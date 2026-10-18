@@ -1,4 +1,4 @@
-# AGENTS.md — CalcFun / Honkai: Star Rail Battle Simulator
+# AGENTS.md — FiniteHSR / Honkai: Star Rail Battle Simulator
 
 ## 0. Purpose
 

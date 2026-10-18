@@ -1,4 +1,4 @@
-# CalcFun - HSR Damage Simulator  
+# FiniteHSR - HSR Damage Simulator  
   
-‘¨¬ã«ïâ®à ¡®ï Honkai: Star Rail  
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Honkai: Star Rail  
   

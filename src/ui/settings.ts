@@ -4,7 +4,7 @@
  * UI-level preferences only (rule 84.1: no domain logic, no hidden engine defaults). These are
  * convenience defaults for the editors (seed / debug level). Whatever they are, the effective
  * value is shown again at run time — the run's RulesSnapshot remains the source of truth (§32).
- * Persisted in localStorage under `calcfun.settings`.
+ * Persisted in localStorage under `FiniteHSR.settings`.
  */
 import { button, kv, label, row, select, title } from './render'
 import { el } from './dom'
@@ -15,7 +15,7 @@ export interface UiSettings {
   debugLevel: number
 }
 
-const KEY = 'calcfun.settings'
+const KEY = 'FiniteHSR.settings'
 const DEFAULTS: UiSettings = { defaultSeed: 1, debugLevel: 0 }
 
 export function loadSettings(): UiSettings {

@@ -1,6 +1,6 @@
 # tests/
 
-Engine-level test corpus for CalcFun (§44 of `reference/total_guide.txt`).
+Engine-level test corpus for FiniteHSR (§44 of `reference/total_guide.txt`).
 
 Run: `npm test`. Type-check: `npx tsc --noEmit -p tsconfig.json` (tsconfig includes `tests`).
 
