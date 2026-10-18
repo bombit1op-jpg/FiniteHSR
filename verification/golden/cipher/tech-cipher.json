@@ -1,0 +1,23 @@
+{
+ "input": {
+  "kit": "cipher",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Cipher alone, technique \"Puss in Boots\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Cipher|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Ice Edge|-|- [1,Infinity]",
+  "BUFF_APPLIED|-|Cipher|-|- [1,Infinity]",
+  "TECHNIQUE_APPLIED|Cipher|-|-|-",
+  "HIT_START|Cipher|Ice Edge|Puss in Boots|basic [1,10,30,5000000,640]",
+  "DAMAGE_CALCULATED|Cipher|Ice Edge|-|basic [0,0,0,0,0,0.05,0.144,0.4,1,1,461,640]",
+  "DAMAGE_DEALT|Cipher|Ice Edge|Puss in Boots|basic [1,461,4999539,5000000,640]",
+  "TOUGHNESS_DAMAGE|Cipher|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Cipher|Ice Edge|-|basic [461,4999539]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

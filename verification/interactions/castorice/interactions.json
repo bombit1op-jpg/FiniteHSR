@@ -1,0 +1,132 @@
+{
+  "kit": "castorice",
+  "slot": "interactions",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/castorice/ranks+traces",
+    "confidence": "verified",
+    "note": "Phase 3.5 paired/allies fixture. Companion = bronya. Assertions pin the canon eidolon/trace observable; status gap = documented deviation expected to diverge (PROMOTE if it passes), blocked = no stable observable."
+  },
+  "fixtures": [
+    {
+      "id": "pair",
+      "env": "castorice E6 + bronya ally vs Boss (Lv120), 6 cycles, seed 11",
+      "battle": {
+        "team": [
+          {
+            "kitId": "castorice",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 120
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "bronya",
+            "stats": {
+              "hp": 10000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 134
+            }
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 250000,
+          "atk": 140,
+          "spd": 150,
+          "level": 120,
+          "toughness": 1800,
+          "weaknesses": [
+            "Physical",
+            "Fire",
+            "Ice",
+            "Lightning",
+            "Wind",
+            "Quantum",
+            "Imaginary"
+          ]
+        },
+        "cycles": 6,
+        "seed": 11
+      }
+    },
+    {
+      "id": "pair-sweep",
+      "env": "castorice E6 + bronya ally, high Max HP so Skill drains fill the Newbud pool — Netherwing despawns and Wings Sweep fires",
+      "battle": {
+        "team": [
+          {
+            "kitId": "castorice",
+            "stats": {
+              "hp": 100000,
+              "atk": 1000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          },
+          {
+            "kitId": "bronya",
+            "stats": {
+              "hp": 10000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 134
+            }
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 5,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "castorice_fixture_runs",
+      "layer": "structure",
+      "claim": "The paired battle executes deterministically with no invariant break.",
+      "fixtures": [
+        "pair"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "fixture executes"
+      }
+    },
+    {
+      "id": "castorice_e6_wings_sweep",
+      "layer": "interactions",
+      "claim": "E6 'Await for Years to Loom': Netherwing's Talent 'Wings Sweep the Ruins' fires on disappear with Quantum DMG (label observable; +3 bounces at E6 per 1140706 notes).",
+      "fixtures": [
+        "pair-sweep"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Wings Sweep the Ruins"
+        }
+      }
+    }
+  ],
+  "golds": []
+}

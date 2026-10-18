@@ -1,0 +1,89 @@
+{
+  "kit": "lynx",
+  "slot": "interactions",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/lynx/ranks+traces",
+    "confidence": "verified",
+    "note": "Phase 3.5 paired/allies fixture. Companion = bronya. Assertions pin the canon eidolon/trace observable; status gap = documented deviation expected to diverge (PROMOTE if it passes), blocked = no stable observable."
+  },
+  "fixtures": [
+    {
+      "id": "pair",
+      "env": "Lynx E6 + wounded Bronya ally (3.5k HP) vs heavy-hitting Boss, 6 cycles, seed 11",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lynx",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 120
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1,
+            "skillPattern": "skill->basic",
+            "skillPriority": 9
+          },
+          {
+            "kitId": "bronya",
+            "stats": {
+              "hp": 3500,
+              "atk": 1500,
+              "def": 600,
+              "spd": 134
+            }
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 250000,
+          "atk": 900,
+          "spd": 170,
+          "level": 120,
+          "toughness": 1800,
+          "weaknesses": [
+            "Physical",
+            "Fire",
+            "Ice",
+            "Lightning",
+            "Wind",
+            "Quantum",
+            "Imaginary"
+          ]
+        },
+        "cycles": 6,
+        "seed": 11
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "lynx_fixture_runs",
+      "layer": "structure",
+      "claim": "The paired battle executes deterministically with no invariant break.",
+      "fixtures": [
+        "pair"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "fixture executes"
+      }
+    },
+    {
+      "id": "lynx_lynx_e4",
+      "layer": "interactions",
+      "claim": "Eidolon/trace observable lynx_e4 is present once a companion shares the field.",
+      "fixtures": [
+        "pair"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "lynx_e4"
+      }
+    }
+  ],
+  "golds": []
+}

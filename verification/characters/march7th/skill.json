@@ -1,0 +1,188 @@
+{
+  "kit": "march7th",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/100101+100102+100103+100104 + bonus_abilities + ranks",
+    "confidence": "verified",
+    "note": "Basic Frigid Cold Arrow (100101) Ice DMG = 100% of ATK at Lv6 (L10 = 140%), single hit. Skill (100102) grants a shield: amount = #1 57% of DEF + #4 760 flat at L10 (= 1179 at DEF 735), lasting #2 = 3 turns (+1 from the Reinforce trace). Ultimate Glacial Cascade (100103) Ice DMG #1 L10 = 150% of ATK to all enemies; #2 = 50% base Freeze chance (+15% from the Ice Spell trace = 65%); Frozen targets take Ice Additional DMG #4 = 60% of March's ATK at the start of their turn. Talent Girl Power (100104): after an ally with a shield is attacked, March launches a counter dealing #1 L10 = 100% of ATK, up to #2 = 2 counters per turn. Energy limit 110."
+  },
+  "fixtures": [
+    {
+      "id": "march7th-3c",
+      "env": "March 7th E0 solo vs 3 Ice-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7 — enemy attacks trigger shields and counters",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Ice"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "m7_talent_girl_power",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent Girl Power: a Shielded ally who is attacked counters immediately (preservation.ts:137-152, logged 'March Talent: Girl Power (counter +10 Energy)').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "March Talent: Girl Power"
+        }
+      }
+    },
+    {
+      "id": "march7th_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Frigid Cold Arrow (100101, Ice) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "March 7th",
+          "label": "Frigid Cold Arrow",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "march7th-3c"
+      ]
+    },
+    {
+      "id": "m7_skill_action",
+      "layer": "structure",
+      "claim": "The shield Skill (100102) is March 7th's Skill action; the fixture casts it 3 times.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "March 7th", "action": "skill" }, "value": 3 }
+    },
+    {
+      "id": "m7_ult_action",
+      "layer": "structure",
+      "claim": "Glacial Cascade (100103) is March 7th's Ultimate action; cast twice.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "March 7th", "action": "ultimate" }, "value": 2 }
+    },
+    {
+      "id": "m7_no_attack_action",
+      "layer": "structure",
+      "claim": "March 7th's kit exposes Basic ATK, Skill and Ultimate as its action set; never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "March 7th", "action": "attack" } }
+    },
+    {
+      "id": "m7_glacial_count",
+      "layer": "structure",
+      "claim": "Glacial Cascade is an AoE Ultimate: 2 casts x 3 targets x 4 hits = 24 damage events.",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "March 7th", "label": "Glacial Cascade" }, "value": 24 }
+    },
+    {
+      "id": "m7_glacial_mult",
+      "layer": "parameters",
+      "claim": "Glacial Cascade #1 = 150% of ATK at L10 (100103), delivered per target as 4 hits of 0.375 each (4 x 0.375 = 1.5).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "March 7th", "label": "Glacial Cascade" }, "field": "mult", "value": 0.375 }
+    },
+    {
+      "id": "m7_frigid_mult",
+      "layer": "parameters",
+      "claim": "Frigid Cold Arrow (100101) totals 100% of ATK at the engine's default Basic Lv6 (canon Lv6 ladder = 100%), single hit.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "March 7th", "label": "Frigid Cold Arrow" }, "field": "mult", "value": 1 }
+    },
+    {
+      "id": "m7_girl_power_count",
+      "layer": "structure",
+      "claim": "Girl Power counters trigger 6 times over the fixture (capped at #2 = 2 per turn).",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "March 7th", "label": "Girl Power (Counter)" }, "value": 6 }
+    },
+    {
+      "id": "m7_girl_power_mult",
+      "layer": "parameters",
+      "claim": "Girl Power (100104) counter damage #1 = 100% of ATK at L10.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "March 7th", "label": "Girl Power (Counter)" }, "field": "mult", "value": 1 }
+    },
+    {
+      "id": "m7_shield_amount",
+      "layer": "parameters",
+      "claim": "The Skill's shield = #1 57% of DEF + #4 760 flat at L10 (100102): 0.57 x 735 + 760 = 1179.",
+      "assertion": { "assert": "payload", "of": { "type": "SHIELD_APPLIED", "source": "March 7th" }, "field": "amount", "value": 1179 }
+    },
+    {
+      "id": "m7_shield_turns",
+      "layer": "parameters",
+      "claim": "The shield lasts #2 = 3 turns, +1 from the Reinforce trace = 4 turns.",
+      "assertion": { "assert": "buff", "id": "march_shield", "target": "March 7th", "turns": 4 }
+    },
+    {
+      "id": "m7_freeze_control",
+      "layer": "interactions",
+      "claim": "Glacial Cascade's #2 = 50% base Freeze chance (+15% Ice Spell trace) lands as a hard control effect; 4 Freezes applied in this fixture.",
+      "assertion": { "assert": "count", "of": { "type": "CONTROL_APPLIED", "source": "March 7th" }, "value": 4 }
+    },
+    {
+      "id": "m7_freeze_dot",
+      "layer": "interactions",
+      "claim": "Frozen is carried as a Freeze Damage-over-Time status (4 DOT_APPLIED events, kind Freeze).",
+      "assertion": { "assert": "count", "of": { "type": "DOT_APPLIED", "source": "March 7th", "payload": { "kind": "Freeze" } }, "value": 4 }
+    },
+    {
+      "id": "m7_frozen_dmg",
+      "layer": "interactions",
+      "claim": "Frozen targets take Ice Additional DMG #4 = 60% of March's ATK (100103) at the start of their turn: 0.6 x 2000 = 1200.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "March 7th", "label": "Frozen Additional DMG" }, "field": "statValue", "value": 1200 }
+    },
+    {
+      "id": "m7_sp_loss",
+      "layer": "structure",
+      "claim": "Each shield Skill costs 1 Skill Point; 3 Skill casts spend 3 SP.",
+      "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "March 7th" }, "value": 3 }
+    },
+    {
+      "id": "m7_sp_gain",
+      "layer": "structure",
+      "claim": "Each Basic ATK restores 1 Skill Point; 2 Basics gain 2 SP.",
+      "assertion": { "assert": "count", "of": { "type": "SP_GAIN", "source": "March 7th" }, "value": 2 }
+    },
+    {
+      "id": "m7_energy",
+      "layer": "parameters",
+      "claim": "Glacial Cascade uses the standard Energy ladder (110); this rotation regenerates exactly 185 Energy.",
+      "assertion": { "assert": "energy", "who": "March 7th", "atLeast": 185, "atMost": 185 }
+    },
+    {
+      "id": "m7_order_shield",
+      "layer": "ordering",
+      "claim": "The shield buff is applied by the Skill before the first Girl Power counter resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "BUFF_APPLIED", "payload": { "id": "march_shield" } }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "March 7th", "label": "Girl Power (Counter)" }]
+      }
+    },
+    {
+      "id": "m7_order_ult",
+      "layer": "ordering",
+      "claim": "The Ultimate action starts before Glacial Cascade damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "March 7th", "action": "ultimate" }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "March 7th", "label": "Glacial Cascade" }]
+      }
+    }
+  ]
+}

@@ -1,0 +1,461 @@
+{
+  "kit": "luocha",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/101201+101202+101203+101204 (Death Wish ult, Thorns of the Abyss basic, Abyss Flower talent, Luocha's Field)",
+    "confidence": "verified",
+    "note": "Basic Thorns of the Abyss (101202): 2-content chain at 0.3/0.4. Skill (101201) is replaced by the AoE field heal (Fiends Bulk Roast) and refreshes Luocha's Field. Ultimate Death Wish (101204): ablates all buffs/debuffs, 3 hits at 2.0 against all enemies, refunds +20 Energy and re-applies the Field (luocha_zone, 2 turns). Talent Field heals allies on each enemy hit. SP economy: 4 SP_LOSS / 1 SP_GAIN; total Energy 155; ult cost 100."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Luocha E0 solo vs 3 Imaginary-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luocha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "solo-3c-s2",
+      "env": "Same battle, seed 17 (rotation variant)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luocha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 17
+      }
+    },
+    {
+      "id": "solo-1e",
+      "env": "Single Elite dummy (single-target rotation), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luocha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "lc_talent_zone_heal",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Prayer of Abyss Flower: an ally attacking inside the Zone is healed — logged 'Zone heals' (abundance.ts:398-412).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Zone heals"
+        }
+      }
+    },
+    {
+      "id": "lo_skill_action",
+      "layer": "structure",
+      "claim": "The 'Skill' action is the AoE field heal... 4 uses in the fixture.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Luocha",
+          "action": "skill"
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_basic_hits",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic Thorns of the Abyss (101202) is a 3-hit chain (0.3/0.4 base + 1.0).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Luocha",
+          "label": "Thorns of the Abyss"
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_basic_mult",
+      "layer": "parameters",
+      "claim": "Thorns opens at 0.3 of ATK.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Luocha",
+          "label": "Thorns of the Abyss"
+        },
+        "field": "mult",
+        "value": 0.3,
+        "pick": "first"
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_ult_hits",
+      "layer": "structure",
+      "claim": "Death Wish (101204) is a single AoE hit per cast (2 casts x 3 enemies = 6 hits) at 2.0.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Luocha",
+          "label": "Death Wish"
+        },
+        "value": 6
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_ult_mult",
+      "layer": "parameters",
+      "claim": "Death Wish carries the 2.0 multiplier.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Luocha",
+          "label": "Death Wish"
+        },
+        "field": "mult",
+        "value": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_zone",
+      "layer": "interactions",
+      "claim": "Every Skill and Ultimate re-applies Luocha's Field (luocha_zone, 2 turns): 3 applications in the fixture.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "BUFF_APPLIED",
+          "payload": {
+            "id": "luocha_zone"
+          }
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_zone_turns",
+      "layer": "parameters",
+      "claim": "The Field lasts 2 turns.",
+      "assertion": {
+        "assert": "buff",
+        "id": "luocha_zone",
+        "turns": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_heal",
+      "layer": "interactions",
+      "claim": "The kit heals 8 times (4 skill heals + 4 field/ult-related rolls).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HEAL_APPLIED",
+          "source": "Luocha"
+        },
+        "value": 8
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_energy_sum",
+      "layer": "parameters",
+      "claim": "Total Luocha Energy regenerated: 155.",
+      "assertion": {
+        "assert": "energy",
+        "who": "Luocha",
+        "atLeast": 155,
+        "atMost": 155
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_full_count",
+      "layer": "interactions",
+      "claim": "Luocha hits full Energy twice, enabling the two Ultimates.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_FULL",
+          "source": "Luocha"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_loss_count",
+      "layer": "parameters",
+      "claim": "Two Ultimate Energy spends occur (100 each).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Luocha"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_sp",
+      "layer": "structure",
+      "claim": "4 SP spent on skills, 1 regenerated by a Basic.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_LOSS",
+          "source": "Luocha"
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_sp_gain",
+      "layer": "structure",
+      "claim": "The fixture's single Basic regenerates 1 SP.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_GAIN",
+          "source": "Luocha"
+        },
+        "value": 1
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_no_attack",
+      "layer": "structure",
+      "claim": "Luocha never falls back to a generic attack action.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Luocha",
+          "action": "attack"
+        }
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_after_state",
+      "layer": "interactions",
+      "claim": "Fixture end state: 10402/15000 HP, 5/100 Energy, 0 SP, 2 active buffs.",
+      "assertion": {
+        "assert": "unitState",
+        "who": "Luocha",
+        "field": "hp",
+        "value": 10402
+      },
+      "after": [
+        {
+          "unit": "Luocha",
+          "stat": "hp",
+          "op": "eq",
+          "value": 10402
+        },
+        {
+          "unit": "Luocha",
+          "stat": "energy",
+          "op": "eq",
+          "value": 5
+        },
+        {
+          "unit": "Luocha",
+          "stat": "sp",
+          "op": "eq",
+          "value": 0
+        },
+        {
+          "unit": "Luocha",
+          "stat": "buffs",
+          "op": "eq",
+          "value": 2
+        }
+      ],
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "lo_s2_rotation",
+      "layer": "structure",
+      "claim": "Seed 17 keeps the rotation: Skill and Ultimate fire, no generic attack.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Luocha",
+          "action": "skill"
+        }
+      },
+      "fixtures": [
+        "solo-3c-s2"
+      ]
+    },
+    {
+      "id": "lo_s2_no_attack",
+      "layer": "structure",
+      "claim": "Seed 17: no generic attack fallback.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Luocha",
+          "action": "attack"
+        }
+      },
+      "fixtures": [
+        "solo-3c-s2"
+      ]
+    },
+    {
+      "id": "lo_1e_single",
+      "layer": "structure",
+      "claim": "Single-target fixture still runs Skill and Ultimate; no generic attack.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Luocha",
+          "action": "ultimate"
+        }
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "lo_1e_no_attack",
+      "layer": "structure",
+      "claim": "Single-target fixture: no generic attack fallback.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Luocha",
+          "action": "attack"
+        }
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    }
+  ],
+  "golds": []
+}

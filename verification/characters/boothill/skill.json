@@ -1,0 +1,453 @@
+{
+  "kit": "boothill",
+  "slot": "skill",
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Boothill E0 solo vs 3 Physical-weak Elite (level 95, 60 Toughness), 3 cycles — Skill 131502 'Sizzlin' Tango' opens the Standoff and grants an Extra Turn (no Energy, 1 SP), the Enhanced Basic 'Fanning the Hammer' wears the 60 Toughness down, breaks the standoff target and procs Talent 131504 'Five Peas in a Pod' extra Break DMG, Ultimate 131503 'Dust Devil's Sunset Rodeo' applies Physical Weakness and delays the target by 40%; the normal Basic 'Skullcrush Spurs' never fires because decide() keeps Boothill in the Standoff or spends his action on Ultimate/Skill",
+      "battle": {
+        "team": [
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 60,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "skill_cast_3",
+      "layer": "structure",
+      "claim": "Skill 131502 'Sizzlin' Tango' is cast 3 times: decide() returns Skill whenever SP >= 1 and Boothill is not already in the Standoff (hunt.ts:1199), perform() spends 1 SP and enters the Standoff (hunt.ts:1223-1226) — 3 casts in 3 cycles.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Boothill",
+          "action": "skill"
+        },
+        "value": 3
+      }
+    },
+    {
+      "id": "extra_turn_3",
+      "layer": "structure",
+      "claim": "Every Skill cast grants an Extra Turn (characters.json 131502 notes 'This Skill grants Boothill an Extra Turn'; perform() calls sim.grantExtraTurn(u), hunt.ts:1227) — 3 Skill casts => 3 EXTRA_TURN events.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "EXTRA_TURN"
+        },
+        "value": 3
+      }
+    },
+    {
+      "id": "ult_cast_2",
+      "layer": "structure",
+      "claim": "Ultimate 131503 'Dust Devil's Sunset Rodeo' fires twice: decide() returns ult the moment Energy fills (hunt.ts:1196) — Energy 115 refills twice in 3 cycles.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Boothill",
+          "action": "ultimate"
+        },
+        "value": 2
+      }
+    },
+    {
+      "id": "basic_cast_2",
+      "layer": "structure",
+      "claim": "Exactly 2 scheduled Basic actions in 3 cycles: the only two turns where Boothill acts outside the Extra Turn with Energy below full and no free Skill choice end up as basic (hunt.ts:1198 returns basic while in Standoff) — the other actions are 3 skills (+3 extra turns) and 2 ultimates.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Boothill",
+          "action": "basic"
+        },
+        "value": 2
+      }
+    },
+    {
+      "id": "fanning_hits_5",
+      "layer": "structure",
+      "claim": "While Standoff is active every Basic resolves as the Enhanced Basic 'Fanning the Hammer' targeting the standoff enemy (hunt.ts:1232-1237): 3 extra-turn basics after each Skill + 2 scheduled basics while the Standoff lasts = 5 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Boothill",
+          "label": "Fanning the Hammer"
+        },
+        "value": 5
+      }
+    },
+    {
+      "id": "ult_hits_2",
+      "layer": "structure",
+      "claim": "The Ultimate hits its single target once per cast with label 'Dust Devil's Sunset Rodeo' (hunt.ts:1215 sim.hit type ult, Physical, toughDmg 15) — 2 casts => 2 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Boothill",
+          "label": "Dust Devil's Sunset Rodeo"
+        },
+        "value": 2
+      }
+    },
+    {
+      "id": "no_skullcrush_solo",
+      "layer": "structure",
+      "claim": "Solo negative: the normal Basic 131501 'Skullcrush Spurs' never fires — every basic action runs while the Standoff is active (enhanced branch, hunt.ts:1232-1243), and decide() blocks Skill re-cast only into basic (hunt.ts:1198).",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "HIT_START",
+          "source": "Boothill",
+          "label": "Skullcrush Spurs"
+        }
+      }
+    },
+    {
+      "id": "ult_cost_115",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate payment books ENERGY_LOSS reason 'ult_cost' with amount 115 = full Energy pool (energyMax 115, hunt.ts:1173; cost booked before the kit body zeroes energy, hunt.ts:1212).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Boothill",
+          "payload": {
+            "reason": "ult_cost"
+          }
+        },
+        "field": "amount",
+        "value": 115
+      }
+    },
+    {
+      "id": "ult_refund_5",
+      "layer": "parameters",
+      "claim": "The Ultimate cast grants the generic castUlt +5 Energy refund after the cost is paid (AGENTS: '+5 Energy (из castUlt)'; observed post-cost ENERGY_GAIN n=5 after both casts).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Boothill",
+          "payload": {
+            "n": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "fanning_energy_first_30",
+      "layer": "parameters",
+      "claim": "The Enhanced Basic regenerates 30 Energy (hunt.ts:1238 sim.gainEnergy(u, 30), canon 131502 basic energy); Boothill's first Energy gain of the battle is that extra-turn Fanning at n=30 (57 -> 87).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Boothill"
+        },
+        "field": "n",
+        "value": 30,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "skill_sp_cost_3",
+      "layer": "parameters",
+      "claim": "Each Skill cast spends exactly 1 SP (hunt.ts:1223 sim.spendSp(1), canon 131502 costs 1 SP) — 3 casts => 3 SP_LOSS events, no other SP flow (hunt.ts:1227 ends the perform without gainSp).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_LOSS",
+          "source": "Boothill"
+        },
+        "value": 3
+      }
+    },
+    {
+      "id": "no_sp_gain_solo",
+      "layer": "parameters",
+      "claim": "Solo negative: the normal Basic SP generation (hunt.ts:1246 sim.gainSp(1)) never runs because no basic reaches the non-Standoff branch (see no_skullcrush_solo), so Boothill never gains SP.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "SP_GAIN",
+          "source": "Boothill"
+        }
+      }
+    },
+    {
+      "id": "standoff_enemy_vuln_30",
+      "layer": "parameters",
+      "claim": "The Standoff enemy takes +30% DMG from the shared pool: skill level-10 param #1 = 0.3 (characters.json 131502 levels 10, hunt.ts:1091-1092 applies vulnAll 0.3 on bh_standoff as a permanent debuff).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "bh_standoff",
+        "stat": "vulnAll",
+        "value": 0.3,
+        "tol": 0.01
+      }
+    },
+    {
+      "id": "stance_mitigation_15",
+      "layer": "parameters",
+      "claim": "Boothill's own stance buff bh_stance ends up at +0.15 mitigation at E0: -0.15 (he takes +15% from the standoff enemy) flattened by the +0.30 Above Snakes non-standoff mitigation (hunt.ts:1093-1097).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "bh_stance",
+        "stat": "mitigation",
+        "value": 0.15,
+        "tol": 0.01
+      }
+    },
+    {
+      "id": "ghost_load_crit_from_be",
+      "layer": "parameters",
+      "claim": "Trace A0 Ghost Load converts Break Effect into CRIT: critRate = min(0.30, 0.10 x BE) (hunt.ts:1133-1138); solo Boothill BE = 0.373 from traces (37.3%) => critRate 0.0373, refreshed after every Trickshot gain.",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "bh_ghost",
+        "stat": "critRate",
+        "value": 0.0373,
+        "tol": 0.002
+      }
+    },
+    {
+      "id": "trick_energy_gain_10_twice",
+      "layer": "parameters",
+      "claim": "A0 Point Blank: gaining a Pocket Trickshot while in the Standoff grants +10 Energy (hunt.ts:1117-1119); the standoff target breaks twice in 3 cycles => exactly 2 n=10 Energy gains.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Boothill",
+          "payload": {
+            "n": 10
+          }
+        },
+        "value": 2
+      }
+    },
+    {
+      "id": "ult_delay_40pct",
+      "layer": "parameters",
+      "claim": "The Ultimate delays its target by 40% (characters.json 131503 level-10 param #2 = 0.4; hunt.ts:1216-1217 sim.delay(target, 0.4) with the 'delays ... by 40%' note, hunt.ts:1219) — both casts emit ACTION_DELAY pct 0.4.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ACTION_DELAY",
+          "source": "Boothill",
+          "payload": {
+            "pct": 0.4
+          }
+        },
+        "value": 2
+      }
+    },
+    {
+      "id": "order_skill_then_extra_turn",
+      "ability": "skill",
+      "layer": "ordering",
+      "claim": "Skill resolution order: setStandoff logs 'enters the Standoff' (hunt.ts:1098) first, then perform() grants the Extra Turn (hunt.ts:1227) — the Standoff always precedes the EXTRA_TURN event.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "enters the Standoff"
+          }
+        ],
+        "after": [
+          {
+            "type": "EXTRA_TURN"
+          }
+        ]
+      }
+    },
+    {
+      "id": "order_break_before_five_peas",
+      "ability": "talent",
+      "layer": "ordering",
+      "claim": "Talent 131504 'Five Peas in a Pod' can only fire on a Weakness-Broken target (canon 131504 'If the target is Weakness Broken'; gate hunt.ts:1145-1146 and the st.broken check hunt.ts:1241), so the first WEAKNESS_BREAK precedes the first 'Five Peas in a Pod (Break)' hit.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "WEAKNESS_BREAK",
+            "source": "Boothill"
+          }
+        ],
+        "after": [
+          {
+            "type": "BREAK_DAMAGE",
+            "label": "Five Peas in a Pod (Break)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "order_trick_before_standoff_over",
+      "layer": "ordering",
+      "claim": "onBreak grants the Trickshot before dispelling the Standoff: grantTrick (hunt.ts:1257, logs 'Pocket Trickshot +1') runs before clearStandoff (hunt.ts:1258, logs 'Standoff over').",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "Pocket Trickshot \\+1"
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "Standoff over"
+          }
+        ]
+      }
+    },
+    {
+      "id": "order_ult_cost_before_refund",
+      "layer": "ordering",
+      "claim": "The Ultimate's Energy cost is booked before the castUlt +5 refund arrives: ENERGY_LOSS reason 'ult_cost' at the cast precedes the n=5 ENERGY_GAIN.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ENERGY_LOSS",
+            "source": "Boothill",
+            "payload": {
+              "reason": "ult_cost"
+            }
+          }
+        ],
+        "after": [
+          {
+            "type": "ENERGY_GAIN",
+            "source": "Boothill",
+            "payload": {
+              "n": 5
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "standoff_breaks_twice",
+      "layer": "interactions",
+      "claim": "The enhanced basic's Toughness damage (30 base, +50% per Trickshot stack, characters.json 131504 param #4, hunt.ts:1236) plus the Ultimate's 15 toughness break the 60-Toughness standoff target twice in 3 cycles — both WEAKNESS_BREAK events are sourced by Boothill against Elite #1.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "WEAKNESS_BREAK",
+          "source": "Boothill"
+        },
+        "value": 2
+      }
+    },
+    {
+      "id": "trickshot_granted_twice",
+      "layer": "interactions",
+      "claim": "Breaking the standoff target grants 1 Pocket Trickshot and dispels the Standoff (canon 131502 'After this target ... becomes Weakness Broken, Boothill gains 1 stack of Pocket Trickshot, then dispels the Standoff'; onBreak hunt.ts:1254-1259) — 2 breaks => 2 'Pocket Trickshot +1' notes (kills never happen, so onKill/onAllyKill stay idle).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "Pocket Trickshot \\+1"
+        },
+        "value": 2
+      }
+    },
+    {
+      "id": "five_peas_hits_4",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent 131504 deals extra Break DMG whenever the Enhanced Basic hits a Weakness-Broken target with at least 1 Trickshot stack (hunt.ts:1142-1161, gate hunt.ts:1145-1146, called from hunt.ts:1241): 4 such hit instances in 3 cycles (T2 post-break, T7 post-break, T10, T11 while still broken).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "BREAK_DAMAGE",
+          "label": "Five Peas in a Pod (Break)"
+        },
+        "value": 4
+      }
+    },
+    {
+      "id": "standoff_cleared_three_times",
+      "layer": "interactions",
+      "claim": "The Standoff is set 3 times and cleared 3 times by every exit route: 2 breaks (onBreak hunt.ts:1254-1259) plus 1 turn-expiry when standoffTurns decrements to 0 at Boothill's turn start (hunt.ts:1186-1193, standing duration 2, hunt.ts:1090) — clearStandoff logs 'Standoff over' (hunt.ts:1101-1109) exactly 3 times.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "Standoff over"
+        },
+        "value": 3
+      }
+    },
+    {
+      "id": "standoff_debuff_applied_3",
+      "layer": "interactions",
+      "claim": "Each Skill attaches the permanent bh_standoff debuff (vulnAll) to the target (hunt.ts:1092, turns Infinity) — 3 casts => 3 DEBUFF_APPLIED events on the standoff enemy.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DEBUFF_APPLIED",
+          "payload": {
+            "id": "bh_standoff"
+          }
+        },
+        "value": 3
+      }
+    },
+    {
+      "id": "sp_pool_start3_end0",
+      "layer": "parameters",
+      "claim": "The shared SP pool is a stable, RNG-free contract solo: it starts at 3 (ResourceSystem default) and ends at 0 — Boothill's 3 Skill casts each spend 1 SP (skill_sp_cost_3) and he generates none (no_sp_gain_solo), so 3 - 3 = 0. Unlike a live multi-character pool, the solo pool has no regeneration, so the clause is a stable boundary, not a snapshot.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "SP_LOSS",
+          "source": "Boothill"
+        }
+      },
+      "before": [
+        { "kitId": "boothill", "stat": "sp", "op": "eq", "value": 3 }
+      ],
+      "after": [
+        { "kitId": "boothill", "stat": "sp", "op": "eq", "value": 0 }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,371 @@
+{
+  "kit": "sparxie",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Sparxie/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 '#GoingViral #WhoIsShe': when Aha Instant ends gain 5 Punchline, and each Punchline gives all allies +1.5% All-Type RES PEN (max 15%) — no buff id, tracked as deviation. E2 '#AudienceKnows': when Aha Instant ends gain an extra turn and 2 Thrill, and each Thrill consumed grants +10% CRIT DMG for 2 turns (max 4) — no buff id, tracked as deviation. E3 '#LinkUp #HeartSkip': Skill Lv.+2 / Basic Lv.+1 / Elation Skill Lv.+1 (Bloom multiplier 1.0 -> 1.1). E4 '#LockedIn #FaceCard': on Ultimate additionally +5 Punchline and +36% Elation for 3 turns (sparxie_e4, elation 0.36). E5 '#HealingTheWorld #GoodVibesOnly': Ult Lv.+2 / Talent Lv.+2 / Elation Skill Lv.+1 (Party's Wildin' 0.884 -> 0.924). E6 '#BuiltDifferent #GoingExtinct': +20% All-Type RES PEN (sparxie_e6, resPenAll 0.2) and +1 Elation-Skill DMG instance per Punchline (max 40). Fixtures run one battle per eidolon rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "sparxie E0 — eidolon ladder rung, cloned from sparxie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparxie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 2,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "sparxie E1 — eidolon ladder rung, cloned from sparxie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparxie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 2,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "sparxie E2 — eidolon ladder rung, cloned from sparxie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparxie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 2,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "sparxie E3 — eidolon ladder rung, cloned from sparxie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparxie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 2,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "sparxie E4 — eidolon ladder rung, cloned from sparxie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparxie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 2,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "sparxie E5 — eidolon ladder rung, cloned from sparxie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparxie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 2,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "sparxie E6 — eidolon ladder rung, cloned from sparxie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparxie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 2,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "sparxie_e3_level",
+      "layer": "parameters",
+      "claim": "E3 '#LinkUp #HeartSkip': Skill Lv.+2 raises the Elation Skill (Bloom) multiplier 1.0 -> 1.1.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Bloom (main)"
+        },
+        "field": "mult",
+        "value": 1.05
+      }
+    },
+    {
+      "id": "sparxie_e4_present",
+      "layer": "interactions",
+      "claim": "E4 '#LockedIn #FaceCard': on Ultimate, +36% Elation for 3 turns (sparxie_e4).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "sparxie_e4",
+        "turns": 3
+      }
+    },
+    {
+      "id": "sparxie_e4_elation",
+      "layer": "parameters",
+      "claim": "The E4 buff carries elation 0.36 (canon ranks/4).",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "sparxie_e4",
+        "stat": "elation",
+        "value": 0.36
+      }
+    },
+    {
+      "id": "sparxie_e4_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E4's sparxie_e4 must NOT be active below rank 4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "sparxie_e4"
+      }
+    },
+    {
+      "id": "sparxie_e5_level",
+      "layer": "parameters",
+      "claim": "E5 '#HealingTheWorld #GoodVibesOnly': Ult Lv.+2 / Talent Lv.+2 raise the Basic (Party's Wildin') multiplier 0.884 -> 0.924.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Party's Wildin'"
+        },
+        "field": "mult",
+        "value": 0.92
+      }
+    },
+    {
+      "id": "sparxie_e6_present",
+      "layer": "interactions",
+      "claim": "E6 '#BuiltDifferent #GoingExtinct': +20% All-Type RES PEN (sparxie_e6, permanent).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "sparxie_e6"
+      }
+    },
+    {
+      "id": "sparxie_e6_respen",
+      "layer": "parameters",
+      "claim": "The E6 buff carries resPenAll 0.20 (canon ranks/6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "sparxie_e6",
+        "stat": "resPenAll",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "sparxie_e6_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E6's sparxie_e6 must NOT be active below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "sparxie_e6"
+      }
+    }
+  ],
+  "golds": []
+}

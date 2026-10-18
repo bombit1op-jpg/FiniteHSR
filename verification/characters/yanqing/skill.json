@@ -1,0 +1,154 @@
+{
+  "kit": "yanqing",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/120901+120902+120903+120904 + bonus_abilities (Icing on the Kick, Gentle Blade) + ranks",
+    "confidence": "verified",
+    "note": "Basic Frost Thorn (120901) Ice DMG 50%->140% of ATK (L10 140%). Skill Darting Ironthorn (120902) deals 110%->220% (L10 220%) and activates Soulsteel Sync (CRIT Rate from Talent #1 = 20% L10, CRIT DMG from #2 = 30% L10, 20% Effect RES trace). After any Yanqing attack Talent One With the Sword (120904) rolls a fixed #3 chance (L10 = 60%) for a Follow-Up ATK dealing #4 = 50% (L10) of ATK split across hits, with #6 = 65% base chance to Freeze for 1 turn; Frozen targets take Ice Additional DMG #5 = 50% at the start of their turn. Ultimate Amidst the Raining Bliss (120903) grants CRIT Rate #1 = 60% (plus #2 = 50% extra CRIT DMG while Soulsteel Sync is active, buff 1 turn) then deals #3 = 350% (L10) Ice DMG. A2 Icing on the Kick adds 30% ATK Ice DMG to Ice-weak enemies after Yanqing attacks; A6 Gentle Blade grants SPD +10% for 2 turns on a CRIT Hit. Energy limit 140."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Yanqing E0 solo vs 3 Ice-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yanqing",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Ice"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "yq_skill_action",
+      "layer": "structure",
+      "claim": "Darting Ironthorn (120902) is Yanqing's damaging Skill action.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Yanqing", "action": "skill" } }
+    },
+    {
+      "id": "yq_skill_hits",
+      "layer": "structure",
+      "claim": "Darting Ironthorn hits the primary target 4 times per cast (16 hits over 4 Skill uses in this fixture), carrying the full 120902 multiplier.",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Yanqing", "label": "Darting Ironthorn" }, "value": 16 }
+    },
+    {
+      "id": "yq_soulsteel_buff",
+      "layer": "structure",
+      "claim": "Using the Skill activates the Soulsteel Sync effect on Yanqing (120902).",
+      "assertion": { "assert": "present", "of": { "type": "BUFF_APPLIED", "target": "Yanqing", "payload": { "id": "yanqing_soulsteel" } } }
+    },
+    {
+      "id": "yq_fua_present",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent One With the Sword rolls a fixed chance (#3, L10 = 60%) after Yanqing attacks to launch the Soulsteel Sync Follow-Up ATK.",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Yanqing", "label": "Soulsteel Sync FUA" } }
+    },
+    {
+      "id": "yq_no_attack_action",
+      "layer": "structure",
+      "claim": "Yanqing's kit exposes Basic ATK, Skill and Ultimate as its action set; it never falls back to a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Yanqing", "action": "attack" } }
+    },
+    {
+      "id": "yq_skill_mult",
+      "layer": "parameters",
+      "claim": "Darting Ironthorn L10 multiplier is 220% of ATK (120902 #1); the engine delivers it as 4 hits of 55% (0.55) each.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Yanqing", "label": "Darting Ironthorn" }, "field": "mult", "value": 0.55 }
+    },
+    {
+      "id": "yq_ult_mult",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Amidst the Raining Bliss (120903 #3) deals Ice DMG equal to 350% of ATK at L10 in a single hit.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Yanqing", "label": "Amidst the Raining Bliss" }, "field": "mult", "value": 3.5 }
+    },
+    {
+      "id": "yq_basic_mult",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic Frost Thorn (120901) runs the 50%->140% ladder (L10 = 140%); at the engine's default Basic Lv6 it totals 100%, delivered as a 50/25/25 split (first hit 0.5).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Yanqing", "label": "Frost Thorn" }, "field": "mult", "value": 0.5, "pick": "first" }
+    },
+    {
+      "id": "yq_soulsteel_turns",
+      "layer": "parameters",
+      "claim": "Soulsteel Sync from the Skill lasts 1 turn (120902). The engine stores self-buffs applied on the caster's own turn as turns=2: the applying turn's own endTick consumes one tick, so the buff is present for exactly that one turn (same encoding as yq_ult_buff_stats).",
+      "assertion": { "assert": "buff", "id": "yanqing_soulsteel", "target": "Yanqing", "turns": 2 }
+    },
+    {
+      "id": "yq_ult_buff_stats",
+      "layer": "parameters",
+      "claim": "The Ultimate increases Yanqing's CRIT Rate by #1 = 60% at L10 (120903), buff lasting 1 turn (stored as turns=2).",
+      "assertion": { "assert": "buffStat", "id": "yanqing_ult", "stat": "critRate", "value": 0.6 }
+    },
+    {
+      "id": "yq_fua_mult",
+      "layer": "parameters",
+      "claim": "The Follow-Up ATK deals Ice DMG equal to #4 = 50% of ATK at L10 (120904), split 30/70 → first hit should be 0.15.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Yanqing", "label": "Soulsteel Sync FUA" }, "field": "mult", "value": 0.15, "pick": "first" }
+    },
+    {
+      "id": "yq_energy",
+      "layer": "parameters",
+      "claim": "Yanqing's Ultimate uses the standard 140-Energy ladder (sp_need 140); over this fixture his action set regenerates exactly 215 Energy.",
+      "assertion": { "assert": "energy", "who": "Yanqing", "atLeast": 215, "atMost": 215 }
+    },
+    {
+      "id": "yq_order_soulsteel",
+      "layer": "ordering",
+      "claim": "Soulsteel Sync is applied during the Skill before the A2 Icing on the Kick additional hit resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "BUFF_APPLIED", "target": "Yanqing", "payload": { "id": "yanqing_soulsteel" } }],
+        "after": [{ "type": "HIT_START", "source": "Yanqing", "label": "A2 Icing on the Kick" }]
+      }
+    },
+    {
+      "id": "yq_order_ult",
+      "layer": "ordering",
+      "claim": "The Ultimate action starts before Amidst the Raining Bliss damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Yanqing", "action": "ultimate" }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Yanqing", "label": "Amidst the Raining Bliss" }]
+      }
+    },
+    {
+      "id": "yq_a2_icing",
+      "layer": "interactions",
+      "claim": "A2 Icing on the Kick: after Yanqing attacks, enemies with Ice Weakness take Ice Additional DMG equal to 30% of Yanqing's ATK.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Yanqing", "label": "A2 Icing on the Kick" }, "field": "mult", "value": 0.3 }
+    },
+    {
+      "id": "yq_a6_gentle_blade",
+      "layer": "interactions",
+      "claim": "A6 Gentle Blade: when a CRIT Hit is triggered, Yanqing's SPD increases by 10% for 2 turns.",
+      "assertion": { "assert": "buffStat", "id": "yanqing_a6", "stat": "spdPct", "value": 0.1 }
+    },
+    {
+      "id": "yq_freeze_dot",
+      "layer": "interactions",
+      "claim": "The Follow-Up's Freeze (#6 = 65% base chance) makes Frozen targets take Ice Additional DMG equal to #5 = 50% of ATK at the start of their turn.",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Yanqing", "label": "Frozen Additional DMG" } }
+    }
+  ],
+  "golds": []
+}

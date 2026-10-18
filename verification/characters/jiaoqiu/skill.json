@@ -1,0 +1,165 @@
+{
+  "kit": "jiaoqiu",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/121801-121807",
+    "confidence": "interpreted",
+    "note": "Jiaoqiu (Fire, Nihility). Basic 121801 Heart Afire. Skill 121802 Scorch Onslaught: Fire Blast (80% primary + adjacent) with a 100% base chance to inflict 1 Ashen Roast. Ultimate 121804 Pyrograph Arcanum: AoE Fire, opens a Zone for 3 turns in which enemies take +Ult DMG and gain Ashen Roast on their turns (<=6 per Zone). Talent 121805 Ashen Roast: stacks increase DMG taken (first stack +2, each extra), also applies a Burn DoT of ATK per turn for 2 turns. A1 Pyre Cleanse +15 Energy at battle start. Energy 100."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Jiaoqiu E0 solo vs 3 Fire-weak Elite (level 95, 240 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jiaoqiu",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200, "ehr": 0.5 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Fire"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4-zone",
+      "env": "Jiaoqiu E4 solo vs the same Elites - the Zone also drops enemy ATK 15% (jq_e4_atk)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jiaoqiu",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200, "ehr": 0.5 },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Fire"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "j_skill_action",
+      "layer": "structure",
+      "claim": "Skill Scorch Onslaught (121802) fires as a Skill action (decide nihility.ts:1530-1533 prefers Skill while SP >= 1).",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Jiaoqiu", "action": "skill" } }
+    },
+    {
+      "id": "j_ult_action",
+      "layer": "structure",
+      "claim": "Pyrograph Arcanum (121804) fires once Energy reaches 100 (energyMax nihility.ts:1516).",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Jiaoqiu", "action": "ultimate" } }
+    },
+    {
+      "id": "j_skill_hit",
+      "layer": "structure",
+      "claim": "Scorch Onslaught is a Blast Skill: a primary Fire hit (nihility.ts:1565-1567).",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Jiaoqiu", "label": "Scorch Onslaught" } }
+    },
+    {
+      "id": "j_skill_adj",
+      "layer": "structure",
+      "claim": "Scorch Onslaught also hits adjacent enemies (nihility.ts:1567, 'Scorch Onslaught (adj)').",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Jiaoqiu", "label": "Scorch Onslaught (adj)" } }
+    },
+    {
+      "id": "j_basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic Heart Afire lands a single Fire hit (nihility.ts:1577).",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Jiaoqiu", "label": "Heart Afire" } }
+    },
+    {
+      "id": "j_ult_hit",
+      "layer": "structure",
+      "claim": "Pyrograph Arcanum is an AoE Fire Ultimate (nihility.ts:1547).",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Jiaoqiu", "label": "Pyrograph Arcanum" } }
+    },
+    {
+      "id": "j_start_energy_15",
+      "layer": "parameters",
+      "claim": "A1 Pyre Cleanse grants +15 Energy at battle start (nihility.ts:1519-1520), Jiaoqiu's first ENERGY_GAIN.",
+      "assertion": { "assert": "payload", "of": { "type": "ENERGY_GAIN", "source": "Jiaoqiu" }, "field": "n", "value": 15, "pick": "first" }
+    },
+    {
+      "id": "j_skill_energy_30",
+      "layer": "parameters",
+      "claim": "Every Skill cast regenerates 30 Energy (nihility.ts:1563).",
+      "assertion": { "assert": "present", "of": { "type": "ENERGY_GAIN", "source": "Jiaoqiu", "payload": { "n": 30 } } }
+    },
+    {
+      "id": "j_talent_roast_burn",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent 121805 Ashen Roast also applies a Burn DoT (ATK-scaled, 2 turns) whenever an Ashen Roast stack lands — the Burn DoT is talent-sourced (nihility.ts:1678-1686, only applyRoast emits it).",
+      "assertion": { "assert": "present", "of": { "type": "DOT_APPLIED", "source": "Jiaoqiu", "payload": { "kind": "Burn" } } }
+    },
+    {
+      "id": "j_roast_applied",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill (and Basic) inflict at least one Ashen Roast stack on the target (nihility.ts:1569, 1579).",
+      "assertion": { "assert": "buff", "id": "jq_roast" }
+    },
+    {
+      "id": "j_roast_stack1",
+      "layer": "parameters",
+      "claim": "The first Ashen Roast application starts at 1 stack (nihility.ts:1497).",
+      "assertion": { "assert": "buff", "id": "jq_roast", "stacks": 1 }
+    },
+    {
+      "id": "j_burn_applied",
+      "layer": "interactions",
+      "claim": "Ashen Roast accompanies a Fire Burn DoT on the target (nihility.ts:1500-1507).",
+      "assertion": { "assert": "present", "of": { "type": "DOT_APPLIED", "source": "Jiaoqiu", "payload": { "kind": "Burn" } } }
+    },
+    {
+      "id": "j_zone_vuln",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate's Zone marks enemies as taking +Ult DMG (nihility.ts:1552-1553, jq_zone_vuln).",
+      "assertion": { "assert": "present", "of": { "type": "DEBUFF_APPLIED", "payload": { "id": "jq_zone_vuln" } } }
+    },
+    {
+      "id": "j_skill_hit_before_roast",
+      "layer": "ordering",
+      "claim": "Within a Skill, the damage resolves before the Ashen Roast lands (nihility.ts:1565 then 1569).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Jiaoqiu", "label": "Scorch Onslaught" }],
+        "after": [{ "type": "DEBUFF_APPLIED", "payload": { "id": "jq_roast" } }]
+      }
+    },
+    {
+      "id": "j_e4_atk_down",
+      "layer": "parameters",
+      "claim": "E4 Leisure In, Luster Out drops enemy ATK by 15% inside the Zone (nihility.ts:1555-1557, atkPct -0.15).",
+      "fixtures": ["e4-zone"],
+      "assertion": { "assert": "buffStat", "id": "jq_e4_atk", "stat": "atkPct", "value": -0.15, "tol": 0.001 }
+    }
+  ]
+}

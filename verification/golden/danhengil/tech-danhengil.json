@@ -1,0 +1,24 @@
+{
+ "input": {
+  "kit": "danhengil",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Dan Heng • Imbibitor Lunae alone, technique \"Heaven-Quelling Prismadrakon\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Dan Heng • Imbibitor Lunae|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "ENERGY_GAIN|Dan Heng • Imbibitor Lunae|Dan Heng • Imbibitor Lunae|-|- [0,140,15,85]",
+  "BUFF_APPLIED|-|Dan Heng • Imbibitor Lunae|-|- [1,Infinity]",
+  "BUFF_APPLIED|-|Dan Heng • Imbibitor Lunae|-|- [1]",
+  "TECHNIQUE_APPLIED|Dan Heng • Imbibitor Lunae|-|-|-",
+  "HIT_START|Dan Heng • Imbibitor Lunae|Ice Edge|Heaven-Quelling Prismadrakon|basic [1,20,30,5000000,698]",
+  "DAMAGE_CALCULATED|Dan Heng • Imbibitor Lunae|Ice Edge|-|basic [0,0,0,0,0,0,0.17,0.224,1,1.2,461,698]",
+  "DAMAGE_DEALT|Dan Heng • Imbibitor Lunae|Ice Edge|Heaven-Quelling Prismadrakon|basic [1.2,461,4999539,5000000,698]",
+  "TOUGHNESS_DAMAGE|Dan Heng • Imbibitor Lunae|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Dan Heng • Imbibitor Lunae|Ice Edge|-|basic [461,4999539]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

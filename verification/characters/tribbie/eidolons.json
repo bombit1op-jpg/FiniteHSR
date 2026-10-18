@@ -1,0 +1,410 @@
+{
+  "kit": "tribbie",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Tribbie/ranks/1..6",
+    "confidence": "interpreted",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 'Rite of Sugar Scoop' (Zone True DMG = 24% of an attack's total on Additional-DMG targets), E2 'Guide of Dream Tour' (Zone Additional DMG -> 120% + 1 extra instance) and E5 'Clock of Wonder Origin' (Skill/Talent level bumps) either need a second damaging ally to surface Zone Additional DMG or only move off-buff magnitudes, so a solo-Tribbie kept fixture cannot observe them; they are documented not asserted. E3 'Trove of Morning Glow' Ult+2/Basic+1 raise 'Guess Who Lives Here' 0.3 -> 0.33 and 'Hundred Rockets' 0.3 -> 0.33. E4 'Peace of Empathy Bond' makes allies ignore 18% DEF while Numinosity lasts (tri_e4 defIgnore 0.18). E6 'Morrow of Star Shine': after the Ultimate, Tribbie launches her Talent Follow-Up ATK ('Busy as Tribbie'). Fixtures run one battle per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "tribbie E0 — eidolon ladder rung, cloned from tribbie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tribbie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "tribbie E1 — eidolon ladder rung, cloned from tribbie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tribbie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "tribbie E2 — eidolon ladder rung, cloned from tribbie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tribbie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "tribbie E3 — eidolon ladder rung, cloned from tribbie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tribbie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "tribbie E4 — eidolon ladder rung, cloned from tribbie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tribbie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "tribbie E5 — eidolon ladder rung, cloned from tribbie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tribbie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "tribbie E6 — eidolon ladder rung, cloned from tribbie/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tribbie",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "tri_e3_ult",
+      "layer": "parameters",
+      "claim": "E3 Ult+2 raises 'Guess Who Lives Here' 0.3 -> 0.33.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Guess Who Lives Here"
+        },
+        "field": "mult",
+        "value": 0.33,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tri_e3_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'Guess Who Lives Here' stays at 0.3.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Guess Who Lives Here"
+        },
+        "field": "mult",
+        "value": 0.3,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tri_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 Basic+1 raises 'Hundred Rockets' 0.3 -> 0.33.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Hundred Rockets"
+        },
+        "field": "mult",
+        "value": 0.33,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tri_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'Hundred Rockets' stays at 0.3.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Hundred Rockets"
+        },
+        "field": "mult",
+        "value": 0.3,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tri_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Peace of Empathy Bond': while Numinosity lasts, allies ignore 18% DEF (tri_e4).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "tri_e4"
+      }
+    },
+    {
+      "id": "tri_e4_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: tri_e4 must NOT be active below rank 4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "tri_e4"
+      }
+    },
+    {
+      "id": "tri_e4_stat",
+      "layer": "parameters",
+      "claim": "tri_e4 carries defIgnore 0.18 (canon E4).",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "tri_e4",
+        "stat": "defIgnore",
+        "value": 0.18
+      }
+    },
+    {
+      "id": "tri_e6_fua",
+      "layer": "interactions",
+      "claim": "E6 'Morrow of Star Shine': after the Ultimate, Tribbie launches her Talent Follow-Up ATK ('Busy as Tribbie').",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Busy as Tribbie"
+        }
+      }
+    },
+    {
+      "id": "tri_e6_fua_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: no E6 Talent Follow-Up ATK below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Busy as Tribbie"
+        }
+      }
+    }
+  ],
+  "golds": []
+}

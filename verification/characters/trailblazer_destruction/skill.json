@@ -1,0 +1,151 @@
+{
+  "kit": "trailblazer_destruction",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/88/skills (Physical, Destruction Trailblazer)",
+    "confidence": "interpreted",
+    "note": "Basic ATK Farewell Hit; Skill RIP Home Run (Blast, main L10=125% ATK, adjacent); Ultimate branches: Stardust Ace (single target, L10=450% ATK) at <=1 enemy OR Blowout: RIP Home Run (main L10=270%, adjacent L10=162%) at >=2 enemies; Talent Perfect Pickoff on Weakness Break. Energy limit 120."
+  },
+  "fixtures": [
+    {
+      "id": "tbd-single",
+      "env": "TB Destruction E0 with one ally vs 1 Physical-weak dummy, energyStartFrac 1 (energy full -> single-target Ultimate), 4 cycles, seed 3",
+      "battle": {
+        "team": [
+          { "kitId": "trailblazer_destruction", "name": "TBD", "stats": { "hp": 5000, "atk": 2200, "def": 1300, "spd": 130 }, "eidolon": 0, "energyStartFrac": 1, "skillPriority": 2 },
+          { "kitId": "danheng", "name": "Ally", "stats": { "hp": 5000, "atk": 2000, "def": 1300, "spd": 110 }, "skillPriority": 3 }
+        ],
+        "enemy": { "name": "Elite", "count": 1, "hp": 500000, "atk": 600, "spd": 120, "level": 85, "toughness": 120, "weaknesses": ["Physical"] },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "tbd-aoe",
+      "env": "TB Destruction E0 vs 2 Physical-weak dummies, energyStartFrac 1 (energy full -> multi-target Blowout Ultimate), 4 cycles, seed 3",
+      "battle": {
+        "team": [
+          { "kitId": "trailblazer_destruction", "name": "TBD", "stats": { "hp": 5000, "atk": 2200, "def": 1300, "spd": 130 }, "eidolon": 0, "energyStartFrac": 1, "skillPriority": 2 }
+        ],
+        "enemy": { "name": "Mob", "count": 2, "hp": 300000, "atk": 600, "spd": 120, "level": 85, "toughness": 120, "weaknesses": ["Physical"] },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "tbd-break",
+      "env": "TB Destruction E0 vs 1 low-Toughness Physical-weak dummy (Toughness 30), energyStartFrac 0, 6 cycles, seed 3 — Weakness Break -> Perfect Pickoff",
+      "battle": {
+        "team": [
+          { "kitId": "trailblazer_destruction", "name": "TBD", "stats": { "hp": 5000, "atk": 2200, "def": 1300, "spd": 130 }, "eidolon": 0, "energyStartFrac": 0, "skillPriority": 2 }
+        ],
+        "enemy": { "name": "Crystal", "count": 1, "hp": 300000, "atk": 600, "spd": 120, "level": 85, "toughness": 30, "weaknesses": ["Physical"] },
+        "cycles": 6,
+        "seed": 3
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "trailblazer_destruction_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Farewell Hit (800201, Physical) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "TBD",
+          "label": "Farewell Hit",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "tbd-aoe",
+        "tbd-break",
+        "tbd-single"
+      ]
+    },
+    {
+      "id": "tbd_basic_label",
+      "layer": "structure",
+      "claim": "Farewell Hit is the Basic ATK label.",
+      "fixtures": ["tbd-break"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBD", "label": "Farewell Hit" } }
+    },
+    {
+      "id": "tbd_skill_label",
+      "layer": "structure",
+      "claim": "RIP Home Run is the Skill (single enemy, no adjacent target).",
+      "fixtures": ["tbd-single"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBD", "label": "RIP Home Run (main)" } }
+    },
+    {
+      "id": "tbd_skill_mult",
+      "layer": "parameters",
+      "claim": "RIP Home Run main hit L10 = 125% of ATK.",
+      "fixtures": ["tbd-single"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "TBD", "label": "RIP Home Run (main)" }, "field": "mult", "value": 1.25, "tol": 1e-6 }
+    },
+    {
+      "id": "tbd_ult_single_label",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "With <=1 enemy the Ultimate is single-target Stardust Ace: Blowout Farewell Hit.",
+      "fixtures": ["tbd-single"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBD", "label": "Stardust Ace: Blowout Farewell Hit" } }
+    },
+    {
+      "id": "tbd_ult_single_mult",
+      "layer": "parameters",
+      "claim": "Stardust Ace single-target Ultimate L10 = 450% of ATK.",
+      "fixtures": ["tbd-single"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "TBD", "label": "Stardust Ace: Blowout Farewell Hit" }, "field": "mult", "value": 4.5, "tol": 1e-6 }
+    },
+    {
+      "id": "tbd_ult_multi_label",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "With >=2 enemies the Ultimate is Blowout: RIP Home Run (Blast).",
+      "fixtures": ["tbd-aoe"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBD", "label": "Blowout: RIP Home Run (main)" } }
+    },
+    {
+      "id": "tbd_ult_multi_adj",
+      "layer": "structure",
+      "claim": "Blowout: RIP Home Run hits adjacent targets.",
+      "fixtures": ["tbd-aoe"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBD", "label": "Blowout: RIP Home Run (adj)" } }
+    },
+    {
+      "id": "tbd_ult_multi_mult",
+      "layer": "parameters",
+      "claim": "Blowout: RIP Home Run main L10 = 270% of ATK.",
+      "fixtures": ["tbd-aoe"],
+      "assertion": { "assert": "payloadAtLeast", "of": { "type": "DAMAGE_DEALT", "source": "TBD", "label": "Blowout: RIP Home Run (main)" }, "field": "mult", "value": 2.7 }
+    },
+    {
+      "id": "tbd_fighting_will",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill/Ultimate applies Fighting Will (tb_dest_fw) DMG-taken +25% for 1 turn.",
+      "fixtures": ["tbd-single"],
+      "assertion": { "assert": "buffStat", "id": "tb_dest_fw", "stat": "vulnAll", "value": 0.25 }
+    },
+    {
+      "id": "tbd_pickoff",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent The Unyielding: Weakness Break grants Perfect Pickoff (tb_dest_pickoff).",
+      "fixtures": ["tbd-break"],
+      "assertion": { "assert": "buff", "id": "tb_dest_pickoff" }
+    },
+    {
+      "id": "tbd_no_attack_action",
+      "layer": "structure",
+      "claim": "The kit exposes Basic/Skill/Ultimate, never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "TBD", "action": "attack" } }
+    }
+  ]
+}

@@ -1,0 +1,926 @@
+{
+  "phase": "3.5 — Paired / Allies Verification",
+  "generatedFrom": [
+    "src/core/kits/*.ts ponytail markers",
+    "verification/characters/*/eidolons.json deviations"
+  ],
+  "note": "Union of both documented-deviation sources. status: promoted = interaction assertion enforced by the mandatory gate (npm run verify); blocked = declared missing engine capability (non-fatal, see verify:deviations).",
+  "count": 47,
+  "kits": [
+    {
+      "kit": "aglaea",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/remembrance.ts",
+          "line": 250,
+          "text": "// ponytail: the ult's own Energy grant is the framework's job — castUlt detects the"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "archer",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/hunt.ts",
+          "line": 1362,
+          "text": "// ponytail: maxSp raisers (Sparkle Red Herring, Rin A2) each subtract their own bonus in"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "argenti",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/argenti/eidolons.json",
+          "req": "arg_e2_deviation",
+          "reason": "Cloned skill.json fixture has a single enemy, so the >=3-enemies branch never fires"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "arlan",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/destruction.ts",
+          "line": 534,
+          "text": "// ponytail: E2 (dispel) and A4 Endurance (DoT resist) are not modeled — no enemy debuffs on allies,"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/arlan/eidolons.json",
+          "req": "arlan_e2_deviation",
+          "reason": "The cloned fixture applies no debuff to Arlan"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/arlan/eidolons.json",
+          "req": "arlan_e4_deviation",
+          "reason": "Revive window gone before the lethal hit in this fixture"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/arlan/eidolons.json",
+          "req": "arlan_e6_deviation",
+          "reason": "Fixture casts the Ultimate at HP > 50%"
+        }
+      ],
+      "interactionNeeded": "E2 dispel / A4 DoT RES / A6 wounded-start interceptor",
+      "canonSource": "characters.json#/Arlan/ranks/2,4,6",
+      "expected": "dispel fires; 50% DoT RES; <=50% HP loss interceptor",
+      "status": "promoted"
+    },
+    {
+      "kit": "ashveil",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/ashveil/eidolons.json",
+          "req": "ash_e2_deviation",
+          "reason": "No Gluttony stack readout in the cloned fixture"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/ashveil/eidolons.json",
+          "req": "ash_e3_deviation",
+          "reason": "Ability-level bump for abilities the fixture never uses"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/ashveil/eidolons.json",
+          "req": "ash_e4_deviation",
+          "reason": "Ashveil is knocked out before taking a turn"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "asta",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/asta/eidolons.json",
+          "req": "asta_e2_deviation",
+          "reason": "No stable observable for Charging-stack retention"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/asta/eidolons.json",
+          "req": "asta_e6_deviation",
+          "reason": "No stable observable for the reduced Charging-stack loss"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "aventurine_waveflair",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/elation.ts",
+          "line": 1097,
+          "text": "* ponytail: checkpoint spacing is 10 while the largest single Fervor grant is 6 (ult_a3), so natural"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "castorice",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/remembrance.ts",
+          "line": 764,
+          "text": "// ponytail: the stack is added at the TOP of breathScorches, i.e. the payout press (Wings Sweep) stacks it too —"
+        },
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/remembrance.ts",
+          "line": 774,
+          "text": "// ponytail: the 100% advance is read as a once-per-summon burst (the text states it once, and 2 stacks would"
+        },
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/remembrance.ts",
+          "line": 786,
+          "text": "// ponytail: the Quantum Weakness Break effect has no sim support - breaks use the type's generic break multiplier."
+        },
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/remembrance.ts",
+          "line": 1162,
+          "text": "// ponytail: nothing can feed the wing mid-turn any more — breathScorches pins the bar to its post-cost value"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "cerydra",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/harmony.ts",
+          "line": 1240,
+          "text": "// ponytail: canon splits the activation — Cerydra's copy is cast immediately as a Follow-Up"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "cyrene",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/remembrance.ts",
+          "line": 1933,
+          "text": "// ponytail: 1141526 lists no Toughness for the bounce hits (only the 0.84% scale + Story threshold 3),"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "evanescia",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/elation.ts",
+          "line": 822,
+          "text": "* ponytail: the Energy<->CB exchange is one hop per instance (the real chain cascades, but its"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "evernight",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/remembrance.ts",
+          "line": 1572,
+          "text": "// ponytail: owner-dead fallback (summonTurn/perform resolve `?? s` / `?? u` to the summon"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "gepard",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/preservation.ts",
+          "line": 316,
+          "text": "// ponytail: Technique \"Comradery\" (120407, Maze) is not modeled — same gap for"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "himeko_nova",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/erudition.ts",
+          "line": 1969,
+          "text": "// ponytail: #3% Energy to allies that use an Assist Skill and the \"Hark!\" extra turn are not"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "hyacine",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/remembrance.ts",
+          "line": 427,
+          "text": "*  at summon/ult, so Ica's E4 crit lags until then — `ponytail:`). */"
+        },
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/remembrance.ts",
+          "line": 686,
+          "text": "// by the ally's own turn start (`ponytail:` — the sim has no generic ally-HP-drop hook)."
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "luocha",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/luocha/eidolons.json",
+          "req": "luocha_e1_deviation",
+          "reason": "The buff is applied by onAllyTurnStart, which the engine fires for every ally EXCEPT the acting unit; the fixture is a solo Luocha, so there is no other ally to receive it and no self-application."
+        }
+      ],
+      "interactionNeeded": "E1 Zone-active buff must land on a non-acting ally at its turn start",
+      "canonSource": "characters.json#/Luocha/ranks/1",
+      "expected": "luocha_e1 (+20% ATK) present on ally while Zone active",
+      "status": "promoted"
+    },
+    {
+      "kit": "lynx",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/lynx/eidolons.json",
+          "req": "lynx_e1_deviation",
+          "reason": "Lynx never heals a target at <=50% HP in the solo fixture (self-heals land well above the 50% gate), so the conditional bonus is never triggered."
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/lynx/eidolons.json",
+          "req": "lynx_e2_deviation",
+          "reason": "Survival Response (lynx_sr) is granted by Skill; the solo fixture never casts Skill, so SR is never applied and the resist can never fire."
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/lynx/eidolons.json",
+          "req": "lynx_e4_deviation",
+          "reason": "Requires casting Skill to gain SR; the solo fixture never casts Skill, so lynx_e4 is never applied."
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/lynx/eidolons.json",
+          "req": "lynx_e6_deviation",
+          "reason": "Modifies Survival Response, which the solo fixture never applies (Skill never cast)."
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "march7th",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/preservation.ts",
+          "line": 11,
+          "text": "// ponytail: this is the base March 7th (Preservation/Ice). «March 7th • The Hunt» is a SEPARATE"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/march7th/eidolons.json",
+          "req": "m7_e4_deviation",
+          "reason": "The extra per-turn Counter and the flat DEF addend do not change the recorded Counter multiplier and the fixture never reaches the previous per-turn Counter cap, so neither is pinned."
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/march7th/eidolons.json",
+          "req": "m7_e6_deviation",
+          "reason": "The heal fires onAllyTurnStart, which the engine runs for every ally except the acting unit; the fixture has a solo March 7th, so no ally turn-start heal is produced."
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "march7th_the_hunt",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/hunt.ts",
+          "line": 1735,
+          "text": "// ponytail: Technique «Feast in One Go» (122407, Maze pre-fight) не моделируется — нужен enter-combat"
+        },
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/hunt.ts",
+          "line": 1847,
+          "text": "*  неотличимы ⇒ ponytail: стреляет по любой атаке Shifu, кроме dot/break (гейт в onAfterAttack). */"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "mortenax_blade",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/nihility.ts",
+          "line": 2244,
+          "text": "// E1 enemy All-Type RES down uses target-side resAll;"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/mortenax_blade/eidolons.json",
+          "req": "mb_e2_deviation",
+          "reason": "The reclassification applies to ALLY Ultimates and the Charge cap is an internal limit; the fixture is a solo Mortenax Blade with no ally Ultimate and exposes no Charge-cap event."
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "moze",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/moze/eidolons.json",
+          "req": "moze_e1_deviation",
+          "reason": "The battle-start 20 Energy shifts the early energy timeline but is swamped by later gains; total ENERGY_GAIN sum is 205 both below and above E1 in the solo fixture, so it cannot be cleanly separated."
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/moze/eidolons.json",
+          "req": "moze_e2_deviation",
+          "reason": "The +40% CRIT DMG vs Prey is applied inside the damage calculation (no dedicated buff id) and the fixture does not expose a stable per-hit CRIT-DMG payload to pin."
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "mydei",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/mydei/eidolons.json",
+          "req": "mydei_e6_deviation",
+          "reason": "Vendetta (mydei_vend) is also gained during a normal fight, and the Charge requirement is an internal gate; neither yields a distinct event/state in the solo fixture."
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "natasha",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/natasha/eidolons.json",
+          "req": "nat_e1_deviation",
+          "reason": "Natasha never drops to <=30% HP in the solo fixture"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/natasha/eidolons.json",
+          "req": "nat_e2_deviation",
+          "reason": "Ultimate is never used by the cloned fixture"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/natasha/eidolons.json",
+          "req": "nat_e5_deviation",
+          "reason": "No observable for the Ult/Talent level bump in this fixture"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "pearl",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/pearl/eidolons.json",
+          "req": "pearl_e1_deviation",
+          "reason": "Only one Elation Path character and no fatal hit in the fixture"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "pela",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/pela/eidolons.json",
+          "req": "pela_e1_deviation",
+          "reason": "No enemy is defeated in the fixture"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "phainon",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/phainon/eidolons.json",
+          "req": "ph_e1_deviation",
+          "reason": "E1 CRIT DMG / SPD inheritance is not surfaced as a buff or log line"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/phainon/eidolons.json",
+          "req": "ph_e2_deviation",
+          "reason": "E2 RES PEN / extra-turn branch is not surfaced"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/phainon/eidolons.json",
+          "req": "ph_e4_deviation",
+          "reason": "Soulscorch stack count is not surfaced"
+        }
+      ],
+      "interactionNeeded": "SPD-inheritance / Verdict-Scourge / Soulscorch observables surfaced by the phainon x bronya fixture (verify:deviations)",
+      "canonSource": "characters.json#/phainon/ranks+traces",
+      "expected": "Khaslana E1 SPD log; E2 4+ Scourge verdict log; Soulscorch Edict at 5 SS",
+      "status": "promoted"
+    },
+    {
+      "kit": "qingque",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/erudition.ts",
+          "line": 456,
+          "text": "/** ponytail: tile choice is automated (the player picks in game) — tie on equal counts goes to the"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "rappa",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/rappa/eidolons.json",
+          "req": "rap_e2_deviation",
+          "reason": "Toughness reduction is not emitted as an observable node"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "rin",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/rin/eidolons.json",
+          "req": "rin_e4_deviation",
+          "reason": "Stack count of the Talent CRIT DMG buff is not exposed"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "robin",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/harmony.ts",
+          "line": 1590,
+          "text": "// ponytail: this is the base Robin (Harmony/Physical, Concerto). «Robin • Summeretto» is a SEPARATE"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/robin/eidolons.json",
+          "req": "rob_e6_deviation",
+          "reason": "No ally attack exists in the solo fixture to trigger the Ult Additional DMG"
+        }
+      ],
+      "interactionNeeded": "E6 Concerto Ult Additional DMG on an ally attack surfaced by the robin x bronya fixture (verify:deviations)",
+      "canonSource": "characters.json#/robin/ranks+traces",
+      "expected": "DAMAGE_DEALT attackType=add label='Vox Harmonique (Additional)' with the +450% CRIT DMG magnitude",
+      "status": "promoted"
+    },
+    {
+      "kit": "robin_summeretto",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/remembrance.ts",
+          "line": 2383,
+          "text": "// ponytail: the three Songbirds are ONE summon unit + a member count (1..3) — the count only drives the"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/robin_summeretto/eidolons.json",
+          "req": "robin_summeretto_e1_deviation",
+          "reason": "True DMG is not a trace event in this harness"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/robin_summeretto/eidolons.json",
+          "req": "rsu_e3_deviation",
+          "reason": "Fixture does not surface the leveled abilities"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/robin_summeretto/eidolons.json",
+          "req": "rsu_e4_deviation",
+          "reason": "Fixture does not surface Vibes deltas or Songbird SPD"
+        }
+      ],
+      "interactionNeeded": "E1 Summer Songbird True DMG surfaced by the robin_summeretto x seele fixture (verify:deviations)",
+      "canonSource": "characters.json#/robin_summeretto/ranks+traces",
+      "expected": "DAMAGE_DEALT attackType=true label='True DMG' fired from Fever (3-member stage)",
+      "status": "promoted"
+    },
+    {
+      "kit": "ruanmei",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/ruanmei/eidolons.json",
+          "req": "rm_e3_deviation",
+          "reason": "Fixture never uses the Skill or Talent"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/ruanmei/eidolons.json",
+          "req": "rm_e4_deviation",
+          "reason": "No Weakness Break occurs in this fixture"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "sampo",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/sampo/eidolons.json",
+          "req": "sampo_e2_deviation",
+          "reason": "No kill happens in this fixture"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "seele",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/seele/eidolons.json",
+          "req": "seele_e1_deviation",
+          "reason": "Enemy stays above 80% HP in this fixture"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/seele/eidolons.json",
+          "req": "seele_e4_deviation",
+          "reason": "Seele never lands a killing blow in this fixture"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "serval",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/serval/eidolons.json",
+          "req": "serval_e4_deviation",
+          "reason": "Every enemy is already Shocked by the Skill in this fixture"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "silver_wolf_lv999",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/elation.ts",
+          "line": 1217,
+          "text": "*  ponytail: collapsed 100-bounce hits, dead CR-DMG-past-100 branch, E6 no re-entry,"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/silver_wolf_lv999/eidolons.json",
+          "req": "swlv_e2_deviation",
+          "reason": "Fixture does not surface buff durations or Enhanced Basic counts"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "silverwolf",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/nihility.ts",
+          "line": 592,
+          "text": "// ponytail: this is the base Silver Wolf (Nihility/Quantum). «Silver Wolf LV.999» is a SEPARATE"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "sparkle",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/sparkle/eidolons.json",
+          "req": "sparkle_e4_deviation",
+          "reason": "No assertion reads the skill-point pool maximum or the extra SP recovered by the Ultimate, so the E4 delta is invisible to this harness"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "sparxie",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/elation.ts",
+          "line": 138,
+          "text": "// ponytail: the stream cap is 20 Engagement Farming triggers = 20 Enhanced Basics, but a"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/sparxie/eidolons.json",
+          "req": "sparxie_e1_deviation",
+          "reason": "The solo fixture never surfaces Punchline or an Aha-Instant-end event, so the E1 RES-PEN ladder is not observable"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/sparxie/eidolons.json",
+          "req": "sparxie_e2_deviation",
+          "reason": "The E2 extra turn and Thrill buff are not surfaced as trace events or buff ids in this fixture"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "sunday",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/harmony.ts",
+          "line": 1054,
+          "text": "// ponytail: restore when an ally-debuff model exists"
+        }
+      ],
+      "interactionNeeded": "A6 dispel 1 debuff from Skill target",
+      "canonSource": "characters.json#/Sunday/ranks/6",
+      "expected": "Skill strips 1 ally debuff",
+      "status": "promoted"
+    },
+    {
+      "kit": "sushang",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/hunt.ts",
+          "line": 1618,
+          "text": "// ponytail: Riposte stacks never expire — source data documents only \"Stacks up to 10 time(s)\""
+        },
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/hunt.ts",
+          "line": 1645,
+          "text": "// ponytail: Technique \"Cloudfencer Art: Warcry\" (120607, Maze) is not modeled — same gap for"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/sushang/eidolons.json",
+          "req": "sushang_e1_deviation",
+          "reason": "No Weakness Break occurs before Sushang's Skill in this fixture"
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/sushang/eidolons.json",
+          "req": "sushang_e2_deviation",
+          "reason": "Sword Stance does not trigger with damage in this fixture, so the E2 mitigation buff never appears"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "the_dahlia",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/the_dahlia/eidolons.json",
+          "req": "dahl_e1_deviation",
+          "reason": "The E1 Super-Break grant and Dance-Partner fixed Toughness reduction have no dedicated buff id or trace event observable in this fixture"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "tingyun",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/tingyun/eidolons.json",
+          "req": "tingyun_e2_deviation",
+          "reason": "No enemy is defeated in this fixture, so the E2 on-kill Energy regeneration is not observable"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "topaz",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/hunt.ts",
+          "line": 294,
+          "text": "// ponytail: no living enemy on this turn (last one died to a prior follow-up) — nothing to mark"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "tribbie",
+      "evidence": [
+        {
+          "kind": "ponytail",
+          "file": "src/core/kits/harmony.ts",
+          "line": 858,
+          "text": "// ponytail: canon picks the single highest-HP target among ALL hit targets once the attack"
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "yanqing",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/yanqing/eidolons.json",
+          "req": "yanqing_e6_present",
+          "reason": "E6 only extends buff duration on an on-kill trigger; the eidolon ladder fixture is a single kit vs a high-HP elite that is never killed, so the extension never fires."
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    },
+    {
+      "kit": "yukong",
+      "evidence": [
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/yukong/eidolons.json",
+          "req": "yukong_e2_present",
+          "reason": "E2 restores Energy only when a teammate's Energy is full; the eidolon ladder fixture is Yukong alone, so no ally ever triggers it."
+        },
+        {
+          "kind": "eidolon-deviation",
+          "file": "verification/characters/yukong/eidolons.json",
+          "req": "yukong_e6_present",
+          "reason": "E6 adds a Roaring Bowstrings stack on Ult, but the solo fixture's Ult already reaches the cap, so the extra stack produces no observable state change."
+        }
+      ],
+      "interactionNeeded": "",
+      "canonSource": "",
+      "expected": "",
+      "status": "promoted"
+    }
+  ]
+}

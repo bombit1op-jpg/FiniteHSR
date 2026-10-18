@@ -1,0 +1,127 @@
+{
+  "kit": "trailblazer_remembrance",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/94/skills + memosprite (Ice, Remembrance Trailblazer)",
+    "confidence": "interpreted",
+    "note": "Basic Leave It to Me!; Skill I Choose You! (summons/heals Mem, +Energy, no damage); Ultimate Together, Mem! (Mem AoE Ice, +Charge); Enhanced Basic Together, We Script Tomorrow! (TB + Mem). Mem acts on its own turn: Baddies! Trouble! (damage) or Lemme! Help You! (Mem's Support true-DMG aura to the highest-ATK ally) at full Charge. Friends! Together! grants allies CRIT DMG. Energy limit 160."
+  },
+  "fixtures": [
+    {
+      "id": "tbr-main",
+      "env": "TB Remembrance E0 solo vs 1 Ice-weak dummy, energyStartFrac 1 (Ultimate first: summons Mem), 8 cycles, seed 3",
+      "battle": {
+        "team": [
+          { "kitId": "trailblazer_remembrance", "name": "TBR", "stats": { "hp": 6000, "atk": 2000, "def": 1300, "spd": 130 }, "eidolon": 0, "energyStartFrac": 1, "skillPriority": 2 }
+        ],
+        "enemy": { "name": "Frost", "count": 1, "hp": 600000, "atk": 600, "spd": 120, "level": 85, "toughness": 120, "weaknesses": ["Ice"] },
+        "cycles": 8,
+        "seed": 3
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "tbr_talent_mem",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent: Memosprite Mem joins the Action Order — logged '<TB> summons Mem' (remembrance.ts:2250-2258).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "summons Mem"
+        }
+      }
+    },
+    {
+      "id": "trailblazer_remembrance_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Leave It to Me! (800801, Ice) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "TBR",
+          "label": "Leave It to Me!",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "tbr-main"
+      ]
+    },
+    {
+      "id": "tbr_ult_used",
+      "layer": "structure",
+      "claim": "Together, Mem! is the Ultimate action.",
+      "fixtures": ["tbr-main"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "TBR", "action": "ultimate" } }
+    },
+    {
+      "id": "tbr_skill_action",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill I Choose You! (summons/heals Mem, no damage) fires as a Skill action (remembrance.ts:2344).",
+      "fixtures": ["tbr-main"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "TBR", "action": "skill" } }
+    },
+    {
+      "id": "tbr_summon",
+      "layer": "interactions",
+      "claim": "Summoning registers the Mem memosprite (SUMMON_CREATED targeting 'Mem').",
+      "fixtures": ["tbr-main"],
+      "assertion": { "assert": "present", "of": { "type": "SUMMON_CREATED", "target": "Mem" } }
+    },
+    {
+      "id": "tbr_ult_damage",
+      "layer": "structure",
+      "claim": "The Ultimate's Ice damage is dealt by Mem (source 'Mem').",
+      "fixtures": ["tbr-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Mem", "label": "Together, Mem!" } }
+    },
+    {
+      "id": "tbr_enhanced_basic_tb",
+      "layer": "structure",
+      "claim": "After the Ultimate the Enhanced Basic Together, We Script Tomorrow! fires from TB.",
+      "fixtures": ["tbr-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBR", "label": "Script Tomorrow (TB)" } }
+    },
+    {
+      "id": "tbr_enhanced_basic_mem",
+      "layer": "structure",
+      "claim": "The Enhanced Basic also fires from Mem.",
+      "fixtures": ["tbr-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Mem", "label": "Script Tomorrow (Mem)" } }
+    },
+    {
+      "id": "tbr_friends",
+      "layer": "interactions",
+      "claim": "Friends! Together! grants allies CRIT DMG while Mem is present (tb_rem_friends).",
+      "fixtures": ["tbr-main"],
+      "assertion": { "assert": "buff", "id": "tb_rem_friends", "target": "TBR" }
+    },
+    {
+      "id": "tbr_baddies",
+      "layer": "structure",
+      "claim": "Mem's own-turn Skill Baddies! Trouble! deals AoE Ice damage (label Baddies AoE).",
+      "fixtures": ["tbr-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Mem", "label": "Baddies AoE" } }
+    },
+    {
+      "id": "tbr_support",
+      "layer": "interactions",
+      "claim": "At full Charge Mem uses Lemme! Help You! granting Mem's Support (tb_rem_support) to the highest-ATK ally.",
+      "fixtures": ["tbr-main"],
+      "assertion": { "assert": "buff", "id": "tb_rem_support", "target": "TBR" }
+    },
+    {
+      "id": "tbr_no_attack_action",
+      "layer": "structure",
+      "claim": "The kit exposes Basic/Skill/Ultimate, never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "TBR", "action": "attack" } }
+    }
+  ]
+}

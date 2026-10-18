@@ -1,0 +1,19 @@
+{
+ "input": {
+  "kit": "the_herta",
+  "slot": "technique",
+  "env": "Technique activation (mode init): The Herta alone, technique \"Vibe Checker\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|The Herta|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [1,42,Infinity]",
+  "TECHNIQUE_APPLIED|The Herta|-|-|-",
+  "BUFF_APPLIED|-|The Herta|-|- [1,2]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [26,42,Infinity]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

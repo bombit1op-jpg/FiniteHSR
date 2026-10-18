@@ -1,0 +1,316 @@
+{
+  "kit": "castorice",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Castorice/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder E1..E6. E1 'Snowbound Maiden, Gleaming Teardrop' raises the DMG of the listed Netherwing abilities to 120%/140% when the target is at <=80%/50% HP (multiplier change, no dedicated buff). E2 'Crown on Wings of Bloom' upon summoning Netherwing grants 2 Ardent Will, advances Castorice's action and refunds Newbud (log 'Ardent Will (E2)'). E3 (Ult+2/Basic+1/Memosprite+1) is a level bump scaling Lost Netherland cast_terr resAll -0.20->-0.22. E4 'Rest in Songs of Gloom' all allies' healing received +20% (cast_e4_ihb inHeal 0.2). E5 (Skill+2/Talent+2/Memosprite+1) is a level bump scaling Desolation Across Palms cast_dmg dmgAll 0.60->0.66. E6 'Await for Years to Loom' +20% Quantum RES PEN (cast_e6_respen resPen:Quantum 0.2) and +3 Wings Sweep the Ruins bounces."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "castorice E0 — eidolon ladder rung, cloned from castorice/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "castorice",
+            "stats": {
+              "hp": 100000,
+              "atk": 1000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 5,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "castorice E1 — eidolon ladder rung, cloned from castorice/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "castorice",
+            "stats": {
+              "hp": 100000,
+              "atk": 1000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 5,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "castorice E2 — eidolon ladder rung, cloned from castorice/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "castorice",
+            "stats": {
+              "hp": 100000,
+              "atk": 1000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 5,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "castorice E3 — eidolon ladder rung, cloned from castorice/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "castorice",
+            "stats": {
+              "hp": 100000,
+              "atk": 1000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 5,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "castorice E4 — eidolon ladder rung, cloned from castorice/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "castorice",
+            "stats": {
+              "hp": 100000,
+              "atk": 1000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 5,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "castorice E5 — eidolon ladder rung, cloned from castorice/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "castorice",
+            "stats": {
+              "hp": 100000,
+              "atk": 1000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 5,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "castorice E6 — eidolon ladder rung, cloned from castorice/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "castorice",
+            "stats": {
+              "hp": 100000,
+              "atk": 1000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 5,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "castorice_e2_log",
+      "layer": "interactions",
+      "claim": "E2 'Crown on Wings of Bloom': summoning Netherwing grants 2 Ardent Will; observable as the dedicated log line. Present from E2 onward.",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "Ardent Will \\(E2\\)" } }
+    },
+    {
+      "id": "castorice_e2_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: the E2 Ardent Will log must NOT appear below rank 2.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "absent", "of": { "type": "NOTE", "log": "Ardent Will \\(E2\\)" } }
+    },
+    {
+      "id": "castorice_e3_terr",
+      "layer": "parameters",
+      "claim": "E3 (Ult+2/Basic+1/Memosprite+1) level bump scales Lost Netherland cast_terr resAll to -0.22 (-0.20 at E0..E2).",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "cast_terr", "stat": "resAll", "value": -0.22 }
+    },
+    {
+      "id": "castorice_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Rest in Songs of Gloom': all allies' healing received +20% (cast_e4_ihb). Present from E4 onward.",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "cast_e4_ihb" }
+    },
+    {
+      "id": "castorice_e4_inheal",
+      "layer": "parameters",
+      "claim": "The E4 buff carries inHeal 0.20 (canon ranks/4).",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "buffStat", "id": "cast_e4_ihb", "stat": "inHeal", "value": 0.2 }
+    },
+    {
+      "id": "castorice_e4_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E4 must NOT be active below rank 4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "noBuff", "id": "cast_e4_ihb" }
+    },
+    {
+      "id": "castorice_e5_dmg",
+      "layer": "parameters",
+      "claim": "E5 (Skill+2/Talent+2/Memosprite+1) level bump scales Desolation Across Palms cast_dmg dmgAll to 0.66 (0.60 at E0..E4).",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "cast_dmg", "stat": "dmgAll", "value": 0.66 }
+    },
+    {
+      "id": "castorice_e6_present",
+      "layer": "interactions",
+      "claim": "E6 'Await for Years to Loom': +20% Quantum RES PEN (cast_e6_respen). Present at rank 6.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buff", "id": "cast_e6_respen" }
+    },
+    {
+      "id": "castorice_e6_respen",
+      "layer": "parameters",
+      "claim": "The E6 buff carries resPen:Quantum 0.20 (canon ranks/6).",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buffStat", "id": "cast_e6_respen", "stat": "resPen:Quantum", "value": 0.2 }
+    },
+    {
+      "id": "castorice_e6_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E6 must NOT be active below rank 6.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "noBuff", "id": "cast_e6_respen" }
+    }
+  ],
+  "golds": []
+}

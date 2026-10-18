@@ -1,0 +1,151 @@
+{
+  "kit": "dr_ratio",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/120801+120802+120803+120804 + bonus_abilities (Summation, Inference, Deduction, Wiseman's Folly)",
+    "confidence": "verified",
+    "note": "Dr. Ratio is a Hunt Imaginary character (Energy limit 140). Basic 120801 Mind is Might (Imaginary). Skill 120802 Intellectual Midwifery spends 1 SP, deals Imaginary DMG, and applies Inference (Effect RES -10%, 2 turns, 100% base chance); Summation grants self CR +2.5%/CD +5% per debuff on the target (cap 6). Talent 120804 Cogito, Ergo Sum: after Skill, a Follow-Up ATK triggers with chance 40% + 20% per debuff on the target (cap 100%); with >=3 debuffs it also gains Deduction (+10% DMG per debuff, cap 50%). Ultimate 120803 Syllogistic Paradox deals heavy Imaginary DMG and marks the target with Wiseman's Folly: the next 2 ally attacks provoke another Follow-Up ATK."
+  },
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "solo-battle",
+      "env": "Dr. Ratio E0 solo vs an Imaginary-weak Elite (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "dr_ratio",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Imaginary"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "wiseman-e2",
+      "env": "Dr. Ratio E2 + Hook E0 vs the same Elite - Hook's attacks on the Wiseman-marked target provoke Ratio's Talent Follow-Up ATK",
+      "battle": {
+        "team": [
+          {
+            "kitId": "dr_ratio",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 160 },
+            "eidolon": 2
+          },
+          {
+            "kitId": "hook",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 130 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Imaginary", "Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "r_basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK 120801 Mind is Might is a single Imaginary hit.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Dr. Ratio", "label": "Mind is Might" } }
+    },
+    {
+      "id": "r_skill_hit",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill 120802 Intellectual Midwifery is a single Imaginary hit.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Dr. Ratio", "label": "Intellectual Midwifery" } }
+    },
+    {
+      "id": "r_skill_action",
+      "layer": "structure",
+      "claim": "Intellectual Midwifery (120802) is Dr. Ratio's Skill action.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Dr. Ratio", "action": "skill" } }
+    },
+    {
+      "id": "r_ult_action",
+      "layer": "structure",
+      "claim": "Syllogistic Paradox (120803) is Dr. Ratio's Ultimate action.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Dr. Ratio", "action": "ultimate" } }
+    },
+    {
+      "id": "r_ult_hit",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Ultimate 120803 Syllogistic Paradox deals Imaginary DMG.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Dr. Ratio", "label": "Syllogistic Paradox" } }
+    },
+    {
+      "id": "r_inference",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill 120802 applies Inference (ratio_infer, Effect RES -10%) to the target.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "buff", "id": "ratio_infer", "target": "Elite" }
+    },
+    {
+      "id": "r_fua_wiseman",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Cogito, Ergo Sum triggers Dr. Ratio's Follow-Up ATK (via Wiseman's Folly after ally attacks).",
+      "fixtures": ["wiseman-e2"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Dr. Ratio", "label": "Cogito, Ergo Sum FUA" } }
+    },
+    {
+      "id": "r_e2_additional",
+      "layer": "interactions",
+      "claim": "E2 adds one Imaginary Additional 20%-ATK hit per debuff on the target (here >=1).",
+      "fixtures": ["wiseman-e2"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Dr. Ratio", "label": "E2 Additional" } }
+    },
+    {
+      "id": "r_ally_attack_before_fua",
+      "layer": "ordering",
+      "claim": "Every Wiseman's Folly Follow-Up ATK follows an ally attack on the marked target.",
+      "fixtures": ["wiseman-e2"],
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Hook", "action": "skill" }],
+        "after": [{ "type": "HIT_START", "source": "Dr. Ratio", "label": "Cogito, Ergo Sum FUA" }]
+      }
+    },
+    {
+      "id": "r_energy_cap",
+      "layer": "parameters",
+      "claim": "Dr. Ratio's Ultimate gate is the 140-Energy ladder; he never exceeds it.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "unitState", "who": "Dr. Ratio", "field": "energy", "atMost": 140 }
+    }
+  ]
+}

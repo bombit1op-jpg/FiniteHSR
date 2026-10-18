@@ -1,0 +1,20 @@
+{
+ "input": {
+  "kit": "hyacine",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Hyacine alone, technique \"Day So Right, Life So Fine!\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Hyacine|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Hyacine|-|- [1,Infinity]",
+  "BUFF_APPLIED|-|Hyacine|-|- [1,Infinity]",
+  "TECHNIQUE_APPLIED|Hyacine|-|-|-",
+  "HEAL_APPLIED|-|Hyacine|-|- [0,0,0,1195,1195]",
+  "BUFF_APPLIED|-|Hyacine|-|- [1,2]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

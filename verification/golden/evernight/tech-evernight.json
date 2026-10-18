@@ -1,0 +1,26 @@
+{
+ "input": {
+  "kit": "evernight",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Evernight alone, technique \"Let it Rain Cold On Thee\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Evernight|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "STAT_CHANGED|Evey|-|-|- [1,160]",
+  "SUMMON_CREATED|Evernight|Evey|-|- [160,62.5,778,778]",
+  "BUFF_APPLIED|-|Evernight|-|- [1,Infinity]",
+  "BUFF_APPLIED|-|Evey|-|- [1,Infinity]",
+  "BUFF_APPLIED|-|Evernight|-|- [1,Infinity]",
+  "BUFF_APPLIED|-|Evey|-|- [1,Infinity]",
+  "ACTION_ADVANCE|Evey|Evey|-|- [0,1]",
+  "HEAL_APPLIED|-|Evey|-|- [0,0,0,778,778]",
+  "ENERGY_GAIN|Evernight|Evernight|-|- [0,190,240,70]",
+  "TECHNIQUE_APPLIED|Evernight|-|-|-",
+  "BUFF_APPLIED|Evernight|Evey|-|- [1,1,2]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

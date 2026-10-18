@@ -1,0 +1,430 @@
+{
+  "kit": "rappa",
+  "slot": "skill",
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Rappa E0 solo vs 3 Imaginary-weak Elite (level 95, 240 Toughness), 3 cycles — Skill 131702 'Ninja Strike: Rooted Resolute' hits all 3 enemies, Ultimate 131703 'Nindō Supreme: Aishiteru' enters Sealform (WBE+50%, BE+30%, 3 Chroma Ink) and grants an Extra Turn, the Enhanced Basic 131718 'Ningu: Demonbane Petalblade' spends Ink per cast while Talent 131704 'Ninja Tech: Endurance Gauge' deals Break DMG to all enemies on every 3rd-hit proc; the normal Basic 'Ninjutsu: Rise Above Tumbles' never fires because decide() only offers Skill (outside Sealform, SP) or the Sealform Basic",
+      "battle": {
+        "team": [
+          {
+            "kitId": "rappa",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "skill_cast_3",
+      "layer": "structure",
+      "claim": "Skill 131702 is cast 3 times: outside Sealform decide() returns Skill while SP >= 1 (erudition.ts:1075), inside Sealform Skill is refused (canon 131703 'Skill and Ultimate cannot be used'; decide erudition.ts:1073) — 3 casts before SP runs out.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Rappa",
+          "action": "skill"
+        },
+        "value": 3
+      }
+    },
+    {
+      "id": "skill_hits_9",
+      "layer": "structure",
+      "claim": "The Skill is an AoE hit against all living enemies with label 'Ninja Strike: Rooted Resolute' (canon 131702 'to all enemies'; erudition.ts:1094 sim.hitAoe) — 3 casts x 3 enemies = 9 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Rappa",
+          "label": "Ninja Strike: Rooted Resolute"
+        },
+        "value": 9
+      }
+    },
+    {
+      "id": "ult_cast_2",
+      "layer": "structure",
+      "claim": "Ultimate 131703 fires twice: decide() returns ult only at full Energy 140 (erudition.ts:1074, guard erudition.ts:1084 'u.energy < u.maxEnergy'), and Sealform blocks re-cast (erudition.ts:1084 ink>0) — 2 casts in 3 cycles.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Rappa",
+          "action": "ultimate"
+        },
+        "value": 2
+      }
+    },
+    {
+      "id": "ult_extra_turn_2",
+      "layer": "structure",
+      "claim": "Every Ultimate immediately grants an Extra Turn (canon 131703 'immediately gains 1 extra turn'; erudition.ts:1088 sim.grantExtraTurn) — 2 casts => 2 EXTRA_TURN events.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "EXTRA_TURN"
+        },
+        "value": 2
+      }
+    },
+    {
+      "id": "enhanced_basic_cast_3",
+      "layer": "structure",
+      "claim": "Exactly 3 scheduled Basic actions in 3 cycles: decide() offers Basic only while Ink > 0 (erudition.ts:1073) — each Sealform's first Enhanced Basic runs as the Ultimate's Extra Turn (no separate ABILITY event), the next 2 as scheduled basics.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Rappa",
+          "action": "basic"
+        },
+        "value": 3
+      }
+    },
+    {
+      "id": "enhanced_main_hits_5",
+      "layer": "structure",
+      "claim": "The Enhanced Basic 131718 hits its designated target with label 'Ningu: Demonbane Petalblade' (erudition.ts:1105-1106 hitBlast main) — 5 Enhanced Basic casts (2 seals: 3 + 2) => 5 main hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Rappa",
+          "label": "Ningu: Demonbane Petalblade"
+        },
+        "value": 5
+      }
+    },
+    {
+      "id": "enhanced_adj_hits_10",
+      "layer": "structure",
+      "claim": "The Enhanced Basic also hits both adjacent enemies with label 'Ningu: Demonbane Petalblade (adj)' (erudition.ts:1107 hitBlast adj) — 5 casts x 2 adjacent = 10 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Rappa",
+          "label": "Ningu: Demonbane Petalblade (adj)"
+        },
+        "value": 10
+      }
+    },
+    {
+      "id": "no_normal_basic",
+      "layer": "structure",
+      "claim": "Solo negative: the normal Basic 131701 'Ninjutsu: Rise Above Tumbles' (erudition.ts:1124) never fires — outside Sealform decide() prefers Skill while SP lasts and then ult-on-full; the only SP-empty turn still found Energy full or Ink active.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "HIT_START",
+          "source": "Rappa",
+          "label": "Ninjutsu: Rise Above Tumbles"
+        }
+      }
+    },
+    {
+      "id": "ult_cost_delta_120",
+      "layer": "parameters",
+      "claim": "ENERGY_LOSS reason 'ult_cost' books the actual Energy delta of the cast: Energy 140 at cast, the kit zeroes the pool (erudition.ts:1085) and the in-cast Extra-Turn Enhanced Basic regenerates +20 (erudition.ts:1108), so the emitted delta is 140 - 20 = 120 (TurnManager.ts:363-374 measures before-after).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Rappa",
+          "payload": {
+            "reason": "ult_cost"
+          }
+        },
+        "field": "amount",
+        "value": 120
+      }
+    },
+    {
+      "id": "ult_refund_5",
+      "layer": "parameters",
+      "claim": "The paid Ultimate cast grants the generic castUlt +5 Energy refund (TurnManager.ts:375, AGENTS: '+5 Energy (из castUlt)') — observed ENERGY_GAIN n=5 after both costs.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Rappa",
+          "payload": {
+            "n": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "skill_energy_first_30",
+      "layer": "parameters",
+      "claim": "Casting the Skill regenerates 30 Energy before the hits resolve (erudition.ts:1093 gainEnergy(30) precedes hitAoe erudition.ts:1094) — Rappa's first Energy gain of the battle is n=30 (70 -> 100).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Rappa"
+        },
+        "field": "n",
+        "value": 30,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "skill_sp_cost_3",
+      "layer": "parameters",
+      "claim": "Each Skill cast spends exactly 1 SP (erudition.ts:1092 sim.spendSp(1)) — 3 casts => 3 SP_LOSS events, draining the opening pool 3 -> 0.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_LOSS",
+          "source": "Rappa"
+        },
+        "value": 3
+      }
+    },
+    {
+      "id": "enhanced_energy_20_five",
+      "layer": "parameters",
+      "claim": "The Enhanced Basic regenerates 20 Energy per cast (erudition.ts:1108 sim.gainEnergy(u, 20); canon 131718 notes 5+5+10 per hit) — 5 casts => 5 gains of n=20.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Rappa",
+          "payload": {
+            "n": 20
+          }
+        },
+        "value": 5
+      }
+    },
+    {
+      "id": "seal_wbe_50",
+      "layer": "parameters",
+      "claim": "Sealform grants Weakness Break Efficiency +50% (canon 131703 level-10 param #1 = 0.5; erudition.ts:1008 mod wbe on rap_seal).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "rap_seal",
+        "stat": "wbe",
+        "value": 0.5,
+        "tol": 0.01
+      }
+    },
+    {
+      "id": "seal_be_30",
+      "layer": "parameters",
+      "claim": "Sealform grants Break Effect +30% (canon 131703 level-10 param #2 = 0.3; erudition.ts:1009 mod be on rap_seal).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "rap_seal",
+        "stat": "be",
+        "value": 0.3,
+        "tol": 0.01
+      }
+    },
+    {
+      "id": "withered_leaf_vuln_3pct",
+      "layer": "parameters",
+      "claim": "A6 Withered Leaf puts +3% Break DMG taken on a broken enemy (erudition.ts:1136-1139: 0.02 base + floor((ATK 2560 - 2400)/100) x 0.01 = 0.03, cap 0.08, 2 turns).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "rap_leaf",
+        "stat": "vulnType:break",
+        "value": 0.03,
+        "tol": 0.005
+      }
+    },
+    {
+      "id": "no_sp_gain",
+      "layer": "parameters",
+      "claim": "Solo negative: Rappa never gains SP — the normal Basic SP gain (erudition.ts:1122) never runs (see no_normal_basic) and canon 131718 states 'Enhanced Basic ATK will not recover Skill Points' (erudition.ts:1101-1119 has no gainSp).",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "SP_GAIN",
+          "source": "Rappa"
+        }
+      }
+    },
+    {
+      "id": "order_sealform_before_extra_turn",
+      "ability": "ultimate",
+      "layer": "ordering",
+      "claim": "Ultimate resolution order: enterSeal logs 'enters SEALFORM' (erudition.ts:1017) first, then perform() grants the Extra Turn (erudition.ts:1088).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "enters SEALFORM"
+          }
+        ],
+        "after": [
+          {
+            "type": "EXTRA_TURN"
+          }
+        ]
+      }
+    },
+    {
+      "id": "order_extra_turn_before_enhanced_basic",
+      "layer": "ordering",
+      "claim": "The first Enhanced Basic lands inside the Ultimate's Extra Turn (canon 131703 notes 'This Ultimate's Extra Turn takes place right after this Ultimate') — the first 'gains an Extra Turn' note precedes the first 'Ningu: Demonbane Petalblade' hit.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "EXTRA_TURN"
+          }
+        ],
+        "after": [
+          {
+            "type": "HIT_START",
+            "source": "Rappa",
+            "label": "Ningu: Demonbane Petalblade"
+          }
+        ]
+      }
+    },
+    {
+      "id": "order_enhanced_before_seal_exit",
+      "layer": "ordering",
+      "claim": "Sealform only exits after Enhanced Basics consume Ink (canon 131703 'After using Enhanced Basic ATK, consumes 1 point ... When Chroma Ink is depleted, exits'; erudition.ts:1109, 1117) — the first Enhanced Basic hit precedes the 'exits Sealform' note.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "HIT_START",
+            "source": "Rappa",
+            "label": "Ningu: Demonbane Petalblade"
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "exits Sealform"
+          }
+        ]
+      }
+    },
+    {
+      "id": "order_ult_cost_before_refund",
+      "layer": "ordering",
+      "claim": "The Energy delta is booked before the refund: ENERGY_LOSS reason 'ult_cost' (TurnManager.ts:374) precedes the +5 ENERGY_GAIN (TurnManager.ts:375).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ENERGY_LOSS",
+            "source": "Rappa",
+            "payload": {
+              "reason": "ult_cost"
+            }
+          }
+        ],
+        "after": [
+          {
+            "type": "ENERGY_GAIN",
+            "source": "Rappa",
+            "payload": {
+              "n": 5
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "sealform_entered_twice",
+      "layer": "interactions",
+      "claim": "Sealform is entered exactly twice (canon 131703; enterSeal erudition.ts:1002-1018 logs 'enters SEALFORM (WBE+50%, BE+30%)' with the level-10 numbers 0.5/0.3).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "enters SEALFORM"
+        },
+        "value": 2
+      }
+    },
+    {
+      "id": "sealform_exited_once",
+      "layer": "interactions",
+      "claim": "Each Sealform carries 3 Chroma Ink (canon 131703 level-10 param #3 = 3; erudition.ts:986 const INK = 3), so the first Sealform exits after its 3 Enhanced Basics (erudition.ts:1117) while the second never depletes before the cycles expire — 1 'exits Sealform' note.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "exits Sealform"
+        },
+        "value": 1
+      }
+    },
+    {
+      "id": "talent_break_dmg_15",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent 131704 fires on every Enhanced Basic's 3rd hit and deals Break DMG to ALL enemies with label 'Demonbane Petalblade Break' (canon 131704 'additionally deals Break DMG ... to all enemies'; erudition.ts:1035-1046 loops livingEnemies) — 5 casts x 3 enemies = 15 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "BREAK_DAMAGE",
+          "label": "Demonbane Petalblade Break"
+        },
+        "value": 15
+      }
+    },
+    {
+      "id": "elite_break_grants_charge_energy",
+      "layer": "interactions",
+      "claim": "A1 Sky High: breaking an elite+ enemy's Weakness grants Rappa +1 Charge and +10 Energy with the trace note (erudition.ts:1131-1134, canon 131704 notes 'Ninjutsu Inscription: Sky High ... additionally gain 1 point of Charge and regenerate 10 Energy') — 1 elite break in 3 cycles.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "broken → Rappa \\+1 Charge"
+        },
+        "value": 1
+      }
+    },
+    {
+      "id": "weakness_break_once",
+      "layer": "interactions",
+      "claim": "Exactly 1 Weakness Break in 3 cycles: the Talent's ignore-weakness toughness pierce (erudition.ts:1045 sim.applyToughness ..., canon 131704 'can ignore Weakness Type to reduce Toughness') breaks Elite #2 from 54 Toughness during the final Enhanced Basic.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "WEAKNESS_BREAK",
+          "source": "Rappa"
+        },
+        "value": 1
+      }
+    }
+  ]
+}

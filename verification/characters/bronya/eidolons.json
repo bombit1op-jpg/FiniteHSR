@@ -1,0 +1,386 @@
+{
+  "kit": "bronya",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Bronya/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder E1..E6. E1 'Hone Your Strength' Skill has a 50% fixed chance to refund 1 Skill Point, 1-turn cooldown (log 'E1 Hone Your Strength recovers 1 SP'). E2 'Quick March' Skill grants the target +30% SPD for 1 turn (bronya_e2 spdPct 0.30). E3 (Ult+2/Talent+2) is a level bump scaling The Belobog March belobog_atk atkPct 0.55->0.594. E4 'Take by Surprise' adds a follow-up ATK on an ally's Basic ATK against a Wind-weak enemy (not exercised by this fixture; no dedicated buff). E5 (Skill+2) is a level bump scaling the Skill DMG buff bronya_dmg dmgAll 0.66->0.726. E6 'Piercing Rainbow' extends the Skill DMG buff by +1 turn (bronya_dmg turns 1->2)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "bronya E0 — eidolon ladder rung, cloned from bronya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bronya",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 190
+            },
+            "eidolon": 0,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "bronya E1 — eidolon ladder rung, cloned from bronya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bronya",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 190
+            },
+            "eidolon": 1,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "bronya E2 — eidolon ladder rung, cloned from bronya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bronya",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 190
+            },
+            "eidolon": 2,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "bronya E3 — eidolon ladder rung, cloned from bronya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bronya",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 190
+            },
+            "eidolon": 3,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "bronya E4 — eidolon ladder rung, cloned from bronya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bronya",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 190
+            },
+            "eidolon": 4,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "bronya E5 — eidolon ladder rung, cloned from bronya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bronya",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 190
+            },
+            "eidolon": 5,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "bronya E6 — eidolon ladder rung, cloned from bronya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bronya",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 190
+            },
+            "eidolon": 6,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "bronya_e1_log",
+      "layer": "interactions",
+      "claim": "E1 'Hone Your Strength': Skill can refund 1 SP; observable as the dedicated log line. Present from E1 onward.",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "Hone Your Strength recovers 1 SP" } }
+    },
+    {
+      "id": "bronya_e1_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: the E1 SP-refund log must NOT appear below rank 1.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "absent", "of": { "type": "NOTE", "log": "Hone Your Strength recovers 1 SP" } }
+    },
+    {
+      "id": "bronya_e2_present",
+      "layer": "interactions",
+      "claim": "E2 'Quick March': Skill grants the target +30% SPD for 1 turn (bronya_e2). Present from E2 onward.",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "bronya_e2" }
+    },
+    {
+      "id": "bronya_e2_spd",
+      "layer": "parameters",
+      "claim": "The E2 buff carries spdPct 0.30 (canon ranks/2).",
+      "fixtures": ["e2"],
+      "assertion": { "assert": "buffStat", "id": "bronya_e2", "stat": "spdPct", "value": 0.3 }
+    },
+    {
+      "id": "bronya_e2_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E2 must NOT be active below rank 2.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "noBuff", "id": "bronya_e2" }
+    },
+    {
+      "id": "bronya_e3_belobog",
+      "layer": "parameters",
+      "claim": "E3 (Ult+2/Talent+2) level bump scales The Belobog March belobog_atk atkPct to 0.594 (0.55 at E0..E2).",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "belobog_atk", "stat": "atkPct", "value": 0.594 }
+    },
+    {
+      "id": "bronya_e5_skilldmg",
+      "layer": "parameters",
+      "claim": "E5 (Skill+2) level bump scales the Skill DMG buff bronya_dmg dmgAll to 0.726 (0.66 at E0..E4).",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "bronya_dmg", "stat": "dmgAll", "value": 0.726 }
+    },
+    {
+      "id": "bronya_e6_duration",
+      "layer": "parameters",
+      "claim": "E6 'Piercing Rainbow' extends the Skill DMG buff by +1 turn: bronya_dmg turns 2 at rank 6 (1 below).",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buff", "id": "bronya_dmg", "turns": 2 }
+    }
+  ],
+  "golds": []
+}

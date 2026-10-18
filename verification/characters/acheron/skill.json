@@ -1,0 +1,230 @@
+{
+  "kit": "acheron",
+  "slot": "skill",
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Acheron E0 solo vs a Lightning-weak Elite, 3 cycles - Slashed Dream replaces Energy (energyMax 9), Red Oni start +5 SD +5 CK, Skill Octobolt Flash Blast +1 SD +3 CK, Ultimate at full SD: 3x Rainblade with CK-Burst, Stygian Resurge, Thunder Core, transient ach_ult_res All-RES down",
+      "battle": {
+        "team": [
+          {
+            "kitId": "acheron",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "e6-apocalypse",
+      "env": "Acheron E6 solo vs the same Elite - each Ultimate additionally grants Apocalypse, the Emancipator (ach_e6_pen, All-RES PEN 20%) while the Ult resolves; E1 critRate and E4 ult vuln are always-on",
+      "battle": {
+        "team": [
+          {
+            "kitId": "acheron",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "acheron_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Trilateral Wiltcross (130801, Thunder) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Acheron",
+          "label": "Trilateral Wiltcross",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "base-solo",
+        "e6-apocalypse"
+      ]
+    },
+    {
+      "id": "ult_cast",
+      "layer": "structure",
+      "claim": "Slashed Dream replaces Energy (energyMax 9, nihility.ts SD_MAX): once it fills, the kit casts Ultimate 'Slashed Dream Cries in Red' (auto-cast replaces the turn action).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Acheron",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "skill_blast",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill Octobolt Flash (120202) is a Lightning Blast: main hit split 10/10/10/70 of rank-10 multiplier, +1 SD +3 CK on the main target.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Acheron",
+          "label": "Octobolt Flash",
+          "attackType": "skill"
+        }
+      }
+    },
+    {
+      "id": "ult_consumption",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate consumes Slashed Dream down to 0 (castUlt ENERGY_LOSS, ultConsumption 'none' = no sp_base +5 refund per Energy.md — Acheron does not use the Energy system), and Slashed Dream never exceeds its cap of 9.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Acheron",
+          "payload": {
+            "reason": "ult_cost"
+          }
+        }
+      },
+      "after": [
+        {
+          "kitId": "acheron",
+          "stat": "energy",
+          "op": "atMost",
+          "value": 9
+        }
+      ]
+    },
+    {
+      "id": "ult_chain_order",
+      "ability": "ultimate",
+      "layer": "ordering",
+      "claim": "Ultimate resolves in canon order: 3x Rainblade (with CK-Burst) first, then Stygian Resurge, then Thunder Core (Resurge) random hits (nihility.ts performUlt).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "HIT_START",
+            "source": "Acheron",
+            "label": "Rainblade 1"
+          },
+          {
+            "type": "HIT_START",
+            "source": "Acheron",
+            "label": "Stygian Resurge"
+          }
+        ],
+        "after": [
+          {
+            "type": "HIT_START",
+            "source": "Acheron",
+            "label": "Thunder Core (Resurge)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ult_res_down",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent during Ultimate: every enemy gets All-RES down (ach_ult_res resAll); the buff is transient but the fixture's last action is the Ultimate itself, so the Elite still holds it (1 buff) at battle end.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "ach_ult_res",
+        "target": "Elite"
+      },
+      "after": [
+        {
+          "unit": "Elite",
+          "stat": "buffs",
+          "op": "eq",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "thunder_core",
+      "layer": "interactions",
+      "claim": "CK removal grants Thunder Core stacks (ach_thunder_core, 3 turns); stacks persist to battle end.",
+      "assertion": {
+        "assert": "buff",
+        "id": "ach_thunder_core",
+        "turns": 3
+      },
+      "after": [
+        {
+          "kitId": "acheron",
+          "stat": "buffs",
+          "op": "atLeast",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "e6_res_pen",
+      "layer": "interactions",
+      "claim": "E6 'Apocalypse, the Emancipator': each Ultimate grants Acheron +20% All-RES PEN (ach_e6_pen) while the Ult resolves.",
+      "fixtures": [
+        "e6-apocalypse"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "ach_e6_pen"
+      }
+    }
+  ]
+}

@@ -1,0 +1,337 @@
+{
+  "kit": "aventurine",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Aventurine/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder E1..E6. E1 'Prisoner's Dilemma' +20% CRIT DMG for Fortified Wager allies (av_e1 critDmg 0.2) plus a 100%-of-Skill Fortified Wager shield to all allies after the Ultimate. E2 'Bounded Rationality' Basic ATK inflicts All-Type RES -12% for 3 turns, modelled as av_e2 resAll -0.12. E4 'Unexpected Hanging Paradox' Talent FUA grants +40% DEF for 2 turns and +3 hits (av_e4 defPct 0.4, turns 2). E6 'Stag Hunt Game' +50% DMG per shielded teammate, cap 150% (av_e6 dmgAll 0.5). E3 (Ult+2/Basic+1) and E5 (Skill+2/Talent+2) are ability-level bumps with no dedicated buff; guarded by probe-eidolon-ladder.ts."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "aventurine E0 — eidolon ladder rung, cloned from aventurine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aventurine",
+            "stats": {
+              "hp": 12000,
+              "atk": 1000,
+              "def": 3000,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1200,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "aventurine E1 — eidolon ladder rung, cloned from aventurine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aventurine",
+            "stats": {
+              "hp": 12000,
+              "atk": 1000,
+              "def": 3000,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1200,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "aventurine E2 — eidolon ladder rung, cloned from aventurine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aventurine",
+            "stats": {
+              "hp": 12000,
+              "atk": 1000,
+              "def": 3000,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1200,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "aventurine E3 — eidolon ladder rung, cloned from aventurine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aventurine",
+            "stats": {
+              "hp": 12000,
+              "atk": 1000,
+              "def": 3000,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1200,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "aventurine E4 — eidolon ladder rung, cloned from aventurine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aventurine",
+            "stats": {
+              "hp": 12000,
+              "atk": 1000,
+              "def": 3000,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1200,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "aventurine E5 — eidolon ladder rung, cloned from aventurine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aventurine",
+            "stats": {
+              "hp": 12000,
+              "atk": 1000,
+              "def": 3000,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1200,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "aventurine E6 — eidolon ladder rung, cloned from aventurine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aventurine",
+            "stats": {
+              "hp": 12000,
+              "atk": 1000,
+              "def": 3000,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1200,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "av_e0_fortwager",
+      "layer": "structure",
+      "claim": "E0 baseline: Aventurine still applies Fortified Wager from Skill/Talent, so the ladder starts from a live shielded state.",
+      "fixtures": ["e0", "e6"],
+      "assertion": { "assert": "buff", "id": "fort_wager" }
+    },
+    {
+      "id": "av_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'Prisoner's Dilemma': +20% CRIT DMG for Fortified Wager allies (av_e1). Present from E1 onward.",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "av_e1" }
+    },
+    {
+      "id": "av_e1_critdmg",
+      "layer": "parameters",
+      "claim": "The E1 buff carries critDmg 0.20 (canon ranks/1).",
+      "fixtures": ["e1"],
+      "assertion": { "assert": "buffStat", "id": "av_e1", "stat": "critDmg", "value": 0.2 }
+    },
+    {
+      "id": "av_e1_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E1 must NOT be active below rank 1.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "noBuff", "id": "av_e1" }
+    },
+    {
+      "id": "av_e2_present",
+      "layer": "interactions",
+      "claim": "E2 'Bounded Rationality': Basic ATK reduces the target's All-Type RES by 12% for 3 turns, modelled as av_e2 resAll -0.12. Present from E2 onward.",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "av_e2" }
+    },
+    {
+      "id": "av_e2_res",
+      "layer": "parameters",
+      "claim": "The E2 All-Type RES reduction is modelled as resAll -0.12 (canon ranks/2).",
+      "fixtures": ["e2"],
+      "assertion": { "assert": "buffStat", "id": "av_e2", "stat": "resAll", "value": -0.12 }
+    },
+    {
+      "id": "av_e2_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E2 must NOT be active below rank 2.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "noBuff", "id": "av_e2" }
+    },
+    {
+      "id": "av_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Unexpected Hanging Paradox': the Talent FUA first grants +40% DEF for 2 turns (av_e4). Present from E4 onward.",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "av_e4" }
+    },
+    {
+      "id": "av_e4_def",
+      "layer": "parameters",
+      "claim": "The E4 buff carries defPct 0.40 (canon ranks/4).",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "buffStat", "id": "av_e4", "stat": "defPct", "value": 0.4 }
+    },
+    {
+      "id": "av_e4_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E4 must NOT be active below rank 4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "noBuff", "id": "av_e4" }
+    },
+    {
+      "id": "av_e6_present",
+      "layer": "interactions",
+      "claim": "E6 'Stag Hunt Game': +50% DMG per shielded teammate (av_e6). Present at rank 6.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buff", "id": "av_e6" }
+    },
+    {
+      "id": "av_e6_dmg",
+      "layer": "parameters",
+      "claim": "The E6 buff carries dmgAll 0.50 (canon ranks/6).",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buffStat", "id": "av_e6", "stat": "dmgAll", "value": 0.5 }
+    },
+    {
+      "id": "av_e6_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E6 must NOT be active below rank 6.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "noBuff", "id": "av_e6" }
+    }
+  ],
+  "golds": []
+}

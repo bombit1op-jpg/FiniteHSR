@@ -1,0 +1,626 @@
+{
+  "kit": "jade",
+  "slot": "skill",
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Jade E0 solo vs 3 Quantum-weak Elite (level 95, 240 Toughness), 3 cycles — Skill 131402 'Acquisition Surety' finds no ally to carry the Debt and refunds its SP, Basic 131401 'Lash of Riches', Ultimate 131403 'Vow of the Deep'; with no Debt Collector no Charge engine output reaches 8, so the Talent FUA and Acquisition Surety Additional hits never fire",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "team-sushang",
+      "env": "Jade E0 with Sushang (kitId sushang) vs 3 Quantum-weak Elite (level 95, 240 Toughness), 3 cycles — Skill 131402 makes Sushang the Debt Collector (+30 SPD), Sushang's attacks feed Jade Charge (131404, threshold 8), the Talent FUA 'Fang of Flare Flaying' fires once unenhanced and twice enhanced after the Ultimate (131403 grants 2 enhancements), Acquisition Surety Additional hits join every Debt Collector attack",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 1800,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "skill_cast_solo",
+      "layer": "structure",
+      "claim": "Skill 'Acquisition Surety' (characters.json 131402) is cast as a skill action; solo it never finds a Debt Collector target, so decide() keeps returning Skill every turn (erudition.ts:928-930, 961-966) — 7 casts in 3 cycles.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Jade",
+          "action": "skill"
+        },
+        "value": 7
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "skill_cast_team",
+      "layer": "structure",
+      "claim": "Exactly one Skill cast in the team battle: after Sushang becomes the Debt Collector decide() switches Jade to Basic for the rest of the Debt duration (erudition.ts:928).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Jade",
+          "action": "skill"
+        },
+        "value": 1
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "basic_cast_team",
+      "layer": "structure",
+      "claim": "Basic 131401 'Lash of Riches' is cast as a basic action whenever a Debt Collector exists (erudition.ts:928) — 5 casts in 3 cycles.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Jade",
+          "action": "basic"
+        },
+        "value": 5
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "basic_hits_main_5",
+      "layer": "structure",
+      "claim": "Each Basic is a Blast hit: one main-target hit 'Lash of Riches' per cast (erudition.ts:975-977 sim.hitBlast main) — 5 casts => 5 main hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Jade",
+          "label": "Lash of Riches"
+        },
+        "value": 5
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "basic_hits_adj_10",
+      "layer": "structure",
+      "claim": "The Basic also hits the 2 adjacent enemies per cast with label 'Lash of Riches (adj)' (erudition.ts:977) — 5 casts x 2 adjacent = 10 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Jade",
+          "label": "Lash of Riches (adj)"
+        },
+        "value": 10
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "ult_cast_count",
+      "layer": "structure",
+      "claim": "Ultimate 131403 'Vow of the Deep' fires once per battle in both fixtures (Energy 140, solo fills only from being hit, team from Skill+Basic+hits).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Jade",
+          "action": "ultimate"
+        },
+        "value": 1
+      }
+    },
+    {
+      "id": "ult_hits_3",
+      "layer": "structure",
+      "claim": "The Ultimate is an AoE hit against all 3 enemies with label 'Vow of the Deep' (erudition.ts:940 sim.hitAoe) — 1 cast x 3 enemies = 3 hits in both fixtures.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Jade",
+          "label": "Vow of the Deep"
+        },
+        "value": 3
+      }
+    },
+    {
+      "id": "fua_unenhanced_15",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent 131404 'Fang of Flare Flaying' is an AoE FUA split into 5 hits per enemy [0.15 x4, 0.4] (erudition.ts:807-809); the first Charge-8 trigger happens before the Ultimate, so it lands unenhanced: 1 trigger x 3 enemies x 5 hits = 15.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Jade",
+          "label": "Fang of Flare Flaying"
+        },
+        "value": 15
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "fua_enhanced_30",
+      "layer": "structure",
+      "claim": "The Ultimate grants exactly 2 Talent FUA enhancements (characters.json 131403, 'enhancement can take effect #2 time(s)'; erudition.ts:941 rt.enh = 2), so the 2 triggers after the Ultimate use label 'Fang of Flare Flaying (Enhanced)': 2 x 3 x 5 = 30 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Jade",
+          "label": "Fang of Flare Flaying (Enhanced)"
+        },
+        "value": 30
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "additional_hits_12",
+      "layer": "structure",
+      "claim": "After each Debt Collector attack Jade deals Acquisition Surety Additional DMG to every living enemy (characters.json 131402; erudition.ts:914-918): 4 collector attacks while Debt is active x 3 enemies = 12 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Jade",
+          "label": "Acquisition Surety (Additional)"
+        },
+        "value": 12
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "solo_no_fua",
+      "layer": "structure",
+      "claim": "Solo negative: with no Debt Collector no per-attack Charge accrues toward the 8-Charge threshold (erudition.ts:760 CHARGE_NEED = 8, 889-901 gate requires collector), so Jade never launches a Follow-Up ATK in the solo battle.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "HIT_START",
+          "source": "Jade",
+          "attackType": "fua"
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "solo_no_additional",
+      "layer": "structure",
+      "claim": "Solo negative: Acquisition Surety Additional DMG fires only after a Debt Collector attacks (erudition.ts:884-897 early-returns without a collector), so no 'Acquisition Surety (Additional)' hits exist solo.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "HIT_START",
+          "source": "Jade",
+          "label": "Acquisition Surety (Additional)"
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "solo_no_debt_notes",
+      "layer": "structure",
+      "claim": "Solo negative: Skill 131402 never designates a Debt Collector solo (erudition.ts:953-966 — no valid ally, SP refunded instead of setDebt), so no Debt Collector lifecycle notes appear.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "NOTE",
+          "log": "Debt Collector"
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "ult_cost_140",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate payment books ENERGY_LOSS reason 'ult_cost' with amount 140 = full Energy pool (energyMax 140, erudition.ts:861, cost booked before kit body runs, erudition.ts:939).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Jade",
+          "payload": {
+            "reason": "ult_cost"
+          }
+        },
+        "field": "amount",
+        "value": 140
+      }
+    },
+    {
+      "id": "ult_energy_refund_5",
+      "layer": "parameters",
+      "claim": "The Ultimate cast grants the generic castUlt +5 Energy refund after the cost is paid (AGENTS: '+5 Energy (из castUlt)'; observed post-cost ENERGY_GAIN n=5 in both fixtures).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Jade",
+          "payload": {
+            "n": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "skill_grants_energy_30",
+      "layer": "parameters",
+      "claim": "Casting the Skill with a valid Debt Collector target grants 30 Energy (erudition.ts:963 sim.gainEnergy(u, 30)); the first Jade Energy event of the team battle is n=30 (70 -> 100).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Jade"
+        },
+        "field": "n",
+        "value": 30,
+        "pick": "first"
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "solo_skill_grants_no_energy",
+      "layer": "parameters",
+      "claim": "Solo negative: with no Debt Collector target the Skill takes the refund branch and grants no Energy (erudition.ts:961-966) — Jade never sees an n=30 Energy gain solo.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Jade",
+          "payload": {
+            "n": 30
+          }
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "basic_grants_energy_20",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic 131401 grants +20 Energy (erudition.ts:972 sim.gainEnergy(u, 20)).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Jade",
+          "payload": {
+            "n": 20
+          }
+        }
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "solo_skill_sp_refund_7",
+      "layer": "parameters",
+      "claim": "Solo every Skill spends 1 SP then refunds 1 SP because no Debt Collector target exists (erudition.ts:950 sim.spendSp(1), 965 sim.gainSp(1)) — 7 casts => 7 SP_GAIN events.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_GAIN",
+          "source": "Jade"
+        },
+        "value": 7
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "debt_collector_spd_30",
+      "layer": "parameters",
+      "claim": "The Debt Collector gains +30 flat SPD from Acquisition Surety (characters.json 131402 'increases their SPD by #1[i]'; erudition.ts:838 mods spdFlat 30 on jade_debt_spd).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "jade_debt_spd",
+        "stat": "spdFlat",
+        "value": 30,
+        "tol": 0.01
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "pawn_start_3_solo",
+      "layer": "parameters",
+      "claim": "Trace A2 Reverse Repo gives +1 Pawned Asset per enemy entering combat (erudition.ts:867-869 onWaveStart) — 3 enemies => stacks 3 at battle start; jade_pawn critDmg = talent_a2 2.4%/stack x 3 = 0.072 (erudition.ts:774).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "jade_pawn",
+        "stat": "critDmg",
+        "value": 0.072,
+        "tol": 0.005
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "pawn_final_27_team",
+      "layer": "parameters",
+      "claim": "Final jade_pawn stack count = 27: 3 from wave entry (A2 pt1) + 3 x 3 from Debt Collector turn starts (A2 pt2, erudition.ts:885) + 3 x 5 from the three Talent FUAs (erudition.ts:812); A6 Asset Forfeiture adds 0.5% ATK per stack (erudition.ts:776) => atkPct = 0.005 x 27 = 0.135.",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "jade_pawn",
+        "stat": "atkPct",
+        "value": 0.135,
+        "tol": 0.001
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "start_action_advance_50",
+      "layer": "parameters",
+      "claim": "Trace A4 Collateral Ticket action-advances Jade by 50% at battle start (erudition.ts:863-865 onStart sim.advance(u, 0.5)) — pct 0.5 in both fixtures.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ACTION_ADVANCE",
+          "source": "Jade",
+          "payload": {
+            "pct": 0.5
+          }
+        }
+      }
+    },
+    {
+      "id": "order_skill_before_debt_note",
+      "layer": "ordering",
+      "claim": "The Skill action resolves first, then setDebt emits 'becomes the Debt Collector' (erudition.ts:950 cast, 835 log after rt.debt assignment).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ABILITY_USED",
+            "source": "Jade",
+            "action": "skill"
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "becomes the Debt Collector"
+          }
+        ]
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "order_debt_applied_before_additional",
+      "layer": "ordering",
+      "claim": "Acquisition Surety Additional hits can only follow Debt assignment: 'becomes the Debt Collector' at the Skill (T1) precedes the first 'Acquisition Surety (Additional)' hit after Sushang's first collector attack (T2).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "becomes the Debt Collector"
+          }
+        ],
+        "after": [
+          {
+            "type": "HIT_START",
+            "source": "Jade",
+            "label": "Acquisition Surety (Additional)"
+          }
+        ]
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "order_debt_applied_before_removed",
+      "layer": "ordering",
+      "claim": "Debt Collector lifecycle is ordered: assignment note first, removal note when rt.debt decrements to 0 at Jade's 3rd subsequent turn start (erudition.ts:871-877, 844-856).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "becomes the Debt Collector"
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "Debt Collector removed"
+          }
+        ]
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "order_ult_before_enhanced_fua",
+      "layer": "ordering",
+      "claim": "Enhanced FUA hits require rt.enh set by the Ultimate (erudition.ts:941), so 'Vow of the Deep' resolves before the first 'Fang of Flare Flaying (Enhanced)' hit.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "HIT_START",
+            "source": "Jade",
+            "label": "Vow of the Deep"
+          }
+        ],
+        "after": [
+          {
+            "type": "HIT_START",
+            "source": "Jade",
+            "label": "Fang of Flare Flaying (Enhanced)"
+          }
+        ]
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "debt_note_once",
+      "layer": "interactions",
+      "claim": "The Skill designates a Debt Collector exactly once: setDebt note 'becomes the Debt Collector' (erudition.ts:835) fires 1 time (a second Skill while Debt is active is blocked by decide/guard, erudition.ts:928, 951).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "becomes the Debt Collector"
+        },
+        "value": 1
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "debt_removed_once",
+      "layer": "interactions",
+      "claim": "Debt lasts 3 Jade turns then clears: onTurnStart decrements rt.debt from 3 (erudition.ts:834) and clearDebt emits 'Jade: Debt Collector removed' (erudition.ts:844-856) exactly once.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "Debt Collector removed"
+        },
+        "value": 1
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "collector_turn_pawn_3",
+      "layer": "interactions",
+      "claim": "Trace A2 pt2: each Debt Collector turn start grants Jade +3 Pawned Asset with note 'Debt Collector turn -> Jade +3 Pawned Asset' (erudition.ts:880-887); Sushang acts 3 times while Debt is active.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "Debt Collector turn"
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "collector_attack_charge_4",
+      "layer": "interactions",
+      "claim": "Every Debt Collector attack feeds Jade Charge with note 'Debt Collector attack -> Jade +N Charge' (erudition.ts:903-912): 4 collector attacks happen while Debt is active (2 skills, the Ultimate, the extra turn).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "Debt Collector attack"
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,532 @@
+{
+  "kit": "trailblazer_harmony",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/92/ranks/1..6 (Imaginary, Harmony Trailblazer)",
+    "confidence": "interpreted",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 'Best Seat in the House' refunds 1 SP after the first Skill — a Skill-Point change with no buff id and no single canonical event, so documented not asserted (it does shift the whole rotation). E2 'Jailbreaking Rainbowwalk': battle-start Energy Regeneration Rate +25% for 3 turns (tb_harm_e2 err 0.25). E3 'Sanatorium for Rest Notes' Skill+2/Talent+2 raise 'Halftime (main)'/'Halftime (extra)' 0.5 -> 0.55. E4 'Dove in Tophat' gives teammates +15% of the Trailblazer's Break Effect (tb_harm_e4; the magnitude is derived from live BE, so only presence is asserted). E5 'Poem Favors Rhythms of Old' Ult+2/Basic+1 raise 'Swing Dance Etiquette' 1 -> 1.1. E6 'Tomorrow, Rest in Spotlight' adds +2 Skill DMG applications, raising the 'Halftime (extra)' hit count 6 -> 24. Fixtures run one battle per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "trailblazer_harmony E0 — eidolon ladder rung, cloned from trailblazer_harmony/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_harmony",
+            "name": "TBH",
+            "stats": {
+              "hp": 5000,
+              "atk": 1400,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 0,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Beetle",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 5,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e1",
+      "env": "trailblazer_harmony E1 — eidolon ladder rung, cloned from trailblazer_harmony/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_harmony",
+            "name": "TBH",
+            "stats": {
+              "hp": 5000,
+              "atk": 1400,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 1,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Beetle",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 5,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e2",
+      "env": "trailblazer_harmony E2 — eidolon ladder rung, cloned from trailblazer_harmony/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_harmony",
+            "name": "TBH",
+            "stats": {
+              "hp": 5000,
+              "atk": 1400,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 2,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Beetle",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 5,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e3",
+      "env": "trailblazer_harmony E3 — eidolon ladder rung, cloned from trailblazer_harmony/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_harmony",
+            "name": "TBH",
+            "stats": {
+              "hp": 5000,
+              "atk": 1400,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 3,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Beetle",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 5,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e4",
+      "env": "trailblazer_harmony E4 — eidolon ladder rung, cloned from trailblazer_harmony/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_harmony",
+            "name": "TBH",
+            "stats": {
+              "hp": 5000,
+              "atk": 1400,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 4,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Beetle",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 5,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e5",
+      "env": "trailblazer_harmony E5 — eidolon ladder rung, cloned from trailblazer_harmony/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_harmony",
+            "name": "TBH",
+            "stats": {
+              "hp": 5000,
+              "atk": 1400,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 5,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Beetle",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 5,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e6",
+      "env": "trailblazer_harmony E6 — eidolon ladder rung, cloned from trailblazer_harmony/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_harmony",
+            "name": "TBH",
+            "stats": {
+              "hp": 5000,
+              "atk": 1400,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Beetle",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 5,
+        "seed": 3
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "tbh_e2_present",
+      "layer": "interactions",
+      "claim": "E2 'Jailbreaking Rainbowwalk': battle start ERR +25% for 3 turns (tb_harm_e2).",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "tb_harm_e2"
+      }
+    },
+    {
+      "id": "tbh_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: tb_harm_e2 must NOT be active below rank 2.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "tb_harm_e2"
+      }
+    },
+    {
+      "id": "tbh_e2_stat",
+      "layer": "parameters",
+      "claim": "tb_harm_e2 carries err 0.25 (canon E2).",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "tb_harm_e2",
+        "stat": "err",
+        "value": 0.25
+      }
+    },
+    {
+      "id": "tbh_e3_skill",
+      "layer": "parameters",
+      "claim": "E3 Skill+2 raises 'Halftime (main)' 0.5 -> 0.55.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Halftime (main)"
+        },
+        "field": "mult",
+        "value": 0.55,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbh_e3_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'Halftime (main)' stays at 0.5.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Halftime (main)"
+        },
+        "field": "mult",
+        "value": 0.5,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbh_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Dove in Tophat': teammates gain +15% of the Trailblazer's Break Effect (tb_harm_e4).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "tb_harm_e4"
+      }
+    },
+    {
+      "id": "tbh_e4_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: tb_harm_e4 must NOT be active below rank 4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "tb_harm_e4"
+      }
+    },
+    {
+      "id": "tbh_e5_basic",
+      "layer": "parameters",
+      "claim": "E5 Basic+1 raises 'Swing Dance Etiquette' 1 -> 1.1.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Swing Dance Etiquette"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbh_e5_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E5 'Swing Dance Etiquette' stays at 1.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Swing Dance Etiquette"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbh_e6_hits",
+      "layer": "interactions",
+      "claim": "E6 'Tomorrow, Rest in Spotlight': +2 Skill DMG applications raise 'Halftime (extra)' from 6 to 24 hits.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Halftime (extra)"
+        },
+        "value": 24
+      }
+    },
+    {
+      "id": "tbh_e6_hits_locked",
+      "layer": "interactions",
+      "claim": "Below E6 'Halftime (extra)' stays at 6 hits.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Halftime (extra)"
+        },
+        "value": 6
+      }
+    }
+  ],
+  "golds": []
+}

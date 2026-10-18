@@ -1,0 +1,59 @@
+{
+  "kit": "danhengil",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/121301+121302+121303+121304+121308+121310+121312 + bonus_abilities (Star Veil, Aqua Reign, Jolt Anew)",
+    "confidence": "verified",
+    "note": "Dracore Libre (121302) enhances Basic up to 3 times: Transcendence, Divine Spear, Fulgurant Leap; it does not consume SP and is not considered using a Skill (1 SP per enhancement is paid via the enhanced Basic's bp_need). Fulgurant Leap (121312) L6 (engine default Basic Lv6): #1 = 500% main, #2 = 180% adjacent; canon 7 hits 14.2x6+14.8 main, 4 hits 25% adj. Azure's Aqua Ablutes All (121303) L10: #1 = 300% main (3 hits 30/30/40), #2 = 140% adjacent, grants #3 = 2 Squama Sacrosancta. Righteous Heart (121304) L10: +10% DMG per hit, max #2 = 6, until end of turn. Outroar (Dracore notes): from 4th hit, +12% CRIT DMG per stack, max 4, end of turn. BA Star Veil: +15 Energy at battle start."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Dan Heng • Imbibitor Lunae E0 solo vs 3 Imaginary-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [{ "kitId": "danhengil", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 0 }],
+        "enemy": { "name": "Elite", "count": 3, "hp": 6000000, "atk": 800, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Imaginary"], "res": 0 },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "dhl_talent_heart",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "Talent Righteous Heart: each Ultimate hit grants a stacking DMG buff — buff dhl_heart (destruction.ts:461-465).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "BUFF_APPLIED",
+          "payload": {
+            "id": "dhl_heart"
+          }
+        }
+      }
+    },
+    { "id": "d_ult_action", "layer": "structure", "claim": "Azure's Aqua Ablutes All (121303) is his Ultimate action (1 cast in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Dan Heng • Imbibitor Lunae", "action": "ultimate" }, "value": 1 } },
+    { "id": "d_skill_action", "ability": "skill", "layer": "structure", "claim": "Skill Dracore Libre (121302) executes as the enhance action 5 times in the fixture (3 enhancements to reach Fulgurant Leap, then 2 more after the reset). The Skill press itself consumes no SP — the 1 SP per enhancement is paid via the enhanced Basic (canon 121302).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Dan Heng • Imbibitor Lunae", "action": "enhance" }, "value": 5 } },
+    { "id": "d_basic_action", "layer": "structure", "claim": "One enhanced Basic ATK (Fulgurant Leap) is executed in the fixture (decide goes straight to full enhancement).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Dan Heng • Imbibitor Lunae", "action": "basic" }, "value": 1 } },
+    { "id": "d_leap_hits", "layer": "structure", "claim": "Fulgurant Leap main-target damage lands as the canon 7-hit sequence per cast: 7 events (1 cast, 14.2% x6 + 14.8%).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng • Imbibitor Lunae", "label": "Fulgurant Leap" }, "value": 7 } },
+    { "id": "d_leap_adj", "layer": "structure", "claim": "Fulgurant Leap hits both adjacent enemies with the canon 4-hit sequence (25% each): 8 events (2 adjacent enemies x 4).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng • Imbibitor Lunae", "label": "Fulgurant Leap (adj)" }, "value": 8 } },
+    { "id": "d_ult_hits", "layer": "structure", "claim": "Azure's Aqua Ablutes All hits the primary target 3 times across the fixture's single Ultimate (30/30/40 split).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng • Imbibitor Lunae", "label": "Azure's Aqua Ablutes All" }, "value": 3 } },
+    { "id": "d_ult_adj", "layer": "structure", "claim": "Azure's Aqua deals adjacent damage across the main hit sequence (30/30/40): 6 events (2 adjacent enemies x 3).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng • Imbibitor Lunae", "label": "Azure's Aqua (adj)" }, "value": 6 } },
+    { "id": "d_sp_loss", "layer": "interactions", "claim": "Fulgurant Leap costs 3 Skill Points (121312 bp_need = 3), offset by 2 Squama Sacrosancta from the Ultimate, netting 1 actual SP spent.", "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Dan Heng • Imbibitor Lunae" }, "value": 1 } },
+    { "id": "d_no_sp_gain", "layer": "interactions", "claim": "No SP is regenerated: his only Basic ATK used is the enhanced one, which costs SP rather than regenerating it.", "assertion": { "assert": "absent", "of": { "type": "SP_GAIN" } } },
+    { "id": "d_m_leap", "layer": "parameters", "claim": "Fulgurant Leap L6 (121312 #1) main total 500% of ATK over the 7-hit split; last (14.8%) piece = 0.74.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng • Imbibitor Lunae", "label": "Fulgurant Leap" }, "field": "mult", "value": 0.74, "pick": "last" } },
+    { "id": "d_m_leap_adj", "layer": "parameters", "claim": "Fulgurant Leap L6 (121312 #2) adjacent total 180% of ATK over the 4-hit split; last (25%) piece = 0.45.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng • Imbibitor Lunae", "label": "Fulgurant Leap (adj)" }, "field": "mult", "value": 0.45, "pick": "last" } },
+    { "id": "d_m_ult", "layer": "parameters", "claim": "Azure's Aqua Ablutes All L10 (121303 #1) totals 300% of ATK; the last of the 30/30/40 split pieces carries 40% -> 1.2.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng • Imbibitor Lunae", "label": "Azure's Aqua Ablutes All" }, "field": "mult", "value": 1.2 } },
+    { "id": "d_m_ult_adj", "layer": "parameters", "claim": "Azure's Aqua Ablutes All L10 (121303 #2) adjacent total 140% of ATK over the 30/30/40 split; last piece = 0.56.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng • Imbibitor Lunae", "label": "Azure's Aqua (adj)" }, "field": "mult", "value": 0.56, "pick": "last" } },
+    { "id": "d_energy", "layer": "parameters", "claim": "Over the fixture he regenerates exactly 105 Energy (BA Star Veil +15 at battle start, enhanced Basic +40, Ultimate +5, hit Energy included).", "assertion": { "assert": "energy", "who": "Dan Heng • Imbibitor Lunae", "atLeast": 105, "atMost": 105 } },
+    { "id": "d_heart_after_basic", "layer": "parameters", "claim": "Righteous Heart (121304) reaches its cap of #2 = 6 stacks after the Fulgurant Leap (1 stack per hit, capped at 6).", "assertion": { "assert": "buff", "id": "dhl_heart", "target": "Dan Heng • Imbibitor Lunae", "stacks": 6 } },
+    { "id": "d_heart_after_ult", "layer": "parameters", "claim": "Righteous Heart also gains stacks from the Ultimate's 3 hits (3 stacks observed).", "assertion": { "assert": "buff", "id": "dhl_heart", "target": "Dan Heng • Imbibitor Lunae", "stacks": 3 } },
+    { "id": "d_outroar_stacks", "layer": "parameters", "claim": "Outroar reaches its max of #2 = 4 stacks during Fulgurant Leap (canon: stacks from the 4th hit onward, max 4).", "assertion": { "assert": "buff", "id": "dhl_outroar", "target": "Dan Heng • Imbibitor Lunae", "stacks": 4 } },
+    { "id": "d_outroar_turns", "layer": "parameters", "claim": "Outroar lasts until the end of the current turn (1 turn).", "assertion": { "assert": "buff", "id": "dhl_outroar", "target": "Dan Heng • Imbibitor Lunae", "turns": 1 } },
+    { "id": "d_a4_present", "layer": "interactions", "claim": "Trace A4 (Jolt Anew: CRIT DMG +24% vs Imaginary-weak targets) is a permanent buff.", "assertion": { "assert": "buff", "id": "dhl_a4", "target": "Dan Heng • Imbibitor Lunae" } },
+    { "id": "d_leap_before_ult", "layer": "ordering", "claim": "The Fulgurant Leap damage resolves before the Ultimate's Azure's Aqua damage in the fixture (he enhances first, then his energy fills).", "assertion": { "assert": "ordering", "before": [{ "type": "DAMAGE_DEALT", "source": "Dan Heng • Imbibitor Lunae", "label": "Fulgurant Leap" }], "after": [{ "type": "DAMAGE_DEALT", "source": "Dan Heng • Imbibitor Lunae", "label": "Azure's Aqua Ablutes All" }] } }
+  ]
+}

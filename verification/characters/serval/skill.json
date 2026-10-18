@@ -1,0 +1,172 @@
+{
+  "kit": "serval",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/100401+100402+100403+100404+100405 + bonus_abilities (A2 Rock'n'Roll, A4 String Vibration, A6 Mania)",
+    "confidence": "verified",
+    "note": "Basic Guitar String 140% at L10 (idx6 default). Skill Lightning Whip (100402) #1 main + #2 adjacent Lightning DMG, then #3 base chance to apply Shock (#5 DoT = % of ATK at L10 = 104%). Ult Here Comes the Mechanical Fever (100404) AoE Lightning #1 (L10 = 180%) and extends Shock duration by #2. Talent Galvanic Chords adds Additional Lightning DMG (#1) to Shocked enemies once per attack. A2 +20% Shock base chance; A4 +15 Energy at battle start."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Serval E0 solo vs 3 Lightning-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "serval",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Lightning"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6-rock",
+      "env": "Serval E6 solo vs 1 Elite - This Song Rocks to Heaven! (+30% DMG vs Shocked enemies) fires on every hit once a Shock is up",
+      "battle": {
+        "team": [
+          {
+            "kitId": "serval",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Lightning"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "sv_skill_action",
+      "layer": "structure",
+      "claim": "Lightning Whip is Serval's damaging Skill action.",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Serval", "action": "skill" } }
+    },
+    {
+      "id": "sv_skill_main_hit",
+      "layer": "structure",
+      "claim": "The Skill hits its primary target (Blast main).",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Serval", "label": "Lightning Whip" } }
+    },
+    {
+      "id": "sv_skill_adj_hit",
+      "layer": "structure",
+      "claim": "The Skill is a Blast attack and also hits adjacent targets.",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Serval", "label": "Lightning Whip (adj)" } }
+    },
+    {
+      "id": "sv_ult_hit",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Ultimate Here Comes the Mechanical Fever deals AoE Lightning DMG (label Voltage).",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Serval", "label": "Voltage" } }
+    },
+    {
+      "id": "sv_talent_hit",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Galvanic Chords adds an Additional Lightning hit to Shocked enemies once per attack.",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Serval", "label": "Talent Additional" } }
+    },
+    {
+      "id": "sv_skill_mult",
+      "layer": "parameters",
+      "claim": "Lightning Whip primary L10 = 140% of ATK (100402 #1).",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Serval", "label": "Lightning Whip" }, "field": "mult", "value": 1.4 }
+    },
+    {
+      "id": "sv_skill_adj_mult",
+      "layer": "parameters",
+      "claim": "Lightning Whip adjacent L10 = 60% of ATK (100402 #2).",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Serval", "label": "Lightning Whip (adj)" }, "field": "mult", "value": 0.6 }
+    },
+    {
+      "id": "sv_ult_mult",
+      "layer": "parameters",
+      "claim": "Here Comes the Mechanical Fever L10 = 180% of ATK (100404 #1).",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Serval", "label": "Voltage" }, "field": "mult", "value": 1.8 }
+    },
+    {
+      "id": "sv_basic_mult",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic Guitar String runs the 50%-140% ladder; at the engine default Basic Lv6 it is 100% of ATK (single hit).",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Serval", "attackType": "basic", "label": "Guitar String" }, "field": "mult", "value": 1 }
+    },
+    {
+      "id": "sv_shock_applied",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill applies a Shock DoT (100402) to each enemy hit.",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "present", "of": { "type": "DOT_APPLIED", "payload": { "kind": "Shock" } } }
+    },
+    {
+      "id": "sv_shock_turns",
+      "layer": "parameters",
+      "claim": "Shock lasts 2 turns (100402 #4).",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "payload", "of": { "type": "DOT_APPLIED", "payload": { "kind": "Shock" } }, "field": "turns", "value": 2, "pick": "first" }
+    },
+    {
+      "id": "sv_talent_mult",
+      "layer": "parameters",
+      "claim": "Galvanic Chords Additional DMG L10 = 72% of ATK (talent #1).",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Serval", "label": "Talent Additional" }, "field": "mult", "value": 0.72 }
+    },
+    {
+      "id": "sv_skill_before_ult",
+      "layer": "ordering",
+      "claim": "Serval's first Skill resolves before her first Ultimate in the fixture.",
+      "fixtures": ["solo-3c"],
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Serval", "label": "Lightning Whip" }],
+        "after": [{ "type": "HIT_START", "source": "Serval", "label": "Voltage" }]
+      }
+    },
+    {
+      "id": "sv_e6_buff",
+      "layer": "interactions",
+      "claim": "E6 This Song Rocks to Heaven! applies a +30% DMG (serval_e6) transient buff around hits on Shocked enemies.",
+      "fixtures": ["e6-rock"],
+      "assertion": { "assert": "buff", "id": "serval_e6" }
+    }
+  ]
+}

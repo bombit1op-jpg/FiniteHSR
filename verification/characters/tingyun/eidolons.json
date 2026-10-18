@@ -1,0 +1,469 @@
+{
+  "kit": "tingyun",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Tingyun/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 'Windfall of Lucky Springs': after using Ultimate, the Benediction ally gains SPD +20% for 1 turn (tingyun_e1, spdPct 0.20). E2 'Gainfully Gives, Givingly Gains': the Benediction ally regenerates 5 Energy after defeating an enemy, once per turn — no kill occurs in this fixture, tracked as deviation. E3 'Halcyon Bequest': Ult Lv.+2 / Basic Lv.+1 raise tingyun_ult dmgAll 0.50 -> 0.56. E4 'Jovial Versatility': the Benediction DMG multiplier +20% (Soothing Melody 0.40 -> 0.48). E5 'Sauntering Coquette': Skill Lv.+2 / Talent Lv.+2 raise the Benediction ATK buff atkFlat 512 -> 552. E6 'Peace Brings Wealth to All': the Ultimate regenerates 10 more Energy for the target ally (log line +50 -> +60 Energy). Fixtures run one battle per eidolon rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "tingyun E0 — eidolon ladder rung, cloned from tingyun/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tingyun",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "tingyun E1 — eidolon ladder rung, cloned from tingyun/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tingyun",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "tingyun E2 — eidolon ladder rung, cloned from tingyun/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tingyun",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 2
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "tingyun E3 — eidolon ladder rung, cloned from tingyun/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tingyun",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 3
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "tingyun E4 — eidolon ladder rung, cloned from tingyun/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tingyun",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 4
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "tingyun E5 — eidolon ladder rung, cloned from tingyun/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tingyun",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 5
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "tingyun E6 — eidolon ladder rung, cloned from tingyun/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tingyun",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 6
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "tingyun_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'Windfall of Lucky Springs': after the Ultimate, the Benediction ally gains SPD +20% for 1 turn (tingyun_e1).",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "tingyun_e1",
+        "turns": 1
+      }
+    },
+    {
+      "id": "tingyun_e1_spd",
+      "layer": "parameters",
+      "claim": "The E1 buff carries spdPct 0.20 (canon ranks/1).",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "tingyun_e1",
+        "stat": "spdPct",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "tingyun_e1_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E1's tingyun_e1 must NOT be active below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "tingyun_e1"
+      }
+    },
+    {
+      "id": "tingyun_e3_level",
+      "layer": "parameters",
+      "claim": "E3 'Halcyon Bequest': Ult Lv.+2 / Basic Lv.+1 raise tingyun_ult dmgAll 0.50 -> 0.56.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "tingyun_ult",
+        "stat": "dmgAll",
+        "value": 0.56
+      }
+    },
+    {
+      "id": "tingyun_e3_locked",
+      "layer": "parameters",
+      "claim": "Cumulative unlock: below rank 3 tingyun_ult dmgAll stays at the 0.50 floor.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "tingyun_ult",
+        "stat": "dmgAll",
+        "value": 0.5
+      }
+    },
+    {
+      "id": "tingyun_e4_level",
+      "layer": "parameters",
+      "claim": "E4 'Jovial Versatility': the Benediction DMG multiplier +20% (Soothing Melody 0.40 -> 0.48).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Soothing Melody"
+        },
+        "field": "mult",
+        "value": 0.46
+      }
+    },
+    {
+      "id": "tingyun_e5_level",
+      "layer": "parameters",
+      "claim": "E5 'Sauntering Coquette': Skill Lv.+2 / Talent Lv.+2 raise the Benediction ATK buff atkFlat 512 -> 552.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "benediction",
+        "stat": "atkFlat",
+        "value": 552
+      }
+    },
+    {
+      "id": "tingyun_e6_energy_present",
+      "layer": "interactions",
+      "claim": "E6 'Peace Brings Wealth to All': the Ultimate regenerates 10 more Energy for the target ally (log line +60 Energy).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "\\+60 Energy"
+        }
+      }
+    },
+    {
+      "id": "tingyun_e6_energy_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: below rank 6 the Ultimate regenerates the base +50 Energy, never +60.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "NOTE",
+          "log": "\\+60 Energy"
+        }
+      }
+    }
+  ],
+  "golds": []
+}

@@ -1,0 +1,379 @@
+{
+  "kit": "luka",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Luka/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 'Fighting Endlessly' = while acting on a Bleeding target, Luka DMG +15% for 2 turns (luka_e1 dmgAll 0.15). E2 'The Enemy is Weak, I am Strong' = Skill on a Physical-weak target grants +1 Fighting Will (A4: +3 Energy per stack -> one extra ENERGY_GAIN event). E3 raises Lacerating Fist 1.2 -> 1.32 and the Bleed base 8653 -> 9518 at clean ATK (Skill+2 / Talent+2; E4's ATK buff later pushes it to 9890). E4 'Never Turning Back' = +5% ATK per Fighting Will stack, max 4 (luka_e4 atkPct 0.2 at 4 stacks). E5 raises Coup de Grâce 3.3 -> 3.564, Rising Uppercut 0.8 -> 0.88 (Ult+2 / Basic+1). E6 'A Champion's Applause' = Rising Uppercut on a Bleeding target bursts the Bleed with an extra 8% per Direct Punch hit: Bleed Burst 0.884 -> 1.284. Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "luka E0 — eidolon ladder rung, cloned from luka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "luka E1 — eidolon ladder rung, cloned from luka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "luka E2 — eidolon ladder rung, cloned from luka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "luka E3 — eidolon ladder rung, cloned from luka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "luka E4 — eidolon ladder rung, cloned from luka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "luka E5 — eidolon ladder rung, cloned from luka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "luka E6 — eidolon ladder rung, cloned from luka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "luka_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'Fighting Endlessly': when Luka takes action against a Bleeding target, DMG dealt +15% for 2 turns (luka_e1 dmgAll 0.15). Present from E1.",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "luka_e1" }
+    },
+    {
+      "id": "luka_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: luka_e1 must NOT be active below rank 1.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "noBuff", "id": "luka_e1" }
+    },
+    {
+      "id": "luka_e1_stat",
+      "layer": "parameters",
+      "claim": "luka_e1 carries dmgAll 0.15 (canon ranks/1).",
+      "fixtures": ["e1"],
+      "assertion": { "assert": "buffStat", "id": "luka_e1", "stat": "dmgAll", "value": 0.15 }
+    },
+    {
+      "id": "luka_e2_energy",
+      "layer": "interactions",
+      "claim": "E2 'The Enemy is Weak, I am Strong': Skill on a Physical-weak target grants +1 Fighting Will; the A4 trace adds +3 Energy per stack obtained, so Luka fires one extra ENERGY_GAIN event (count 17 -> 18).",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "count", "of": { "type": "ENERGY_GAIN", "target": "Luka" }, "value": 18 }
+    },
+    {
+      "id": "luka_e2_energy_locked",
+      "layer": "interactions",
+      "claim": "Below E2 no extra Fighting Will: Luka's ENERGY_GAIN count stays at 17.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "count", "of": { "type": "ENERGY_GAIN", "target": "Luka" }, "value": 17 }
+    },
+    {
+      "id": "luka_e3_skill",
+      "layer": "parameters",
+      "claim": "E3 'Born for the Ring': Skill Lv.+2 raises Lacerating Fist 1.2 -> 1.32.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Lacerating Fist" }, "field": "mult", "value": 1.32, "tol": 0.002, "pick": "first" }
+    },
+    {
+      "id": "luka_e3_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Lacerating Fist stays at 1.2.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Lacerating Fist" }, "field": "mult", "value": 1.2, "tol": 0.002, "pick": "first" }
+    },
+    {
+      "id": "luka_e3_bleed",
+      "layer": "parameters",
+      "claim": "E3 Talent+2 / Skill+2: Bleed cap is recalculated from the raised Skill cap, base 8653 -> 9518 at clean ATK (0 rank-mods; from E4 the E4 ATK buff inflates it further, asserted separately via luka_e4_stat).",
+      "fixtures": ["e3"],
+      "assertion": { "assert": "payload", "of": { "type": "DOT_APPLIED", "payload": { "kind": "Bleed" } }, "field": "baseDmg", "value": 9518, "tol": 1, "pick": "first" }
+    },
+    {
+      "id": "luka_e3_bleed_locked",
+      "layer": "parameters",
+      "claim": "Below E3 the Bleed base stays at 8653.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DOT_APPLIED", "payload": { "kind": "Bleed" } }, "field": "baseDmg", "value": 8653, "tol": 1, "pick": "first" }
+    },
+    {
+      "id": "luka_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Never Turning Back': per Fighting Will stack ATK +5%, stacking up to 4 (luka_e4 atkPct 0.05 x stacks). Present from E4.",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "luka_e4" }
+    },
+    {
+      "id": "luka_e4_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: luka_e4 must NOT be active below rank 4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "noBuff", "id": "luka_e4" }
+    },
+    {
+      "id": "luka_e4_stat",
+      "layer": "parameters",
+      "claim": "With 4 Fighting Will stacks luka_e4 carries atkPct 0.2 (canon ranks/4: 5% x 4).",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "buffStat", "id": "luka_e4", "stat": "atkPct", "value": 0.2 }
+    },
+    {
+      "id": "luka_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 'The Spirit of Wildfire': Ultimate Lv.+2 raises Coup de Grâce 3.3 -> 3.564.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Coup de Grâce" }, "field": "mult", "value": 3.564, "tol": 0.002, "pick": "first" }
+    },
+    {
+      "id": "luka_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Coup de Grâce stays at 3.3.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Coup de Grâce" }, "field": "mult", "value": 3.3, "tol": 0.002, "pick": "first" }
+    },
+    {
+      "id": "luka_e5_basic",
+      "layer": "parameters",
+      "claim": "E5 Basic ATK Lv.+1 raises the Enhanced Basic (Rising Uppercut) 0.8 -> 0.88.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Rising Uppercut" }, "field": "mult", "value": 0.88, "tol": 0.002, "pick": "first" }
+    },
+    {
+      "id": "luka_e5_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Rising Uppercut stays at 0.8.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Rising Uppercut" }, "field": "mult", "value": 0.8, "tol": 0.002, "pick": "first" }
+    },
+    {
+      "id": "luka_e6_bleed_burst",
+      "layer": "parameters",
+      "claim": "E6 'A Champion's Applause': Rising Uppercut on a Bleeding target adds 8% of the current Bleed per Direct Punch hit to the burst; Bleed Burst mult rises 0.884 -> 1.284.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Bleed Burst" }, "field": "mult", "value": 1.284, "tol": 0.002, "pick": "first" }
+    },
+    {
+      "id": "luka_e6_bleed_burst_locked",
+      "layer": "parameters",
+      "claim": "Below E6 Bleed Burst stays at 0.884 (Talent-only burst ratio).",
+      "fixtures": ["e5"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Bleed Burst" }, "field": "mult", "value": 0.884, "tol": 0.002, "pick": "first" }
+    }
+  ],
+  "golds": []
+}

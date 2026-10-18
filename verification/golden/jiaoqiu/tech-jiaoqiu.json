@@ -1,0 +1,24 @@
+{
+ "input": {
+  "kit": "jiaoqiu",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Jiaoqiu alone, technique \"Fiery Queller\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Jiaoqiu|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "ENERGY_GAIN|Jiaoqiu|Jiaoqiu|-|- [0,100,15,65]",
+  "TECHNIQUE_APPLIED|Jiaoqiu|-|-|-",
+  "HIT_START|Jiaoqiu|Ice Edge|Fiery Queller|basic [1,10,30,5000000,601]",
+  "DAMAGE_CALCULATED|Jiaoqiu|Ice Edge|-|basic [0,0,0,0,0,0,0.05,0.144,1,1,309,601]",
+  "DAMAGE_DEALT|Jiaoqiu|Ice Edge|Fiery Queller|basic [1,309,4999691,5000000,601]",
+  "TOUGHNESS_DAMAGE|Jiaoqiu|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Jiaoqiu|Ice Edge|-|basic [309,4999691]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [1,2,5]",
+  "DOT_APPLIED|Jiaoqiu|Ice Edge|-|- [1,1082,2]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

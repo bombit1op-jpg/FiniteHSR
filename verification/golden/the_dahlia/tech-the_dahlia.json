@@ -1,0 +1,18 @@
+{
+ "input": {
+  "kit": "the_dahlia",
+  "slot": "technique",
+  "env": "Technique activation (mode init): The Dahlia alone, technique \"The Heart Makes the Finest Tomb\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|The Dahlia|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "ENERGY_GAIN|The Dahlia|The Dahlia|-|- [0,100,130,35]",
+  "TECHNIQUE_APPLIED|The Dahlia|-|-|-",
+  "BUFF_APPLIED|-|The Dahlia|-|- [1,Infinity]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

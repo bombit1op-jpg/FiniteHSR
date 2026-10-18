@@ -1,0 +1,380 @@
+{
+  "kit": "fugue",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Fugue/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder. E1/E2/E4/E6 act through Foxian Prayer on allies and other enemies and are unobservable in the solo fixture (E6 also adds self WBE, absent from the run's TOUGHNESS payload); E3 Basic Lv.+1 raises Radiant Streak 1.0 -> 1.1; E5 Ult/Talent Lv.+2 raises Solar Splendor 1.1784 -> 1.3074."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "fugue E0 — eidolon ladder rung, cloned from fugue/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "fugue",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "fugue E1 — eidolon ladder rung, cloned from fugue/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "fugue",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "fugue E2 — eidolon ladder rung, cloned from fugue/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "fugue",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "fugue E3 — eidolon ladder rung, cloned from fugue/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "fugue",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "fugue E4 — eidolon ladder rung, cloned from fugue/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "fugue",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "fugue E5 — eidolon ladder rung, cloned from fugue/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "fugue",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "fugue E6 — eidolon ladder rung, cloned from fugue/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "fugue",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "fugue_e1_custom",
+      "layer": "interactions",
+      "claim": "E1 +50% Weakness Break Efficiency on the Foxian Prayer ally; no ally in the solo fixture.",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "Foxian Prayer ally WBE not observable solo"
+      }
+    },
+    {
+      "id": "fugue_e2_custom",
+      "layer": "interactions",
+      "claim": "E2 regenerates 3 Energy and advances allies when a Foxian-Prayer enemy is broken; needs allies/a break.",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "Foxian Prayer break energy/advance not observable solo"
+      }
+    },
+    {
+      "id": "fugue_e3_present",
+      "layer": "parameters",
+      "claim": "E3 Basic Lv.+1 raises Radiant Streak 1.0 -> 1.1.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Radiant Streak"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "fugue_e3_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Radiant Streak stays at 1.0.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Radiant Streak"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "fugue_e4_custom",
+      "layer": "interactions",
+      "claim": "E4 +20% Break DMG on Foxian Prayer targets; solo fixture unobservable.",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "Foxian Prayer break DMG not observable solo"
+      }
+    },
+    {
+      "id": "fugue_e5_present",
+      "layer": "parameters",
+      "claim": "E5 Ult/Talent Lv.+2 raises Solar Splendor 1.1784 -> 1.3074.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Solar Splendor"
+        },
+        "field": "mult",
+        "value": 1.3074,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "fugue_e5_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Solar Splendor stays at 1.1784.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Solar Splendor"
+        },
+        "field": "mult",
+        "value": 1.1784,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "fugue_e6_custom",
+      "layer": "interactions",
+      "claim": "E6 self +50% Weakness Break Efficiency and Foxian Prayer applying to all Torrid Scorch allies; not observable in the solo fixture.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "self WBE + all-ally Foxian Prayer not observable solo"
+      }
+    }
+  ],
+  "golds": []
+}

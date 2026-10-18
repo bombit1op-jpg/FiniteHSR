@@ -1,0 +1,45 @@
+{
+  "kit": "clara",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/110701+110702+110703+110704 + bonus_abilities (Kinship, Under Protection, Revenge)",
+    "confidence": "verified",
+    "note": "Svarog Watches Over You (110702) L10: #1 = 120% to all enemies (AoE), plus #2 = 120% to marked enemies as 4 extra hits of 25% BEFORE the base hit, no Toughness DMG; Marks removed after the Skill. Ultimate (110703) L10: #4 = 25% extra DMG reduction, #3 = 2 turns of greatly increased taunt, #2 = +160% enhanced Counter multiplier, #5 = 2 enhanced Counters. Talent (110704) L10: Counter = #2 = 160% of ATK, #3 = 10% DMG reduction; BA Revenge: Counter DMG +30% -> 208% normal Counter, enhanced Counter = (160% + 160%) x 1.3 = 416% with 50% to adjacent. Basic (110701) L6 = 100%."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Clara E0 solo vs 3 Physical-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [{ "kitId": "clara", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 0 }],
+        "enemy": { "name": "Elite", "count": 3, "hp": 6000000, "atk": 800, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Physical"], "res": 0 },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    { "id": "c_ult_action", "layer": "structure", "claim": "Promise, Not Command (110703) is Clara's Ultimate action (2 casts in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Clara", "action": "ultimate" }, "value": 2 } },
+    { "id": "c_skill_action", "layer": "structure", "claim": "Svarog Watches Over You (110702) is her Skill action (4 casts in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Clara", "action": "skill" }, "value": 4 } },
+    { "id": "c_basic_action", "layer": "structure", "claim": "I Want to Help (110701) is her Basic ATK action (1 cast in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Clara", "action": "basic" }, "value": 1 } },
+    { "id": "c_skill_hits", "layer": "structure", "claim": "The Skill's base hit strikes all 3 enemies per cast (AoE, 110702 #1) — 4 casts x 3 = 12.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Clara", "label": "Svarog Watches (main)" }, "value": 12 } },
+    { "id": "c_extra_hits", "layer": "structure", "claim": "Marked enemies take 4 extra hits of 25% each (canon 110702, dealt before the base hit, no Toughness) — 24 extra hits land in the fixture (6 marked instances x 4).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Clara", "label": "Svarog Watches (extra)" }, "value": 24 } },
+    { "id": "c_counter_hits", "layer": "structure", "claim": "Svarog's Counter (110704) triggers 9 times in the fixture (on every enemy attack against Clara).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Clara", "label": "Svarog Counter" }, "value": 9 } },
+    { "id": "c_counter_adj", "layer": "structure", "claim": "Enhanced Counters (110703) hit adjacent enemies at 50% — 4 adjacent hits (2 enhanced counters per Ultimate x 2 Ultimates, last counter was un-enhanced).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Clara", "label": "Svarog Counter (adj)" }, "value": 4 } },
+    { "id": "c_basic_hits", "layer": "structure", "claim": "I Want to Help hits its single target once (1 cast).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Clara", "label": "I Want to Help" }, "value": 1 } },
+    { "id": "c_sp_gain", "layer": "interactions", "claim": "The Basic ATK regenerates 1 Skill Point (110701 sp_base equivalent, 1 cast).", "assertion": { "assert": "count", "of": { "type": "SP_GAIN" }, "value": 1 } },
+    { "id": "c_sp_loss", "layer": "interactions", "claim": "The Skill costs 1 Skill Point per cast (4 casts = 4 SP).", "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Clara" }, "value": 4 } },
+    { "id": "c_m_skill", "layer": "parameters", "claim": "Svarog Watches Over You L10 (110702 #1) base multiplier is 120% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Clara", "label": "Svarog Watches (main)" }, "field": "mult", "value": 1.2 } },
+    { "id": "c_m_extra", "layer": "parameters", "claim": "Svarog Watches Over You L10 (110702 #2) extra-hit total 120% of ATK over the 25/25/25/25 split; last piece = 0.3.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Clara", "label": "Svarog Watches (extra)" }, "field": "mult", "value": 0.3, "pick": "last" } },
+    { "id": "c_m_counter", "layer": "parameters", "claim": "Normal Counter = Talent L10 160% x BA Revenge (+30%) = 208% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Clara", "label": "Svarog Counter" }, "field": "mult", "value": 2.08 } },
+    { "id": "c_m_counter_adj", "layer": "parameters", "claim": "Enhanced Counter adjacent damage = 50% of the enhanced main hit ((160% + 160%) x 1.3 = 416% -> 208% adjacent).", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Clara", "label": "Svarog Counter (adj)" }, "field": "mult", "value": 2.08 } },
+    { "id": "c_m_basic", "layer": "parameters", "claim": "I Want to Help at the engine's default Basic Lv6 (110701 L6) totals 100% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Clara", "label": "I Want to Help" }, "field": "mult", "value": 1 } },
+    { "id": "c_energy", "layer": "parameters", "claim": "Over the fixture Clara regenerates exactly 170 Energy (talent counters +5 each, Basic +20, Skill +30, Ultimates consume 110 each).", "assertion": { "assert": "energy", "who": "Clara", "atLeast": 170, "atMost": 170 } },
+    { "id": "c_ult_turns", "layer": "parameters", "claim": "The Ultimate's taunt/DMG-reduction lasts #3 = 2 turns (110703).", "assertion": { "assert": "buff", "id": "clara_ult", "target": "Clara", "turns": 2 } },
+    { "id": "c_protect_present", "ability": "talent", "layer": "interactions", "claim": "Talent Because We're Family's passive 10% DMG reduction (#3) is a permanent buff.", "assertion": { "assert": "buff", "id": "clara_protect", "target": "Clara" } },
+    { "id": "c_mark_turns", "layer": "parameters", "claim": "Mark of Counter persists (engine uses a 999-turn duration; canon: mark stays until removed by the Skill, E0).", "assertion": { "assert": "buff", "id": "clara_mark", "turns": 999 } },
+    { "id": "c_mark_before_extra", "layer": "ordering", "claim": "A Mark of Counter must exist before the Skill's extra marked-hit can resolve: the first Svarog Counter precedes the first extra hit.", "assertion": { "assert": "ordering", "before": [{ "type": "DAMAGE_DEALT", "source": "Clara", "label": "Svarog Counter" }], "after": [{ "type": "DAMAGE_DEALT", "source": "Clara", "label": "Svarog Watches (extra)" }] } },
+    { "id": "c_counter_after_skill", "layer": "ordering", "claim": "Counters are reactions that occur off-turn: the first Svarog Counter resolves after the first Skill cast's damage.", "assertion": { "assert": "ordering", "before": [{ "type": "DAMAGE_DEALT", "source": "Clara", "label": "Svarog Watches (main)" }], "after": [{ "type": "DAMAGE_DEALT", "source": "Clara", "label": "Svarog Counter" }] } }
+  ]
+}

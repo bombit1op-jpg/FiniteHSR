@@ -1,0 +1,17 @@
+{
+ "input": {
+  "kit": "sampo",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Sampo alone, technique \"Shining Bright\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Sampo|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Sampo|-|-|-",
+  "ACTION_DELAY|Ice Edge|Ice Edge|-|- [0.25,94.697]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

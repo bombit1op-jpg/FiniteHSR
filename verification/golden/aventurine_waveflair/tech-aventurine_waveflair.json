@@ -1,0 +1,22 @@
+{
+ "input": {
+  "kit": "aventurine_waveflair",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Aventurine • Waveflair alone, technique \"Make Waves in Still Waters\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Aventurine • Waveflair|-|- [1]",
+  "BUFF_APPLIED|-|Aha|-|- [1,Infinity]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Aventurine • Waveflair|-|-|-",
+  "HIT_START|Aventurine • Waveflair|Ice Edge|Make Waves in Still Waters|basic [1,10,30,485,5000000]",
+  "DAMAGE_CALCULATED|Aventurine • Waveflair|Ice Edge|-|basic [0,0,0,0,0,0,0,0.237,1,1,218,485]",
+  "DAMAGE_DEALT|Aventurine • Waveflair|Ice Edge|Make Waves in Still Waters|basic [1,218,485,4999782,5000000]",
+  "TOUGHNESS_DAMAGE|Aventurine • Waveflair|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Aventurine • Waveflair|Ice Edge|-|basic [218,4999782]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

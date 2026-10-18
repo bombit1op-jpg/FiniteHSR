@@ -1,0 +1,323 @@
+{
+  "kit": "dr_ratio",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "hsr-data/characters.json#/Dr. Ratio/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E1: Summation caps raise to cr/cd 0.10/0.20 with 4 stacks at battle start (ratio_summation_cr/cd 0.025/0.05 -> 0.10/0.20+). E3 (Ult+2/Basic+1): Syllogistic Paradox 2.4->2.592 and Mind is Might 1.0->1.1. E5 (Skill+2/Talent+2): Intellectual Midwifery 1.5->1.65. E2 (FUA on debuff), E4 (+15 Energy on Talent trigger) and E6 (FUA +50% / Wiseman +1) require the Talent FUA, which the fixture rarely fires; covered as custom. Fixtures battle one run per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "dr_ratio E0 — eidolon ladder rung, cloned from dr_ratio/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "dr_ratio",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "dr_ratio E1 — eidolon ladder rung, cloned from dr_ratio/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "dr_ratio",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "dr_ratio E2 — eidolon ladder rung, cloned from dr_ratio/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "dr_ratio",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "dr_ratio E3 — eidolon ladder rung, cloned from dr_ratio/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "dr_ratio",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "dr_ratio E4 — eidolon ladder rung, cloned from dr_ratio/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "dr_ratio",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "dr_ratio E5 — eidolon ladder rung, cloned from dr_ratio/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "dr_ratio",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "dr_ratio E6 — eidolon ladder rung, cloned from dr_ratio/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "dr_ratio",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "dr_ratio_e1_sum_cd",
+      "layer": "parameters",
+      "claim": "E1 raises the Summation CRIT DMG cap (ratio_summation_cd critDmg 0.05 -> 0.25).",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "ratio_summation_cd", "stat": "critDmg", "value": 0.25 }
+    },
+    {
+      "id": "dr_ratio_e1_sum_cd_locked",
+      "layer": "parameters",
+      "claim": "At E0 ratio_summation_cd critDmg stays 0.05.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "buffStat", "id": "ratio_summation_cd", "stat": "critDmg", "value": 0.05 }
+    },
+    {
+      "id": "dr_ratio_e3_ult",
+      "layer": "parameters",
+      "claim": "E3 (Ult+2/Basic+1) raises Syllogistic Paradox 2.4 -> 2.592.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Syllogistic Paradox" }, "field": "mult", "value": 2.592, "tol": 0.002 }
+    },
+    {
+      "id": "dr_ratio_e3_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Syllogistic Paradox stays 2.4.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Syllogistic Paradox" }, "field": "mult", "value": 2.4, "tol": 0.002 }
+    },
+    {
+      "id": "dr_ratio_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 (Basic+1) raises Mind is Might 1.0 -> 1.1.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Mind is Might" }, "field": "mult", "value": 1.1, "tol": 0.002 }
+    },
+    {
+      "id": "dr_ratio_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Mind is Might stays 1.0.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Mind is Might" }, "field": "mult", "value": 1.0, "tol": 0.002 }
+    },
+    {
+      "id": "dr_ratio_e5_skill",
+      "layer": "parameters",
+      "claim": "E5 (Skill+2/Talent+2) raises Intellectual Midwifery 1.5 -> 1.65.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Intellectual Midwifery" }, "field": "mult", "value": 1.65, "tol": 0.002 }
+    },
+    {
+      "id": "dr_ratio_e5_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Intellectual Midwifery stays 1.5.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Intellectual Midwifery" }, "field": "mult", "value": 1.5, "tol": 0.002 }
+    },
+    {
+      "id": "dr_ratio_e2_custom",
+      "layer": "interactions",
+      "claim": "E2 (FUA on debuff count) is not exercised because the fixture rarely fires the Talent FUA.",
+      "fixtures": ["e2"],
+      "assertion": { "assert": "custom", "note": "debuff-count FUA not exercised by fixture" }
+    },
+    {
+      "id": "dr_ratio_e4_custom",
+      "layer": "interactions",
+      "claim": "E4 (+15 Energy on Talent trigger) needs the Talent FUA.",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "custom", "note": "talent-trigger energy not exercised" }
+    },
+    {
+      "id": "dr_ratio_e6_custom",
+      "layer": "interactions",
+      "claim": "E6 (FUA +50% / Wiseman +1) needs the Talent FUA.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "custom", "note": "FUA buff not exercised by fixture" }
+    }
+  ],
+  "golds": []
+}

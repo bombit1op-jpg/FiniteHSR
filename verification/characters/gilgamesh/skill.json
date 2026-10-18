@@ -1,0 +1,234 @@
+{
+  "kit": "gilgamesh",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/140801+140802+140803+140804+140805 + bonus_abilities (A1/A2 Hero's Hauteur, A3 Hegemon's Strife, talent2 Joint FUA) + eidolons",
+    "confidence": "verified",
+    "note": "Gilgamesh has no Energy Ultimate: his gauge is the Interest resource (energyMax 360 is only the auto-ult threshold; onStart seeds 3 Interest from Technique Enkidu). Basic Halfhearted Blow. Skill Gate of Babylon: 5-split primary (L10 = 280%) + adjacent (L10 = 140%), grants King's Acknowledgement DEF-ignore (skill_a5, L10 = 30%) for 3 turns. Ultimate Enuma Elish: AoE Lightning (L10 = 400%) plus 10 random single-target bounces (ult_a2 L10 = 100%). A2 Hero's Hauteur: each Interest gained → +25% CRIT DMG (cap 6). Talent: +10% SPD per Interest held; at 10 Interest 'Interest Piqued!' locks him to Skill. Talent2 I Grant You Permission To Strike: Gil/Saber attacks tally; at 8 → Joint FUA (Saber Wind then Gilgamesh Lightning) on all enemies, +3 Interest, Saber +120 Energy."
+  },
+  "fixtures": [
+    {
+      "id": "gil-solo",
+      "env": "Gilgamesh E0 solo vs 3 Lightning-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gilgamesh",
+            "stats": { "hp": 12000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Lightning"],
+          "res": 0
+        },
+        "cycles": 4,
+        "seed": 7
+      }
+    },
+    {
+      "id": "gil-saber",
+      "env": "Gilgamesh + Saber vs 3 Lightning-weak Elites - Saber's attacks feed the talent2 tally into Joint FUA",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gilgamesh",
+            "stats": { "hp": 12000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          },
+          {
+            "kitId": "saber",
+            "stats": { "hp": 12000, "atk": 2000, "def": 600, "spd": 160 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Lightning"],
+          "res": 0
+        },
+        "cycles": 4,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "gil_basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic Halfhearted Blow is Gilgamesh's normal single-target hit.",
+      "fixtures": ["gil-solo", "gil-saber"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Gilgamesh", "label": "Halfhearted Blow" } }
+    },
+    {
+      "id": "gil_ult_aoe",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Ultimate Enuma Elish hits every enemy (AoE main hit).",
+      "fixtures": ["gil-solo", "gil-saber"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Gilgamesh", "label": "Enuma Elish" } }
+    },
+    {
+      "id": "gil_ult_bounce",
+      "layer": "structure",
+      "claim": "Enuma Elish also fires random single-target bounce instances.",
+      "fixtures": ["gil-solo", "gil-saber"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Gilgamesh", "label": "Enuma Elish bounce" } }
+    },
+    {
+      "id": "gil_joint_saber",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent2 Joint FUA fires Saber's Wind hit first.",
+      "fixtures": ["gil-saber"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Saber", "label": "Joint FUA (Saber)" } }
+    },
+    {
+      "id": "gil_joint_self",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent2 Joint FUA then fires Gilgamesh's Lightning hit.",
+      "fixtures": ["gil-saber"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Gilgamesh", "label": "Joint FUA (Gilgamesh)" } }
+    },
+    {
+      "id": "gil_skill_hit",
+      "layer": "structure",
+      "claim": "Once Interest Piqued! locks Gilgamesh to Skill, Gate of Babylon fires its primary hit.",
+      "fixtures": ["gil-saber"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Gilgamesh", "label": "Gate of Babylon (main)" } }
+    },
+    {
+      "id": "gil_basic_mult",
+      "layer": "parameters",
+      "claim": "Halfhearted Blow Lv6 = 100% of ATK split 30/30/40; its first segment carries mult 0.30.",
+      "fixtures": ["gil-solo"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Gilgamesh", "label": "Halfhearted Blow" }, "field": "mult", "value": 0.3, "pick": "first" }
+    },
+    {
+      "id": "gil_ult_mult",
+      "layer": "parameters",
+      "claim": "Enuma Elish AoE L10 = 400% of ATK (140804 #1).",
+      "fixtures": ["gil-solo"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Gilgamesh", "label": "Enuma Elish" }, "field": "mult", "value": 4 }
+    },
+    {
+      "id": "gil_ult_bounce_mult",
+      "layer": "parameters",
+      "claim": "Each Enuma Elish bounce L10 = 100% of ATK (140804 #2).",
+      "fixtures": ["gil-solo"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Gilgamesh", "label": "Enuma Elish bounce" }, "field": "mult", "value": 1, "pick": "first" }
+    },
+    {
+      "id": "gil_skill_mult",
+      "layer": "parameters",
+      "claim": "Gate of Babylon primary L10 = 280% split 10/10/20/20/40; its first segment carries mult 0.28.",
+      "fixtures": ["gil-saber"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Gilgamesh", "label": "Gate of Babylon (main)" }, "field": "mult", "value": 0.28, "pick": "first" }
+    },
+    {
+      "id": "gil_skill_adj_mult",
+      "layer": "parameters",
+      "claim": "Gate of Babylon adjacent L10 = 140% of ATK (140802 #2).",
+      "fixtures": ["gil-saber"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Gilgamesh", "label": "Gate of Babylon (adj)" }, "field": "mult", "value": 1.4, "pick": "first" }
+    },
+    {
+      "id": "gil_joint_mult",
+      "layer": "parameters",
+      "claim": "Gilgamesh's Joint FUA Lightning hit L10 = 400% split 18/18/18/46; its first segment carries mult 0.72.",
+      "fixtures": ["gil-saber"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Gilgamesh", "label": "Joint FUA (Gilgamesh)" }, "field": "mult", "value": 0.72, "pick": "first" }
+    },
+    {
+      "id": "gil_hauteur_buff",
+      "layer": "interactions",
+      "claim": "A2 Hero's Hauteur grants a CRIT DMG buff whenever Interest is gained.",
+      "fixtures": ["gil-solo", "gil-saber"],
+      "assertion": { "assert": "buff", "id": "gil_hauteur" }
+    },
+    {
+      "id": "gil_hauteur_stat",
+      "layer": "parameters",
+      "claim": "Hero's Hauteur caps at 6 stacks = +150% CRIT DMG (6 x 25%).",
+      "fixtures": ["gil-solo"],
+      "assertion": { "assert": "buffStat", "id": "gil_hauteur", "stat": "critDmg", "value": 1.5, "tol": 0.01 }
+    },
+    {
+      "id": "gil_interest_spd",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent grants +10% SPD per Interest held while Interest is active.",
+      "fixtures": ["gil-solo", "gil-saber"],
+      "assertion": { "assert": "buff", "id": "gil_interest_spd" }
+    },
+    {
+      "id": "gil_a3_buff",
+      "layer": "interactions",
+      "claim": "A3 Hegemon's Strife grants all allies +ATK%/+CRIT DMG at battle start.",
+      "fixtures": ["gil-solo", "gil-saber"],
+      "assertion": { "assert": "buff", "id": "gil_a3" }
+    },
+    {
+      "id": "gil_ack_buff",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill grants King's Acknowledgement DEF-ignore for 3 turns.",
+      "fixtures": ["gil-saber"],
+      "assertion": { "assert": "buff", "id": "gil_ack", "turns": 3 }
+    },
+    {
+      "id": "gil_burden_buff",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Amuse Me to the Fullest grants King's Burden (Ult DMG +40%) when an ally uses their Ultimate.",
+      "fixtures": ["gil-saber"],
+      "assertion": { "assert": "buff", "id": "gil_burden" }
+    },
+    {
+      "id": "gil_basic_before_ult",
+      "layer": "ordering",
+      "claim": "Gilgamesh's first Basic resolves before his first Ultimate.",
+      "fixtures": ["gil-solo"],
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Gilgamesh", "label": "Halfhearted Blow" }],
+        "after": [{ "type": "HIT_START", "source": "Gilgamesh", "label": "Enuma Elish" }]
+      }
+    },
+    {
+      "id": "gil_joint_saber_first",
+      "layer": "ordering",
+      "claim": "Saber's Joint FUA hit resolves before Gilgamesh's Joint FUA hit.",
+      "fixtures": ["gil-saber"],
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Saber", "label": "Joint FUA (Saber)" }],
+        "after": [{ "type": "HIT_START", "source": "Gilgamesh", "label": "Joint FUA (Gilgamesh)" }]
+      }
+    },
+    {
+      "id": "gil_technique",
+      "ability": "technique",
+      "layer": "interactions",
+      "claim": "Technique Enkidu grants +3 Interest at combat start, modeled as a battle-start buff (gil_interest_spd) applied in onStart.",
+      "assertion": { "assert": "buff", "id": "gil_interest_spd" },
+      "fixtures": ["gil-solo"]
+    }
+  ]
+}

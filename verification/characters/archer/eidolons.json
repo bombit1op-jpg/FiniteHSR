@@ -1,0 +1,482 @@
+{
+  "kit": "archer",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Archer/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 +2 Skill Points after 3 Skills in one turn (SP_GAIN 4 -> 5); E2 Ultimate -20% Quantum RES + Quantum Weakness for 2 turns (archer_e2 vuln:Quantum 0.2); E3 Skill Lv.+2 raises Caladbolg II 3.6 -> 3.96; E4 +150% Ultimate DMG (Unlimited Blade Works 0.4 -> 1.0); E5 Ult/Talent Lv.+2 raises UBW 1.0 -> 1.08; E6 +1 SP per turn and Skill ignores 20% DEF (archer_e6d defIgnore 0.2). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "archer E0 — eidolon ladder rung, cloned from archer/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "archer",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "archer E1 — eidolon ladder rung, cloned from archer/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "archer",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "archer E2 — eidolon ladder rung, cloned from archer/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "archer",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "archer E3 — eidolon ladder rung, cloned from archer/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "archer",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "archer E4 — eidolon ladder rung, cloned from archer/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "archer",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "archer E5 — eidolon ladder rung, cloned from archer/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "archer",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "archer E6 — eidolon ladder rung, cloned from archer/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "archer",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "arc_e1_locked",
+      "layer": "interactions",
+      "claim": "Below E1 the solo rotation restores exactly 5 Skill Points (5 Basic ATK uses, n=1 each). E1's +2 SP refund needs 3 Skills within one turn; without a SP source the Circuit Connection chains break at 2 Skills per turn (canon 101502 'insufficient to use Skill again' exits the state), so the gate is not reached at E0-E5.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_GAIN",
+          "source": "Archer"
+        },
+        "value": 5
+      }
+    },
+    {
+      "id": "arc_e2_present",
+      "layer": "interactions",
+      "claim": "E2 'The Unfulfilled Happiness': Ultimate applies -20% Quantum RES for 2 turns (archer_e2 vuln:Quantum 0.2). Present from E2.",
+      "fixtures": [
+        "e2",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "archer_e2"
+      }
+    },
+    {
+      "id": "arc_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: archer_e2 must NOT be active below rank 2.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "archer_e2"
+      }
+    },
+    {
+      "id": "arc_e2_stat",
+      "layer": "parameters",
+      "claim": "archer_e2 carries vuln:Quantum 0.2 (canon rank 2).",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "archer_e2",
+        "stat": "vuln:Quantum",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "arc_e3_present",
+      "layer": "parameters",
+      "claim": "E3 'The Untamed Will': Skill Lv.+2 raises Caladbolg II 3.6 -> 3.96.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Caladbolg II"
+        },
+        "field": "mult",
+        "value": 3.96,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "arc_e3_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Caladbolg II stays at 3.6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Caladbolg II"
+        },
+        "field": "mult",
+        "value": 3.6,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "arc_e4_present",
+      "layer": "parameters",
+      "claim": "E4 'The Unsung Life': +150% Ultimate DMG raises Unlimited Blade Works first hit 0.4 -> 1.0.",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Unlimited Blade Works"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "arc_e4_locked",
+      "layer": "parameters",
+      "claim": "Below E4 Unlimited Blade Works first hit stays at 0.4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Unlimited Blade Works"
+        },
+        "field": "mult",
+        "value": 0.4,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "arc_e5_present",
+      "layer": "parameters",
+      "claim": "E5 'The Nameless Watch': Ult/Talent Lv.+2 raises Unlimited Blade Works first hit 1.0 -> 1.08.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Unlimited Blade Works"
+        },
+        "field": "mult",
+        "value": 1.08,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "arc_e5_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Unlimited Blade Works first hit stays at 1.0.",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Unlimited Blade Works"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "arc_e6_present",
+      "layer": "interactions",
+      "claim": "E6 'The Endless Pilgrimage': Skill DMG ignores 20% DEF (archer_e6d defIgnore 0.2).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "archer_e6d",
+        "stat": "defIgnore",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "arc_e6_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: archer_e6d must NOT be active below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "archer_e6d"
+      }
+    },
+    {
+      "id": "arc_e1_refund",
+      "layer": "interactions",
+      "fixtures": [
+        "e6"
+      ],
+      "claim": "E1 'The Unreached Dream' refund is observable once SP lets a chain reach 3 Skills in one turn: at the E6 rung (cumulative E1+E6, E6 recovers 1 SP each turn start) exactly one n=2 SP_GAIN event fires from the 3-Skill combo.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_GAIN",
+          "source": "Archer",
+          "payload": {
+            "n": 2
+          }
+        },
+        "value": 1
+      }
+    }
+  ],
+  "golds": []
+}

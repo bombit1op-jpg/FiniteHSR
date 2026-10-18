@@ -1,0 +1,239 @@
+{
+  "kit": "pela",
+  "slot": "skill",
+  "canon": {
+    "source": "reference/hsr-data/characters.json",
+    "ref": "Pela skill IDs 110601-110604",
+    "confidence": "high",
+    "note": "Basic 110601: 140% ATK at L10, 2 hits 50/50 (engine Basic Lv6 = 100% total). Skill 110602 Frostbite: 210% L10, dispels 1 buff. Ult 110603 Zone of Suppression: 100% all enemies, 100% base chance Exposed (DEF -40%, 2 turns). Talent 110604 Data Collecting: +10 Energy after Pela's attack when enemy debuffed, once per attack. A4 The Secret Strategy: team EHR +10%. A2 Bash: +20% DMG vs debuffed targets, next attack. A6 Wipe Out: +20% DMG next attack after dispelling a buff. sp_need 110."
+  },
+  "fixtures": [
+    {
+      "id": "solo-1e",
+      "env": "Pela E0 solo vs 1 Ice-weak Elite dummy (Lv120, 6M HP, 300 Toughness), auto rotation, 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "pela",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Ice"],
+          "res": 0,
+          "buff": { "id": "elite_rage", "name": "Enraged", "mods": [{ "stat": "atkPct", "value": 0.2 }] }
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "trio-3e",
+      "env": "Pela E0 solo vs 3 Ice-weak Elite dummies (Lv120, 6M HP, 300 Toughness each), auto rotation, 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "pela",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Ice"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "alt-rotation",
+      "env": "Pela E0 solo vs 1 Ice-weak Elite dummy (Lv120, 6M HP, 300 Toughness), skillPattern normal->skill->normal, 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "pela",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0,
+            "skillPattern": "normal->skill->normal"
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Ice"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "p_basic_hits",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic Frost Shot hits twice per use (canon 110601: 2 hits, 50/50 split)",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "HIT_START", "source": "Pela", "label": "Frost Shot" },
+        "value": 2
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "p_basic_split",
+      "layer": "parameters",
+      "claim": "Frost Shot hits carry 0.5x coefficient each (engine Basic Lv6 total 1.0, split 50/50 per canon)",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Pela", "label": "Frost Shot", "payload": { "mult": 0.5 } },
+        "value": 2
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "p_skill_hits",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill Frostbite deals 2.1x per cast (canon 110602: 210% ATK at L10), 4 casts in fixture",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Pela", "label": "Frostbite", "payload": { "mult": 2.1 } },
+        "value": 4
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "p_ult_present",
+      "layer": "structure",
+      "claim": "Pela casts her Ultimate in the fixture (standard Energy activation)",
+      "assertion": {
+        "assert": "present",
+        "of": { "type": "ABILITY_USED", "source": "Pela", "action": "ultimate" }
+      }
+    },
+    {
+      "id": "p_ult_mult",
+      "layer": "parameters",
+      "claim": "Zone of Suppression deals 1.0x (canon 110603 #4: 100% ATK)",
+      "assertion": {
+        "assert": "payload",
+        "of": { "type": "DAMAGE_DEALT", "source": "Pela", "label": "Zone of Suppression" },
+        "field": "mult",
+        "value": 1
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "p_ult_aoe",
+      "layer": "structure",
+      "claim": "Zone of Suppression hits all 3 enemies per cast (6 hits over 2 casts in trio fixture)",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "HIT_START", "source": "Pela", "label": "Zone of Suppression" },
+        "value": 6
+      },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "p_exposed_turns",
+      "layer": "parameters",
+      "claim": "Exposed debuff lasts 2 turns (canon 110603 #2 duration 2)",
+      "assertion": { "assert": "buff", "id": "exposed", "turns": 2 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "p_exposed_stat",
+      "layer": "parameters",
+      "claim": "Exposed applies DEF reduction 40% (canon 110603 #3: DEF -40%)",
+      "assertion": { "assert": "buffStat", "id": "exposed", "stat": "defRed", "value": 0.4 }
+    },
+    {
+      "id": "p_a4_ehr",
+      "layer": "parameters",
+      "claim": "A4 The Secret Strategy grants the team +10% Effect Hit Rate (canon A4: 10%)",
+      "assertion": { "assert": "buffStat", "id": "pela_a4", "stat": "ehr", "value": 0.1, "target": "Pela" }
+    },
+    {
+      "id": "p_energy",
+      "layer": "parameters",
+      "claim": "Regenerates exactly 180 Energy in the single-enemy fixtures: skills 4x30, basic +20, castUlt bonuses +5x2, Data Collecting +10 whenever an enemy is debuffed after Pela's attack, +10 per landed enemy attack (sp_need 110 ladder)",
+      "assertion": { "assert": "energy", "who": "Pela", "atLeast": 180, "atMost": 180 },
+      "fixtures": ["solo-1e", "alt-rotation"]
+    },
+    {
+      "id": "p_energy_trio",
+      "layer": "parameters",
+      "claim": "The three-enemy fixture regenerates 250 Energy: the extra enemies add Data Collecting (+10) procs and their own attacks",
+      "assertion": { "assert": "energy", "who": "Pela", "atLeast": 250, "atMost": 250 },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "p_frostbite_dispel",
+      "layer": "interactions",
+      "claim": "Frostbite dispels 1 positive buff on the target (canon 110602); the fixture enemy holds the Enraged buff, which is removed",
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "Frostbite dispels" } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "p_wipe_out",
+      "layer": "interactions",
+      "claim": "A6 Wipe Out grants +20% DMG (canon A6: 20%) after dispelling the enemy's positive buff",
+      "assertion": { "assert": "buffStat", "id": "pela_a6", "stat": "dmgAll", "value": 0.2 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "p_bash",
+      "layer": "interactions",
+      "claim": "A2 Bash grants +20% DMG (canon A2: 20%) against a debuffed target (Basic while Exposed held)",
+      "assertion": { "assert": "buffStat", "id": "pela_a2", "stat": "dmgAll", "value": 0.2 },
+      "fixtures": ["alt-rotation"]
+    },
+    {
+      "id": "p_talent_energy",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Data Collecting: after Pela's attack, an enemy left debuffed restores +10 Energy once per attack (canon 110604; nihility.ts:134-142).",
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "Pela Talent: \\+Energy" } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "p_order_ult_exposed",
+      "layer": "ordering",
+      "claim": "Exposed is applied during the Ultimate action (canon: Exposed applied by Zone of Suppression hit)",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "ABILITY_USED", "source": "Pela", "action": "ultimate" }
+        ],
+        "after": [
+          { "type": "DEBUFF_APPLIED", "payload": { "id": "exposed" } }
+        ]
+      },
+      "fixtures": ["solo-1e"]
+    }
+  ],
+  "golds": []
+}

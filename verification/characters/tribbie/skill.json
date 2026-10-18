@@ -1,0 +1,151 @@
+{
+  "kit": "tribbie",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/140301+140302+140303+140304 + bonus_abilities",
+    "confidence": "verified",
+    "note": "Skill (140302) refunds +30 Energy per cast. Ultimate Guess Who Lives Here (140303) is a 6-hit Quantum attack. Talent (140304) creates a zone that raises the team's Quantum RES PEN (tri_respen, 0.24); after using Ultimate Tribbie gains an extra 'zone' vulnerability debuff (tri_zone_vuln, 0.30, applied to each enemy). A6 (Gift of the Music Boxes): each time a team member hits an enemy Tribbie regenerates 1.5 Energy per hit. A2 (Summer Blessing): Ultimate raises her Max HP by 990."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Tribbie E0 solo vs 3 Quantum-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "tribbie",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Quantum"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "tribbie_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Hundred Rockets (140301, Quantum) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Tribbie",
+          "label": "Hundred Rockets",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "tri_skill_action",
+      "layer": "structure",
+      "claim": "The Skill (140302) consumes 1 SP and is usable without dealing damage to enemies.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Tribbie", "action": "skill" }, "value": 4 }
+    },
+    {
+      "id": "tri_skill_sp",
+      "layer": "structure",
+      "claim": "Each Skill cast spends 1 SP (4 casts in the fixture).",
+      "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Tribbie" }, "value": 4 }
+    },
+    {
+      "id": "tri_skill_energy",
+      "layer": "parameters",
+      "claim": "The Skill refunds +30 Energy per cast (140302 #2); the engine also grants +30 at battle start, so the fixture logs 5 gains of 30 (1 onStart + 4 casts).",
+      "assertion": { "assert": "count", "of": { "type": "ENERGY_GAIN", "source": "Tribbie", "target": "Tribbie", "payload": { "n": 30 } }, "value": 5 }
+    },
+    {
+      "id": "tri_zone_respen",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "Talent zone buff tri_respen grants 0.24 Quantum RES PEN.",
+      "assertion": { "assert": "buffStat", "id": "tri_respen", "stat": "resPenAll", "value": 0.24 }
+    },
+    {
+      "id": "tri_ult_hits",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "The Ultimate Guess Who Lives Here is a 3-hit attack per cast (2 casts x 3 = 6 hits total, engine flattens the triple enemy group to 3 hits per ult).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Tribbie", "label": "Guess Who Lives Here" }, "value": 6 }
+    },
+    {
+      "id": "tri_ult_energy_loss",
+      "layer": "parameters",
+      "claim": "The Ultimate consumes Energy at cast; the engine logs the spent portion (115.5 of the 120 threshold was available at cast).",
+      "assertion": { "assert": "payload", "of": { "type": "ENERGY_LOSS", "source": "Tribbie" }, "field": "amount", "value": 115.5, "pick": "first" }
+    },
+    {
+      "id": "tri_zone_vuln",
+      "layer": "interactions",
+      "claim": "After the Ultimate, each enemy gains the zone vulnerability debuff tri_zone_vuln with 0.30 Vulnerability (6 total: 2 ults x 3 enemies).",
+      "assertion": { "assert": "count", "of": { "type": "BUFF_APPLIED", "payload": { "id": "tri_zone_vuln" } }, "value": 6 }
+    },
+    {
+      "id": "tri_zone_vuln_value",
+      "layer": "parameters",
+      "claim": "tri_zone_vuln grants 0.30 vulnerability against the enemies.",
+      "assertion": { "assert": "buffStat", "id": "tri_zone_vuln", "stat": "vulnAll", "value": 0.3 }
+    },
+    {
+      "id": "tri_a6_energy",
+      "layer": "interactions",
+      "claim": "A6: each time her attack hits a new enemy target Tribbie regens 1.5 Energy — the engine fires 9 of these in the fixture (3 casts that hit enemies across the run).",
+      "assertion": { "assert": "count", "of": { "type": "ENERGY_GAIN", "source": "Tribbie", "target": "Tribbie", "payload": { "n": 1.5 } }, "value": 9 }
+    },
+    {
+      "id": "tri_a2_hpflat",
+      "layer": "parameters",
+      "claim": "A2 (Summer Blessing) raises Max HP by 990 flat.",
+      "assertion": { "assert": "buffStat", "id": "tri_a2", "stat": "hpFlat", "value": 990 }
+    },
+    {
+      "id": "tri_basic_hits",
+      "layer": "structure",
+      "claim": "The Basic ATK Hundred Rockets is a Blast: 1 primary hit plus 2 adjacent hits per cast.",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Tribbie", "label": "Hundred Rockets (adj)" }, "value": 2 }
+    },
+    {
+      "id": "tri_energy_regens",
+      "layer": "parameters",
+      "claim": "Across the fixture Tribbie regenerates exactly 274 Energy (skill refunds 4x30, A6 9x1.5, Ultimates +5, enemy-turn hits).",
+      "assertion": { "assert": "energy", "who": "Tribbie", "atLeast": 274, "atMost": 274 }
+    },
+    {
+      "id": "tri_zone_additional",
+      "layer": "interactions",
+      "claim": "When the zone setter attacks alone, each enemy hit after the Ultimate routes through the Zone and fires the additional Zone DMG hit.",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Tribbie", "label": "Zone Additional DMG" } }
+    },
+    {
+      "id": "tri_after_state",
+      "layer": "interactions",
+      "claim": "Fixture end state: Tribbie damaged to 6806/11000 HP, 94/120 Energy, 0 SP, 2 active buffs (traces + tri_respen).",
+      "assertion": { "assert": "unitState", "who": "Tribbie", "field": "hp", "value": 6806 },
+      "after": [
+        { "unit": "Tribbie", "stat": "hp", "op": "eq", "value": 6806 },
+        { "unit": "Tribbie", "stat": "energy", "op": "eq", "value": 94 },
+        { "unit": "Tribbie", "stat": "sp", "op": "eq", "value": 0 },
+        { "unit": "Tribbie", "stat": "buffs", "op": "eq", "value": 2 }
+      ]
+    }
+  ],
+  "golds": []
+}

@@ -1,0 +1,22 @@
+{
+ "input": {
+  "kit": "feixiao",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Feixiao alone, technique \"Stormborn\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Feixiao|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Feixiao|-|- [1,Infinity]",
+  "TECHNIQUE_APPLIED|Feixiao|-|-|-",
+  "HIT_START|Feixiao|Ice Edge|Stormborn|basic [1,10,30,5000000,769.28]",
+  "DAMAGE_CALCULATED|Feixiao|Ice Edge|-|basic [0,0,0,0,0,0,0,0.17,1,1038,2,769]",
+  "DAMAGE_DEALT|Feixiao|Ice Edge|Stormborn|basic [1038,2,4998962,5000000,769.28]",
+  "TOUGHNESS_DAMAGE|Feixiao|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Feixiao|Ice Edge|-|basic [1038,4998962]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

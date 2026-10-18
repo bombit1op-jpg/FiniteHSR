@@ -1,0 +1,443 @@
+{
+  "kit": "silver_wolf_lv999",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Silver Wolf LV.999/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 enemies in the Zone take +20% DMG and 20% Hidden MMR is retained on exit (extends the Elation loop - aWolf casts 6 -> 7); E2 buffs +1 turn per 120 Hidden MMR and +1 Enhanced Basic; E3 Skill Lv.+2/Basic Lv.+1/Elation Skill Lv.+1 (Trigger Happy 1.6 -> 1.76); E4 Honkai-DMG Demo Elation DMG x5 Punchline; E5 Ultimate Lv.+2/Talent Lv.+2/Elation Skill Lv.+1 (Top Loot Box 16818 -> 18500); E6 Enhanced Basic merrymake +50% and Absolute Weakness implant (sw_e6, All-Type Weakness). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent. E2 is unobservable in this fixture (recorded as a deviation)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "silver_wolf_lv999 E0 — eidolon ladder rung, cloned from silver_wolf_lv999/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "silver_wolf_lv999",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "energyStartFrac": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 10,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "silver_wolf_lv999 E1 — eidolon ladder rung, cloned from silver_wolf_lv999/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "silver_wolf_lv999",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "energyStartFrac": 1,
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 10,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "silver_wolf_lv999 E2 — eidolon ladder rung, cloned from silver_wolf_lv999/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "silver_wolf_lv999",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "energyStartFrac": 1,
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 10,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "silver_wolf_lv999 E3 — eidolon ladder rung, cloned from silver_wolf_lv999/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "silver_wolf_lv999",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "energyStartFrac": 1,
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 10,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "silver_wolf_lv999 E4 — eidolon ladder rung, cloned from silver_wolf_lv999/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "silver_wolf_lv999",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "energyStartFrac": 1,
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 10,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "silver_wolf_lv999 E5 — eidolon ladder rung, cloned from silver_wolf_lv999/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "silver_wolf_lv999",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "energyStartFrac": 1,
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 10,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "silver_wolf_lv999 E6 — eidolon ladder rung, cloned from silver_wolf_lv999/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "silver_wolf_lv999",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "energyStartFrac": 1,
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 10,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "swlv_e1_present",
+      "layer": "parameters",
+      "claim": "E1: +20% DMG taken and 20% Hidden MMR retained extend the loop - aWolf Instant casts 6 -> 7.",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Bonus Stage: aWolf Instant"
+        },
+        "value": 7
+      }
+    },
+    {
+      "id": "swlv_e1_locked",
+      "layer": "parameters",
+      "claim": "Below E1 Hidden MMR is fully cleared, so aWolf Instant casts 6 times.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Bonus Stage: aWolf Instant"
+        },
+        "value": 6
+      }
+    },
+    {
+      "id": "swlv_e3_present",
+      "layer": "parameters",
+      "claim": "E3: Skill Lv.+2/Basic Lv.+1/Elation Skill Lv.+1 raise Trigger Happy 1.6 -> 1.76.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Trigger Happy"
+        },
+        "field": "mult",
+        "value": 1.76,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "swlv_e3_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Trigger Happy stays at 1.6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Trigger Happy"
+        },
+        "field": "mult",
+        "value": 1.6,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "swlv_e4_present",
+      "layer": "parameters",
+      "claim": "E4: Honkai-DMG Demo Elation DMG accounts for Punchline x5 (mult jumps to ~88296).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Honkai-DMG Demo"
+        },
+        "field": "mult",
+        "value": 88296
+      }
+    },
+    {
+      "id": "swlv_e4_locked",
+      "layer": "parameters",
+      "claim": "Below E4 Honkai-DMG Demo keeps the base multiplier ~16818.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Honkai-DMG Demo"
+        },
+        "field": "mult",
+        "value": 16818.3579312,
+        "tol": 0.5,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "swlv_e5_present",
+      "layer": "parameters",
+      "claim": "E5: Ultimate Lv.+2/Talent Lv.+2/Elation Skill Lv.+1 raise Top Loot Box 16818 -> 18500.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Top Loot Box"
+        },
+        "field": "mult",
+        "value": 18500.19372432
+      }
+    },
+    {
+      "id": "swlv_e5_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Top Loot Box stays at ~16818.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Top Loot Box"
+        },
+        "field": "mult",
+        "value": 16818.3579312,
+        "tol": 0.5,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "swlv_e6_present",
+      "layer": "interactions",
+      "claim": "E6: Enhanced Basic merrymake +50% and Absolute Weakness implant (sw_e6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "sw_e6"
+      }
+    },
+    {
+      "id": "swlv_e6_locked",
+      "layer": "interactions",
+      "claim": "Below E6 no sw_e6 buff is applied.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "sw_e6"
+      }
+    }
+  ],
+  "golds": []
+}

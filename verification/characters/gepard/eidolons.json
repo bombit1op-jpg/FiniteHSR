@@ -1,0 +1,427 @@
+{
+  "kit": "gepard",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Gepard/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder. E1 +35% Freeze base chance (probabilistic, not observable here); E2 gepard_e2 spdDown 0.2; E3 Ult Lv.+2 / Talent Lv.+2 not observable in the skill-only fixture; E4 gepard_e4 effRes 0.2; E5 Basic Lv.+1 / Skill Lv.+2 raises Daunting Smite 0.3/0.7/1 -> 0.33/0.77/1.1; E6 Talent-triggered extra action and HP restore (not observable here)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "gepard E0 — eidolon ladder rung, cloned from gepard/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gepard",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "gepard E1 — eidolon ladder rung, cloned from gepard/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gepard",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "gepard E2 — eidolon ladder rung, cloned from gepard/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gepard",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "gepard E3 — eidolon ladder rung, cloned from gepard/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gepard",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "gepard E4 — eidolon ladder rung, cloned from gepard/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gepard",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "gepard E5 — eidolon ladder rung, cloned from gepard/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gepard",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "gepard E6 — eidolon ladder rung, cloned from gepard/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gepard",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "gep_e1_custom",
+      "layer": "interactions",
+      "claim": "E1 raises Freeze base chance by 35%; the fixture does not assert a probabilistic freeze.",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "freeze-chance buff is probabilistic, not trace-observable"
+      }
+    },
+    {
+      "id": "gep_e2_present",
+      "layer": "interactions",
+      "claim": "E2 Skill reduces target SPD by 20% (gepard_e2 spdDown 0.2). Present from E2.",
+      "fixtures": [
+        "e2",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "gepard_e2"
+      }
+    },
+    {
+      "id": "gep_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: gepard_e2 must NOT be active below rank 2.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "gepard_e2"
+      }
+    },
+    {
+      "id": "gep_e2_stat",
+      "layer": "parameters",
+      "claim": "gepard_e2 carries spdDown 0.2 (canon rank 2).",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "gepard_e2",
+        "stat": "spdDown",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "gep_e3_custom",
+      "layer": "interactions",
+      "claim": "E3 Ult Lv.+2 / Talent Lv.+2; the skill-only fixture never casts the Ultimate, so it is unobservable.",
+      "fixtures": [
+        "e3"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "Ultimate/Talent level bump not trace-observable here"
+      }
+    },
+    {
+      "id": "gep_e4_present",
+      "layer": "interactions",
+      "claim": "E4 grants Effect RES +20% (gepard_e4 effRes 0.2). Present from E4.",
+      "fixtures": [
+        "e4",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "gepard_e4"
+      }
+    },
+    {
+      "id": "gep_e4_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: gepard_e4 must NOT be active below rank 4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "gepard_e4"
+      }
+    },
+    {
+      "id": "gep_e4_stat",
+      "layer": "parameters",
+      "claim": "gepard_e4 carries effRes 0.2 (canon rank 4).",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "gepard_e4",
+        "stat": "effRes",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "gep_e5_present",
+      "layer": "parameters",
+      "claim": "E5 Basic Lv.+1 / Skill Lv.+2 raises Daunting Smite 0.3 -> 0.33 (first hit).",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Daunting Smite"
+        },
+        "field": "mult",
+        "value": 0.33,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gep_e5_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Daunting Smite first hit stays at 0.3.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Daunting Smite"
+        },
+        "field": "mult",
+        "value": 0.3,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gep_e5_fist_present",
+      "layer": "parameters",
+      "claim": "E5 raises Fist of Conviction 0.5 -> 0.55.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Fist of Conviction"
+        },
+        "field": "mult",
+        "value": 0.55,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gep_e6_custom",
+      "layer": "interactions",
+      "claim": "E6 Talent-triggered immediate action and HP restore; not observable in this fixture.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "Talent extra-action/HP restore not trace-observable here"
+      }
+    }
+  ],
+  "golds": []
+}

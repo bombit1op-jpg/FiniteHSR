@@ -1,0 +1,135 @@
+{
+  "kit": "arlan",
+  "slot": "interactions",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Arlan/ranks/2,6 and bonus_abilities Endurance, Repel",
+    "confidence": "verified",
+    "note": "E2 'A Barrier of Sand' dispels 1 debuff from Arlan on Skill/Ult; A4 'Endurance' grants 50% DoT RES; A6 'Repel' nullifies all DMG except DoTs while HP ≤ 50% at battle start (until attacked). Implemented via: TeamSpec.hpFrac (wounded start), loss-intercept kind ('dot' exempt), dotRes stat, EnemySpec.debuff + sim.dispel. See src/core/kits/destruction.ts."
+  },
+  "fixtures": [
+    {
+      "id": "wounded_ref",
+      "env": "Arlan E6 wounded start (hpFrac 0.5) + opening debuff 'curse' vs 1 Boss (Lv120), 5 cycles, seed 11",
+      "battle": {
+        "team": [
+          {
+            "kitId": "arlan",
+            "name": "Arlan",
+            "stats": {
+              "hp": 9000,
+              "atk": 2200,
+              "def": 500,
+              "spd": 120
+            },
+            "hpFrac": 0.5,
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 200000,
+          "atk": 140,
+          "spd": 150,
+          "level": 120,
+          "toughness": 1800,
+          "weaknesses": [
+            "Lightning",
+            "Physical"
+          ],
+          "debuff": {
+            "id": "curse",
+            "name": "Curse of Thorns",
+            "mods": [
+              {
+                "stat": "defRed",
+                "value": 0.2
+              }
+            ],
+            "targetName": "Arlan"
+          }
+        },
+        "cycles": 5,
+        "seed": 11
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "arlan_fixture_runs",
+      "layer": "structure",
+      "claim": "The paired battle executes deterministically with no invariant break.",
+      "fixtures": [
+        "wounded_ref"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "BATTLE_END"
+        }
+      }
+    },
+    {
+      "id": "arlan_e2_dispel",
+      "layer": "interactions",
+      "claim": "E2 'A Barrier of Sand': using the Skill removes the opening debuff from Arlan.",
+      "fixtures": [
+        "wounded_ref"
+      ],
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "DEBUFF_APPLIED",
+            "target": "Arlan",
+            "payload": {
+              "id": "curse"
+            }
+          }
+        ],
+        "after": [
+          {
+            "type": "DISPELLED",
+            "target": "Arlan",
+            "payload": {
+              "id": "curse"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "arlan_a4_endurance",
+      "layer": "interactions",
+      "claim": "A4 'Endurance': Arlan carries a permanent +50% DoT RES buff.",
+      "fixtures": [
+        "wounded_ref"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "arlan_endurance",
+        "stat": "dotRes",
+        "value": 0.5
+      }
+    },
+    {
+      "id": "arlan_a6_repel",
+      "layer": "interactions",
+      "claim": "A6 'Repel': at HP ≤ 50% battle start, the Boss's first hit on Arlan is fully nullified (loss interceptor fires).",
+      "fixtures": [
+        "wounded_ref"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "HP_INTERCEPT",
+          "target": "Arlan"
+        },
+        "field": "amount",
+        "value": 1
+      }
+    }
+  ],
+  "golds": []
+}

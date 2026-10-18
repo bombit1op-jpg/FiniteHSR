@@ -1,0 +1,352 @@
+{
+  "kit": "anaxa",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Anaxa/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 Skill hit -16% DEF for 2 turns (axa_e1 defRed 0.16) + 1 SP on first Skill; E2 entering enemies -20% All-Type RES (axa_e2 resAll -0.2); E3 Ult Lv.+2 raises Sprouting Life Sculpts Earth 2.08 -> 2.288; E4 Skill +30% ATK for 2 turns, 2 stacks (axa_e4 atkPct 0.3); E5 Skill/Talent Lv.+2 raises Sprouting 2.288 -> 2.3302; E6 DMG x1.3 (axa_e6 finalDmgBoost 0.3) and Imperative Hiatus unconditional (axa_a4_cd critDmg 1.4). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "anaxa E0 — eidolon ladder rung, cloned from anaxa/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "anaxa",
+            "name": "Anaxa",
+            "stats": {
+              "hp": 5000,
+              "atk": 2400,
+              "def": 1300,
+              "spd": 97
+            },
+            "eidolon": 0,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 300000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 100,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "anaxa E1 — eidolon ladder rung, cloned from anaxa/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "anaxa",
+            "name": "Anaxa",
+            "stats": {
+              "hp": 5000,
+              "atk": 2400,
+              "def": 1300,
+              "spd": 97
+            },
+            "eidolon": 1,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 300000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 100,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "anaxa E2 — eidolon ladder rung, cloned from anaxa/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "anaxa",
+            "name": "Anaxa",
+            "stats": {
+              "hp": 5000,
+              "atk": 2400,
+              "def": 1300,
+              "spd": 97
+            },
+            "eidolon": 2,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 300000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 100,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "anaxa E3 — eidolon ladder rung, cloned from anaxa/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "anaxa",
+            "name": "Anaxa",
+            "stats": {
+              "hp": 5000,
+              "atk": 2400,
+              "def": 1300,
+              "spd": 97
+            },
+            "eidolon": 3,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 300000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 100,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "anaxa E4 — eidolon ladder rung, cloned from anaxa/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "anaxa",
+            "name": "Anaxa",
+            "stats": {
+              "hp": 5000,
+              "atk": 2400,
+              "def": 1300,
+              "spd": 97
+            },
+            "eidolon": 4,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 300000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 100,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "anaxa E5 — eidolon ladder rung, cloned from anaxa/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "anaxa",
+            "name": "Anaxa",
+            "stats": {
+              "hp": 5000,
+              "atk": 2400,
+              "def": 1300,
+              "spd": 97
+            },
+            "eidolon": 5,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 300000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 100,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "anaxa E6 — eidolon ladder rung, cloned from anaxa/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "anaxa",
+            "name": "Anaxa",
+            "stats": {
+              "hp": 5000,
+              "atk": 2400,
+              "def": 1300,
+              "spd": 97
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 300000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 100,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    { "id": "axa_e1_present", "layer": "interactions", "claim": "E1 'Magician, Isolated by Stars': Skill hits reduce target DEF by 16% for 2 turns (axa_e1 defRed 0.16). Present from E1.", "fixtures": ["e1", "e6"], "assertion": { "assert": "buff", "id": "axa_e1" } },
+    { "id": "axa_e1_locked", "layer": "interactions", "claim": "Cumulative unlock: axa_e1 must NOT be active below rank 1.", "fixtures": ["e0"], "assertion": { "assert": "noBuff", "id": "axa_e1" } },
+    { "id": "axa_e1_stat", "layer": "parameters", "claim": "axa_e1 carries defRed 0.16 (canon rank 1).", "fixtures": ["e1"], "assertion": { "assert": "buffStat", "id": "axa_e1", "stat": "defRed", "value": 0.16 } },
+    { "id": "axa_e2_present", "layer": "interactions", "claim": "E2 'Soul, True to History': entering enemies get -20% All-Type RES (axa_e2 resAll -0.2). Present from E2.", "fixtures": ["e2", "e6"], "assertion": { "assert": "buff", "id": "axa_e2" } },
+    { "id": "axa_e2_locked", "layer": "interactions", "claim": "Cumulative unlock: axa_e2 must NOT be active below rank 2.", "fixtures": ["e0", "e1"], "assertion": { "assert": "noBuff", "id": "axa_e2" } },
+    { "id": "axa_e2_stat", "layer": "parameters", "claim": "axa_e2 carries resAll -0.2 (canon rank 2).", "fixtures": ["e2"], "assertion": { "assert": "buffStat", "id": "axa_e2", "stat": "resAll", "value": -0.2 } },
+    { "id": "axa_e3_present", "layer": "parameters", "claim": "E3 'Pupil, Etched into Cosmos': Ultimate Lv.+2 raises Sprouting Life Sculpts Earth 2.08 -> 2.288.", "fixtures": ["e3", "e4"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Sprouting Life Sculpts Earth" }, "field": "mult", "value": 2.288, "tol": 0.01, "pick": "first" } },
+    { "id": "axa_e3_locked", "layer": "parameters", "claim": "Below E3 Sprouting Life Sculpts Earth stays at 2.08.", "fixtures": ["e0", "e1", "e2"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Sprouting Life Sculpts Earth" }, "field": "mult", "value": 2.08, "tol": 0.01, "pick": "first" } },
+    { "id": "axa_e4_present", "layer": "interactions", "claim": "E4 'Blaze, Plunged to Canyon': Skill +30% ATK for 2 turns, up to 2 stacks (axa_e4 atkPct 0.3). Present from E4.", "fixtures": ["e4", "e6"], "assertion": { "assert": "buff", "id": "axa_e4" } },
+    { "id": "axa_e4_locked", "layer": "interactions", "claim": "Cumulative unlock: axa_e4 must NOT be active below rank 4.", "fixtures": ["e0", "e1", "e2", "e3"], "assertion": { "assert": "noBuff", "id": "axa_e4" } },
+    { "id": "axa_e4_stat", "layer": "parameters", "claim": "axa_e4 carries atkPct 0.3 (canon rank 4).", "fixtures": ["e4"], "assertion": { "assert": "buffStat", "id": "axa_e4", "stat": "atkPct", "value": 0.3 } },
+    { "id": "axa_e5_present", "layer": "parameters", "claim": "E5 'Embryo, Set Beyond Vortex': Skill/Talent Lv.+2 raises Sprouting Life Sculpts Earth 2.288 -> 2.3302.", "fixtures": ["e5", "e6"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Sprouting Life Sculpts Earth" }, "field": "mult", "value": 2.3302, "tol": 0.01, "pick": "first" } },
+    { "id": "axa_e5_locked", "layer": "parameters", "claim": "Below E5 Sprouting Life Sculpts Earth stays at 2.288.", "fixtures": ["e3", "e4"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Sprouting Life Sculpts Earth" }, "field": "mult", "value": 2.288, "tol": 0.01, "pick": "first" } },
+    { "id": "axa_e6_present", "layer": "interactions", "claim": "E6 'Everything Is in Everything': Anaxa DMG x1.3 (axa_e6 finalDmgBoost 0.3).", "fixtures": ["e6"], "assertion": { "assert": "buffStat", "id": "axa_e6", "stat": "finalDmgBoost", "value": 0.3 } },
+    { "id": "axa_e6_locked", "layer": "interactions", "claim": "Cumulative unlock: axa_e6 must NOT be active below rank 6.", "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"], "assertion": { "assert": "noBuff", "id": "axa_e6" } }
+  ],
+  "golds": []
+}

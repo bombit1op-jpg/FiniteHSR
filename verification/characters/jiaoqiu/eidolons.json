@@ -1,0 +1,344 @@
+{
+  "kit": "jiaoqiu",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "hsr-data/characters.json#/Jiaoqiu/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 (Pentapathic Transference) adds a second jq_roast vulnAll mod (allies +40% DMG to Ashen Roast targets); the assertion vocabulary's buffStat reads only the first vulnAll mod, so E1 is documented as a deviation. E2 (Ashen Roast Fire DoT x4) quadruples the Burn DOT baseDmg (3600 -> 14400). E3 (Skill+2/Basic+1) raises Scorch Onslaught 1.5 -> 1.65 and Heart Afire 1.0 -> 1.1. E4 (Zone: enemies ATK -15%) applies jq_e4_atk. E5 (Ult+2/Talent+2) raises Pyrograph Arcanum 1.0 -> 1.08 and jq_zone_vuln 0.15 -> 0.162. E6 (Ashen Roast All-Type RES -3% per stack, cap 9) adds a target-side resAll mod to jq_roast. Fixtures battle one run per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "jiaoqiu E0 — eidolon ladder rung, cloned from jiaoqiu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jiaoqiu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "jiaoqiu E1 — eidolon ladder rung, cloned from jiaoqiu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jiaoqiu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "jiaoqiu E2 — eidolon ladder rung, cloned from jiaoqiu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jiaoqiu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "jiaoqiu E3 — eidolon ladder rung, cloned from jiaoqiu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jiaoqiu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "jiaoqiu E4 — eidolon ladder rung, cloned from jiaoqiu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jiaoqiu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "jiaoqiu E5 — eidolon ladder rung, cloned from jiaoqiu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jiaoqiu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "jiaoqiu E6 — eidolon ladder rung, cloned from jiaoqiu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jiaoqiu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "jiaoqiu_e2_dot_boost",
+      "layer": "parameters",
+      "claim": "E2 raises the Ashen Roast Burn DOT baseDmg x4 (3600 -> 14400).",
+      "fixtures": ["e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DOT_APPLIED", "payload": { "kind": "Burn" } }, "field": "baseDmg", "value": 14400, "tol": 0.5 }
+    },
+    {
+      "id": "jiaoqiu_e2_dot_boost_locked",
+      "layer": "parameters",
+      "claim": "Below E2 the Ashen Roast Burn DOT baseDmg stays 3600.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "payload", "of": { "type": "DOT_APPLIED", "payload": { "kind": "Burn" } }, "field": "baseDmg", "value": 3600, "tol": 0.5 }
+    },
+    {
+      "id": "jiaoqiu_e3_skill",
+      "layer": "parameters",
+      "claim": "E3 (Skill+2/Basic+1) raises Scorch Onslaught 1.5 -> 1.65.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Scorch Onslaught" }, "field": "mult", "value": 1.65, "tol": 0.002 }
+    },
+    {
+      "id": "jiaoqiu_e3_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Scorch Onslaught stays 1.5.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Scorch Onslaught" }, "field": "mult", "value": 1.5, "tol": 0.002 }
+    },
+    {
+      "id": "jiaoqiu_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 raises Heart Afire 1.0 -> 1.1.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Heart Afire" }, "field": "mult", "value": 1.1, "tol": 0.002 }
+    },
+    {
+      "id": "jiaoqiu_e4_present",
+      "layer": "interactions",
+      "claim": "E4 (Zone: enemies ATK -15%) applies jq_e4_atk from rank E4 onward.",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "jq_e4_atk" }
+    },
+    {
+      "id": "jiaoqiu_e4_atk",
+      "layer": "parameters",
+      "claim": "The jq_e4_atk debuff carries atkPct -0.15 (canon ranks/4 param 1).",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "buffStat", "id": "jq_e4_atk", "stat": "atkPct", "value": -0.15 }
+    },
+    {
+      "id": "jiaoqiu_e4_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: jq_e4_atk must NOT be active below rank E4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "noBuff", "id": "jq_e4_atk" }
+    },
+    {
+      "id": "jiaoqiu_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 (Ult+2/Talent+2) raises Pyrograph Arcanum 1.0 -> 1.08.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Pyrograph Arcanum" }, "field": "mult", "value": 1.08, "tol": 0.002 }
+    },
+    {
+      "id": "jiaoqiu_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Pyrograph Arcanum stays 1.0.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Pyrograph Arcanum" }, "field": "mult", "value": 1.0, "tol": 0.002 }
+    },
+    {
+      "id": "jiaoqiu_e5_zone_vuln",
+      "layer": "parameters",
+      "claim": "E5 raises jq_zone_vuln vulnType:ult 0.15 -> 0.162.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "jq_zone_vuln", "stat": "vulnType:ult", "value": 0.162 }
+    },
+    {
+      "id": "jiaoqiu_e6_respen",
+      "layer": "interactions",
+      "claim": "E6 adds a target-side resAll mod to jq_roast (Ashen Roast All-Type RES -3% per stack, 8 stacks → -0.24).",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buffStat", "id": "jq_roast", "stat": "resAll", "value": -0.24 }
+    },
+    {
+      "id": "jiaoqiu_e1_custom",
+      "layer": "interactions",
+      "claim": "E1 (Pentapathic Transference) adds a second jq_roast vulnAll mod (allies +40% DMG to Ashen Roast); buffStat reads only the first vulnAll mod, so this needs a mod-list assertion the vocabulary lacks.",
+      "fixtures": ["e1"],
+      "assertion": { "assert": "custom", "note": "E1 second vulnAll mod not distinguishable by buffStat" }
+    }
+  ],
+  "golds": []
+}

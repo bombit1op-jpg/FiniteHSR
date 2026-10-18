@@ -1,0 +1,296 @@
+{
+  "kit": "hysilens",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Hysilens (skills 132001-132009, ranks 1-6)",
+    "confidence": "verified",
+    "note": "Hysilens is a Nihility (Physical) DoT enabler. Basic Aeolian Mode is a 2-hit physical attack (+1 SP, +20 Energy). Skill Overtone Hum is an AoE physical hit that also raises DMG taken on enemies (hys_vuln). Ultimate Maelstrom Rhapsody detonates all DoTs at 150% (The Bubble of Banquets), deals AoE physical DMG and deploys the Maelstrom Rhapsody Zone (hys_zone / hys_zone_def DEF-down / hys_zone_atk) for a few turns. Talent Sirenic Serenade: every ally attack has a base chance to inflict one of WindShear/Burn/Shock/Bleed (Bleed = 20% of target Max HP capped). While the Zone is active each DoT tick also spawns a Zone Physical DoT (per-turn capped). A2 The Fiddle of Pearls is EHR-gated (needs >60% EHR)."
+  },
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Hysilens E0 solo vs a Physical-weak Elite, 4 cycles - Basic Aeolian Mode, Skill Overtone Hum (+vuln), Ultimate Maelstrom Rhapsody (detonate + Zone), Talent DoT on every attack and the Zone Physical DoT on every enemy DoT tick.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hysilens",
+            "stats": {
+              "hp": 12000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 4,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "e6-full",
+      "env": "Hysilens E6 solo vs a Physical-weak Elite, 4 cycles - E1 gives all allies +16% DoT dealt and a second coexisting Talent DoT instance, E4 turns the Zone into an All-Type RES -20% on enemies, E6 raises the Zone DoT multiplier x1.2.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hysilens",
+            "stats": {
+              "hp": 12000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 4,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "hys_basic",
+      "ability": "basic",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Basic ATK Aeolian Mode is a 2-hit physical attack (labels Aeolian Mode (1/2) and Aeolian Mode (2/2)).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Hysilens",
+          "label": "Aeolian Mode (1/2)"
+        }
+      }
+    },
+    {
+      "id": "hys_skill",
+      "ability": "skill",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Skill Overtone Hum (132002) is an AoE physical hit.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Hysilens",
+          "label": "Overtone Hum"
+        }
+      }
+    },
+    {
+      "id": "hys_ult",
+      "ability": "ultimate",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Ultimate Maelstrom Rhapsody (132003) is an AoE physical hit.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Hysilens",
+          "label": "Maelstrom Rhapsody"
+        }
+      }
+    },
+    {
+      "id": "hys_detonate",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "A1 The Bubble of Banquets: casting the Ultimate detonates all DoTs on each enemy (label The Bubble of Banquets).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "The Bubble of Banquets"
+        }
+      }
+    },
+    {
+      "id": "hys_talent_dot",
+      "ability": "talent",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Talent Sirenic Serenade inflicts one of WindShear/Burn/Shock/Bleed on the attacked enemy (DOT_APPLIED).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DOT_APPLIED"
+        }
+      }
+    },
+    {
+      "id": "hys_talent_note",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "The Talent infection is surfaced as a trace line 'Hysilens Talent: <kind> on <target>'.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Hysilens Talent:"
+        }
+      }
+    },
+    {
+      "id": "hys_zone",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "The Ultimate deploys the Maelstrom Rhapsody Zone, marked on every enemy (hys_zone).",
+      "assertion": {
+        "assert": "buff",
+        "id": "hys_zone"
+      }
+    },
+    {
+      "id": "hys_zone_def",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "While the Zone is active enemies suffer a DEF reduction (hys_zone_def defRed).",
+      "assertion": {
+        "assert": "buff",
+        "id": "hys_zone_def"
+      }
+    },
+    {
+      "id": "hys_zone_deploy_note",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Zone deployment is surfaced as a trace line 'Hysilens Deploys Zone +1 SP'.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Hysilens Deploys Zone"
+        }
+      }
+    },
+    {
+      "id": "hys_zone_dot",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "While the Zone is active every enemy DoT tick spawns a Zone Physical DoT (log 'Hysilens Zone Phys DoT on <target> (+1)').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Hysilens Zone Phys DoT"
+        }
+      }
+    },
+    {
+      "id": "hys_vuln",
+      "ability": "skill",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Skill Overtone Hum raises the target's DMG taken (hys_vuln vulnAll).",
+      "assertion": {
+        "assert": "buff",
+        "id": "hys_vuln"
+      }
+    },
+    {
+      "id": "hys_e1",
+      "layer": "interactions",
+      "fixtures": [
+        "e6-full"
+      ],
+      "claim": "E1 You Ask Why Hearts Cry grants all allies +16% DoT dealt (hys_e1 boost:dot 0.16).",
+      "assertion": {
+        "assert": "buff",
+        "id": "hys_e1"
+      }
+    },
+    {
+      "id": "hys_e4",
+      "layer": "interactions",
+      "fixtures": [
+        "e6-full"
+      ],
+      "claim": "E4 Lo, How Time Flows By gives Zone-marked enemies All-Type RES -20% (hys_e4 resAll -0.2).",
+      "assertion": {
+        "assert": "buff",
+        "id": "hys_e4"
+      }
+    },
+    {
+      "id": "hys_detonate_before_ult",
+      "layer": "ordering",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Within the Ultimate the DoT detonation (The Bubble of Banquets) resolves before the AoE hit (Maelstrom Rhapsody).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "DAMAGE_DEALT",
+            "label": "The Bubble of Banquets"
+          }
+        ],
+        "after": [
+          {
+            "type": "HIT_START",
+            "source": "Hysilens",
+            "label": "Maelstrom Rhapsody"
+          }
+        ]
+      }
+    }
+  ]
+}

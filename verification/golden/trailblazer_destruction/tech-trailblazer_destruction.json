@@ -1,0 +1,18 @@
+{
+ "input": {
+  "kit": "trailblazer_destruction",
+  "slot": "technique",
+  "env": "Technique activation (mode init): {NICKNAME} alone, technique \"Immortal Third Strike\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|{NICKNAME}|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "ENERGY_GAIN|{NICKNAME}|{NICKNAME}|-|- [0,120,15,75]",
+  "TECHNIQUE_APPLIED|{NICKNAME}|-|-|-",
+  "HEAL_APPLIED|-|{NICKNAME}|-|- [0,0,0,1420,1420]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

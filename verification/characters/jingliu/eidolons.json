@@ -1,0 +1,372 @@
+{
+  "kit": "jingliu",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "hsr-data/characters.json#/Jingliu/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 applies jingliu_e1 (critDmg +0.36 for 2 turns after attacking a debuffed/HP-drained foe) and retypes the enhanced-Skill hits to the extra DAMAGE deal labelled 'E1 Tianguan Gate'. E2 applies jingliu_e2 (dmgAll 0.8 to the enhanced state). E3 raises jingliu_spectral critRate 0.5 -> 0.52, Florephemeral Dreamflux 1.8 -> 1.98 and jingliu_moon critDmg 2.2 -> 2.42. E4 raises jingliu_moon critDmg to 3.42. E5 raises Transcendent Flash / Moon On Glacial River 1.5 -> 1.65 and the Moon adjacent multiplier 0.75 -> 0.825. E6 adds resPen:Ice to jingliu_spectral. Fixtures battle one run per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "jingliu E0 — eidolon ladder rung, cloned from jingliu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingliu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "jingliu E1 — eidolon ladder rung, cloned from jingliu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingliu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "jingliu E2 — eidolon ladder rung, cloned from jingliu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingliu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "jingliu E3 — eidolon ladder rung, cloned from jingliu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingliu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "jingliu E4 — eidolon ladder rung, cloned from jingliu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingliu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "jingliu E5 — eidolon ladder rung, cloned from jingliu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingliu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "jingliu E6 — eidolon ladder rung, cloned from jingliu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingliu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "jingliu_e1_present",
+      "layer": "interactions",
+      "claim": "E1 applies jingliu_e1 from rank E1 onward.",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "jingliu_e1" }
+    },
+    {
+      "id": "jingliu_e1_critdmg",
+      "layer": "parameters",
+      "claim": "jingliu_e1 carries critDmg 0.36 (canon ranks/1).",
+      "fixtures": ["e1"],
+      "assertion": { "assert": "buffStat", "id": "jingliu_e1", "stat": "critDmg", "value": 0.36 }
+    },
+    {
+      "id": "jingliu_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: jingliu_e1 must NOT be active below rank E1.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "noBuff", "id": "jingliu_e1" }
+    },
+    {
+      "id": "jingliu_e1_extra_hit",
+      "layer": "ordering",
+      "claim": "E1 adds the extra DAMAGE deal labelled 'E1 Tianguan Gate'.",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "label": "E1 Tianguan Gate" } }
+    },
+    {
+      "id": "jingliu_e1_extra_hit_locked",
+      "layer": "ordering",
+      "claim": "Below E1 the extra DAMAGE deal is absent.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "absent", "of": { "type": "DAMAGE_DEALT", "label": "E1 Tianguan Gate" } }
+    },
+    {
+      "id": "jingliu_e2_present",
+      "layer": "interactions",
+      "claim": "E2 applies jingliu_e2 from rank E2 onward.",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "jingliu_e2" }
+    },
+    {
+      "id": "jingliu_e2_dmgall",
+      "layer": "parameters",
+      "claim": "jingliu_e2 carries dmgAll 0.8 (canon ranks/2).",
+      "fixtures": ["e2"],
+      "assertion": { "assert": "buffStat", "id": "jingliu_e2", "stat": "dmgAll", "value": 0.8 }
+    },
+    {
+      "id": "jingliu_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: jingliu_e2 must NOT be active below rank E2.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "noBuff", "id": "jingliu_e2" }
+    },
+    {
+      "id": "jingliu_e3_critrate",
+      "layer": "parameters",
+      "claim": "E3 raises jingliu_spectral critRate 0.5 -> 0.52.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "jingliu_spectral", "stat": "critRate", "value": 0.52 }
+    },
+    {
+      "id": "jingliu_e3_critrate_locked",
+      "layer": "parameters",
+      "claim": "Below E3 jingliu_spectral critRate stays 0.5.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "buffStat", "id": "jingliu_spectral", "stat": "critRate", "value": 0.5 }
+    },
+    {
+      "id": "jingliu_e3_dreamflux",
+      "layer": "parameters",
+      "claim": "E3 (Skill+2/Skill+2) raises Florephemeral Dreamflux 1.8 -> 1.98.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Florephemeral Dreamflux" }, "field": "mult", "value": 1.98, "tol": 0.002 }
+    },
+    {
+      "id": "jingliu_e3_dreamflux_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Florephemeral Dreamflux stays 1.8.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Florephemeral Dreamflux" }, "field": "mult", "value": 1.8, "tol": 0.002 }
+    },
+    {
+      "id": "jingliu_e3_moon_critdmg",
+      "layer": "parameters",
+      "claim": "E3 raises jingliu_moon critDmg 2.2 -> 2.42.",
+      "fixtures": ["e3"],
+      "assertion": { "assert": "buffStat", "id": "jingliu_moon", "stat": "critDmg", "value": 2.42 }
+    },
+    {
+      "id": "jingliu_e4_moon_critdmg",
+      "layer": "parameters",
+      "claim": "E4 raises jingliu_moon critDmg to 3.42.",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "jingliu_moon", "stat": "critDmg", "value": 3.42 }
+    },
+    {
+      "id": "jingliu_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 raises Transcendent Flash 1.5 -> 1.65.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Transcendent Flash" }, "field": "mult", "value": 1.65, "tol": 0.002 }
+    },
+    {
+      "id": "jingliu_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Transcendent Flash stays 1.5.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Transcendent Flash" }, "field": "mult", "value": 1.5, "tol": 0.002 }
+    },
+    {
+      "id": "jingliu_e6_respen",
+      "layer": "interactions",
+      "claim": "E6 adds resPen:Ice 0.3 to jingliu_spectral.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buffStat", "id": "jingliu_spectral", "stat": "resPen:Ice", "value": 0.3 }
+    }
+  ],
+  "golds": []
+}

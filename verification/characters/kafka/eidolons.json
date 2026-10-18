@@ -1,0 +1,351 @@
+{
+  "kit": "kafka",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "hsr-data/characters.json#/Kafka/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 (Da Capo) applies kafka_e1, DoT taken +30% for 2 turns. E2 (Fortississimo) applies kafka_e2, all ally DoT +33%. E3 (Skill+2/Basic+1) raises Caressing Moonlight 1.6->1.76 and Midnight Tumult 0.5->0.55. E4 (Recitativo) regenerates +2 Energy each time a Shock inflicted by Kafka deals DMG (ENERGY_GAIN count 9->11). E5 (Ult+2/Talent+2) raises Twilight Trill 0.8->0.864. E6 (Leggiero) raises the Shock multiplier by 156% and extends it 1 turn (DOT_APPLIED turns 2->3). Fixtures battle one run per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "kafka E0 — eidolon ladder rung, cloned from kafka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "kafka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "kafka E1 — eidolon ladder rung, cloned from kafka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "kafka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "kafka E2 — eidolon ladder rung, cloned from kafka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "kafka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "kafka E3 — eidolon ladder rung, cloned from kafka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "kafka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "kafka E4 — eidolon ladder rung, cloned from kafka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "kafka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "kafka E5 — eidolon ladder rung, cloned from kafka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "kafka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "kafka E6 — eidolon ladder rung, cloned from kafka/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "kafka",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "kafka_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'Da Capo' applies kafka_e1 (DoT taken +30%) from rank E1 onward.",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "kafka_e1" }
+    },
+    {
+      "id": "kafka_e1_dotvuln",
+      "layer": "parameters",
+      "claim": "The kafka_e1 buff carries dotVuln 0.30 (canon ranks/1 param 2).",
+      "fixtures": ["e1"],
+      "assertion": { "assert": "buffStat", "id": "kafka_e1", "stat": "dotVuln", "value": 0.3 }
+    },
+    {
+      "id": "kafka_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: kafka_e1 must NOT be active below rank E1.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "noBuff", "id": "kafka_e1" }
+    },
+    {
+      "id": "kafka_e2_present",
+      "layer": "interactions",
+      "claim": "E2 'Fortississimo' applies kafka_e2 (all ally DoT +33%) from rank E2 onward.",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "kafka_e2" }
+    },
+    {
+      "id": "kafka_e2_dotboost",
+      "layer": "parameters",
+      "claim": "The kafka_e2 buff carries boost:dot 0.33 (canon ranks/2 param 1).",
+      "fixtures": ["e2"],
+      "assertion": { "assert": "buffStat", "id": "kafka_e2", "stat": "boost:dot", "value": 0.33 }
+    },
+    {
+      "id": "kafka_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: kafka_e2 must NOT be active below rank E2.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "noBuff", "id": "kafka_e2" }
+    },
+    {
+      "id": "kafka_e3_skill",
+      "layer": "parameters",
+      "claim": "E3 (Skill+2/Basic+1) raises Caressing Moonlight 1.6 -> 1.76; with the 3-hit Skill the 50% tail carries 0.88.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Caressing Moonlight" }, "field": "mult", "value": 0.88, "pick": "last", "tol": 0.002 }
+    },
+    {
+      "id": "kafka_e3_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Caressing Moonlight stays 1.6; with the 3-hit Skill the 50% tail carries 0.8.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Caressing Moonlight" }, "field": "mult", "value": 0.8, "pick": "last", "tol": 0.002 }
+    },
+    {
+      "id": "kafka_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 raises Midnight Tumult 0.5 -> 0.55.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Midnight Tumult" }, "field": "mult", "value": 0.55, "tol": 0.002 }
+    },
+    {
+      "id": "kafka_e4_energy_gain",
+      "layer": "interactions",
+      "claim": "E4 'Recitativo' regenerates +2 Energy per Shock DMG, adding two ENERGY_GAIN events (count 9 -> 11).",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "count", "of": { "type": "ENERGY_GAIN", "target": "Kafka" }, "value": 11 }
+    },
+    {
+      "id": "kafka_e4_energy_gain_locked",
+      "layer": "interactions",
+      "claim": "Below E4 the Shock ticks grant no extra Energy (count 9).",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "count", "of": { "type": "ENERGY_GAIN", "target": "Kafka" }, "value": 9 }
+    },
+    {
+      "id": "kafka_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 (Ult+2/Talent+2) raises Twilight Trill 0.8 -> 0.864.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Twilight Trill" }, "field": "mult", "value": 0.864, "tol": 0.002 }
+    },
+    {
+      "id": "kafka_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Twilight Trill stays 0.8.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Twilight Trill" }, "field": "mult", "value": 0.8, "tol": 0.002 }
+    },
+    {
+      "id": "kafka_e6_shock_turns",
+      "layer": "interactions",
+      "claim": "E6 'Leggiero' extends Kafka's Shock 1 turn (DOT_APPLIED turns 2 -> 3).",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DOT_APPLIED", "payload": { "kind": "Shock" } }, "field": "turns", "value": 3 }
+    },
+    {
+      "id": "kafka_e6_shock_turns_locked",
+      "layer": "interactions",
+      "claim": "Below E6 Shock lasts 2 turns.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "payload", "of": { "type": "DOT_APPLIED", "payload": { "kind": "Shock" } }, "field": "turns", "value": 2 }
+    }
+  ],
+  "golds": []
+}

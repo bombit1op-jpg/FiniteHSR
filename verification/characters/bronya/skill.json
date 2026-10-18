@@ -1,0 +1,182 @@
+{
+  "kit": "bronya",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/110101-110107",
+    "confidence": "interpreted",
+    "note": "Bronya (Wind, Harmony). Basic 110101 Windrider Bullet (guaranteed CRIT via trace), then self-advances via Talent Leading the Way. Skill 110102 Combat Redeployment: target ally +DMG (1 turn) and immediate action. Ultimate 110104 The Belobog March: all allies +ATK% and +CRIT DMG. A4 Battlefield: +20% DEF all allies, 2 turns. A6 Military Might: +10% DMG all allies. Energy 120."
+  },
+  "fixtures": [
+    {
+      "id": "team-sushang",
+      "env": "Bronya E0 with Sushang (kitId sushang) vs 3 Physical-weak Elite (level 95, 240 Toughness), 3 cycles, seed 7 - Skill buffs + advances the carry, Ultimate buffs the team",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bronya",
+            "stats": { "hp": 10000, "atk": 1600, "def": 600, "spd": 190 },
+            "eidolon": 0,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": { "hp": 9000, "atk": 2000, "def": 550, "spd": 180, "be": 0.6 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6-redeploy",
+      "env": "Bronya E6 with Sushang vs the same Elites - E6 extends Combat Redeployment's DMG buff to 2 turns",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bronya",
+            "stats": { "hp": 10000, "atk": 1600, "def": 600, "spd": 190 },
+            "eidolon": 6,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": { "hp": 9000, "atk": 2000, "def": 550, "spd": 180, "be": 0.6 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "br_talent_self_advance",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent: Bronya's own action is advanced after her turn — logged as 'Bronya Talent: self-advance' (harmony.ts:135).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Bronya Talent: self-advance"
+        }
+      }
+    },
+    {
+      "id": "bronya_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Windrider Bullet (110101, Wind) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Bronya",
+          "label": "Windrider Bullet",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "e6-redeploy",
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "b_skill_action",
+      "layer": "structure",
+      "claim": "Skill Combat Redeployment (110102) fires as a Skill action (decide harmony.ts:33-44 picks Skill while SP >= 1 and a carry exists).",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Bronya", "action": "skill" } }
+    },
+    {
+      "id": "b_ult_action",
+      "layer": "structure",
+      "claim": "The Belobog March (110104) fires once Energy reaches 120 (energyMax harmony.ts:16).",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Bronya", "action": "ultimate" } }
+    },
+    {
+      "id": "b_skill_buff",
+      "layer": "interactions",
+      "claim": "Combat Redeployment grants the target +DMG for 1 turn at E0 (harmony.ts:94, bronya_dmg).",
+      "fixtures": ["team-sushang"],
+      "assertion": { "assert": "buff", "id": "bronya_dmg", "turns": 1 }
+    },
+    {
+      "id": "b_extra_turn",
+      "layer": "interactions",
+      "claim": "Combat Redeployment gives the target an immediate action (harmony.ts:105-107, sim.immediateTurn -> EXTRA_TURN).",
+      "assertion": { "assert": "present", "of": { "type": "EXTRA_TURN", "target": "Sushang" } }
+    },
+    {
+      "id": "b_a4_def",
+      "layer": "parameters",
+      "claim": "A4 Battlefield grants +20% DEF to all allies for 2 turns (harmony.ts:18-23).",
+      "assertion": { "assert": "buffStat", "id": "bronya_a4", "stat": "defPct", "value": 0.2, "tol": 0.001 }
+    },
+    {
+      "id": "b_a6_dmg",
+      "layer": "parameters",
+      "claim": "A6 Military Might grants +10% DMG to all allies (harmony.ts:24-28).",
+      "assertion": { "assert": "buffStat", "id": "bronya_a6", "stat": "dmgAll", "value": 0.1, "tol": 0.001 }
+    },
+    {
+      "id": "b_ult_atk",
+      "layer": "interactions",
+      "claim": "The Belobog March grants all allies an ATK% buff (harmony.ts:74-77, belobog_atk).",
+      "assertion": { "assert": "present", "of": { "type": "BUFF_APPLIED", "payload": { "id": "belobog_atk" } } }
+    },
+    {
+      "id": "b_ult_cd",
+      "layer": "interactions",
+      "claim": "The Belobog March grants all allies a CRIT DMG buff (harmony.ts:78-81, belobog_cd).",
+      "assertion": { "assert": "present", "of": { "type": "BUFF_APPLIED", "payload": { "id": "belobog_cd" } } }
+    },
+    {
+      "id": "b_skill_energy_30",
+      "layer": "parameters",
+      "claim": "Every Skill cast regenerates 30 Energy (harmony.ts:88).",
+      "assertion": { "assert": "present", "of": { "type": "ENERGY_GAIN", "source": "Bronya", "payload": { "n": 30 } } }
+    },
+    {
+      "id": "b_skill_before_buff",
+      "layer": "ordering",
+      "claim": "The Skill action starts before its target buff lands (harmony.ts:87 then 94).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Bronya", "action": "skill" }],
+        "after": [{ "type": "BUFF_APPLIED", "payload": { "id": "bronya_dmg" } }]
+      }
+    },
+    {
+      "id": "b_e6_two_turns",
+      "layer": "parameters",
+      "claim": "E6 extends Combat Redeployment's DMG buff to 2 turns (harmony.ts:93-94).",
+      "fixtures": ["e6-redeploy"],
+      "assertion": { "assert": "buff", "id": "bronya_dmg", "turns": 2 }
+    }
+  ]
+}

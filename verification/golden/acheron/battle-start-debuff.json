@@ -1,0 +1,26 @@
+{
+ "input": {
+  "kit": "acheron",
+  "slot": "skill",
+  "env": "init-only: Acheron E4 + Black Swan E2 A4 Goblet's Dredges — battle-start debuffs are not ability actions, so they must not feed SD",
+  "seed": 19,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Acheron|-|- [1]",
+  "BUFF_APPLIED|-|Black Swan|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,19]",
+  "DEBUFF_APPLIED|-|Elite #1|-|- [5,Infinity]",
+  "DEBUFF_APPLIED|-|Elite #1|-|- [1,Infinity]",
+  "DEBUFF_APPLIED|-|Elite #2|-|- [1,Infinity]",
+  "BUFF_APPLIED|-|Acheron|-|- [1,Infinity]",
+  "BUFF_APPLIED|-|Acheron|-|- [1,Infinity]",
+  "BUFF_APPLIED|-|Black Swan|-|- [1,Infinity]",
+  "DEBUFF_APPLIED|-|Elite #1|-|- [1,3]",
+  "DEBUFF_APPLIED|-|Elite #2|-|- [1,3]",
+  "DEBUFF_REFRESHED|-|Elite #1|-|- [1,Infinity]",
+  "DEBUFF_REFRESHED|-|Elite #2|-|- [1,Infinity]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

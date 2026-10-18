@@ -1,0 +1,44 @@
+{
+  "kit": "blade",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/1120501+1120502+1120503+1120504+1120508 + bonus_abilities (Vita Infinita, Neverending Deaths, Cyclone of Destruction)",
+    "confidence": "verified",
+    "note": "Hellscape (1120502) L10: consumes 30% Max HP, enhances Basic to Forest of Swords for #2 = 3 turns, grants an Extra Turn, no Energy. Forest of Swords (1120508) L6 (engine default Basic Lv6): #2 = 130% main, #3 = 52% adjacent, HP cost #1 = 10%, generates no SP; canon main split 2 hits 50/50. Death Sentence (1120503) L10: #1 = 150% Max HP main, #3 = 60% adjacent (Blast), sets HP to 50%. Shuhu's Gift (1120504) L10: FUA #2 = 130% Max HP (A6 Cyclone of Destruction +20% FUA DMG -> 156%), split 33/33/34, heals #3 = 25% Max HP, +15 Energy from A6."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Blade E0 solo vs 3 Wind-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [{ "kitId": "blade", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 0 }],
+        "enemy": { "name": "Elite", "count": 3, "hp": 6000000, "atk": 800, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Wind"], "res": 0 },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    { "id": "b_ult_action", "layer": "structure", "claim": "Death Sentence (1120503) is Blade's Ultimate action (2 casts in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Blade", "action": "ultimate" }, "value": 2 } },
+    { "id": "b_skill_action", "layer": "structure", "claim": "Hellscape (1120502) is Blade's Skill action (2 casts: the first expires after its 3 turns, the second re-applies it).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Blade", "action": "skill" }, "value": 2 } },
+    { "id": "b_basic_action", "layer": "structure", "claim": "Blade performs 3 Basic ATK actions (the 2 extra-turn basics from Hellscape are not separate logged actions).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Blade", "action": "basic" }, "value": 3 } },
+    { "id": "b_forest_hits", "layer": "structure", "claim": "Forest of Swords (1120508) main-target damage lands 10 times in the fixture (5 casts x 2 hits, canon 50% + 50%).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Blade", "label": "Forest of Swords" }, "value": 10 } },
+    { "id": "b_forest_adj", "layer": "structure", "claim": "Forest of Swords hits both adjacent enemies on every cast (5 casts x 2 adjacent = 10).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Blade", "label": "Forest of Swords (adj)" }, "value": 10 } },
+    { "id": "b_shuhu_hits", "ability": "talent", "layer": "structure", "claim": "Shuhu's Gift (1120504) Follow-Up ATK fires on all 3 enemies with the canon 3-hit split (3 casts x 3 enemies x 3 slices = 27 events in the fixture).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Blade", "label": "Shuhu's Gift (FUA)" }, "value": 27 } },
+    { "id": "b_death_main", "layer": "structure", "claim": "Death Sentence (1120503) Blast main-target hit occurs once per Ultimate (2 casts).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Blade", "label": "Death Sentence (main)" }, "value": 2 } },
+    { "id": "b_death_adj", "layer": "structure", "claim": "Death Sentence hits both adjacent enemies per Ultimate (2 x 2 = 4).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Blade", "label": "Death Sentence (adj)" }, "value": 4 } },
+    { "id": "b_no_forest_sp", "layer": "interactions", "claim": "Forest of Swords cannot regenerate Skill Points (1120508: \"cannot regenerate Skill Points\") — Blade gains no SP in the fixture.", "assertion": { "assert": "absent", "of": { "type": "SP_GAIN" } } },
+    { "id": "b_sp_loss", "layer": "interactions", "claim": "Hellscape has bp_need = 1 and is cast twice, costing 2 Skill Points total.", "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Blade" }, "value": 2 } },
+    { "id": "b_m_forest", "layer": "parameters", "claim": "Forest of Swords L6 (1120508 #2) main total 130% of Max HP over the 50%+50% split; last (50%) piece = 0.65.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Blade", "label": "Forest of Swords" }, "field": "mult", "value": 0.65, "pick": "last" } },
+    { "id": "b_m_forest_adj", "layer": "parameters", "claim": "Forest of Swords L6 (1120508 #3) adjacent multiplier totals 52% of Max HP.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Blade", "label": "Forest of Swords (adj)" }, "field": "mult", "value": 0.52 } },
+    { "id": "b_m_shuhu", "layer": "parameters", "claim": "Shuhu's Gift L10 (1120504 #2 = 130%) plus A6 Cyclone of Destruction (+20% FUA DMG) = 156% of Max HP, split 33/33/34; last piece carries 34% -> 0.5304.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Blade", "label": "Shuhu's Gift (FUA)" }, "field": "mult", "value": 0.5304 } },
+    { "id": "b_m_death", "layer": "parameters", "claim": "Death Sentence L10 (1120503 #1) main multiplier is 150% of Max HP.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Blade", "label": "Death Sentence (main)" }, "field": "mult", "value": 1.5 } },
+    { "id": "b_m_death_adj", "layer": "parameters", "claim": "Death Sentence L10 (1120503 #3) adjacent multiplier is 60% of Max HP.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Blade", "label": "Death Sentence (adj)" }, "field": "mult", "value": 0.6 } },
+    { "id": "b_energy", "layer": "parameters", "claim": "Over the fixture Blade regenerates exactly 200 Energy (Skill grants none per 1120502; FUA grants +25 per A6 Cyclone of Destruction).", "assertion": { "assert": "energy", "who": "Blade", "atLeast": 200, "atMost": 200 } },
+    { "id": "b_hellscape_turns", "layer": "parameters", "claim": "Hellscape lasts #2 = 3 turns at L10 (1120502).", "assertion": { "assert": "buff", "id": "hellscape", "target": "Blade", "turns": 3 } },
+    { "id": "b_a2_present", "layer": "interactions", "claim": "Trace A2 (in-heal +20%, permanent) is active as an unlimited-duration buff throughout the battle.", "assertion": { "assert": "buff", "id": "blade_b1", "target": "Blade" } },
+    { "id": "b_heals", "layer": "interactions", "claim": "Shuhu's Gift restores Blade's HP by 25% of Max HP (1120504 #3) after each Follow-Up ATK; 3 heal events fire (one per FUA, 3 FUAs in the fixture).", "assertion": { "assert": "count", "of": { "type": "HEAL_APPLIED", "target": "Blade" }, "value": 3 } },
+    { "id": "b_ult_last", "layer": "ordering", "claim": "Forest of Swords damage resolves before the first Death Sentence damage in the fixture (Blade builds energy before his first Ultimate).", "assertion": { "assert": "ordering", "before": [{ "type": "DAMAGE_DEALT", "source": "Blade", "label": "Forest of Swords" }], "after": [{ "type": "DAMAGE_DEALT", "source": "Blade", "label": "Death Sentence (main)" }] } }
+  ]
+}

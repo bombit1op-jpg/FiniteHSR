@@ -1,0 +1,22 @@
+{
+ "input": {
+  "kit": "blade",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Blade alone, technique \"Karma Wind\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Blade|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Blade|-|- [1]",
+  "TECHNIQUE_APPLIED|Blade|-|-|-",
+  "HIT_START|Blade|Ice Edge|Karma Wind|basic [1,10,1738,30,5000000]",
+  "DAMAGE_CALCULATED|Blade|Ice Edge|-|basic [0,0,0,0,0,0,0,0.17,0.4,1,1738,312]",
+  "DAMAGE_DEALT|Blade|Ice Edge|Karma Wind|basic [0.4,1738,312,4999688,5000000]",
+  "TOUGHNESS_DAMAGE|Blade|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Blade|Ice Edge|-|basic [312,4999688]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

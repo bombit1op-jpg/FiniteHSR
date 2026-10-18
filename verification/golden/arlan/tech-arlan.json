@@ -1,0 +1,21 @@
+{
+ "input": {
+  "kit": "arlan",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Arlan alone, technique \"Swift Harvest\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Arlan|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Arlan|-|- [1,Infinity]",
+  "TECHNIQUE_APPLIED|Arlan|-|-|-",
+  "HIT_START|Arlan|Ice Edge|Swift Harvest|basic [0,1,30,5000000,766.72]",
+  "DAMAGE_CALCULATED|Arlan|Ice Edge|-|basic [0,0,0,0,0,0,0,0.05,0.8,1,276,767]",
+  "DAMAGE_DEALT|Arlan|Ice Edge|Swift Harvest|basic [0.8,276,4999724,5000000,766.72]",
+  "HIT_END|Arlan|Ice Edge|-|basic [276,4999724]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

@@ -1,0 +1,124 @@
+{
+  "kit": "trailblazer_preservation",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/90/skills (Fire, Preservation Trailblazer)",
+    "confidence": "interpreted",
+    "note": "Basic Ice-Breaking Light; Enhanced Basic Ice-Breaking Light; Skill Ever-Burning Amber (self Fire RES / mitigation + Strong Defend the Weak to allies); Ultimate War-Flaming Lance (self mitigation for 1 turn); Talent Treasure of the Architects (shield all allies, 2 turns). Magma Will charges to 4 for the enhanced Basic. Energy limit 120."
+  },
+  "fixtures": [
+    {
+      "id": "tbp-main",
+      "env": "TB Preservation E0 + one ally vs 2 Physical-weak dummies, energyStartFrac 1 (Ultimate first), 4 cycles, seed 3",
+      "battle": {
+        "team": [
+          { "kitId": "trailblazer_preservation", "name": "TBP", "stats": { "hp": 6000, "atk": 1200, "def": 1500, "spd": 130 }, "eidolon": 0, "energyStartFrac": 1, "skillPriority": 2 },
+          { "kitId": "danheng", "name": "Ally", "stats": { "hp": 5000, "atk": 2000, "def": 1300, "spd": 110 }, "skillPriority": 3 }
+        ],
+        "enemy": { "name": "Mob", "count": 2, "hp": 200000, "atk": 700, "spd": 120, "level": 85, "toughness": 120, "weaknesses": ["Physical"] },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "tbp-e6",
+      "env": "TB Preservation E6 solo vs 2 Physical-weak dummies, energyStartFrac 0, 5 cycles, seed 3 — City-Forging Bulwarks DEF buff",
+      "battle": {
+        "team": [
+          { "kitId": "trailblazer_preservation", "name": "TBP", "stats": { "hp": 6000, "atk": 1200, "def": 1500, "spd": 130 }, "eidolon": 6, "energyStartFrac": 0, "skillPriority": 2 }
+        ],
+        "enemy": { "name": "Mob", "count": 2, "hp": 200000, "atk": 700, "spd": 120, "level": 85, "toughness": 120, "weaknesses": ["Physical"] },
+        "cycles": 5,
+        "seed": 3
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "trailblazer_preservation_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Ice-Breaking Light (enhanced adj) (800408, Fire) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "TBP",
+          "label": "Ice-Breaking Light (enhanced adj)",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "tbp-e6",
+        "tbp-main"
+      ]
+    },
+    {
+      "id": "tbp_ult_label",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "War-Flaming Lance is the Ultimate.",
+      "fixtures": ["tbp-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBP", "label": "War-Flaming Lance" } }
+    },
+    {
+      "id": "tbp_skill_mit",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill Ever-Burning Amber grants the caster 40% DMG mitigation for 1 turn (tb_pres_skill).",
+      "fixtures": ["tbp-main"],
+      "assertion": { "assert": "buffStat", "id": "tb_pres_skill", "stat": "mitigation", "value": 0.4 }
+    },
+    {
+      "id": "tbp_sdw_mit",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill grants Strong Defend the Weak (15% DMG mitigation) to allies (tb_pres_sdw).",
+      "fixtures": ["tbp-main"],
+      "assertion": { "assert": "buffStat", "id": "tb_pres_sdw", "stat": "mitigation", "value": 0.15 }
+    },
+    {
+      "id": "tbp_shield_self",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Treasure of the Architects shields the caster (tb_pres_shield).",
+      "fixtures": ["tbp-main"],
+      "assertion": { "assert": "buff", "id": "tb_pres_shield", "target": "TBP" }
+    },
+    {
+      "id": "tbp_shield_ally",
+      "layer": "interactions",
+      "claim": "The shield also lands on allies (tb_pres_shield on the second character).",
+      "fixtures": ["tbp-main"],
+      "assertion": { "assert": "buff", "id": "tb_pres_shield", "target": "Ally" }
+    },
+    {
+      "id": "tbp_abt",
+      "layer": "interactions",
+      "claim": "When shielded at turn start, Action Beats Overthinking grants ATK +15% for 1 turn (tb_pres_abt).",
+      "fixtures": ["tbp-main"],
+      "assertion": { "assert": "buffStat", "id": "tb_pres_abt", "stat": "atkPct", "value": 0.15 }
+    },
+    {
+      "id": "tbp_free_enhanced",
+      "layer": "structure",
+      "claim": "The Ultimate grants one free Enhanced Basic Ice-Breaking Light, which resolves at 0 Magma Will.",
+      "fixtures": ["tbp-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBP", "label": "Ice-Breaking Light (enhanced main)" } }
+    },
+    {
+      "id": "tbp_e6_def",
+      "layer": "parameters",
+      "claim": "E6 City-Forging Bulwarks: after enhanced Basic / Ultimate, DEF +10% per stack (tb_pres_e6).",
+      "fixtures": ["tbp-e6"],
+      "assertion": { "assert": "buffStat", "id": "tb_pres_e6", "stat": "defPct", "value": 0.1 }
+    },
+    {
+      "id": "tbp_no_attack_action",
+      "layer": "structure",
+      "claim": "The kit exposes Basic/Skill/Ultimate, never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "TBP", "action": "attack" } }
+    }
+  ]
+}

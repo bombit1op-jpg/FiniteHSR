@@ -1,0 +1,16 @@
+{
+ "input": {
+  "kit": "qingque",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Qingque alone, technique \"Game Solitaire\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Qingque|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Qingque|-|-|-",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

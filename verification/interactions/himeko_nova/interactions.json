@@ -1,0 +1,99 @@
+{
+  "kit": "himeko_nova",
+  "slot": "interactions",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/himeko_nova/ranks+traces",
+    "confidence": "verified",
+    "note": "Phase 3.5 paired/allies fixture. Companion = bronya. Assertions pin the canon eidolon/trace observable; status gap = documented deviation expected to diverge (PROMOTE if it passes), blocked = no stable observable."
+  },
+  "fixtures": [
+    {
+      "id": "pair",
+      "env": "himeko_nova E6 + bronya ally vs Boss (Lv120), 6 cycles, seed 11",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko_nova",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 120
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "bronya",
+            "stats": {
+              "hp": 10000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 134
+            }
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 250000,
+          "atk": 140,
+          "spd": 150,
+          "level": 120,
+          "toughness": 1800,
+          "weaknesses": [
+            "Physical",
+            "Fire",
+            "Ice",
+            "Lightning",
+            "Wind",
+            "Quantum",
+            "Imaginary"
+          ]
+        },
+        "cycles": 6,
+        "seed": 11
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "himeko_nova_fixture_runs",
+      "layer": "structure",
+      "claim": "The paired battle executes deterministically with no invariant break.",
+      "fixtures": [
+        "pair"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "fixture executes"
+      }
+    },
+    {
+      "id": "himeko_nova_hn_respen",
+      "layer": "interactions",
+      "claim": "Eidolon/trace observable hn_respen is present once a companion shares the field.",
+      "fixtures": [
+        "pair"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "hn_respen"
+      }
+    },
+    {
+      "id": "himeko_nova_hn_e6_fire",
+      "layer": "interactions",
+      "claim": "Eidolon/trace observable hn_e6_fire is present once a companion shares the field.",
+      "fixtures": [
+        "pair"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "hn_e6_fire"
+      }
+    }
+  ],
+  "golds": []
+}

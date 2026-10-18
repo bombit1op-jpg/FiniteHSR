@@ -1,0 +1,263 @@
+{
+  "kit": "cipher",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/140601+140602+140603+140604+140607 + bonus_abilities",
+    "confidence": "verified",
+    "note": "Basic Missed Catch (140601): single hit vs the lowest-HP enemy (scaleStat atk). Skill (140602): applies cipher_weaken to every enemy and grants Cipher cipher_atk (+30% ATK, 2 turns) + refunds Energy; the engine flattens each cast to 8 hits against the highest-HP enemy (5x 0.2 + 1x 1.0) plus 1x 1.0 on the other two enemies, the adjacency hits labelled '(adj)'. Ultimate Yours Truly (140603): 1.2 main + 0.4 to the two adjacent + True DMG 1.0 on each (add). A6 (140607): all enemies gain +40% vulnerability (cipher_a6) at battle start; A3/F: FUAs get +100% CRIT DMG (cipher_a3); A0 grants +25% CRIT Rate (cipher_a0) at battle start. The primary fixture uses seed 17: 4 Skill casts / 1 Ultimate; end state 5806/10000 HP, 130/130 Energy, 0 SP. The single-target fixture (seed 7) gives 4 casts / 1 Ult and 170 Energy."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Cipher E0 solo vs 3 Quantum-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 17",
+      "battle": {
+        "team": [
+          { "kitId": "cipher", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 143 }, "eidolon": 0 }
+        ],
+        "enemy": { "name": "Elite", "count": 3, "hp": 6000000, "atk": 800, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Quantum"], "res": 0 },
+        "cycles": 3,
+        "seed": 17
+      }
+    },
+    {
+      "id": "solo-1e",
+      "env": "Cipher E0 solo vs a single Quantum-weak Elite dummy (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7 - single-target rotation",
+      "battle": {
+        "team": [
+          { "kitId": "cipher", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 143 }, "eidolon": 0 }
+        ],
+        "enemy": { "name": "Elite", "count": 1, "hp": 6000000, "atk": 800, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Quantum"], "res": 0 },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "cipher-duo",
+      "env": "Cipher E0 + Dan Heng ally vs 1 Quantum-weak Elite dummy, 3 cycles, seed 7 - ally attack on the Patron triggers the Talent FUA",
+      "battle": {
+        "team": [
+          { "kitId": "cipher", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 143 }, "eidolon": 0 },
+          { "kitId": "danheng", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 110 }, "eidolon": 0 }
+        ],
+        "enemy": { "name": "Elite", "count": 1, "hp": 6000000, "atk": 800, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Quantum"], "res": 0 },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "cp_skill_action",
+      "layer": "structure",
+      "claim": "The Skill (140602) is Cipher's SP-spending action, 4 casts in the fixture.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Cipher", "action": "skill" }, "value": 4 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_basic_action",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic Missed Catch (140601) fires once and is a single hit.",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Cipher", "label": "Missed Catch" }, "value": 1 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_ult_action",
+      "layer": "structure",
+      "claim": "The Ultimate fires once in the fixture.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Cipher", "action": "ultimate" }, "value": 1 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_a6_buffs",
+      "layer": "interactions",
+      "claim": "A6: each enemy gains +0.40 vulnerability at battle start (3 enemies).",
+      "assertion": { "assert": "count", "of": { "type": "BUFF_APPLIED", "payload": { "id": "cipher_a6" } }, "value": 3 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_a6_value",
+      "fixtures": ["solo-3c","solo-1e"],
+      "layer": "parameters",
+      "claim": "The A6 vulnerability buff is +0.40.",
+      "assertion": { "assert": "buffStat", "id": "cipher_a6", "stat": "vulnAll", "value": 0.4 }
+    },
+    {
+      "id": "cp_a0_stats",
+      "fixtures": ["solo-3c","solo-1e"],
+      "layer": "parameters",
+      "claim": "Battle-start cipher_a0 grants +0.25 CRIT Rate.",
+      "assertion": { "assert": "buffStat", "id": "cipher_a0", "stat": "critRate", "value": 0.25 }
+    },
+    {
+      "id": "cp_a3_stats",
+      "fixtures": ["solo-3c","solo-1e"],
+      "layer": "parameters",
+      "claim": "Battle-start cipher_a3 grants +1.0 CRIT DMG to follow-up attacks.",
+      "assertion": { "assert": "buffStat", "id": "cipher_a3", "stat": "critDmg:fua", "value": 1 }
+    },
+    {
+      "id": "cp_skill_hits",
+      "layer": "structure",
+      "claim": "The Skill flattens to 6 'Jackpot (main)' + 2 'Jackpot (adj)' hits per cast (4 casts = 24 main).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Cipher", "label": "Jackpot (main)" }, "value": 24 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_skill_mult",
+      "layer": "parameters",
+      "claim": "The highest-HP enemy eats the 5x0.2 + 1x1.0 split; the adjacency part is a single 1.0 hit.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Cipher", "label": "Jackpot (main)" }, "field": "mult", "value": 0.2, "pick": "first" },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_skill_mult_max",
+      "layer": "parameters",
+      "claim": "The split's last hit carries the full 1.0 multiplier.",
+      "assertion": { "assert": "payloadAtLeast", "of": { "type": "DAMAGE_DEALT", "source": "Cipher", "label": "Jackpot (main)" }, "field": "mult", "value": 1 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_weaken",
+      "layer": "interactions",
+      "claim": "The first Skill cast marks all three enemies with cipher_weaken; every later cast refreshes them (3 applied + 9 refreshed = one per enemy per cast).",
+      "assertion": { "assert": "count", "of": { "type": "BUFF_APPLIED", "payload": { "id": "cipher_weaken" } }, "value": 3 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_weaken_turns",
+      "layer": "parameters",
+      "claim": "cipher_weaken lasts 2 turns.",
+      "assertion": { "assert": "buff", "id": "cipher_weaken", "target": "Elite #1", "turns": 2 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_atk_buff",
+      "layer": "interactions",
+      "claim": "cipher_atk (+30% ATK, 2 turns) is up after each Skill cast: 3 fresh applications, 1 refresh and 2 expiries in the fixture.",
+      "assertion": { "assert": "count", "of": { "type": "BUFF_APPLIED", "payload": { "id": "cipher_atk" } }, "value": 3 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_atk_value",
+      "fixtures": ["solo-3c","solo-1e"],
+      "layer": "parameters",
+      "claim": "cipher_atk grants +0.30 ATK.",
+      "assertion": { "assert": "buffStat", "id": "cipher_atk", "stat": "atkPct", "value": 0.3 }
+    },
+    {
+      "id": "cp_ult_hits",
+      "layer": "structure",
+      "claim": "Yours Truly (140603) hits the main for 1.2 and the two others for 0.4, plus True DMG 1.0 on each enemy.",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Cipher", "label": "Yours Truly" }, "value": 1 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_ult_adj_hits",
+      "layer": "structure",
+      "claim": "The two adjacency targets receive the 0.4 split hit.",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Cipher", "label": "Yours Truly (adj)" }, "value": 3 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_ult_true_main",
+      "layer": "structure",
+      "claim": "The True DMG 1.0 hit lands on the main target outright.",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Cipher", "label": "True DMG (main)" }, "value": 1 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_ult_true_adj",
+      "layer": "structure",
+      "claim": "True DMG hits the two adjacency targets on top of the 0.4 base hit.",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Cipher", "label": "True DMG (adj)" }, "value": 3 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_ult_mult",
+      "layer": "parameters",
+      "claim": "The Ultimate main hit carries the 1.2 multiplier.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Cipher", "label": "Yours Truly" }, "field": "mult", "value": 1.2 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_ult_energy",
+      "layer": "parameters",
+      "claim": "The Ultimate consumes its 130-Energy bar once and regenerates exactly 195 Energy across the fixture.",
+      "assertion": { "assert": "count", "of": { "type": "ENERGY_LOSS", "source": "Cipher" }, "value": 1 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_energy_sum",
+      "layer": "parameters",
+      "claim": "Total Cipher Energy regenerated across the fixture: 195.",
+      "assertion": { "assert": "energy", "who": "Cipher", "atLeast": 195, "atMost": 195 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_full_count",
+      "layer": "interactions",
+      "claim": "Cipher hits full Energy twice (conservative casts) in the fixture.",
+      "assertion": { "assert": "count", "of": { "type": "ENERGY_FULL", "source": "Cipher" }, "value": 2 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_no_attack",
+      "layer": "structure",
+      "claim": "Cipher never falls back to a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Cipher", "action": "attack" } },
+      "fixtures": ["solo-3c", "solo-1e"]
+    },
+    {
+      "id": "cp_adj_label",
+      "layer": "structure",
+      "claim": "The Skill's adjacency-target hits carry a distinct 'Jackpot (adj)' label (2 per cast = 8 across the fixture).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Cipher", "label": "Jackpot (adj)" }, "value": 8 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_after_state",
+      "layer": "interactions",
+      "claim": "Fixture end state: 5806/10000 HP, 130/130 Energy, 0 SP, 4 active buffs (traces + A3 + A0 + cipher_atk).",
+      "assertion": { "assert": "unitState", "who": "Cipher", "field": "hp", "value": 5806 },
+      "after": [
+        { "unit": "Cipher", "stat": "hp", "op": "eq", "value": 5806 },
+        { "unit": "Cipher", "stat": "energy", "op": "eq", "value": 130 },
+        { "unit": "Cipher", "stat": "sp", "op": "eq", "value": 0 },
+        { "unit": "Cipher", "stat": "buffs", "op": "eq", "value": 4 }
+      ],
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "cp_1e_skill",
+      "layer": "structure",
+      "claim": "Single-target fixture still runs the Skill.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Cipher", "action": "skill" } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "cp_1e_ult",
+      "layer": "structure",
+      "claim": "Single-target fixture still runs the Ultimate.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Cipher", "action": "ultimate" } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "cp_1e_energy",
+      "layer": "parameters",
+      "claim": "Single-target fixture regenerates 170 Energy.",
+      "assertion": { "assert": "energy", "who": "Cipher", "atLeast": 170, "atMost": 170 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "cp_talent_fua",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent The Hospitable Dolosian: an ally's attack on the Patron triggers Cipher's Follow-Up ATK (140604; nihility.ts:1367-1376).",
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Cipher", "label": "Hospitable Dolosian (FUA)" } },
+      "fixtures": ["cipher-duo"]
+    }
+  ],
+  "golds": []
+}

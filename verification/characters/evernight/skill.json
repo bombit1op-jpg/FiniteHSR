@@ -1,0 +1,429 @@
+{
+  "kit": "evernight",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Evernight (skills 141301-141309, memosprite 1141301-1141307, ranks 1-6)",
+    "confidence": "verified",
+    "note": "Evernight is a Remembrance (Ice, HP-scaling) character whose Skill is free (no SP) and summons the memosprite Evey (1413xx) at battle start. Her Ultimate O Wakeful World, Goodnight (141303) is executed BY Evey and enters the Darkest Riddle Charge state. Memoria (cap 16) is the Ult resource; at 16 Evey immediately acts and can cast Dream, Dissolving, as Dew (1141307), consuming all Memoria. Skill Day Gently Slips (141302) grants memosprites a CRIT DMG buff and A2 Kindle the Morn scales that by Remembrance-char count. A0 grants +35% CRIT Rate; Talent With Me, This Night builds Memoria and CRIT DMG on HP loss."
+  },
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Evernight E0 + Luocha sustain vs an Ice-weak Elite, 6 cycles - Evey is summoned at battle start; Skill Day Gently Slips (free) buffs the memosprite; Evey takes her own SPD-160 turns with Remembrance, Whirling, Like Rain; once Energy (240) fills, the Ultimate O Wakeful World, Goodnight is cast through Evey and enters Darkest Riddle.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "evernight",
+            "stats": {
+              "hp": 20000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "luocha",
+            "stats": {
+              "hp": 12000,
+              "atk": 1200,
+              "def": 800,
+              "spd": 110
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 6,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "e6-full",
+      "env": "Evernight E6 + Luocha sustain vs an Ice-weak Elite, 6 cycles - E2 adds +2 to every Memoria gain, so Memoria hits the 16 cap and Evey casts Dream, Dissolving, as Dew; E1/E4 memosprite buffs and E6 All-RES-PEN are live.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "evernight",
+            "stats": {
+              "hp": 20000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          },
+          {
+            "kitId": "luocha",
+            "stats": {
+              "hp": 12000,
+              "atk": 1200,
+              "def": 800,
+              "spd": 110
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 6,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "low-hp",
+      "env": "Evernight E0 solo starting at ~12% HP vs a low-ATK Elite, 1 cycle - Skill is skipped when HP is below 15%, so Evernight falls back to the Basic ATK Time Thence Blurs.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "evernight",
+            "stats": {
+              "hp": 12000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0,
+            "hpFrac": 0.12
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 30,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 1,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "ev_summons_evey",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Evernight summons the memosprite Evey at battle start (SUMMON_CREATED target 'Evey').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "SUMMON_CREATED",
+          "target": "Evey"
+        }
+      }
+    },
+    {
+      "id": "ev_summons_note",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "The summon is surfaced as a trace line 'Evernight summons memosprite Evey (...)'.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "summons memosprite Evey"
+        }
+      }
+    },
+    {
+      "id": "ev_ult",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Once Energy reaches its max (240) the kit casts Ultimate O Wakeful World, Goodnight (141303).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Evernight",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "ev_ult_hit",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "The Ultimate is executed BY Evey: all enemies take HP-scaled Ice DMG.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Evey",
+          "label": "O Wakeful World, Goodnight"
+        }
+      }
+    },
+    {
+      "id": "ev_evey_whirl",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "On her own SPD-160 turn Evey attacks with Remembrance, Whirling, Like Rain (HP-scaled Ice DMG, extra per 4 Memoria).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Evey",
+          "label": "Remembrance, Whirling, Like Rain"
+        }
+      }
+    },
+    {
+      "id": "ev_dream",
+      "layer": "structure",
+      "fixtures": [
+        "e6-full"
+      ],
+      "claim": "At the 16-Memoria cap Evey uses Dream, Dissolving, as Dew (1141307), consuming all Memoria and disappearing.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Evey",
+          "label": "Dream, Dissolving, as Dew"
+        }
+      }
+    },
+    {
+      "id": "ev_dream_note",
+      "layer": "interactions",
+      "fixtures": [
+        "e6-full"
+      ],
+      "claim": "Evey's Dream is surfaced as a trace line '-- Evey uses Dream, Dissolving, as Dew (xN Memoria)'.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Dream, Dissolving, as Dew"
+        }
+      }
+    },
+    {
+      "id": "ev_basic",
+      "ability": "basic",
+      "layer": "structure",
+      "fixtures": [
+        "low-hp"
+      ],
+      "claim": "Basic ATK Time Thence Blurs (141301) is HP-scaled single-target Ice DMG; Evernight falls back to it when HP is below 15%.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Evernight",
+          "label": "Time Thence Blurs"
+        }
+      }
+    },
+    {
+      "id": "ev_a0_cr",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "A0 Dark the Night, Still the Moon grants Evernight and Evey +35% CRIT Rate (ev_a0_cr).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ev_a0_cr"
+      }
+    },
+    {
+      "id": "ev_solitude",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Solitude, Drifting, In Murk: while Evey is on the field Evernight and Evey deal bonus DMG (ev_solitude).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ev_solitude"
+      }
+    },
+    {
+      "id": "ev_skill_buff",
+      "ability": "skill",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Skill Day Gently Slips (141302, free) grants ally memosprites a CRIT DMG buff (ev_skill_cd).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ev_skill_cd"
+      }
+    },
+    {
+      "id": "ev_kindle",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "A2 Kindle the Morn, Drop the Rain grants memosprites extra CRIT DMG scaled by Remembrance-char count (ev_a2_cd).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ev_a2_cd"
+      }
+    },
+    {
+      "id": "ev_memoria_note",
+      "ability": "talent",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Talent With Me, This Night: HP loss accrues Memoria, surfaced as a trace line 'Evernight Memoria: X -> Y (+n)'.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Memoria:"
+        }
+      }
+    },
+    {
+      "id": "ev_dr_atk",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "The Ultimate enters Darkest Riddle: Evernight and Evey gain bonus DMG (ev_dr_atk).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ev_dr_atk"
+      }
+    },
+    {
+      "id": "ev_dr_vuln",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Darkest Riddle makes every enemy take increased DMG (ev_dr_vuln, vulnAll).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ev_dr_vuln"
+      }
+    },
+    {
+      "id": "ev_e2_critdmg",
+      "layer": "interactions",
+      "fixtures": [
+        "e6-full"
+      ],
+      "claim": "E2 Listen Up, the Slumber Speaks Soft grants Evernight and Evey +40% CRIT DMG (ev_e2).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ev_e2"
+      }
+    },
+    {
+      "id": "ev_e1_memosprite",
+      "layer": "interactions",
+      "fixtures": [
+        "e6-full"
+      ],
+      "claim": "E1 Sleep Tight, the Night Dreams Long raises ally memosprite DMG by enemy count (ev_e1).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ev_e1"
+      }
+    },
+    {
+      "id": "ev_e4_wbe",
+      "layer": "interactions",
+      "fixtures": [
+        "e6-full"
+      ],
+      "claim": "E4 Wake Up, the Tomorrow is Yours gives memosprites +25% Weakness Break Efficiency (ev_e4).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ev_e4"
+      }
+    },
+    {
+      "id": "ev_e6_respen",
+      "layer": "interactions",
+      "fixtures": [
+        "e6-full"
+      ],
+      "claim": "E6 Like This, Always grants all allied targets +20% All-Type RES PEN (ev_e6).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ev_e6"
+      }
+    },
+    {
+      "id": "ev_ult_before_evey",
+      "layer": "ordering",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "The Ultimate ability use precedes Evey's O Wakeful World, Goodnight hit (Evey is the attacker).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ABILITY_USED",
+            "source": "Evernight",
+            "action": "ultimate"
+          }
+        ],
+        "after": [
+          {
+            "type": "HIT_START",
+            "source": "Evey",
+            "label": "O Wakeful World, Goodnight"
+          }
+        ]
+      }
+    }
+  ]
+}

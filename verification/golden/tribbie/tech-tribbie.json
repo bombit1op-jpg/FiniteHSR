@@ -1,0 +1,18 @@
+{
+ "input": {
+  "kit": "tribbie",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Tribbie alone, technique \"If You're Happy and You Know It\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Tribbie|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "ENERGY_GAIN|Tribbie|Tribbie|-|- [0,120,30,90]",
+  "TECHNIQUE_APPLIED|Tribbie|-|-|-",
+  "BUFF_APPLIED|-|Tribbie|-|- [1,Infinity]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

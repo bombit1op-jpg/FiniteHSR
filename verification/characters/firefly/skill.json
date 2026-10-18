@@ -1,0 +1,265 @@
+{
+  "kit": "firefly",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "reference/hsr-data/characters.json#/1131/skills/1131002",
+    "confidence": "verified",
+    "note": "AGENTS.md kit note firefly: Skill 1131002 costs 40% Max HP, regenerates 65% Max Energy; Ult 1131003 Complete Combustion; enhanced skill 1131009 (Deathstar Overload) applies Fire Weakness"
+  },
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Solo E0 Firefly, energyStartFrac 0 (start-energy talent raises to 50% = 120 EN), stats atk 3000/spd 200 (traces on: SPD+5 -> eff 205, no ATK trace -> Module gamma sees 3000), vs a dummy Elite (atk 0 so only Firefly's own 40% Max HP drain applies, Lightning-only weakness), 3 cycles. Rotation: 1131001 Basic / 1131002 Skill (fills 120->240 EN) -> 1131003 auto-Ult (Complete Combustion, Countdown spd 70) -> 1131009 Deathstar Overload while CC is up -> post-CC normal actions 1131001/1131002",
+      "battle": {
+        "team": [
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": ["Lightning"],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "firefly_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Order: Flare Propulsion (1131001, Fire) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Firefly",
+          "label": "Order: Flare Propulsion",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "skill_main_hit",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill 1131002 'Order: Aerial Bombardment' is the non-CC Fire Blast main hit (label 'Order: Aerial Bombardment', attackType skill).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Firefly",
+          "label": "Order: Aerial Bombardment",
+          "attackType": "skill"
+        }
+      }
+    },
+    {
+      "id": "ult_cast",
+      "layer": "structure",
+      "claim": "Ultimate 1131003 'Complete Combustion' is cast from an auto-ult turn (charTurn convention: full energy replaces the action, AGENTS 30-09-2026).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Firefly",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "cc_skill_hit",
+      "layer": "structure",
+      "claim": "Enhanced Skill 1131009 'Deathstar Overload' is the CC main hit (label 'Deathstar Overload', attackType skill).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Firefly",
+          "label": "Deathstar Overload",
+          "attackType": "skill"
+        }
+      }
+    },
+    {
+      "id": "start_energy_talent",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "firefly onStart: when starting energy is below 50% of the 240 cap it is raised to 120 EN (kit onStart, log 'talent: energy set to 50%').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "talent: energy set to 50%"
+        }
+      }
+    },
+    {
+      "id": "cc_buff_applied",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Ultimate 1131003 puts Firefly into the Complete Combustion state, modelled as buff cc_state ('Complete Combustion').",
+      "assertion": {
+        "assert": "buff",
+        "id": "cc_state",
+        "target": "Firefly"
+      }
+    },
+    {
+      "id": "ult_energy_paid",
+      "layer": "parameters",
+      "claim": "Casting the auto-ult consumes the full 240 Energy pool (Energy.md canon: full-energy ult drops to 0 -> castUlt ENERGY_LOSS amount 240, reason ult_cost) and energy never exceeds the 240 cap afterwards.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Firefly",
+          "payload": { "reason": "ult_cost" }
+        },
+        "field": "amount",
+        "value": 240,
+        "tol": 1
+      },
+      "after": [
+        { "kitId": "firefly", "stat": "energy", "op": "atMost", "value": 240 }
+      ]
+    },
+    {
+      "id": "ult_energy_refund",
+      "layer": "parameters",
+      "claim": "A paid Ultimate refunds sp_base +5 Energy (Energy.md canon; kit logs 'Complete Combustion (energy +5)'); first ENERGY_GAIN of the battle is that refund, n = 5.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "target": "Firefly"
+        },
+        "field": "n",
+        "value": 5,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "cc_break_boost",
+      "layer": "parameters",
+      "claim": "Complete Combustion grants Break DMG boost from 1131003 #1: mult('firefly','ult') at default Ult Lv.10 = 0.2 (PROG FIREFLY ult ladder L10, progression.ts:100; 0.25 only at Lv.15).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "cc_state",
+        "stat": "boost:break",
+        "value": 0.2,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "module_gamma_be",
+      "layer": "parameters",
+      "claim": "Module gamma (destruction.ts:23-26): +0.8% Break Effect per 10 ATK above 1800, cap 360%; atk 3000 -> floor(1200/10)*0.008 = 0.96.",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "module_gamma",
+        "stat": "be",
+        "value": 0.96,
+        "tol": 0.005
+      }
+    },
+    {
+      "id": "skill_then_ult",
+      "layer": "ordering",
+      "claim": "Turn order: the first action is Skill 1131002 (120 -> 240 EN via the 65% Max Energy regen, direct write), the following turn auto-ults (charTurn full-energy rule).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "HIT_START", "label": "Order: Aerial Bombardment" }
+        ],
+        "after": [
+          { "type": "ABILITY_USED", "source": "Firefly", "action": "ultimate" }
+        ]
+      }
+    },
+    {
+      "id": "ult_before_cc_skill",
+      "layer": "ordering",
+      "claim": "Deathstar Overload 1131009 can only happen after Ultimate 1131003 has entered Complete Combustion (kit gates the enhanced kit on buff cc_state).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "ABILITY_USED", "source": "Firefly", "action": "ultimate" }
+        ],
+        "after": [
+          { "type": "HIT_START", "label": "Deathstar Overload" }
+        ]
+      }
+    },
+    {
+      "id": "exit_cc_before_flare",
+      "layer": "ordering",
+      "claim": "Normal Basic 1131001 'Order: Flare Propulsion' happens only after the CC Countdown (timer spd 70, onCcEnd -> exitCc) has ended Complete Combustion.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "NOTE", "log": "exits Complete Combustion" }
+        ],
+        "after": [
+          { "type": "HIT_START", "label": "Order: Flare Propulsion" }
+        ]
+      }
+    },
+    {
+      "id": "no_flare_inside_cc",
+      "layer": "interactions",
+      "claim": "Between the Ultimate cast and the first Deathstar hit no normal Basic 1131001 can fire (kit picks the enhanced branch while cc_state is up; own-turn ult cannot basic).",
+      "assertion": {
+        "assert": "noEventBetween",
+        "between": [
+          { "type": "ABILITY_USED", "source": "Firefly", "action": "ultimate" },
+          { "type": "HIT_START", "label": "Deathstar Overload" }
+        ],
+        "forbidden": { "type": "HIT_START", "label": "Order: Flare Propulsion" }
+      }
+    },
+    {
+      "id": "fire_weakness_applied",
+      "layer": "interactions",
+      "claim": "Enhanced Skill 1131009 applies Fire Weakness to the enemies (destruction.ts:82 applyWeakness loop; fixture Elite starts Lightning-only, engine logs 'Elite gains Fire weakness').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "gains Fire weakness"
+        }
+      }
+    },
+    {
+      "id": "no_e1_def_ignore",
+      "layer": "interactions",
+      "claim": "E1 'In Reddened Chrysalis' grants ff_e1_def DEF-ignore on the Enhanced Skill; at E0 the buff must never be applied (kit eidolon guard).",
+      "assertion": {
+        "assert": "noBuff",
+        "id": "ff_e1_def"
+      }
+    }
+  ]
+}

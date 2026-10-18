@@ -1,0 +1,114 @@
+{
+  "kit": "trailblazer_harmony",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/92/skills (Imaginary, Harmony Trailblazer)",
+    "confidence": "interpreted",
+    "note": "Basic Swing Dance Etiquette; Skill Halftime to Make It Rain (main + random extra hits; E6 adds 2 extra hits); Ultimate All-Out Footlight Parade (no direct DMG, applies Backup Dancer BE% to all allies, 1 turn); Talent Full-on Aerial Dance regenerates Energy on Weakness Break. Energy limit 140."
+  },
+  "fixtures": [
+    {
+      "id": "tbh-main",
+      "env": "TB Harmony E0 + one ally vs 1 Imaginary-weak dummy, energyStartFrac 1 (Ultimate first), 5 cycles, seed 3",
+      "battle": {
+        "team": [
+          { "kitId": "trailblazer_harmony", "name": "TBH", "stats": { "hp": 5000, "atk": 1400, "def": 1300, "spd": 130 }, "eidolon": 0, "energyStartFrac": 1, "skillPriority": 2 },
+          { "kitId": "danheng", "name": "Ally", "stats": { "hp": 5000, "atk": 2000, "def": 1300, "spd": 110 }, "skillPriority": 3 }
+        ],
+        "enemy": { "name": "Beetle", "count": 1, "hp": 400000, "atk": 600, "spd": 120, "level": 85, "toughness": 300, "weaknesses": ["Imaginary"] },
+        "cycles": 5,
+        "seed": 3
+      }
+    },
+    {
+      "id": "tbh-break",
+      "env": "TB Harmony E0 solo vs a single Imaginary-weak low-Toughness Elite, 2 cycles, seed 3 - Weakness Break triggers the Talent energy",
+      "battle": {
+        "team": [
+          { "kitId": "trailblazer_harmony", "name": "TBH", "stats": { "hp": 5000, "atk": 1400, "def": 1300, "spd": 130 }, "eidolon": 0, "skillPriority": 2 }
+        ],
+        "enemy": { "name": "Beetle", "count": 1, "hp": 400000, "atk": 600, "spd": 120, "level": 85, "toughness": 60, "weaknesses": ["Imaginary"] },
+        "cycles": 2,
+        "seed": 3
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "trailblazer_harmony_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Swing Dance Etiquette (800601, Imaginary) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "TBH",
+          "label": "Swing Dance Etiquette",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "tbh-main"
+      ]
+    },
+    {
+      "id": "tbh_basic_label",
+      "layer": "structure",
+      "claim": "Swing Dance Etiquette is the Basic ATK label.",
+      "fixtures": ["tbh-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBH", "label": "Swing Dance Etiquette" } }
+    },
+    {
+      "id": "tbh_skill_main",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Halftime to Make It Rain is the Skill label (main hit).",
+      "fixtures": ["tbh-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBH", "label": "Halftime (main)" } }
+    },
+    {
+      "id": "tbh_skill_extra",
+      "layer": "structure",
+      "claim": "The Skill fires additional random hits (Halftime (extra)).",
+      "fixtures": ["tbh-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBH", "label": "Halftime (extra)" } }
+    },
+    {
+      "id": "tbh_ult_used",
+      "layer": "structure",
+      "claim": "All-Out Footlight Parade is the Ultimate action (no direct damage).",
+      "fixtures": ["tbh-main"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "TBH", "action": "ultimate" } }
+    },
+    {
+      "id": "tbh_backup_dancer",
+      "layer": "interactions",
+      "claim": "The Ultimate applies Backup Dancer (tb_harm_bd) to allies.",
+      "fixtures": ["tbh-main"],
+      "assertion": { "assert": "buff", "id": "tb_harm_bd" }
+    },
+    {
+      "id": "tbh_backup_dancer_be",
+      "layer": "parameters",
+      "claim": "Backup Dancer grants Break Effect +30% (ult_a3 L10 = 0.3).",
+      "fixtures": ["tbh-main"],
+      "assertion": { "assert": "buffStat", "id": "tb_harm_bd", "stat": "be", "value": 0.3 }
+    },
+    {
+      "id": "tbh_no_attack_action",
+      "layer": "structure",
+      "claim": "The kit exposes Basic/Skill/Ultimate, never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "TBH", "action": "attack" } }
+    },
+    {
+      "id": "tbh_talent_energy",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Full-on Aerial Dance: breaking an enemy's Weakness regenerates Energy for the Trailblazer (harmony.ts:1912-1916).",
+      "fixtures": ["tbh-break"],
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "TB Harmony Talent: Full-on Aerial Dance" } }
+    }
+  ]
+}

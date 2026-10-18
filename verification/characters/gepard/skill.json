@@ -1,0 +1,196 @@
+{
+  "kit": "gepard",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/110401+110402+110403+110404 + bonus_abilities (Grit, Untold Reasons, Unshakable Faith)",
+    "confidence": "verified",
+    "note": "Basic Fist of Conviction (110401) 100% total at L6 (ladder tops at 140% L10), 50/50 split. Skill Daunting Smite (110402) deals #1 = 200% (L10) Physical DMG to one enemy in a 15/35/50 three-hit split, with #2 = 65% base chance to Freeze for #3 = 1 turn; on Frozen targets deals #4 = 60% of Gepard's ATK as Additional DMG. Ultimate Bracing Astral Bulwark (110403) grants the team a Shield = #1 = 45% of Gepard's DEF + #3 = 600, lasting #2 = 3 turns; it deals no damage. Energy limit 100. BA1 Grit: at turn start, DMG taken −# = 35% of Gepard's DEF as ATK bonus... (engine: atkFlat refresh from current DEF)."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Gepard E0 solo vs 3 Ice-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gepard",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Ice"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "gepard-fall",
+      "env": "Gepard E0 solo (low HP) vs a single hard-hitting Elite, 2 cycles, seed 7 - a killing blow triggers the Talent revive",
+      "battle": {
+        "team": [
+          { "kitId": "gepard", "stats": { "hp": 2000, "atk": 2000, "def": 100, "spd": 120 }, "eidolon": 0 }
+        ],
+        "enemy": { "name": "Elite", "count": 1, "hp": 6000000, "atk": 50000, "spd": 200, "level": 120, "toughness": 300, "weaknesses": ["Ice"], "res": 0 },
+        "cycles": 2,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "g_skill_action",
+      "fixtures": ["solo-3c"],
+      "layer": "structure",
+      "claim": "Daunting Smite (110402) is Gepard's damaging Skill action.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Gepard", "action": "skill" } }
+    },
+    {
+      "id": "g_skill_hits",
+      "fixtures": ["solo-3c"],
+      "layer": "structure",
+      "claim": "Daunting Smite delivers its 200% (L10) multiplier as a 15/35/50 three-hit split per cast: 4 Skill casts × 3 HIT_START events = 12.",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Gepard", "label": "Daunting Smite" }, "value": 12 }
+    },
+    {
+      "id": "g_ult_action",
+      "fixtures": ["solo-3c"],
+      "layer": "structure",
+      "claim": "Bracing Astral Bulwark (110403) is Gepard's Ultimate action.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Gepard", "action": "ultimate" } }
+    },
+    {
+      "id": "g_basic_present",
+      "fixtures": ["solo-3c"],
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic Fist of Conviction (110401) is used once in the fixture (2 damage events from its 50/50 split).",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Gepard", "label": "Fist of Conviction" } }
+    },
+    {
+      "id": "g_frozen_addl_hits",
+      "fixtures": ["solo-3c"],
+      "layer": "structure",
+      "claim": "Hits against Frozen targets add the #4 Additional DMG event (3 occurrences in the fixture).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Gepard", "label": "Frozen Additional DMG" }, "value": 3 }
+    },
+    {
+      "id": "g_ult_no_damage",
+      "fixtures": ["solo-3c"],
+      "layer": "structure",
+      "claim": "The Ultimate grants a team Shield and deals no damage (110403) — no HIT_START with attackType ult from Gepard.",
+      "assertion": { "assert": "absent", "of": { "type": "HIT_START", "source": "Gepard", "attackType": "ult" } }
+    },
+    {
+      "id": "g_no_attack_action",
+      "fixtures": ["solo-3c"],
+      "layer": "structure",
+      "claim": "Gepard's kit exposes Basic ATK, Skill and Ultimate as its action set; it never falls back to a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Gepard", "action": "attack" } }
+    },
+    {
+      "id": "g_skill_mult_first",
+      "fixtures": ["solo-3c"],
+      "layer": "parameters",
+      "claim": "Daunting Smite L10 total = 200% of ATK (110402 #1), first split part 15% → 0.3.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Gepard", "label": "Daunting Smite" }, "field": "mult", "value": 0.3, "pick": "first" }
+    },
+    {
+      "id": "g_skill_mult_last",
+      "fixtures": ["solo-3c"],
+      "layer": "parameters",
+      "claim": "Daunting Smite's final split part carries 50% of the 200% total → 1.0.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Gepard", "label": "Daunting Smite" }, "field": "mult", "value": 1 }
+    },
+    {
+      "id": "g_basic_mult_first",
+      "fixtures": ["solo-3c"],
+      "layer": "parameters",
+      "claim": "Fist of Conviction L6 total = 100%, delivered as a 50/50 split → first part 0.5.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Gepard", "label": "Fist of Conviction" }, "field": "mult", "value": 0.5, "pick": "first" }
+    },
+    {
+      "id": "g_shield_turns",
+      "fixtures": ["solo-3c"],
+      "layer": "parameters",
+      "claim": "The Ultimate's Shield lasts #2 = 3 turns (110403).",
+      "assertion": { "assert": "buff", "id": "gepard_shield", "turns": 3 }
+    },
+    {
+      "id": "g_freeze_count",
+      "fixtures": ["solo-3c"],
+      "layer": "parameters",
+      "claim": "Daunting Smite's #2 = 65% base chance to Freeze: 3 of the 4 Skill casts froze a target in the fixture (seed 7).",
+      "assertion": { "assert": "count", "of": { "type": "DOT_APPLIED", "source": "Gepard", "payload": { "kind": "Freeze" } }, "value": 3 }
+    },
+    {
+      "id": "g_freeze_turns",
+      "fixtures": ["solo-3c"],
+      "layer": "parameters",
+      "claim": "Freeze from Daunting Smite lasts #3 = 1 turn (110402).",
+      "assertion": { "assert": "payload", "of": { "type": "DOT_APPLIED", "source": "Gepard", "payload": { "kind": "Freeze" } }, "field": "turns", "value": 1, "pick": "first" }
+    },
+    {
+      "id": "g_frozen_addl_statvalue",
+      "fixtures": ["solo-3c"],
+      "layer": "parameters",
+      "claim": "Frozen Additional DMG = #4 = 60% of Gepard's ATK: statValue = 0.6 × 2236 effective ATK = 1341.6.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Gepard", "label": "Frozen Additional DMG" }, "field": "statValue", "value": 1341.6, "pick": "first" }
+    },
+    {
+      "id": "g_energy",
+      "fixtures": ["solo-3c"],
+      "layer": "parameters",
+      "claim": "Gepard's Ultimate uses the 100-Energy ladder (sp_need 100); over this fixture his action set regenerates exactly 155 Energy.",
+      "assertion": { "assert": "energy", "who": "Gepard", "atLeast": 155, "atMost": 155 }
+    },
+    {
+      "id": "g_ba1_atkflat",
+      "fixtures": ["solo-3c"],
+      "layer": "interactions",
+      "claim": "Bonus Ability Grit refreshes at turn start from Gepard's current DEF: floor(675 × 0.35) = 236 flat ATK.",
+      "assertion": { "assert": "buffStat", "id": "gepard_a2", "stat": "atkFlat", "value": 236 }
+    },
+    {
+      "id": "g_shield_after_ult",
+      "fixtures": ["solo-3c"],
+      "layer": "ordering",
+      "claim": "The Shield buff application follows the Ultimate action start (110403 resolution order).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Gepard", "action": "ultimate" }],
+        "after": [{ "type": "BUFF_APPLIED", "target": "Gepard", "payload": { "id": "gepard_shield" } }]
+      }
+    },
+    {
+      "id": "g_freeze_after_hit",
+      "fixtures": ["solo-3c"],
+      "layer": "ordering",
+      "claim": "Daunting Smite's Freeze lands within the same Skill cast, after its damage hits (110402 #2).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Gepard", "label": "Daunting Smite" }],
+        "after": [{ "type": "DOT_APPLIED", "source": "Gepard", "payload": { "kind": "Freeze" } }]
+      }
+    },
+    {
+      "id": "g_talent_revive",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Unyielding Will: a killing blow restores Gepard to a % of Max HP instead of knocking him down, once per battle (110404; preservation.ts:425-435).",
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "Gepard revives" } },
+      "fixtures": ["gepard-fall"]
+    }
+  ],
+  "golds": []
+}

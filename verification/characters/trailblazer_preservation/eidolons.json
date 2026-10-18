@@ -1,0 +1,536 @@
+{
+  "kit": "trailblazer_preservation",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/90/ranks/1..6 (Fire, Preservation Trailblazer)",
+    "confidence": "interpreted",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 'Earth-Shaking Resonance': Basic additionally deals Fire DMG = 25% DEF (enhanced Basic 50%) — the extra hits surface as 'E1 Basic Bonus'/'E1 Enhanced Bonus' damage events. E2 'Time-Defying Tenacity': the Talent shield blocks +2% DEF +27, so extra shield absorption (SHIELD_ABSORBED) appears. E3 'Trail-Blazing Blueprint' Skill+2/Talent+2 and E4 'Nation-Building Oath' (battle-start 4 Magma Will) change shield magnitudes without a distinct event, so they are documented not asserted. E5 'Spirit-Warming Flame' Ult+2/Basic+1 raise 'War-Flaming Lance' 1 -> 1.1 and 'Ice-Breaking Light' 1 -> 1.1. E6 'City-Forging Bulwarks': after enhanced Basic or Ultimate, +10% DEF up to 3 stacks (tb_pres_e6 defPct 0.10). Fixtures run one battle per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "trailblazer_preservation E0 — eidolon ladder rung, cloned from trailblazer_preservation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_preservation",
+            "name": "TBP",
+            "stats": {
+              "hp": 6000,
+              "atk": 1200,
+              "def": 1500,
+              "spd": 130
+            },
+            "eidolon": 0,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 200000,
+          "atk": 700,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e1",
+      "env": "trailblazer_preservation E1 — eidolon ladder rung, cloned from trailblazer_preservation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_preservation",
+            "name": "TBP",
+            "stats": {
+              "hp": 6000,
+              "atk": 1200,
+              "def": 1500,
+              "spd": 130
+            },
+            "eidolon": 1,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 200000,
+          "atk": 700,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e2",
+      "env": "trailblazer_preservation E2 — eidolon ladder rung, cloned from trailblazer_preservation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_preservation",
+            "name": "TBP",
+            "stats": {
+              "hp": 6000,
+              "atk": 1200,
+              "def": 1500,
+              "spd": 130
+            },
+            "eidolon": 2,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 200000,
+          "atk": 700,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e3",
+      "env": "trailblazer_preservation E3 — eidolon ladder rung, cloned from trailblazer_preservation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_preservation",
+            "name": "TBP",
+            "stats": {
+              "hp": 6000,
+              "atk": 1200,
+              "def": 1500,
+              "spd": 130
+            },
+            "eidolon": 3,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 200000,
+          "atk": 700,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e4",
+      "env": "trailblazer_preservation E4 — eidolon ladder rung, cloned from trailblazer_preservation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_preservation",
+            "name": "TBP",
+            "stats": {
+              "hp": 6000,
+              "atk": 1200,
+              "def": 1500,
+              "spd": 130
+            },
+            "eidolon": 4,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 200000,
+          "atk": 700,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e5",
+      "env": "trailblazer_preservation E5 — eidolon ladder rung, cloned from trailblazer_preservation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_preservation",
+            "name": "TBP",
+            "stats": {
+              "hp": 6000,
+              "atk": 1200,
+              "def": 1500,
+              "spd": 130
+            },
+            "eidolon": 5,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 200000,
+          "atk": 700,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e6",
+      "env": "trailblazer_preservation E6 — eidolon ladder rung, cloned from trailblazer_preservation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_preservation",
+            "name": "TBP",
+            "stats": {
+              "hp": 6000,
+              "atk": 1200,
+              "def": 1500,
+              "spd": 130
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 200000,
+          "atk": 700,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "tbp_e1_bonus",
+      "layer": "interactions",
+      "claim": "E1 'Earth-Shaking Resonance': the enhanced Basic additionally deals Fire DMG = 50% DEF ('E1 Enhanced Bonus' hit).",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "E1 Enhanced Bonus"
+        }
+      }
+    },
+    {
+      "id": "tbp_e1_bonus_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: no E1 Basic bonus hit below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "E1 Enhanced Bonus"
+        }
+      }
+    },
+    {
+      "id": "tbp_e2_shield",
+      "layer": "interactions",
+      "claim": "E2 'Time-Defying Tenacity': the stronger Talent shield blocks extra DMG, raising shield-absorption events to 9.",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SHIELD_ABSORBED"
+        },
+        "value": 9
+      }
+    },
+    {
+      "id": "tbp_e2_shield_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: below rank 2 the smaller Talent shield absorbs 7 hits.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SHIELD_ABSORBED"
+        },
+        "value": 7
+      }
+    },
+    {
+      "id": "tbp_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 Ult+2 raises 'War-Flaming Lance' 1 -> 1.1.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "War-Flaming Lance"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbp_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 'War-Flaming Lance' stays at 1.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "War-Flaming Lance"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbp_e5_basic",
+      "layer": "parameters",
+      "claim": "E5 Basic+1 raises the enhanced 'Ice-Breaking Light' main hit 1.35 -> 1.4625.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Ice-Breaking Light (enhanced main)"
+        },
+        "field": "mult",
+        "value": 1.4625,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbp_e5_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E5 the enhanced 'Ice-Breaking Light' main hit stays at 1.35.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Ice-Breaking Light (enhanced main)"
+        },
+        "field": "mult",
+        "value": 1.35,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbp_e6_present",
+      "layer": "interactions",
+      "claim": "E6 'City-Forging Bulwarks': after enhanced Basic or Ultimate, +10% DEF up to 3 stacks (tb_pres_e6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "tb_pres_e6"
+      }
+    },
+    {
+      "id": "tbp_e6_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: tb_pres_e6 must NOT be active below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "tb_pres_e6"
+      }
+    },
+    {
+      "id": "tbp_e6_stat",
+      "layer": "parameters",
+      "claim": "tb_pres_e6 carries defPct 0.10 (canon E6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "tb_pres_e6",
+        "stat": "defPct",
+        "value": 0.1
+      }
+    }
+  ],
+  "golds": []
+}

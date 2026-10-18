@@ -1,0 +1,490 @@
+{
+  "kit": "hook",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "reference/hsr-data/characters.json#/Hook/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E1: Enhanced Skill +20% (Enhanced Skill (main) 2.80 -> 3.36). E2: Skill Burn +1 turn (DOT_TICK count 7 -> 9). E3 (Skill +2 / Basic +1): Hey! Remember Hook? 2.40 -> 2.64 and Enhanced Skill (main) 3.36 -> 3.696. E4: Talent Burn also hits adjacent enemies (Oil to the Flames 6 -> 8 instances). E5 (Ult +2 / Talent +2): Oil to the Flames DoT mult 1.00 -> 1.10 and Boom! Here Comes the Fire! 1.20 -> 1.296. E6: +20% DMG vs Burned enemies (Enhanced Skill (main) 3.696 -> 4.4352). Fixtures run one battle per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "hook E0 — eidolon ladder rung, cloned from hook/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hook",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "hook E1 — eidolon ladder rung, cloned from hook/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hook",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "hook E2 — eidolon ladder rung, cloned from hook/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hook",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "hook E3 — eidolon ladder rung, cloned from hook/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hook",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "hook E4 — eidolon ladder rung, cloned from hook/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hook",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "hook E5 — eidolon ladder rung, cloned from hook/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hook",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "hook E6 — eidolon ladder rung, cloned from hook/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hook",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "hook_e1_enhanced_e1_e2",
+      "layer": "parameters",
+      "claim": "E1: Enhanced Skill +20% (Enhanced Skill (main) 2.80 -> 3.36).",
+      "fixtures": [
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Enhanced Skill (main)"
+        },
+        "field": "mult",
+        "value": 3.36,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "hook_e1_enhanced_locked_e0",
+      "layer": "parameters",
+      "claim": "E1 locked below its rank: Enhanced Skill (main) 2.80 at E0.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Enhanced Skill (main)"
+        },
+        "field": "mult",
+        "value": 2.8,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "hook_e2_dotdur_e2_e3",
+      "layer": "interactions",
+      "claim": "E2: Skill Burn +1 turn (DOT_TICK count 7 -> 9).",
+      "fixtures": [
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DOT_TICK"
+        },
+        "value": 9
+      }
+    },
+    {
+      "id": "hook_e2_dotdur_locked_e0_e1",
+      "layer": "interactions",
+      "claim": "E2 locked below its rank: DOT_TICK count 7 at E0/E1.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DOT_TICK"
+        },
+        "value": 7
+      }
+    },
+    {
+      "id": "hook_e3_basic_e3_e5",
+      "layer": "parameters",
+      "claim": "E3 (Basic +1): Hey! Remember Hook? 2.40 -> 2.64.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Hey! Remember Hook?"
+        },
+        "field": "mult",
+        "value": 2.64,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "hook_e3_basic_locked_e0_e2",
+      "layer": "parameters",
+      "claim": "E3 locked below its rank: Hey! Remember Hook? 2.40 at E0..E2.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Hey! Remember Hook?"
+        },
+        "field": "mult",
+        "value": 2.4,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "hook_e3_enhanced_e3_e5",
+      "layer": "parameters",
+      "claim": "E3 (Skill +2): Enhanced Skill (main) 3.36 -> 3.696.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Enhanced Skill (main)"
+        },
+        "field": "mult",
+        "value": 3.696,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "hook_e4_spread_e4_e6",
+      "layer": "interactions",
+      "claim": "E4: Talent Burn also hits adjacent enemies (Oil to the Flames 6 -> 8 instances).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Oil to the Flames"
+        },
+        "value": 8
+      }
+    },
+    {
+      "id": "hook_e4_spread_locked_e0_e3",
+      "layer": "interactions",
+      "claim": "E4 locked below its rank: Oil to the Flames 6 instances at E0..E3.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Oil to the Flames"
+        },
+        "value": 6
+      }
+    },
+    {
+      "id": "hook_e5_dot_e5",
+      "layer": "parameters",
+      "claim": "E5 (Talent +2): Oil to the Flames DoT mult 1.00 -> 1.10.",
+      "fixtures": [
+        "e5"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Oil to the Flames"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "hook_e5_dot_locked_e0_e4",
+      "layer": "parameters",
+      "claim": "E5 locked below its rank: Oil to the Flames DoT mult 1.00 at E0..E4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Oil to the Flames"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "hook_e6_burned_e6",
+      "layer": "parameters",
+      "claim": "E6: +20% DMG vs Burned enemies (Enhanced Skill (main) 3.696 -> 4.4352).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Enhanced Skill (main)"
+        },
+        "field": "mult",
+        "value": 4.4352,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "hook_e6_burned_locked_e3_e5",
+      "layer": "parameters",
+      "claim": "E6 locked below its rank: Enhanced Skill (main) 3.696 at E3..E5.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Enhanced Skill (main)"
+        },
+        "field": "mult",
+        "value": 3.696,
+        "tol": 0.001
+      }
+    }
+  ],
+  "golds": []
+}

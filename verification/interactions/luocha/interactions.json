@@ -1,0 +1,81 @@
+{
+  "kit": "luocha",
+  "slot": "interactions",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Luocha/ranks/1",
+    "confidence": "verified",
+    "note": "E1 'Ablution of the Quick': while the Abyss Flower Zone is active, all allies gain ATK +20%, refreshed on each ally's turn. The solo eidolon fixture could never observe it (no second ally for the onAllyTurnStart refresh to land on). This paired fixture adds an ally so the interaction is real: Luocha (E1) deploys the Zone, then on every ally's turn start the +20% ATK buff (luocha_e1) must be present on the ally."
+  },
+  "fixtures": [
+    {
+      "id": "e1_pair",
+      "env": "Luocha E1 + Bronya ally vs 1 Imaginary-weak Boss (Lv120), 5 cycles, seed 11",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luocha",
+            "stats": {
+              "hp": 11000,
+              "atk": 1300,
+              "def": 600,
+              "spd": 110
+            },
+            "eidolon": 1,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "bronya",
+            "stats": {
+              "hp": 10000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 134
+            }
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 200000,
+          "atk": 140,
+          "spd": 150,
+          "level": 120,
+          "toughness": 1800,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 5,
+        "seed": 11
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "luocha_fixture_runs",
+      "layer": "structure",
+      "claim": "The paired battle executes deterministically (Luocha + a second ally vs one boss) with no invariant break.",
+      "fixtures": [
+        "e1_pair"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "fixture executes"
+      }
+    },
+    {
+      "id": "luocha_e1_applies_to_ally",
+      "layer": "interactions",
+      "claim": "E1: while the Abyss Flower Zone is active, an ally other than the acting unit receives the +20% ATK buff (luocha_e1) at its turn start.",
+      "fixtures": [
+        "e1_pair"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "luocha_e1"
+      }
+    }
+  ],
+  "golds": []
+}

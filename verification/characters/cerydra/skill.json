@@ -1,0 +1,254 @@
+{
+  "kit": "cerydra",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "reference/hsr-data/characters.json#/1412/skills/141202",
+    "confidence": "verified",
+    "note": "AGENTS.md kit note cerydra: Military Merit/Peerage on strongest ally, Charge cap 8, Peerage at 6, Coup de Main copies carrier Skill (141202 notes), A1 +18% CRIT DMG per 100 ATK above 2000 (cap 360%), A3 +20 SPD, A4 CRIT Rate +100%, energyMax 130"
+  },
+  "fixtures": [
+    {
+      "id": "base-duo",
+      "env": "Duo E0 Cerydra + E0 Firefly (Firefly is the strongest ally = Merit carrier), Cerydra stats atk 3000/spd 165 (traces on: ATK+18% -> effAtk 3540, no SPD trace), energyStartFrac 0.5 (65/130 EN), Firefly stats atk 3000/spd 150 energyStartFrac 0 (talent floors to 120 EN), vs a dummy Elite (atk 0, Lightning-only weakness), 3 cycles. Rotation: Cerydra Skill grants Military Merit to Firefly -> Charge from carrier actions -> auto-Ult Scholar's Mate (+2 Charge) -> Carrier basic at Charge 6 upgrades to Peerage -> Carrier Skill fires Coup de Main copy and reverts Peerage (-6 Charge) -> Cerydra Basic King's Castling when SP is dry",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cerydra",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 165
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 150
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": ["Lightning"],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic 141201 'King's Castling' is Cerydra's SP-dry fallback (kit decide: SP < 1 -> basic), Wind basic hit.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Cerydra",
+          "label": "King's Castling",
+          "attackType": "basic"
+        }
+      }
+    },
+    {
+      "id": "ult_hit",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Ultimate 141203 'Scholar's Mate' is the AoE Wind ult hit from the auto-ult turn.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Cerydra",
+          "label": "Scholar's Mate",
+          "attackType": "ult"
+        }
+      }
+    },
+    {
+      "id": "ult_cast",
+      "layer": "structure",
+      "claim": "Ultimate 141203 is cast from an auto-ult turn (charTurn full-energy rule, AGENTS 30-09-2026: energy 130/130 replaces the action).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Cerydra",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "merit_granted",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill 141202 grants Military Merit to the strongest ally other than Cerydra (kit applyMerit, note 'grants Military Merit to Firefly').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "grants Military Merit to Firefly"
+        }
+      }
+    },
+    {
+      "id": "coup_copy_hit",
+      "layer": "structure",
+      "claim": "Coup de Main (141202 notes: carrier uses Skill -> Cerydra copies that skill) fires a skill-type copy hit attributed to the carrier, label 'Coup de Main'.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Firefly",
+          "label": "Coup de Main",
+          "attackType": "skill"
+        }
+      }
+    },
+    {
+      "id": "a4_crit_rate",
+      "layer": "parameters",
+      "claim": "Trace A4 grants Cerydra CRIT Rate +100% at battle start (kit onStart cerydra_crit, buffStat critRate = 1.0).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "cerydra_crit",
+        "stat": "critRate",
+        "value": 1.0,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "a1_crit_dmg",
+      "layer": "parameters",
+      "claim": "Trace A1 gives CRIT DMG +0.18 per 100 ATK above 2000 (cap 360%): effAtk = 3000 x (1 + 0.18 atkPct trace) = 3540 -> floor(1540/100) = 15 x 0.18 = 2.7 (kit onStart cerydra_cd).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "cerydra_cd",
+        "stat": "critDmg",
+        "value": 2.7,
+        "tol": 0.005
+      }
+    },
+    {
+      "id": "ult_energy_paid",
+      "layer": "parameters",
+      "claim": "Casting the auto-ult consumes the full 130 Energy pool (Energy.md canon: castUlt ENERGY_LOSS reason ult_cost, amount 130) and energy never exceeds the 130 cap afterwards.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Cerydra",
+          "payload": { "reason": "ult_cost" }
+        },
+        "field": "amount",
+        "value": 130,
+        "tol": 1
+      },
+      "after": [
+        { "kitId": "cerydra", "stat": "energy", "op": "atMost", "value": 130 }
+      ]
+    },
+    {
+      "id": "a3_spd_flat",
+      "layer": "parameters",
+      "claim": "Trace A3 grants +20 flat SPD to Cerydra and the Merit carrier after Skill (kit perform skill, buff cerydra_spd spdFlat = 20).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "cerydra_spd",
+        "stat": "spdFlat",
+        "value": 20,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "merit_before_talent",
+      "layer": "ordering",
+      "claim": "Military Merit must be granted (Cerydra Skill) before the talent follow-up 'Id Conservancy' can fire on the carrier's first attack.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "NOTE", "log": "grants Military Merit to Firefly" }
+        ],
+        "after": [
+          { "type": "HIT_START", "label": "Id Conservancy", "attackType": "add" }
+        ]
+      }
+    },
+    {
+      "id": "ult_before_coup",
+      "layer": "ordering",
+      "claim": "Scholar's Mate (+2 Charge) resolves before Coup de Main: the ult turn precedes the carrier Skill that consumes Peerage.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "HIT_START", "label": "Scholar's Mate" }
+        ],
+        "after": [
+          { "type": "HIT_START", "label": "Coup de Main" }
+        ]
+      }
+    },
+    {
+      "id": "peerage_before_coup",
+      "layer": "ordering",
+      "claim": "Peerage auto-upgrade (Charge 6 -> 6+, kit maybePeerage note) must happen before Coup de Main, which only fires while the Peerage buff is active.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "NOTE", "log": "upgraded to Peerage" }
+        ],
+        "after": [
+          { "type": "HIT_START", "label": "Coup de Main" }
+        ]
+      }
+    },
+    {
+      "id": "peerage_on_carrier",
+      "layer": "interactions",
+      "claim": "Peerage (cerydra_peer: Skill CRIT DMG + All RES PEN) is applied to the Merit carrier Firefly, not to Cerydra (kit maybePeerage target).",
+      "assertion": {
+        "assert": "buff",
+        "id": "cerydra_peer",
+        "target": "Firefly"
+      }
+    },
+    {
+      "id": "merit_atk_on_carrier",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Military Merit gives the carrier flat ATK scaled from Cerydra's ATK (talent_a2 = 24% at L10 of Cerydra effAtk, buff cerydra_atk applied to Firefly via applyMerit).",
+      "assertion": {
+        "assert": "buff",
+        "id": "cerydra_atk",
+        "target": "Firefly"
+      }
+    },
+    {
+      "id": "no_e2_buffs",
+      "layer": "interactions",
+      "claim": "E2 'carrier +40% DMG / Cerydra +160% DMG' buffs must never appear at E0 (kit eidolon guard).",
+      "assertion": {
+        "assert": "noBuff",
+        "id": "cerydra_e2"
+      }
+    }
+  ]
+}

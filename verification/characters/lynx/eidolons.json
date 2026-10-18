@@ -1,0 +1,334 @@
+{
+  "kit": "lynx",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Lynx/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 'Morning of Snow Hike' = Outgoing Healing +20% when the healed ally is at <=50% HP (also HoT). E2 'Noon of Portable Furnace' = Survival Response resists one debuff. E3 'Afternoon of Avalanche Beacon' +Skill Lv.2 / Basic Lv.1 raises Basic 'Ice Crampon Technique' 0.5 -> 0.55. E4 'Dusk of Warm Campfire' = gaining SR grants ATK equal to 3% of Lynx's Max HP for 1 turn (lynx_e4). E5 'Night of Aurora Tea' +Ultimate Lv.2 / Talent Lv.2 raises the Ultimate heal 2572 -> 2760 and HoT ticks. E6 'Dawn of Explorers' Chart' additionally boosts SR Max HP by 6% of Lynx's Max HP and +30% Effect RES. The solo fixture never casts Skill (Lynx never drops below its Skill gate), so all SR-tied ranks (E1/E2/E4/E6) are engine-supported but not observable here; E3/E5 are pinned by the Basic multiplier and the Ultimate heal amount."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "lynx E0 — eidolon ladder rung, cloned from lynx/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lynx",
+            "stats": {
+              "hp": 12800,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1600,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "lynx E1 — eidolon ladder rung, cloned from lynx/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lynx",
+            "stats": {
+              "hp": 12800,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1600,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "lynx E2 — eidolon ladder rung, cloned from lynx/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lynx",
+            "stats": {
+              "hp": 12800,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1600,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "lynx E3 — eidolon ladder rung, cloned from lynx/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lynx",
+            "stats": {
+              "hp": 12800,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1600,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "lynx E4 — eidolon ladder rung, cloned from lynx/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lynx",
+            "stats": {
+              "hp": 12800,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1600,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "lynx E5 — eidolon ladder rung, cloned from lynx/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lynx",
+            "stats": {
+              "hp": 12800,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1600,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "lynx E6 — eidolon ladder rung, cloned from lynx/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lynx",
+            "stats": {
+              "hp": 12800,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1600,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "lynx_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 'Afternoon of Avalanche Beacon': Basic ATK Lv.+1 raises 'Ice Crampon Technique' 0.5 -> 0.55.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Ice Crampon Technique"
+        },
+        "field": "mult",
+        "value": 0.55,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "lynx_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'Ice Crampon Technique' stays at 0.5.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Ice Crampon Technique"
+        },
+        "field": "mult",
+        "value": 0.5,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "lynx_e5_heal",
+      "layer": "parameters",
+      "claim": "E5 'Night of Aurora Tea': Ultimate Lv.+2 / Talent Lv.+2 raise the Ultimate heal 2572 -> 2760 (first HEAL_APPLIED).",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "HEAL_APPLIED",
+          "source": "Lynx",
+          "target": "Lynx"
+        },
+        "field": "amount",
+        "value": 2760,
+        "tol": 1,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "lynx_e5_heal_locked",
+      "layer": "parameters",
+      "claim": "Below E5 the Ultimate heal stays at 2572.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "HEAL_APPLIED",
+          "source": "Lynx",
+          "target": "Lynx"
+        },
+        "field": "amount",
+        "value": 2572,
+        "tol": 1,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

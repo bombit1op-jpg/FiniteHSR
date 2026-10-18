@@ -1,0 +1,208 @@
+{
+  "kit": "topaz",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/111201+111202+111203+111204 + bonus_abilities + ranks",
+    "confidence": "verified",
+    "note": "Basic Deficit... (111201) Fire DMG #1 L6 = 100% / L10 = 140% of ATK. Skill Difficulty Paying? (111202) Fire DMG #1 L10 = 150% of ATK over 7 hits (1/7 each); Notes: when Numby is in Windfall Bonanza it hits 8 times (10% x7 + 30% on the last), the damage is considered both Skill DMG and Follow-Up ATK DMG, and Numby deals +50% DMG (#2) to the Proof of Debt target. Ultimate Turn a Profit! (111203) #1 L10 = Numby DMG +150%, #2 = CRIT DMG +25%, #3 = advance Numby 50% when allies hit the Proof of Debt enemy, ends after #4 = 2 Numby attacks. Talent Trotter Market!? (111204) Proof of Debt: Numby FUA #1 L10 = 150% of ATK, advance #3 = 50%. Bonus: 'Topaz & Numby's DMG dealt to enemy targets with Fire Weakness' +15%; Stonks Market restores 10 Energy to Topaz after Numby's Windfall attacks."
+  },
+  "fixtures": [
+    {
+      "id": "topaz-3c",
+      "env": "Topaz & Numby E0 solo vs 3 Fire-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "topaz",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Fire"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "topaz_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Deficit... (111201, Fire) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Topaz & Numby",
+          "label": "Deficit...",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "topaz-3c"
+      ]
+    },
+    {
+      "id": "tz_skill_action",
+      "layer": "structure",
+      "claim": "Difficulty Paying? (111202) is Topaz's damaging Skill; the fixture casts it 4 times.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Topaz & Numby", "action": "skill" }, "value": 4 }
+    },
+    {
+      "id": "tz_ult_action",
+      "layer": "structure",
+      "claim": "Turn a Profit! (111203) is Topaz's Ultimate action (buff setup, no direct damage); cast twice.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Topaz & Numby", "action": "ultimate" }, "value": 2 }
+    },
+    {
+      "id": "tz_no_attack_action",
+      "layer": "structure",
+      "claim": "Topaz's kit exposes Basic ATK, Skill and Ultimate as its action set; never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Topaz & Numby", "action": "attack" } }
+    },
+    {
+      "id": "tz_numby_action",
+      "layer": "structure",
+      "claim": "Numby is a summon with its own timeline slot: it takes 4 separate actions in this fixture.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Numby", "action": "ability" }, "value": 4 }
+    },
+    {
+      "id": "tz_summon_created",
+      "layer": "structure",
+      "claim": "Numby enters battle as an owned summon (SUMMON_CREATED at battle start).",
+      "assertion": { "assert": "present", "of": { "type": "SUMMON_CREATED", "target": "Numby" } }
+    },
+    {
+      "id": "tz_difficulty_count",
+      "layer": "structure",
+      "claim": "Difficulty Paying? hits 7 times per cast, or 8 while Numby is in Windfall Bonanza (111202 Notes); the fixture has 2 normal casts (7) and 2 Windfall casts (8) = 30 damage events.",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Topaz & Numby", "label": "Difficulty Paying?" }, "value": 30 }
+    },
+    {
+      "id": "tz_difficulty_mult",
+      "layer": "parameters",
+      "claim": "Difficulty Paying? #1 = 150% of ATK at L10 split evenly over 7 hits = 0.21428571428571427 each (111202; the first cast is a normal 7-hit cast).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Topaz & Numby", "label": "Difficulty Paying?" }, "field": "mult", "value": 0.21428571428571427, "pick": "first" }
+    },
+    {
+      "id": "tz_skill_fua_tagging",
+      "layer": "structure",
+      "claim": "Difficulty Paying?'s damage is considered both Skill DMG and Follow-Up ATK DMG (111202 Notes): every hit carries the Follow-Up tag and takes FUA-only bonuses (Proof of Debt, E1 Debtor).",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Topaz & Numby", "label": "Difficulty Paying?", "tags": "fua" }, "value": 30 }
+    },
+    {
+      "id": "tz_windfall_split",
+      "layer": "structure",
+      "claim": "While Numby is in Windfall Bonanza (111202 Notes) Difficulty Paying? hits 8 times: 10% x7 + 30% on the final hit, so the greatest per-hit multiplier is 0.45 (30% x 150% ATK at L10).",
+      "assertion": { "assert": "payloadAtLeast", "of": { "type": "DAMAGE_DEALT", "source": "Topaz & Numby", "label": "Difficulty Paying?" }, "field": "mult", "value": 0.44 }
+    },
+    {
+      "id": "tz_numby_mult",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "Numby's FUA (111204) #1 = 150% of ATK at L10 over 7 hits = 0.21428571428571427 each.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Numby", "label": "Numby" }, "field": "mult", "value": 0.21428571428571427, "pick": "first" }
+    },
+    {
+      "id": "tz_numby_windfall_mult",
+      "layer": "parameters",
+      "claim": "Turn a Profit! #1 increases Numby's DMG multiplier by 150% (111203): during Windfall each Numby hit rises to 0.5357142857142857 (x2.5).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Numby", "label": "Numby" }, "field": "mult", "value": 0.5357142857142857, "pick": "last" }
+    },
+    {
+      "id": "tz_numby_wind_buff",
+      "layer": "parameters",
+      "claim": "Turn a Profit! applies Windfall Bonanza to Numby for #4 = 2 Numby attacks (stored as turns=1 between summon turns).",
+      "assertion": { "assert": "buff", "id": "numby_wind", "target": "Numby" }
+    },
+    {
+      "id": "tz_numby_wind_cd",
+      "layer": "parameters",
+      "claim": "Turn a Profit! #2 raises Numby's CRIT DMG by 25% while Windfall Bonanza is active.",
+      "assertion": { "assert": "buffStat", "id": "numby_wind", "stat": "critDmg", "value": 0.25 }
+    },
+    {
+      "id": "tz_deficit_mult",
+      "layer": "parameters",
+      "claim": "Deficit... #1 = 100% of ATK at the engine's default Basic Lv6 (canon L10 = 140%; canon L6 = 100%, matching exactly).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Topaz & Numby", "label": "Deficit..." }, "field": "mult", "value": 1 }
+    },
+    {
+      "id": "tz_pod_buff",
+      "layer": "structure",
+      "claim": "Difficulty Paying? marks the target with Proof of Debt (persistent on the most recent target).",
+      "assertion": { "assert": "buff", "id": "topaz_pod", "turns": 0 }
+    },
+    {
+      "id": "tz_pod_stat",
+      "layer": "parameters",
+      "claim": "Proof of Debt makes Numby deal +50% DMG (#2, L10) to the marked target (111202).",
+      "assertion": { "assert": "buffStat", "id": "topaz_pod", "stat": "vulnType:fua", "value": 0.5 }
+    },
+    {
+      "id": "tz_numby_advance",
+      "layer": "interactions",
+      "claim": "Turn a Profit! #3: while Windfall Bonanza is active, hits on the Proof of Debt enemy advance Numby by 50%; the fixture emits 4 such advances (one per Skill cast window).",
+      "assertion": { "assert": "count", "of": { "type": "ACTION_ADVANCE", "source": "Topaz & Numby", "payload": { "pct": 0.5 } }, "value": 4 }
+    },
+    {
+      "id": "tz_a4_buff",
+      "layer": "interactions",
+      "claim": "Bonus ability: DMG dealt to enemy targets with Fire Weakness +15% applies to Numby.",
+      "assertion": { "assert": "buff", "id": "topaz_a4", "target": "Numby", "turns": 99 }
+    },
+    {
+      "id": "tz_a4_buff_topaz",
+      "layer": "interactions",
+      "claim": "Bonus ability: the Fire-weak +15% DMG also applies to Topaz's own attacks (canon boosts 'Topaz & Numby's DMG', both units).",
+      "assertion": { "assert": "buff", "id": "topaz_a4", "target": "Topaz & Numby", "turns": 99 }
+    },
+    {
+      "id": "tz_a4_stat",
+      "layer": "interactions",
+      "claim": "The Fire-weak bonus is +15% DMG.",
+      "assertion": { "assert": "buffStat", "id": "topaz_a4", "stat": "dmgAll", "value": 0.15 }
+    },
+    {
+      "id": "tz_sp_loss",
+      "layer": "structure",
+      "claim": "Each Difficulty Paying? costs 1 Skill Point; 4 Skill casts spend 4 SP.",
+      "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Topaz & Numby" }, "value": 4 }
+    },
+    {
+      "id": "tz_sp_gain",
+      "layer": "structure",
+      "claim": "The single Basic ATK restores 1 Skill Point.",
+      "assertion": { "assert": "count", "of": { "type": "SP_GAIN", "source": "Topaz & Numby" }, "value": 1 }
+    },
+    {
+      "id": "tz_energy",
+      "layer": "parameters",
+      "claim": "Turn a Profit! uses the standard Energy ladder; this rotation regenerates exactly 200 Energy.",
+      "assertion": { "assert": "energy", "who": "Topaz & Numby", "atLeast": 200, "atMost": 200 }
+    },
+    {
+      "id": "tz_order_pod",
+      "layer": "ordering",
+      "claim": "Proof of Debt is applied by the first Skill cast before that cast's damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "BUFF_APPLIED", "payload": { "id": "topaz_pod" } }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Topaz & Numby", "label": "Difficulty Paying?" }]
+      }
+    }
+  ]
+}

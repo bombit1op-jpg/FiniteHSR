@@ -1,0 +1,389 @@
+{
+  "kit": "trailblazer_remembrance",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/94/ranks/1..6 (Ice, Remembrance Trailblazer)",
+    "confidence": "interpreted",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 'Narrator of the Present': allies with Mem's Support gain +10% CRIT Rate (tb_rem_e1 critRate 0.10). E2 'Gleaner of the Past' (memosprite action +8 Energy), E3 'Chanter of the Future' (level bumps incl. Memosprite Talent), E4 'Dancer of the Muse' (Mem Charge/True DMG on 0-Max-Energy allies) and E6 'Bearer of the Revelation' (Ultimate CRIT Rate set to 100%) are not exercised by the kept single-Mem fixture, so they are documented not asserted. E5 'Seamster of the Ode' Ult+2/Basic+1/Memosprite Skill+1 raise 'Together, Mem!' 2.4 -> 2.64 and 'Leave It to Me!' 1 -> 1.1. Fixtures run one battle per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "trailblazer_remembrance E0 — eidolon ladder rung, cloned from trailblazer_remembrance/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_remembrance",
+            "name": "TBR",
+            "stats": {
+              "hp": 6000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 0,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Frost",
+          "count": 1,
+          "hp": 600000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e1",
+      "env": "trailblazer_remembrance E1 — eidolon ladder rung, cloned from trailblazer_remembrance/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_remembrance",
+            "name": "TBR",
+            "stats": {
+              "hp": 6000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 1,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Frost",
+          "count": 1,
+          "hp": 600000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e2",
+      "env": "trailblazer_remembrance E2 — eidolon ladder rung, cloned from trailblazer_remembrance/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_remembrance",
+            "name": "TBR",
+            "stats": {
+              "hp": 6000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 2,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Frost",
+          "count": 1,
+          "hp": 600000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e3",
+      "env": "trailblazer_remembrance E3 — eidolon ladder rung, cloned from trailblazer_remembrance/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_remembrance",
+            "name": "TBR",
+            "stats": {
+              "hp": 6000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 3,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Frost",
+          "count": 1,
+          "hp": 600000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e4",
+      "env": "trailblazer_remembrance E4 — eidolon ladder rung, cloned from trailblazer_remembrance/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_remembrance",
+            "name": "TBR",
+            "stats": {
+              "hp": 6000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 4,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Frost",
+          "count": 1,
+          "hp": 600000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e5",
+      "env": "trailblazer_remembrance E5 — eidolon ladder rung, cloned from trailblazer_remembrance/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_remembrance",
+            "name": "TBR",
+            "stats": {
+              "hp": 6000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 5,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Frost",
+          "count": 1,
+          "hp": 600000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e6",
+      "env": "trailblazer_remembrance E6 — eidolon ladder rung, cloned from trailblazer_remembrance/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_remembrance",
+            "name": "TBR",
+            "stats": {
+              "hp": 6000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Frost",
+          "count": 1,
+          "hp": 600000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "tbr_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'Narrator of the Present': allies with Mem's Support gain +10% CRIT Rate (tb_rem_e1).",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "tb_rem_e1"
+      }
+    },
+    {
+      "id": "tbr_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: tb_rem_e1 must NOT be active below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "tb_rem_e1"
+      }
+    },
+    {
+      "id": "tbr_e1_stat",
+      "layer": "parameters",
+      "claim": "tb_rem_e1 carries critRate 0.10 (canon E1).",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "tb_rem_e1",
+        "stat": "critRate",
+        "value": 0.1
+      }
+    },
+    {
+      "id": "tbr_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 Ult+2 raises 'Together, Mem!' 2.4 -> 2.64.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Together, Mem!"
+        },
+        "field": "mult",
+        "value": 2.64,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbr_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 'Together, Mem!' stays at 2.4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Together, Mem!"
+        },
+        "field": "mult",
+        "value": 2.4,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbr_e5_basic",
+      "layer": "parameters",
+      "claim": "E5 Basic+1 raises 'Leave It to Me!' 1 -> 1.1.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Leave It to Me!"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbr_e5_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E5 'Leave It to Me!' stays at 1.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Leave It to Me!"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

@@ -1,0 +1,347 @@
+{
+  "kit": "archer",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/101501+101502+101503 + bonus_abilities + ranks",
+    "confidence": "verified",
+    "note": "Basic/Skill Kanshou and Bakuya (101501): Notes — DMG dealt in 3 hits, distribution 30/35/35. Skill Caladbolg II: Fake Spiral Sword (101502): #1 L10 = 360% of ATK; DMG increases by #2 = 100% per stack, up to #3 = 2 stacks; Notes — this Skill consumes 2 SP. Ultimate Unlimited Blade Works (101503): #1 L10 = 1000% of ATK, gains #2 = 2 Charge per cast up to #3 = 4; Notes — DMG dealt in 15 hits, distribution 4% x 14 + 44%. Energy limit 130 (standard)."
+  },
+  "fixtures": [
+    {
+      "id": "archer-3c",
+      "env": "Archer E0 solo vs 3 Quantum-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "archer",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "archer-duo",
+      "env": "Archer E0 + Dan Heng ally vs 1 Quantum-weak Elite dummy, 3 cycles, seed 7 - teammate attack triggers the Talent FUA",
+      "battle": {
+        "team": [
+          { "kitId": "archer", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "skillPriority": 1, "eidolon": 0 },
+          { "kitId": "danheng", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 110 }, "eidolon": 0 }
+        ],
+        "enemy": { "name": "Elite", "count": 1, "hp": 6000000, "atk": 800, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Quantum"], "res": 0 },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "archer_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Kanshou and Bakuya (101501, Quantum) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Archer",
+          "label": "Kanshou and Bakuya",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "archer-3c"
+      ]
+    },
+    {
+      "id": "ar_skill_action",
+      "fixtures": ["archer-3c"],
+      "layer": "structure",
+      "claim": "Caladbolg II (101502) is Archer's damaging Skill; the fixture casts it 4 times.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Archer",
+          "action": "skill"
+        },
+        "value": 4
+      }
+    },
+    {
+      "id": "ar_ult_action",
+      "fixtures": ["archer-3c"],
+      "layer": "structure",
+      "claim": "Unlimited Blade Works (101503) is Archer's Ultimate; the fixture runs 2 UBW casts (30 hits). Only the scheduled one emits ABILITY_USED — the other auto-cast rides a Circuit Connection extra turn (grantExtraTurn actions stay ACTION/ABILITY-silent), so ABILITY_USED ultimate counts 1.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Archer",
+          "action": "ultimate"
+        },
+        "value": 1
+      }
+    },
+    {
+      "id": "ar_no_attack_action",
+      "fixtures": ["archer-3c"],
+      "layer": "structure",
+      "claim": "Archer's kit exposes Basic ATK, Skill and Ultimate as its action set; never a generic attack action.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Archer",
+          "action": "attack"
+        }
+      }
+    },
+    {
+      "id": "ar_kanshou_count",
+      "fixtures": ["archer-3c"],
+      "layer": "structure",
+      "claim": "Kanshou and Bakuya deals its damage in 3 hits per use (101501 Notes); the fixture resolves 5 uses (2 scheduled + 3 extra-turn basics to rebuild SP) = 15 events.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Archer",
+          "label": "Kanshou and Bakuya"
+        },
+        "value": 15
+      }
+    },
+    {
+      "id": "ar_kanshou_first",
+      "fixtures": ["archer-3c"],
+      "layer": "parameters",
+      "claim": "Kanshou and Bakuya's hit distribution starts at 30% (101501 Notes).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Archer",
+          "label": "Kanshou and Bakuya"
+        },
+        "field": "mult",
+        "value": 0.3,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "ar_kanshou_last",
+      "fixtures": ["archer-3c"],
+      "layer": "parameters",
+      "claim": "Kanshou and Bakuya's hit distribution ends at 35% (101501 Notes).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Archer",
+          "label": "Kanshou and Bakuya"
+        },
+        "field": "mult",
+        "value": 0.35,
+        "pick": "last"
+      }
+    },
+    {
+      "id": "ar_caladbolg_count",
+      "fixtures": ["archer-3c"],
+      "layer": "structure",
+      "claim": "Caladbolg II damage resolves 5 times over the fixture's combos (4 Action skills + 1 chained re-cast).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Archer",
+          "label": "Caladbolg II"
+        },
+        "value": 5
+      }
+    },
+    {
+      "id": "ar_caladbolg_mult",
+      "fixtures": ["archer-3c"],
+      "layer": "parameters",
+      "claim": "Caladbolg II #1 = 360% of ATK at L10 (101502).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Archer",
+          "label": "Caladbolg II"
+        },
+        "field": "mult",
+        "value": 3.6,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "ar_caladbolg_stacks",
+      "fixtures": ["archer-3c"],
+      "layer": "parameters",
+      "claim": "Caladbolg II gains +100% DMG per Circuit Connection stack (skill_a2) up to #3 = 2 stacks, so a consecutive-cast chain reads 3.6 -> 7.2 -> 10.8 (peak 1080%).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Archer",
+          "label": "Caladbolg II",
+          "payload": {
+            "mult": 10.8
+          }
+        }
+      }
+    },
+    {
+      "id": "ar_ubw_count",
+      "fixtures": ["archer-3c"],
+      "layer": "structure",
+      "claim": "Unlimited Blade Works deals its damage in 15 hits per cast (101503 Notes); 2 casts = 30 events.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Archer",
+          "label": "Unlimited Blade Works"
+        },
+        "value": 30
+      }
+    },
+    {
+      "id": "ar_ubw_first",
+      "fixtures": ["archer-3c"],
+      "layer": "parameters",
+      "claim": "Unlimited Blade Works' opening hits are 4% each (101503 Notes: 4% x 14 + 44%).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Archer",
+          "label": "Unlimited Blade Works"
+        },
+        "field": "mult",
+        "value": 0.4,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "ar_ubw_last",
+      "fixtures": ["archer-3c"],
+      "layer": "parameters",
+      "claim": "Unlimited Blade Works' final hit is 44% of the #1 = 1000% total (101503 Notes) = 4.4.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Archer",
+          "label": "Unlimited Blade Works"
+        },
+        "field": "mult",
+        "value": 4.4,
+        "pick": "last"
+      }
+    },
+    {
+      "id": "ar_sp_loss",
+      "fixtures": ["archer-3c"],
+      "layer": "structure",
+      "claim": "Caladbolg II consumes 2 Skill Points per combo start (canon 101502 Notes: 'this Skill consumes 2 SP'); chained re-casts within the on-going Circuit Connection combo cast free. Solo Archer sustains 3 paying combos => 3 SP_LOSS events of n=2 = 6 SP total.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_LOSS",
+          "source": "Archer",
+          "payload": {
+            "n": 2
+          }
+        },
+        "value": 3
+      }
+    },
+    {
+      "id": "ar_sp_gain",
+      "fixtures": ["archer-3c"],
+      "layer": "structure",
+      "claim": "SP economy restores 5 Skill Points over the fixture (Basic ATK restores 1 SP by the standard rule; extra-turn basics re-arm the 2-SP combos).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_GAIN",
+          "source": "Archer"
+        },
+        "value": 5
+      }
+    },
+    {
+      "id": "ar_energy",
+      "fixtures": ["archer-3c"],
+      "layer": "parameters",
+      "claim": "Archer's Ultimate uses the standard Energy ladder (220 max); this rotation regenerates exactly 335 Energy (chained Skill uses pay 30 each, basics 20).",
+      "assertion": {
+        "assert": "energy",
+        "who": "Archer",
+        "atLeast": 335,
+        "atMost": 335
+      }
+    },
+    {
+      "id": "ar_order_skill",
+      "fixtures": ["archer-3c"],
+      "layer": "ordering",
+      "claim": "The Skill action starts before Caladbolg II damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ABILITY_USED",
+            "source": "Archer",
+            "action": "skill"
+          }
+        ],
+        "after": [
+          {
+            "type": "DAMAGE_DEALT",
+            "source": "Archer",
+            "label": "Caladbolg II"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ar_talent_fua",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Mind's Eye (True): a teammate's attack consumes 1 Charge to launch a Follow-Up ATK on the primary target (101504; hunt.ts:1482-1501).",
+      "assertion": {
+        "assert": "present",
+        "of": { "type": "DAMAGE_DEALT", "source": "Archer", "label": "Mind's Eye FUA" }
+      },
+      "fixtures": ["archer-duo"]
+    }
+  ]
+}

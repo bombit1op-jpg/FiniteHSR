@@ -1,0 +1,204 @@
+{
+  "kit": "sparkle",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/1130601-1130607",
+    "confidence": "interpreted",
+    "note": "Sparkle (Quantum, Harmony). Basic 1130601 Monodrama. Skill 1130602 Dreamdiver: target ally +CRIT DMG, +All-Type RES PEN (trace), and 50% action advance. Ultimate 1130603 The Hero with a Thousand Faces: recovers SP and grants Cipher (DMG taken down? engine models dmgAll on allies) to all allies. Talent Red Herring: raises max SP by 2 and grants Figment stacks on SP spend. A6 Nocturne: +45% ATK to all allies. Energy 110."
+  },
+  "fixtures": [
+    {
+      "id": "team-sushang",
+      "env": "Sparkle E0 with Sushang (kitId sushang) vs 3 Physical-weak Elite (level 95, 240 Toughness), 3 cycles, seed 7 - Skill buffs + advances the carry and feeds Figment on SP spend",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparkle",
+            "stats": { "hp": 10000, "atk": 1600, "def": 600, "spd": 185 },
+            "eidolon": 0,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": { "hp": 9000, "atk": 2000, "def": 550, "spd": 180, "be": 0.6 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1-cipher",
+      "env": "Sparkle E1 with Sushang vs the same Elites - Cipher also grants allies +40% ATK (cipher_atk)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparkle",
+            "stats": { "hp": 10000, "atk": 1600, "def": 600, "spd": 185 },
+            "eidolon": 1,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": { "hp": 9000, "atk": 2000, "def": 550, "spd": 180, "be": 0.6 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "sp-basic",
+      "env": "Sparkle E0 solo vs 3 Physical-weak Elite (level 95, 240 Toughness), skillPriority 0 + skillPattern normal->skill->normal, 3 cycles, seed 7 — the fixed rotation forces the Basic ATK",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparkle",
+            "stats": { "hp": 10000, "atk": 1600, "def": 600, "spd": 185 },
+            "eidolon": 0,
+            "skillPriority": 0,
+            "skillPattern": "normal->skill->normal"
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "s_skill_action",
+      "fixtures": ["team-sushang","e1-cipher"],
+      "layer": "structure",
+      "claim": "Skill Dreamdiver (1130602) fires as a Skill action (decide harmony.ts:155-160 prefers Skill while SP >= 1).",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Sparkle", "action": "skill" } }
+    },
+    {
+      "id": "s_ult_action",
+      "fixtures": ["team-sushang","e1-cipher"],
+      "layer": "structure",
+      "claim": "The Hero with a Thousand Faces (1130603) fires once Energy reaches 110 (energyMax harmony.ts:153).",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Sparkle", "action": "ultimate" } }
+    },
+    {
+      "id": "s_dreamdiver",
+      "fixtures": ["team-sushang","e1-cipher"],
+      "layer": "interactions",
+      "claim": "Dreamdiver grants the target +10% All-Type RES PEN (A6 Nocturne, harmony.ts:216-218).",
+      "assertion": { "assert": "buffStat", "id": "dreamdiver", "stat": "resPenAll", "value": 0.1, "tol": 0.001 }
+    },
+    {
+      "id": "s_advance",
+      "fixtures": ["team-sushang","e1-cipher"],
+      "layer": "interactions",
+      "claim": "Dreamdiver advances its target 50% (harmony.ts:221-223).",
+      "assertion": { "assert": "present", "of": { "type": "ACTION_ADVANCE", "source": "Sparkle", "target": "Sushang" } }
+    },
+    {
+      "id": "s_cipher",
+      "fixtures": ["team-sushang","e1-cipher"],
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate grants Cipher (Purely Fictitious) to all allies (harmony.ts:185-189, cipher_dmg).",
+      "assertion": { "assert": "present", "of": { "type": "BUFF_APPLIED", "payload": { "id": "cipher_dmg" } } }
+    },
+    {
+      "id": "s_figment",
+      "fixtures": ["team-sushang","e1-cipher"],
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Red Herring grants Figment stacks whenever SP is spent (harmony.ts:286-314).",
+      "assertion": { "assert": "present", "of": { "type": "BUFF_APPLIED", "payload": { "id": "figment" } } }
+    },
+    {
+      "id": "s_a6_atk",
+      "fixtures": ["team-sushang","e1-cipher"],
+      "layer": "parameters",
+      "claim": "A6 Nocturne grants +45% ATK to all allies (harmony.ts:267-271).",
+      "assertion": { "assert": "buffStat", "id": "sparkle_a6", "stat": "atkPct", "value": 0.45, "tol": 0.001 }
+    },
+    {
+      "id": "s_skill_energy_30",
+      "fixtures": ["team-sushang","e1-cipher"],
+      "layer": "parameters",
+      "claim": "Every Skill cast regenerates 30 Energy (harmony.ts:210).",
+      "assertion": { "assert": "present", "of": { "type": "ENERGY_GAIN", "source": "Sparkle", "payload": { "n": 30 } } }
+    },
+    {
+      "id": "s_skill_energy_first_30",
+      "fixtures": ["team-sushang","e1-cipher"],
+      "layer": "parameters",
+      "claim": "Sparkle gains no Energy at battle start, so her first ENERGY_GAIN is the Skill's +30 (harmony.ts:210).",
+      "assertion": { "assert": "payload", "of": { "type": "ENERGY_GAIN", "source": "Sparkle" }, "field": "n", "value": 30, "pick": "first" }
+    },
+    {
+      "id": "s_skill_speed",
+      "fixtures": ["team-sushang","e1-cipher"],
+      "layer": "parameters",
+      "claim": "Every Skill cast spends 1 SP (harmony.ts:206).",
+      "assertion": { "assert": "present", "of": { "type": "SP_LOSS", "source": "Sparkle" } }
+    },
+    {
+      "id": "s_skill_before_dreamdiver",
+      "fixtures": ["team-sushang","e1-cipher"],
+      "layer": "ordering",
+      "claim": "The Skill action starts before the Dreamdiver buff lands (harmony.ts:206 then 216-220).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Sparkle", "action": "skill" }],
+        "after": [{ "type": "BUFF_APPLIED", "payload": { "id": "dreamdiver" } }]
+      }
+    },
+    {
+      "id": "s_e1_cipher_atk",
+      "layer": "parameters",
+      "claim": "E1 Suspension of Disbelief adds +40% ATK to Cipher (harmony.ts:182-183, cipher_atk).",
+      "fixtures": ["e1-cipher"],
+      "assertion": { "assert": "buffStat", "id": "cipher_atk", "stat": "atkPct", "value": 0.4, "tol": 0.001 }
+    },
+    {
+      "id": "s_basic_action",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Monodrama (1130601) fires under a fixed 'normal->skill->normal' rotation with skillPriority 0 (harmony.ts:175-182).",
+      "fixtures": ["sp-basic"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Sparkle", "action": "basic" } }
+    }
+  ]
+}

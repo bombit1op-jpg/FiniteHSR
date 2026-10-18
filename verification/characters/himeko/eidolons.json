@@ -1,0 +1,488 @@
+{
+  "kit": "himeko",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "reference/hsr-data/characters.json#/Himeko/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E1: after Victory Rush, himeko_e1 (SPD +20%, 2 turns) is granted. E3 (Skill +2 / Basic +1): Molten Detonation 2.00 -> 2.20 and Sawblade Tuning 0.40 -> 0.44. E5 (Ult +2 / Talent +2): Heavenly Flare 2.30 -> 2.484 and Victory Rush 0.28 -> 0.308. E6: Ultimate deals 2 extra 40%-DMG instances (Heavenly Flare (E6)). E2 (+15% DMG to enemies at or below 50% HP) and E4 (Skill Weakness Break -> +1 Charge) are not observable in the 6M-HP solo fixture (the target never drops to <=50% HP; Charge count is not emitted) — covered as custom. Fixtures run one battle per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "himeko E0 — eidolon ladder rung, cloned from himeko/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 40,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "himeko E1 — eidolon ladder rung, cloned from himeko/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 40,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "himeko E2 — eidolon ladder rung, cloned from himeko/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 40,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "himeko E3 — eidolon ladder rung, cloned from himeko/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 40,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "himeko E4 — eidolon ladder rung, cloned from himeko/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 40,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "himeko E5 — eidolon ladder rung, cloned from himeko/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 40,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "himeko E6 — eidolon ladder rung, cloned from himeko/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 40,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "himeko_e1_present_e1_e6",
+      "layer": "interactions",
+      "claim": "E1: after Victory Rush, himeko_e1 (SPD +20%, 2 turns) is granted.",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "himeko_e1"
+      }
+    },
+    {
+      "id": "himeko_e1_spd_e1",
+      "layer": "parameters",
+      "claim": "E1: himeko_e1 grants SPD +20%.",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "himeko_e1",
+        "stat": "spdPct",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "himeko_e1_turns_e1",
+      "layer": "interactions",
+      "claim": "E1: himeko_e1 lasts 2 turns.",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "himeko_e1",
+        "turns": 2
+      }
+    },
+    {
+      "id": "himeko_e1_locked_e0",
+      "layer": "interactions",
+      "claim": "E1 locked below its rank: no himeko_e1 at E0.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "himeko_e1"
+      }
+    },
+    {
+      "id": "himeko_e3_skill_e3_e6",
+      "layer": "parameters",
+      "claim": "E3 (Skill +2): Molten Detonation 200% -> 220%; last 40% piece = 0.88.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Molten Detonation"
+        },
+        "field": "mult",
+        "value": 0.88,
+        "pick": "last",
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "himeko_e3_skill_locked_e0_e2",
+      "layer": "parameters",
+      "claim": "E3 locked below its rank: Molten Detonation 200% -> last 40% piece 0.8 at E0..E2.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Molten Detonation"
+        },
+        "field": "mult",
+        "value": 0.8,
+        "pick": "last",
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "himeko_e3_basic_e3_e6",
+      "layer": "parameters",
+      "claim": "E3 (Basic +1): Sawblade Tuning 0.40 -> 0.44.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Sawblade Tuning"
+        },
+        "field": "mult",
+        "value": 0.44,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "himeko_e3_basic_locked_e0_e2",
+      "layer": "parameters",
+      "claim": "E3 locked below its rank: Sawblade Tuning 0.40 at E0..E2.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Sawblade Tuning"
+        },
+        "field": "mult",
+        "value": 0.4,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "himeko_e5_ult_e5_e6",
+      "layer": "parameters",
+      "claim": "E5 (Ult +2): Heavenly Flare 2.30 -> 2.484.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Heavenly Flare"
+        },
+        "field": "mult",
+        "value": 2.484,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "himeko_e5_ult_locked_e0_e4",
+      "layer": "parameters",
+      "claim": "E5 locked below its rank: Heavenly Flare 2.30 at E0..E4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Heavenly Flare"
+        },
+        "field": "mult",
+        "value": 2.3,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "himeko_e6_extra_e6",
+      "layer": "interactions",
+      "claim": "E6: Ultimate deals 2 extra 40%-DMG instances (Heavenly Flare (E6)).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Heavenly Flare (E6)"
+        }
+      }
+    },
+    {
+      "id": "himeko_e6_extra_locked_e0_e5",
+      "layer": "interactions",
+      "claim": "E6 locked below its rank: no Heavenly Flare (E6) instances at E0..E5.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Heavenly Flare (E6)"
+        }
+      }
+    },
+    {
+      "id": "himeko_e2_custom",
+      "layer": "interactions",
+      "claim": "E2: deals 15% more DMG to enemies at or below 50% HP.",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "E2 needs a target at <=50% HP; the 6M-HP solo fixture never drops that low."
+      }
+    },
+    {
+      "id": "himeko_e4_custom",
+      "layer": "interactions",
+      "claim": "E4: Skill Weakness Break grants +1 Charge.",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "E4 increases a Charge counter that the engine does not emit as an event; the solo fixture surfaces no charge delta."
+      }
+    }
+  ],
+  "golds": []
+}

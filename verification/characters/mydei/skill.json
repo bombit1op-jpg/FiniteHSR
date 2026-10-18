@@ -1,0 +1,111 @@
+{
+  "kit": "mydei",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/65/skills (Imaginary, Destruction)",
+    "confidence": "interpreted",
+    "note": "Basic Vow of Voyage (unused in practice); Skill Deaths are Legion, Regrets are None (Blast, costs 50% of current HP, no Skill Point cost); Enhanced Skill Kingslayer Be King (in Vendetta); Godslayer Be God (in Vendetta at 150 Charge, E6 at 100); Ultimate Throne of Bones (Blast + heal). Talent Blood for Blood: Charge accrues 1 per 1% Max HP lost; at 100 -> Vendetta (heal, Max HP +50%, Advance 100%). Energy limit 160."
+  },
+  "fixtures": [
+    {
+      "id": "mydei-e0",
+      "env": "Mydei E0 solo (HP 9000) vs 2 Imaginary-weak dummies (900k HP, atk 300), 15 cycles, seed 1 — Charge from skill self-cost + enemy damage -> Vendetta",
+      "battle": {
+        "team": [
+          { "kitId": "mydei", "name": "Mydei", "stats": { "hp": 9000, "atk": 2200, "def": 1300, "spd": 130 }, "eidolon": 0, "skillPriority": 2 }
+        ],
+        "enemy": { "name": "Mob", "count": 2, "hp": 900000, "atk": 300, "spd": 120, "level": 85, "toughness": 120, "weaknesses": ["Imaginary"] },
+        "cycles": 15,
+        "seed": 1
+      }
+    },
+    {
+      "id": "mydei-e6",
+      "env": "Mydei E6 solo (HP 9000) vs 2 Imaginary-weak dummies, 8 cycles, seed 1 — battle-start Vendetta and Godslayer at 100 Charge",
+      "battle": {
+        "team": [
+          { "kitId": "mydei", "name": "Mydei", "stats": { "hp": 9000, "atk": 2200, "def": 1300, "spd": 130 }, "eidolon": 6, "skillPriority": 2 }
+        ],
+        "enemy": { "name": "Mob", "count": 2, "hp": 120000, "atk": 400, "spd": 120, "level": 85, "toughness": 120, "weaknesses": ["Imaginary"] },
+        "cycles": 8,
+        "seed": 1
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "mydei_skill_label",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Deaths are Legion, Regrets are None is the base Skill (Blast).",
+      "fixtures": ["mydei-e0"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Mydei", "label": "Deaths are Legion (main)" } }
+    },
+    {
+      "id": "mydei_skill_adj",
+      "layer": "structure",
+      "claim": "The Skill hits adjacent targets.",
+      "fixtures": ["mydei-e0"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Mydei", "label": "Deaths are Legion (adj)" } }
+    },
+    {
+      "id": "mydei_basic_never",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "The Skill consumes HP (not Skill Points), so the Basic ATK Vow of Voyage is never used.",
+      "fixtures": ["mydei-e0"],
+      "assertion": { "assert": "absent", "of": { "type": "DAMAGE_DEALT", "source": "Mydei", "label": "Vow of Voyage" } }
+    },
+    {
+      "id": "mydei_vendetta",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Blood for Blood: at 100 Charge Mydei enters Vendetta (mydei_vend).",
+      "fixtures": ["mydei-e0"],
+      "assertion": { "assert": "buff", "id": "mydei_vend", "target": "Mydei" }
+    },
+    {
+      "id": "mydei_kingslayer",
+      "layer": "structure",
+      "claim": "In Vendetta the auto-Skill is Kingslayer Be King (Enhanced Skill).",
+      "fixtures": ["mydei-e0"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Mydei", "label": "Kingslayer Be King (main)" } }
+    },
+    {
+      "id": "mydei_godslayer",
+      "layer": "interactions",
+      "claim": "At 150 Charge in Vendetta Mydei uses Godslayer Be God.",
+      "fixtures": ["mydei-e0"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Mydei", "label": "Godslayer Be God (1/2)" } }
+    },
+    {
+      "id": "mydei_ult",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Throne of Bones is the Ultimate (Blast).",
+      "fixtures": ["mydei-e0"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Mydei", "label": "Throne of Bones (main)" } }
+    },
+    {
+      "id": "mydei_e6_vendetta_start",
+      "layer": "interactions",
+      "claim": "E6: Mydei enters Vendetta immediately at battle start.",
+      "fixtures": ["mydei-e6"],
+      "assertion": { "assert": "buff", "id": "mydei_vend", "target": "Mydei" }
+    },
+    {
+      "id": "mydei_e6_godslayer",
+      "layer": "interactions",
+      "claim": "E6: Godslayer Be God fires at 100 Charge.",
+      "fixtures": ["mydei-e6"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Mydei", "label": "Godslayer Be God (1/2)" } }
+    },
+    {
+      "id": "mydei_no_attack_action",
+      "layer": "structure",
+      "claim": "The kit exposes Basic/Skill/Ultimate, never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Mydei", "action": "attack" } }
+    }
+  ]
+}

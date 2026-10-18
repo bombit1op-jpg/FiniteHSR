@@ -1,0 +1,532 @@
+{
+  "kit": "robin",
+  "slot": "skill",
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Robin E0 solo vs 3 Physical-weak Elite (level 95, 240 Toughness), 3 cycles — A2 advances Robin 25% at battle start (harmony.ts:1634-1635) and Talent 130904 grants +20% CRIT DMG; Ultimate 130903 opens the Concerto state with a SPD-90 Concerto Countdown; with no ally attackers, Vox Harmonique Additional DMG and the talent's +2 Energy regen never fire, and Robin's own scheduled Concerto basics deal no damage (perform early-return harmony.ts:1681)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "team-sushang",
+      "env": "Robin E0 with Sushang (kitId sushang) vs 3 Physical-weak Elite (level 95, 240 Toughness), 3 cycles — Skill 130902 'Pinion's Aria' grants all allies +50% DMG for 3 turns (duration ticks on Robin's turns, harmony.ts:1710-1713) and is re-cast on expiry; Ultimate 130903 Concerto makes Sushang act immediately (harmony.ts:1702-1703) and Robin's Vox Harmonique Additional DMG fires once per Sushang attack; countdown end gives Robin an immediate action (harmony.ts:1674-1677)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 1800,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "solo_skill_4",
+      "layer": "structure",
+      "claim": "Solo Robin casts Skill 130902 'Pinion's Aria' 4 times in 3 cycles (decide harmony.ts:1645 prefers Skill while SP >= 1 and skillPriority > 0).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Robin",
+          "action": "skill"
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "solo_basic_4",
+      "layer": "structure",
+      "claim": "4 scheduled basic actions in the solo battle — 2 outside Concerto that hit, 2 taken during Concerto where perform() early-returns (harmony.ts:1681 'rt.concerto -> return', canon 130903 'cannot enter her turn or take action').",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Robin",
+          "action": "basic"
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "ult_cast_1",
+      "layer": "structure",
+      "claim": "Ultimate 130903 fires exactly once in both fixtures: decide() opens with ult at full Energy 160 (harmony.ts:1684 gate via decide), the kit zeroes the pool (harmony.ts:1685), and 160 Energy regens only once in 3 cycles.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Robin",
+          "action": "ultimate"
+        },
+        "value": 1
+      }
+    },
+    {
+      "id": "solo_wingflip_6",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic 130901 'Wingflip White Noise' is a 3-hit attack (canon 130901 notes 'dealt in 3 hits ... 33% + 33% + 34%'; harmony.ts:1725 split [0.33,0.33,0.34]) — only the 2 post-Concerto basics hit, so 6 hits solo.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Robin",
+          "label": "Wingflip White Noise"
+        },
+        "value": 6
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "team_skill_4",
+      "layer": "structure",
+      "claim": "4 Skill casts in the team battle, same cadence as solo (Aria expires 3 Robin-turns after each cast, harmony.ts:1710-1713 tickOnSource).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Robin",
+          "action": "skill"
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "team_basic_3",
+      "layer": "structure",
+      "claim": "3 scheduled basic actions in the team battle — only T17 lands outside Concerto (T10/T15 fall inside the Concerto window).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Robin",
+          "action": "basic"
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "team_vox_4",
+      "layer": "structure",
+      "claim": "While Concerto is active, each ally attack triggers one 'Vox Harmonique (Additional)' hit by Robin, deduplicated per attackNo (harmony.ts:1658-1667, canon 130903 'after every attack by ally targets ... for 1 time') — 4 procs off Sushang's attacks in 3 cycles.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Robin",
+          "label": "Vox Harmonique (Additional)"
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "solo_no_vox",
+      "layer": "structure",
+      "claim": "Solo negative: no Vox Harmonique Additional DMG ever fires — the Concerto hook requires an attacking ally other than Robin (harmony.ts:1654-1658 attacker !== robin), and solo has none.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "HIT_START",
+          "source": "Robin",
+          "label": "Vox Harmonique (Additional)"
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "ult_cost_160",
+      "layer": "parameters",
+      "claim": "ENERGY_LOSS reason 'ult_cost' books amount 160 = the full pool (energyMax 160, harmony.ts:1630; kit zeroes Energy harmony.ts:1685 and adds none during the cast, so the TurnManager.ts:372-374 delta is exactly 160) — both fixtures.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Robin",
+          "payload": {
+            "reason": "ult_cost"
+          }
+        },
+        "field": "amount",
+        "value": 160
+      }
+    },
+    {
+      "id": "ult_refund_5",
+      "layer": "parameters",
+      "claim": "The paid Ultimate cast grants the generic castUlt +5 Energy refund to Robin (TurnManager.ts:375).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "target": "Robin",
+          "payload": {
+            "n": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "skill_energy_first_30",
+      "layer": "parameters",
+      "claim": "The Skill regenerates 30 Energy (harmony.ts:1709 sim.gainEnergy(u, 30)) and is each battle's first Robin Energy gain (80 -> 110).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Robin"
+        },
+        "field": "n",
+        "value": 30,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "team_a6_gain_5_x4",
+      "layer": "parameters",
+      "claim": "Trace A6 Sequential Passage adds +5 Energy on every Skill (harmony.ts:1715-1716, comment 'A6') — 4 team Skill casts => 4 gains of n=5 sourced from Robin.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Robin",
+          "payload": {
+            "n": 5
+          }
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "basic_energy_n20_x1",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic regenerates 20 Energy (harmony.ts:1723); Concerto basics grant nothing (early return harmony.ts:1681) and each fixture's second free basic clips against the 160 cap (actual delta 5), leaving exactly one observable n=20 gain per fixture.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Robin",
+          "payload": {
+            "n": 20
+          }
+        },
+        "value": 1
+      }
+    },
+    {
+      "id": "aria_dmg_all_50",
+      "layer": "parameters",
+      "claim": "Pinion's Aria grants +50% All-Type DMG (canon 130902 level-10 param #1 = 0.5; harmony.ts:1713 mods dmgAll on robin_aria).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "robin_aria",
+        "stat": "dmgAll",
+        "value": 0.5,
+        "tol": 0.01
+      }
+    },
+    {
+      "id": "talent_cd_20",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "Talent Tonal Resonance grants all allies +20% CRIT DMG with permanent duration (canon 130904 level-10 param #1 = 0.2; harmony.ts:1637-1640 turns: Infinity, applied at battle start).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "robin_cd",
+        "stat": "critDmg",
+        "value": 0.2,
+        "tol": 0.01
+      }
+    },
+    {
+      "id": "skill_sp_cost_4",
+      "layer": "parameters",
+      "claim": "Each Skill cast spends 1 SP (harmony.ts:1708 sim.spendSp(1)) — 4 casts => 4 SP_LOSS events, both fixtures.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_LOSS",
+          "source": "Robin"
+        },
+        "value": 4
+      }
+    },
+    {
+      "id": "solo_basic_sp_gain_2",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic spends no SP and returns +1 (harmony.ts:1722 sim.gainSp(1)); Concerto basics grant nothing (harmony.ts:1681), so only the 2 post-Concerto solo basics produce SP_GAIN events.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_GAIN",
+          "source": "Robin"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "order_skill_before_aria_buff",
+      "ability": "skill",
+      "layer": "ordering",
+      "claim": "Skill resolution order: ABILITY_USED fires when the action starts, then perform() spends SP (harmony.ts:1708) and applies robin_aria (harmony.ts:1713).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ABILITY_USED",
+            "source": "Robin",
+            "action": "skill"
+          }
+        ],
+        "after": [
+          {
+            "type": "BUFF_APPLIED",
+            "payload": {
+              "id": "robin_aria"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "order_skill_energy_before_note",
+      "layer": "ordering",
+      "claim": "The Skill's +30 Energy (harmony.ts:1709) is granted before the 'uses Pinion's Aria' note is logged (harmony.ts:1717).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ENERGY_GAIN",
+            "source": "Robin",
+            "payload": {
+              "n": 30
+            }
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "uses Pinion's Aria"
+          }
+        ]
+      }
+    },
+    {
+      "id": "order_concerto_buffs_before_countdown",
+      "ability": "ultimate",
+      "layer": "ordering",
+      "claim": "Ultimate resolution order: concertoBuffs applies robin_concerto to allies (harmony.ts:1690) before the Concerto Countdown unit is registered (harmony.ts:1692-1699).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "BUFF_APPLIED",
+            "payload": {
+              "id": "robin_concerto"
+            }
+          }
+        ],
+        "after": [
+          {
+            "type": "SUMMON_CREATED",
+            "target": "Concerto Countdown"
+          }
+        ]
+      }
+    },
+    {
+      "id": "order_ult_cost_before_refund",
+      "layer": "ordering",
+      "claim": "TurnManager.ts:374 emits ENERGY_LOSS 'ult_cost' before TurnManager.ts:375 grants the +5 refund.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ENERGY_LOSS",
+            "source": "Robin",
+            "payload": {
+              "reason": "ult_cost"
+            }
+          }
+        ],
+        "after": [
+          {
+            "type": "ENERGY_GAIN",
+            "target": "Robin",
+            "payload": {
+              "n": 5,
+              "total": 5
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "aria_on_sushang_3t",
+      "layer": "interactions",
+      "claim": "Pinion's Aria lands on every ally, incl. Sushang, for 3 turns with duration ticking on Robin's turns (harmony.ts:1711-1713 tickOnSource, canon 130902 'duration decreases by 1 at the start of Robin's every turn').",
+      "assertion": {
+        "assert": "buff",
+        "id": "robin_aria",
+        "target": "Sushang",
+        "turns": 3
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "aria_note_per_skill",
+      "layer": "interactions",
+      "claim": "Every Skill cast logs 'uses Pinion's Aria (team DMG+)' (harmony.ts:1717) — 4 notes in each fixture.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "uses Pinion's Aria"
+        },
+        "value": 4
+      }
+    },
+    {
+      "id": "talent_cd_on_ally",
+      "layer": "interactions",
+      "claim": "The Talent's CRIT DMG buff is applied to every living ally, not just Robin (harmony.ts:1637-1640 loop over allies; team fixture shows robin_cd on both Robin and Sushang).",
+      "assertion": {
+        "assert": "buff",
+        "id": "robin_cd",
+        "target": "Sushang"
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "concerto_makes_teammate_act",
+      "layer": "interactions",
+      "claim": "Casting the Ultimate immediately queues Sushang's action (harmony.ts:1701-1703 sim.immediateTurn for every other ally, canon 130903 'makes all teammates ... immediately take action') — Sushang receives 3 EXTRA_TURN events (Concerto queue + her own Dawn Herald follow-ups) across the battle.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "EXTRA_TURN",
+          "target": "Sushang"
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "solo_no_talent_energy",
+      "layer": "interactions",
+      "claim": "Solo negative: the Talent's +2 Energy regen never fires — harmony.ts:1654 requires the attacker to be an ally other than Robin, and solo has none, so no n=2 ENERGY_GAIN event exists.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Robin",
+          "payload": {
+            "n": 2
+          }
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    }
+  ]
+}

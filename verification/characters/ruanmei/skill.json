@@ -1,0 +1,503 @@
+{
+  "kit": "ruanmei",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/130301+130302+130303+130304 + bonus_abilities",
+    "confidence": "verified",
+    "note": "Basic Threading Fragrance (130301) deals Ice DMG. Skill (130302) refreshes Overtone: DMG bonus +0.32, Weakness Break Efficiency +0.50 for 3 turns, and refunds +30 Energy. Ultimate (130303) applies Ruan Mei's Field for 2 turns: all allies gain 25% RES PEN (rm_field); canon deals Ice DMG on cast. Talent (130304 rm_overtone_dmg/rm_overtone_wbe are managed per-skill). A2 (130304 part) Break Effect +0.2."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Ruan Mei E0 solo vs 3 Ice-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "ruanmei",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "solo-3c-s2",
+      "env": "Same battle, seed 17 (rotation variant)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "ruanmei",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 17
+      }
+    },
+    {
+      "id": "solo-1e",
+      "env": "Single Elite dummy (single-target rotation), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "ruanmei",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "rm-duo",
+      "env": "Ruan Mei E0 + Dan Heng ally vs 1 Ice-weak Elite dummy, 2 cycles, seed 7 - Talent SPD buff lands on the ally",
+      "battle": {
+        "team": [
+          { "kitId": "ruanmei", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 0 },
+          { "kitId": "danheng", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 110 }, "eidolon": 0 }
+        ],
+        "enemy": { "name": "Elite", "count": 1, "hp": 6000000, "atk": 800, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Ice"], "res": 0 },
+        "cycles": 2,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "rm_skill_action",
+      "layer": "structure",
+      "claim": "The Skill (130302) is Ruan Mei's SP-consuming action, 4 casts in the fixture.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Ruan Mei",
+          "action": "skill"
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_basic_hits",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic Threading Fragrance (130301) is a single Ice hit per cast (2 casts = 2 hits).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Ruan Mei",
+          "label": "Threading Fragrance"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_basic_mult",
+      "layer": "parameters",
+      "claim": "Threading Fragrance L6 total is 100% of ATK as a single hit (mult 1.0).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Ruan Mei",
+          "label": "Threading Fragrance"
+        },
+        "field": "mult",
+        "value": 1
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_ult_action",
+      "layer": "structure",
+      "claim": "The Ultimate is used twice in the fixture.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Ruan Mei",
+          "action": "ultimate"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_ult_no_damage",
+      "layer": "structure",
+      "claim": "The Ultimate applies the Zone only and deals no enemy damage or toughness damage: raw 130303 has a Zone + All-Type RES PEN + Thanatoplum Rebloom only, with no direct damage component (the deviation's 'canon Ice DMG' does not exist in the dataset). DAMAGE events counted here come from Basic/Skill.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Ruan Mei"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_ult_cost",
+      "layer": "parameters",
+      "claim": "The Ultimate consumes Energy at cast; it spends 130 on the first cast (full bar).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Ruan Mei"
+        },
+        "field": "amount",
+        "value": 130,
+        "pick": "first"
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_skill_energy",
+      "layer": "parameters",
+      "claim": "Each Skill cast refunds +30 Energy (130302 #2) — 4 uncapped gains of 30.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Ruan Mei",
+          "target": "Ruan Mei",
+          "payload": {
+            "n": 30
+          }
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_energy_sum",
+      "layer": "parameters",
+      "claim": "Across the fixture Ruan Mei regenerates exactly 235 Energy.",
+      "assertion": {
+        "assert": "energy",
+        "who": "Ruan Mei",
+        "atLeast": 235,
+        "atMost": 235
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_overtone_dmg",
+      "layer": "interactions",
+      "claim": "Overtone's all-DMG bonus is +0.32 for 3 turns (130302 #2).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "rm_overtone_dmg",
+        "stat": "dmgAll",
+        "value": 0.32
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_overtone_wbe",
+      "layer": "interactions",
+      "claim": "Overtone raises Weakness Break Efficiency by 0.50 for 3 turns (130302 #3).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "rm_overtone_wbe",
+        "stat": "wbe",
+        "value": 0.5
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_field_buff",
+      "layer": "interactions",
+      "claim": "The Ultimate's Field grants the team 0.25 RES PEN (rm_field, 130303 #2).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "rm_field",
+        "stat": "resPenAll",
+        "value": 0.25
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_field_turns",
+      "layer": "parameters",
+      "claim": "The Field lasts 2 turns (130303).",
+      "assertion": {
+        "assert": "buff",
+        "id": "rm_field",
+        "turns": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_ult_refresh_field",
+      "layer": "ordering",
+      "claim": "The Field follows the Ultimate action (cast 1) and is refreshed on the second cast.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ABILITY_USED",
+            "source": "Ruan Mei",
+            "action": "ultimate"
+          }
+        ],
+        "after": [
+          {
+            "type": "BUFF_APPLIED",
+            "payload": {
+              "id": "rm_field"
+            }
+          }
+        ]
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_ult_full",
+      "layer": "interactions",
+      "claim": "Ruan Mei reaches full Energy once during the fixture.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_FULL",
+          "source": "Ruan Mei"
+        },
+        "value": 1
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_no_attack",
+      "layer": "structure",
+      "claim": "Ruan Mei never falls back to a generic attack action.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Ruan Mei",
+          "action": "attack"
+        }
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_after_state",
+      "layer": "interactions",
+      "claim": "Fixture end state: 5806/10000 HP, 40/130 Energy, 1 SP, 4 active buffs.",
+      "assertion": {
+        "assert": "unitState",
+        "who": "Ruan Mei",
+        "field": "hp",
+        "value": 5806
+      },
+      "after": [
+        {
+          "unit": "Ruan Mei",
+          "stat": "hp",
+          "op": "eq",
+          "value": 5806
+        },
+        {
+          "unit": "Ruan Mei",
+          "stat": "energy",
+          "op": "eq",
+          "value": 40
+        },
+        {
+          "unit": "Ruan Mei",
+          "stat": "sp",
+          "op": "eq",
+          "value": 1
+        },
+        {
+          "unit": "Ruan Mei",
+          "stat": "buffs",
+          "op": "eq",
+          "value": 4
+        }
+      ],
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_s2_rotation",
+      "layer": "structure",
+      "claim": "Seed 17 keeps the full rotation: Skill and Ultimate still cast, still no generic attack.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Ruan Mei",
+          "action": "skill"
+        }
+      },
+      "fixtures": [
+        "solo-3c-s2"
+      ]
+    },
+    {
+      "id": "rm_s2_no_attack",
+      "layer": "structure",
+      "claim": "Seed 17: no generic attack fallback.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Ruan Mei",
+          "action": "attack"
+        }
+      },
+      "fixtures": [
+        "solo-3c-s2"
+      ]
+    },
+    {
+      "id": "rm_1e_single",
+      "layer": "structure",
+      "claim": "Single-target fixture still runs the full rotation: Skill and Ultimate fire, Overtone is applied.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Ruan Mei",
+          "action": "ultimate"
+        }
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "rm_1e_no_attack",
+      "layer": "structure",
+      "claim": "Single-target fixture: no generic attack fallback.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Ruan Mei",
+          "action": "attack"
+        }
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "rm_technique",
+      "ability": "technique",
+      "layer": "interactions",
+      "claim": "Technique Silken Serenade is modeled as an unconditional battle-start Overtone buff (rm_overtone_wbe) applied in onStart.",
+      "assertion": {
+        "assert": "buff",
+        "id": "rm_overtone_wbe"
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "rm_talent_spd",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Somatotypical Helix: SPD up for teammates, excluding Ruan Mei herself, via rm_talent_spd (harmony.ts:1574-1578).",
+      "assertion": { "assert": "buff", "id": "rm_talent_spd" },
+      "fixtures": ["rm-duo"]
+    }
+  ],
+  "golds": []
+}

@@ -1,0 +1,111 @@
+{
+  "kit": "sunday",
+  "slot": "interactions",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Sunday/bonus_abilities Haven in Palm",
+    "confidence": "verified",
+    "note": "A6 'Haven in Palm': when using Skill, dispels 1 debuff from the target. Implemented via sim.dispel on the Skill target; EnemySpec.debuff provides the opening ally debuff to observe against. The old no-op removed a non-debuff gear buff and broke the '+1 SP on Skill on The Beatified' gate — dispel now only touches isDebuff()-tagged buffs. See src/core/kits/harmony.ts."
+  },
+  "fixtures": [
+    {
+      "id": "dispel_ref",
+      "env": "Sunday E6 + Bronya ally + opening debuff on Bronya vs 1 Imaginary-weak Boss (Lv120), 5 cycles, seed 11",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sunday",
+            "stats": {
+              "hp": 10000,
+              "atk": 1300,
+              "def": 600,
+              "spd": 130
+            },
+            "eidolon": 6
+          },
+          {
+            "kitId": "bronya",
+            "name": "Bronya",
+            "stats": {
+              "hp": 10000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 134
+            }
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 200000,
+          "atk": 140,
+          "spd": 150,
+          "level": 120,
+          "toughness": 1800,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "debuff": {
+            "id": "curse",
+            "name": "Curse of Thorns",
+            "mods": [
+              {
+                "stat": "defRed",
+                "value": 0.2
+              }
+            ],
+            "targetName": "Bronya"
+          }
+        },
+        "cycles": 5,
+        "seed": 11
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "sunday_fixture_runs",
+      "layer": "structure",
+      "claim": "The paired battle executes deterministically with no invariant break.",
+      "fixtures": [
+        "dispel_ref"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "BATTLE_END"
+        }
+      }
+    },
+    {
+      "id": "sunday_a6_dispel",
+      "layer": "interactions",
+      "claim": "A6 'Haven in Palm': using the Skill on Bronya removes the opening debuff from her.",
+      "fixtures": [
+        "dispel_ref"
+      ],
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "DEBUFF_APPLIED",
+            "target": "Bronya",
+            "payload": {
+              "id": "curse"
+            }
+          }
+        ],
+        "after": [
+          {
+            "type": "DISPELLED",
+            "target": "Bronya",
+            "payload": {
+              "id": "curse"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "golds": []
+}

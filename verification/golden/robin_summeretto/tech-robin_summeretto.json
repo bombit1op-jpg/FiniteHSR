@@ -1,0 +1,19 @@
+{
+ "input": {
+  "kit": "robin_summeretto",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Robin • Summeretto alone, technique \"We Are the Melody\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Robin • Summeretto|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|Robin • Summeretto|Robin • Summeretto|-|- [1,Infinity]",
+  "TECHNIQUE_APPLIED|Robin • Summeretto|-|-|-",
+  "ACTION_ADVANCE|Robin • Summeretto|Robin • Summeretto|-|- [0.2,73.3945]",
+  "BUFF_APPLIED|-|Robin • Summeretto|-|- [1,2]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

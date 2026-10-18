@@ -1,0 +1,464 @@
+{
+  "kit": "pela",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Pela/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 +5 Energy when an enemy is defeated - the fixture enemy never dies (deviation); E2 using Skill to dispel increases SPD +10% 2 turns (pela_e2 spdPct 0.1); E3 Skill Lv.+2/Basic Lv.+1 raises Frost Shot 0.5 -> 0.55; E4 Skill reduces target Ice RES -12% 2 turns (pela_e4 vuln:Ice 0.12); E5 Ult Lv.+2/Talent Lv.+2 raises Zone of Suppression 1.0 -> 1.08; E6 after attacking a debuffed enemy deals Ice Additional DMG = 40% ATK (label \"E6 Feeble Pursuit\", mult 0.4). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "pela E0 — eidolon ladder rung, cloned from pela/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "pela",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0,
+          "buff": { "id": "elite_rage", "name": "Enraged", "mods": [{ "stat": "atkPct", "value": 0.2 }] }
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "pela E1 — eidolon ladder rung, cloned from pela/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "pela",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0,
+          "buff": { "id": "elite_rage", "name": "Enraged", "mods": [{ "stat": "atkPct", "value": 0.2 }] }
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "pela E2 — eidolon ladder rung, cloned from pela/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "pela",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0,
+          "buff": { "id": "elite_rage", "name": "Enraged", "mods": [{ "stat": "atkPct", "value": 0.2 }] }
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "pela E3 — eidolon ladder rung, cloned from pela/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "pela",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0,
+          "buff": { "id": "elite_rage", "name": "Enraged", "mods": [{ "stat": "atkPct", "value": 0.2 }] }
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "pela E4 — eidolon ladder rung, cloned from pela/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "pela",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0,
+          "buff": { "id": "elite_rage", "name": "Enraged", "mods": [{ "stat": "atkPct", "value": 0.2 }] }
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "pela E5 — eidolon ladder rung, cloned from pela/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "pela",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0,
+          "buff": { "id": "elite_rage", "name": "Enraged", "mods": [{ "stat": "atkPct", "value": 0.2 }] }
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "pela E6 — eidolon ladder rung, cloned from pela/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "pela",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0,
+          "buff": { "id": "elite_rage", "name": "Enraged", "mods": [{ "stat": "atkPct", "value": 0.2 }] }
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "pela_e2_present",
+      "layer": "interactions",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "claim": "E2 \"Adamant Charge\": using Skill to dispel increases SPD +10% for 2 turns (pela_e2).",
+      "assertion": {
+        "assert": "buff",
+        "id": "pela_e2"
+      }
+    },
+    {
+      "id": "pela_e2_locked",
+      "layer": "interactions",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "claim": "Cumulative unlock: pela_e2 must NOT be active below rank 2.",
+      "assertion": {
+        "assert": "noBuff",
+        "id": "pela_e2"
+      }
+    },
+    {
+      "id": "pela_e2_stat",
+      "layer": "parameters",
+      "fixtures": [
+        "e2"
+      ],
+      "claim": "The E2 buff carries spdPct 0.10 (canon ranks/2).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "pela_e2",
+        "stat": "spdPct",
+        "value": 0.1
+      }
+    },
+    {
+      "id": "pela_e3_present",
+      "layer": "parameters",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "claim": "E3 Basic ATK Lv.+1 raises Frost Shot 0.5 -> 0.55.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Frost Shot"
+        },
+        "field": "mult",
+        "value": 0.55,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "pela_e3_locked",
+      "layer": "parameters",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "claim": "Below E3 Frost Shot stays at the Lv.6 floor 0.5 (cumulative unlock).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Frost Shot"
+        },
+        "field": "mult",
+        "value": 0.5,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "pela_e4_present",
+      "layer": "interactions",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "claim": "E4 \"Full Analysis\": Skill reduces the target enemy's Ice RES by 12% for 2 turns (pela_e4).",
+      "assertion": {
+        "assert": "buff",
+        "id": "pela_e4"
+      }
+    },
+    {
+      "id": "pela_e4_locked",
+      "layer": "interactions",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "claim": "Cumulative unlock: pela_e4 must NOT be active below rank 4.",
+      "assertion": {
+        "assert": "noBuff",
+        "id": "pela_e4"
+      }
+    },
+    {
+      "id": "pela_e4_stat",
+      "layer": "parameters",
+      "fixtures": [
+        "e4"
+      ],
+      "claim": "The E4 debuff carries vuln:Ice 0.12 (canon ranks/4).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "pela_e4",
+        "stat": "vuln:Ice",
+        "value": 0.12
+      }
+    },
+    {
+      "id": "pela_e5_present",
+      "layer": "parameters",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "claim": "E5 Ultimate Lv.+2 raises Zone of Suppression 1.0 -> 1.08.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Zone of Suppression"
+        },
+        "field": "mult",
+        "value": 1.08,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "pela_e5_locked",
+      "layer": "parameters",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "claim": "Below E5 Zone of Suppression stays at the Lv.10 floor 1.0 (cumulative unlock).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Zone of Suppression"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "pela_e6_present",
+      "layer": "parameters",
+      "fixtures": [
+        "e6"
+      ],
+      "claim": "E6 \"Feeble Pursuit\": after attacking a debuffed enemy deals Ice Additional DMG = 40% ATK.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "E6 Feeble Pursuit"
+        },
+        "field": "mult",
+        "value": 0.4,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "pela_e6_locked",
+      "layer": "interactions",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "claim": "Cumulative unlock: the E6 additional hit must NOT appear below rank 6.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "E6 Feeble Pursuit"
+        }
+      }
+    }
+  ],
+  "golds": []
+}

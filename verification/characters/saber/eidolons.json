@@ -1,0 +1,258 @@
+{
+  "kit": "saber",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Saber/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 Ultimate DMG +60% (Excalibur 2.8 -> 4.48); E2 1% DEF-ignore per Core Resonance, cap 15 (saber_e2); E3 Ultimate Lv.+2/Basic Lv.+1 (Excalibur 4.48 -> 4.928); E4 Wind RES PEN +8%, +4% after each Ultimate up to 3 stacks (saber_e4); E5 Skill Lv.+2/Talent Lv.+2 (Strike Air main 0.15 -> 0.165); E6 Ultimate Wind RES PEN +20% and overflow Energy cap 200 (saber_e6_pen, ENERGY_GAIN 265 -> 550). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "saber E0 — eidolon ladder rung, cloned from saber/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "saber",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "saber E1 — eidolon ladder rung, cloned from saber/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "saber",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "saber E2 — eidolon ladder rung, cloned from saber/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "saber",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "saber E3 — eidolon ladder rung, cloned from saber/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "saber",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "saber E4 — eidolon ladder rung, cloned from saber/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "saber",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "saber E5 — eidolon ladder rung, cloned from saber/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "saber",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "saber E6 — eidolon ladder rung, cloned from saber/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "saber",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {"id":"saber_e1_present","layer":"parameters","claim":"E1: Ultimate DMG +60% raises Excalibur 2.8 -> 4.48.","fixtures":["e1","e2"],"assertion":{"assert":"payload","of":{"type":"DAMAGE_DEALT","label":"Excalibur"},"field":"mult","value":4.48,"tol":0.01,"pick":"first"}},
+    {"id":"saber_e1_locked","layer":"parameters","claim":"Below E1 Excalibur stays at 2.8.","fixtures":["e0"],"assertion":{"assert":"payload","of":{"type":"DAMAGE_DEALT","label":"Excalibur"},"field":"mult","value":2.8,"tol":0.01,"pick":"first"}},
+    {"id":"saber_e2_present","layer":"interactions","claim":"E2: each Core Resonance point grants 1% DEF-ignore (cap 15) - saber_e2.","fixtures":["e2","e3","e4","e5","e6"],"assertion":{"assert":"buff","id":"saber_e2"}},
+    {"id":"saber_e2_locked","layer":"interactions","claim":"Below E2 no saber_e2 DEF-ignore buff is applied.","fixtures":["e0","e1"],"assertion":{"assert":"noBuff","id":"saber_e2"}},
+    {"id":"saber_e3_present","layer":"parameters","claim":"E3: Ultimate Lv.+2/Basic Lv.+1 raise Excalibur 4.48 -> 4.928.","fixtures":["e3","e4","e5","e6"],"assertion":{"assert":"payload","of":{"type":"DAMAGE_DEALT","label":"Excalibur"},"field":"mult","value":4.928,"tol":0.01,"pick":"first"}},
+    {"id":"saber_e3_locked","layer":"parameters","claim":"Below E3 Excalibur holds the E1 rung 4.48.","fixtures":["e1","e2"],"assertion":{"assert":"payload","of":{"type":"DAMAGE_DEALT","label":"Excalibur"},"field":"mult","value":4.48,"tol":0.01,"pick":"first"}},
+    {"id":"saber_e4_present","layer":"interactions","claim":"E4: +8% Wind RES PEN, +4% after each Ultimate up to 3 stacks (saber_e4).","fixtures":["e4","e5","e6"],"assertion":{"assert":"buff","id":"saber_e4"}},
+    {"id":"saber_e4_locked","layer":"interactions","claim":"Below E4 no saber_e4 Wind RES PEN buff is applied.","fixtures":["e0","e1","e2","e3"],"assertion":{"assert":"noBuff","id":"saber_e4"}},
+    {"id":"saber_e5_present","layer":"parameters","claim":"E5: Skill Lv.+2/Talent Lv.+2 raise Strike Air (main) 0.15 -> 0.165.","fixtures":["e5","e6"],"assertion":{"assert":"payload","of":{"type":"DAMAGE_DEALT","label":"Strike Air (main)"},"field":"mult","value":0.165,"tol":0.01,"pick":"first"}},
+    {"id":"saber_e5_locked","layer":"parameters","claim":"Below E5 Strike Air (main) stays at 0.15.","fixtures":["e0","e1","e2","e3","e4"],"assertion":{"assert":"payload","of":{"type":"DAMAGE_DEALT","label":"Strike Air (main)"},"field":"mult","value":0.15,"tol":0.01,"pick":"first"}},
+    {"id":"saber_e6_present","layer":"interactions","claim":"E6: Ultimate Wind RES PEN +20% and overflow Energy cap 200 (saber_e6_pen).","fixtures":["e6"],"assertion":{"assert":"buff","id":"saber_e6_pen"}},
+    {"id":"saber_e6_locked","layer":"interactions","claim":"Below E6 no saber_e6_pen buff is applied.","fixtures":["e0","e1","e2","e3","e4","e5"],"assertion":{"assert":"noBuff","id":"saber_e6_pen"}}
+  ],
+  "golds": []
+}

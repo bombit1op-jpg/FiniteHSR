@@ -1,0 +1,23 @@
+{
+ "input": {
+  "kit": "serval",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Serval alone, technique \"Good Night, Belobog\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Serval|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "ENERGY_GAIN|Serval|Serval|-|- [0,100,15,65]",
+  "TECHNIQUE_APPLIED|Serval|-|-|-",
+  "HIT_START|Serval|Ice Edge|Good Night, Belobog|basic [1,10,30,5000000,652]",
+  "DAMAGE_CALCULATED|Serval|Ice Edge|-|basic [0,0,0,0,0,0,0,0.237,0.5,1,146,652]",
+  "DAMAGE_DEALT|Serval|Ice Edge|Good Night, Belobog|basic [0.5,146,4999854,5000000,652]",
+  "TOUGHNESS_DAMAGE|Serval|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Serval|Ice Edge|-|basic [146,4999854]",
+  "DOT_APPLIED|-|Ice Edge|-|- [1,3,678]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

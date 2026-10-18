@@ -1,0 +1,22 @@
+{
+ "input": {
+  "kit": "acheron",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Acheron alone, technique \"Quadrivalent Ascendance\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Acheron|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [5,Infinity]",
+  "TECHNIQUE_APPLIED|Acheron|-|-|-",
+  "HIT_START|Acheron|Ice Edge|Quadrivalent Ascendance|basic [1,10,30,5000000,893.44]",
+  "DAMAGE_CALCULATED|Acheron|Ice Edge|-|basic [0,0,0,0,0,0,0.05,0.08,1,2,868,893]",
+  "DAMAGE_DEALT|Acheron|Ice Edge|Quadrivalent Ascendance|basic [2,4999132,5000000,868,893.44]",
+  "TOUGHNESS_DAMAGE|Acheron|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Acheron|Ice Edge|-|basic [4999132,868]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

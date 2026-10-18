@@ -1,0 +1,178 @@
+{
+  "kit": "misha",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/131201+131202+131203+131204 + bonus_abilities",
+    "confidence": "verified",
+    "note": "Basic E—Excuse Me, Please! (131201) 100% total at L6/L10 (ladder tops at 100%). Skill R—Room Service! (131202) deals #1 = 200% (L10) to the primary and #2 = 80% to adjacent enemies, and Misha gains #3 = 1 Skill Point (stacks to +3). Ultimate G—Gonna Be Late! (131203) deals #1 = 300% to the designated enemy and #2 = 60% random hits to other enemies (#3 = 20% chance to Freeze for #4 = 1 turn); the number of random hits scales with Skill Points spent (base 3). #5 = 10 ... Frozen targets take #4 = 30% of Misha's ATK as Additional DMG per hit. Talent 131204: each Skill Point spent regenerates #1 = 2 Energy (engine ladder L10 = 1). Energy limit 100."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Misha E0 solo vs 3 Ice-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "misha",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Ice"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "m_skill_action",
+      "layer": "structure",
+      "claim": "R—Room Service! (131202) is Misha's damaging Skill action.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Misha", "action": "skill" } }
+    },
+    {
+      "id": "m_skill_main_hits",
+      "layer": "structure",
+      "claim": "R—Room Service! hits the designated enemy once per cast (4 Skill casts in the fixture).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Misha", "label": "R—Room Service! (main)" }, "value": 4 }
+    },
+    {
+      "id": "m_skill_adj_hits",
+      "layer": "structure",
+      "claim": "R—Room Service! is a Blast attack: 2 adjacent hits per cast × 4 casts.",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Misha", "label": "R—Room Service! (adj)" }, "value": 8 }
+    },
+    {
+      "id": "m_ult_action",
+      "layer": "structure",
+      "claim": "G—Gonna Be Late! (131203) is Misha's Ultimate action.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Misha", "action": "ultimate" } }
+    },
+    {
+      "id": "m_ult_first_hits",
+      "layer": "structure",
+      "claim": "The Ultimate's first hit (single-target, 60% L10) fires once per Ultimate (2 Ultimates).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Misha", "label": "First hit — G—Gonna Be Late!" }, "value": 2 }
+    },
+    {
+      "id": "m_ult_random_hits",
+      "layer": "structure",
+      "claim": "The Ultimate's remaining random hits (60% L10 each) scale with Skill Points spent: 6 random hits per Ultimate in the fixture → 12 total.",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Misha", "label": "G—Gonna Be Late!" }, "value": 12 }
+    },
+    {
+      "id": "m_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic E—Excuse Me, Please! (131201) is available and used in the fixture.",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Misha", "label": "E—Excuse Me, Please!" } }
+    },
+    {
+      "id": "m_no_attack_action",
+      "layer": "structure",
+      "claim": "Misha's kit exposes Basic ATK, Skill and Ultimate as its action set; it never falls back to a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Misha", "action": "attack" } }
+    },
+    {
+      "id": "m_skill_main_mult",
+      "layer": "parameters",
+      "claim": "R—Room Service! primary hit L10 = 200% of ATK (131202 #1).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Misha", "label": "R—Room Service! (main)" }, "field": "mult", "value": 2 }
+    },
+    {
+      "id": "m_skill_adj_mult",
+      "layer": "parameters",
+      "claim": "R—Room Service! adjacent hit L10 = 80% of ATK (131202 #2).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Misha", "label": "R—Room Service! (adj)" }, "field": "mult", "value": 0.8 }
+    },
+    {
+      "id": "m_ult_first_mult",
+      "layer": "parameters",
+      "claim": "The Ultimate's designated-enemy hit L10 = 60% of ATK (131203 #2 — #1 = 300% total over the base + random hits).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Misha", "label": "First hit — G—Gonna Be Late!" }, "field": "mult", "value": 0.6 }
+    },
+    {
+      "id": "m_ult_random_mult",
+      "layer": "parameters",
+      "claim": "The Ultimate's random hits L10 = 60% of ATK each (131203 #2).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Misha", "label": "G—Gonna Be Late!" }, "field": "mult", "value": 0.6 }
+    },
+    {
+      "id": "m_basic_mult",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic E—Excuse Me, Please! totals 100% at the engine's default Basic Lv6 (ladder tops at 140%→100% at L10; observed split sums to 1.0).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Misha", "label": "E—Excuse Me, Please!" }, "field": "mult", "value": 1 }
+    },
+    {
+      "id": "m_energy",
+      "layer": "parameters",
+      "claim": "Misha's Ultimate uses the 100-Energy ladder (sp_need 100); over this fixture his action set regenerates exactly 155 Energy (includes talent energy refunds).",
+      "assertion": { "assert": "energy", "who": "Misha", "atLeast": 155, "atMost": 155 }
+    },
+    {
+      "id": "m_talent_energy",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "Talent 131204 regenerates 2 Energy per Skill Point spent (canon #1 = 2 at L10); the fixture's 4 SP spends each grant the canon amount.",
+      "assertion": { "assert": "payload", "of": { "type": "ENERGY_GAIN", "target": "Misha" }, "field": "n", "value": 2, "pick": "first" }
+    },
+    {
+      "id": "m_freeze_dot",
+      "layer": "interactions",
+      "claim": "The Ultimate's #3 = 20% base chance to Freeze lands in the fixture (Freeze DoT applied by Misha).",
+      "assertion": { "assert": "present", "of": { "type": "DOT_APPLIED", "source": "Misha", "payload": { "kind": "Freeze" } } }
+    },
+    {
+      "id": "m_frozen_addl_dmg",
+      "layer": "interactions",
+      "claim": "Hits against Frozen targets add Additional DMG equal to #4 = 30% of Misha's ATK (0.3 × 2000 = 600) per 131203.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Misha", "label": "Frozen Additional DMG" }, "field": "statValue", "value": 600, "pick": "first" }
+    },
+    {
+      "id": "m_a2_buff",
+      "layer": "interactions",
+      "claim": "Bonus Ability (A2) grants Effect Hit Rate +60% while the Ultimate is active (observed as misha_a2_ehr buffStat ehr 0.6).",
+      "assertion": { "assert": "buffStat", "id": "misha_a2_ehr", "stat": "ehr", "value": 0.6 }
+    },
+    {
+      "id": "m_a3_buff",
+      "layer": "interactions",
+      "claim": "Bonus Ability (A3) grants CRIT DMG +30% against Frozen enemies (observed as misha_a3_cd buffStat critDmg 0.3).",
+      "assertion": { "assert": "buffStat", "id": "misha_a3_cd", "stat": "critDmg", "value": 0.3 }
+    },
+    {
+      "id": "m_first_hit_before_random",
+      "layer": "ordering",
+      "claim": "Within each Ultimate, the designated-enemy first hit precedes the random-target hits (131203 resolution order).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Misha", "label": "First hit — G—Gonna Be Late!" }],
+        "after": [{ "type": "HIT_START", "source": "Misha", "label": "G—Gonna Be Late!" }]
+      }
+    },
+    {
+      "id": "m_freeze_before_addl",
+      "layer": "ordering",
+      "claim": "The Freeze DoT is applied before Frozen Additional DMG events can fire against the target.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "DOT_APPLIED", "source": "Misha", "payload": { "kind": "Freeze" } }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Misha", "label": "Frozen Additional DMG" }]
+      }
+    }
+  ],
+  "golds": []
+}

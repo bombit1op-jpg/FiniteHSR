@@ -1,0 +1,24 @@
+{
+ "input": {
+  "kit": "jade",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Jade alone, technique \"Visionary Predation\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Jade|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "ACTION_ADVANCE|Jade|Jade|-|- [0.5,48.5437]",
+  "TECHNIQUE_APPLIED|Jade|-|-|-",
+  "HIT_START|Jade|Ice Edge|Visionary Predation|basic [1,10,30,5000000,777.62]",
+  "DAMAGE_CALCULATED|Jade|Ice Edge|-|basic [0,0,0,0,0,0,0.05,0.224,0.5,1,214,778]",
+  "DAMAGE_DEALT|Jade|Ice Edge|Visionary Predation|basic [0.5,214,4999786,5000000,777.62]",
+  "TOUGHNESS_DAMAGE|Jade|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Jade|Ice Edge|-|basic [214,4999786]",
+  "BUFF_APPLIED|-|Jade|-|- [1,Infinity]",
+  "BUFF_APPLIED|-|Jade|-|- [1,Infinity]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

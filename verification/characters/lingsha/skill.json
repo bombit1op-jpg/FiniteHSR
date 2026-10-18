@@ -1,0 +1,177 @@
+{
+  "kit": "lingsha",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/121101+121102+121103+121104 + bonus_abilities (Vermilion Waft, Sylvan Smoke, Ember's Echo)",
+    "confidence": "verified",
+    "note": "Basic 121101 Votive Incense 140% Fire at L10 (engine Basic Lv6 = 100%); A2 Sylvan Smoke adds +10 Energy on Basic. Skill 121102 Smoke and Splendor: 100% Fire AoE (L10) + heals all allies (#2=14% ATK + #3=420) + summons Fuyuan. Ultimate 121103 Dripping Mistscape: 180% Fire AoE (L10) + heal all (#2=12% ATK + #3=360) + Befog (Break DMG taken +25% for 2 turns), advances Fuyuan 100%. Talent 121104: Fuyuan Follow-Up ATK 75% Fire AoE + extra 75% single hit + heal (8% ATK + 360). Energy limit 110."
+  },
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "solo-battle",
+      "env": "Lingsha E0 solo vs a Fire-weak Elite (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lingsha",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Fire"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1-break",
+      "env": "Lingsha E1 solo vs the same Elite - Untethered Sun grants WBE +50% for the whole battle",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lingsha",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Fire"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "l_skill_action",
+      "layer": "structure",
+      "claim": "Smoke and Splendor (121102) is Lingsha's Skill action.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Lingsha", "action": "skill" } }
+    },
+    {
+      "id": "l_ult_action",
+      "layer": "structure",
+      "claim": "Dripping Mistscape (121103) is Lingsha's Ultimate action.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Lingsha", "action": "ultimate" } }
+    },
+    {
+      "id": "l_basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK 121101 Votive Incense is a single Fire hit.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Lingsha", "label": "Votive Incense" } }
+    },
+    {
+      "id": "l_skill_hit",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill 121102 Smoke and Splendor is a Fire AoE hit.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Lingsha", "label": "Smoke and Splendor" } }
+    },
+    {
+      "id": "l_ult_hit",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Ultimate 121103 Dripping Mistscape is a Fire AoE hit.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Lingsha", "label": "Dripping Mistscape" } }
+    },
+    {
+      "id": "l_fuyuan_summon",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill 121102 summons the Fuyuan memosprite (a SUMMON_CREATED event owned by Lingsha).",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "SUMMON_CREATED", "source": "Lingsha" } }
+    },
+    {
+      "id": "l_skill_mult",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill 121102 L10 multiplier is 80% of ATK (AoE).",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Lingsha", "label": "Smoke and Splendor" }, "field": "mult", "value": 0.8 }
+    },
+    {
+      "id": "l_ult_mult",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate 121103 L10 multiplier is 150% of ATK (AoE).",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Lingsha", "label": "Dripping Mistscape" }, "field": "mult", "value": 1.5 }
+    },
+    {
+      "id": "l_fuyuan_fua_mult",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "Talent 121104 Fuyuan Follow-Up ATK L10 = 75% of ATK (Fire AoE).",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Fuyuan", "label": "Fuyuan Follow-Up" }, "field": "mult", "value": 0.75 }
+    },
+    {
+      "id": "l_befog",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate 121103 applies Befog to every enemy: Break DMG taken +25% (ult_a4 L10) for 2 turns.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "buffStat", "id": "lingsha_befog", "stat": "vulnType:break", "value": 0.25 }
+    },
+    {
+      "id": "l_a2_energy",
+      "layer": "interactions",
+      "claim": "A2 Sylvan Smoke: Basic ATK restores an extra +10 Energy (ENERGY_GAIN n=10).",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "ENERGY_GAIN", "target": "Lingsha", "payload": { "n": 10 } } }
+    },
+    {
+      "id": "l_e1_wbe",
+      "layer": "interactions",
+      "claim": "E1 Untethered Sun grants Lingsha Weakness Break Efficiency +50% (lingsha_e1_wbe) for the battle.",
+      "fixtures": ["e1-break"],
+      "assertion": { "assert": "buff", "id": "lingsha_e1_wbe", "target": "Lingsha" }
+    },
+    {
+      "id": "l_skill_before_fua",
+      "layer": "ordering",
+      "claim": "Lingsha's Skill resolves before Fuyuan's Follow-Up ATK.",
+      "fixtures": ["solo-battle"],
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Lingsha", "label": "Smoke and Splendor" }],
+        "after": [{ "type": "HIT_START", "source": "Fuyuan", "label": "Fuyuan Follow-Up" }]
+      }
+    },
+    {
+      "id": "l_energy_cap",
+      "layer": "parameters",
+      "claim": "Lingsha's Ultimate gate is the 110-Energy ladder (sp_need 110); she never exceeds it.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "unitState", "who": "Lingsha", "field": "energy", "atMost": 110 }
+    }
+  ]
+}

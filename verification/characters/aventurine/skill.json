@@ -1,0 +1,200 @@
+{
+  "kit": "aventurine",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/130601+130602+130603+130604+130605 + bonus_abilities (A1 Leverage, A2, A3 Bingo!, A4)",
+    "confidence": "verified",
+    "note": "Skill (130602) grants Fortified Wager: a shield = %DEF (#1) + flat (#2) for #3 turns, and 30 Energy. Basic Straight Bet deals DEF-scaled Imaginary DMG. Ultimate Roulette Shark: random +1..7 Blind Bet, applies Unnerved (CRIT DMG taken +% for #4 turns) and an Imaginary DEF hit. Talent Shot Loaded Right: when a Fortified Wager ally (or Aventurine himself, +1 extra) is attacked, +1 Blind Bet; 7 Blind Bet are consumed to fire the Roulette Shark FUA. A2 grants Fortified Wager to all allies at battle start."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Aventurine E0 solo vs 3 Imaginary-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aventurine",
+            "stats": { "hp": 12000, "atk": 1000, "def": 3000, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1200,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Imaginary"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "av-skill",
+      "env": "Aventurine E0 solo vs 3 Imaginary-weak Elite (Lv120, 6M HP, 300 Toughness), 4 cycles, seed 7 — after the A2 Fortified Wager expires he casts Skill Cornerstone Deluxe to re-shield",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aventurine",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 120 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 1200,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Imaginary"],
+          "res": 0
+        },
+        "cycles": 4,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6-stag",
+      "env": "Aventurine E6 solo vs 1 Elite - Stag Hunt Game (+50% DMG per shielded ally, refreshed on his turn)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aventurine",
+            "stats": { "hp": 12000, "atk": 1000, "def": 3000, "spd": 200 },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 1200,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Imaginary"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "av_basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic Straight Bet deals a single Imaginary hit.",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Aventurine", "label": "Straight Bet" } }
+    },
+    {
+      "id": "av_ult_hit",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Ultimate Roulette Shark strikes the target with an Imaginary DEF hit.",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Aventurine", "label": "Roulette Shark" } }
+    },
+    {
+      "id": "av_skill_action",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill Cornerstone Deluxe (130602) fires as a Skill action once Fortified Wager has lapsed (preservation.ts:832).",
+      "fixtures": ["av-skill"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Aventurine", "action": "skill" } }
+    },
+    {
+      "id": "av_talent_fua",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent fires the Roulette Shark Follow-Up ATK once Blind Bet reaches 7.",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Aventurine", "label": "Roulette Shark FUA" } }
+    },
+    {
+      "id": "av_no_generic_attack",
+      "layer": "structure",
+      "claim": "Aventurine's action set is Basic / Skill / Ultimate / Talent FUA; it never falls back to a generic attack.",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Aventurine", "action": "attack" } }
+    },
+    {
+      "id": "av_basic_mult",
+      "layer": "parameters",
+      "claim": "Straight Bet is a single hit with no percent multiplier (DEF-flat scaled, so payload mult = 1).",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Aventurine", "label": "Straight Bet" }, "field": "mult", "value": 1 }
+    },
+    {
+      "id": "av_fw_shield",
+      "layer": "interactions",
+      "claim": "A2 grants Fortified Wager (fort_wager shield) to all allies at battle start.",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "buff", "id": "fort_wager" }
+    },
+    {
+      "id": "av_fw_turns",
+      "layer": "parameters",
+      "claim": "Fortified Wager lasts #3 = 3 turns (130602).",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "buff", "id": "fort_wager", "turns": 3 }
+    },
+    {
+      "id": "av_shield_event",
+      "layer": "interactions",
+      "claim": "Fortified Wager is emitted as a shield application.",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "present", "of": { "type": "SHIELD_APPLIED" } }
+    },
+    {
+      "id": "av_technique",
+      "ability": "technique",
+      "layer": "interactions",
+      "claim": "Technique The Red or the Black grants a DEF buff to allies at battle start.",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "buff", "id": "av_tech" }
+    },
+    {
+      "id": "av_unnerved",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate applies Unnerved (CRIT DMG taken +%) to the target.",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "buff", "id": "unnerved" }
+    },
+    {
+      "id": "av_unnerved_turns",
+      "layer": "parameters",
+      "claim": "Unnerved lasts #4 = 3 turns (130604).",
+      "fixtures": ["solo-3c"],
+      "assertion": { "assert": "buff", "id": "unnerved", "turns": 3 }
+    },
+    {
+      "id": "av_fua_before_ult",
+      "layer": "ordering",
+      "claim": "The first Talent FUA (from early enemy attacks) resolves before the first Ultimate.",
+      "fixtures": ["solo-3c"],
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Aventurine", "label": "Roulette Shark FUA" }],
+        "after": [{ "type": "HIT_START", "source": "Aventurine", "label": "Roulette Shark" }]
+      }
+    },
+    {
+      "id": "av_e6_stag",
+      "layer": "interactions",
+      "claim": "E6 Stag Hunt Game grants Aventurine +50% DMG per shielded ally (av_e6).",
+      "fixtures": ["e6-stag"],
+      "assertion": { "assert": "buff", "id": "av_e6" }
+    }
+  ]
+}

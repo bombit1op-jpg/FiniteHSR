@@ -1,0 +1,216 @@
+{
+  "kit": "arlan",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/100801+100802+100803+100804 + bonus_abilities (Revival, Endurance, Repel)",
+    "confidence": "verified",
+    "note": "Basic (100801) 140% at L10. Skill Shackle Breaker (100802) consumes HP equal to #1 = 15% of Max HP and deals Lightning DMG = #2 = 240% (L10) to one enemy (HP reduced to 1 if insufficient). Ultimate Frenzied Punishment (100803) deals #1 = 320% (L10) to the primary and #2 = 160% to adjacent enemies. Talent Pain and Anger (100804): DMG bonus from current missing HP%, up to a maximum of #1 = 72% at L10. Energy limit 110. Project decision: Skill is free of Skill Point cost (PROG comment \"deals no Skill Point\")."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Arlan E0 solo vs 3 Lightning-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "arlan",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Lightning"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "arlan-basic",
+      "env": "Arlan E0 solo vs 3 Lightning-weak Elite dummies (Lv120, 6M HP, 300 Toughness), skillPriority -1, 3 cycles, seed 7 — negative priority forces the Basic ATK Lightning Rush",
+      "battle": {
+        "team": [
+          {
+            "kitId": "arlan",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0,
+            "skillPriority": -1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Lightning"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "a_skill_action",
+      "fixtures": ["solo-3c"],
+      "layer": "structure",
+      "claim": "Shackle Breaker (100802) is Arlan's damaging Skill action.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Arlan", "action": "skill" } }
+    },
+    {
+      "id": "a_skill_hits",
+      "fixtures": ["solo-3c"],
+      "layer": "structure",
+      "claim": "Shackle Breaker hits the designated enemy once per cast (5 Skill casts in the fixture).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Arlan", "label": "Shackle Breaker" }, "value": 5 }
+    },
+    {
+      "id": "a_ult_action",
+      "fixtures": ["solo-3c"],
+      "layer": "structure",
+      "claim": "Frenzied Punishment (100803) is Arlan's Ultimate action.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Arlan", "action": "ultimate" } }
+    },
+    {
+      "id": "a_ult_main_hits",
+      "fixtures": ["solo-3c"],
+      "layer": "structure",
+      "claim": "Frenzied Punishment hits the primary target once per Ultimate (3 Ultimates in the fixture).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Arlan", "label": "Frenzied Punishment (main)" }, "value": 3 }
+    },
+    {
+      "id": "a_ult_adj_hits",
+      "fixtures": ["solo-3c"],
+      "layer": "structure",
+      "claim": "Frenzied Punishment is a Blast attack: it hits both adjacent enemies per Ultimate (2 adjacent × 3 Ultimates).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Arlan", "label": "Frenzied Punishment (adj)" }, "value": 6 }
+    },
+    {
+      "id": "a_pain_present",
+      "fixtures": ["solo-3c"],
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent Pain and Anger (100804) grants Arlan a missing-HP-scaled DMG bonus as a state object.",
+      "assertion": { "assert": "present", "of": { "type": "BUFF_APPLIED", "target": "Arlan", "payload": { "id": "arlan_pain" } } }
+    },
+    {
+      "id": "a_pain_refresh_count",
+      "fixtures": ["solo-3c"],
+      "layer": "structure",
+      "claim": "Pain and Anger is re-applied on every refresh point (turn start, Skill self HP-cost, incoming hit): 17 applications over the fixture.",
+      "assertion": { "assert": "count", "of": { "type": "BUFF_APPLIED", "payload": { "id": "arlan_pain" } }, "value": 17 }
+    },
+    {
+      "id": "a_no_attack_action",
+      "fixtures": ["solo-3c"],
+      "layer": "structure",
+      "claim": "Arlan's kit exposes Basic ATK, Skill and Ultimate as its action set; it never falls back to a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Arlan", "action": "attack" } }
+    },
+    {
+      "id": "a_skill_mult",
+      "fixtures": ["solo-3c"],
+      "layer": "parameters",
+      "claim": "Shackle Breaker L10 multiplier is 240% of ATK (100802 #2).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Arlan", "label": "Shackle Breaker" }, "field": "mult", "value": 2.4 }
+    },
+    {
+      "id": "a_ult_main_mult",
+      "fixtures": ["solo-3c"],
+      "layer": "parameters",
+      "claim": "Frenzied Punishment primary hit L10 = 320% of ATK (100803 #1), delivered as a 30/10/60 split → first part 0.96.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Arlan", "label": "Frenzied Punishment (main)" }, "field": "mult", "value": 0.96, "pick": "first" }
+    },
+    {
+      "id": "a_ult_adj_mult",
+      "fixtures": ["solo-3c"],
+      "layer": "parameters",
+      "claim": "Frenzied Punishment adjacent hit L10 = 160% of ATK (100803 #2) with the same 30/10/60 split → first part 0.48.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Arlan", "label": "Frenzied Punishment (adj)" }, "field": "mult", "value": 0.48, "pick": "first" }
+    },
+    {
+      "id": "a_energy",
+      "fixtures": ["solo-3c"],
+      "layer": "parameters",
+      "claim": "Arlan's Ultimate uses the 110-Energy ladder (sp_need 110); over this fixture his action set regenerates exactly 165 Energy.",
+      "assertion": { "assert": "energy", "who": "Arlan", "atLeast": 165, "atMost": 165 }
+    },
+    {
+      "id": "a_pain_value",
+      "fixtures": ["solo-3c"],
+      "layer": "parameters",
+      "claim": "Pain and Anger scales with missing HP% (first refresh after the first Skill self-cost: 15% missing × 72% cap = 0.108).",
+      "assertion": { "assert": "buffStat", "id": "arlan_pain", "stat": "dmgAll", "atLeast": 0.108 }
+    },
+    {
+      "id": "a_skill_before_ult",
+      "fixtures": ["solo-3c"],
+      "layer": "ordering",
+      "claim": "A Skill cast resolves before Arlan's first Ultimate in the fixture.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Arlan", "label": "Shackle Breaker" }],
+        "after": [{ "type": "HIT_START", "source": "Arlan", "label": "Frenzied Punishment (main)" }]
+      }
+    },
+    {
+      "id": "a_ult_cast_order",
+      "fixtures": ["solo-3c"],
+      "layer": "ordering",
+      "claim": "The Ultimate action starts before Frenzied Punishment damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Arlan", "action": "ultimate" }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Arlan", "label": "Frenzied Punishment (main)" }]
+      }
+    },
+    {
+      "id": "a_pain_before_ult",
+      "fixtures": ["solo-3c"],
+      "layer": "interactions",
+      "claim": "Pain and Anger (100804) is established by turn start and therefore active before Arlan's first Ultimate damage resolves — the Ultimate benefits from the missing-HP DMG bonus.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "BUFF_APPLIED", "target": "Arlan", "payload": { "id": "arlan_pain" } }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Arlan", "label": "Frenzied Punishment (main)" }]
+      }
+    },
+    {
+      "id": "a_no_sp_cost",
+      "fixtures": ["solo-3c"],
+      "layer": "interactions",
+      "claim": "Project decision: Arlan's Skill is free of Skill Point cost — the fixture's 5 Skill casts spend no SP (0 SP_LOSS events with Arlan as source).",
+      "assertion": { "assert": "absent", "of": { "type": "SP_LOSS", "source": "Arlan" } }
+    },
+    {
+      "id": "a_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Lightning Rush (100801) is the kit's Basic and fires when the Skill is de-prioritised (destruction.ts:574, skillPriority < 0).",
+      "fixtures": ["arlan-basic"],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Arlan",
+          "label": "Lightning Rush",
+          "attackType": "basic"
+        }
+      }
+    }
+  ],
+  "golds": []
+}

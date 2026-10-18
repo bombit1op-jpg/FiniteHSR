@@ -1,0 +1,23 @@
+{
+ "input": {
+  "kit": "phainon",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Phainon alone, technique \"Beginning of the End\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Phainon|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Phainon|-|-|-",
+  "HIT_START|Phainon|Ice Edge|Beginning of the End|basic [1,10,30,5000000,582]",
+  "DAMAGE_CALCULATED|Phainon|Ice Edge|-|basic [0,0,0,0,0,0,0,0.17,1,2,523,582]",
+  "DAMAGE_DEALT|Phainon|Ice Edge|Beginning of the End|basic [2,4999477,5000000,523,582]",
+  "TOUGHNESS_DAMAGE|Phainon|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Phainon|Ice Edge|-|basic [4999477,523]",
+  "ENERGY_GAIN|Phainon|Phainon|-|- [0,120,25,85]",
+  "SP_GAIN|-|-|-|- [1,4]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

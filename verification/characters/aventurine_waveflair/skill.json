@@ -1,0 +1,268 @@
+{
+  "kit": "aventurine_waveflair",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "reference/hsr-data/characters.json#/1513/skills/151302",
+    "confidence": "verified",
+    "note": "AGENTS.md kit note aventurine_waveflair: Skill 151302 'Kill Shot, the Sands Boil' AoE Quantum + Punchline #2 + Fervor #3, Ult 151303 'Grand Slam, Crest That High Tide' + Punchline/Fervor/SPD, Talent 'Ante Up, the Abyss Answers' checkpoint at 10 Fervor fires Cheers! and arms All In!, Aha Instant grants Certified Banger, energyMax 130"
+  },
+  "fixtures": [
+    {
+      "id": "base-duo",
+      "env": "Duo E0 Aventurine • Waveflair + E0 March 7th • The Hunt (teammate: each of her attacks grants Aventurine +1 Fervor +1 Punchline via Talent), Aventurine stats atk 3000/spd 160 (traces on: SPD+9 -> eff 169, crit +18.7%, elation +10%), skillPriority 2, energyStartFrac 0.5 (65/130 EN), March stats atk 3000/spd 140 skillPriority 0 (designates Aventurine as Shifu once, then Basics to feed Fervor and SP), vs a dummy Elite (atk 0, Quantum+Imaginary weakness, 600 Toughness), 3 cycles. Rotation: Skill 'Kill Shot, the Sands Boil' (+4 Punchline, +4 Fervor) -> teammate attacks push Fervor to 10 -> Talent checkpoint uses 'Cheers! To Summer's Blaze' and arms All In! -> Aha Instant consumes the armed state with 'All In!' and grants Certified Banger -> Skill/Ult CB-gated Elation hits; auto-Ult 'Grand Slam, Crest That High Tide'",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aventurine_waveflair",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 160
+            },
+            "eidolon": 0,
+            "skillPriority": 2,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "march7th_the_hunt",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": ["Quantum", "Imaginary"],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "skill_hit",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill 151302 'Kill Shot, the Sands Boil' is the AoE Quantum skill hit (dataset 151302 type BPSkill, tag AoEAttack).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Aventurine • Waveflair",
+          "label": "Kill Shot, the Sands Boil",
+          "attackType": "skill"
+        }
+      }
+    },
+    {
+      "id": "basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic 'Dead Center, the Torrent Hits' fires when SP is dry (kit decide: SP >= 1 -> skill, else basic).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Aventurine • Waveflair",
+          "label": "Dead Center, the Torrent Hits",
+          "attackType": "basic"
+        }
+      }
+    },
+    {
+      "id": "ult_cast",
+      "layer": "structure",
+      "claim": "Ultimate 'Grand Slam, Crest That High Tide' is cast from an auto-ult turn (charTurn full-energy rule: 130/130 EN).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Aventurine • Waveflair",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "cheers_fired",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent 'Ante Up, the Abyss Answers' fires 'Cheers! To Summer's Blaze' when a Fervor checkpoint is crossed (kit checkFervor).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Elation Skill: Cheers! To Summer's Blaze"
+        }
+      }
+    },
+    {
+      "id": "allin_fired",
+      "layer": "structure",
+      "claim": "The checkpoint arms the next Aha Instant, which uses the enhanced 'All In! To Summer's Blaze' (kit elSkill allIn branch).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Elation Skill: All In! To Summer's Blaze"
+        }
+      }
+    },
+    {
+      "id": "cb_gained",
+      "layer": "structure",
+      "claim": "The Aha Instant grants Aventurine Certified Banger equal to the Punchline taken into the instant (TurnManager ahaTurn -> addCb).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Aventurine • Waveflair gains Certified Banger"
+        }
+      }
+    },
+    {
+      "id": "cheers_instances",
+      "layer": "parameters",
+      "claim": "'Cheers!' deals the fixed instance count el_skill2_a2 = 10 at L10 (kit log 'Cheers! ... (10 instances)').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Elation Skill: Cheers! To Summer's Blaze \\(10 instances\\)"
+        }
+      }
+    },
+    {
+      "id": "fervor_checkpoint",
+      "layer": "parameters",
+      "claim": "The E0 Fervor checkpoint is talent L10 = 10 points (PROG talent ladder Array(15).fill(10), fervorSteps).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "reaches 10 Fervor"
+        }
+      }
+    },
+    {
+      "id": "ult_energy_paid",
+      "layer": "parameters",
+      "claim": "Casting the auto-ult consumes the full 130 Energy pool (Energy.md canon: castUlt ENERGY_LOSS reason ult_cost, amount 130) and energy never exceeds the 130 cap afterwards.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Aventurine • Waveflair",
+          "payload": { "reason": "ult_cost" }
+        },
+        "field": "amount",
+        "value": 130,
+        "tol": 1
+      },
+      "after": [
+        { "kitId": "aventurine_waveflair", "stat": "energy", "op": "atMost", "value": 130 }
+      ]
+    },
+    {
+      "id": "ult_spd_buff",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate grants SPD +30% for 4 turns (PROG ult_a4 L10 = 0.3, ult_a5 = 4, buff aw_ult_spd).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "aw_ult_spd",
+        "stat": "spdPct",
+        "value": 0.3,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "checkpoint_before_allin",
+      "layer": "ordering",
+      "claim": "'All In!' can only fire after the Fervor checkpoint armed awAllInNext (kit checkFervor -> elSkill allIn).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "NOTE", "log": "reaches \\d+ Fervor" }
+        ],
+        "after": [
+          { "type": "NOTE", "log": "Elation Skill: All In! To Summer's Blaze" }
+        ]
+      }
+    },
+    {
+      "id": "cb_before_skill_cb",
+      "layer": "ordering",
+      "claim": "The CB-gated Skill Elation hit 'Kill Shot, the Sands Boil (CB)' only fires while holding Certified Banger, so the Aha CB gain precedes it (kit: sim.cbOf gate).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "NOTE", "log": "gains Certified Banger" }
+        ],
+        "after": [
+          { "type": "HIT_START", "label": "Kill Shot, the Sands Boil (CB)" }
+        ]
+      }
+    },
+    {
+      "id": "cb_before_ult_cb",
+      "layer": "ordering",
+      "claim": "The CB-gated Ult Elation hit 'Grand Slam, Crest That High Tide (CB)' fires only after Certified Banger was granted (kit ult: sim.cbOf(u) > 0 gate).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "NOTE", "log": "gains Certified Banger" }
+        ],
+        "after": [
+          { "type": "HIT_START", "label": "Grand Slam, Crest That High Tide (CB)" }
+        ]
+      }
+    },
+    {
+      "id": "checkpoint_once",
+      "layer": "interactions",
+      "claim": "E0 checkpoint list is a single step (fervorSteps: [10]), and each crossing fires exactly once per checkpoint pass: first crossing at Fervor 15 arms All In, All In resets awThresh/awFervor to 0 (kit allIn branch), second crossing at Fervor 10 re-arms it. Total 'reaches N Fervor' notes in this battle = 2.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "reaches \\d+ Fervor"
+        },
+        "value": 2
+      }
+    },
+    {
+      "id": "ult_spd_on_self",
+      "layer": "interactions",
+      "claim": "The Ult SPD buff (aw_ult_spd) lands on Aventurine himself (kit perform ult self addBuff), not on the teammate.",
+      "assertion": {
+        "assert": "buff",
+        "id": "aw_ult_spd",
+        "target": "Aventurine • Waveflair"
+      }
+    },
+    {
+      "id": "no_e1_respen",
+      "layer": "interactions",
+      "claim": "E1 'A Holiday on the Line' All-Type RES PEN +24% must never appear at E0 (kit onStart eidolon guard).",
+      "assertion": {
+        "assert": "noBuff",
+        "id": "aw_e1"
+      }
+    }
+  ]
+}

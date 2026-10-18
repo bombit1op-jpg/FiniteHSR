@@ -1,0 +1,21 @@
+{
+ "input": {
+  "kit": "kafka",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Kafka alone, technique \"Mercy Is Not Forgiveness\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Kafka|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Kafka|-|-|-",
+  "HIT_START|Kafka|Ice Edge|Mercy Is Not Forgiveness|basic [0,1,30,5000000,869.12]",
+  "DAMAGE_CALCULATED|Kafka|Ice Edge|-|basic [0,0,0,0,0,0,0,0.05,0.5,1,195,869]",
+  "DAMAGE_DEALT|Kafka|Ice Edge|Mercy Is Not Forgiveness|basic [0.5,195,4999805,5000000,869.12]",
+  "HIT_END|Kafka|Ice Edge|-|basic [195,4999805]",
+  "DOT_APPLIED|Kafka|Ice Edge|-|- [1,2,2520]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

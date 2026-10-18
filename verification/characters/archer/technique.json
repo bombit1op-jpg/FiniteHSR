@@ -1,0 +1,64 @@
+{
+  "kit": "archer",
+  "slot": "technique",
+  "canon": {
+    "source": "dataset",
+    "confidence": "interpreted",
+    "note": "Technique \"Clairvoyance\" feeds the pre-fight pipeline (BattleEngine.applyTechniques). This spec pins activation; the technique's concrete effect is asserted in tests/golden/techniques/prefight.ts."
+  },
+  "fixtures": [
+    {
+      "id": "tech-archer",
+      "env": "Technique activation (mode init): Archer alone, technique \"Clairvoyance\" active, seed 7",
+      "mode": "init",
+      "battle": {
+        "team": [
+          {
+            "kitId": "archer"
+          }
+        ],
+        "enemy": {
+          "name": "Ice Edge",
+          "hp": 5000000,
+          "spd": 132,
+          "level": 80,
+          "toughness": 30,
+          "weaknesses": [
+            "Physical",
+            "Fire",
+            "Ice",
+            "Lightning",
+            "Wind",
+            "Quantum",
+            "Imaginary"
+          ],
+          "count": 1,
+          "atk": 0
+        },
+        "cycles": 1,
+        "seed": 7,
+        "techniques": [
+          "archer"
+        ]
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "archer_tech_applied",
+      "ability": "technique",
+      "layer": "structure",
+      "claim": "Technique \"Clairvoyance\" is activated at battle start (TECHNIQUE_APPLIED).",
+      "fixtures": [
+        "tech-archer"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "TECHNIQUE_APPLIED",
+          "source": "Archer"
+        }
+      }
+    }
+  ]
+}

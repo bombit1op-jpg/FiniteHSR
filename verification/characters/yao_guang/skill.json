@@ -1,0 +1,179 @@
+{
+  "kit": "yao_guang",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/150201+150202+150203+150204 + bonus_abilities (Amaze-In Grace, Poised and Sated, Great Boon) and docs/combat_mechanics/Punchline.md",
+    "confidence": "verified",
+    "note": "Yao Guang is an Elation-path Physical character (Energy limit 180). Basic 150201 Whistlebolt Sings Joy is a Physical Blast (+30 Energy). Skill 150202 Decalight Unveils All spends 1 SP, +30 Energy, deploys the Decalight Zone (shares Yao Guang's Elation with allies) and +3 Punchline. Ultimate 150203 Let All That Is Good Be Brewed spends all Energy, grants the Hexagram of Feathered Fortune All-Type RES PEN buff to allies, gives Aha an extra turn, then uses the Elation Skill (Woe's Whisper vulnAll debuff + Let Thy Fortune Elation hits) and grants Certified Banger. A0 Amaze-In Grace (SPD>=120) adds Elation."
+  },
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "solo-battle",
+      "env": "Yao Guang E0 solo (SPD 200, so A0 Amaze-In Grace is active) vs a Physical-weak Elite (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yao_guang",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 2,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "slow-battle",
+      "env": "Yao Guang E0 solo at SPD 101 (<120) - Amaze-In Grace stays inactive",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yao_guang",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 101 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Physical"],
+          "res": 0
+        },
+        "cycles": 2,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "yg_talent_great_boon",
+      "ability": "talent",
+      "layer": "interactions",
+      "fixtures": ["solo-battle"],
+      "claim": "Talent 'Great Boon': while Certified Banger is held, ally attacks deal extra Elation DMG (elation.ts:320-337, hit label 'Great Boon'). The slow-battle fixture (SPD 101) never builds the Ultimate/CB rotation (2 cycles), so this is pinned to the SPD-200 fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "label": "Great Boon"
+        }
+      }
+    },
+    {
+      "id": "y_basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK 150201 Whistlebolt Sings Joy is a Physical Blast - main target hit.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Yao Guang", "label": "Whistlebolt Sings Joy" } }
+    },
+    {
+      "id": "y_basic_adj",
+      "layer": "structure",
+      "claim": "Whistlebolt Sings Joy also strikes the adjacent target.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Yao Guang", "label": "Whistlebolt (adjacent)" } }
+    },
+    {
+      "id": "y_skill_action",
+      "layer": "structure",
+      "claim": "Decalight Unveils All (150202) is Yao Guang's Skill action.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Yao Guang", "action": "skill" } }
+    },
+    {
+      "id": "y_ult_action",
+      "layer": "structure",
+      "claim": "Let All That Is Good Be Brewed (150203) is Yao Guang's Ultimate action.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Yao Guang", "action": "ultimate" } }
+    },
+    {
+      "id": "y_elation_hit",
+      "layer": "structure",
+      "claim": "The Ultimate's Elation Skill deals Let Thy Fortune Burst Physical Elation DMG to every enemy.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Yao Guang", "label": "Let Thy Fortune Burst" } }
+    },
+    {
+      "id": "y_zone_buff",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill 150202 deploys the Decalight Zone (yg_zone) on Yao Guang.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "buff", "id": "yg_zone", "target": "Yao Guang" }
+    },
+    {
+      "id": "y_a1_buff",
+      "layer": "interactions",
+      "claim": "A1 Poised and Sated grants Yao Guang CRIT DMG +60% (yg_a1).",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "buff", "id": "yg_a1", "target": "Yao Guang" }
+    },
+    {
+      "id": "y_a0_active_at_high_spd",
+      "layer": "interactions",
+      "claim": "A0 Amaze-In Grace is active at SPD >= 120 (yg_a0).",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "buff", "id": "yg_a0", "target": "Yao Guang" }
+    },
+    {
+      "id": "y_a0_inactive_at_low_spd",
+      "layer": "interactions",
+      "claim": "A0 Amaze-In Grace does NOT apply below SPD 120 (yg_a0 absent).",
+      "fixtures": ["slow-battle"],
+      "assertion": { "assert": "noBuff", "id": "yg_a0", "target": "Yao Guang" }
+    },
+    {
+      "id": "y_ult_rpen",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate 150203 grants the Hexagram of Feathered Fortune All-Type RES PEN buff (yg_rpen) to allies.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "buff", "id": "yg_rpen", "target": "Yao Guang" }
+    },
+    {
+      "id": "y_woe_debuff",
+      "layer": "interactions",
+      "claim": "The Elation Skill applies Woe's Whisper (yg_woe, vulnAll) to every enemy.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "buff", "id": "yg_woe", "target": "Elite #1" }
+    },
+    {
+      "id": "y_skill_before_hit",
+      "layer": "ordering",
+      "claim": "Yao Guang's Skill (Decalight Zone) resolves before any offensive hit.",
+      "fixtures": ["solo-battle"],
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Yao Guang", "action": "skill" }],
+        "after": [{ "type": "HIT_START", "source": "Yao Guang" }]
+      }
+    },
+    {
+      "id": "y_energy_cap",
+      "layer": "parameters",
+      "claim": "Yao Guang's Ultimate gate is the 180-Energy ladder; she never exceeds it.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "unitState", "who": "Yao Guang", "field": "energy", "atMost": 180 }
+    }
+  ]
+}

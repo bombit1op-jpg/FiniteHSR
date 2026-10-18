@@ -1,0 +1,25 @@
+{
+ "input": {
+  "kit": "evanescia",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Evanescia alone, technique \"Petalfall: Floral Reminiscence\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Evanescia|-|- [1]",
+  "BUFF_APPLIED|-|Aha|-|- [1,Infinity]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Evanescia|-|- [1]",
+  "BUFF_APPLIED|-|Evanescia|-|- [1]",
+  "TECHNIQUE_APPLIED|Evanescia|-|-|-",
+  "HIT_START|Evanescia|Ice Edge|Petalfall: Floral Reminiscence|basic [1,10,30,5000000,737]",
+  "DAMAGE_CALCULATED|Evanescia|Ice Edge|-|basic [0,0,0,0,0,0,0,0.537,1,1,497,737]",
+  "DAMAGE_DEALT|Evanescia|Ice Edge|Petalfall: Floral Reminiscence|basic [1,497,4999503,5000000,737]",
+  "TOUGHNESS_DAMAGE|Evanescia|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Evanescia|Ice Edge|-|basic [497,4999503]",
+  "ENERGY_GAIN|Evanescia|Evanescia|-|- [0,20,260,480]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "input": {
+  "kit": "mydei",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Mydei alone, technique \"Cage of Broken Lance\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Mydei|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Mydei|-|-|-",
+  "HIT_START|Mydei|Ice Edge|Cage of Broken Lance|basic [1,10,1831,30,5000000]",
+  "DAMAGE_CALCULATED|Mydei|Ice Edge|-|basic [0,0,0,0,0,0,0,0.05,0.8,1,1831,659]",
+  "DAMAGE_DEALT|Mydei|Ice Edge|Cage of Broken Lance|basic [0.8,1831,4999341,5000000,659]",
+  "TOUGHNESS_DAMAGE|Mydei|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Mydei|Ice Edge|-|basic [4999341,659]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

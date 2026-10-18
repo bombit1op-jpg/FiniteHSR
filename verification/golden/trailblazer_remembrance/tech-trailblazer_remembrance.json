@@ -1,0 +1,23 @@
+{
+ "input": {
+  "kit": "trailblazer_remembrance",
+  "slot": "technique",
+  "env": "Technique activation (mode init): {NICKNAME} alone, technique \"Memories Back as Echoes\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|{NICKNAME}|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "ACTION_ADVANCE|{NICKNAME}|{NICKNAME}|-|- [0.3,67.9612]",
+  "TECHNIQUE_APPLIED|{NICKNAME}|-|-|-",
+  "ACTION_DELAY|Ice Edge|Ice Edge|-|- [0.5,113.6364]",
+  "HIT_START|{NICKNAME}|Ice Edge|Memories Back as Echoes|basic [1,10,30,5000000,619.02]",
+  "DAMAGE_CALCULATED|{NICKNAME}|Ice Edge|-|basic [0,0,0,0,0,0,0,0.05,1,1,278,619]",
+  "DAMAGE_DEALT|{NICKNAME}|Ice Edge|Memories Back as Echoes|basic [1,278,4999722,5000000,619.02]",
+  "TOUGHNESS_DAMAGE|{NICKNAME}|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|{NICKNAME}|Ice Edge|-|basic [278,4999722]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

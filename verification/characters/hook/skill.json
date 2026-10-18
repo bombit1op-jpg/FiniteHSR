@@ -1,0 +1,178 @@
+{
+  "kit": "hook",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/110901+110902+110903+110904+110905+110906+110907 + bonus_abilities (Playing With Fire, Warm Blood, Hot-Blooded)",
+    "confidence": "verified",
+    "note": "Basic (110901) 140% at L10. Skill Hey! Remember Hook? (110902) deals #1 = 240% (L10) Fire DMG to one enemy and applies a Burn: Burn DMG = #4 = 65% of Hook's ATK at the start of each turn for #3 = 2 turns. After using Ultimate, the next Skill is enhanced (110903): Enhanced Skill (110909) hits the primary for #1 = 280% and adjacent enemies for #5 = 80%, with Oil to the Flames (110904) adding Fire DMG per #1 = 1.0×ATK ladder step against Burned targets. Ultimate Boom! Here Comes the Fire! (110905) deals #1 = 400% of ATK split 30/70. Energy limit 110. BA2 Playing With Fire: after Ultimate, action advanced by 20% and gain 5 Energy."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Hook E0 solo vs 3 Fire-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hook",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Fire"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "h_skill_action",
+      "layer": "structure",
+      "claim": "Hey! Remember Hook? (110902) is Hook's damaging Skill action.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Hook", "action": "skill" } }
+    },
+    {
+      "id": "h_skill_hits",
+      "layer": "structure",
+      "claim": "The un-enhanced Skill hits the designated enemy once per cast (3 casts in the fixture; the 4th Skill cast is enhanced by the Ultimate).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Hook", "label": "Hey! Remember Hook?" }, "value": 3 }
+    },
+    {
+      "id": "h_enhanced_action",
+      "layer": "structure",
+      "claim": "After the Ultimate, Hook's next Skill becomes the Enhanced Skill (110903/110909).",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Hook", "label": "Enhanced Skill (main)" } }
+    },
+    {
+      "id": "h_enhanced_adj_hits",
+      "layer": "structure",
+      "claim": "The Enhanced Skill is a Blast attack: it hits both adjacent enemies (2 adjacent hits from the fixture's single enhanced cast).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Hook", "label": "Enhanced Skill (adj)" }, "value": 2 }
+    },
+    {
+      "id": "h_ult_hits",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Boom! Here Comes the Fire! (110905) is delivered as a 30/70 two-hit split per Ultimate (2 Ultimates × 2 hits).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Hook", "label": "Boom! Here Comes the Fire!" }, "value": 4 }
+    },
+    {
+      "id": "h_no_attack_action",
+      "layer": "structure",
+      "claim": "Hook's kit exposes Basic ATK, Skill (base and enhanced) and Ultimate as its action set; it never falls back to a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Hook", "action": "attack" } }
+    },
+    {
+      "id": "h_skill_mult",
+      "layer": "parameters",
+      "claim": "Hey! Remember Hook? L10 multiplier is 240% of ATK (110902 #1).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Hook", "label": "Hey! Remember Hook?" }, "field": "mult", "value": 2.4 }
+    },
+    {
+      "id": "h_enhanced_main_mult",
+      "layer": "parameters",
+      "claim": "The Enhanced Skill primary hit L10 = 280% of ATK (110909 #1).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Hook", "label": "Enhanced Skill (main)" }, "field": "mult", "value": 2.8 }
+    },
+    {
+      "id": "h_enhanced_adj_mult",
+      "layer": "parameters",
+      "claim": "The Enhanced Skill adjacent hit L10 = 80% of ATK (110909 #5).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Hook", "label": "Enhanced Skill (adj)" }, "field": "mult", "value": 0.8 }
+    },
+    {
+      "id": "h_ult_mult_first",
+      "layer": "parameters",
+      "claim": "Boom! Here Comes the Fire! L10 total = 400% of ATK (110905 #1), first split part carries 30% → 1.2.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Hook", "label": "Boom! Here Comes the Fire!" }, "field": "mult", "value": 1.2, "pick": "first" }
+    },
+    {
+      "id": "h_ult_mult_last",
+      "layer": "parameters",
+      "claim": "The Ultimate's second split part carries 70% of the 400% total → 2.8.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Hook", "label": "Boom! Here Comes the Fire!" }, "field": "mult", "value": 2.8 }
+    },
+    {
+      "id": "h_oil_mult",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "Oil to the Flames (110904) adds Fire DMG equal to the talent ladder value (L10 = 1.0×ATK) as an additional hit against Burned enemies.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Hook", "label": "Oil to the Flames" }, "field": "mult", "value": 1 }
+    },
+    {
+      "id": "h_basic_mult",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic ATK (110901) runs the 50%→140% ladder (L10 = 140%); at the engine's default Basic Lv6 it totals 100% as a single hit.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Hook", "attackType": "basic" }, "field": "mult", "value": 1, "pick": "first" }
+    },
+    {
+      "id": "h_energy",
+      "layer": "parameters",
+      "claim": "Hook's Ultimate uses the 110-Energy ladder (sp_need 110); over this fixture her action set regenerates exactly 195 Energy (includes BA2's +5 Energy per Ultimate).",
+      "assertion": { "assert": "energy", "who": "Hook", "atLeast": 195, "atMost": 195 }
+    },
+    {
+      "id": "h_burn_applied",
+      "layer": "interactions",
+      "claim": "Every Skill cast applies the Burn debuff from 110902 #2 (4 Skill casts, 4 Burn applications).",
+      "assertion": { "assert": "count", "of": { "type": "DOT_APPLIED", "source": "Hook", "payload": { "kind": "Burn" } }, "value": 4 }
+    },
+    {
+      "id": "h_burn_turns",
+      "layer": "parameters",
+      "claim": "Burn lasts #3 = 2 turns (110902).",
+      "assertion": { "assert": "payload", "of": { "type": "DOT_APPLIED", "source": "Hook", "payload": { "kind": "Burn" } }, "field": "turns", "value": 2, "pick": "first" }
+    },
+    {
+      "id": "h_burn_basedmg",
+      "layer": "parameters",
+      "claim": "Burn DMG = #4 = 65% of Hook's ATK at L10: baseDmg = 0.65 × 2560 effective ATK = 1664.",
+      "assertion": { "assert": "payload", "of": { "type": "DOT_APPLIED", "source": "Hook", "payload": { "kind": "Burn" } }, "field": "baseDmg", "value": 1664, "pick": "first" }
+    },
+    {
+      "id": "h_burn_tick",
+      "layer": "interactions",
+      "claim": "Burn ticks at the beginning of each enemy turn (110902: \"at the start of each turn\").",
+      "assertion": { "assert": "present", "of": { "type": "DOT_TICK", "source": "Hook" } }
+    },
+    {
+      "id": "h_after_ult_advance",
+      "layer": "interactions",
+      "claim": "Bonus Ability Playing With Fire (BA2): after using the Ultimate, Hook's action is advanced by 20% (2 Ultimates → 2 advances).",
+      "assertion": { "assert": "count", "of": { "type": "ACTION_ADVANCE", "source": "Hook" }, "value": 2 }
+    },
+    {
+      "id": "h_burn_before_tick",
+      "layer": "ordering",
+      "claim": "Burn is applied during the Skill action and only ticks at the enemy's next turn start.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "DOT_APPLIED", "source": "Hook", "payload": { "kind": "Burn" } }],
+        "after": [{ "type": "DOT_TICK", "source": "Hook" }]
+      }
+    },
+    {
+      "id": "h_skill_before_ult",
+      "layer": "ordering",
+      "claim": "Hook's first Skill damage resolves before her first Ultimate damage in the fixture.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Hook", "label": "Hey! Remember Hook?" }],
+        "after": [{ "type": "HIT_START", "source": "Hook", "label": "Boom! Here Comes the Fire!" }]
+      }
+    }
+  ],
+  "golds": []
+}

@@ -1,0 +1,330 @@
+{
+  "kit": "blackswan",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Black Swan/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder E1..E6. E1 'Seven Pillars of Wisdom' reduces enemy RES to Wind/Physical/Fire/Lightning by 25% while a matching DoT is present, modelled as bs_e1_<element> vuln:<element> 0.25. E2 'Weep Not For Me, My Lamb' applies 30 Arcana on enemy entry (log 'Weep Not For Me, My Lamb Arcana x30'). E3 (Skill+2/Talent+2) is a level bump scaling the Decadence DEF-down bs_def defRed 0.208->0.22. E4 'In Tears We Gift' Epiphany deals +20% DMG (bs_epiphany vulnAll 0.25->0.45) and grants 8 Energy at Epiphany turn start. E5 (Ult+2/Basic+1) is a level bump scaling bs_epiphany to 0.47. E6 'Pantheon Merciful, Stars Illuminating' raises the Arcana cap by 30 (entry Arcana x30 -> x60) and lets teammates stack Arcana."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "blackswan E0 — eidolon ladder rung, cloned from blackswan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blackswan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "blackswan E1 — eidolon ladder rung, cloned from blackswan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blackswan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "blackswan E2 — eidolon ladder rung, cloned from blackswan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blackswan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "blackswan E3 — eidolon ladder rung, cloned from blackswan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blackswan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "blackswan E4 — eidolon ladder rung, cloned from blackswan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blackswan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "blackswan E5 — eidolon ladder rung, cloned from blackswan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blackswan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "blackswan E6 — eidolon ladder rung, cloned from blackswan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blackswan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "bs_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'Seven Pillars of Wisdom': -25% RES to a matching DoT element, modelled as bs_e1_<element> vuln. Present from E1 onward.",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "bs_e1_Wind" }
+    },
+    {
+      "id": "bs_e1_value",
+      "layer": "parameters",
+      "claim": "The E1 RES shred is modelled as vuln:Wind 0.25 (canon ranks/1).",
+      "fixtures": ["e1"],
+      "assertion": { "assert": "buffStat", "id": "bs_e1_Wind", "stat": "vuln:Wind", "value": 0.25 }
+    },
+    {
+      "id": "bs_e1_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E1 must NOT be active below rank 1.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "noBuff", "id": "bs_e1_Wind" }
+    },
+    {
+      "id": "bs_e2_log",
+      "layer": "interactions",
+      "claim": "E2 'Weep Not For Me, My Lamb' applies 30 Arcana on enemy entry; observable as the dedicated log line. Present from E2 onward.",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "Weep Not For Me, My Lamb" } }
+    },
+    {
+      "id": "bs_e2_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: the E2 entry-Arcana log must NOT appear below rank 2.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "absent", "of": { "type": "NOTE", "log": "Weep Not For Me, My Lamb" } }
+    },
+    {
+      "id": "bs_e3_defdown",
+      "layer": "parameters",
+      "claim": "E3 (Skill+2/Talent+2) level bump scales the Decadence DEF-down bs_def to defRed 0.22 (0.208 at E0..E2).",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "bs_def", "stat": "defRed", "value": 0.22 }
+    },
+    {
+      "id": "bs_e4_epiphany",
+      "layer": "parameters",
+      "claim": "E4 'In Tears We Gift': Epiphany DMG taken +20%, scaling bs_epiphany vulnAll to 0.45 (canon ranks/4).",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "buffStat", "id": "bs_epiphany", "stat": "vulnAll", "value": 0.45 }
+    },
+    {
+      "id": "bs_e4_energy",
+      "layer": "interactions",
+      "claim": "E4 grants 8 Energy at Epiphany turn start, raising Black Swan's total Energy gain from 180 to 185.",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "energy", "who": "Black Swan", "atLeast": 185 }
+    },
+    {
+      "id": "bs_e4_energy_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: the extra Epiphany Energy must NOT be present below rank 4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "energy", "who": "Black Swan", "atMost": 180 }
+    },
+    {
+      "id": "bs_e5_epiphany",
+      "layer": "parameters",
+      "claim": "E5 (Ult+2/Basic+1) level bump scales bs_epiphany vulnAll to 0.47.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "bs_epiphany", "stat": "vulnAll", "value": 0.47 }
+    },
+    {
+      "id": "bs_e6_arcana",
+      "layer": "parameters",
+      "claim": "E6 raises the Arcana cap by 30, so entry Arcana reads 60 (log 'Elite Arcana 60') at rank 6.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "Elite Arcana 60" } }
+    },
+    {
+      "id": "bs_e6_arcana_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: the raised-cap Arcana (60) must NOT appear below rank 6.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "absent", "of": { "type": "NOTE", "log": "Elite Arcana 60" } }
+    }
+  ],
+  "golds": []
+}

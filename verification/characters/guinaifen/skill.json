@@ -1,0 +1,206 @@
+{
+  "kit": "guinaifen",
+  "slot": "skill",
+  "canon": {
+    "source": "reference/hsr-data/characters.json",
+    "ref": "Guinaifen skill IDs 121001-121004",
+    "confidence": "high",
+    "note": "Basic 121001: 140% ATK at L10, single hit. Skill 121002 Blazing Welcome: 120% primary, 40% adjacent (skill_a2), 100% base chance Burn (Burn = 218.208% ATK L10 skill_a3, 2 turns). Ult 121003 Watch This Showstopper: 120% all enemies, detonates Burn at 92% (ult_a2). Talent 121004: Burn damage → 100% base chance Firekiss (vuln +7%, 3 turns, max 3 stacks; E6 = 4). A4 Bladed Hoop: +25% action advance at battle start. A6 Walking on Knives: +20% DMG vs Burned targets. sp_need 120."
+  },
+  "fixtures": [
+    {
+      "id": "solo-1e",
+      "env": "Guinaifen E0 solo vs 1 Fire-weak Elite dummy (Lv120, 6M HP, 300 Toughness), auto rotation, 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "guinaifen",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Fire"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "trio-3e",
+      "env": "Guinaifen E0 solo vs 3 Fire-weak Elite dummies (Lv120, 6M HP, 300 Toughness each), auto rotation, 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "guinaifen",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Fire"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "g_basic",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic Standing Ovation deals 1.0x per hit (engine Basic Lv6 total 100% of canon 140% at L10), 2 casts in fixture",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Guinaifen", "label": "Standing Ovation", "payload": { "mult": 1 } },
+        "value": 2
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "g_skill_primary",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill Blazing Welcome primary hit deals 1.2x (canon 121002 #1: 120% ATK)",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Guinaifen", "label": "Blazing Welcome Blast", "payload": { "mult": 1.2 } },
+        "value": 4
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "g_skill_adj",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill adjacent hits deal 0.4x each (canon 121002 #2: 40% ATK), 2 adjacent hits per cast over 4 casts",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Guinaifen", "label": "Blazing Welcome Blast (adj)", "payload": { "mult": 0.4 } },
+        "value": 8
+      },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "g_ult_present",
+      "layer": "structure",
+      "claim": "Guinaifen casts her Ultimate in the fixture (standard Energy activation)",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Guinaifen", "action": "ultimate" } }
+    },
+    {
+      "id": "g_ult_mult",
+      "layer": "parameters",
+      "claim": "Watch This Showstopper deals 1.2x (canon 121003 #1: 120% ATK)",
+      "assertion": {
+        "assert": "payload",
+        "of": { "type": "DAMAGE_DEALT", "source": "Guinaifen", "label": "Watch This Showstopper" },
+        "field": "mult",
+        "value": 1.2
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "g_ult_aoe",
+      "layer": "structure",
+      "claim": "Watch This Showstopper hits all 3 enemies per cast (6 hits over 2 casts in trio fixture)",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "HIT_START", "source": "Guinaifen", "label": "Watch This Showstopper" },
+        "value": 6
+      },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "g_burn_apply",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill applies Burn DoT (canon 121002 #3: 100% base chance Burn)",
+      "assertion": { "assert": "present", "of": { "type": "DOT_APPLIED", "payload": { "kind": "Burn" } } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "g_burn_tick",
+      "layer": "interactions",
+      "claim": "Burn ticks on the enemy turn (canon Burn = 2-turn DoT)",
+      "assertion": { "assert": "present", "of": { "type": "DOT_TICK", "payload": { "kind": "Burn" } } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "g_detonate",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate detonates Burn at 0.92x (canon 121003 ult_a2: 92% of Burn damage), 2 detonations in fixture",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Guinaifen", "label": "Burn Detonation", "payload": { "mult": 0.92 } },
+        "value": 2
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "g_firekiss_stacks",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "Firekiss stacks to 3 (canon 121004 max 3 stacks at E0)",
+      "assertion": { "assert": "buff", "id": "firekiss", "stacks": 3 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "g_firekiss_stat",
+      "layer": "parameters",
+      "claim": "Firekiss applies +7% damage taken (canon 121004: vuln 7%)",
+      "assertion": { "assert": "buffStat", "id": "firekiss", "stat": "vulnAll", "value": 0.07 }
+    },
+    {
+      "id": "g_a4_advance",
+      "layer": "parameters",
+      "claim": "A4 Bladed Hoop advances action 25% at battle start (canon A4: 25%)",
+      "assertion": { "assert": "payload", "of": { "type": "ACTION_ADVANCE", "source": "Guinaifen" }, "field": "pct", "value": 0.25 }
+    },
+    {
+      "id": "g_a6",
+      "layer": "interactions",
+      "claim": "A6 Walking on Knives grants +20% DMG vs Burned targets (canon A6: 20%)",
+      "assertion": { "assert": "buffStat", "id": "gui_a6", "stat": "dmgAll", "value": 0.2 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "g_energy_solo",
+      "layer": "parameters",
+      "claim": "Regenerates exactly 185 Energy in solo fixture (sp_need 120 ladder)",
+      "assertion": { "assert": "energy", "who": "Guinaifen", "atLeast": 185, "atMost": 185 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "g_energy_trio",
+      "layer": "parameters",
+      "claim": "Regenerates exactly 205 Energy in trio fixture (sp_need 120 ladder)",
+      "assertion": { "assert": "energy", "who": "Guinaifen", "atLeast": 205, "atMost": 205 },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "g_no_e1",
+      "layer": "interactions",
+      "claim": "No Eidolon effects at E0 (E1 skill Effect RES shred not applied)",
+      "assertion": { "assert": "noBuff", "id": "gui_e1" }
+    }
+  ],
+  "golds": []
+}

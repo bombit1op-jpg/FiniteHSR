@@ -1,0 +1,50 @@
+{
+  "kit": "himeko",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/100301+100302+100303+100304 + bonus_abilities (Starfire, Magma, Benchmark)",
+    "confidence": "verified",
+    "note": "Sawblade Tuning (100301, Basic): single-target, dealt in 2 hits (40% + 60% per notes). Molten Detonation (100302, Skill): primary target dealt in 7 hits (20/20/5/5/5/5/40), adjacent in 3 hits (20/20/60). Heavenly Flare (100303, Ultimate): AoE, +Energy per enemy defeated. Victory Rush (100304, Talent): on Weakness Break gain Charge (Elite+ = 3 per notes); at full Charge, any ally attack triggers 1 Follow-Up ATK vs all enemies, consuming all Charge, dealt in 4 hits (20/20/20/40 per notes); start of battle = 1 Charge. Starfire (Trace): 50% base chance to inflict Burn on attack (2 turns), Burn DoT = 30% ATK at start of turn. Magma (Trace): Skill deals +20% DMG to Burned enemies. Benchmark (Trace): CRIT Rate +15% at HP >= 80%."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Himeko E0 solo vs 3 Fire-weak Elite dummies (Lv120, 6M HP, 40 Toughness), 3 cycles, seed 7 — low Toughness so Weakness Breaks and Victory Rush fire",
+      "battle": {
+        "team": [{ "kitId": "himeko", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 0 }],
+        "enemy": { "name": "Elite", "count": 3, "hp": 6000000, "atk": 800, "spd": 90, "level": 120, "toughness": 40, "weaknesses": ["Fire"], "res": 0 },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    { "id": "h_ult_action", "layer": "structure", "claim": "Heavenly Flare (100303) is Himeko's Ultimate action (1 cast in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Himeko", "action": "ultimate" }, "value": 1 } },
+    { "id": "h_skill_action", "layer": "structure", "claim": "Molten Detonation (100302) is her Skill action (4 casts in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Himeko", "action": "skill" }, "value": 4 } },
+    { "id": "h_basic_action", "layer": "structure", "claim": "Sawblade Tuning (100301) is her Basic ATK action (2 casts in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Himeko", "action": "basic" }, "value": 2 } },
+    { "id": "h_molten_main", "layer": "structure", "claim": "Molten Detonation primary-target damage: 14 events (2 plain casts x 7 hits, canon 100302 20/20/5/5/5/5/40).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Molten Detonation" }, "value": 14 } },
+    { "id": "h_molten_burn", "layer": "structure", "claim": "When the primary target is Burned, the Magma label variant fires 7 hits per cast: 14 events (2 casts).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Molten Detonation (Burn)" }, "value": 14 } },
+    { "id": "h_molten_adj", "layer": "structure", "claim": "Molten Detonation adjacent plain damage: 6 events (canon 100302 3-hit 20/20/60 split).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Molten Detonation (adj)" }, "value": 6 } },
+    { "id": "h_molten_adj_burn", "layer": "structure", "claim": "Molten Detonation adjacent Burn label variant: 18 events (3-hit split per adjacent enemy).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Molten Detonation (adj) (Burn)" }, "value": 18 } },
+    { "id": "h_heavenly", "layer": "structure", "claim": "Heavenly Flare (100303) is AoE: 3 damage events (1 per enemy) in the fixture.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Heavenly Flare" }, "value": 3 } },
+    { "id": "h_victory_rush", "ability": "talent", "layer": "structure", "claim": "Victory Rush (100304) Follow-Up ATK fires 3 times in the fixture; each is the canon 4-hit split vs all 3 enemies -> 36 damage events.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Victory Rush" }, "value": 36 } },
+    { "id": "h_sawblade", "layer": "structure", "claim": "Sawblade Tuning (100301) hits twice per cast (40% + 60% per notes) — 2 casts x 2 hits = 4 events.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Sawblade Tuning" }, "value": 4 } },
+    { "id": "h_breaks", "layer": "interactions", "claim": "4 Weakness Breaks occur in the fixture (toughness 40 dummies; each Elite broken once, first Elite twice).", "assertion": { "assert": "count", "of": { "type": "WEAKNESS_BREAK", "source": "Himeko" }, "value": 4 } },
+    { "id": "h_dots", "layer": "interactions", "claim": "Starfire (Trace) applies Burn 10 times in the fixture (50% base chance per attack).", "assertion": { "assert": "count", "of": { "type": "DOT_APPLIED", "source": "Himeko" }, "value": 10 } },
+    { "id": "h_sp_gain", "layer": "interactions", "claim": "The Basic ATK regenerates 1 Skill Point per cast (2 casts = 2 SP).", "assertion": { "assert": "count", "of": { "type": "SP_GAIN" }, "value": 2 } },
+    { "id": "h_sp_loss", "layer": "interactions", "claim": "The Skill costs 1 Skill Point per cast (4 casts = 4 SP).", "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Himeko" }, "value": 4 } },
+    { "id": "h_m_molten", "layer": "parameters", "claim": "Molten Detonation L10 (100302) primary total 200% of ATK over the 20/20/5/5/5/5/40 split; last (40%) piece = 0.8.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Molten Detonation" }, "field": "mult", "value": 0.8, "pick": "last" } },
+    { "id": "h_m_molten_burn", "layer": "parameters", "claim": "Molten Detonation with Magma (+20% Skill DMG vs Burned enemies) = 220% of ATK; last 40% piece = 0.88.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Molten Detonation (Burn)" }, "field": "mult", "value": 0.88, "pick": "last" } },
+    { "id": "h_m_molten_adj", "layer": "parameters", "claim": "Molten Detonation L10 (100302) adjacent total 80% of ATK over the 20/20/60 split; last (60%) piece = 0.48.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Molten Detonation (adj)" }, "field": "mult", "value": 0.48, "pick": "last" } },
+    { "id": "h_m_molten_adj_burn", "layer": "parameters", "claim": "Adjacent Magma bonus: 80% + 20% = 100% of ATK; last 60% piece = 0.6.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Molten Detonation (adj) (Burn)" }, "field": "mult", "value": 0.6, "pick": "last" } },
+    { "id": "h_m_heavenly", "layer": "parameters", "claim": "Heavenly Flare L10 (100303) AoE multiplier is 230% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Heavenly Flare" }, "field": "mult", "value": 2.3 } },
+    { "id": "h_m_victory_first", "layer": "parameters", "claim": "Victory Rush L10 (100304) total 140% of ATK over its canon 4-hit split (20% piece = 0.28).", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Victory Rush" }, "field": "mult", "value": 0.28, "pick": "first" } },
+    { "id": "h_m_victory_last", "layer": "parameters", "claim": "Victory Rush final piece carries the canon 40% = 0.56.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Victory Rush" }, "field": "mult", "value": 0.56, "pick": "last" } },
+    { "id": "h_m_sawblade_first", "layer": "parameters", "claim": "Sawblade Tuning first hit = 40% of the L6 100% basic -> 0.4.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Sawblade Tuning" }, "field": "mult", "value": 0.4, "pick": "first" } },
+    { "id": "h_m_sawblade_last", "layer": "parameters", "claim": "Sawblade Tuning second hit = 60% -> 0.6.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Sawblade Tuning" }, "field": "mult", "value": 0.6, "pick": "last" } },
+    { "id": "h_energy", "layer": "parameters", "claim": "Over the fixture Himeko gains exactly 180 Energy (ENERGY_GAIN sum; Ultimate consumes 130).", "assertion": { "assert": "energy", "who": "Himeko", "atLeast": 180, "atMost": 180 } },
+    { "id": "h_a6_present", "layer": "interactions", "claim": "Benchmark (Trace: CRIT Rate +15% at HP >= 80%) is active as a buff in the fixture.", "assertion": { "assert": "buff", "id": "himeko_a6", "target": "Himeko" } },
+    { "id": "h_break_before_fua", "layer": "ordering", "claim": "Victory Rush needs Charge from Weakness Break: the first Weakness Break resolves before the last Follow-Up ATK.", "assertion": { "assert": "ordering", "before": [{ "type": "WEAKNESS_BREAK", "source": "Himeko" }], "after": [{ "type": "DAMAGE_DEALT", "source": "Himeko", "label": "Victory Rush" }] } }
+  ]
+}

@@ -1,0 +1,355 @@
+{
+  "kit": "arlan",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Arlan/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 Skill +10% DMG at HP <=50% (Shackle Breaker mult 2.4 -> 2.64); E2 Skill/Ultimate removes 1 debuff - unobservable in this fixture (deviation); E3 Skill Lv.+2/Basic Lv.+1 (Shackle Breaker 2.64 -> 2.904); E4 revive once at 25% HP, armed 2 turns - fired after the window expired in this fixture (deviation); E5 Ult/Talent Lv.+2 (arlan_pain dmgAll 0.72 -> 0.792); E6 Ultimate +20% at HP <=50% and adjacent = primary - Ultimate cast above 50% HP here (deviation). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "arlan E0 — eidolon ladder rung, cloned from arlan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "arlan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "arlan E1 — eidolon ladder rung, cloned from arlan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "arlan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "arlan E2 — eidolon ladder rung, cloned from arlan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "arlan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "arlan E3 — eidolon ladder rung, cloned from arlan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "arlan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "arlan E4 — eidolon ladder rung, cloned from arlan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "arlan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "arlan E5 — eidolon ladder rung, cloned from arlan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "arlan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "arlan E6 — eidolon ladder rung, cloned from arlan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "arlan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "arlan_e1_present",
+      "layer": "parameters",
+      "claim": "E1 'To the Bitter End': Skill +10% DMG at HP <=50% raises the Shackle Breaker max multiplier 2.4 -> 2.64.",
+      "fixtures": [
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Shackle Breaker"
+        },
+        "field": "mult",
+        "value": 2.64
+      }
+    },
+    {
+      "id": "arlan_e1_locked",
+      "layer": "parameters",
+      "claim": "Below E1 Shackle Breaker stays at 2.4.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Shackle Breaker"
+        },
+        "field": "mult",
+        "value": 2.4,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "arlan_e3_present",
+      "layer": "parameters",
+      "claim": "E3 'Power Through': Skill Lv.+2/Basic Lv.+1 raises the Shackle Breaker max multiplier 2.64 -> 2.904.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Shackle Breaker"
+        },
+        "field": "mult",
+        "value": 2.904
+      }
+    },
+    {
+      "id": "arlan_e3_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Shackle Breaker stays at 2.4.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Shackle Breaker"
+        },
+        "field": "mult",
+        "value": 2.4,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "arlan_e5_present",
+      "layer": "parameters",
+      "claim": "E5 'Hammer and Tongs': Ult/Talent Lv.+2 raises the arlan_pain dmgAll cap 0.72 -> 0.792.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "arlan_pain",
+        "stat": "dmgAll",
+        "value": 0.792
+      }
+    },
+    {
+      "id": "arlan_e5_locked",
+      "layer": "parameters",
+      "claim": "Below E5 arlan_pain dmgAll caps at 0.72.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "arlan_pain",
+        "stat": "dmgAll",
+        "value": 0.72
+      }
+    }
+  ],
+  "golds": []
+}

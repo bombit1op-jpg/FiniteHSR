@@ -1,0 +1,313 @@
+{
+  "kit": "robin_summeretto",
+  "slot": "skill",
+  "fixtures": [
+    {
+      "id": "fever-lifecycle",
+      "env": "E0 Robin • Summeretto + E0 Boothill (Basic-only engine; Boothill's 3000 ATK wins the 'strongest ally' pick for the Ultimate and the Deviated Chords ATK branch) vs a dummy Elite (atk 150, Wind weakness, 600 Toughness), 8 cycles, seed 11. energyStartFrac 1 makes the first action the Ultimate 'Ascend That Rhapsody in Blue': Boothill becomes the Special Guest (2 turns, +2 Vibes per attack) and advances 100%. Next Roben's Skill 'Summer Strums the Soul' summons Summer Songbirds Bessie (+20 Energy via 'Near the Sea's Heartbeat', +6 Vibes), basics feed 'The Sea Sings in My Key'. Ally attacks funnel Vibes -> member count 2 (Drummie) then 3 (Paddie) -> 'all on stage' -> the Fever state starts: Zone deployed (DEF-ignore scales with Vibes), Songbirds join the Action Order with their Memosprite Skill 'Chirrup Quartet'. The SPD-140 Fever Countdown turn then deducts 50% Vibes (min 12) -> 12-12 = 0 -> 'exits the Fever state'; Roben recharges to a second full Ultimate. E0 asserts stay off: no E2 team RES PEN, no E6 stored Ultimate.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin_summeretto",
+            "stats": {
+              "hp": 5200,
+              "atk": 2800,
+              "def": 1100,
+              "spd": 120
+            },
+            "eidolon": 0,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 11
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "robin_summeretto_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK The Sea Sings in My Key (151201, Wind) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Robin • Summeretto",
+          "label": "The Sea Sings in My Key",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "fever-lifecycle"
+      ]
+    },
+    {
+      "id": "rhapsody_ult_note",
+      "ability": "ultimate",
+      "layer": "structure",
+      "hint": "Canon Ultimate 'Ascend That Rhapsody in Blue': designates the Special Guest, advances them 100%, grants a slice of their Max Energy, duration 2 guest turns. Structure: the Ultimate is a support cast with an explicit log.",
+      "claim": "Engine: the Ultimate logs Boothill as the Special Guest with the exact advance and energy slice.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Robin • Summeretto uses Ascend That Rhapsody in Blue: Boothill is the Special Guest \\(\\+\\d+ Energy, advance 100%\\)"
+        }
+      }
+    },
+    {
+      "id": "guest_buff",
+      "layer": "structure",
+      "hint": "Canon: the Special Guest marker lives on the designated ally. Structure: the guest state is a real buff object.",
+      "claim": "Engine: Boothill receives the 'Special Guest' buff from the Ultimate.",
+      "assertion": {
+        "assert": "buff",
+        "id": "rsu_guest",
+        "target": "Boothill"
+      }
+    },
+    {
+      "id": "birds_summon",
+      "ability": "talent",
+      "layer": "structure",
+      "hint": "Canon memosprite talent: Summer Songbirds initial MaxHP = 70% of Roben's, SPD = 180% of Roben's. Structure: the memosprite is summoned and mirrored.",
+      "claim": "Engine: the Skill summons Summer Songbirds Bessie and logs her mirrored MaxHP and SPD ratio.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Robin • Summeretto summons Summer Songbirds Bessie \\(MaxHP \\d+, SPD 180%\\)"
+        }
+      }
+    },
+    {
+      "id": "sea_basic",
+      "layer": "structure",
+      "hint": "Canon Basic 'The Sea Sings in My Key': Max-HP-scaling Wind single-target hit. Structure: the normal action keeps its identity.",
+      "claim": "Engine: the non-Fever Basic deals the 'The Sea Sings in My Key' hit.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "label": "The Sea Sings in My Key"
+        }
+      }
+    },
+    {
+      "id": "fever_entry",
+      "layer": "structure",
+      "hint": "Canon: at 12 Vibes all three Songbirds are on stage, Roben enters the Fever state (Zone deployed, Songbirds join the Action Order). Structure: Fever is an explicit state transition.",
+      "claim": "Engine: reaching 12 Vibes starts Fever and logs the Zone/timeline handover.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Robin • Summeretto enters the Fever state — Zone deployed, Summer Songbirds join the Action Order"
+        }
+      }
+    },
+    {
+      "id": "fever_exit",
+      "layer": "structure",
+      "hint": "Canon: the Fever Countdown turn deducts 50% of current Vibes (min 12); at 0 the state ends and the Zone/member auras are torn down. Structure: Fever is a bounded state machine.",
+      "claim": "Engine: the countdown drains the Vibes to 0 and logs the Fever exit.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Robin • Summeretto exits the Fever state"
+        }
+      }
+    },
+    {
+      "id": "summon_energy",
+      "layer": "parameters",
+      "hint": "Canon memosprite talent 'Near the Sea's Heartbeat' #1 = 20: on summon Roben regenerates 20 Energy. Parameters: the summon carries a quantified Energy grant.",
+      "claim": "Engine: summoning the Songbirds emits an Energy gain of exactly 20.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "payload": {
+            "n": 20
+          }
+        }
+      }
+    },
+    {
+      "id": "skill_vibes",
+      "ability": "skill",
+      "layer": "parameters",
+      "hint": "Canon Skill param #2 = 6 Vibes per cast. Parameters: the Skill grants exactly 6 Vibes.",
+      "claim": "Engine: the Skill logs a +6 Vibes gain.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Robin • Summeretto gains 6 Vibes \\(\\d+ → \\d+\\)"
+        }
+      }
+    },
+    {
+      "id": "zone_def_ignore",
+      "layer": "parameters",
+      "hint": "Canon talent_a8 (0.15 at level 10) + Vibes term: the Fever Zone makes allies ignore DEF. Parameters: the zone grants a real DEF-ignore stat.",
+      "claim": "Engine: during Fever allies carry the 'Fever Zone (DEF ignore)' buff with defIgnore >= 0.15.",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "rsu_zone",
+        "stat": "defIgnore",
+        "atLeast": 0.15
+      }
+    },
+    {
+      "id": "chirrup",
+      "layer": "parameters",
+      "hint": "Canon memosprite skill 'Chirrup Quartet': the Songbirds' own action in Fever. Parameters: the memosprite action owns an explicit hit identity.",
+      "claim": "Engine: the Songbirds' Fever turn hits with the 'Chirrup Quartet' skill.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "label": "Chirrup Quartet"
+        }
+      }
+    },
+    {
+      "id": "rhapsody_after_ult",
+      "layer": "ordering",
+      "hint": "Canon: the Ultimate IS the Rhapsody cast. Ordering: the summon/Skill phase follows the Ultimate, never precedes it.",
+      "claim": "Engine: the Songbirds summon note comes after the first Rhapsody note.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "Robin • Summeretto uses Ascend That Rhapsody in Blue: Boothill is the Special Guest \\(\\+\\d+ Energy, advance 100%\\)"
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "Robin • Summeretto summons Summer Songbirds Bessie \\(MaxHP \\d+, SPD 180%\\)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "members_then_fever",
+      "layer": "ordering",
+      "hint": "Canon: Bessie(1) -> +Drummie(2) at 6 Vibes -> +Paddie(3) at 12 Vibes, then 'all on stage' -> Fever. Ordering: the 3-member log precedes the Fever entry.",
+      "claim": "Engine: the '3 members on stage' member-count log comes before the Fever entry note.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "Summer Songbirds: 3 members on stage \\(Drummie \\+ Paddie join\\)"
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "Robin • Summeretto enters the Fever state — Zone deployed, Summer Songbirds join the Action Order"
+          }
+        ]
+      }
+    },
+    {
+      "id": "exit_after_entry",
+      "layer": "ordering",
+      "hint": "Canon: Fever is entered at 12 Vibes and exited when the countdown drains them. Ordering: the exit cannot precede the entry.",
+      "claim": "Engine: the first Fever-exit note comes after the first Fever-entry note.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "Robin • Summeretto enters the Fever state — Zone deployed, Summer Songbirds join the Action Order"
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "Robin • Summeretto exits the Fever state"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rhapsody_twice",
+      "layer": "interactions",
+      "hint": "Canon: the Ultimate is a normal Energy Ultimate (140 pool) — after the Fever episode Roben recharges with Skills and Basics. Interactions: a second full pool fires a second Rhapsody.",
+      "claim": "Engine: within 8 cycles the kit lands the Rhapsody Ultimate a second time.",
+      "assertion": {
+        "assert": "count",
+        "value": 2,
+        "of": {
+          "type": "NOTE",
+          "log": "Robin • Summeretto uses Ascend That Rhapsody in Blue: Boothill is the Special Guest \\(\\+\\d+ Energy, advance 100%\\)"
+        }
+      }
+    },
+    {
+      "id": "dev_chords",
+      "layer": "interactions",
+      "hint": "Canon trace 'Deviated Chords': the ally that generated the Vibes gets ATK (from Roben's Max HP) or CRIT DMG for 2 turns. Interactions: the ally-sided ripple lands on the generator.",
+      "claim": "Engine: Boothill (attack generator, higher ATK than Roben) receives the 'Deviated Chords (ATK)' buff.",
+      "assertion": {
+        "assert": "buff",
+        "id": "rsu_dev",
+        "target": "Boothill"
+      }
+    },
+    {
+      "id": "member_aura",
+      "layer": "interactions",
+      "hint": "Canon memosprite talent: enemies take #3-#5% more DMG by the Songbird count. Interactions: the enemy-face modifier is applied live on the Elite.",
+      "claim": "Engine: the Elite carries the 'Summer Songbirds' DMG-taken debuff while members are on stage.",
+      "assertion": {
+        "assert": "buff",
+        "id": "rsu_member",
+        "target": "Elite"
+      }
+    },
+    {
+      "id": "no_e2",
+      "layer": "interactions",
+      "hint": "Canon E2 'A Heart of Still Water': 18% All-Type RES PEN for the team is an Eidolon-2 effect. Interactions: an E0 run must NOT apply it.",
+      "claim": "Engine: E0 never grants the team RES PEN buff.",
+      "assertion": {
+        "assert": "noBuff",
+        "id": "rsu_e2_res"
+      }
+    }
+  ]
+}

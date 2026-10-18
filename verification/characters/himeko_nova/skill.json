@@ -1,0 +1,51 @@
+{
+  "kit": "himeko_nova",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/151001+151002+151003+151004+151008+151009+151022+151025 + bonus_abilities (Whither, Hark!, The Silver Rail)",
+    "confidence": "verified",
+    "note": "Enkindle the First Lodestar (151001, Basic): single-target. Upraise the Vanward Cresset (151002, Skill): no damage; recovers all Assist Skill uses, grants Navigator's Semaphore for #2 = 3 turns (all allies +DMG). We, Too, Stride the Stars (151003, Ultimate): Starblazer performs Hyperluminal Particle Beam (151008, #1 = 32% AoE per use, +1 Source Energy, max #3 = 2... engine cap differs) or Orbital Annihilation Pulse (151009: consumes 1 Source Energy, #9 = 762% designated / #10 = 252% others; with Source Energy > 1, every #2 points consumed add 1 random-enemy instance of #3); when Beam uses run out, launches Pulse then Final Hit (#6 = 3 instances of #7 = 80% on random enemies). 151008 notes: a cycle = 3 animations, 2nd use per cycle dealt in 4 hits of 25%. 151009 notes: bounce DMG before AoE DMG. Of Fire and Far Faring (151004, Talent): deploys Starblazer Visioscape, grants allies 1 Assist Skill use; Assist Skill considered as Nova using her Skill. The Silver Rail (Trace): on Ultimate gain 3 Source Energy; at >= 3 Source Energy the Pulse multiplier against random single enemies +30% (-> bounce instances 30% -> 39%). Companion Protocol: Verdict (151025, Assist Skill): only usable via another ally's Assist Skill slot."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Himeko • Nova E0 solo vs 3 Fire-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [{ "kitId": "himeko_nova", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 0 }],
+        "enemy": { "name": "Elite", "count": 3, "hp": 6000000, "atk": 800, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Fire"], "res": 0 },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    { "id": "nv_ult_action", "layer": "structure", "claim": "We, Too, Stride the Stars (151003) is Nova's Ultimate action (2 casts in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Himeko • Nova", "action": "ultimate" }, "value": 2 } },
+    { "id": "nv_skill_action", "layer": "structure", "claim": "Upraise the Vanward Cresset (151002) is her Skill action (3 casts in the fixture; no damage).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Himeko • Nova", "action": "skill" }, "value": 3 } },
+    { "id": "nv_basic_action", "layer": "structure", "claim": "Enkindle the First Lodestar (151001) is her Basic ATK action (2 casts in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Himeko • Nova", "action": "basic" }, "value": 2 } },
+    { "id": "nv_enkindle", "layer": "structure", "claim": "Enkindle the First Lodestar hits its single target once per cast (2 events).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Enkindle the First Lodestar" }, "value": 2 } },
+    { "id": "nv_pulse_cycle", "layer": "structure", "claim": "Each Ultimate's Starblazer cycle lands Orbital Annihilation Pulse (151009) on all 3 enemies at use slots 1, 2, 3, 5 and final: 6 events per slot label per slot (2 casts x 3 enemies).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Orbital Annihilation Pulse (1/6)" }, "value": 6 } },
+    { "id": "nv_pulse_2", "layer": "structure", "claim": "Pulse use slot 2/6: 6 events (2 casts x 3 enemies).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Orbital Annihilation Pulse (2/6)" }, "value": 6 } },
+    { "id": "nv_pulse_3", "layer": "structure", "claim": "Pulse use slot 3/6: 6 events.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Orbital Annihilation Pulse (3/6)" }, "value": 6 } },
+    { "id": "nv_pulse_5", "layer": "structure", "claim": "Pulse use slot 5/6: 6 events.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Orbital Annihilation Pulse (5/6)" }, "value": 6 } },
+    { "id": "nv_pulse_final", "layer": "structure", "claim": "The terminal Orbital Annihilation Pulse (auto-launched when Beam uses are depleted, 151003) fires once per Ultimate on all 3 enemies: 6 events.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Orbital Annihilation Pulse (final)" }, "value": 6 } },
+    { "id": "nv_beam_4", "layer": "structure", "claim": "Hyperluminal Particle Beam (151008) at use slot 4/6: 6 events (2 casts x 3 enemies).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Hyperluminal Particle Beam (4)" }, "value": 6 } },
+    { "id": "nv_beam_6", "layer": "structure", "claim": "Hyperluminal Particle Beam at use slot 6/6: 6 events.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Hyperluminal Particle Beam (6)" }, "value": 6 } },
+    { "id": "nv_final_hit", "layer": "structure", "claim": "Final Hit (151003 #6 = 3 instances of 80% vs random enemies) lands 3 instances per Ultimate: 6 events total.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Final Hit" }, "value": 6 } },
+    { "id": "nv_se_boosted", "layer": "structure", "claim": "The Silver Rail boosts one Pulse bounce instance per Ultimate (>= 3 Source Energy): 2 events labelled '(Source Energy)' on slot 1/6.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Orbital Annihilation Pulse (1/6) (Source Energy)" }, "value": 2 } },
+    { "id": "nv_se_plain", "layer": "structure", "claim": "Unboosted Source Energy bounce instances land on slot 2/6: 2 events.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Orbital Annihilation Pulse (2/6) (Source Energy)" }, "value": 2 } },
+    { "id": "nv_break", "ability": "talent", "layer": "interactions", "claim": "Talent (151004): Nova ignores Weakness Types when attacking — 1 Weakness Break in the fixture.", "assertion": { "assert": "count", "of": { "type": "WEAKNESS_BREAK", "source": "Himeko • Nova" }, "value": 1 } },
+    { "id": "nv_no_verdict", "layer": "interactions", "claim": "Companion Protocol: Verdict (151025, Assist Skill) never activates in a solo fixture — Assist Skills require another ally's slot.", "assertion": { "assert": "noBuff", "id": "hn_verdict" } },
+    { "id": "nv_sp_gain", "layer": "interactions", "claim": "The Basic ATK regenerates 1 Skill Point per cast (2 casts = 2 SP).", "assertion": { "assert": "count", "of": { "type": "SP_GAIN" }, "value": 2 } },
+    { "id": "nv_sp_loss", "layer": "interactions", "claim": "The Skill costs 1 Skill Point per cast (3 casts = 3 SP).", "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Himeko • Nova" }, "value": 3 } },
+    { "id": "nv_m_enkindle", "layer": "parameters", "claim": "Enkindle the First Lodestar at the engine's default Basic Lv6 (151001) totals 100% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Enkindle the First Lodestar" }, "field": "mult", "value": 1 } },
+    { "id": "nv_m_pulse", "layer": "parameters", "claim": "Orbital Annihilation Pulse (151009 #10) deals 252% of ATK to other targets.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Orbital Annihilation Pulse (final)" }, "field": "mult", "value": 2.52 } },
+    { "id": "nv_m_beam", "layer": "parameters", "claim": "Hyperluminal Particle Beam (151003 #1) deals 32% of ATK per use.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Hyperluminal Particle Beam (4)" }, "field": "mult", "value": 0.32 } },
+    { "id": "nv_m_final", "layer": "parameters", "claim": "Final Hit instance multiplier (151003 #7) is 80% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Final Hit" }, "field": "mult", "value": 0.8 } },
+    { "id": "nv_m_se_boosted", "layer": "parameters", "claim": "The Silver Rail: bounce instance 30% + 30% boost at >= 3 Source Energy = 39% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Orbital Annihilation Pulse (1/6) (Source Energy)" }, "field": "mult", "value": 0.39 } },
+    { "id": "nv_m_se_plain", "layer": "parameters", "claim": "Source Energy bounce instance (151009) base multiplier is 30% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Orbital Annihilation Pulse (2/6) (Source Energy)" }, "field": "mult", "value": 0.3 } },
+    { "id": "nv_energy", "layer": "parameters", "claim": "Over the fixture Nova gains exactly 230 Energy (ENERGY_GAIN sum; both Ultimates consume their full gauge).", "assertion": { "assert": "energy", "who": "Himeko • Nova", "atLeast": 230, "atMost": 230 } },
+    { "id": "nv_sem_turns", "layer": "parameters", "claim": "Navigator's Semaphore (151002) lasts #2 = 3 turns.", "assertion": { "assert": "buff", "id": "hn_sem", "target": "Himeko • Nova", "turns": 3 } },
+    { "id": "nv_beam_after_pulse3", "layer": "ordering", "claim": "The cycle order: Pulse slots 1-3 fire before the Beam at slot 4.", "assertion": { "assert": "ordering", "before": [{ "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Orbital Annihilation Pulse (3/6)" }], "after": [{ "type": "DAMAGE_DEALT", "source": "Himeko • Nova", "label": "Hyperluminal Particle Beam (4)" }] } }
+  ]
+}

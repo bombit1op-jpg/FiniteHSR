@@ -1,0 +1,172 @@
+{
+  "kit": "hanya",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/121501+121502+121503+121504 + bonus_abilities",
+    "confidence": "verified",
+    "note": "Basic Oracle Brush (121501) 100% total at L6. Skill Samsara, Locked (121502) deals #1 = 240% (L10) Physical DMG to one enemy and marks it with Burden: Burden stores #2 = 2 Skill Point recoveries, then is dispelled. Ultimate Samsara, Closed (121503) is a pure buff: #1 = 60% (L10) ATK and SPD boost equal to #3 = 20% of Hanya's own SPD for #2 = 2 turns; it deals no damage. Talent When an allied target uses Basic ATK/Skill/Ultimate against a Burdened enemy, their DMG dealt increases by 30%, lasting 2 turns; Burden recovers 1 SP per 2 counted attacks. Energy limit 140. BA0: +10% ATK for 1 turn when Burden recovers SP. BA2 (A5): regenerate 2 Energy when Burden dispels."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Hanya E0 solo vs 3 Physical-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hanya",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "hn_skill_action",
+      "layer": "structure",
+      "claim": "Samsara, Locked (121502) is Hanya's damaging Skill action.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Hanya", "action": "skill" } }
+    },
+    {
+      "id": "hn_skill_hits",
+      "layer": "structure",
+      "claim": "Samsara, Locked hits the designated enemy once per cast (5 Skill casts in the fixture).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Hanya", "label": "Samsara, Locked" }, "value": 5 }
+    },
+    {
+      "id": "hn_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic Oracle Brush (121501) is used once in the fixture (SP-positive rotation).",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Hanya", "label": "Oracle Brush" } }
+    },
+    {
+      "id": "hn_ult_action",
+      "layer": "structure",
+      "claim": "Samsara, Closed (121503) is Hanya's Ultimate action.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Hanya", "action": "ultimate" } }
+    },
+    {
+      "id": "hn_ult_no_damage",
+      "layer": "structure",
+      "claim": "The Ultimate is a pure buff (121503): it deals no damage — no HIT_START with attackType ult from Hanya.",
+      "assertion": { "assert": "absent", "of": { "type": "HIT_START", "source": "Hanya", "attackType": "ult" } }
+    },
+    {
+      "id": "hn_burden_stacks",
+      "layer": "structure",
+      "claim": "The Skill marks the target with Burden at 2 SP recoveries (121502 #2).",
+      "assertion": { "assert": "buff", "id": "hanya_burden", "target": "Elite #1", "stacks": 2 }
+    },
+    {
+      "id": "hn_no_attack_action",
+      "layer": "structure",
+      "claim": "Hanya's kit exposes Basic ATK, Skill and Ultimate as its action set; it never falls back to a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Hanya", "action": "attack" } }
+    },
+    {
+      "id": "hn_skill_mult",
+      "layer": "parameters",
+      "claim": "Samsara, Locked L10 multiplier is 240% of ATK (121502 #1).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Hanya", "label": "Samsara, Locked" }, "field": "mult", "value": 2.4 }
+    },
+    {
+      "id": "hn_basic_mult",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic Oracle Brush totals 100% at the engine's default Basic Lv6 (121501 ladder tops at 140%).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Hanya", "label": "Oracle Brush" }, "field": "mult", "value": 1 }
+    },
+    {
+      "id": "hn_ult_buff_turns",
+      "layer": "parameters",
+      "claim": "The Ultimate's buff lasts #2 = 2 turns (121503).",
+      "assertion": { "assert": "buff", "id": "hanya_ult", "target": "Hanya", "turns": 2 }
+    },
+    {
+      "id": "hn_ult_buff_atk",
+      "layer": "parameters",
+      "claim": "The Ultimate increases ATK by #1 = 60% at L10 (121503).",
+      "assertion": { "assert": "buffStat", "id": "hanya_ult", "stat": "atkPct", "value": 0.6 }
+    },
+    {
+      "id": "hn_ult_buff_spd",
+      "layer": "parameters",
+      "claim": "The Ultimate increases SPD by #3 = 20% of Hanya's own SPD: 205 × 0.2 = 41 flat SPD (121503).",
+      "assertion": { "assert": "buffStat", "id": "hanya_ult", "stat": "spdFlat", "value": 41 }
+    },
+    {
+      "id": "hn_sanction_atk",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "The talent's Burden-triggered bonus increases the attacker's DMG dealt by 30% (121504).",
+      "assertion": { "assert": "buffStat", "id": "hanya_sanction", "stat": "dmgAll", "value": 0.3 }
+    },
+    {
+      "id": "hn_sanction_turns",
+      "layer": "parameters",
+      "claim": "The talent's DMG bonus lasts 2 turns (121504).",
+      "assertion": { "assert": "buff", "id": "hanya_sanction", "turns": 2 }
+    },
+    {
+      "id": "hn_ba0_buff",
+      "layer": "parameters",
+      "claim": "Bonus Ability (BA0) grants Hanya +10% ATK for 1 turn when Burden recovers a Skill Point.",
+      "assertion": { "assert": "buffStat", "id": "hanya_a1", "stat": "atkPct", "value": 0.1 }
+    },
+    {
+      "id": "hn_energy",
+      "layer": "parameters",
+      "claim": "Hanya's Ultimate uses the 140-Energy ladder (sp_need 140); over this fixture her action set regenerates exactly 215 Energy (includes BA2's +2 Energy on Burden dispel).",
+      "assertion": { "assert": "energy", "who": "Hanya", "atLeast": 215, "atMost": 215 }
+    },
+    {
+      "id": "hn_sp_recoveries",
+      "layer": "interactions",
+      "claim": "Burden stores SP recoveries (121502 #2) released 1 per 2 counted attacks plus the Basic's own SP gain: 2 SP gained in the fixture.",
+      "assertion": { "assert": "count", "of": { "type": "SP_GAIN", "source": "Hanya" }, "value": 2 }
+    },
+    {
+      "id": "hn_sanction_on_attacker",
+      "layer": "interactions",
+      "claim": "The talent's DMG bonus lands on the allied attacker that used the ability against the Burdened enemy (solo fixture: Hanya herself).",
+      "assertion": { "assert": "present", "of": { "type": "BUFF_APPLIED", "target": "Hanya", "payload": { "id": "hanya_sanction" } } }
+    },
+    {
+      "id": "hn_ult_cast_order",
+      "layer": "ordering",
+      "claim": "The Ultimate action starts before its buff application resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Hanya", "action": "ultimate" }],
+        "after": [{ "type": "BUFF_APPLIED", "target": "Hanya", "payload": { "id": "hanya_ult" } }]
+      }
+    },
+    {
+      "id": "hn_sanction_after_burden",
+      "layer": "ordering",
+      "claim": "Burden must be applied by the Skill before the talent's DMG-bonus buff can trigger.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "BUFF_APPLIED", "payload": { "id": "hanya_burden" } }],
+        "after": [{ "type": "BUFF_APPLIED", "target": "Hanya", "payload": { "id": "hanya_sanction" } }]
+      }
+    }
+  ],
+  "golds": []
+}

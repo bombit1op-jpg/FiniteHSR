@@ -1,0 +1,192 @@
+{
+  "kit": "welt",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/1100401-1100407",
+    "confidence": "interpreted",
+    "note": "Welt (Imaginary, Nihility). Basic 1100401 Gravity Suppression (100% L6, A4 adds an 80% extra instance). Skill 1100402 Edge of the Void: 1 primary + 4 bounces (E0), applies an SPD Reduction (Edge of the Void), A4 adds a 120% extra instance. Ultimate 1100404 Synthetic Black Hole: 10/90 split, Imprisons (12% action delay + SPD-10%), applies Weightless (DEF-40%, SPD-5%, 4% action-delay per attack). Talent 1100405 Time Distortion: attacks on Slowed enemies deal Additional Imaginary DMG. A2 Retribution +30 Energy at battle start. Energy 120."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Welt E0 solo vs 3 Imaginary-weak Elite (level 95, 240 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "welt",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200, "ehr": 0.5 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Imaginary"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4-weightless",
+      "env": "Welt E4 solo vs the same Elites — while Weightless is active, enemies take +30% All-Type DMG (welt_weightless resAll -0.30)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "welt",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200, "ehr": 0.5 },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Imaginary"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "welt_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Gravity Suppression (1100401, Imaginary) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Welt",
+          "label": "Gravity Suppression",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "e4-weightless",
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "w_skill_action",
+      "layer": "structure",
+      "claim": "Skill Edge of the Void (1100402) fires as a Skill action (decide nihility.ts:322 prefers Skill while SP >= 1).",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Welt", "action": "skill" } }
+    },
+    {
+      "id": "w_ult_action",
+      "layer": "structure",
+      "claim": "Synthetic Black Hole (1100404) fires once Energy reaches 120 (energyMax nihility.ts:304).",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Welt", "action": "ultimate" } }
+    },
+    {
+      "id": "w_skill_primary_hit",
+      "layer": "structure",
+      "claim": "Edge of the Void hits the primary target then bounces to a random living enemy (nihility.ts:369-381, 4 bounces at E0).",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Welt", "label": "Edge of the Void" } }
+    },
+    {
+      "id": "w_skill_bounce",
+      "layer": "structure",
+      "claim": "Each Skill cast produces bounces to random enemies (nihility.ts:374-381, label 'Edge of the Void (bounce)').",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Welt", "label": "Edge of the Void (bounce)" } }
+    },
+    {
+      "id": "w_skill_a4_add",
+      "layer": "structure",
+      "claim": "Trace A4 Judgment adds a 120% extra Skill instance (nihility.ts:372, 'Edge of the Void (A4)').",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Welt", "label": "Edge of the Void (A4)" } }
+    },
+    {
+      "id": "w_basic_a4_add",
+      "layer": "structure",
+      "claim": "Trace A4 Judgment adds an 80% extra Basic instance (nihility.ts:389, 'Gravity Suppression (A4)').",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Welt", "label": "Gravity Suppression (A4)" } }
+    },
+    {
+      "id": "w_ult_hit",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Ultimate Synthetic Black Hole is a two-part 10/90 split (nihility.ts:344).",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Welt", "label": "Synthetic Black Hole" } }
+    },
+    {
+      "id": "w_start_energy_30",
+      "layer": "parameters",
+      "claim": "A2 Retribution grants +30 Energy at battle start (nihility.ts:310); it is Welt's first ENERGY_GAIN.",
+      "assertion": { "assert": "payload", "of": { "type": "ENERGY_GAIN", "source": "Welt" }, "field": "n", "value": 30, "pick": "first" }
+    },
+    {
+      "id": "w_slow_applied",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill lays an SPD Reduction on its target (nihility.ts:366, welt_slow spdDown 0.10, 2 turns).",
+      "assertion": { "assert": "buff", "id": "welt_slow", "turns": 2 }
+    },
+    {
+      "id": "w_imprison_applied",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate Imprisons each surviving enemy (nihility.ts:348, welt_imprison spdDown 0.10, 1 turn).",
+      "assertion": { "assert": "buff", "id": "welt_imprison", "turns": 1 }
+    },
+    {
+      "id": "w_weightless_applied",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate applies Weightless to each enemy (nihility.ts:350-354, 2 turns).",
+      "assertion": { "assert": "present", "of": { "type": "DEBUFF_APPLIED", "payload": { "id": "welt_weightless" } } }
+    },
+    {
+      "id": "w_weightless_defred",
+      "layer": "parameters",
+      "claim": "Weightless carries DEF-40% (nihility.ts:341, defRed 0.40).",
+      "assertion": { "assert": "buffStat", "id": "welt_weightless", "stat": "defRed", "value": 0.4, "tol": 0.001 }
+    },
+    {
+      "id": "w_imprison_delay",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate immediately delays each enemy 12% (nihility.ts:347).",
+      "assertion": { "assert": "present", "of": { "type": "ACTION_DELAY", "source": "Welt" } }
+    },
+    {
+      "id": "w_talent_time_distortion",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Time Distortion deals Additional Imaginary DMG when Welt attacks a Slowed enemy (nihility.ts:413).",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Welt", "label": "Time Distortion" } }
+    },
+    {
+      "id": "w_skill_hit_before_slow",
+      "layer": "ordering",
+      "claim": "Within a Skill, the primary hit resolves before the SPD Reduction lands (nihility.ts:369 then 370).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Welt", "label": "Edge of the Void" }],
+        "after": [{ "type": "DEBUFF_APPLIED", "payload": { "id": "welt_slow" } }]
+      }
+    },
+    {
+      "id": "w_e4_vuln",
+      "layer": "parameters",
+      "claim": "E4 Appellation of Justice makes Weightless enemies take +30% All-Type DMG (nihility.ts, resAll -0.30).",
+      "fixtures": ["e4-weightless"],
+      "assertion": { "assert": "buffStat", "id": "welt_weightless", "stat": "resAll", "value": -0.3, "tol": 0.001 }
+    }
+  ]
+}

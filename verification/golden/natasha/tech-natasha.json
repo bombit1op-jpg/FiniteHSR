@@ -1,0 +1,23 @@
+{
+ "input": {
+  "kit": "natasha",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Natasha alone, technique \"Hypnosis Research\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Natasha|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Natasha|-|- [1,Infinity]",
+  "TECHNIQUE_APPLIED|Natasha|-|-|-",
+  "HIT_START|Natasha|Ice Edge|Hypnosis Research|basic [1,10,30,476,5000000]",
+  "DAMAGE_CALCULATED|Natasha|Ice Edge|-|basic [0,0,0,0,0,0,0,0.05,0.8,1,171,476]",
+  "DAMAGE_DEALT|Natasha|Ice Edge|Hypnosis Research|basic [0.8,171,476,4999829,5000000]",
+  "TOUGHNESS_DAMAGE|Natasha|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Natasha|Ice Edge|-|basic [171,4999829]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [1,1]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

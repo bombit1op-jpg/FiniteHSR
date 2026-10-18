@@ -1,0 +1,452 @@
+{
+  "kit": "himeko_nova",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "reference/hsr-data/characters.json#/Himeko • Nova/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E2: Assist cap -> 2 and Ultimate/Assist DMG x1.3 (Hyperluminal Particle Beam 0.32 -> 0.416). E3 (Ult +2 / Basic +1): Enkindle the First Lodestar 1.00 -> 1.10. E4: All-Type RES PEN applies to all allies and +10% for Nova (hn_e4_respen; hn_respen resPenAll 0.20 -> 0.30). E5 (Skill +2 / Talent +2): hn_respen resPenAll 0.30 -> 0.32 and hn_cd CRIT DMG 0.80 -> 0.88. E6: Fire RES PEN +20% (hn_e6_fire). E1 (Assist-use/Charge reductions) needs an ally running Verdict/Decimation, absent from the solo fixture — covered as custom. Fixtures run one battle per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "himeko_nova E0 — eidolon ladder rung, cloned from himeko_nova/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko_nova",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "himeko_nova E1 — eidolon ladder rung, cloned from himeko_nova/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko_nova",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "himeko_nova E2 — eidolon ladder rung, cloned from himeko_nova/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko_nova",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "himeko_nova E3 — eidolon ladder rung, cloned from himeko_nova/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko_nova",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "himeko_nova E4 — eidolon ladder rung, cloned from himeko_nova/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko_nova",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "himeko_nova E5 — eidolon ladder rung, cloned from himeko_nova/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko_nova",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "himeko_nova E6 — eidolon ladder rung, cloned from himeko_nova/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "himeko_nova",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "nova_e2_beam_e2_e6",
+      "layer": "parameters",
+      "claim": "E2: Ult/Assist DMG x1.3 (Hyperluminal Particle Beam 0.32 -> 0.416).",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Hyperluminal Particle Beam (4)"
+        },
+        "field": "mult",
+        "value": 0.416,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "nova_e2_beam_locked_e0_e1",
+      "layer": "parameters",
+      "claim": "E2 locked below its rank: Hyperluminal Particle Beam 0.32 at E0/E1.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Hyperluminal Particle Beam (4)"
+        },
+        "field": "mult",
+        "value": 0.32,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "nova_e3_enkindle_e3_e6",
+      "layer": "parameters",
+      "claim": "E3 (Ult +2): Enkindle the First Lodestar 1.00 -> 1.10.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Enkindle the First Lodestar"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "nova_e3_enkindle_locked_e0_e2",
+      "layer": "parameters",
+      "claim": "E3 locked below its rank: Enkindle the First Lodestar 1.00 at E0..E2.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Enkindle the First Lodestar"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "nova_e4_present_e4_e6",
+      "layer": "interactions",
+      "claim": "E4: All-Type RES PEN extends to all allies (hn_e4_respen).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "hn_e4_respen"
+      }
+    },
+    {
+      "id": "nova_e4_locked_e0_e3",
+      "layer": "interactions",
+      "claim": "E4 locked below its rank: no hn_e4_respen at E0..E3.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "hn_e4_respen"
+      }
+    },
+    {
+      "id": "nova_e4_respen_e4",
+      "layer": "parameters",
+      "claim": "E4: hn_respen resPenAll 0.20 -> 0.30.",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hn_respen",
+        "stat": "resPenAll",
+        "value": 0.3
+      }
+    },
+    {
+      "id": "nova_e5_respen_e5_e6",
+      "layer": "parameters",
+      "claim": "E5 (Skill +2): hn_respen resPenAll 0.30 -> 0.32.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hn_respen",
+        "stat": "resPenAll",
+        "value": 0.32
+      }
+    },
+    {
+      "id": "nova_e5_cd_e5_e6",
+      "layer": "parameters",
+      "claim": "E5 (Talent +2): hn_cd CRIT DMG 0.80 -> 0.88.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hn_cd",
+        "stat": "critDmg",
+        "value": 0.88
+      }
+    },
+    {
+      "id": "nova_e6_present_e6",
+      "layer": "interactions",
+      "claim": "E6: Fire RES PEN +20% (hn_e6_fire).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "hn_e6_fire"
+      }
+    },
+    {
+      "id": "nova_e6_fire_e6",
+      "layer": "parameters",
+      "claim": "E6: hn_e6_fire grants Fire RES PEN +20%.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hn_e6_fire",
+        "stat": "resPen:Fire",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "nova_e6_locked_e0_e5",
+      "layer": "interactions",
+      "claim": "E6 locked below its rank: no hn_e6_fire at E0..E5.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "hn_e6_fire"
+      }
+    },
+    {
+      "id": "nova_e1_custom",
+      "layer": "interactions",
+      "claim": "E1: reduces Assist-use count / Charge requirement.",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "E1 requires an ally running Verdict/Decimation to exercise the Assist path; the solo fixture has none, so the change is not observable."
+      }
+    }
+  ],
+  "golds": []
+}

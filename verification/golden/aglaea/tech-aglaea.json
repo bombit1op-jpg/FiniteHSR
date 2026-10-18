@@ -1,0 +1,25 @@
+{
+ "input": {
+  "kit": "aglaea",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Aglaea alone, technique \"Meteoric Sunder\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Aglaea|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Aglaea|-|-|-",
+  "ENERGY_GAIN|Aglaea|Aglaea|-|- [0,205,30,350]",
+  "STAT_CHANGED|Garmentmaker|-|-|- [1,36]",
+  "SUMMON_CREATED|Aglaea|Garmentmaker|-|- [1539,1539,277.7778,36]",
+  "ACTION_ADVANCE|Garmentmaker|Garmentmaker|-|- [0,1]",
+  "HIT_START|Aglaea|Ice Edge|Meteoric Sunder|basic [0,1,30,5000000,698]",
+  "DAMAGE_CALCULATED|Aglaea|Ice Edge|-|basic [0,0,0,0,0,0,0.17,0.224,1,1,384,698]",
+  "DAMAGE_DEALT|Aglaea|Ice Edge|Meteoric Sunder|basic [1,384,4999616,5000000,698]",
+  "HIT_END|Aglaea|Ice Edge|-|basic [384,4999616]",
+  "BUFF_APPLIED|-|Ice Edge|-|- [1,Infinity]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

@@ -1,0 +1,428 @@
+{
+  "kit": "herta",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "reference/hsr-data/characters.json#/Herta/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E3 (Skill +2 / Basic +1): One-Time Offer 1.015 -> 1.085 and What Are You Looking At? 1.00 -> 1.10. E5 (Ult +2 / Talent +2): It's Magic, I Added Some Magic 2.00 -> 2.16. E6: after Ultimate, herta_e6 (ATK +25%, 1 turn) is granted. E1 (Basic deals 40%-ATK Ice Additional DMG to a target at or below 50% HP), E2 (Talent trigger -> +3% CRIT Rate, stacking to 5) and E4 (Talent trigger -> +10% DMG) all require the Talent follow-up, which only fires when a target falls to <=50% HP — the single-Herta 6M-HP fixture never does, so those ranks are covered as custom. Fixtures run one battle per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "herta E0 — eidolon ladder rung, cloned from herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "herta",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "herta E1 — eidolon ladder rung, cloned from herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "herta",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "herta E2 — eidolon ladder rung, cloned from herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "herta",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "herta E3 — eidolon ladder rung, cloned from herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "herta",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "herta E4 — eidolon ladder rung, cloned from herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "herta",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "herta E5 — eidolon ladder rung, cloned from herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "herta",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "herta E6 — eidolon ladder rung, cloned from herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "herta",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "herta_e3_skill_e3_e6",
+      "layer": "parameters",
+      "claim": "E3 (Skill +2): One-Time Offer 1.015 -> 1.085.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "One-Time Offer"
+        },
+        "field": "mult",
+        "value": 1.085,
+        "tol": 0.0005
+      }
+    },
+    {
+      "id": "herta_e3_skill_locked_e0_e2",
+      "layer": "parameters",
+      "claim": "E3 locked below its rank: One-Time Offer 1.015 at E0..E2.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "One-Time Offer"
+        },
+        "field": "mult",
+        "value": 1.015,
+        "tol": 0.0005
+      }
+    },
+    {
+      "id": "herta_e3_basic_e3_e6",
+      "layer": "parameters",
+      "claim": "E3 (Basic +1): What Are You Looking At? 1.00 -> 1.10.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "What Are You Looking At?"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "herta_e5_ult_e5_e6",
+      "layer": "parameters",
+      "claim": "E5 (Ult +2): It's Magic, I Added Some Magic 2.00 -> 2.16.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "It's Magic, I Added Some Magic"
+        },
+        "field": "mult",
+        "value": 2.16,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "herta_e5_ult_locked_e0_e4",
+      "layer": "parameters",
+      "claim": "E5 locked below its rank: It's Magic, I Added Some Magic 2.00 at E0..E4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "It's Magic, I Added Some Magic"
+        },
+        "field": "mult",
+        "value": 2,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "herta_e6_present_e6",
+      "layer": "interactions",
+      "claim": "E6: after Ultimate, herta_e6 (ATK +25%, 1 turn) is granted.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "herta_e6"
+      }
+    },
+    {
+      "id": "herta_e6_atk_e6",
+      "layer": "parameters",
+      "claim": "E6: herta_e6 grants ATK +25%.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "herta_e6",
+        "stat": "atkPct",
+        "value": 0.25
+      }
+    },
+    {
+      "id": "herta_e6_locked_e0_e5",
+      "layer": "interactions",
+      "claim": "E6 locked below its rank: no herta_e6 at E0..E5.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "herta_e6"
+      }
+    },
+    {
+      "id": "herta_e1_custom",
+      "layer": "interactions",
+      "claim": "E1: Basic deals 40% ATK Ice Additional DMG to a target at or below 50% HP.",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "E1 needs a target at <=50% HP; the 6M-HP solo fixture never drops that low."
+      }
+    },
+    {
+      "id": "herta_e2_custom",
+      "layer": "interactions",
+      "claim": "E2: Talent trigger grants +3% CRIT Rate, stacking to 5.",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "E2 requires the Talent follow-up; it only fires when a target falls to <=50% HP, which the fixture never does."
+      }
+    },
+    {
+      "id": "herta_e4_custom",
+      "layer": "interactions",
+      "claim": "E4: Talent trigger grants +10% DMG.",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "E4 requires the Talent follow-up; it only fires when a target falls to <=50% HP, which the fixture never does."
+      }
+    }
+  ],
+  "golds": []
+}

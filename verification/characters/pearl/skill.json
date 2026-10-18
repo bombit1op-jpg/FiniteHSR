@@ -1,0 +1,180 @@
+{
+  "kit": "pearl",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/150301+150302+150303+150304 + bonus_abilities (Panoptic Vision, Sensory Latitude, Aesthetic Firewall) and docs/combat_mechanics/Punchline.md",
+    "confidence": "verified",
+    "note": "Pearl is an Elation-path Ice healer/support (Energy limit 180). Basic 150301 Brushstroke: Trace the Severed Stream is a %DEF Ice hit. Skill 150302 Relume Life's Light spends 1 SP, +30 Energy, gains +15 Certified Banger and heals the team (+ the lowest-HP ally again). Ultimate 150303 Appraise Soul's Ground gains +20 CB and marks the team's Elation Archetype with Deep Learning, advancing them. Talent Grow Grace from Grit turns CB into Repellency (200/CB, cap 50) which absorbs 60% incoming ally DMG; an ally at <=50% HP additionally takes -30%. A0 Panoptic Vision (DEF>=2400) adds Elation and an OHB bonus; A2 Sensory Latitude gives +5 CB at each ally turn start."
+  },
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "duo-deep",
+      "env": "Pearl E0 + Hook E0 vs an Ice/Physical-weak Elite (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7 - Hook is Pearl's Elation Archetype and demonstrates Deep Learning",
+      "battle": {
+        "team": [
+          {
+            "kitId": "pearl",
+            "stats": { "hp": 10000, "atk": 1000, "def": 3000, "spd": 200 },
+            "eidolon": 0
+          },
+          {
+            "kitId": "hook",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 130 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Ice", "Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6-shell",
+      "env": "Pearl E6 + Hook E0 vs the same Elite - Compute Life From One Shell grants all allies Action DMG +? / All-Type RES PEN +20% while Deep Learning is up",
+      "battle": {
+        "team": [
+          {
+            "kitId": "pearl",
+            "stats": { "hp": 10000, "atk": 1000, "def": 3000, "spd": 200 },
+            "eidolon": 6
+          },
+          {
+            "kitId": "hook",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 130 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Ice", "Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "pr_talent_repellency",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent 'Grow Grace from Grit': incoming damage to a ≤50% HP ally is intercepted by Repellency — logged 'Pearl Repellency blocks' (elation.ts:610-631).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Pearl Repellency blocks"
+        }
+      }
+    },
+    {
+      "id": "p_basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK 150301 Brushstroke: Trace the Severed Stream is a single Ice hit (scaled on DEF).",
+      "fixtures": ["duo-deep"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Pearl", "label": "Brushstroke: Trace the Severed Stream" } }
+    },
+    {
+      "id": "p_skill_action",
+      "layer": "structure",
+      "claim": "Relume Life's Light (150302) is Pearl's Skill action.",
+      "fixtures": ["duo-deep"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Pearl", "action": "skill" } }
+    },
+    {
+      "id": "p_ult_action",
+      "layer": "structure",
+      "claim": "Appraise Soul's Ground (150303) is Pearl's Ultimate action.",
+      "fixtures": ["duo-deep"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Pearl", "action": "ultimate" } }
+    },
+    {
+      "id": "p_skill_heal",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill 150302 heals the team.",
+      "fixtures": ["duo-deep"],
+      "assertion": { "assert": "present", "of": { "type": "HEAL_APPLIED", "source": "Pearl" } }
+    },
+    {
+      "id": "p_deep_buff",
+      "layer": "interactions",
+      "claim": "The Ultimate marks the Elation Archetype (Hook) with Deep Learning (pearl_deep).",
+      "fixtures": ["duo-deep"],
+      "assertion": { "assert": "buff", "id": "pearl_deep", "target": "Hook" }
+    },
+    {
+      "id": "p_deep_basic_hit",
+      "layer": "interactions",
+      "claim": "After the Archetype Basic, Deep Learning enhances Pearl's Basic to Brushstroke: Render the Great Wave (non-Elation archetype).",
+      "fixtures": ["duo-deep"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Pearl", "label": "Brushstroke: Render the Great Wave" } }
+    },
+    {
+      "id": "p_deep_elation_hit",
+      "layer": "interactions",
+      "claim": "Deep Learning adds Ice Elation DMG owned by the Archetype (Hook).",
+      "fixtures": ["duo-deep"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Hook", "label": "Deep Learning" } }
+    },
+    {
+      "id": "p_a0_ohb",
+      "layer": "interactions",
+      "claim": "A0 Panoptic Vision grants Pearl an OHB bonus buff (pearl_a0_ohb).",
+      "fixtures": ["duo-deep"],
+      "assertion": { "assert": "buff", "id": "pearl_a0_ohb", "target": "Pearl" }
+    },
+    {
+      "id": "p_a2_effres",
+      "layer": "interactions",
+      "claim": "A2 Sensory Latitude fires on an ally turn start, granting Effect RES +50% (pearl_a2) while Pearl holds CB.",
+      "fixtures": ["duo-deep"],
+      "assertion": { "assert": "buff", "id": "pearl_a2", "target": "Pearl" }
+    },
+    {
+      "id": "p_e6_respen",
+      "layer": "interactions",
+      "claim": "E6 Compute Life From One Shell grants all allies All-Type RES PEN +20% while Deep Learning is up (pearl_e6).",
+      "fixtures": ["e6-shell"],
+      "assertion": { "assert": "buff", "id": "pearl_e6", "target": "Pearl" }
+    },
+    {
+      "id": "p_deep_before_hit",
+      "layer": "ordering",
+      "claim": "Deep Learning is applied (Ultimate) before its enhanced hits resolve.",
+      "fixtures": ["duo-deep"],
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Pearl", "action": "ultimate" }],
+        "after": [{ "type": "HIT_START", "source": "Hook", "label": "Deep Learning" }]
+      }
+    },
+    {
+      "id": "p_energy_cap",
+      "layer": "parameters",
+      "claim": "Pearl's Ultimate gate is the 180-Energy ladder; she never exceeds it.",
+      "fixtures": ["duo-deep"],
+      "assertion": { "assert": "unitState", "who": "Pearl", "field": "energy", "atMost": 180 }
+    }
+  ]
+}

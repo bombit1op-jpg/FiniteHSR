@@ -1,0 +1,206 @@
+{
+  "kit": "yukong",
+  "slot": "skill",
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Yukong E0 solo vs an Imaginary-weak Elite, 3 cycles - Arrowslinger 3-hit basic with the Seven Layers One Arrow extra hit, Roaring Bowstrings team ATK buff on Skill, Diving Kestrel Ultimate (single hit, +5 Energy), A4 12% Imaginary DMG aura",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "e4-echoes",
+      "env": "Yukong E4 solo vs the same Elite - while Roaring Bowstrings is up her own turn start grants Zephyrean Echoes +30% DMG (yukong_e4)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 2,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "a4_imaginary",
+      "layer": "interactions",
+      "claim": "A4 trace hands every ally +12% Imaginary DMG (yukong_dmg, dmg:Imaginary 0.12) for as long as Yukong is on the field.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "BUFF_APPLIED",
+          "payload": {
+            "id": "yukong_dmg"
+          }
+        }
+      }
+    },
+    {
+      "id": "basic_hit",
+      "ability": "basic",
+      "layer": "interactions",
+      "claim": "Basic ATK Arrowslinger (121302) is a 3-hit Imaginary attack (split 20/20/60, 140% rank-10).",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Yukong",
+          "payload": {
+            "label": "Arrowslinger"
+          }
+        }
+      }
+    },
+    {
+      "id": "talent_arrow",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Seven Layers One Arrow adds an extra Imaginary hit (100% rank-10) on every second Basic ATK.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Yukong",
+          "payload": {
+            "label": "Seven Layers, One Arrow"
+          }
+        }
+      }
+    },
+    {
+      "id": "skill_roaring",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill Diving Kestrel formation (no damage) grants all allies 2 stacks of Roaring Bowstrings (roaring_bow, atkPct 100% rank-10) consumed by ally actions.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "BUFF_APPLIED",
+          "payload": {
+            "id": "roaring_bow"
+          }
+        }
+      }
+    },
+    {
+      "id": "ult_hit",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate Diving Kestrel strikes the target with a single Imaginary hit (456% rank-10) and gains +5 Energy from the cast.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Yukong",
+          "payload": {
+            "label": "Diving Kestrel"
+          }
+        }
+      }
+    },
+    {
+      "id": "ult_energy",
+      "layer": "interactions",
+      "claim": "Diving Kestrel returns +5 Energy to Yukong when cast.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Yukong",
+          "payload": {
+            "n": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "e4_echoes",
+      "layer": "interactions",
+      "claim": "E4 Zephyrean Echoes: while Roaring Bowstrings is active Yukong receives +30% DMG (yukong_e4) at her turn start.",
+      "fixtures": [
+        "e4-echoes"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "BUFF_APPLIED",
+          "payload": {
+            "id": "yukong_e4"
+          }
+        }
+      }
+    }
+  ]
+}

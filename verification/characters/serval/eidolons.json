@@ -1,0 +1,433 @@
+{
+  "kit": "serval",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Serval/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 Basic adds an adjacent 60% hit (Echo Chamber); E2 +4 Energy per Talent trigger; E3 Skill Lv.+2/Basic Lv.+1 (Lightning Whip 1.4 -> 1.54); E4 Ultimate 100% Shock application; E5 Ultimate Lv.+2/Talent Lv.+2 (Voltage 1.8 -> 1.944); E6 +30% DMG vs Shocked enemies (serval_e6). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent. E4 is unobservable here because the Skill already Shocks every enemy (recorded as a deviation). Talent 110304 \"After Serval attacks, deals Additional DMG to all Shocked enemies\" = ONCE PER ATTACK; E2 her_energy 16 = 11 baseline + one 4-Energy gain per attack that hit a Shocked enemy. (Was 27 when the Talent's `add` hit wrongly minted a new attackNo per hit/target — fixed 10-10-2026: Additional DMG is not an attack, so the rider carries noSeq.)"
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "serval E0 — eidolon ladder rung, cloned from serval/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "serval",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "serval E1 — eidolon ladder rung, cloned from serval/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "serval",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "serval E2 — eidolon ladder rung, cloned from serval/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "serval",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "serval E3 — eidolon ladder rung, cloned from serval/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "serval",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "serval E4 — eidolon ladder rung, cloned from serval/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "serval",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "serval E5 — eidolon ladder rung, cloned from serval/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "serval",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "serval E6 — eidolon ladder rung, cloned from serval/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "serval",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "serval_e1_present",
+      "layer": "parameters",
+      "claim": "E1: the Basic ATK adds an Echo Chamber hit to an adjacent enemy.",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Echo Chamber"
+        }
+      }
+    },
+    {
+      "id": "serval_e1_locked",
+      "layer": "parameters",
+      "claim": "Below E1 the Basic ATK deals no adjacent Echo Chamber hit.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Echo Chamber"
+        }
+      }
+    },
+    {
+      "id": "serval_e2_present",
+      "layer": "parameters",
+      "claim": "E2: +4 Energy each time the Talent deals Additional DMG (ENERGY_GAIN events 11 -> 16; Talent fires once per attack, not per hit).",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "target": "Serval"
+        },
+        "value": 16
+      }
+    },
+    {
+      "id": "serval_e2_locked",
+      "layer": "parameters",
+      "claim": "Below E2 the Talent grants no extra Energy (11 gains).",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "target": "Serval"
+        },
+        "value": 11
+      }
+    },
+    {
+      "id": "serval_e3_present",
+      "layer": "parameters",
+      "claim": "E3: Skill Lv.+2/Basic Lv.+1 raise Lightning Whip 1.4 -> 1.54.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Lightning Whip"
+        },
+        "field": "mult",
+        "value": 1.54,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "serval_e3_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Lightning Whip stays at 1.4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Lightning Whip"
+        },
+        "field": "mult",
+        "value": 1.4,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "serval_e5_present",
+      "layer": "parameters",
+      "claim": "E5: Ultimate Lv.+2/Talent Lv.+2 raise Voltage 1.8 -> 1.944.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Voltage"
+        },
+        "field": "mult",
+        "value": 1.944,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "serval_e5_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Voltage stays at 1.8.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Voltage"
+        },
+        "field": "mult",
+        "value": 1.8,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "serval_e6_present",
+      "layer": "interactions",
+      "claim": "E6: +30% DMG dealt to Shocked enemies (serval_e6, dmgAll 0.3).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "serval_e6"
+      }
+    },
+    {
+      "id": "serval_e6_locked",
+      "layer": "interactions",
+      "claim": "Below E6 the Shocked-target DMG bonus is absent.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "serval_e6"
+      }
+    }
+  ],
+  "golds": []
+}

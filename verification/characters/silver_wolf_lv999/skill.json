@@ -1,0 +1,208 @@
+{
+  "kit": "silver_wolf_lv999",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json skills 150601-150621 (basic 150601/150608, skill 150602, ult 150603, talent 150604, el_skill 150620/150621)",
+    "confidence": "interpreted",
+    "note": "Imaginary Elation. Hidden MMR (from Punchline) raises CRIT Rate and unlocks the Ultimate at 60; the Ultimate enters the Godmode Player state (Zone, Enhanced Basic, Enhanced Elation Skill) and does not spend a normal Energy pool (ultConsumption 'none')."
+  },
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Silver Wolf LV.999 E0 solo vs an Imaginary-weak Elite, 10 cycles. Energy starts full (60) but the Ult is locked below 60 Hidden MMR, so She builds MMR with Skill Trigger Happy (+5 Punchline/+5 MMR) and the Aha Elation Skill until the gate opens, then casts God Mode: ON!, deploys the Zone and spends the 3 Enhanced Basic uses of Bonus Stage: aWolf Instant.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "silver_wolf_lv999",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "energyStartFrac": 1.0,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 10,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6-weakness",
+      "env": "Silver Wolf LV.999 E6 solo vs the same Elite, 10 cycles. E6 implants Absolute Weakness (sw_absweak, vulnAll +20%) on enemies entering combat at wave start, in addition to the base Godmode rotation.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "silver_wolf_lv999",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "energyStartFrac": 1.0,
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 10,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK One Punch! (150601) deals a single-target Imaginary hit outside Godmode.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Silver Wolf LV.999",
+          "label": "One Punch!",
+          "attackType": "basic"
+        }
+      }
+    },
+    {
+      "id": "skill_hit",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill Trigger Happy (150602) is an Imaginary AoE hit and grants skill_a2 (=5) Punchline.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Silver Wolf LV.999",
+          "label": "Trigger Happy",
+          "attackType": "skill"
+        }
+      }
+    },
+    {
+      "id": "mmr_buff",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Hidden MMR is modelled as the sw_mmr buff (talent_a4 CRIT Rate per point); the talent gates the Ultimate at 60.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "sw_mmr"
+      }
+    },
+    {
+      "id": "ult_godmode",
+      "layer": "structure",
+      "claim": "God Mode: ON! (150603) enters the Godmode Player state (once Hidden MMR reaches talent=60) and resolves as a normal 'ult' action.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Silver Wolf LV.999",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "ult_consumption",
+      "layer": "parameters",
+      "claim": "The Ultimate zeroes her Energy (castUlt ENERGY_LOSS reason 'ult_cost'); no sp_base refund because ultConsumption 'none' (she does not use the Energy system).",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Silver Wolf LV.999",
+          "payload": {
+            "reason": "ult_cost"
+          }
+        }
+      }
+    },
+    {
+      "id": "zone_vuln",
+      "layer": "interactions",
+      "claim": "While in Godmode a Zone is deployed on the field (sw_zone, vulnAll +20%) and removed on exiting Godmode.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "sw_zone",
+        "target": "Elite"
+      }
+    },
+    {
+      "id": "enhanced_basic",
+      "layer": "interactions",
+      "claim": "Inside Godmode the Basic becomes Bonus Stage: aWolf Instant (150608), Imaginary Elation DMG to the bounces; after 3 uses (talent_a5) she exits Godmode.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Silver Wolf LV.999",
+          "label": "Bonus Stage: aWolf Instant"
+        }
+      }
+    },
+    {
+      "id": "e6_absolute_weakness",
+      "layer": "interactions",
+      "claim": "E6 implants Absolute Weakness (sw_absweak, All-Type Weakness + vulnAll +20%) on enemies entering combat at wave start.",
+      "fixtures": [
+        "e6-weakness"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "sw_absweak",
+        "target": "Elite"
+      }
+    }
+  ],
+  "golds": []
+}

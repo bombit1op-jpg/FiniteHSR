@@ -1,0 +1,20 @@
+{
+ "input": {
+  "kit": "himeko_nova",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Himeko • Nova alone, technique \"Starcharter Cruise\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Himeko • Nova|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Himeko • Nova|-|- [1,Infinity]",
+  "BUFF_APPLIED|-|Himeko • Nova|-|- [1,Infinity]",
+  "TECHNIQUE_APPLIED|Himeko • Nova|-|-|-",
+  "ENERGY_GAIN|Himeko • Nova|Himeko • Nova|-|- [0,105,150,30]",
+  "BUFF_APPLIED|Himeko • Nova|Himeko • Nova|-|- [1,3]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

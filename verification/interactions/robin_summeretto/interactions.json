@@ -1,0 +1,95 @@
+{
+  "kit": "robin_summeretto",
+  "slot": "interactions",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/robin_summeretto/ranks+traces",
+    "confidence": "verified",
+    "note": "Phase 3.5 paired/allies fixture. Companion = seele (attacker): Summeretto's Fever needs ally attacks to build Vibes, and only the 3-member stage emits E1's True DMG. Assertions pin the canon eidolon/trace observable; status gap = documented deviation expected to diverge (PROMOTE if it passes), blocked = no stable observable."
+  },
+  "fixtures": [
+    {
+      "id": "pair",
+      "env": "robin_summeretto E6 + seele ally vs Boss (Lv120), 6 cycles, seed 11",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin_summeretto",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 120
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "seele",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 134
+            }
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 250000,
+          "atk": 140,
+          "spd": 150,
+          "level": 120,
+          "toughness": 1800,
+          "weaknesses": [
+            "Physical",
+            "Fire",
+            "Ice",
+            "Lightning",
+            "Wind",
+            "Quantum",
+            "Imaginary"
+          ]
+        },
+        "cycles": 6,
+        "seed": 11
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "robin_summeretto_fixture_runs",
+      "layer": "structure",
+      "claim": "The paired battle executes deterministically with no invariant break.",
+      "fixtures": [
+        "pair"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "fixture executes"
+      }
+    },
+    {
+      "id": "robin_summeretto_e1_true_dmg",
+      "layer": "interactions",
+      "claim": "E1: once Fever is reached (3 Summer Songbirds), the birds' attacks deal True DMG, emitted as a traceable DAMAGE_DEALT with attackType 'true'.",
+      "fixtures": [
+        "pair"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "attackType": "true",
+          "label": "True DMG"
+        },
+        "field": "amount",
+        "value": 13721.064,
+        "tol": 0.5,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

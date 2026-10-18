@@ -1,0 +1,223 @@
+{
+  "kit": "blackswan",
+  "slot": "skill",
+  "canon": {
+    "source": "reference/hsr-data/characters.json",
+    "ref": "Black Swan skill IDs 1130701-1130704",
+    "confidence": "high",
+    "note": "Basic 1130701 Percipience: 140% ATK at L10, single hit. Skill 1130702 Decadence: 90% primary, adjacent same; Goblet's Dredges DEF -20.8% 3 turns (skill_a2). Ult 1130703 Bliss: 120% all enemies, applies Epiphany (DMG taken +25%, 2 turns) before the hit, +5 Arcana stacks. Talent 1130704: Arcana DoT (per-stack scaling, halved if target has Epiphany at tick), Splash WindShear on skill hits. A6 Candleflame: EHR-scaled DMG bonus, permanent. sp_need 120."
+  },
+  "fixtures": [
+    {
+      "id": "solo-1e",
+      "env": "Black Swan E0 solo vs 1 Wind-weak Elite dummy (Lv120, 6M HP, 300 Toughness), auto rotation, 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blackswan",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Wind"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "trio-3e",
+      "env": "Black Swan E0 solo vs 3 Wind-weak Elite dummies (Lv120, 6M HP, 300 Toughness each), auto rotation, 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blackswan",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Wind"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "bs_basic",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic Percipience deals 1.0x (engine Basic Lv6 total 100% of canon 140% at L10), 2 casts in fixture",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Black Swan", "label": "Percipience, Silent Dawn", "payload": { "mult": 1 } },
+        "value": 2
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "bs_skill_mult",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill Decadence primary deals 0.9x (canon 1130702 #1: 90% ATK), 4 casts in fixture",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Black Swan", "label": "Decadence, False Twilight", "payload": { "mult": 0.9 } },
+        "value": 4
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "bs_skill_adj",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill adjacent hits deal 0.9x each (same coefficient as primary), 2 per cast over 4 casts",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Black Swan", "label": "Decadence, False Twilight (adj)", "payload": { "mult": 0.9 } },
+        "value": 8
+      },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "bs_ult_present",
+      "layer": "structure",
+      "claim": "Black Swan casts her Ultimate in the fixture (standard Energy activation)",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Black Swan", "action": "ultimate" } }
+    },
+    {
+      "id": "bs_ult_mult",
+      "layer": "parameters",
+      "claim": "Bliss of Otherworld's Embrace deals 1.2x (canon 1130703 #1: 120% ATK)",
+      "assertion": {
+        "assert": "payload",
+        "of": { "type": "DAMAGE_DEALT", "source": "Black Swan", "label": "Bliss of Otherworld's Embrace" },
+        "field": "mult",
+        "value": 1.2
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "bs_ult_aoe",
+      "layer": "structure",
+      "claim": "Bliss hits all 3 enemies per cast (6 hits over 2 casts in trio fixture)",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "HIT_START", "source": "Black Swan", "label": "Bliss of Otherworld's Embrace" },
+        "value": 6
+      },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "bs_order_epiphany",
+      "layer": "ordering",
+      "claim": "Epiphany is applied before Bliss damage resolves (canon 1130703: Epiphany lands as part of the Ultimate before damage)",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "BUFF_APPLIED", "payload": { "id": "bs_epiphany" } }
+        ],
+        "after": [
+          { "type": "DAMAGE_DEALT", "source": "Black Swan", "label": "Bliss of Otherworld's Embrace" }
+        ]
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "bs_epiphany_turns",
+      "layer": "parameters",
+      "claim": "Epiphany lasts 2 turns (canon 1130703 #3: 2 turns)",
+      "assertion": { "assert": "buff", "id": "bs_epiphany", "turns": 2 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "bs_epiphany_stat",
+      "layer": "parameters",
+      "claim": "Epiphany raises DMG taken by 25% (canon 1130703 #3: 25%)",
+      "assertion": { "assert": "buffStat", "id": "bs_epiphany", "stat": "vulnAll", "value": 0.25 }
+    },
+    {
+      "id": "bs_def_turns",
+      "layer": "parameters",
+      "claim": "Goblet's Dredges DEF shred lasts 3 turns (canon skill duration 3)",
+      "assertion": { "assert": "buff", "id": "bs_def", "turns": 3 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "bs_def_stat",
+      "layer": "parameters",
+      "claim": "Goblet's Dredges DEF shred is 20.8% (canon skill_a2: 20.8%)",
+      "assertion": { "assert": "buffStat", "id": "bs_def", "stat": "defRed", "value": 0.208 }
+    },
+    {
+      "id": "bs_arcana_tick",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Arcana DoT ticks on the enemy turn (canon 1130704: Arcana is the Talent DoT)",
+      "assertion": { "assert": "present", "of": { "type": "DOT_TICK", "payload": { "kind": "Arcana" } } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "bs_arcana_stacks",
+      "layer": "interactions",
+      "claim": "Arcana stacks accumulate (+5 per Ult/skill application, canon 1130703/1130704: +5 stacks)",
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "Arcana ×" } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "bs_splash_apply",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill splashes WindShear onto adjacent enemies (canon 1130704: Splash WindShear on skill hits)",
+      "assertion": { "assert": "present", "of": { "type": "DOT_APPLIED", "payload": { "kind": "WindShear" } } },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "bs_splash_tick",
+      "layer": "interactions",
+      "claim": "Splashed WindShear ticks on the enemy turn",
+      "assertion": { "assert": "present", "of": { "type": "DOT_TICK", "payload": { "kind": "WindShear" } } },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "bs_a6",
+      "layer": "parameters",
+      "claim": "A6 Candleflame grants +6% DMG at 10% EHR (canon A6: EHR-scaled, 10% EHR -> 6%)",
+      "assertion": { "assert": "buffStat", "id": "bs_a6", "stat": "dmgAll", "value": 0.06 }
+    },
+    {
+      "id": "bs_energy_solo",
+      "layer": "parameters",
+      "claim": "Regenerates exactly 180 Energy in solo fixture (sp_need 120 ladder)",
+      "assertion": { "assert": "energy", "who": "Black Swan", "atLeast": 180, "atMost": 180 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "bs_energy_trio",
+      "layer": "parameters",
+      "claim": "Regenerates exactly 185 Energy in trio fixture (same kit gains plus landed enemy attacks)",
+      "assertion": { "assert": "energy", "who": "Black Swan", "atLeast": 185, "atMost": 185 },
+      "fixtures": ["trio-3e"]
+    }
+  ],
+  "golds": []
+}

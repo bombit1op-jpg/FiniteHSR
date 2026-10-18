@@ -1,0 +1,428 @@
+{
+  "kit": "cyrene",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "hsr-data/characters.json#/Cyrene/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E1: 'Ode to Ego' bounces +12 (Ode to Ego hit count 6->143; Minuet 6->11). E2: gains +12 Recollection at battle start and the True DMG zone is strengthened (Cyrene starting energy 20->31). E3 (level bump): cy_heart dmgAll 0.20->0.22 and cy_ripples_cr critRate 0.50->0.55. E4: 'Ode to Ego' spiral multiplier grows per bounce (adds the 0.90..1.68 ladder on top of 0.84). E5 (Talent+2): To Love and Tomorrow 0.30->0.33. E6: cy_e6_def defRed 0.20 on the target plus an extra Ode bounce multiplier (1.74) and Boothill action-advance energy 293->323. Fixtures battle one run per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "cyrene E0 — eidolon ladder rung, cloned from cyrene/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cyrene",
+            "stats": {
+              "hp": 4800,
+              "atk": 2800,
+              "def": 1000,
+              "spd": 160
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 200,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Ice",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 5
+      }
+    },
+    {
+      "id": "e1",
+      "env": "cyrene E1 — eidolon ladder rung, cloned from cyrene/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cyrene",
+            "stats": {
+              "hp": 4800,
+              "atk": 2800,
+              "def": 1000,
+              "spd": 160
+            },
+            "eidolon": 1,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 200,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Ice",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 5
+      }
+    },
+    {
+      "id": "e2",
+      "env": "cyrene E2 — eidolon ladder rung, cloned from cyrene/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cyrene",
+            "stats": {
+              "hp": 4800,
+              "atk": 2800,
+              "def": 1000,
+              "spd": 160
+            },
+            "eidolon": 2,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 200,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Ice",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 5
+      }
+    },
+    {
+      "id": "e3",
+      "env": "cyrene E3 — eidolon ladder rung, cloned from cyrene/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cyrene",
+            "stats": {
+              "hp": 4800,
+              "atk": 2800,
+              "def": 1000,
+              "spd": 160
+            },
+            "eidolon": 3,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 200,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Ice",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 5
+      }
+    },
+    {
+      "id": "e4",
+      "env": "cyrene E4 — eidolon ladder rung, cloned from cyrene/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cyrene",
+            "stats": {
+              "hp": 4800,
+              "atk": 2800,
+              "def": 1000,
+              "spd": 160
+            },
+            "eidolon": 4,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 200,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Ice",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 5
+      }
+    },
+    {
+      "id": "e5",
+      "env": "cyrene E5 — eidolon ladder rung, cloned from cyrene/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cyrene",
+            "stats": {
+              "hp": 4800,
+              "atk": 2800,
+              "def": 1000,
+              "spd": 160
+            },
+            "eidolon": 5,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 200,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Ice",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 5
+      }
+    },
+    {
+      "id": "e6",
+      "env": "cyrene E6 — eidolon ladder rung, cloned from cyrene/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cyrene",
+            "stats": {
+              "hp": 4800,
+              "atk": 2800,
+              "def": 1000,
+              "spd": 160
+            },
+            "eidolon": 6,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 200,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Ice",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 5
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "cyrene_e1_bounces",
+      "layer": "parameters",
+      "claim": "E1 adds +12 bounces to each 'Ode to Ego' cast (13 per cast vs 1 at E0); the reduced-Recollection fixture runs 7 casts = 91 hits.",
+      "fixtures": ["e1"],
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "label": "Ode to Ego" }, "value": 91 }
+    },
+    {
+      "id": "cyrene_e1_bounces_locked",
+      "layer": "parameters",
+      "claim": "At E0 'Ode to Ego' deals 1 bounce per cast; the fixture's 4 casts = 4 hits.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "label": "Ode to Ego" }, "value": 4 }
+    },
+    {
+      "id": "cyrene_e2_energy",
+      "layer": "interactions",
+      "claim": "E2 'Credo for a New World' grants +12 Recollection at battle start, sharply accelerating the pool: each E2 fixture sustains 9 Ultimate casts (vs 4 at E0).",
+      "fixtures": ["e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Cyrene", "action": "ultimate" }, "value": 9 }
+    },
+    {
+      "id": "cyrene_e2_energy_locked",
+      "layer": "interactions",
+      "claim": "Below E2 (no battle-start +12) the Recollection pool sustains only 4 Ultimate casts in the E0 fixture.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Cyrene", "action": "ultimate" }, "value": 4 }
+    },
+    {
+      "id": "cyrene_e3_heart",
+      "layer": "parameters",
+      "claim": "E3 raises cy_heart dmgAll 0.20 -> 0.22.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "cy_heart", "stat": "dmgAll", "value": 0.22 }
+    },
+    {
+      "id": "cyrene_e3_heart_locked",
+      "layer": "parameters",
+      "claim": "Below E3 cy_heart dmgAll stays 0.20.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "buffStat", "id": "cy_heart", "stat": "dmgAll", "value": 0.2 }
+    },
+    {
+      "id": "cyrene_e3_ripples",
+      "layer": "parameters",
+      "claim": "E3 raises cy_ripples_cr critRate 0.50 -> 0.55.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "cy_ripples_cr", "stat": "critRate", "value": 0.55 }
+    },
+    {
+      "id": "cyrene_e4_bounce_mult",
+      "layer": "parameters",
+      "claim": "E4 grows the 'Ode to Ego' bounce ladder (+6% per Minuet/Ode use); the reduced-Recollection fixtures climb to mult 1.44 (20/24 stacks, ladder cap unchanged).",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "payloadAtLeast", "of": { "type": "DAMAGE_DEALT", "label": "Ode to Ego" }, "field": "mult", "value": 1.44 }
+    },
+    {
+      "id": "cyrene_e5_basic",
+      "layer": "parameters",
+      "claim": "E5 (Talent+2) raises To Love and Tomorrow 0.30 -> 0.33.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "To Love and Tomorrow (single)" }, "field": "mult", "value": 0.33, "tol": 0.002 }
+    },
+    {
+      "id": "cyrene_e5_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E5 To Love and Tomorrow stays 0.30.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "To Love and Tomorrow (single)" }, "field": "mult", "value": 0.3, "tol": 0.002 }
+    },
+    {
+      "id": "cyrene_e6_def",
+      "layer": "interactions",
+      "claim": "E6 applies cy_e6_def to the target.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buff", "id": "cy_e6_def" }
+    },
+    {
+      "id": "cyrene_e6_def_locked",
+      "layer": "interactions",
+      "claim": "cy_e6_def (E6) is absent below E6.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "noBuff", "id": "cy_e6_def" }
+    },
+    {
+      "id": "cyrene_e6_def_stat",
+      "layer": "parameters",
+      "claim": "cy_e6_def reduces the target's DEF by 0.20.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buffStat", "id": "cy_e6_def", "stat": "defRed", "value": 0.2 }
+    }
+  ],
+  "golds": []
+}

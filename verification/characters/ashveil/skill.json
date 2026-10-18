@@ -1,0 +1,378 @@
+{
+  "kit": "ashveil",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Ashveil (skills 150401-150407, ranks 1-6)",
+    "confidence": "verified",
+    "note": "Ashveil is a Lightning (raw damage_type 'Thunder') Hunt character, energyMax 150. Basic ATK Talons: Inculcate Decorum (150401); Skill Flog: Smite Evil (150402) marks the target as the Bait and, on a repeat hit against an existing Bait, recovers 1 SP; Ultimate Banquet: Insatiable Appetite (150403) side-DEF-downs every enemy and refunds Charge; Talent Rancor: Enmity Reprisal (150404) is a Follow-Up ATK vs the Bait that consumes 1 Charge and builds Gluttony (the Ultimate's Gluttony chain spends 4 to launch Enhanced Talent Follow-Ups). Technique Devour: O Loathsome Hand (150407)."
+  },
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Ashveil E0 solo vs a Lightning-weak Elite, 6 cycles (Energy starts full so the Ultimate lands on the first turn) - Talons: Inculcate Decorum Basic; Flog: Smite Evil Skill that marks the Bait and repeats for +1 SP; Banquet: Insatiable Appetite Ultimate with side-DEF-down and the Charge-refunded Talent Follow-Up Rancor: Enmity Reprisal.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "ashveil",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0,
+            "energyStartFrac": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 6,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "ally-trigger",
+      "env": "Ashveil E6 with a Pela ally vs a Lightning-weak Elite, 8 cycles - the ally's attacks on the Bait fire Ashveil's Talent Follow-Up (Rancor: Enmity Reprisal) and build Gluttony, so the Ultimate's Gluttony chain launches Enhanced Talent Follow-Ups; E1 target vuln, E4 ult ATK and E6 RES-down/DMG-per-Gluttony are all live.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "ashveil",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          },
+          {
+            "kitId": "pela",
+            "stats": {
+              "hp": 10000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 100
+            }
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 8,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "basic-only",
+      "env": "Ashveil E0 solo with skillPriority -1 vs a Lightning-weak Elite, 2 cycles - forces the Basic ATK Talons: Inculcate Decorum so the single-target Basic hit is covered.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "ashveil",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0,
+            "skillPriority": -1,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 2,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "ash_basic",
+      "ability": "basic",
+      "layer": "structure",
+      "fixtures": [
+        "basic-only"
+      ],
+      "claim": "Basic ATK Talons: Inculcate Decorum (150401) is a single-target Lightning attack.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Ashveil",
+          "label": "Talons: Inculcate Decorum",
+          "attackType": "basic"
+        }
+      }
+    },
+    {
+      "id": "ash_skill",
+      "ability": "skill",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Skill Flog: Smite Evil (150402) is a single-target Lightning attack that marks its target as the Bait.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Ashveil",
+          "label": "Flog: Smite Evil",
+          "attackType": "skill"
+        }
+      }
+    },
+    {
+      "id": "ash_skill_repeat",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Flog: Smite Evil on a target that is already the Bait adds a second Lightning hit and recovers 1 Skill Point (#5).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Ashveil",
+          "label": "Flog (Bait repeat)"
+        }
+      }
+    },
+    {
+      "id": "ash_ult",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Once Energy reaches its max (150) the kit casts Ultimate Banquet: Insatiable Appetite (150403).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Ashveil",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "ash_ult_hit",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Banquet: Insatiable Appetite strikes the Bait with a single Lightning hit.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Ashveil",
+          "label": "Banquet: Insatiable Appetite"
+        }
+      }
+    },
+    {
+      "id": "ash_talent_fua",
+      "ability": "talent",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Talent Rancor: Enmity Reprisal (150404) is a Follow-Up ATK on the Bait; the Ultimate fires a free enhanced one.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Ashveil",
+          "label": "Rancor: Enmity Reprisal",
+          "attackType": "fua"
+        }
+      }
+    },
+    {
+      "id": "ash_ult_chain",
+      "layer": "structure",
+      "fixtures": [
+        "ally-trigger"
+      ],
+      "claim": "The Ultimate's Gluttony chain spends 4 Gluttony (ashveil ult_a3) to launch an Enhanced Talent Follow-Up against the Bait.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Ashveil",
+          "label": "Enhanced Talent Follow-Up"
+        }
+      }
+    },
+    {
+      "id": "ash_bait_mark",
+      "ability": "skill",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Skill/Ultimate mark a living enemy as the Bait (ash_bait debuff on the enemy).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ash_bait"
+      }
+    },
+    {
+      "id": "ash_bait_note",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Marking the Bait is surfaced as a trace line 'Ashveil: <enemy> becomes the Bait'.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "becomes the Bait"
+        }
+      }
+    },
+    {
+      "id": "ash_def_down",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "While the Bait exists, Ultimate/Skill side-DEF-down every enemy (ash_def, defRed = skill_a4).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ash_def"
+      }
+    },
+    {
+      "id": "ash_gluttony_note",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Each Talent Follow-Up is surfaced as a trace line reporting Charge/Gluttony ('... Charge X→Y, Gluttony →Z').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Gluttony"
+        }
+      }
+    },
+    {
+      "id": "ash_e1_vuln",
+      "layer": "interactions",
+      "fixtures": [
+        "ally-trigger"
+      ],
+      "claim": "E1 makes enemies take +24% DMG while Ashveil is on the field (ash_e1 vulnAll 0.24).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ash_e1"
+      }
+    },
+    {
+      "id": "ash_e4_atk",
+      "layer": "interactions",
+      "fixtures": [
+        "ally-trigger"
+      ],
+      "claim": "E4 grants Ashveil +40% ATK for 3 turns after each Ultimate (ash_e4 atkPct 0.4).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ash_e4"
+      }
+    },
+    {
+      "id": "ash_e6_res",
+      "layer": "interactions",
+      "fixtures": [
+        "ally-trigger"
+      ],
+      "claim": "E6 lowers every enemy's All-Type RES by 20% while the Bait exists (ash_e6_res resAll -0.2).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ash_e6_res"
+      }
+    },
+    {
+      "id": "ash_e6_dmg",
+      "layer": "interactions",
+      "fixtures": [
+        "ally-trigger"
+      ],
+      "claim": "E6 grants Ashveil +4% DMG per Gluttony stack (cap 30) as Gluttony changes (ash_e6_dmg dmgAll).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ash_e6_dmg"
+      }
+    },
+    {
+      "id": "ash_ult_before_fua",
+      "layer": "ordering",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "The Ultimate's own hit and free enhanced Follow-Up resolve after the ability is used.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ABILITY_USED",
+            "source": "Ashveil",
+            "action": "ultimate"
+          }
+        ],
+        "after": [
+          {
+            "type": "HIT_START",
+            "source": "Ashveil",
+            "label": "Rancor: Enmity Reprisal"
+          }
+        ]
+      }
+    }
+  ]
+}

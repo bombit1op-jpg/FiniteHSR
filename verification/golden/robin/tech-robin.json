@@ -1,0 +1,19 @@
+{
+ "input": {
+  "kit": "robin",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Robin alone, technique \"Barrier\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Robin|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "ACTION_ADVANCE|Robin|Robin|-|- [0.25,70.0935]",
+  "BUFF_APPLIED|-|Robin|-|- [1,Infinity]",
+  "TECHNIQUE_APPLIED|Robin|-|-|-",
+  "ENERGY_GAIN|Robin|Robin|-|- [0,160,5,85]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

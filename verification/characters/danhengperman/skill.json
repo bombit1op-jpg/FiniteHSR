@@ -1,0 +1,532 @@
+{
+  "kit": "danhengperman",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/141401+141402+141403+141404+141407 + bonus_abilities (Empyreanity, Sylvanity, Sublimity)",
+    "confidence": "verified",
+    "note": "Basic Aegis Vitae (141401): 2-hit Wind attack (0.3/0.7). Skill (141402) shields non-summon allies (dh_shield_a1, 3 turns) and deals no damage. Ultimate A Dragon's Zenith (141403): 3-hit (3.0 total) + Bondmate's DMG 1.0 x 12 + Sublimity DMG 1.0 x 4, advancing and empowering the Souldragon (Souldragon FUA 0.2 x 48). Summon Souldragon (141407) has its own AV turns (6 in the fixture). A2: battle start, Dan Heng advances on the Souldragon and himself. Ultimate cost: 135-Energy ladder (engine spends 117 at cast)."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Dan Heng Permansor Terrae E0 solo vs 3 Physical-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengperman",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "solo-3c-s2",
+      "env": "Same battle, seed 17 (rotation variant)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengperman",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 17
+      }
+    },
+    {
+      "id": "solo-1e",
+      "env": "Single Elite dummy (single-target rotation), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengperman",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "dh_skill_action",
+      "layer": "structure",
+      "claim": "The Skill (141402) is the shield action: 4 casts, all spent on SP.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Dan Heng • Permansor Terrae",
+          "action": "skill"
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_skill_no_hits",
+      "layer": "structure",
+      "claim": "The Skill deals no attack hits: all 26 of Dan Heng's hits come from Basic (4) + Zenith (6) + Bondmate (12) + Sublimity (4).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Dan Heng • Permansor Terrae"
+        },
+        "value": 26
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_basic_hits",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic Aegis Vitae (141401) is a 2-hit attack (2 casts = 4 hits, 0.3/0.7 split).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Dan Heng • Permansor Terrae",
+          "label": "Aegis Vitae"
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_basic_mult",
+      "layer": "parameters",
+      "claim": "Aegis Vitae's first split part is 0.3.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Dan Heng • Permansor Terrae",
+          "label": "Aegis Vitae"
+        },
+        "field": "mult",
+        "value": 0.3,
+        "pick": "first"
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_ult_hits",
+      "layer": "structure",
+      "claim": "A Dragon's Zenith (141403) is a 3-hit attack per cast (2 casts = 6 hits).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Dan Heng • Permansor Terrae",
+          "label": "A Dragon's Zenith"
+        },
+        "value": 6
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_ult_mult",
+      "layer": "parameters",
+      "claim": "Each Zenith hit carries the 3.0 multiplier.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Dan Heng • Permansor Terrae",
+          "label": "A Dragon's Zenith"
+        },
+        "field": "mult",
+        "value": 3
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_ult_bond",
+      "layer": "structure",
+      "claim": "The Ultimate's Bondmate's DMG fires 12 times (1.0 each).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Dan Heng • Permansor Terrae",
+          "label": "Bondmate's DMG"
+        },
+        "value": 12
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_ult_sublime",
+      "layer": "structure",
+      "claim": "The Ultimate's Sublimity DMG fires 4 times (1.0 each).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Dan Heng • Permansor Terrae",
+          "label": "Sublimity DMG"
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_summon",
+      "layer": "interactions",
+      "claim": "The Souldragon is summoned once and takes 6 actions.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SUMMON_CREATED",
+          "source": "Dan Heng • Permansor Terrae"
+        },
+        "value": 1
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_summon_actions",
+      "layer": "interactions",
+      "claim": "The Souldragon acts (kind=summon) 6 times across the fixture.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ACTION_START",
+          "source": "Souldragon",
+          "payload": {
+            "kind": "summon"
+          }
+        },
+        "value": 6
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_dragon_fua",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "The Souldragon's enhanced FUA fires 48 hits of 0.2.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Souldragon",
+          "label": "Souldragon FUA"
+        },
+        "value": 48
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_shield_self",
+      "layer": "interactions",
+      "claim": "The Ultimate shields the fielded ally (dh_shield_a1, 3 turns); no damage is taken, shield absorbs 9 incoming hits.",
+      "assertion": {
+        "assert": "buff",
+        "id": "dh_shield_a1",
+        "target": "Dan Heng • Permansor Terrae",
+        "turns": 3
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_shield_dragon",
+      "layer": "interactions",
+      "claim": "The Skill shields the Souldragon as well (dh_shield_sd_a1, 3 turns).",
+      "assertion": {
+        "assert": "buff",
+        "id": "dh_shield_sd_a1",
+        "target": "Souldragon",
+        "turns": 3
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_shield_applied",
+      "layer": "structure",
+      "claim": "Exactly 2 shield applications and 9 absorptions occur.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SHIELD_APPLIED",
+          "source": "Dan Heng • Permansor Terrae"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_shield_absorb",
+      "layer": "structure",
+      "claim": "The shields eat all incoming damage: 9 SHIELD_ABSORBED events.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SHIELD_ABSORBED",
+          "source": "Dan Heng • Permansor Terrae"
+        },
+        "value": 9
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_a2_advance",
+      "layer": "interactions",
+      "claim": "A2 advances Dan Heng at battle start (ACTION_ADVANCE on self).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ACTION_ADVANCE",
+          "source": "Dan Heng • Permansor Terrae",
+          "target": "Dan Heng • Permansor Terrae"
+        }
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_ult_energy",
+      "layer": "parameters",
+      "claim": "The Ultimate spends 117 Energy at each of its 2 uses and regenerates exactly 338 Energy total.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Dan Heng • Permansor Terrae"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_energy_sum",
+      "layer": "parameters",
+      "claim": "Total Dan Heng Energy: 338 across the fixture.",
+      "assertion": {
+        "assert": "energy",
+        "who": "Dan Heng • Permansor Terrae",
+        "atLeast": 338,
+        "atMost": 338
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_no_attack",
+      "layer": "structure",
+      "claim": "Dan Heng never falls back to a generic attack action.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Dan Heng • Permansor Terrae",
+          "action": "attack"
+        }
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_after_state",
+      "layer": "interactions",
+      "claim": "Fixture end state: 10000/10000 HP (no damage taken), 135/135 Energy, 1 SP, 3 active buffs.",
+      "assertion": {
+        "assert": "unitState",
+        "who": "Dan Heng • Permansor Terrae",
+        "field": "hp",
+        "value": 10000
+      },
+      "after": [
+        {
+          "unit": "Dan Heng • Permansor Terrae",
+          "stat": "hp",
+          "op": "eq",
+          "value": 10000
+        },
+        {
+          "unit": "Dan Heng • Permansor Terrae",
+          "stat": "energy",
+          "op": "eq",
+          "value": 135
+        },
+        {
+          "unit": "Dan Heng • Permansor Terrae",
+          "stat": "sp",
+          "op": "eq",
+          "value": 1
+        },
+        {
+          "unit": "Dan Heng • Permansor Terrae",
+          "stat": "buffs",
+          "op": "eq",
+          "value": 3
+        }
+      ],
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "dh_s2_rotation",
+      "layer": "structure",
+      "claim": "Seed 17 keeps the rotation: Skill and Ultimate fire, no generic attack.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Dan Heng • Permansor Terrae",
+          "action": "skill"
+        }
+      },
+      "fixtures": [
+        "solo-3c-s2"
+      ]
+    },
+    {
+      "id": "dh_s2_no_attack",
+      "layer": "structure",
+      "claim": "Seed 17: no generic attack fallback.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Dan Heng • Permansor Terrae",
+          "action": "attack"
+        }
+      },
+      "fixtures": [
+        "solo-3c-s2"
+      ]
+    },
+    {
+      "id": "dh_1e_single",
+      "layer": "structure",
+      "claim": "Single-target fixture still runs Skill and Ultimate; no generic attack.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Dan Heng • Permansor Terrae",
+          "action": "ultimate"
+        }
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "dh_1e_no_attack",
+      "layer": "structure",
+      "claim": "Single-target fixture: no generic attack fallback.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Dan Heng • Permansor Terrae",
+          "action": "attack"
+        }
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    }
+  ],
+  "golds": []
+}

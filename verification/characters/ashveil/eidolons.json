@@ -1,0 +1,365 @@
+{
+  "kit": "ashveil",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Ashveil/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 enemies take +24% DMG while Ashveil is on the field (ash_e1 vulnAll 0.24; 36% below 50% HP); E2 Gluttony max 18 and 35% refund - not exposed as a stable value (deviation); E3 Ult Lv.+2/Basic Lv.+1 - Ultimate unused in this fixture (deviation); E4 Ultimate +40% ATK for 3 turns - Ashveil never acts before dying (deviation); E5 Skill/Talent Lv.+2 (ash_def defRed 0.4 -> 0.44); E6 -20% All-Type RES while Bait is out and +4% DMG per Gluttony stack (ash_e6_res resAll -0.2, ash_e6_dmg dmgAll up to 0.16). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "ashveil E0 — eidolon ladder rung, cloned from ashveil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "ashveil",
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "ashveil E1 — eidolon ladder rung, cloned from ashveil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "ashveil",
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "ashveil E2 — eidolon ladder rung, cloned from ashveil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "ashveil",
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "ashveil E3 — eidolon ladder rung, cloned from ashveil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "ashveil",
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "ashveil E4 — eidolon ladder rung, cloned from ashveil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "ashveil",
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "ashveil E5 — eidolon ladder rung, cloned from ashveil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "ashveil",
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "ashveil E6 — eidolon ladder rung, cloned from ashveil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "ashveil",
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "ash_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'Beware: Venture Not at Full Moon': enemies take +24% DMG while Ashveil is on the field (ash_e1 vulnAll 0.24). Present from E1.",
+      "fixtures": [
+        "e1",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "ash_e1",
+        "stat": "vulnAll",
+        "value": 0.24
+      }
+    },
+    {
+      "id": "ash_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: ash_e1 must NOT be active below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "ash_e1"
+      }
+    },
+    {
+      "id": "ash_e5_present",
+      "layer": "parameters",
+      "claim": "E5 'Caution: Sleuth Turns Slayer': Skill/Talent Lv.+2 raises Skill-applied ash_def defRed 0.4 -> 0.44.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "ash_def",
+        "stat": "defRed",
+        "value": 0.44
+      }
+    },
+    {
+      "id": "ash_e5_locked",
+      "layer": "parameters",
+      "claim": "Below E5 ash_def defRed stays at 0.4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "ash_def",
+        "stat": "defRed",
+        "value": 0.4
+      }
+    },
+    {
+      "id": "ash_e6_present",
+      "layer": "interactions",
+      "claim": "E6 'Finale: And Then There Were None': while Bait is out, enemies get -20% All-Type RES (ash_e6_res resAll -0.2).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "ash_e6_res",
+        "stat": "resAll",
+        "value": -0.2
+      }
+    },
+    {
+      "id": "ash_e6_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: ash_e6_res must NOT be active below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "ash_e6_res"
+      }
+    }
+  ],
+  "golds": []
+}

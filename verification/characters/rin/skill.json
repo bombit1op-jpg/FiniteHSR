@@ -1,0 +1,254 @@
+{
+  "kit": "rin",
+  "slot": "skill",
+  "canon": {
+    "source": "reference/hsr-data/characters.json",
+    "ref": "Rin Tohsaka skill IDs 150801-150809",
+    "confidence": "high",
+    "note": "Basic 150801: 140% ATK at L10, single hit. Skill 150802 Jeweled Sword: 180% L10, one target. Ult 150803: 600% primary + 200% others (L10 params [6,2,12,1,0.2,3]), recovers 1 SP, all-enemy DMG taken +20% for 3 turns, +12 Gem Energy. Talent 150804: enters combat with Gem Energy, ally SP consume/recover -> CRIT DMG +70% for 2 turns (talent_a2/a3), 1 Gem per SP, enhanced skill at Gem >= 15 or SP >= 7. Enhanced Skill 150809 Second Magic: 90% to all enemies split 4 hits 25/25/25/25 (notes), then repeat consuming 3 Gem -> 90% to a random enemy up to 33 cycles, SP above 2 consumed for +2 Gem each. Talent 150805 Joint FUA requires Archer (absent at E0). A1 Elegant Conduct: ATK+150% + Quantum RES PEN+15% (kit comment); A2 max SP +2; A2 Ladylike Poise: SPD+20% 3 turns. sp_need 160."
+  },
+  "fixtures": [
+    {
+      "id": "solo-1e",
+      "env": "Rin Tohsaka E0 solo vs 1 Quantum-weak Elite dummy (Lv120, 6M HP, 300 Toughness), auto rotation, 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "rin",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Quantum"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7,
+        "techniques": ["rin"]
+      }
+    },
+    {
+      "id": "trio-3e",
+      "env": "Rin Tohsaka E0 solo vs 3 Quantum-weak Elite dummies (Lv120, 6M HP, 300 Toughness each), auto rotation, 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "rin",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Quantum"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7,
+        "techniques": ["rin"]
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "r_basic",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic Bajiquan deals 1.0x (engine Basic Lv6 total 100% of canon 140% at L10), single hit per canon 150801",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Rin Tohsaka", "label": "Bajiquan", "payload": { "mult": 1 } },
+        "value": 1
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "r_skill",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill Jeweled Sword Zelretch deals 1.8x (canon 150802 #1: 180% ATK), 4 casts in solo fixture",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Rin Tohsaka", "label": "Jeweled Sword Zelretch", "payload": { "mult": 1.8 } },
+        "value": 4
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "r_ult_present",
+      "layer": "structure",
+      "claim": "Rin casts her Ultimate in the fixture (special-resource activation at 160 energy)",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Rin Tohsaka", "action": "ultimate" } }
+    },
+    {
+      "id": "r_ult_main",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate main target takes 6.0x (canon 150803 #1: 600% ATK)",
+      "assertion": {
+        "assert": "payload",
+        "of": { "type": "DAMAGE_DEALT", "source": "Rin Tohsaka", "label": "An Gal Ta Ki Gal (main)" },
+        "field": "mult",
+        "value": 6
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "r_ult_others",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate other targets take 2.0x each (canon 150803 #2: 200% ATK); 2 casts x 2 others = 4 hits",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Rin Tohsaka", "label": "An Gal Ta Ki Gal (others)", "payload": { "mult": 2 } },
+        "value": 4
+      },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "r_ult_sp",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate recovers 1 Skill Point (canon 150803 #4: 1 SP)",
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "Ult: \\+1 SP" } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "r_ult_vuln",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate DMG-taken debuff lasts 3 turns (canon 150803 #6: 3 turns)",
+      "assertion": { "assert": "buff", "id": "rin_ult_vuln", "turns": 3 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "r_ult_vuln_stat",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate raises all-enemy DMG taken by 20% (canon 150803 #5: 20%)",
+      "assertion": { "assert": "buffStat", "id": "rin_ult_vuln", "stat": "vulnAll", "value": 0.2 }
+    },
+    {
+      "id": "r_enh_present",
+      "layer": "structure",
+      "claim": "Enhanced skill Second Magic fires (Gem/SP threshold met: entering Gem 30, max SP 7)",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Rin Tohsaka", "label": "Second Magic (AoE)" } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "r_enh_aoe_split",
+      "layer": "parameters",
+      "claim": "Second Magic AoE splits 4 hits of 0.225x per enemy per cast (canon 150809 notes: 4 hits 25%+25%+25%+25% of 90%); 2 casts x 4 hits = 8 solo",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Rin Tohsaka", "label": "Second Magic (AoE)", "payload": { "mult": 0.225 } },
+        "value": 8
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "r_enh_aoe_trio",
+      "layer": "structure",
+      "claim": "Second Magic AoE hits every enemy: 2 casts x 4 hits x 3 enemies = 24",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Rin Tohsaka", "label": "Second Magic (AoE)", "payload": { "mult": 0.225 } },
+        "value": 24
+      },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "r_enh_instances",
+      "layer": "parameters",
+      "claim": "Gem Energy cycles repeat as 0.9x instance hits (canon 150809 #3: 90% per cycle, up to #6 33 cycles); engine resolves 16 cycles in each fixture",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Rin Tohsaka", "label": "Second Magic instance", "payload": { "mult": 0.9 } },
+        "value": 16
+      },
+      "fixtures": ["solo-1e", "trio-3e"]
+    },
+    {
+      "id": "r_gem_cd",
+      "layer": "parameters",
+      "claim": "Gem Magecraft CRIT DMG buff lasts 2 turns (canon 150804 #2: 2 turns)",
+      "assertion": { "assert": "buff", "id": "rin_gem_cd", "turns": 2 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "r_gem_cd_stat",
+      "layer": "parameters",
+      "claim": "Gem Magecraft grants +70% CRIT DMG (canon 150804 #3: 70%)",
+      "assertion": { "assert": "buffStat", "id": "rin_gem_cd", "stat": "critDmg", "value": 0.7 }
+    },
+    {
+      "id": "r_a1_atk",
+      "layer": "parameters",
+      "claim": "A1 Elegant Conduct grants +150% ATK (kit A1 comment: ATK+150%)",
+      "assertion": { "assert": "buffStat", "id": "rin_a1", "stat": "atkPct", "value": 1.5 }
+    },
+    {
+      "id": "r_a1_respen",
+      "layer": "parameters",
+      "claim": "A1 Elegant Conduct grants Quantum RES PEN +15% (kit A1 comment: RES PEN+15%)",
+      "assertion": { "assert": "buffStat", "id": "rin_a1", "stat": "resPen:Quantum", "value": 0.15 }
+    },
+    {
+      "id": "r_a2_spd",
+      "layer": "parameters",
+      "claim": "A2 Ladylike Poise grants +20% SPD for 3 turns (kit A2 comment: SPD+20% 3t)",
+      "assertion": { "assert": "buffStat", "id": "rin_a2_spd", "stat": "spdPct", "value": 0.2 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "r_energy_solo",
+      "layer": "parameters",
+      "claim": "Regenerates exactly 215 Energy in solo fixture (sp_need 160 ladder: 2 casts + start/taken gains)",
+      "assertion": { "assert": "energy", "who": "Rin Tohsaka", "atLeast": 215, "atMost": 215 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "r_energy_trio",
+      "layer": "parameters",
+      "claim": "Regenerates exactly 245 Energy in trio fixture (same kit gains plus landed enemy attacks)",
+      "assertion": { "assert": "energy", "who": "Rin Tohsaka", "atLeast": 245, "atMost": 245 },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "r_no_joint_fua",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "No Joint Follow-Up ATK without Archer on the team (canon 150805 requires Archer)",
+      "assertion": { "assert": "absent", "of": { "type": "HIT_START", "label": "Freeform (Rin)" } }
+    },
+    {
+      "id": "r_no_e2",
+      "layer": "interactions",
+      "claim": "No Eidolon effects at E0 (E2 Dimensional Traveler skill-DMG boost not applied)",
+      "assertion": { "assert": "noBuff", "id": "rin_e2" }
+    },
+    {
+      "id": "r_technique",
+      "ability": "technique",
+      "layer": "interactions",
+      "claim": "Technique Conversion Charge (150807) grants #1 = 10 Gem Energy at battle start.",
+      "fixtures": ["solo-1e", "trio-3e"],
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "Conversion Charge: \\+10 Gem Energy" } }
+    }
+  ],
+  "golds": []
+}

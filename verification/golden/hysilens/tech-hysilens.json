@@ -1,0 +1,22 @@
+{
+ "input": {
+  "kit": "hysilens",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Hysilens alone, technique \"At Ocean's Abode\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Hysilens|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [1,Infinity]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [1,Infinity]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [1,Infinity]",
+  "SP_GAIN|-|-|-|- [1,4]",
+  "TECHNIQUE_APPLIED|Hysilens|-|-|-",
+  "DOT_APPLIED|Hysilens|Ice Edge|-|- [1,177,2]",
+  "DOT_APPLIED|Hysilens|Ice Edge|-|- [1,177,2]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

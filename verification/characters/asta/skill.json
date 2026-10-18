@@ -1,0 +1,167 @@
+{
+  "kit": "asta",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/100901-100907",
+    "confidence": "interpreted",
+    "note": "Asta (Fire, Harmony). Basic 100901 Spectrum Beam (Sparks trace: 80% base chance to Burn for 3 turns). Skill 100902 Meteor Storm: 5 hits (6 at E1) distributed over enemies; each distinct enemy hit grants a Charging stack (+1 more if Fire-weak), cap 5, feeding the Talent Astrometry (all allies +ATK per stack). Ultimate 100904 Astral Blessing: all allies gain flat SPD for 2 turns. Trace Ignite: +18% Fire DMG to all allies while on field. Energy 120."
+  },
+  "fixtures": [
+    {
+      "id": "team-sushang",
+      "env": "Asta E0 with Sushang (kitId sushang) vs 3 Fire/Physical-weak Elite (level 95, 240 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "asta",
+            "stats": { "hp": 10000, "atk": 1600, "def": 600, "spd": 185 },
+            "eidolon": 0
+          },
+          {
+            "kitId": "sushang",
+            "stats": { "hp": 9000, "atk": 2000, "def": 550, "spd": 180, "be": 0.6 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Fire", "Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4-err",
+      "env": "Asta E4 with Sushang vs the same Elites - while Charging >= 2 she gains +15% Energy Regeneration (asta_e4)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "asta",
+            "stats": { "hp": 10000, "atk": 1600, "def": 600, "spd": 185 },
+            "eidolon": 4
+          },
+          {
+            "kitId": "sushang",
+            "stats": { "hp": 9000, "atk": 2000, "def": 550, "spd": 180, "be": 0.6 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Fire", "Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "asta_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Spectrum Beam (100901, Fire) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Asta",
+          "label": "Spectrum Beam",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "e4-err",
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "a_skill_action",
+      "layer": "structure",
+      "claim": "Skill Meteor Storm (100902) fires as a Skill action (decide harmony.ts:531-534 prefers Skill while SP >= 1).",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Asta", "action": "skill" } }
+    },
+    {
+      "id": "a_ult_action",
+      "layer": "structure",
+      "claim": "Astral Blessing (100904) fires once Energy reaches 120 (energyMax harmony.ts:520).",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Asta", "action": "ultimate" } }
+    },
+    {
+      "id": "a_skill_hit",
+      "layer": "structure",
+      "claim": "Meteor Storm hits enemies (harmony.ts:570).",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Asta", "label": "Meteor Storm" } }
+    },
+    {
+      "id": "a_ult_spd",
+      "layer": "interactions",
+      "claim": "Astral Blessing grants all allies a flat SPD buff (harmony.ts:545-548, asta_ult).",
+      "assertion": { "assert": "present", "of": { "type": "BUFF_APPLIED", "payload": { "id": "asta_ult" } } }
+    },
+    {
+      "id": "a_ult_spd_value",
+      "layer": "parameters",
+      "claim": "The Ultimate's SPD grant is a positive flat amount (harmony.ts:548, stat spdFlat).",
+      "assertion": { "assert": "buffStat", "id": "asta_ult", "stat": "spdFlat", "atLeast": 1 }
+    },
+    {
+      "id": "a_talent_atk",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Astrometry grants all allies an ATK buff scaled by Charging stacks (harmony.ts:485-492).",
+      "assertion": { "assert": "buff", "id": "asta_talent" }
+    },
+    {
+      "id": "a_ignite",
+      "layer": "parameters",
+      "claim": "Trace Ignite grants +18% Fire DMG to all allies while Asta is on the field (harmony.ts:526-529).",
+      "assertion": { "assert": "buffStat", "id": "asta_ignite", "stat": "dmg:Fire", "value": 0.18, "tol": 0.001 }
+    },
+    {
+      "id": "a_const_def",
+      "layer": "interactions",
+      "claim": "Trace Constellation grants Asta +6% DEF per Charging stack (harmony.ts:481-483).",
+      "assertion": { "assert": "present", "of": { "type": "BUFF_APPLIED", "payload": { "id": "asta_const_def" } } }
+    },
+    {
+      "id": "a_skill_energy_30",
+      "layer": "parameters",
+      "claim": "Every Skill cast regenerates 30 Energy (harmony.ts:559).",
+      "assertion": { "assert": "present", "of": { "type": "ENERGY_GAIN", "source": "Asta", "payload": { "n": 30 } } }
+    },
+    {
+      "id": "a_skill_before_talent",
+      "layer": "ordering",
+      "claim": "Meteor Storm's hits resolve before Charging recomputes the team ATK buff (harmony.ts:566-576).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Asta", "label": "Meteor Storm" }],
+        "after": [{ "type": "BUFF_APPLIED", "payload": { "id": "asta_talent" } }]
+      }
+    },
+    {
+      "id": "a_e4_err",
+      "layer": "parameters",
+      "claim": "E4 Aurora Basks grants +15% Energy Regeneration while Charging >= 2 (harmony.ts:510-513).",
+      "fixtures": ["e4-err"],
+      "assertion": { "assert": "buffStat", "id": "asta_e4", "stat": "err", "value": 0.15, "tol": 0.001 }
+    }
+  ]
+}

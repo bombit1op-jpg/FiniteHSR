@@ -1,0 +1,47 @@
+{
+  "kit": "saber",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/101401+101402+101403+101404+101407+101408 + bonus_abilities (Knight of the Dragon, Blessing of the Lake, Crown of the Star)",
+    "confidence": "verified",
+    "note": "Invisible Air: Barrier of the Wind King (101401, Basic): 100% single-target at L6. Strike Air: Hammer of the Wind King (101402, Skill): main total 150% dealt in 4 hits (10/10/10/70 per notes), adjacent total 75%, heals 7.5% Max HP; Core Resonance can boost the multiplier. Excalibur (101403, Ultimate): consumes 360 Energy; AoE 280% + #3 instances of 110% on random enemies; after the Ultimate the next Basic ATK becomes Release, the Golden Scepter. Release, the Golden Scepter (101408, Enhanced Basic): all-enemy hit, 2 hits of 50/50 (notes), gains 2 Core Resonance. Dragon Reactor Core (101404, Talent): +DMG when any ally uses Ultimate, Core Resonance points, Energy per point consumed. Technique (101407): ATK% for 2 turns + Core Resonance. Crown of the Star (Trace): Skill use grants CRIT DMG +50% for 2 turns. Blessing of the Lake (Trace): up to 120 overflow Energy, 60% Energy at battle start."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Saber E0 solo vs 3 Wind-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [{ "kitId": "saber", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 0 }],
+        "enemy": { "name": "Elite", "count": 3, "hp": 6000000, "atk": 800, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Wind"], "res": 0 },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    { "id": "s_ult_action", "layer": "structure", "claim": "Excalibur (101403) is Saber's Ultimate action (1 cast in the fixture; Ultimate costs 360 Energy).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Saber", "action": "ultimate" }, "value": 1 } },
+    { "id": "s_skill_action", "layer": "structure", "claim": "Strike Air (101402) is her Skill action (4 casts in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Saber", "action": "skill" }, "value": 4 } },
+    { "id": "s_basic_action", "layer": "structure", "claim": "Two Basic ATK actions in the fixture: 1 Invisible Air (101401) before the Ultimate, then 1 Release, the Golden Scepter (101408) — after using her Ultimate the next Basic ATK switches to Release (101403 note).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Saber", "action": "basic" }, "value": 2 } },
+    { "id": "s_strike_main", "layer": "structure", "claim": "Strike Air main-target hits: 16 in the fixture (4 casts x 4 hits, canon 10/10/10/70 split).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Saber", "label": "Strike Air (main)" }, "value": 16 } },
+    { "id": "s_strike_adj", "layer": "structure", "claim": "Strike Air adjacent hits: 8 in the fixture (4 casts x 2 adjacent enemies, one hit each carrying the full 75%).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Saber", "label": "Strike Air (adj)" }, "value": 8 } },
+    { "id": "s_excal_main", "layer": "structure", "claim": "Excalibur's main AoE hit strikes all 3 enemies once (3 total).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Saber", "label": "Excalibur" }, "value": 3 } },
+    { "id": "s_excal_instances", "layer": "structure", "claim": "Excalibur's 10 random instances (101403 #3) all land: 10 damage events spread over the 3 enemies.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Saber", "label": "Excalibur instance" }, "value": 10 } },
+    { "id": "s_release_hits", "layer": "structure", "claim": "Release, the Golden Scepter (101408, Enhanced Basic after the Ultimate) deals 2 hits of 50/50 to all 3 enemies: 6 damage events in the fixture, tagged attackType basic (canon: it IS a Basic ATK).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Saber", "label": "Release, the Golden Scepter" }, "value": 6 } },
+    { "id": "s_basic_hits", "layer": "structure", "claim": "Invisible Air (101401) is cast once and dealt 1 single-target damage event in the fixture.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Saber", "label": "Invisible Air" }, "value": 1 } },
+    { "id": "s_sp_gain", "ability": "basic", "layer": "interactions", "claim": "Basic ATKs regenerate 1 Skill Point each: 1 Invisible Air + 1 Release = 2 SP.", "assertion": { "assert": "count", "of": { "type": "SP_GAIN" }, "value": 2 } },
+    { "id": "s_sp_loss", "layer": "interactions", "claim": "The Skill costs 1 Skill Point per cast (4 casts = 4 SP).", "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Saber" }, "value": 4 } },
+    { "id": "s_m_strike", "layer": "parameters", "claim": "Strike Air L10 (101402) main total is 150% of ATK; the last of the 10/10/10/70 pieces carries 70% -> 1.05.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Saber", "label": "Strike Air (main)" }, "field": "mult", "value": 1.05 } },
+    { "id": "s_m_strike_adj", "layer": "parameters", "claim": "Strike Air L10 (101402) adjacent total is 75% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Saber", "label": "Strike Air (adj)" }, "field": "mult", "value": 0.75 } },
+    { "id": "s_m_excal", "layer": "parameters", "claim": "Excalibur (101403) main AoE multiplier is 280% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Saber", "label": "Excalibur" }, "field": "mult", "value": 2.8 } },
+    { "id": "s_m_excal_instance", "layer": "parameters", "claim": "Excalibur random instance multiplier (101403) is 110% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Saber", "label": "Excalibur instance" }, "field": "mult", "value": 1.1 } },
+    { "id": "s_m_release", "layer": "parameters", "claim": "Release, the Golden Scepter totals 150% of ATK over its 2 hits (50/50 per 101408 notes); the last piece carries 75% -> 0.75.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Saber", "label": "Release, the Golden Scepter" }, "field": "mult", "value": 0.75 } },
+    { "id": "s_m_basic", "layer": "parameters", "claim": "Invisible Air at the engine's default Basic Lv6 (101401) totals 100% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Saber", "label": "Invisible Air" }, "field": "mult", "value": 1 } },
+    { "id": "s_energy", "layer": "parameters", "claim": "Over the fixture Saber gains exactly 265 Energy (ENERGY_GAIN sum; Ultimate consumes its 360 gauge via overflow per Blessing of the Lake).", "assertion": { "assert": "energy", "who": "Saber", "atLeast": 265, "atMost": 265 } },
+    { "id": "s_core_resonance_present", "ability": "talent", "layer": "interactions", "claim": "Trace/talent state (Dragon Reactor Core Core Resonance machinery, 101404) is active as a persistent buff.", "assertion": { "assert": "buff", "id": "saber_a2", "target": "Saber" } },
+    { "id": "s_tech_turns", "ability": "technique", "layer": "parameters", "claim": "Technique (101407) grants ATK% for #2 = 2 turns at battle start.", "assertion": { "assert": "buff", "id": "saber_tech", "target": "Saber", "turns": 2 } },
+    { "id": "s_a6_turns", "layer": "parameters", "claim": "Crown of the Star: Skill use grants CRIT DMG +50% for 2 turns.", "assertion": { "assert": "buff", "id": "saber_a6", "target": "Saber", "turns": 2 } },
+    { "id": "s_ult_before_skill_last", "layer": "ordering", "claim": "Excalibur damage resolves after the first Strike Air damage in the fixture (360 Energy needs several Skill casts first).", "assertion": { "assert": "ordering", "before": [{ "type": "DAMAGE_DEALT", "source": "Saber", "label": "Strike Air (main)" }], "after": [{ "type": "DAMAGE_DEALT", "source": "Saber", "label": "Excalibur" }] } },
+    { "id": "s_release_after_ult", "layer": "ordering", "claim": "Release, the Golden Scepter (101408) can only follow the Ultimate: Excalibur damage resolves before Release damage.", "assertion": { "assert": "ordering", "before": [{ "type": "DAMAGE_DEALT", "source": "Saber", "label": "Excalibur" }], "after": [{ "type": "DAMAGE_DEALT", "source": "Saber", "label": "Release, the Golden Scepter" }] } }
+  ]
+}

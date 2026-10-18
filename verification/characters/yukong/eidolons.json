@@ -1,0 +1,461 @@
+{
+  "kit": "yukong",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Yukong/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ranks. E1 Aerial Marshal: at battle start all allies gain SPD +10% for 2 turns (yukong_e1 spdPct 0.1). E2 Skyward Command, Roaring Skies: when an ally is at max Energy, Yukong additionally restores 5 Energy (needs an ally — not observable solo). E3 Skill Lv.+2 / Basic Lv.+1: Arrowslinger 0.2->0.22. E4 Zephyrean Echoes: while Roaring Bowstrings is active, Yukong DMG +30% (yukong_e4 dmgAll 0.3). E5 Ult Lv.+2 / Talent Lv.+2: Diving Kestrel 3.8->4.104, Seven Layers, One Arrow 0.8->0.88. E6 Bowstring Thunderclap: the Ultimate grants 1 stack of Roaring Bowstrings — solo the Ultimate already caps it, not observable (deviation)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "yukong E0 — eidolon ladder rung, cloned from yukong/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "yukong E1 — eidolon ladder rung, cloned from yukong/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "yukong E2 — eidolon ladder rung, cloned from yukong/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "yukong E3 — eidolon ladder rung, cloned from yukong/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "yukong E4 — eidolon ladder rung, cloned from yukong/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "yukong E5 — eidolon ladder rung, cloned from yukong/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "yukong E6 — eidolon ladder rung, cloned from yukong/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "yukong_e1_present",
+      "layer": "interactions",
+      "claim": "E1 Aerial Marshal: at battle start all allies gain SPD +10% for 2 turns (yukong_e1). Present from E1.",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "yukong_e1"
+      }
+    },
+    {
+      "id": "yukong_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: yukong_e1 must NOT be active below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "yukong_e1"
+      }
+    },
+    {
+      "id": "yukong_e1_stat",
+      "layer": "parameters",
+      "claim": "yukong_e1 carries spdPct 0.1 (canon rank 1).",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "yukong_e1",
+        "stat": "spdPct",
+        "value": 0.1
+      }
+    },
+    {
+      "id": "yukong_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 Basic Lv.+1: Arrowslinger 0.2 -> 0.22.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Arrowslinger"
+        },
+        "field": "mult",
+        "value": 0.22,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "yukong_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Arrowslinger stays at 0.2.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Arrowslinger"
+        },
+        "field": "mult",
+        "value": 0.2,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "yukong_e4_present",
+      "layer": "interactions",
+      "claim": "E4 Zephyrean Echoes: while Roaring Bowstrings is active, Yukong DMG +30% (yukong_e4). Present from E4.",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "yukong_e4"
+      }
+    },
+    {
+      "id": "yukong_e4_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: yukong_e4 must NOT be active below rank 4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "yukong_e4"
+      }
+    },
+    {
+      "id": "yukong_e4_stat",
+      "layer": "parameters",
+      "claim": "yukong_e4 carries dmgAll 0.3 (canon rank 4).",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "yukong_e4",
+        "stat": "dmgAll",
+        "value": 0.3
+      }
+    },
+    {
+      "id": "yukong_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 Ultimate Lv.+2: Diving Kestrel 3.8 -> 4.104.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Diving Kestrel"
+        },
+        "field": "mult",
+        "value": 4.104,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "yukong_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Diving Kestrel stays at 3.8.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Diving Kestrel"
+        },
+        "field": "mult",
+        "value": 3.8,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "yukong_e5_talent",
+      "layer": "parameters",
+      "claim": "E5 Talent Lv.+2: Seven Layers, One Arrow 0.8 -> 0.88.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Seven Layers, One Arrow"
+        },
+        "field": "mult",
+        "value": 0.88,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "yukong_e5_talent_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Seven Layers, One Arrow stays at 0.8.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Seven Layers, One Arrow"
+        },
+        "field": "mult",
+        "value": 0.8,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

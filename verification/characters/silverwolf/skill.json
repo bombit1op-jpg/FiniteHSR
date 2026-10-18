@@ -1,0 +1,241 @@
+{
+  "kit": "silverwolf",
+  "slot": "skill",
+  "canon": {
+    "source": "reference/hsr-data/characters.json",
+    "ref": "Silver Wolf skill IDs 1100601-1100604",
+    "confidence": "high",
+    "note": "Basic 1100601 System Warning: 140% ATK at L10, 3 hits 25/25/50. Skill 1100602 Allow Changes?: 196% primary; implants one Quantum weakness on the primary target (not already present), Quantum RES taken +20% 3 turns (skill_a4/skill_a5); separate All-Type RES taken +13% 2 turns (skill_a3/skill_a7) at 100% base chance (skill_a6). Ult 1100603 User Banned: 380%, DEF -45% 3 turns (ult_a2). Talent 1100604 Bug: after each SW attack, 100% base chance implant random Bug, duration 4 (base 3 + Trace). A4: +20 Energy at battle start, +5 at own turn start. A6: +10% ATK per 10% EHR up to 50%. sp_need 110."
+  },
+  "fixtures": [
+    {
+      "id": "solo-1e",
+      "env": "Silver Wolf E0 solo vs 1 Elite dummy weak to Fire+Ice (no Quantum; Lv120, 6M HP, 300 Toughness), auto rotation, 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "silverwolf",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Fire", "Ice"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "trio-3e",
+      "env": "Silver Wolf E0 solo vs 3 Elite dummies weak to Fire+Ice (no Quantum; Lv120, 6M HP, 300 Toughness each), auto rotation, 3 cycles, seed 7 (implant lands on primary only)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "silverwolf",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Fire", "Ice"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "sw_basic_hits",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic System Warning hits 3 times per cast (canon 1100601 notes: 3 hits 25/25/50)",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "HIT_START", "source": "Silver Wolf", "label": "System Warning" },
+        "value": 3
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "sw_basic_split_light",
+      "layer": "parameters",
+      "claim": "Two System Warning slices carry 0.25x each (canon 25% slices of engine Basic Lv6 total 1.0)",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Silver Wolf", "label": "System Warning", "payload": { "mult": 0.25 } },
+        "value": 2
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "sw_basic_split_heavy",
+      "layer": "parameters",
+      "claim": "One System Warning slice carries 0.5x (canon 50% slice)",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Silver Wolf", "label": "System Warning", "payload": { "mult": 0.5 } },
+        "value": 1
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "sw_skill_mult",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill Allow Changes? deals 1.96x (canon 1100602 #1: 196% ATK)",
+      "assertion": {
+        "assert": "payload",
+        "of": { "type": "DAMAGE_DEALT", "source": "Silver Wolf", "label": "Allow Changes?" },
+        "field": "mult",
+        "value": 1.96
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "sw_ult_present",
+      "layer": "structure",
+      "claim": "Silver Wolf casts her Ultimate in the fixture (standard Energy activation)",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Silver Wolf", "action": "ultimate" } }
+    },
+    {
+      "id": "sw_ult_mult",
+      "layer": "parameters",
+      "claim": "User Banned deals 3.8x (canon 1100603 #1: 380% ATK)",
+      "assertion": {
+        "assert": "payload",
+        "of": { "type": "DAMAGE_DEALT", "source": "Silver Wolf", "label": "User Banned" },
+        "field": "mult",
+        "value": 3.8
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "sw_ult_aoe",
+      "layer": "structure",
+      "claim": "User Banned hits all 3 enemies per cast (6 hits over 2 casts in trio fixture)",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "HIT_START", "source": "Silver Wolf", "label": "User Banned" },
+        "value": 6
+      },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "sw_implant_log",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill implants Quantum weakness (canon 1100602 #2: implant weakness of the Skill's type)",
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "implants Quantum weakness on" } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "sw_implant_buff",
+      "layer": "parameters",
+      "claim": "Implanted weakness carries the Quantum RES-taken debuff for 3 turns (canon skill_a5: 3)",
+      "assertion": { "assert": "buff", "id": "sw_weak_Quantum", "turns": 3 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "sw_implant_stat",
+      "layer": "parameters",
+      "claim": "Quantum weakness raises Quantum DMG taken by 20% (canon skill_a4: 20%)",
+      "assertion": { "assert": "buffStat", "id": "sw_weak_Quantum", "stat": "vuln:Quantum", "value": 0.2 }
+    },
+    {
+      "id": "sw_implant_primary_only",
+      "layer": "structure",
+      "claim": "Implant hits the primary target only: exactly 1 sw_weak_Quantum application across 3 enemies",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "BUFF_APPLIED", "payload": { "id": "sw_weak_Quantum" } },
+        "value": 1
+      },
+      "fixtures": ["trio-3e"]
+    },
+    {
+      "id": "sw_resall",
+      "layer": "parameters",
+      "claim": "All-Type RES debuff lasts 2 turns (canon skill_a7: 2)",
+      "assertion": { "assert": "buff", "id": "sw_resall", "turns": 2 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "sw_resall_stat",
+      "layer": "parameters",
+      "claim": "All-Type RES debuff lowers enemy All-Type RES by 13% (canon skill_a3: 13%)",
+      "assertion": { "assert": "buffStat", "id": "sw_resall", "stat": "resAll", "value": -0.13 }
+    },
+    {
+      "id": "sw_ult_def",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate DEF shred lasts 3 turns (canon 1100603 #7: 3 turns)",
+      "assertion": { "assert": "buff", "id": "sw_ult_def", "turns": 3 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "sw_ult_def_stat",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate DEF shred is 45% (canon 1100603 ult_a2: 45%)",
+      "assertion": { "assert": "buffStat", "id": "sw_ult_def", "stat": "defRed", "value": 0.45 }
+    },
+    {
+      "id": "sw_bug",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "Talent implants Bug for 4 turns (canon 1100604 duration 3 + Trace Generate +1)",
+      "assertion": { "assert": "buff", "id": "sw_bug", "turns": 4 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "sw_a6",
+      "layer": "parameters",
+      "claim": "A6 grants +10% ATK at 10% EHR (canon A6: +10% ATK per 10% EHR; trace EHR 10% steps to 10%)",
+      "assertion": { "assert": "buffStat", "id": "sw_a6", "stat": "atkPct", "value": 0.1 }
+    },
+    {
+      "id": "sw_a4_start_energy",
+      "layer": "parameters",
+      "claim": "A4 grants +20 Energy at battle start: with energyStartFrac 0.5 Silver Wolf opens at 55 + 20 = 75 / 110 Energy",
+      "assertion": { "assert": "present", "of": { "type": "BATTLE_START" } },
+      "before": [
+        { "kitId": "silverwolf", "stat": "energy", "op": "eq", "value": 75 }
+      ],
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "sw_energy_solo",
+      "layer": "parameters",
+      "claim": "Regenerates exactly 215 Energy in solo fixture (sp_need 110 ladder: +20 start, +5 per own turn, skill/basic/ult cast gains, taken-hit gains)",
+      "assertion": { "assert": "energy", "who": "Silver Wolf", "atLeast": 215, "atMost": 215 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "sw_energy_trio",
+      "layer": "parameters",
+      "claim": "Regenerates exactly 260 Energy in trio fixture (same kit gains plus more landed enemy attacks)",
+      "assertion": { "assert": "energy", "who": "Silver Wolf", "atLeast": 260, "atMost": 260 },
+      "fixtures": ["trio-3e"]
+    }
+  ],
+  "golds": []
+}

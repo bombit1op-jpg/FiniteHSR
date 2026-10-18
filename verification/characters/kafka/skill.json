@@ -1,0 +1,251 @@
+{
+  "kit": "kafka",
+  "slot": "skill",
+  "canon": {
+    "source": "reference/hsr-data/characters.json",
+    "ref": "Kafka skill IDs 1100501-1100504",
+    "confidence": "high",
+    "note": "Basic 1100501: 140% ATK at L10, 2 hits 50/50. Skill 1100502 Caressing Moonlight: 160% primary; notes say primary DMG split 20%+30%+50% over 3 hits; adjacent 60% (skill_a3). Ult 1100503 Twilight Trill: 80% all enemies, applies Shock (ult_a3 290% ATK), detonates existing DoTs at 120% (ult_a2). Talent 1100504 Gentle but Cruel: on ally attack, 6 hits 15/15/15/15/15/25 of 140%, +10 Energy, Shock (ult_a3 290%... talent path uses ult_a3), charges: on enemy turn start, if no charge regained at Kafka's turn end (+1/turn). Skill detonates existing DoTs at 75% (skill_a2). sp_need 120."
+  },
+  "fixtures": [
+    {
+      "id": "solo-1e",
+      "env": "Kafka E0 solo vs 1 Lightning-weak Elite dummy (Lv120, 6M HP, 300 Toughness), auto rotation, 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "kafka",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Lightning"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "duo-1e",
+      "env": "Kafka E0 + Pela E0 vs 1 Lightning-weak Elite dummy (Lv120, 6M HP, 300 Toughness), auto rotation, 3 cycles, seed 7 (Pela attacks feed Kafka Talent FUA)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "kafka",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          },
+          {
+            "kitId": "pela",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Lightning"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "k_basic_split",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic Midnight Tumult splits 0.5 + 0.5 per cast (engine Basic Lv6 total 1.0; canon 1100501 notes 50%+50%), 2 casts in fixture",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Kafka", "label": "Midnight Tumult", "payload": { "mult": 0.5 } },
+        "value": 4
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "k_skill_mult",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill Caressing Moonlight first slice = 20% of the 1.6x coefficient -> 0.32 (canon 1100502 #1: 160% ATK)",
+      "assertion": {
+        "assert": "payload",
+        "of": { "type": "DAMAGE_DEALT", "source": "Kafka", "label": "Caressing Moonlight" },
+        "field": "mult",
+        "value": 0.32,
+        "pick": "first"
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "k_skill_hits",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill primary splits into 3 hits per cast (20%+30%+50% canon 1100502); 4 casts -> 12 Caressing Moonlight DAMAGE events.",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Kafka", "label": "Caressing Moonlight" },
+        "value": 12
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "k_skill_split_tail",
+      "layer": "structure",
+      "claim": "The last Skill digit of each cast carries the 50% tail (0.80x).",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Kafka", "label": "Caressing Moonlight", "payload": { "mult": 0.8 } },
+        "value": 4
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "k_ult_present",
+      "layer": "structure",
+      "claim": "Kafka casts her Ultimate in the fixture (standard Energy activation)",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Kafka", "action": "ultimate" } }
+    },
+    {
+      "id": "k_ult_mult",
+      "layer": "parameters",
+      "claim": "Twilight Trill deals 0.8x (canon 1100503 #1: 80% ATK)",
+      "assertion": {
+        "assert": "payload",
+        "of": { "type": "DAMAGE_DEALT", "source": "Kafka", "label": "Twilight Trill" },
+        "field": "mult",
+        "value": 0.8
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "k_shock_apply",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate applies Shock DoT (canon 1100503 #3: Shock 290% ATK, 2 turns)",
+      "assertion": { "assert": "present", "of": { "type": "DOT_APPLIED", "payload": { "kind": "Shock" } } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "k_shock_tick",
+      "layer": "interactions",
+      "claim": "Shock ticks on the enemy turn (canon Shock is a 2-turn DoT)",
+      "assertion": { "assert": "present", "of": { "type": "DOT_TICK", "payload": { "kind": "Shock" } } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "k_det_skill",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill detonates existing DoTs at 0.75x (canon skill_a2: 75%), 2 detonations in solo fixture",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Kafka", "label": "DoT Detonation", "payload": { "mult": 0.75 } },
+        "value": 2
+      },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "k_det_ult",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate detonates existing DoTs at 1.2x (canon ult_a2: 120%), 1 detonation in duo fixture",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "DAMAGE_DEALT", "source": "Kafka", "label": "DoT Detonation", "payload": { "mult": 1.2 } },
+        "value": 1
+      },
+      "fixtures": ["duo-1e"]
+    },
+    {
+      "id": "k_fua_count",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent Gentle but Cruel triggers once per Pela attack (6 ally attacks -> 6 Follow-Ups; charges cap 2, regained at Kafka's turn end)",
+      "assertion": {
+        "assert": "count",
+        "of": { "type": "HIT_START", "source": "Kafka", "label": "Gentle but Cruel" },
+        "value": 6
+      },
+      "fixtures": ["duo-1e"]
+    },
+    {
+      "id": "k_fua_split",
+      "layer": "parameters",
+      "claim": "Gentle but Cruel hits split 15%/15%/15%/15%/15%/25% of 1.4x -> 0.21x and 0.35x slices (canon 1100504 notes)",
+      "assertion": {
+        "assert": "payload",
+        "of": { "type": "DAMAGE_DEALT", "source": "Kafka", "label": "Gentle but Cruel" },
+        "field": "mult",
+        "value": 0.21,
+        "pick": "first"
+      },
+      "fixtures": ["duo-1e"]
+    },
+    {
+      "id": "k_fua_split_tail",
+      "layer": "parameters",
+      "claim": "The 6th Gentle but Cruel slice carries 0.35x (25% of 1.4x)",
+      "assertion": {
+        "assert": "payload",
+        "of": { "type": "DAMAGE_DEALT", "source": "Kafka", "label": "Gentle but Cruel" },
+        "field": "mult",
+        "value": 0.35
+      },
+      "fixtures": ["duo-1e"]
+    },
+    {
+      "id": "k_fua_energy",
+      "layer": "interactions",
+      "claim": "Gentle but Cruel regenerates +10 Energy for Kafka (canon 1100504 sp_base 10)",
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "Gentle but Cruel \\(energy \\+10\\)" } },
+      "fixtures": ["duo-1e"]
+    },
+    {
+      "id": "k_energy_solo",
+      "layer": "parameters",
+      "claim": "Regenerates exactly 180 Energy in solo fixture (sp_need 120 ladder; no Talent triggers solo)",
+      "assertion": { "assert": "energy", "who": "Kafka", "atLeast": 180, "atMost": 180 },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "k_energy_duo",
+      "layer": "parameters",
+      "claim": "Regenerates exactly 180 Energy in duo fixture (same skill/basic pattern plus Talent +10 events within the sp_need 120 ladder)",
+      "assertion": { "assert": "energy", "who": "Kafka", "atLeast": 180, "atMost": 180 },
+      "fixtures": ["duo-1e"]
+    },
+    {
+      "id": "k_order_shock_det",
+      "layer": "ordering",
+      "claim": "Shock exists before any Skill detonation consumes it (Ultimate applies Shock, later Skill detonates)",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "DOT_APPLIED", "payload": { "kind": "Shock" } }
+        ],
+        "after": [
+          { "type": "DAMAGE_DEALT", "source": "Kafka", "label": "DoT Detonation" }
+        ]
+      },
+      "fixtures": ["solo-1e"]
+    }
+  ],
+  "golds": []
+}

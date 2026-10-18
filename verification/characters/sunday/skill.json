@@ -1,0 +1,169 @@
+{
+  "kit": "sunday",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/131301-131307",
+    "confidence": "interpreted",
+    "note": "Sunday (Imaginary, Harmony). Basic 131301 Gleaming Admonition. Skill 131302 Ode to Caress and Cicatrix: target ally (and their summon) gains +DMG for 2 turns; the Talent adds +CRIT Rate; a non-Harmony target takes an immediate action. Ultimate 131303 The Beatified: target (and summon) gains CRIT DMG (fraction of Sunday's CD) for 3 turns and regenerates Energy (min 40). Talent 131304 The Sorrowing Body: CRIT Rate buff. A2 +25 Energy at battle start. Energy 130."
+  },
+  "fixtures": [
+    {
+      "id": "team-sushang",
+      "env": "Sunday E0 with Sushang (kitId sushang) vs 3 Physical-weak Elite (level 95, 240 Toughness), 3 cycles, seed 7 - Skill buffs + advances the carry, Ultimate blesses it",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sunday",
+            "stats": { "hp": 10000, "atk": 1600, "def": 600, "spd": 185 },
+            "eidolon": 0
+          },
+          {
+            "kitId": "sushang",
+            "stats": { "hp": 9000, "atk": 2000, "def": 550, "spd": 180, "be": 0.6 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1-def",
+      "env": "Sunday E1 with Sushang vs the same Elites - E1 grants the Skill target 16% DEF ignore (sunday_e1)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sunday",
+            "stats": { "hp": 10000, "atk": 1600, "def": 600, "spd": 185 },
+            "eidolon": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": { "hp": 9000, "atk": 2000, "def": 550, "spd": 180, "be": 0.6 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "sunday_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Gleaming Admonition (131301, Imaginary) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Sunday",
+          "label": "Gleaming Admonition",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "e1-def",
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "su_skill_action",
+      "layer": "structure",
+      "claim": "Skill Ode to Caress and Cicatrix (131302) fires as a Skill action (decide harmony.ts:990-994 picks Skill while SP >= 1 and a target exists).",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Sunday", "action": "skill" } }
+    },
+    {
+      "id": "su_ult_action",
+      "layer": "structure",
+      "claim": "The Beatified (131303) fires once Energy reaches 130 (energyMax harmony.ts:973).",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Sunday", "action": "ultimate" } }
+    },
+    {
+      "id": "su_skill_dmg",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill grants the target +DMG for 2 turns (harmony.ts:1040-1044, sunday_dmg).",
+      "assertion": { "assert": "buff", "id": "sunday_dmg", "turns": 2 }
+    },
+    {
+      "id": "su_talent_crit",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent The Sorrowing Body: the Skill applies sunday_talent CRIT Rate for 3 turns (harmony.ts:1096-1099).",
+      "assertion": { "assert": "buff", "id": "sunday_talent", "turns": 3 }
+    },
+    {
+      "id": "su_advance",
+      "layer": "interactions",
+      "claim": "A non-Harmony target takes an immediate action after the Skill (harmony.ts:1057-1065, sim.immediateTurn -> EXTRA_TURN).",
+      "assertion": { "assert": "present", "of": { "type": "EXTRA_TURN", "target": "Sushang" } }
+    },
+    {
+      "id": "su_beatified",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate places The Beatified on the target (harmony.ts:1013-1014).",
+      "assertion": { "assert": "present", "of": { "type": "BUFF_APPLIED", "payload": { "id": "beatified" } } }
+    },
+    {
+      "id": "su_start_energy_25",
+      "layer": "parameters",
+      "claim": "A2 grants +25 Energy at battle start (harmony.ts:980-983), Sunday's first ENERGY_GAIN.",
+      "assertion": { "assert": "payload", "of": { "type": "ENERGY_GAIN", "source": "Sunday" }, "field": "n", "value": 25, "pick": "first" }
+    },
+    {
+      "id": "su_skill_energy_30",
+      "layer": "parameters",
+      "claim": "Every Skill cast regenerates 30 Energy (harmony.ts:1028).",
+      "assertion": { "assert": "present", "of": { "type": "ENERGY_GAIN", "source": "Sunday", "payload": { "n": 30 } } }
+    },
+    {
+      "id": "su_ult_energy_regen",
+      "layer": "parameters",
+      "claim": "The Beatified regenerates Energy to its target (harmony.ts:1009-1012, min 40). NOTE: the engine sets t.energy directly (no ENERGY_GAIN event), so the nominal amount is asserted from the cast log.",
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "Sunday Ult on Sushang: \\+\\d+ energy" } }
+    },
+    {
+      "id": "su_skill_before_dmg",
+      "layer": "ordering",
+      "claim": "The Skill action starts before the sunday_dmg buff lands (harmony.ts:1027 then 1043).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Sunday", "action": "skill" }],
+        "after": [{ "type": "BUFF_APPLIED", "payload": { "id": "sunday_dmg" } }]
+      }
+    },
+    {
+      "id": "su_e1_def",
+      "layer": "parameters",
+      "claim": "E1 grants the Skill target 16% DEF ignore (harmony.ts:1046-1047, sunday_e1).",
+      "fixtures": ["e1-def"],
+      "assertion": { "assert": "buffStat", "id": "sunday_e1", "stat": "defIgnore", "value": 0.16, "tol": 0.001 }
+    }
+  ]
+}

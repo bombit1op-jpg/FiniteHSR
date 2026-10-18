@@ -1,0 +1,184 @@
+{
+  "kit": "natasha",
+  "slot": "interactions",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/natasha/ranks+traces",
+    "confidence": "verified",
+    "note": "Phase 3.5 paired/allies fixture. Companion = bronya. Assertions pin the canon eidolon/trace observable on HEAL_APPLIED nodes (HealingPipeline emits them for every heal); status gap = documented deviation expected to diverge (PROMOTE if it passes), blocked = no stable observable."
+  },
+  "fixtures": [
+    {
+      "id": "pair",
+      "env": "natasha E6 + bronya (wounded 25%) ally vs Boss (Lv120), 6 cycles, seed 11",
+      "battle": {
+        "team": [
+          {
+            "kitId": "natasha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 120
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "bronya",
+            "stats": {
+              "hp": 10000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 134
+            },
+            "hpFrac": 0.25
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 250000,
+          "atk": 140,
+          "spd": 150,
+          "level": 120,
+          "toughness": 1800,
+          "weaknesses": [
+            "Physical",
+            "Fire",
+            "Ice",
+            "Lightning",
+            "Wind",
+            "Quantum",
+            "Imaginary"
+          ]
+        },
+        "cycles": 6,
+        "seed": 11
+      }
+    },
+    {
+      "id": "e1_trigger",
+      "env": "natasha E6 solo, wounded 20%, no ult at start; first enemy hit must trigger E1 self-heal",
+      "battle": {
+        "team": [
+          {
+            "kitId": "natasha",
+            "stats": {
+              "hp": 30000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 120
+            },
+            "eidolon": 6,
+            "energyStartFrac": 0,
+            "hpFrac": 0.2
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 250000,
+          "atk": 140,
+          "spd": 150,
+          "level": 120,
+          "toughness": 1800,
+          "weaknesses": [
+            "Physical",
+            "Fire",
+            "Ice",
+            "Lightning",
+            "Wind",
+            "Quantum",
+            "Imaginary"
+          ]
+        },
+        "cycles": 6,
+        "seed": 11
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "natasha_fixture_runs",
+      "layer": "structure",
+      "claim": "Both paired and solo battles execute deterministically with no invariant break.",
+      "fixtures": [
+        "pair",
+        "e1_trigger"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "fixtures execute"
+      }
+    },
+    {
+      "id": "natasha_heal_observable",
+      "layer": "interactions",
+      "claim": "Natasha's healing is observable as HEAL_APPLIED nodes (HealingPipeline emits one per heal).",
+      "fixtures": [
+        "pair"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HEAL_APPLIED"
+        }
+      }
+    },
+    {
+      "id": "natasha_e1_selfheal",
+      "layer": "interactions",
+      "claim": "E1 Pharmacology Expertise: self-heal (15% MaxHP + 400) fires when natasha is attacked at <=30% HP; canon floor = 4900 for MaxHP 30000.",
+      "fixtures": [
+        "e1_trigger"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "HEAL_APPLIED",
+          "source": "Natasha",
+          "target": "Natasha"
+        },
+        "field": "amount",
+        "value": 4900
+      }
+    },
+    {
+      "id": "natasha_heals_wounded_ally",
+      "layer": "interactions",
+      "claim": "Natasha directs a heal at the wounded companion bronya (skill/ult), observable as HEAL_APPLIED(source Natasha, target Bronya).",
+      "fixtures": [
+        "pair"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HEAL_APPLIED",
+          "source": "Natasha",
+          "target": "Bronya"
+        }
+      }
+    },
+    {
+      "id": "natasha_e2_hot_tick",
+      "layer": "interactions",
+      "claim": "E2 Clinical Research: continuous heal ticks at the START of the affected ally's turn. Canon = 6% of Natasha Max HP + 160 = floor(12800*0.06+160) = 928 raw; with A4 outHeal 0.1 (Innervation off, bronya above 30% after ult): round(928*1.1) = 1021. The tick amount is unique — distinct from ult direct heal (3779) and skill heal (1920).",
+      "fixtures": [
+        "pair"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HEAL_APPLIED",
+          "source": "Natasha",
+          "target": "Bronya",
+          "payload": {
+            "amount": 1021
+          }
+        }
+      }
+    }
+  ],
+  "golds": []
+}

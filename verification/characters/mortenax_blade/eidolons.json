@@ -1,0 +1,437 @@
+{
+  "kit": "mortenax_blade",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Mortenax Blade/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 'Ere My Death, I Stood Unmade' = while the Zone is active enemies' All-Type RES -20% (mb_e1 resAll -0.2), and the extra Skill delays the Infinite Fury countdown 15%. E2 'Ash Was My Heart, Yet the Flame Stayed' = ally Ultimates count as Follow-Up ATK (+75% FUA DMG) and the Charge cap drops to 7 (energy max 250 -> 280). E3 'Across the Shore, Wrath Laid Bare' +Ultimate Lv.2 / Talent Lv.2 raises 'Tenax Per Ignem' 3.5 -> 3.78. E4 \"Odium I've Smitten, Thence Came the Blade\" = 'Heart, Refined ad Infinitum' increases ally-target DMG +50% (mb_a2self dmgAll 0.5 -> 1). E5 'I Severed My Woes, Knowing Death Begets Life' +Skill Lv.2 / Basic Lv.1 raises Basic 'A Broken Blade Still Slays' 0.5 -> 0.55. E6 'If Immortality Could Die, I Swore THEM Slain' = as the Zone persists, +1 Charge when Mortenax Blade takes DMG/consumes HP, and 'Tenax Per Ignem' multiplier x1.5 (3.78 -> 5.67)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "mortenax_blade E0 — eidolon ladder rung, cloned from mortenax_blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mortenax_blade",
+            "stats": {
+              "hp": 12000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 300
+            },
+            "energyStartFrac": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "mortenax_blade E1 — eidolon ladder rung, cloned from mortenax_blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mortenax_blade",
+            "stats": {
+              "hp": 12000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 300
+            },
+            "energyStartFrac": 1,
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "mortenax_blade E2 — eidolon ladder rung, cloned from mortenax_blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mortenax_blade",
+            "stats": {
+              "hp": 12000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 300
+            },
+            "energyStartFrac": 1,
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "mortenax_blade E3 — eidolon ladder rung, cloned from mortenax_blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mortenax_blade",
+            "stats": {
+              "hp": 12000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 300
+            },
+            "energyStartFrac": 1,
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "mortenax_blade E4 — eidolon ladder rung, cloned from mortenax_blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mortenax_blade",
+            "stats": {
+              "hp": 12000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 300
+            },
+            "energyStartFrac": 1,
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "mortenax_blade E5 — eidolon ladder rung, cloned from mortenax_blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mortenax_blade",
+            "stats": {
+              "hp": 12000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 300
+            },
+            "energyStartFrac": 1,
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "mortenax_blade E6 — eidolon ladder rung, cloned from mortenax_blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mortenax_blade",
+            "stats": {
+              "hp": 12000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 300
+            },
+            "energyStartFrac": 1,
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "mb_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'Ere My Death, I Stood Unmade': while the Zone is active enemies' All-Type RES -20% (mb_e1).",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "mb_e1"
+      }
+    },
+    {
+      "id": "mb_e1_stat",
+      "layer": "parameters",
+      "claim": "mb_e1 carries resAll -0.2 (canon ranks/1).",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "mb_e1",
+        "stat": "resAll",
+        "value": -0.2
+      }
+    },
+    {
+      "id": "mb_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: mb_e1 must NOT be active below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "mb_e1"
+      }
+    },
+    {
+      "id": "mb_e3_ult",
+      "layer": "parameters",
+      "claim": "E3 'Across the Shore, Wrath Laid Bare': Ultimate/Talent Lv.+2 raises 'Tenax Per Ignem' 3.5 -> 3.78.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Tenax Per Ignem"
+        },
+        "field": "mult",
+        "value": 3.78,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "mb_e3_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'Tenax Per Ignem' stays at 3.5.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Tenax Per Ignem"
+        },
+        "field": "mult",
+        "value": 3.5,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "mb_e4_present",
+      "layer": "interactions",
+      "claim": "E4 \"Odium I've Smitten, Thence Came the Blade\": 'Heart, Refined ad Infinitum' raises ally-target DMG +50% (mb_a2self dmgAll 0.5 -> 1).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "mb_a2self",
+        "stat": "dmgAll",
+        "value": 1
+      }
+    },
+    {
+      "id": "mb_e5_basic",
+      "layer": "parameters",
+      "claim": "E5 'I Severed My Woes, Knowing Death Begets Life': Basic ATK Lv.+1 raises 'A Broken Blade Still Slays' 0.5 -> 0.55.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "A Broken Blade Still Slays"
+        },
+        "field": "mult",
+        "value": 0.55,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "mb_e5_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E5 'A Broken Blade Still Slays' stays at 0.5.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "A Broken Blade Still Slays"
+        },
+        "field": "mult",
+        "value": 0.5,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "mb_e6_ult",
+      "layer": "parameters",
+      "claim": "E6 'If Immortality Could Die, I Swore THEM Slain': 'Tenax Per Ignem' multiplier x1.5 raises it 3.78 -> 5.67.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Tenax Per Ignem"
+        },
+        "field": "mult",
+        "value": 5.67,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "mb_e6_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E6 'Tenax Per Ignem' stays at the E3 value 3.78.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Tenax Per Ignem"
+        },
+        "field": "mult",
+        "value": 3.78,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

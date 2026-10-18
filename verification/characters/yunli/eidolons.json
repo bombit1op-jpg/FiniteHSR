@@ -1,0 +1,267 @@
+{
+  "kit": "yunli",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Yunli/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ranks. E1 Weathered Blade: Intuit: Slash DMG +20% (Intuit: Slash 2.2->2.64) and Intuit: Cull deals +3 hits (6->9). E2 First Luster: Intuit: Cull ignores 20% DEF (yunli_e2_def defIgnore 0.2). E3 Ult Lv.+2 / Basic Lv.+1: Intuit: Slash 2.64->2.8512, Galespin Summersault 1.0->1.1. E4 Artisan's Ironsong: after Intuit, Effect RES +50% for 1 turn (yunli_e4 effRes 0.5). E5 Skill Lv.+2 / Talent Lv.+2: Bladeborne Quake 1.2->1.32, Flashforge Counter 1.2->1.32, Skill heal 1148->1233. E6 Walk in Blade, A Name That Rings: Parry triggers Intuit: Cull, and Intuit grants +15% CRIT Rate / +20% Physical RES PEN (yunli_e6 critRate 0.15, resPen:Physical 0.2)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "yunli E0 — eidolon ladder rung, cloned from yunli/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yunli",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "yunli E1 — eidolon ladder rung, cloned from yunli/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yunli",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "yunli E2 — eidolon ladder rung, cloned from yunli/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yunli",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "yunli E3 — eidolon ladder rung, cloned from yunli/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yunli",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "yunli E4 — eidolon ladder rung, cloned from yunli/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yunli",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "yunli E5 — eidolon ladder rung, cloned from yunli/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yunli",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "yunli E6 — eidolon ladder rung, cloned from yunli/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yunli",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    { "id": "yunli_e1_slash", "layer": "parameters", "claim": "E1 Weathered Blade: Intuit: Slash DMG +20% (2.2 -> 2.64). Present from E1 (re-measured at E3, see e3).", "fixtures": ["e1", "e2"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Intuit: Slash" }, "field": "mult", "value": 2.64, "tol": 0.001, "pick": "first" } },
+    { "id": "yunli_e1_slash_locked", "layer": "parameters", "claim": "Below E1 Intuit: Slash stays at 2.2.", "fixtures": ["e0"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Intuit: Slash" }, "field": "mult", "value": 2.2, "tol": 0.001, "pick": "first" } },
+    { "id": "yunli_e1_cull", "layer": "parameters", "claim": "E1 Weathered Blade: Intuit: Cull deals +3 hits (6 -> 9) per proc. 2 Parry-counters in the fixture = 18 Cull hits.", "fixtures": ["e1", "e2", "e3", "e4", "e5"], "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "label": "Intuit: Cull (hit)" }, "value": 18 } },
+    { "id": "yunli_e1_cull_locked", "layer": "parameters", "claim": "Below E1 Intuit: Cull lands 6 hits per proc — 2 Parry-counters in the fixture = 12 total.", "fixtures": ["e0"], "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "label": "Intuit: Cull (hit)" }, "value": 12 } },
+    { "id": "yunli_e2_present", "layer": "interactions", "claim": "E2 First Luster: Intuit: Cull ignores 20% DEF (yunli_e2_def). Present from E2.", "fixtures": ["e2", "e3", "e4", "e5", "e6"], "assertion": { "assert": "buff", "id": "yunli_e2_def" } },
+    { "id": "yunli_e2_locked", "layer": "interactions", "claim": "Cumulative unlock: yunli_e2_def must NOT be active below rank 2.", "fixtures": ["e0", "e1"], "assertion": { "assert": "noBuff", "id": "yunli_e2_def" } },
+    { "id": "yunli_e2_stat", "layer": "parameters", "claim": "yunli_e2_def carries defIgnore 0.2 (canon rank 2).", "fixtures": ["e2"], "assertion": { "assert": "buffStat", "id": "yunli_e2_def", "stat": "defIgnore", "value": 0.2 } },
+    { "id": "yunli_e3_slash", "layer": "parameters", "claim": "E3 Ultimate Lv.+2: Intuit: Slash 2.64 -> 2.8512.", "fixtures": ["e3", "e4", "e5", "e6"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Intuit: Slash" }, "field": "mult", "value": 2.8512, "tol": 0.001, "pick": "first" } },
+    { "id": "yunli_e3_basic", "layer": "parameters", "claim": "E3 Basic Lv.+1: Galespin Summersault 1.0 -> 1.1.", "fixtures": ["e3", "e4", "e5", "e6"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Galespin Summersault" }, "field": "mult", "value": 1.1, "tol": 0.001, "pick": "first" } },
+    { "id": "yunli_e3_basic_locked", "layer": "parameters", "claim": "Below E3 Galespin Summersault stays at 1.0.", "fixtures": ["e0", "e1", "e2"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Galespin Summersault" }, "field": "mult", "value": 1.0, "tol": 0.001, "pick": "first" } },
+    { "id": "yunli_e4_present", "layer": "interactions", "claim": "E4 Artisan's Ironsong: after Intuit, Effect RES +50% for 1 turn (yunli_e4). Present from E4.", "fixtures": ["e4", "e5", "e6"], "assertion": { "assert": "buff", "id": "yunli_e4" } },
+    { "id": "yunli_e4_locked", "layer": "interactions", "claim": "Cumulative unlock: yunli_e4 must NOT be active below rank 4.", "fixtures": ["e0", "e1", "e2", "e3"], "assertion": { "assert": "noBuff", "id": "yunli_e4" } },
+    { "id": "yunli_e4_stat", "layer": "parameters", "claim": "yunli_e4 carries effRes 0.5 (canon rank 4).", "fixtures": ["e4"], "assertion": { "assert": "buffStat", "id": "yunli_e4", "stat": "effRes", "value": 0.5 } },
+    { "id": "yunli_e5_skill", "layer": "parameters", "claim": "E5 Skill Lv.+2: Bladeborne Quake 1.2 -> 1.32.", "fixtures": ["e5", "e6"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Bladeborne Quake" }, "field": "mult", "value": 1.32, "tol": 0.001, "pick": "first" } },
+    { "id": "yunli_e5_skill_locked", "layer": "parameters", "claim": "Below E5 Bladeborne Quake stays at 1.2.", "fixtures": ["e0", "e1", "e2", "e3", "e4"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Bladeborne Quake" }, "field": "mult", "value": 1.2, "tol": 0.001, "pick": "first" } },
+    { "id": "yunli_e5_talent", "layer": "parameters", "claim": "E5 Talent Lv.+2: Flashforge Counter 1.2 -> 1.32.", "fixtures": ["e5", "e6"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Flashforge Counter" }, "field": "mult", "value": 1.32, "tol": 0.001, "pick": "first" } },
+    { "id": "yunli_e5_talent_locked", "layer": "parameters", "claim": "Below E5 Flashforge Counter stays at 1.2.", "fixtures": ["e0", "e1", "e2", "e3", "e4"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Flashforge Counter" }, "field": "mult", "value": 1.2, "tol": 0.001, "pick": "first" } },
+    { "id": "yunli_e6_present", "layer": "interactions", "claim": "E6 Walk in Blade, A Name That Rings: Intuit grants +15% CRIT Rate / +20% Physical RES PEN (yunli_e6). Present from E6.", "fixtures": ["e6"], "assertion": { "assert": "buff", "id": "yunli_e6" } },
+    { "id": "yunli_e6_locked", "layer": "interactions", "claim": "Cumulative unlock: yunli_e6 must NOT be active below rank 6.", "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"], "assertion": { "assert": "noBuff", "id": "yunli_e6" } },
+    { "id": "yunli_e6_stat_cr", "layer": "parameters", "claim": "yunli_e6 carries critRate 0.15 (canon rank 6).", "fixtures": ["e6"], "assertion": { "assert": "buffStat", "id": "yunli_e6", "stat": "critRate", "value": 0.15 } },
+    { "id": "yunli_e6_stat_rpen", "layer": "parameters", "claim": "yunli_e6 carries resPen:Physical 0.2 (canon rank 6).", "fixtures": ["e6"], "assertion": { "assert": "buffStat", "id": "yunli_e6", "stat": "resPen:Physical", "value": 0.2 } }
+  ],
+  "golds": []
+}

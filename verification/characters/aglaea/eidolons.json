@@ -1,0 +1,268 @@
+{
+  "kit": "aglaea",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Aglaea/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 Seam-Stitch target takes +15% DMG (gm_stitch vulnAll 0.15) and each attack regenerates 20 Energy; E2 ignores 14% DEF, stacks to 3 (aglaea_e2def defIgnore 0.14); E3 Skill Lv.+2 raises Joint ATK multipliers (0.5 -> 0.55); E4 SPD-Boost max stack +1 (aglaea_sup_spd spdPct reaches 1.05 vs 0.9 cap below); E5 Ult/Talent Lv.+2 raises Seam Stitch 0.3 -> 0.336; E6 +20% Lightning RES PEN in Supreme Stance (aglaea_e6). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "aglaea E0 — eidolon ladder rung, cloned from aglaea/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aglaea",
+            "stats": {
+              "hp": 6000,
+              "atk": 3000,
+              "def": 1200,
+              "spd": 250
+            },
+            "eidolon": 0,
+            "energyStartFrac": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e1",
+      "env": "aglaea E1 — eidolon ladder rung, cloned from aglaea/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aglaea",
+            "stats": {
+              "hp": 6000,
+              "atk": 3000,
+              "def": 1200,
+              "spd": 250
+            },
+            "eidolon": 1,
+            "energyStartFrac": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e2",
+      "env": "aglaea E2 — eidolon ladder rung, cloned from aglaea/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aglaea",
+            "stats": {
+              "hp": 6000,
+              "atk": 3000,
+              "def": 1200,
+              "spd": 250
+            },
+            "eidolon": 2,
+            "energyStartFrac": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e3",
+      "env": "aglaea E3 — eidolon ladder rung, cloned from aglaea/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aglaea",
+            "stats": {
+              "hp": 6000,
+              "atk": 3000,
+              "def": 1200,
+              "spd": 250
+            },
+            "eidolon": 3,
+            "energyStartFrac": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e4",
+      "env": "aglaea E4 — eidolon ladder rung, cloned from aglaea/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aglaea",
+            "stats": {
+              "hp": 6000,
+              "atk": 3000,
+              "def": 1200,
+              "spd": 250
+            },
+            "eidolon": 4,
+            "energyStartFrac": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e5",
+      "env": "aglaea E5 — eidolon ladder rung, cloned from aglaea/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aglaea",
+            "stats": {
+              "hp": 6000,
+              "atk": 3000,
+              "def": 1200,
+              "spd": 250
+            },
+            "eidolon": 5,
+            "energyStartFrac": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e6",
+      "env": "aglaea E6 — eidolon ladder rung, cloned from aglaea/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aglaea",
+            "stats": {
+              "hp": 6000,
+              "atk": 3000,
+              "def": 1200,
+              "spd": 250
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    }
+  ],
+  "requirements": [
+    { "id": "gl_e1_present", "layer": "parameters", "claim": "E1 'Drift at the Whim of Venus': the Seam-Stitch target takes +15% DMG (gm_stitch vulnAll 0.15). Present from E1.", "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"], "assertion": { "assert": "buffStat", "id": "gm_stitch", "stat": "vulnAll", "value": 0.15 } },
+    { "id": "gl_e1_energy", "layer": "parameters", "claim": "E1 additionally regenerates 20 Energy per attack on the Seam-Stitch target (Aglaea ENERGY_GAIN total jumps from ~645 to ~2705 from E1).", "fixtures": ["e1", "e6"], "assertion": { "assert": "energy", "who": "Aglaea", "atLeast": 2000 } },
+    { "id": "gl_e1_locked", "layer": "interactions", "claim": "Cumulative unlock: below E1 Aglaea's total Energy gain stays low (~645).", "fixtures": ["e0"], "assertion": { "assert": "energy", "who": "Aglaea", "atMost": 700 } },
+    { "id": "gl_e2_present", "layer": "interactions", "claim": "E2 'Sail on the Raft of Eyelids': attacks ignore 14% of the target's DEF (aglaea_e2def). Present from E2.", "fixtures": ["e2", "e6"], "assertion": { "assert": "buff", "id": "aglaea_e2def" } },
+    { "id": "gl_e2_locked", "layer": "interactions", "claim": "Cumulative unlock: aglaea_e2def must NOT be active below rank 2.", "fixtures": ["e0", "e1"], "assertion": { "assert": "noBuff", "id": "aglaea_e2def" } },
+    { "id": "gl_e2_stat", "layer": "parameters", "claim": "aglaea_e2def carries defIgnore 0.14 (canon rank 2).", "fixtures": ["e2"], "assertion": { "assert": "buffStat", "id": "aglaea_e2def", "stat": "defIgnore", "value": 0.14 } },
+    { "id": "gl_e3_present", "layer": "parameters", "claim": "E3 'Bequeath in the Coalescence of Dew': Skill Lv.+2 raises the Joint ATK main multiplier 0.5 -> 0.55.", "fixtures": ["e3", "e4", "e5"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Joint ATK (main)" }, "field": "mult", "value": 0.55, "tol": 0.01, "pick": "first" } },
+    { "id": "gl_e3_locked", "layer": "parameters", "claim": "Below E3 the Joint ATK main multiplier stays at 0.5.", "fixtures": ["e0", "e1", "e2"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Joint ATK (main)" }, "field": "mult", "value": 0.5, "tol": 0.01, "pick": "first" } },
+    { "id": "gl_e4_present", "layer": "parameters", "claim": "E4 'Flicker Below the Surface of Marble': SPD Boost max stack +1, so aglaea_sup_spd reaches spdPct 1.05 (vs 0.9 cap below).", "fixtures": ["e4", "e5", "e6"], "assertion": { "assert": "buffStat", "id": "aglaea_sup_spd", "stat": "spdPct", "atLeast": 1.05 } },
+    { "id": "gl_e4_locked_low", "layer": "parameters", "claim": "Below E4 (E0/E1) the SPD Boost caps at spdPct 0.9.", "fixtures": ["e0", "e1"], "assertion": { "assert": "buffStat", "id": "aglaea_sup_spd", "stat": "spdPct", "value": 0.9 } },
+    { "id": "gl_e4_locked_e2e3", "layer": "parameters", "claim": "Below E4 (E2/E3) the SPD Boost caps at spdPct 0.6.", "fixtures": ["e2", "e3"], "assertion": { "assert": "buffStat", "id": "aglaea_sup_spd", "stat": "spdPct", "value": 0.6 } },
+    { "id": "gl_e5_present", "layer": "parameters", "claim": "E5 'Weave Under the Shroud of Woe': Ult/Talent Lv.+2 raises Seam Stitch 0.3 -> 0.336.", "fixtures": ["e5", "e6"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Seam Stitch" }, "field": "mult", "value": 0.336, "tol": 0.01, "pick": "first" } },
+    { "id": "gl_e5_locked", "layer": "parameters", "claim": "Below E5 Seam Stitch stays at 0.3.", "fixtures": ["e0", "e1", "e2", "e3", "e4"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Seam Stitch" }, "field": "mult", "value": 0.3, "tol": 0.01, "pick": "first" } },
+    { "id": "gl_e6_present", "layer": "interactions", "claim": "E6 'Fluctuate in the Tapestry of Fates': +20% Lightning RES PEN in Supreme Stance (aglaea_e6 resPen:Lightning 0.2).", "fixtures": ["e6"], "assertion": { "assert": "buffStat", "id": "aglaea_e6", "stat": "resPen:Lightning", "value": 0.2 } },
+    { "id": "gl_e6_locked", "layer": "interactions", "claim": "Cumulative unlock: aglaea_e6 must NOT be active below rank 6.", "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"], "assertion": { "assert": "noBuff", "id": "aglaea_e6" } }
+  ],
+  "golds": []
+}

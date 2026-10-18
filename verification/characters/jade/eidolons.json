@@ -1,0 +1,316 @@
+{
+  "kit": "jade",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "hsr-data/characters.json#/Jade/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 (Talent FUA +32% and extra Charge) and E6 (Quantum RES PEN while a Debt Collector exists) require a collector teammate the single-character fixture lacks; E2 (CRIT Rate +18% at 15 Pawned Asset stacks) is likewise not exercised. Observable single-character rungs: E3 (Skill+2/Talent+2) raises jade_pawn critDmg 0.072 -> 0.0792, E4 (Ult def-ignore 12% for 3 turns) applies jade_e4, E5 (Ult+2/Basic+1) raises Vow of the Deep 2.4 -> 2.64. Fixtures battle one run per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "jade E0 — eidolon ladder rung, cloned from jade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "jade E1 — eidolon ladder rung, cloned from jade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "jade E2 — eidolon ladder rung, cloned from jade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "jade E3 — eidolon ladder rung, cloned from jade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "jade E4 — eidolon ladder rung, cloned from jade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "jade E5 — eidolon ladder rung, cloned from jade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "jade E6 — eidolon ladder rung, cloned from jade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "jade_e3_talent_buff",
+      "layer": "parameters",
+      "claim": "E3 (Skill+2/Talent+2) raises jade_pawn critDmg 0.072 -> 0.0792.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "jade_pawn", "stat": "critDmg", "value": 0.0792 }
+    },
+    {
+      "id": "jade_e3_talent_buff_locked",
+      "layer": "parameters",
+      "claim": "Below E3 jade_pawn critDmg stays 0.072.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "buffStat", "id": "jade_pawn", "stat": "critDmg", "value": 0.072 }
+    },
+    {
+      "id": "jade_e4_present",
+      "layer": "interactions",
+      "claim": "E4 applies jade_e4 (Ult grants 12% DEF ignore, 3 turns) from rank E4 onward.",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "jade_e4" }
+    },
+    {
+      "id": "jade_e4_defignore",
+      "layer": "parameters",
+      "claim": "The jade_e4 buff carries defIgnore 0.12 (canon ranks/4 param 1).",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "buffStat", "id": "jade_e4", "stat": "defIgnore", "value": 0.12 }
+    },
+    {
+      "id": "jade_e4_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: jade_e4 must NOT be active below rank E4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "noBuff", "id": "jade_e4" }
+    },
+    {
+      "id": "jade_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 (Ult+2/Basic+1) raises Vow of the Deep 2.4 -> 2.64.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Vow of the Deep" }, "field": "mult", "value": 2.64, "tol": 0.002 }
+    },
+    {
+      "id": "jade_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Vow of the Deep stays 2.4.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Vow of the Deep" }, "field": "mult", "value": 2.4, "tol": 0.002 }
+    },
+    {
+      "id": "jade_e1_custom",
+      "layer": "interactions",
+      "claim": "E1 (Talent FUA +32% and extra Charge on the Debt Collector's attacks) needs a collector teammate and a FUA, absent from the solo fixture.",
+      "fixtures": ["e1"],
+      "assertion": { "assert": "custom", "note": "Talent FUA / extra Charge E1 needs a Debt Collector ally that attacks" }
+    },
+    {
+      "id": "jade_e2_custom",
+      "layer": "interactions",
+      "claim": "E2 (CRIT Rate +18% at 15 Pawned Asset stacks) needs the stack cap to be reached, absent from the solo fixture.",
+      "fixtures": ["e2"],
+      "assertion": { "assert": "custom", "note": "E2 CRIT Rate at 15 Pawned Asset needs the Pawned Asset ladder to fire" }
+    },
+    {
+      "id": "jade_e6_custom",
+      "layer": "interactions",
+      "claim": "E6 (Quantum RES PEN while a Debt Collector exists) needs a collector teammate; solo Jade never sets a Debt Collector.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "custom", "note": "E6 Quantum RES PEN needs a Debt Collector teammate" }
+    }
+  ],
+  "golds": []
+}

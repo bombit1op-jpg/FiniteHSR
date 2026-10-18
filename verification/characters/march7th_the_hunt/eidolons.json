@@ -1,0 +1,582 @@
+{
+  "kit": "march7th_the_hunt",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/March 7th [122401]/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n (The Hunt / Shifu). Raw dataset has two entries both named 'March 7th'; this is the Hunt form (rank ids 122401..122406). E1 'My Sword Stirs Starlight' = while Shifu is on the field, March 7th's SPD +10% (m7h_e1_spd spdPct 0.1). E2 \"Blade Dances on Waves' Fight\" = after Shifu uses Basic ATK or Skill, March 7th launches a Follow-Up ATK (60% ATK, 'Blade Dances on Waves Fight (Shifu FUA)'; once per turn, Ultimate does not trigger it). E3 'Sharp Wit in Martial Might' +Skill Lv.2 / Basic Lv.1 raises Enhanced Basic 'My Sword Zaps Demons' 0.40 -> 0.44. E4 'Being Fabulous Never Frights' = regenerates 5 Energy at the start of the turn (ENERGY_GAIN sum 165 -> 180). E5 'Sword Delights, Sugar Blights' +Ultimate Lv.2 / Talent Lv.2 raises Ultimate 'March 7th, the Apex Heroine' 2.4 -> 2.592. E6 'Me, the Best Girl in Sight' = after Ultimate, the next Enhanced Basic gains +50% CRIT DMG (m7h_e6_cd critDmg 0.5)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "march7th_the_hunt E0 — eidolon ladder rung, cloned from march7th_the_hunt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th_the_hunt",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 0,
+            "skillPriority": 0,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Imaginary",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "march7th_the_hunt E1 — eidolon ladder rung, cloned from march7th_the_hunt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th_the_hunt",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 1,
+            "skillPriority": 0,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Imaginary",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "march7th_the_hunt E2 — eidolon ladder rung, cloned from march7th_the_hunt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th_the_hunt",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 2,
+            "skillPriority": 0,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Imaginary",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "march7th_the_hunt E3 — eidolon ladder rung, cloned from march7th_the_hunt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th_the_hunt",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 3,
+            "skillPriority": 0,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Imaginary",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "march7th_the_hunt E4 — eidolon ladder rung, cloned from march7th_the_hunt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th_the_hunt",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 4,
+            "skillPriority": 0,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Imaginary",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "march7th_the_hunt E5 — eidolon ladder rung, cloned from march7th_the_hunt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th_the_hunt",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 5,
+            "skillPriority": 0,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Imaginary",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "march7th_the_hunt E6 — eidolon ladder rung, cloned from march7th_the_hunt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th_the_hunt",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 6,
+            "skillPriority": 0,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Imaginary",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "m7h_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'My Sword Stirs Starlight': SPD +10% while Shifu is on the field (m7h_e1_spd).",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "m7h_e1_spd"
+      }
+    },
+    {
+      "id": "m7h_e1_stat",
+      "layer": "parameters",
+      "claim": "m7h_e1_spd carries spdPct 0.1 (canon ranks/1).",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "m7h_e1_spd",
+        "stat": "spdPct",
+        "value": 0.1
+      }
+    },
+    {
+      "id": "m7h_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: m7h_e1_spd must NOT be active below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "m7h_e1_spd"
+      }
+    },
+    {
+      "id": "m7h_e2_fua",
+      "layer": "interactions",
+      "claim": "E2 \"Blade Dances on Waves' Fight\": Shifu's Basic/Skill triggers March 7th's Follow-Up ATK.",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Blade Dances on Waves Fight (Shifu FUA)"
+        }
+      }
+    },
+    {
+      "id": "m7h_e2_fua_locked",
+      "layer": "interactions",
+      "claim": "Below E2 there is no Shifu Follow-Up ATK.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Blade Dances on Waves Fight (Shifu FUA)"
+        }
+      }
+    },
+    {
+      "id": "m7h_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 'Sharp Wit in Martial Might': Basic ATK Lv.+1 raises 'My Sword Zaps Demons' 0.40 -> 0.44.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "My Sword Zaps Demons"
+        },
+        "field": "mult",
+        "value": 0.44,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "m7h_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'My Sword Zaps Demons' stays at 0.40.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "My Sword Zaps Demons"
+        },
+        "field": "mult",
+        "value": 0.4,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "m7h_e4_energy",
+      "layer": "interactions",
+      "claim": "E4 'Being Fabulous Never Frights': +5 Energy at the start of the turn raises total ENERGY_GAIN 165 -> 180.",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "energy",
+        "who": "March 7th • The Hunt",
+        "atLeast": 180
+      }
+    },
+    {
+      "id": "m7h_e4_energy_locked",
+      "layer": "interactions",
+      "claim": "Below E4 the turn-start energy is absent: total ENERGY_GAIN stays 165.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "energy",
+        "who": "March 7th • The Hunt",
+        "atMost": 165
+      }
+    },
+    {
+      "id": "m7h_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 'Sword Delights, Sugar Blights': Ultimate Lv.+2 raises 'March 7th, the Apex Heroine' 2.4 -> 2.592.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "March 7th, the Apex Heroine"
+        },
+        "field": "mult",
+        "value": 2.592,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "m7h_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 'March 7th, the Apex Heroine' stays at 2.4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "March 7th, the Apex Heroine"
+        },
+        "field": "mult",
+        "value": 2.4,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "m7h_e6_present",
+      "layer": "interactions",
+      "claim": "E6 'Me, the Best Girl in Sight': after Ultimate the next Enhanced Basic gains +50% CRIT DMG (m7h_e6_cd).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "m7h_e6_cd"
+      }
+    },
+    {
+      "id": "m7h_e6_stat",
+      "layer": "parameters",
+      "claim": "m7h_e6_cd carries critDmg 0.5 (canon ranks/6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "m7h_e6_cd",
+        "stat": "critDmg",
+        "value": 0.5
+      }
+    },
+    {
+      "id": "m7h_e6_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: m7h_e6_cd must NOT be active below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "m7h_e6_cd"
+      }
+    }
+  ],
+  "golds": []
+}

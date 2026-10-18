@@ -1,0 +1,21 @@
+{
+ "input": {
+  "kit": "xueyi",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Xueyi alone, technique \"Summary Execution\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Xueyi|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Xueyi|-|- [1]",
+  "TECHNIQUE_APPLIED|Xueyi|-|-|-",
+  "HIT_START|Xueyi|Ice Edge|Summary Execution|basic [0,1,30,5000000,599]",
+  "DAMAGE_CALCULATED|Xueyi|Ice Edge|-|basic [0,0,0,0,0,0,0.05,0.453,0.8,1,313,599]",
+  "DAMAGE_DEALT|Xueyi|Ice Edge|Summary Execution|basic [0.8,313,4999687,5000000,599]",
+  "HIT_END|Xueyi|Ice Edge|-|basic [313,4999687]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

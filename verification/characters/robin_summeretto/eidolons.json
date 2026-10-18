@@ -1,0 +1,452 @@
+{
+  "kit": "robin_summeretto",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Robin Summeretto/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 Stray Bird of Summer keeps a tally and deals True DMG on the Songbirds' turn; E2 team All-Type RES PEN +18% and Vibes cap +20 (rsu_e2_res); E3 Skill/Talent/Memosprite-Talent levels; E4 +12 Vibes on entering Fever and Songbird SPD during Fever; E5 Ultimate Lv.+2/Basic Lv.+1 (The Sea Sings in My Key 0.5 -> 0.55); E6 Memosprite Skill DMG +100% and first-Fever +140 Energy (Chirrup Quartet 2.1 -> 4.2). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent. E1 True DMG is logged but emits no trace node, and E3/E4 hinge on levels and Songbird SPD this fixture does not surface (recorded as deviations)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "robin_summeretto E0 — eidolon ladder rung, cloned from robin_summeretto/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin_summeretto",
+            "stats": {
+              "hp": 5200,
+              "atk": 2800,
+              "def": 1100,
+              "spd": 120
+            },
+            "eidolon": 0,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 11
+      }
+    },
+    {
+      "id": "e1",
+      "env": "robin_summeretto E1 — eidolon ladder rung, cloned from robin_summeretto/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin_summeretto",
+            "stats": {
+              "hp": 5200,
+              "atk": 2800,
+              "def": 1100,
+              "spd": 120
+            },
+            "eidolon": 1,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 11
+      }
+    },
+    {
+      "id": "e2",
+      "env": "robin_summeretto E2 — eidolon ladder rung, cloned from robin_summeretto/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin_summeretto",
+            "stats": {
+              "hp": 5200,
+              "atk": 2800,
+              "def": 1100,
+              "spd": 120
+            },
+            "eidolon": 2,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 11
+      }
+    },
+    {
+      "id": "e3",
+      "env": "robin_summeretto E3 — eidolon ladder rung, cloned from robin_summeretto/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin_summeretto",
+            "stats": {
+              "hp": 5200,
+              "atk": 2800,
+              "def": 1100,
+              "spd": 120
+            },
+            "eidolon": 3,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 11
+      }
+    },
+    {
+      "id": "e4",
+      "env": "robin_summeretto E4 — eidolon ladder rung, cloned from robin_summeretto/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin_summeretto",
+            "stats": {
+              "hp": 5200,
+              "atk": 2800,
+              "def": 1100,
+              "spd": 120
+            },
+            "eidolon": 4,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 11
+      }
+    },
+    {
+      "id": "e5",
+      "env": "robin_summeretto E5 — eidolon ladder rung, cloned from robin_summeretto/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin_summeretto",
+            "stats": {
+              "hp": 5200,
+              "atk": 2800,
+              "def": 1100,
+              "spd": 120
+            },
+            "eidolon": 5,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 11
+      }
+    },
+    {
+      "id": "e6",
+      "env": "robin_summeretto E6 — eidolon ladder rung, cloned from robin_summeretto/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin_summeretto",
+            "stats": {
+              "hp": 5200,
+              "atk": 2800,
+              "def": 1100,
+              "spd": 120
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 11
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "rsu_e2_present",
+      "layer": "interactions",
+      "claim": "E2: team All-Type RES PEN +18% and Vibes cap +20 (rsu_e2_res).",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "rsu_e2_res"
+      }
+    },
+    {
+      "id": "rsu_e2_locked",
+      "layer": "interactions",
+      "claim": "Below E2 no rsu_e2_res buff is applied.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "rsu_e2_res"
+      }
+    },
+    {
+      "id": "rsu_e5_present",
+      "layer": "parameters",
+      "claim": "E5: Ultimate Lv.+2/Basic Lv.+1 raise The Sea Sings in My Key 0.5 -> 0.55.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "The Sea Sings in My Key"
+        },
+        "field": "mult",
+        "value": 0.55,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "rsu_e5_locked",
+      "layer": "parameters",
+      "claim": "Below E5 The Sea Sings in My Key stays at 0.5.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "The Sea Sings in My Key"
+        },
+        "field": "mult",
+        "value": 0.5,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "rsu_e6_present",
+      "layer": "parameters",
+      "claim": "E6: Memosprite Skill DMG +100% raises Chirrup Quartet 2.1 -> 4.2.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Chirrup Quartet"
+        },
+        "field": "mult",
+        "value": 4.2,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "rsu_e6_locked",
+      "layer": "parameters",
+      "claim": "Below E6 Chirrup Quartet stays at 2.1.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Chirrup Quartet"
+        },
+        "field": "mult",
+        "value": 2.1,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

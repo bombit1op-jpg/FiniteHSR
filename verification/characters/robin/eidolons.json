@@ -1,0 +1,377 @@
+{
+  "kit": "robin",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Robin/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 while in Concerto all allies All-Type RES PEN +24% (robin_concerto resPenAll 0.24); E2 while in Concerto allies SPD +16% (robin_concerto spdPct 0.16); E3 Skill Lv.+2/Ult Lv.+2 raises the Concerto ATK share (robin_concerto atkFlat 784 -> 853); E4 while in Concerto allies Effect RES +50% (robin_concerto effRes 0.5); E5 Basic ATK Lv.+1/Talent Lv.+2 raises Wingflip White Noise 0.33 -> 0.363; E6 Moonless Midnight: +450% CRIT DMG on the first 8 Ult Additional-DMG procs - the solo fixture spawns no ally attacks, so the bonus never fires (deviation). E1/E2/E4 fold their mods into the shared Concerto buff, so absence below the rank cannot be asserted via a separate buff id. Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "robin E0 — eidolon ladder rung, cloned from robin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "robin E1 — eidolon ladder rung, cloned from robin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "robin E2 — eidolon ladder rung, cloned from robin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "robin E3 — eidolon ladder rung, cloned from robin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "robin E4 — eidolon ladder rung, cloned from robin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "robin E5 — eidolon ladder rung, cloned from robin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "robin E6 — eidolon ladder rung, cloned from robin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "robin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "rob_e1_stat",
+      "layer": "parameters",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "claim": "E1 \"Land of Smiles\": while in Concerto all allies All-Type RES PEN +24% (robin_concerto resPenAll 0.24).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "robin_concerto",
+        "stat": "resPenAll",
+        "value": 0.24
+      }
+    },
+    {
+      "id": "rob_e2_stat",
+      "layer": "parameters",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "claim": "E2 \"Afternoon Tea For Two\": while in Concerto all allies SPD +16% (robin_concerto spdPct 0.16).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "robin_concerto",
+        "stat": "spdPct",
+        "value": 0.16
+      }
+    },
+    {
+      "id": "rob_e3_present",
+      "layer": "parameters",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "claim": "E3 Skill/Ult Lv.+2 raises the Concerto ATK share (robin_concerto atkFlat 784 -> 853).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "robin_concerto",
+        "stat": "atkFlat",
+        "value": 853,
+        "tol": 0.01
+      }
+    },
+    {
+      "id": "rob_e3_locked",
+      "layer": "parameters",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "claim": "Below E3 the Concerto ATK share is at the base value (robin_concerto atkFlat 784).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "robin_concerto",
+        "stat": "atkFlat",
+        "value": 784,
+        "tol": 0.01
+      }
+    },
+    {
+      "id": "rob_e4_stat",
+      "layer": "parameters",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "claim": "E4 \"Raindrop Key\": while in Concerto all allies Effect RES +50% (robin_concerto effRes 0.5).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "robin_concerto",
+        "stat": "effRes",
+        "value": 0.5
+      }
+    },
+    {
+      "id": "rob_e5_present",
+      "layer": "parameters",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "claim": "E5 Basic ATK Lv.+1 raises Wingflip White Noise 0.33 -> 0.363.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Wingflip White Noise"
+        },
+        "field": "mult",
+        "value": 0.363,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "rob_e5_locked",
+      "layer": "parameters",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "claim": "Below E5 Wingflip White Noise stays at the Lv.6 floor 0.33 (cumulative unlock).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Wingflip White Noise"
+        },
+        "field": "mult",
+        "value": 0.33,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

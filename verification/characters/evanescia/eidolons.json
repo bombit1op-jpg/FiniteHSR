@@ -1,0 +1,351 @@
+{
+  "kit": "evanescia",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "hsr-data/characters.json#/Evanescia/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E1: +20% RES PEN (ev_e1 resPenAll 0.20, energy 530->660). E2: ev_e2_cd critDmg 0.36. E3 (Ult+2/Basic+1): Swordsong: Absolution Denied 1.6->1.76, its bounce 1.2->1.296, and Syllabus: Pop Quiz 1.0->1.1. E4: ev_e4 defIgnore 0.15. E5 (Skill+2/Talent+2): Master Fox 1.0->1.1. E6: ev_e6_merry merrymake (>=0.15, energy 660->765). Fixtures battle one run per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "evanescia E0 — eidolon ladder rung, cloned from evanescia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "evanescia",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 160
+            },
+            "energyStartFrac": 0.25,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 8,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "evanescia E1 — eidolon ladder rung, cloned from evanescia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "evanescia",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 160
+            },
+            "energyStartFrac": 0.25,
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 8,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "evanescia E2 — eidolon ladder rung, cloned from evanescia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "evanescia",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 160
+            },
+            "energyStartFrac": 0.25,
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 8,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "evanescia E3 — eidolon ladder rung, cloned from evanescia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "evanescia",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 160
+            },
+            "energyStartFrac": 0.25,
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 8,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "evanescia E4 — eidolon ladder rung, cloned from evanescia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "evanescia",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 160
+            },
+            "energyStartFrac": 0.25,
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 8,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "evanescia E5 — eidolon ladder rung, cloned from evanescia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "evanescia",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 160
+            },
+            "energyStartFrac": 0.25,
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 8,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "evanescia E6 — eidolon ladder rung, cloned from evanescia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "evanescia",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 160
+            },
+            "energyStartFrac": 0.25,
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 8,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "evanescia_e1_pen",
+      "layer": "interactions",
+      "claim": "E1 grants +20% RES PEN (ev_e1 resPenAll 0.20).",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "ev_e1", "stat": "resPenAll", "value": 0.2 }
+    },
+    {
+      "id": "evanescia_e1_pen_locked",
+      "layer": "interactions",
+      "claim": "ev_e1 (E1) is absent at E0.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "noBuff", "id": "ev_e1" }
+    },
+    {
+      "id": "evanescia_e2_cd",
+      "layer": "interactions",
+      "claim": "E2 grants ev_e2_cd critDmg 0.36.",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "ev_e2_cd", "stat": "critDmg", "value": 0.36 }
+    },
+    {
+      "id": "evanescia_e2_cd_locked",
+      "layer": "interactions",
+      "claim": "ev_e2_cd (E2) is absent below E2.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "noBuff", "id": "ev_e2_cd" }
+    },
+    {
+      "id": "evanescia_e3_ult",
+      "layer": "parameters",
+      "claim": "E3 (Ult+2/Basic+1) raises Swordsong: Absolution Denied 1.6 -> 1.76.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Swordsong: Absolution Denied" }, "field": "mult", "value": 1.76, "tol": 0.002 }
+    },
+    {
+      "id": "evanescia_e3_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Swordsong: Absolution Denied stays 1.6.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Swordsong: Absolution Denied" }, "field": "mult", "value": 1.6, "tol": 0.002 }
+    },
+    {
+      "id": "evanescia_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 (Basic+1) raises Syllabus: Pop Quiz 1.0 -> 1.1.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Syllabus: Pop Quiz" }, "field": "mult", "value": 1.1, "tol": 0.002 }
+    },
+    {
+      "id": "evanescia_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Syllabus: Pop Quiz stays 1.0.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Syllabus: Pop Quiz" }, "field": "mult", "value": 1.0, "tol": 0.002 }
+    },
+    {
+      "id": "evanescia_e4_def",
+      "layer": "interactions",
+      "claim": "E4 grants ev_e4 defIgnore 0.15.",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "ev_e4", "stat": "defIgnore", "value": 0.15 }
+    },
+    {
+      "id": "evanescia_e4_def_locked",
+      "layer": "interactions",
+      "claim": "ev_e4 (E4) is absent below E4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "noBuff", "id": "ev_e4" }
+    },
+    {
+      "id": "evanescia_e5_masterfox",
+      "layer": "parameters",
+      "claim": "E5 (Skill+2/Talent+2) raises Master Fox 1.0 -> 1.1.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Master Fox" }, "field": "mult", "value": 1.1, "tol": 0.002 }
+    },
+    {
+      "id": "evanescia_e5_masterfox_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Master Fox stays 1.0.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Master Fox" }, "field": "mult", "value": 1.0, "tol": 0.002 }
+    },
+    {
+      "id": "evanescia_e6_merry",
+      "layer": "interactions",
+      "claim": "E6 grants ev_e6_merry merrymake (at least 0.15).",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buffStat", "id": "ev_e6_merry", "stat": "merrymake", "atLeast": 0.15 }
+    },
+    {
+      "id": "evanescia_e6_merry_locked",
+      "layer": "interactions",
+      "claim": "ev_e6_merry (E6) is absent below E6.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "noBuff", "id": "ev_e6_merry" }
+    }
+  ],
+  "golds": []
+}

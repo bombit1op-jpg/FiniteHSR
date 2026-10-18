@@ -1,0 +1,22 @@
+{
+ "input": {
+  "kit": "pela",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Pela alone, technique \"Preemptive Strike\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Pela|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Pela|-|- [1,Infinity]",
+  "TECHNIQUE_APPLIED|Pela|-|-|-",
+  "HIT_START|Pela|Ice Edge|Preemptive Strike|basic [0,1,30,5000000,644.28]",
+  "DAMAGE_CALCULATED|Pela|Ice Edge|-|basic [0,0,0,0,0,0,0.05,0.224,0.8,1,283,644]",
+  "DAMAGE_DEALT|Pela|Ice Edge|Preemptive Strike|basic [0.8,283,4999717,5000000,644.28]",
+  "HIT_END|Pela|Ice Edge|-|basic [283,4999717]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [1,2]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

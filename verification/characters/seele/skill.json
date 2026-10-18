@@ -1,0 +1,291 @@
+{
+  "kit": "seele",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/1110201+1110202+1110203+1110204 + bonus_abilities + ranks",
+    "confidence": "verified",
+    "note": "Basic Thwack (1110201) Quantum DMG L6 100% -> L10 140% of ATK, 2 hits 50/50. Skill Sheathed Blade (1110202) Quantum DMG #1 L6 270% -> L10 360% of ATK; Notes: the auto Skill granted after defeating an enemy with Seele 'does not consume Skill Points or regenerate Energy'. Ultimate Butterfly Flurry (1110203) enters Amplification and deals #1 L10 720% of ATK. Talent Resurgence (1110204) #1 L10 = 80% DMG bonus for #4 = 3 turns on kill; Notes: the Extra Turn is queued alongside other Ultimates and Extra Turns at the end of the queue. Bonuses: Amplification grants Quantum RES PEN 25% (A2), Seele SPD +25% for 3 turns after Skill (A4 Whistle), Basic ATK advances Seele 20% (A4 Whistle), enemy defeated by Seele grants DMG +50% for 3 turns (A1 Lingering Shrike)."
+  },
+  "fixtures": [
+    {
+      "id": "seele1",
+      "env": "Seele E0 solo vs 3 Quantum-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7 — no kills",
+      "battle": {
+        "team": [
+          {
+            "kitId": "seele",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Quantum"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "seele-kill",
+      "env": "Seele E0 solo vs 3 Quantum-weak Elite dummies (Lv120, 30k HP, 300 Toughness), 3 cycles, seed 7 — Resurgence kills trigger the auto Skill",
+      "battle": {
+        "team": [
+          {
+            "kitId": "seele",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 30000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Quantum"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "seele_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Thwack (1110201, Quantum) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Seele",
+          "label": "Thwack",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "seele-kill",
+        "seele1"
+      ]
+    },
+    {
+      "id": "se_skill_action",
+      "layer": "structure",
+      "claim": "Sheathed Blade (1110202) is Seele's damaging Skill action; the fixture casts it 5 times in seele1.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Seele", "action": "skill" }, "value": 5 },
+      "fixtures": ["seele1"]
+    },
+    {
+      "id": "se_no_attack_action",
+      "layer": "structure",
+      "claim": "Seele's kit exposes Basic ATK, Skill and Ultimate as its action set; she never falls back to a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Seele", "action": "attack" } }
+    },
+    {
+      "id": "se_ult_action",
+      "layer": "structure",
+      "claim": "Butterfly Flurry (1110203) is Seele's Ultimate action; the fixture casts it twice.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Seele", "action": "ultimate" }, "value": 2 }
+    },
+    {
+      "id": "se_ult_mult",
+      "layer": "parameters",
+      "claim": "Butterfly Flurry #1 = 720% of ATK at L10 (1110203) in a single hit.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Seele", "label": "Butterfly Flurry" }, "field": "mult", "value": 7.2 }
+    },
+    {
+      "id": "se_basic_mult",
+      "layer": "parameters",
+      "claim": "Thwack (1110201) totals 100% of ATK at the engine's default Basic Lv6 (canon L10 = 140%); the engine delivers its 2 hits with a 30% opening hit (0.3).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Seele", "label": "Thwack" }, "field": "mult", "value": 0.3, "pick": "first" }
+    },
+    {
+      "id": "se_sheathed_first",
+      "layer": "parameters",
+      "claim": "Sheathed Blade #1 = 360% of ATK at L10 (1110202); the engine delivers it over 4 hits with a 20% opening hit (0.72).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Seele", "label": "Sheathed Blade" }, "field": "mult", "value": 0.72, "pick": "first" }
+    },
+    {
+      "id": "se_sheathed_count_1",
+      "layer": "structure",
+      "claim": "5 Skill casts in seele1 x 4 hits each = 20 Sheathed Blade damage events.",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Seele", "label": "Sheathed Blade" }, "value": 20 },
+      "fixtures": ["seele1"]
+    },
+    {
+      "id": "se_thwack_count_1",
+      "layer": "structure",
+      "claim": "2 Basic ATKs in seele1 x 2 hits each = 4 Thwack damage events.",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Seele", "label": "Thwack" }, "value": 4 },
+      "fixtures": ["seele1"]
+    },
+    {
+      "id": "se_sheathed_count_k",
+      "layer": "structure",
+      "claim": "In seele-kill 5 Sheathed Blade casts resolve under the normal label (20 damage events of 4 hits each); the Resurgence free cast uses the (Auto) label.",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Seele", "label": "Sheathed Blade" }, "value": 20 },
+      "fixtures": ["seele-kill"]
+    },
+    {
+      "id": "se_auto_present",
+      "layer": "structure",
+      "claim": "The Resurgence-class automatic Skill resolves under a distinct 'Sheathed Blade (Auto)' label in seele-kill (4 damage events, full 4-hit cast).",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Seele", "label": "Sheathed Blade (Auto)" }, "value": 4 },
+      "fixtures": ["seele-kill"]
+    },
+    {
+      "id": "se_auto_split",
+      "layer": "parameters",
+      "claim": "The automatic Skill uses the same Sheathed Blade ladder: 360% total at L10 with a 20% opening hit (0.72).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Seele", "label": "Sheathed Blade (Auto)" }, "field": "mult", "value": 0.72, "pick": "first" },
+      "fixtures": ["seele-kill"]
+    },
+    {
+      "id": "se_auto_timing_dev",
+      "layer": "structure",
+      "claim": "Resurgence (1110204): the automatic Skill resolves strictly after an enemy is defeated by Seele, as a free extra-turn action.",
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Seele", "label": "Sheathed Blade (Auto)" } },
+      "fixtures": ["seele-kill"]
+    },
+    {
+      "id": "se_amplif_buff",
+      "layer": "parameters",
+      "claim": "Butterfly Flurry (1110203) enters Seele's Amplification state, lasting #4 = 3 turns via Resurgence (1110204).",
+      "assertion": { "assert": "buff", "id": "amplif", "target": "Seele", "turns": 3 }
+    },
+    {
+      "id": "se_amplif_stat",
+      "layer": "parameters",
+      "claim": "Amplification increases all DMG dealt by Seele by #1 = 80% at L10 (1110204).",
+      "assertion": { "assert": "buffStat", "id": "amplif", "stat": "dmgAll", "value": 0.8 }
+    },
+    {
+      "id": "se_amplif_respen",
+      "layer": "interactions",
+      "claim": "While Amplification is active Seele ignores 25% of the target's Quantum RES (bonus A2).",
+      "assertion": { "assert": "buffStat", "id": "amplif", "stat": "resPen:Quantum", "value": 0.25 }
+    },
+    {
+      "id": "se_spd_buff",
+      "layer": "parameters",
+      "claim": "After Seele uses her Skill, SPD increases by 25% for 3 turns (bonus A4 Whistle).",
+      "assertion": { "assert": "buff", "id": "seele_spd", "target": "Seele", "turns": 3 }
+    },
+    {
+      "id": "se_spd_stat",
+      "layer": "parameters",
+      "claim": "The post-Skill SPD bonus is +25% SPD (bonus A4 Whistle).",
+      "assertion": { "assert": "buffStat", "id": "seele_spd", "stat": "spdPct", "value": 0.25 }
+    },
+    {
+      "id": "se_adv_count",
+      "layer": "interactions",
+      "claim": "After Seele uses Basic ATK her action is Advanced Forward by 20% (bonus A4 Whistle); 2 Basic ATKs in seele1 produce 2 advances.",
+      "assertion": { "assert": "count", "of": { "type": "ACTION_ADVANCE", "source": "Seele" }, "value": 2 },
+      "fixtures": ["seele1"]
+    },
+    {
+      "id": "se_adv_pct",
+      "layer": "interactions",
+      "claim": "The Basic-ATK advance value is 20% (bonus A4 Whistle).",
+      "assertion": { "assert": "present", "of": { "type": "ACTION_ADVANCE", "source": "Seele", "payload": { "pct": 0.2 } } }
+    },
+    {
+      "id": "se_energy_1",
+      "layer": "parameters",
+      "claim": "Seele's Ultimate uses the standard Energy ladder; in seele1 her action set regenerates exactly 245 Energy.",
+      "assertion": { "assert": "energy", "who": "Seele", "atLeast": 245, "atMost": 245 },
+      "fixtures": ["seele1"]
+    },
+    {
+      "id": "se_energy_k",
+      "layer": "parameters",
+      "claim": "In seele-kill she regenerates exactly 245 Energy (the Resurgence free auto Skill gains no energy, 1110202 Notes).",
+      "assertion": { "assert": "energy", "who": "Seele", "atLeast": 245, "atMost": 245 },
+      "fixtures": ["seele-kill"]
+    },
+    {
+      "id": "se_sp_1",
+      "layer": "structure",
+      "claim": "Each Sheathed Blade costs 1 Skill Point; 5 Skill casts in seele1 spend 5 SP.",
+      "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Seele" }, "value": 5 },
+      "fixtures": ["seele1"]
+    },
+    {
+      "id": "se_sp_k",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill Point economy: 5 paid Skill casts spend 1 SP each; the Resurgence free auto Skill consumes no SP (1110202 Notes: the auto Skill 'does not consume Skill Points or regenerate Energy').",
+      "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Seele" }, "value": 5 },
+      "fixtures": ["seele-kill"]
+    },
+    {
+      "id": "se_nightshade_buff",
+      "layer": "parameters",
+      "claim": "After an enemy is defeated by Seele she gains DMG +50% for 3 turns (bonus A1 Lingering Shrike).",
+      "assertion": { "assert": "buff", "id": "seele_nightshade", "target": "Seele", "turns": 3 },
+      "fixtures": ["seele-kill"]
+    },
+    {
+      "id": "se_nightshade_stat",
+      "layer": "parameters",
+      "claim": "Lingering Shrike's bonus is +50% DMG (bonus A1).",
+      "assertion": { "assert": "buffStat", "id": "seele_nightshade", "stat": "dmgAll", "value": 0.5 },
+      "fixtures": ["seele-kill"]
+    },
+    {
+      "id": "se_order_spd",
+      "layer": "ordering",
+      "claim": "The post-Skill SPD buff is applied during the Skill action before the first Sheathed Blade damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "BUFF_APPLIED", "payload": { "id": "seele_spd" } }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Seele", "label": "Sheathed Blade" }]
+      }
+    },
+    {
+      "id": "se_order_amplif",
+      "layer": "ordering",
+      "claim": "Butterfly Flurry enters the Amplification state — the Amplification buff is applied after the Ultimate's damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "DAMAGE_DEALT", "source": "Seele", "label": "Butterfly Flurry" }],
+        "after": [{ "type": "BUFF_APPLIED", "payload": { "id": "amplif" } }]
+      }
+    },
+    {
+      "id": "se_order_nightshade",
+      "layer": "ordering",
+      "claim": "Lingering Shrike applies after the killing blow: the enemy dies first, then the DMG +50% buff lands.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "DEATH", "source": "Seele" }],
+        "after": [{ "type": "BUFF_APPLIED", "payload": { "id": "seele_nightshade" } }]
+      },
+      "fixtures": ["seele-kill"]
+    },
+    {
+      "id": "se_extra_turn_silent",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Resurgence (1110204) grants Seele an Extra Turn after defeating an enemy: an EXTRA_TURN event is emitted and the follow-up executes as the free (Auto) Skill (canon 1110202: no SP, no Energy).",
+      "assertion": { "assert": "present", "of": { "type": "EXTRA_TURN", "target": "Seele" } },
+      "fixtures": ["seele-kill"]
+    }
+  ]
+}

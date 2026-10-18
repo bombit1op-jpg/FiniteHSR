@@ -1,0 +1,238 @@
+{
+  "kit": "jingliu",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/1121202+1121203+1121204+1121209 + bonus_abilities + ranks",
+    "confidence": "verified",
+    "note": "Skill Transcendent Flash (1121202) Ice DMG #1 L10 = 150% of ATK. Ultimate Florephemeral Dreamflux (1121203) Ice DMG #1 L10 = 180% of ATK, adjacent #3 = 90%. Enhanced Skill Moon On Glacial River (1121209): Notes — DMG dealt in 5 hits (10% + 10% + 10% + 20% + 50%); #1 L10 = 150% of ATK on the primary target, #3 = 75% adjacent; entering the state requires #5 = 2 Syzygy stacks, the Ultimate's entry advances the action by #6 = 100% (1121204), and the Moonlight buff grants CRIT DMG +#3 = 44% per stack (observed 5 stacks, cap #4 = 2.2) plus CRIT Rate +#7 = 50% (jingliu_spectral). Enhanced Skill does not consume Skill Points. Frost Wraith (bonus): at Syzygy cap the next attack ignores 25% of the target's DEF (_jw6). Energy limit 140."
+  },
+  "fixtures": [
+    {
+      "id": "jingliu-3c",
+      "env": "Jingliu E0 solo vs 3 Ice-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7 — Syzygy/Moonlight state machine",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingliu",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Ice"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "jingliu-basic",
+      "env": "Jingliu E0 solo vs 3 Ice-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 10 cycles, seed 7 — long enough for the shared SP pool to reach 0 out of the Moonlight state and force the Basic ATK",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingliu",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Ice"],
+          "res": 0
+        },
+        "cycles": 10,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "jl_talent_syzygy",
+      "fixtures": ["jingliu-3c"],
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent Syzygy: the stack counter rises as allies take action — logged 'Syzygy N → M' (destruction.ts:890-915).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Syzygy "
+        }
+      }
+    },
+    {
+      "id": "jl_skill_action",
+      "fixtures": ["jingliu-3c"],
+      "layer": "structure",
+      "claim": "Transcendent Flash (1121202) is Jingliu's base Skill; the fixture casts it 2 times (single-hit → 2 damage events).",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Jingliu", "label": "Transcendent Flash" }, "value": 2 }
+    },
+    {
+      "id": "jl_ult_action",
+      "fixtures": ["jingliu-3c"],
+      "layer": "structure",
+      "claim": "Florephemeral Dreamflux (1121203) is Jingliu's Ultimate action; cast twice.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Jingliu", "action": "ultimate" }, "value": 2 }
+    },
+    {
+      "id": "jl_moon_skill_action",
+      "fixtures": ["jingliu-3c"],
+      "layer": "structure",
+      "claim": "Moon On Glacial River (1121209) is the state's Enhanced Skill — the only Skill available in the Moonlight state, and it does not consume Skill Points. It is emitted as a Skill action (never 'basic'): the fixture's 6 Skill ABILITY_USED are 2 base Transcendent Flash + 4 Enhanced Moon casts.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Jingliu", "action": "skill" }, "value": 6 }
+    },
+    {
+      "id": "jl_no_attack_action",
+      "fixtures": ["jingliu-3c"],
+      "layer": "structure",
+      "claim": "Jingliu's kit exposes Basic ATK, Skill and Ultimate as its action set; never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Jingliu", "action": "attack" } }
+    },
+    {
+      "id": "jl_moon_structure",
+      "fixtures": ["jingliu-3c"],
+      "layer": "structure",
+      "claim": "Moon On Glacial River Notes: DMG dealt in 5 hits (10% + 10% + 10% + 20% + 50%); 4 casts in the fixture = 20 events on the primary target.",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Jingliu", "label": "Moon On Glacial River" }, "value": 20 }
+    },
+    {
+      "id": "jl_moon_mult",
+      "fixtures": ["jingliu-3c"],
+      "layer": "parameters",
+      "claim": "Moon On Glacial River's final hit is 50% of #1 = 75% of ATK at L10 (last of the 10/10/10/20/50 split).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Jingliu", "label": "Moon On Glacial River" }, "field": "mult", "value": 0.75, "pick": "last" }
+    },
+    {
+      "id": "jl_moon_adj_mult",
+      "fixtures": ["jingliu-3c"],
+      "layer": "parameters",
+      "claim": "Moon On Glacial River's adjacent targets take #3 = 75% of ATK at L10.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Jingliu", "label": "Moon (adj)" }, "field": "mult", "value": 0.75 }
+    },
+    {
+      "id": "jl_tf_mult",
+      "fixtures": ["jingliu-3c"],
+      "layer": "parameters",
+      "claim": "Transcendent Flash (1121202) #1 = 150% of ATK at L10.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Jingliu", "label": "Transcendent Flash" }, "field": "mult", "value": 1.5 }
+    },
+    {
+      "id": "jl_dreamflux_mult",
+      "fixtures": ["jingliu-3c"],
+      "layer": "parameters",
+      "claim": "Florephemeral Dreamflux (1121203) #1 = 180% of ATK at L10 on the primary target.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Jingliu", "label": "Florephemeral Dreamflux" }, "field": "mult", "value": 1.8 }
+    },
+    {
+      "id": "jl_dreamflux_adj",
+      "fixtures": ["jingliu-3c"],
+      "layer": "parameters",
+      "claim": "Florephemeral Dreamflux's adjacent targets take #3 = 90% of ATK at L10.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Jingliu", "label": "Florephemeral (adj)" }, "field": "mult", "value": 0.9 }
+    },
+    {
+      "id": "jl_sp_loss",
+      "fixtures": ["jingliu-3c"],
+      "layer": "structure",
+      "claim": "Transcendent Flash costs 1 SP per cast (2 casts = 2 SP); the Enhanced Skill Moon On Glacial River is free (canon: does not consume Skill Points).",
+      "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Jingliu" }, "value": 2 }
+    },
+    {
+      "id": "jl_energy",
+      "fixtures": ["jingliu-3c"],
+      "layer": "parameters",
+      "claim": "Florephemeral Dreamflux uses the standard Energy ladder (140); this rotation regenerates exactly 253 Energy.",
+      "assertion": { "assert": "energy", "who": "Jingliu", "atLeast": 253, "atMost": 253 }
+    },
+    {
+      "id": "jl_spectral_buff",
+      "fixtures": ["jingliu-3c"],
+      "layer": "structure",
+      "claim": "Entering the Moonlight state applies jingliu_spectral (permanent while the state is active).",
+      "assertion": { "assert": "buff", "id": "jingliu_spectral", "target": "Jingliu" }
+    },
+    {
+      "id": "jl_spectral_crit",
+      "fixtures": ["jingliu-3c"],
+      "layer": "parameters",
+      "claim": "1121204 #7: entering the state raises CRIT Rate by 50% at L10 (jingliu_spectral).",
+      "assertion": { "assert": "buffStat", "id": "jingliu_spectral", "stat": "critRate", "value": 0.5 }
+    },
+    {
+      "id": "jl_moon_buff",
+      "fixtures": ["jingliu-3c"],
+      "layer": "structure",
+      "claim": "Moonlight (jingliu_moon) tracks the Moon On Glacial River stacks while the state is active.",
+      "assertion": { "assert": "buff", "id": "jingliu_moon", "target": "Jingliu" }
+    },
+    {
+      "id": "jl_moon_critdmg",
+      "fixtures": ["jingliu-3c"],
+      "layer": "parameters",
+      "claim": "1121204 #3: each Moonlight stack grants CRIT DMG +44% at L10; observed 5 stacks (cap #4) = 2.2. Enemy attacks mint their own attackSeq, so each attack received by the solo carry counts once (5 reached in the 3-cycle fixture).",
+      "assertion": { "assert": "buffStat", "id": "jingliu_moon", "stat": "critDmg", "value": 2.2 }
+    },
+    {
+      "id": "jl_advance",
+      "fixtures": ["jingliu-3c"],
+      "layer": "interactions",
+      "claim": "1121204 #6 = 100% at L10: entering the state via the Ultimate advances Jingliu's action by 100% (canon value, not a deviation).",
+      "assertion": { "assert": "present", "of": { "type": "ACTION_ADVANCE", "source": "Jingliu", "payload": { "pct": 1 } } }
+    },
+    {
+      "id": "jl_frost_wraith",
+      "fixtures": ["jingliu-3c"],
+      "layer": "interactions",
+      "claim": "Frost Wraith (bonus): at Syzygy cap the next attack applies a mark that ignores 25% of the target's DEF (_jw6).",
+      "assertion": { "assert": "present", "of": { "type": "DEBUFF_APPLIED", "payload": { "id": "_jw6" } } }
+    },
+    {
+      "id": "jl_order_jw6",
+      "fixtures": ["jingliu-3c"],
+      "layer": "ordering",
+      "claim": "The Frost Wraith mark lands before the next Moon On Glacial River damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "DEBUFF_APPLIED", "payload": { "id": "_jw6" } }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Jingliu", "label": "Moon On Glacial River" }]
+      }
+    },
+    {
+      "id": "jl_order_spectral",
+      "fixtures": ["jingliu-3c"],
+      "layer": "ordering",
+      "claim": "Entering the state (spectral buff) precedes the first Moon On Glacial River damage.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "BUFF_APPLIED", "payload": { "id": "jingliu_spectral" } }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Jingliu", "label": "Moon On Glacial River" }]
+      }
+    },
+    {
+      "id": "jl_basic_action",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Lucent Moonglow is Jingliu's only non-Skill action: out of the Moonlight state it is chosen once the shared SP pool hits 0 (destruction.ts:820-825).",
+      "fixtures": ["jingliu-basic"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Jingliu", "action": "basic" } }
+    }
+  ]
+}

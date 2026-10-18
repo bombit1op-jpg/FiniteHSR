@@ -1,0 +1,161 @@
+{
+  "kit": "fuxuan",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/120801+120802+120803 + bonus_abilities + ranks",
+    "confidence": "verified",
+    "note": "Basic Novaburst (120801) Quantum DMG = 50% of ATK at Lv6 / 70% at L10, scaling off Max HP. Skill Network of Preserving Strings (120802): team matrix; #4 L10 = Fu Xuan Max HP +6%, #5 = CRIT Rate +12% for the team, matrix lasts 3 turns. Ultimate Woes of Many Morphed to One (120803) Quantum DMG #1 L10 = 100% of Max HP to all enemies. Bonus A4: Fu Xuan Max HP +6% (Knowledge of Preserving). Energy limit 120."
+  },
+  "fixtures": [
+    {
+      "id": "fuxuan-3c",
+      "env": "Fu Xuan E0 solo vs 3 Quantum-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7 — Max HP scaling kit",
+      "battle": {
+        "team": [
+          {
+            "kitId": "fuxuan",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Quantum"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "fx_talent_misfortune",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Misfortune Avoidance: while Fu Xuan is alive the whole team takes less DMG — permanent mitigation buff fx_ma (preservation.ts:201-207).",
+      "assertion": {
+        "assert": "buff",
+        "id": "fx_ma"
+      }
+    },
+    {
+      "id": "fuxuan_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Novaburst (120801, Quantum) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Fu Xuan",
+          "label": "Novaburst",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "fuxuan-3c"
+      ]
+    },
+    {
+      "id": "fxu_skill_action",
+      "layer": "structure",
+      "claim": "Network of Preserving Strings (120802) is Fu Xuan's Skill; the fixture casts it 2 times.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Fu Xuan", "action": "skill" }, "value": 2 }
+    },
+    {
+      "id": "fxu_ult_action",
+      "layer": "structure",
+      "claim": "Woes of Many Morphed to One (120803) is Fu Xuan's Ultimate action; cast twice.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Fu Xuan", "action": "ultimate" }, "value": 2 }
+    },
+    {
+      "id": "fxu_no_attack_action",
+      "layer": "structure",
+      "claim": "Fu Xuan's kit exposes Basic ATK, Skill and Ultimate as its action set; never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Fu Xuan", "action": "attack" } }
+    },
+    {
+      "id": "fxu_novaburst_mult",
+      "layer": "parameters",
+      "claim": "Novaburst (120801) deals Quantum DMG equal to 50% of Max HP at the engine's default Basic Lv6 (canon L10 = 70%); the engine reads the stat as Max HP.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Fu Xuan", "label": "Novaburst" }, "field": "mult", "value": 0.5, "pick": "first" }
+    },
+    {
+      "id": "fxu_woes_mult",
+      "layer": "parameters",
+      "claim": "Woes of Many Morphed to One (120803) #1 = 100% of Max HP at L10.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Fu Xuan", "label": "Woes of Many Morphed to One" }, "field": "mult", "value": 1 }
+    },
+    {
+      "id": "fxu_knowledge_statValue",
+      "layer": "parameters",
+      "claim": "Knowledge of Preserving #4: Fu Xuan's Max HP increases by 6% at L10 (120802); HP-scaling hits resolve against 11800 x 1.06 = 12508.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Fu Xuan", "label": "Novaburst" }, "field": "statValue", "value": 12508, "pick": "first" }
+    },
+    {
+      "id": "fxu_knowledge_buff",
+      "layer": "parameters",
+      "claim": "The Skill applies Knowledge of Preserving to Fu Xuan, lasting 3 turns.",
+      "assertion": { "assert": "buff", "id": "fx_knowledge", "target": "Fu Xuan", "turns": 3 }
+    },
+    {
+      "id": "fxu_knowledge_crit",
+      "layer": "parameters",
+      "claim": "Knowledge of Preserving #5: CRIT Rate +12% at L10 for the team.",
+      "assertion": { "assert": "buffStat", "id": "fx_knowledge", "stat": "critRate", "value": 0.12 }
+    },
+    {
+      "id": "fxu_matrix_buff",
+      "layer": "structure",
+      "claim": "The Skill establishes the Matrix of Preserving on the team (3 turns).",
+      "assertion": { "assert": "buff", "id": "fx_matrix", "target": "Fu Xuan", "turns": 3 }
+    },
+    {
+      "id": "fxu_sp_loss",
+      "layer": "structure",
+      "claim": "Each Skill costs 1 Skill Point; 2 Skill casts spend 2 SP.",
+      "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Fu Xuan" }, "value": 2 }
+    },
+    {
+      "id": "fxu_sp_gain",
+      "layer": "structure",
+      "claim": "Each Basic ATK restores 1 Skill Point; 3 Basics gain 3 SP.",
+      "assertion": { "assert": "count", "of": { "type": "SP_GAIN", "source": "Fu Xuan" }, "value": 3 }
+    },
+    {
+      "id": "fxu_energy",
+      "layer": "parameters",
+      "claim": "Woes of Many Morphed to One uses the standard Energy ladder (120); this rotation regenerates exactly 208 Energy.",
+      "assertion": { "assert": "energy", "who": "Fu Xuan", "atLeast": 208, "atMost": 208 }
+    },
+    {
+      "id": "fxu_order_matrix",
+      "layer": "ordering",
+      "claim": "The Matrix buff is applied by the first Skill cast before the next action's Novaburst damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "BUFF_APPLIED", "payload": { "id": "fx_matrix" } }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Fu Xuan", "label": "Novaburst" }]
+      }
+    },
+    {
+      "id": "fxu_order_knowledge",
+      "layer": "ordering",
+      "claim": "Knowledge of Preserving lands during the Skill, before the first Novaburst damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "BUFF_APPLIED", "payload": { "id": "fx_knowledge" } }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Fu Xuan", "label": "Novaburst" }]
+      }
+    }
+  ]
+}

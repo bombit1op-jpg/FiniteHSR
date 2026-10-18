@@ -1,0 +1,485 @@
+{
+  "kit": "guinaifen",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "reference/hsr-data/characters.json#/Guinaifen/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E1: Skill applies gui_e1 (Effect RES -10%, 2 turns) to the target. E2: Burn DoT multiplier +40% (per-tick amount 2003 -> 2804). E3 (Skill +2 / Basic +1): Blazing Welcome Blast 1.20 -> 1.32 and Standing Ovation 1.00 -> 1.10. E4: each Burn tick regenerates 2 Energy (ENERGY_GAIN n=2). E5 (Ult +2 / Talent +2): Watch This Showstopper 1.20 -> 1.296 and firekiss vulnAll 0.070 -> 0.076. E6: Firekiss max stack 3 -> 4 (only the stackable cap changes; a 3-cycle fixture reaches 3 stacks, so no payload/value vocabulary observes it) — covered as custom. Fixtures run one battle per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "guinaifen E0 — eidolon ladder rung, cloned from guinaifen/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "guinaifen",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "guinaifen E1 — eidolon ladder rung, cloned from guinaifen/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "guinaifen",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "guinaifen E2 — eidolon ladder rung, cloned from guinaifen/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "guinaifen",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "guinaifen E3 — eidolon ladder rung, cloned from guinaifen/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "guinaifen",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "guinaifen E4 — eidolon ladder rung, cloned from guinaifen/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "guinaifen",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "guinaifen E5 — eidolon ladder rung, cloned from guinaifen/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "guinaifen",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "guinaifen E6 — eidolon ladder rung, cloned from guinaifen/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "guinaifen",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "gui_e1_present_e1_e6",
+      "layer": "interactions",
+      "claim": "E1: after Skill, gui_e1 (Effect RES -10%, 2 turns) is applied to the target.",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "gui_e1"
+      }
+    },
+    {
+      "id": "gui_e1_effres_e1",
+      "layer": "parameters",
+      "claim": "E1: gui_e1 lowers the target Effect RES by 0.10.",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "gui_e1",
+        "stat": "effRes",
+        "value": -0.1,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "gui_e1_locked_e0",
+      "layer": "interactions",
+      "claim": "E1 locked below its rank: no gui_e1 at E0.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "gui_e1"
+      }
+    },
+    {
+      "id": "gui_e2_burn_e2_e6",
+      "layer": "parameters",
+      "claim": "E2: Burn DoT multiplier +40% (per-tick amount 2003 -> 2804).",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "DOT_TICK"
+        },
+        "field": "amount",
+        "value": 2750
+      }
+    },
+    {
+      "id": "gui_e2_locked_e0_e1",
+      "layer": "parameters",
+      "claim": "E2 locked below its rank: Burn tick stays at base 2003 at E0/E1.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DOT_TICK"
+        },
+        "field": "amount",
+        "value": 2003,
+        "tol": 1,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gui_e3_skill_e3_e6",
+      "layer": "parameters",
+      "claim": "E3 (Skill +2): Blazing Welcome Blast 1.20 -> 1.32.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Blazing Welcome Blast"
+        },
+        "field": "mult",
+        "value": 1.32,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "gui_e3_skill_locked_e0_e2",
+      "layer": "parameters",
+      "claim": "E3 locked below its rank: Blazing Welcome Blast 1.20 at E0..E2.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Blazing Welcome Blast"
+        },
+        "field": "mult",
+        "value": 1.2,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "gui_e3_basic_e3_e6",
+      "layer": "parameters",
+      "claim": "E3 (Basic +1): Standing Ovation 1.00 -> 1.10.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Standing Ovation"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "gui_e4_energy_e4_e6",
+      "layer": "interactions",
+      "claim": "E4: each Burn tick regenerates 2 Energy (two ENERGY_GAIN n=2 events).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "payload": {
+            "n": 2
+          }
+        },
+        "value": 2
+      }
+    },
+    {
+      "id": "gui_e4_energy_locked_e0_e3",
+      "layer": "interactions",
+      "claim": "E4 locked below its rank: no per-tick Energy gain at E0..E3.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "payload": {
+            "n": 2
+          }
+        },
+        "value": 0
+      }
+    },
+    {
+      "id": "gui_e5_ult_e5_e6",
+      "layer": "parameters",
+      "claim": "E5 (Ult +2): Watch This Showstopper 1.20 -> 1.296.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Watch This Showstopper"
+        },
+        "field": "mult",
+        "value": 1.296,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "gui_e5_ult_locked_e0_e4",
+      "layer": "parameters",
+      "claim": "E5 locked below its rank: Watch This Showstopper 1.20 at E0..E4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Watch This Showstopper"
+        },
+        "field": "mult",
+        "value": 1.2,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "gui_e6_stack_cap",
+      "layer": "interactions",
+      "claim": "E6: Firekiss max stack 3 -> 4.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "E6 raises Firekiss maxStacks 3->4; the 3-cycle fixture reaches only 3 stacks, so no payload/value change is observable."
+      }
+    }
+  ],
+  "golds": []
+}

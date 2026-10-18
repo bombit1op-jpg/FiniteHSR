@@ -1,0 +1,393 @@
+{
+  "kit": "lingsha",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "hsr-data/characters.json#/Lingsha/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 applies lingsha_e1_wbe (wbe 0.5 to Fuyuan's attacks). E2 applies lingsha_e2 (be 0.4, 3 turns). E3 (Skill+2/Talent+2) raises Dripping Mistscape 1.5 -> 1.62, Fuyuan Follow-Up 0.75 -> 0.825, and lingsha_befog vulnType:break 0.25 -> 0.27. E4 makes Fuyuan's attacks heal (HEAL_APPLIED count 10 -> 14). E5 (Ult+2/Basic+1) raises Smoke and Splendor 0.8 -> 0.88 and Votive Incense 1.0 -> 1.1. E6 applies lingsha_e6_res (resAll -0.2) and adds the 'Fuyuan E6 hit' follow-up. Fixtures run Lingsha + Fuyuan vs one Elite, one run per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "lingsha E0 — eidolon ladder rung, cloned from lingsha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lingsha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "lingsha E1 — eidolon ladder rung, cloned from lingsha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lingsha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "lingsha E2 — eidolon ladder rung, cloned from lingsha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lingsha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "lingsha E3 — eidolon ladder rung, cloned from lingsha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lingsha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "lingsha E4 — eidolon ladder rung, cloned from lingsha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lingsha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "lingsha E5 — eidolon ladder rung, cloned from lingsha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lingsha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "lingsha E6 — eidolon ladder rung, cloned from lingsha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "lingsha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "lingsha_e1_present",
+      "layer": "interactions",
+      "claim": "E1 applies lingsha_e1_wbe from rank E1 onward.",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "lingsha_e1_wbe" }
+    },
+    {
+      "id": "lingsha_e1_wbe",
+      "layer": "parameters",
+      "claim": "lingsha_e1_wbe carries wbe 0.5 (canon ranks/1).",
+      "fixtures": ["e1"],
+      "assertion": { "assert": "buffStat", "id": "lingsha_e1_wbe", "stat": "wbe", "value": 0.5 }
+    },
+    {
+      "id": "lingsha_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: lingsha_e1_wbe must NOT be active below rank E1.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "noBuff", "id": "lingsha_e1_wbe" }
+    },
+    {
+      "id": "lingsha_e2_present",
+      "layer": "interactions",
+      "claim": "E2 applies lingsha_e2 (be 0.4, 3 turns) from rank E2 onward.",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "lingsha_e2", "turns": 3 }
+    },
+    {
+      "id": "lingsha_e2_be",
+      "layer": "parameters",
+      "claim": "lingsha_e2 carries be 0.4 (canon ranks/2).",
+      "fixtures": ["e2"],
+      "assertion": { "assert": "buffStat", "id": "lingsha_e2", "stat": "be", "value": 0.4 }
+    },
+    {
+      "id": "lingsha_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: lingsha_e2 must NOT be active below rank E2.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "noBuff", "id": "lingsha_e2" }
+    },
+    {
+      "id": "lingsha_e3_skill",
+      "layer": "parameters",
+      "claim": "E3 (Skill+2/Talent+2) raises Dripping Mistscape 1.5 -> 1.62.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Dripping Mistscape" }, "field": "mult", "value": 1.62, "tol": 0.002 }
+    },
+    {
+      "id": "lingsha_e3_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Dripping Mistscape stays 1.5.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Dripping Mistscape" }, "field": "mult", "value": 1.5, "tol": 0.002 }
+    },
+    {
+      "id": "lingsha_e3_fua",
+      "layer": "parameters",
+      "claim": "E3 raises Fuyuan Follow-Up 0.75 -> 0.825.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Fuyuan Follow-Up" }, "field": "mult", "value": 0.825, "tol": 0.002 }
+    },
+    {
+      "id": "lingsha_e3_befog",
+      "layer": "parameters",
+      "claim": "E3 raises lingsha_befog vulnType:break 0.25 -> 0.27.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "lingsha_befog", "stat": "vulnType:break", "value": 0.27 }
+    },
+    {
+      "id": "lingsha_e3_befog_locked",
+      "layer": "parameters",
+      "claim": "Below E3 lingsha_befog vulnType:break stays 0.25.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "buffStat", "id": "lingsha_befog", "stat": "vulnType:break", "value": 0.25 }
+    },
+    {
+      "id": "lingsha_e4_heal",
+      "layer": "parameters",
+      "claim": "E4 makes Fuyuan's attacks heal (14 HEAL_APPLIED from Lingsha).",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "count", "of": { "type": "HEAL_APPLIED" }, "value": 14 }
+    },
+    {
+      "id": "lingsha_e4_heal_locked",
+      "layer": "parameters",
+      "claim": "Below E4 there are 10 HEAL_APPLIED from Lingsha.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "count", "of": { "type": "HEAL_APPLIED" }, "value": 10 }
+    },
+    {
+      "id": "lingsha_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 (Ult+2/Basic+1) raises Smoke and Splendor 0.8 -> 0.88.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Smoke and Splendor" }, "field": "mult", "value": 0.88, "tol": 0.002 }
+    },
+    {
+      "id": "lingsha_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Smoke and Splendor stays 0.8.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Smoke and Splendor" }, "field": "mult", "value": 0.8, "tol": 0.002 }
+    },
+    {
+      "id": "lingsha_e5_basic",
+      "layer": "parameters",
+      "claim": "E5 raises Votive Incense 1.0 -> 1.1.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Votive Incense" }, "field": "mult", "value": 1.1, "tol": 0.002 }
+    },
+    {
+      "id": "lingsha_e6_present",
+      "layer": "interactions",
+      "claim": "E6 applies lingsha_e6_res.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buff", "id": "lingsha_e6_res" }
+    },
+    {
+      "id": "lingsha_e6_vuln",
+      "layer": "parameters",
+      "claim": "lingsha_e6_res carries resAll -0.2 (canon ranks/6).",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buffStat", "id": "lingsha_e6_res", "stat": "resAll", "value": -0.2 }
+    },
+    {
+      "id": "lingsha_e6_hit",
+      "layer": "ordering",
+      "claim": "E6 adds the 'Fuyuan E6 hit' follow-up.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "label": "Fuyuan E6 hit" } }
+    },
+    {
+      "id": "lingsha_e6_hit_locked",
+      "layer": "ordering",
+      "claim": "Below E6 the 'Fuyuan E6 hit' follow-up is absent.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "absent", "of": { "type": "DAMAGE_DEALT", "label": "Fuyuan E6 hit" } }
+    },
+    {
+      "id": "lingsha_e6_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: lingsha_e6_res must NOT be active below rank E6.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "noBuff", "id": "lingsha_e6_res" }
+    }
+  ],
+  "golds": []
+}

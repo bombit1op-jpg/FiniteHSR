@@ -1,0 +1,196 @@
+{
+  "kit": "natasha",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/110501+110502+110503+110504 + bonus_abilities (Healer, Recuperation, Miracle Cure)",
+    "confidence": "verified",
+    "note": "Basic ATK 110501 Behind the Kindness 140% Physical at L10 (engine runs Basic Lv6 = 100%). Skill 110502 Love, Heal, and Choose: heals the weakest ally for #1=10.5% of Natasha's Max HP + #3=280 (L10) and applies Regeneration (HoT = #2=7.2% Max HP + #4=192 per turn) for 3 turns (A6 Recuperation +1). Ultimate 110503 Gift of Rebirth heals all allies #1=13.8% Max HP + #3=368 (L10). Talent 110504 Innervation: while any ally is at/below 30% HP, allies' Outgoing Healing +62.5%. A4 Healer: +10% Outgoing Healing. Energy limit 90."
+  },
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "solo-battle",
+      "env": "Natasha E0 solo vs a Physical-weak Elite (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "natasha",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4-miracle",
+      "env": "Natasha E4 solo vs the same Elite - E4 Miracle Cure returns +5 Energy each time she is attacked",
+      "battle": {
+        "team": [
+          {
+            "kitId": "natasha",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "wounded-pair",
+      "env": "Natasha E6 + bronya (wounded 25%) ally vs Boss (Lv120, atk 140, spd 150), 6 cycles, seed 11 - keeps an ally at/below 30% HP so Innervation stays active",
+      "battle": {
+        "team": [
+          {
+            "kitId": "natasha",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 120 },
+            "eidolon": 6,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "bronya",
+            "stats": { "hp": 10000, "atk": 1500, "def": 600, "spd": 134 },
+            "hpFrac": 0.25
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 250000,
+          "atk": 140,
+          "spd": 150,
+          "level": 120,
+          "toughness": 1800,
+          "weaknesses": ["Physical", "Fire", "Ice", "Lightning", "Wind", "Quantum", "Imaginary"]
+        },
+        "cycles": 6,
+        "seed": 11
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "nt_talent_innervation",
+      "ability": "talent",
+      "layer": "interactions",
+      "fixtures": ["wounded-pair"],
+      "claim": "Talent Innervation: Outgoing Healing rises while an ally is at ≤30% HP — permanent buff natasha_innervation, logged 'Innervation active' (abundance.ts:513-522).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Innervation active"
+        }
+      }
+    },
+    {
+      "id": "n_skill_action",
+      "layer": "structure",
+      "claim": "Love, Heal, and Choose (110502) is Natasha's Skill action.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Natasha", "action": "skill" } }
+    },
+    {
+      "id": "n_ult_action",
+      "layer": "structure",
+      "claim": "Gift of Rebirth (110503) is Natasha's Ultimate action.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Natasha", "action": "ultimate" } }
+    },
+    {
+      "id": "n_basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK 110501 Behind the Kindness is a single Physical hit.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Natasha", "label": "Behind the Kindness" } }
+    },
+    {
+      "id": "n_basic_mult",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic ATK 110501 runs the 50%->140% ladder; at the engine default Basic Lv6 it is 100% of ATK.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Natasha", "attackType": "basic" }, "field": "mult", "value": 1, "pick": "first" }
+    },
+    {
+      "id": "n_skill_heal",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill 110502 heals an ally (HEAL_APPLIED sourced from Natasha).",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "HEAL_APPLIED", "source": "Natasha" } }
+    },
+    {
+      "id": "n_ult_heal",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate 110503 heals every ally (Gift of Rebirth).",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "present", "of": { "type": "HEAL_APPLIED", "source": "Natasha" } },
+      "after": [
+        { "kitId": "natasha", "stat": "hp", "op": "atLeast", "value": 1 }
+      ]
+    },
+    {
+      "id": "n_skill_before_ult",
+      "layer": "ordering",
+      "claim": "The Skill cycle resolves before the Ultimate in the fixture.",
+      "fixtures": ["solo-battle"],
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Natasha", "action": "skill" }],
+        "after": [{ "type": "ABILITY_USED", "source": "Natasha", "action": "ultimate" }]
+      }
+    },
+    {
+      "id": "n_a4_healer",
+      "layer": "interactions",
+      "claim": "A4 Healer grants Natasha +10% Outgoing Healing for the battle.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "buff", "id": "natasha_a4", "target": "Natasha" }
+    },
+    {
+      "id": "n_e4_energy",
+      "layer": "interactions",
+      "claim": "E4 Miracle Cure: when Natasha is attacked she gains +5 Energy (ENERGY_GAIN n=5).",
+      "fixtures": ["e4-miracle"],
+      "assertion": { "assert": "present", "of": { "type": "ENERGY_GAIN", "target": "Natasha", "payload": { "n": 5 } } }
+    },
+    {
+      "id": "n_energy_cap",
+      "layer": "parameters",
+      "claim": "Natasha's Ultimate gate is the 90-Energy ladder (sp_need 90); she never exceeds it.",
+      "fixtures": ["solo-battle"],
+      "assertion": { "assert": "unitState", "who": "Natasha", "field": "energy", "atMost": 90 },
+      "after": [
+        { "kitId": "natasha", "stat": "energy", "op": "atMost", "value": 90 }
+      ]
+    }
+  ]
+}

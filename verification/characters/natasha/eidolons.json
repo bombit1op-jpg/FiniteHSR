@@ -1,0 +1,363 @@
+{
+  "kit": "natasha",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Natasha/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 self-heal at <=30% HP after being attacked never fires (fixture Natasha ends full HP); E2 ult HoT is not exercised (auto rotation never casts the Ultimate); E3 Basic Lv.+1 raises Behind the Kindness 1.0 -> 1.1; E4 after being attacked regenerates 5 Energy (NOTE \"E4 Miracle Cure: +5 Energy\"); E5 Ult/Talent Lv.+2 has no observable in this fixture (Ult unused, Talent heal not captured); E6 Basic additionally deals 40% Max HP Physical (label \"E6 Doctor's Grace\"). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "natasha E0 — eidolon ladder rung, cloned from natasha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "natasha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "natasha E1 — eidolon ladder rung, cloned from natasha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "natasha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "natasha E2 — eidolon ladder rung, cloned from natasha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "natasha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "natasha E3 — eidolon ladder rung, cloned from natasha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "natasha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "natasha E4 — eidolon ladder rung, cloned from natasha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "natasha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "natasha E5 — eidolon ladder rung, cloned from natasha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "natasha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "natasha E6 — eidolon ladder rung, cloned from natasha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "natasha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "nat_e3_basic_present",
+      "layer": "parameters",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "claim": "E3 \"The Right Cure\" Basic ATK Lv.+1 raises Behind the Kindness from 1.0 to 1.1.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Behind the Kindness"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "nat_e3_basic_locked",
+      "layer": "parameters",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "claim": "Below E3 the Basic ATK multiplier stays at the Lv.6 floor 1.0 (cumulative unlock).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Behind the Kindness"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "nat_e4_energy_present",
+      "layer": "interactions",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "claim": "E4 \"Miracle Cure\": after being attacked, regenerates 5 extra Energy (logged per hit).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "E4 Miracle Cure"
+        }
+      }
+    },
+    {
+      "id": "nat_e4_energy_locked",
+      "layer": "interactions",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "claim": "Cumulative unlock: the E4 +5 Energy per hit must NOT fire below rank 4.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "NOTE",
+          "log": "E4 Miracle Cure"
+        }
+      }
+    },
+    {
+      "id": "nat_e6_extra_present",
+      "layer": "parameters",
+      "fixtures": [
+        "e6"
+      ],
+      "claim": "E6 Doctor's Grace: Basic ATK additionally deals Physical DMG equal to 40% Max HP.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "E6 Doctor's Grace"
+        },
+        "field": "mult",
+        "value": 0.4,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "nat_e6_extra_locked",
+      "layer": "interactions",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "claim": "Cumulative unlock: the E6 extra Basic hit must NOT appear below rank 6.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "E6 Doctor's Grace"
+        }
+      }
+    }
+  ],
+  "golds": []
+}

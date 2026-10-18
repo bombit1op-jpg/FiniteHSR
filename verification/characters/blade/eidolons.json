@@ -1,0 +1,316 @@
+{
+  "kit": "blade",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Blade/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder E1..E6. E1 'Blade Cuts the Deepest in Hell' adds 150% of the Ultimate HP-loss tally as extra DMG to the designated enemy (log 'E1 extra'). E2 'Ten Thousand Sorrows From One Broken Dream' +15% CRIT Rate while in Hellscape (hellscape critRate 0.15). E3 (Ult+2/Talent+2) is a level bump. E4 'Rejected by Death, Infected With Life' Max HP +20%, stacking to 2 when HP crosses below 50% (blade_e4 hpPct 0.2, 2 stacks). E5 (Skill+2/Basic+1) is a level bump scaling Hellscape DMG hellscape dmgAll 0.40->0.456. E6 'Reborn Into an Empty Husk' lowers the Charge cap to 4 and adds 50% of Max HP to the Talent FUA, so the FUA fires more and Blade's total Energy gain rises (200->285)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "blade E0 — eidolon ladder rung, cloned from blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "blade E1 — eidolon ladder rung, cloned from blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "blade E2 — eidolon ladder rung, cloned from blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "blade E3 — eidolon ladder rung, cloned from blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "blade E4 — eidolon ladder rung, cloned from blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "blade E5 — eidolon ladder rung, cloned from blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "blade E6 — eidolon ladder rung, cloned from blade/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "blade",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "blade_e1_log",
+      "layer": "interactions",
+      "claim": "E1 'Blade Cuts the Deepest in Hell' adds 150% of the Ultimate HP-loss tally as extra DMG; observable as the dedicated log line. Present from E1 onward.",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "E1 extra" } }
+    },
+    {
+      "id": "blade_e1_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: the E1 extra-DMG log must NOT appear below rank 1.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "absent", "of": { "type": "NOTE", "log": "E1 extra" } }
+    },
+    {
+      "id": "blade_e2_crit",
+      "layer": "parameters",
+      "claim": "E2 'Ten Thousand Sorrows From One Broken Dream': +15% CRIT Rate while in Hellscape (hellscape critRate 0.15).",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "hellscape", "stat": "critRate", "value": 0.15 }
+    },
+    {
+      "id": "blade_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Rejected by Death, Infected With Life': +20% Max HP stacking when HP crosses below 50% (blade_e4). Present from E4 onward.",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "blade_e4" }
+    },
+    {
+      "id": "blade_e4_hp",
+      "layer": "parameters",
+      "claim": "The E4 buff carries hpPct 0.20 per stack (canon ranks/4).",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "buffStat", "id": "blade_e4", "stat": "hpPct", "value": 0.2 }
+    },
+    {
+      "id": "blade_e4_stacks",
+      "layer": "parameters",
+      "claim": "E4 reaches 2 stacks in this scenario.",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "buff", "id": "blade_e4", "stacks": 2 }
+    },
+    {
+      "id": "blade_e4_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E4 must NOT be active below rank 4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "noBuff", "id": "blade_e4" }
+    },
+    {
+      "id": "blade_e5_hellscape",
+      "layer": "parameters",
+      "claim": "E5 (Skill+2/Basic+1) level bump scales Hellscape DMG hellscape dmgAll to 0.456 (0.40 at E0..E4).",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "hellscape", "stat": "dmgAll", "value": 0.456 }
+    },
+    {
+      "id": "blade_e6_energy",
+      "layer": "interactions",
+      "claim": "E6 lowers the Charge cap so the Talent FUA fires more, raising Blade's total Energy gain to 285 (200 below rank 6).",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "energy", "who": "Blade", "atLeast": 285 }
+    },
+    {
+      "id": "blade_e6_energy_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: the E6 FUA-driven Energy gain must NOT be present below rank 6.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "energy", "who": "Blade", "atMost": 200 }
+    }
+  ],
+  "golds": []
+}

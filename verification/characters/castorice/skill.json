@@ -1,0 +1,203 @@
+{
+  "kit": "castorice",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/140701+140702+140703+140704 + memosprite 1140701+1140702+1140703+1140706 + bonus_abilities (Inverted Torch, Contained Dark Tide)",
+    "confidence": "verified",
+    "note": "Castorice does not use the Energy system: her Ultimate gate is Newbud (an HP-loss pool, cap 34000) and the cast consumes no Energy. Basic 140701 Nethersea's Ripple = 70% Max HP Quantum at L10 (engine Basic Lv6 = 50%). Skill 140702 Wraithfly's Caress drains 30% of each ally's current HP, then Blast Quantum; with Netherwing on the field it becomes Boneclaw Doomdrake's Embrace (drain 40%, Joint Quantum ATK). Ultimate 140703 Doomshriek, Dawn's Chime summons the Netherwing memosprite (HP 340, SPD 165) and deploys the Lost Netherland Territory (all enemies DMG taken +20% at L10). Netherwing presses Breath Scorches the Shadow (each costs 25% of its Max HP), then pays out Wings Sweep the Ruins on disappear."
+  },
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "solo-summon",
+      "env": "Castorice E0 solo vs a Quantum-weak Elite (Lv120, 6M HP, 300 Toughness), 5 cycles, seed 7 - the high Max HP lets the Skill drains fill the Newbud pool so the Ultimate summons Netherwing",
+      "battle": {
+        "team": [
+          {
+            "kitId": "castorice",
+            "stats": { "hp": 100000, "atk": 1000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Quantum"],
+          "res": 0
+        },
+        "cycles": 5,
+        "seed": 7
+      }
+    },
+    {
+      "id": "basic-only",
+      "env": "Castorice E0 solo with skill priority disabled - only Basic ATK is used",
+      "battle": {
+        "team": [
+          {
+            "kitId": "castorice",
+            "stats": { "hp": 10000, "atk": 1000, "def": 600, "spd": 200 },
+            "eidolon": 0,
+            "skillPriority": -1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Quantum"],
+          "res": 0
+        },
+        "cycles": 2,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6-wing",
+      "env": "Castorice E6 solo vs the same Elite - Await for Years to Loom grants Quantum RES PEN +20% to Castorice and to the summoned Netherwing",
+      "battle": {
+        "team": [
+          {
+            "kitId": "castorice",
+            "stats": { "hp": 100000, "atk": 1000, "def": 600, "spd": 200 },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Quantum"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "c_ult_action",
+      "layer": "structure",
+      "claim": "Doomshriek, Dawn's Chime (140703) is Castorice's Ultimate action, gated by a full Newbud pool rather than Energy.",
+      "fixtures": ["solo-summon"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Castorice", "action": "ultimate" } }
+    },
+    {
+      "id": "c_ult_summons_netherwing",
+      "layer": "structure",
+      "claim": "The Ultimate summons the Netherwing memosprite (SUMMON_CREATED owned by Castorice).",
+      "fixtures": ["solo-summon"],
+      "assertion": { "assert": "present", "of": { "type": "SUMMON_CREATED", "source": "Castorice" } }
+    },
+    {
+      "id": "c_wraithfly_hit",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill 140702 Wraithfly's Caress is a Quantum Blast before Netherwing exists.",
+      "fixtures": ["solo-summon"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Castorice", "label": "Wraithfly Caress (main)" } }
+    },
+    {
+      "id": "c_breath_hit",
+      "layer": "structure",
+      "claim": "Netherwing presses Breath Scorches the Shadow as a Quantum AoE on its own turn.",
+      "fixtures": ["solo-summon"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Netherwing: Pollux", "label": "Breath Scorches (AoE)" } }
+    },
+    {
+      "id": "c_wings_payout",
+      "layer": "structure",
+      "claim": "When Netherwing disappears it pays out Wings Sweep the Ruins (memosprite talent 1140706), owned by Castorice.",
+      "fixtures": ["solo-summon"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Castorice", "label": "Wings Sweep the Ruins" } }
+    },
+    {
+      "id": "c_basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK 140701 Lament, Nethersea's Ripple is a single Quantum hit.",
+      "fixtures": ["basic-only"],
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Castorice", "label": "Nethersea Ripple" } }
+    },
+    {
+      "id": "c_territory_value",
+      "layer": "parameters",
+      "claim": "Lost Netherland Territory (140703) makes enemies take +20% DMG (ult L10) - the cast_terr debuff's resAll -0.2.",
+      "fixtures": ["solo-summon"],
+      "assertion": { "assert": "buffStat", "id": "cast_terr", "stat": "resAll", "value": -0.2 }
+    },
+    {
+      "id": "c_roar_value",
+      "layer": "parameters",
+      "claim": "On summon, memosprite Talent Roar Rumbles the Realm grants all allies +10% DMG (cast_roar, dmgAll 0.10).",
+      "fixtures": ["solo-summon"],
+      "assertion": { "assert": "buffStat", "id": "cast_roar", "stat": "dmgAll", "value": 0.1 }
+    },
+    {
+      "id": "c_territory_applied",
+      "layer": "interactions",
+      "claim": "The Lost Netherland Territory lands as an enemy debuff (cast_terr).",
+      "fixtures": ["solo-summon"],
+      "assertion": { "assert": "buff", "id": "cast_terr", "target": "Elite" }
+    },
+    {
+      "id": "c_roar_applied",
+      "layer": "interactions",
+      "claim": "Roar Rumbles the Realm applies to Castorice herself.",
+      "fixtures": ["solo-summon"],
+      "assertion": { "assert": "buff", "id": "cast_roar", "target": "Castorice" }
+    },
+    {
+      "id": "c_talent_dmg_stack",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent 140704 Desolation Across Palms: ally HP loss stacks +DMG on Castorice (cast_dmg).",
+      "fixtures": ["solo-summon"],
+      "assertion": { "assert": "buff", "id": "cast_dmg", "target": "Castorice" }
+    },
+    {
+      "id": "c_e6_respen_self",
+      "layer": "interactions",
+      "claim": "E6 Await for Years to Loom grants Castorice Quantum RES PEN +20% for the battle (cast_e6_respen).",
+      "fixtures": ["e6-wing"],
+      "assertion": { "assert": "buff", "id": "cast_e6_respen", "target": "Castorice" }
+    },
+    {
+      "id": "c_summon_before_breath",
+      "layer": "ordering",
+      "claim": "Netherwing is summoned (Ultimate) before it presses Breath Scorches the Shadow.",
+      "fixtures": ["solo-summon"],
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "SUMMON_CREATED", "source": "Castorice" }],
+        "after": [{ "type": "HIT_START", "source": "Netherwing: Pollux", "label": "Breath Scorches (AoE)" }]
+      }
+    },
+    {
+      "id": "c_basic_before_skill",
+      "layer": "ordering",
+      "claim": "The pre-summon Wraithfly's Caress Skill resolves before the first Breath (which requires the Ultimate summon first).",
+      "fixtures": ["solo-summon"],
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Castorice", "label": "Wraithfly Caress (main)" }],
+        "after": [{ "type": "HIT_START", "source": "Netherwing: Pollux", "label": "Breath Scorches (AoE)" }]
+      }
+    }
+  ]
+}

@@ -1,0 +1,405 @@
+{
+  "kit": "seele",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Seele/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 CRIT Rate +15% and 20% DEF-ignore vs enemies at <=80% HP; E2 Skill SPD-Boost stacks to 2; E3 Skill Lv.+2/Talent Lv.+2 (Sheathed Blade 0.72 -> 0.792); E4 +15 Energy on kill; E5 Ultimate Lv.+2/Basic Lv.+1 (Butterfly Flurry 7.2 -> 7.92); E6 Ultimate inflicts \"Butterfly Flurry\" (seele_e6). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent. E1 (enemy stays above 80% HP) and E4 (no kill) never fire in this fixture and are recorded as deviations."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "seele E0 — eidolon ladder rung, cloned from seele/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "seele",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "seele E1 — eidolon ladder rung, cloned from seele/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "seele",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "seele E2 — eidolon ladder rung, cloned from seele/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "seele",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "seele E3 — eidolon ladder rung, cloned from seele/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "seele",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "seele E4 — eidolon ladder rung, cloned from seele/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "seele",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "seele E5 — eidolon ladder rung, cloned from seele/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "seele",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "seele E6 — eidolon ladder rung, cloned from seele/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "seele",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "seele_e2_present",
+      "layer": "parameters",
+      "claim": "E2: the Skill's SPD-Boost stacks up to 2, so Seele takes more extra actions - Thwack casts rise 4 -> 6.",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Thwack"
+        },
+        "value": 6
+      }
+    },
+    {
+      "id": "seele_e2_locked",
+      "layer": "parameters",
+      "claim": "Below E2 the SPD-Boost holds one stack (Thwack casts 4).",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Thwack"
+        },
+        "value": 4
+      }
+    },
+    {
+      "id": "seele_e3_present",
+      "layer": "parameters",
+      "claim": "E3: Skill Lv.+2/Talent Lv.+2 raise Sheathed Blade 0.72 -> 0.792.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Sheathed Blade"
+        },
+        "field": "mult",
+        "value": 0.792,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "seele_e3_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Sheathed Blade stays at 0.72.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Sheathed Blade"
+        },
+        "field": "mult",
+        "value": 0.72,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "seele_e5_present",
+      "layer": "parameters",
+      "claim": "E5: Ultimate Lv.+2 raises Butterfly Flurry 7.2 -> 7.92.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Butterfly Flurry"
+        },
+        "field": "mult",
+        "value": 7.92,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "seele_e5_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Butterfly Flurry stays at 7.2.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Butterfly Flurry"
+        },
+        "field": "mult",
+        "value": 7.2,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "seele_e6_present",
+      "layer": "interactions",
+      "claim": "E6: Ultimate inflicts \"Butterfly Flurry\" on the target (seele_e6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "seele_e6"
+      }
+    },
+    {
+      "id": "seele_e6_locked",
+      "layer": "interactions",
+      "claim": "Below E6 \"Butterfly Flurry\" is never applied.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "seele_e6"
+      }
+    }
+  ],
+  "golds": []
+}

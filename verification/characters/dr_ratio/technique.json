@@ -1,0 +1,64 @@
+{
+  "kit": "dr_ratio",
+  "slot": "technique",
+  "canon": {
+    "source": "dataset",
+    "confidence": "interpreted",
+    "note": "Technique \"Mold of Idolatry\" feeds the pre-fight pipeline (BattleEngine.applyTechniques). This spec pins activation; the technique's concrete effect is asserted in tests/golden/techniques/prefight.ts."
+  },
+  "fixtures": [
+    {
+      "id": "tech-dr_ratio",
+      "env": "Technique activation (mode init): Dr. Ratio alone, technique \"Mold of Idolatry\" active, seed 7",
+      "mode": "init",
+      "battle": {
+        "team": [
+          {
+            "kitId": "dr_ratio"
+          }
+        ],
+        "enemy": {
+          "name": "Ice Edge",
+          "hp": 5000000,
+          "spd": 132,
+          "level": 80,
+          "toughness": 30,
+          "weaknesses": [
+            "Physical",
+            "Fire",
+            "Ice",
+            "Lightning",
+            "Wind",
+            "Quantum",
+            "Imaginary"
+          ],
+          "count": 1,
+          "atk": 0
+        },
+        "cycles": 1,
+        "seed": 7,
+        "techniques": [
+          "dr_ratio"
+        ]
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "dr_ratio_tech_applied",
+      "ability": "technique",
+      "layer": "structure",
+      "claim": "Technique \"Mold of Idolatry\" is activated at battle start (TECHNIQUE_APPLIED).",
+      "fixtures": [
+        "tech-dr_ratio"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "TECHNIQUE_APPLIED",
+          "source": "Dr. Ratio"
+        }
+      }
+    }
+  ]
+}

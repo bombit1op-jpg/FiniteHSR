@@ -1,0 +1,21 @@
+{
+ "input": {
+  "kit": "castorice",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Castorice alone, technique \"Wail, Death's Herald\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Castorice|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Castorice|-|- [1]",
+  "TECHNIQUE_APPLIED|Castorice|-|-|-",
+  "SUMMON_CREATED|Castorice|Netherwing: Pollux|-|- [165,34000,34000,60.6061]",
+  "ACTION_ADVANCE|Netherwing: Pollux|Netherwing: Pollux|-|- [0,1]",
+  "BUFF_APPLIED|-|Castorice|-|- [1,3]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [1]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

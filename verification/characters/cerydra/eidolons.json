@@ -1,0 +1,456 @@
+{
+  "kit": "cerydra",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "hsr-data/characters.json#/Cerydra/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E1 'Seize the Crowns of All' (param 0.16): Military Merit carrier ignores 16% DEF (cerydra_def defIgnore 0.16->0.36) and Cerydra's Skill regenerates 2 Energy for the designated ally (Firefly ENERGY_GAIN +2). E2 'Forge the Dreams of Many': Merit carrier +40% DMG (cerydra_e2 dmgAll 0.40) and Cerydra +160% while a teammate holds Merit (cerydra_e2self dmgAll 1.60). E3 'Torch the Laws of Old' (Skill+2/Basic+1): Peerage critDmg:skill 0.72->0.792 and King's Castling mult 1.0->1.1. E4 'Remake the Realms of Men' (param 2.4): Ult multiplier +240% -> Scholar's Mate 2.4->8.16. E5 'Help and Hurt Repaid in Full' (Ult+2/Talent+2): Scholar's Mate 8.16->8.8128 and Id Conservancy 0.6->0.66. E6 'A Journey Set Starward': Peerage resPenAll 0.104->0.304 and Additional DMG via Merit x4 (Id Conservancy 0.66->2.64). Fixtures battle one run per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "cerydra E0 — eidolon ladder rung, cloned from cerydra/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cerydra",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 165
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 150
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "cerydra E1 — eidolon ladder rung, cloned from cerydra/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cerydra",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 165
+            },
+            "eidolon": 1,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 150
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "cerydra E2 — eidolon ladder rung, cloned from cerydra/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cerydra",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 165
+            },
+            "eidolon": 2,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 150
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "cerydra E3 — eidolon ladder rung, cloned from cerydra/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cerydra",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 165
+            },
+            "eidolon": 3,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 150
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "cerydra E4 — eidolon ladder rung, cloned from cerydra/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cerydra",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 165
+            },
+            "eidolon": 4,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 150
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "cerydra E5 — eidolon ladder rung, cloned from cerydra/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cerydra",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 165
+            },
+            "eidolon": 5,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 150
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "cerydra E6 — eidolon ladder rung, cloned from cerydra/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cerydra",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 165
+            },
+            "eidolon": 6,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 150
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "cerydra_e1_def_ignore",
+      "layer": "parameters",
+      "claim": "E1 adds +20% DEF ignore on top of the base 16% (cerydra_def gains a 0.36 entry). Gated by cerydra_e1_energy; the numeric value cannot be isolated via buffStat because cerydra_def is applied twice per turn and buffStat reads the last application (0.16).",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "custom", "note": "E1 DEF-ignore folded into doubled cerydra_def application; energy refund is the E1 gate" }
+    },
+    {
+      "id": "cerydra_e1_def_ignore_locked",
+      "layer": "parameters",
+      "claim": "At E0 the Military Merit carrier's DEF ignore stays 0.16.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "buffStat", "id": "cerydra_def", "stat": "defIgnore", "value": 0.16 }
+    },
+    {
+      "id": "cerydra_e1_energy",
+      "layer": "interactions",
+      "claim": "E1 makes Cerydra's Skill regenerate 2 Energy for the designated ally (Firefly).",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "present", "of": { "type": "ENERGY_GAIN", "target": "Firefly", "payload": { "n": 2 } } }
+    },
+    {
+      "id": "cerydra_e1_energy_locked",
+      "layer": "interactions",
+      "claim": "At E0 no 2-Energy refund is granted to Firefly.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "absent", "of": { "type": "ENERGY_GAIN", "target": "Firefly", "payload": { "n": 2 } } }
+    },
+    {
+      "id": "cerydra_e2_target",
+      "layer": "interactions",
+      "claim": "E2 grants the Military Merit carrier +40% DMG (cerydra_e2 dmgAll 0.40).",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "cerydra_e2", "stat": "dmgAll", "value": 0.4 }
+    },
+    {
+      "id": "cerydra_e2_target_locked",
+      "layer": "interactions",
+      "claim": "cerydra_e2 (E2) is absent below E2.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "noBuff", "id": "cerydra_e2" }
+    },
+    {
+      "id": "cerydra_e2_self",
+      "layer": "interactions",
+      "claim": "E2 grants Cerydra +160% DMG while a teammate holds Military Merit (cerydra_e2self dmgAll 1.60).",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "cerydra_e2self", "stat": "dmgAll", "value": 1.6 }
+    },
+    {
+      "id": "cerydra_e3_skill",
+      "layer": "parameters",
+      "claim": "E3 (Skill+2) raises Peerage critDmg:skill from 0.72 to 0.792.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "cerydra_peer", "stat": "critDmg:skill", "value": 0.792 }
+    },
+    {
+      "id": "cerydra_e3_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Peerage critDmg:skill stays 0.72.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "buffStat", "id": "cerydra_peer", "stat": "critDmg:skill", "value": 0.72 }
+    },
+    {
+      "id": "cerydra_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 (Basic+1) raises King's Castling multiplier from 1.0 to 1.1.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "King's Castling" }, "field": "mult", "value": 1.1, "tol": 0.002 }
+    },
+    {
+      "id": "cerydra_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 King's Castling multiplier stays 1.0.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "King's Castling" }, "field": "mult", "value": 1.0, "tol": 0.002 }
+    },
+    {
+      "id": "cerydra_e4_ult",
+      "layer": "parameters",
+      "claim": "E4 adds +240% to Cerydra's Ultimate multiplier: Scholar's Mate 2.4 -> 8.16.",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Scholar's Mate" }, "field": "mult", "value": 8.16, "tol": 0.002 }
+    },
+    {
+      "id": "cerydra_e4_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E4 Scholar's Mate stays 2.4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Scholar's Mate" }, "field": "mult", "value": 2.4, "tol": 0.002 }
+    },
+    {
+      "id": "cerydra_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 (Ult+2) raises Scholar's Mate 8.16 -> 8.8128.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Scholar's Mate" }, "field": "mult", "value": 8.8128, "tol": 0.002 }
+    },
+    {
+      "id": "cerydra_e5_talent",
+      "layer": "parameters",
+      "claim": "E5 (Talent+2) raises Id Conservancy 0.6 -> 0.66.",
+      "fixtures": ["e5"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Id Conservancy" }, "field": "mult", "value": 0.66, "tol": 0.002 }
+    },
+    {
+      "id": "cerydra_e6_peer_pen",
+      "layer": "parameters",
+      "claim": "E6 grants the Military Merit carrier +20% RES PEN (cerydra_peer resPenAll 0.104 -> 0.304).",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buffStat", "id": "cerydra_peer", "stat": "resPenAll", "value": 0.304 }
+    },
+    {
+      "id": "cerydra_e6_peer_pen_locked",
+      "layer": "parameters",
+      "claim": "At E5 Peerage resPenAll is still 0.104.",
+      "fixtures": ["e5"],
+      "assertion": { "assert": "buffStat", "id": "cerydra_peer", "stat": "resPenAll", "value": 0.104 }
+    },
+    {
+      "id": "cerydra_e6_talent",
+      "layer": "parameters",
+      "claim": "E6 adds Additional DMG via Military Merit x4: Id Conservancy 0.66 -> 2.64.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Id Conservancy" }, "field": "mult", "value": 2.64, "tol": 0.002 }
+    }
+  ],
+  "golds": []
+}

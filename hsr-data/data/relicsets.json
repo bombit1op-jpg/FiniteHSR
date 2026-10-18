@@ -1,0 +1,2486 @@
+{
+  "101": {
+    "id": "101",
+    "name": "Passerby of Wandering Cloud",
+    "names": {
+      "en": "Passerby of Wandering Cloud",
+      "zh": "云无留迹的过客",
+      "ja": "流雲無痕の過客",
+      "ko": "흔적을 남기지 않은 과객"
+    },
+    "icon": "SpriteOutput/ItemIcon/71000.png",
+    "parts": {
+      "31011": {
+        "name": "Passerby's Rejuvenated Wooden Hairstick",
+        "desc": null,
+        "story": null
+      },
+      "31012": {
+        "name": "Passerby's Roaming Dragon Bracer",
+        "desc": null,
+        "story": null
+      },
+      "31013": {
+        "name": "Passerby's Ragged Embroidered Coat",
+        "desc": null,
+        "story": null
+      },
+      "31014": {
+        "name": "Passerby's Stygian Hiking Boots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Outgoing Healing by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.1
+        ]
+      },
+      "4": {
+        "desc": "At the start of the battle, immediately regenerates 1 Skill Point.",
+        "param_list": []
+      }
+    }
+  },
+  "102": {
+    "id": "102",
+    "name": "Musketeer of Wild Wheat",
+    "names": {
+      "en": "Musketeer of Wild Wheat",
+      "zh": "野穗伴行的快枪手",
+      "ja": "草の穂ガンマン",
+      "ko": "들이삭과 동행하는 거너"
+    },
+    "icon": "SpriteOutput/ItemIcon/71001.png",
+    "parts": {
+      "31021": {
+        "name": "Musketeer's Wild Wheat Felt Hat",
+        "desc": null,
+        "story": null
+      },
+      "31022": {
+        "name": "Musketeer's Coarse Leather Gloves",
+        "desc": null,
+        "story": null
+      },
+      "31023": {
+        "name": "Musketeer's Wind-Hunting Shawl",
+        "desc": null,
+        "story": null
+      },
+      "31024": {
+        "name": "Musketeer's Rivets Riding Boots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases ATK by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.12
+        ]
+      },
+      "4": {
+        "desc": "The wearer's SPD increases by <unbreak>#1[i]%</unbreak> and DMG dealt by Basic ATK increases by <unbreak>#2[i]%</unbreak>.",
+        "param_list": [
+          0.06,
+          0.1
+        ]
+      }
+    }
+  },
+  "103": {
+    "id": "103",
+    "name": "Knight of Purity Palace",
+    "names": {
+      "en": "Knight of Purity Palace",
+      "zh": "净庭教宗的圣骑士",
+      "ja": "純庭教会の聖騎士",
+      "ko": "정토 교황의 팔라딘"
+    },
+    "icon": "SpriteOutput/ItemIcon/71002.png",
+    "parts": {
+      "31031": {
+        "name": "Knight's Forgiving Casque",
+        "desc": null,
+        "story": null
+      },
+      "31032": {
+        "name": "Knight's Silent Oath Ring",
+        "desc": null,
+        "story": null
+      },
+      "31033": {
+        "name": "Knight's Solemn Breastplate",
+        "desc": null,
+        "story": null
+      },
+      "31034": {
+        "name": "Knight's Iron Boots of Order",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases DEF by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.15
+        ]
+      },
+      "4": {
+        "desc": "Increases the max DMG that can be absorbed by the Shield created by the wearer by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.2
+        ]
+      }
+    }
+  },
+  "104": {
+    "id": "104",
+    "name": "Hunter of Glacial Forest",
+    "names": {
+      "en": "Hunter of Glacial Forest",
+      "zh": "密林卧雪的猎人",
+      "ja": "雪の密林の狩人",
+      "ko": "혹한 밀림의 사냥꾼"
+    },
+    "icon": "SpriteOutput/ItemIcon/71003.png",
+    "parts": {
+      "31041": {
+        "name": "Hunter's Artaius Hood",
+        "desc": null,
+        "story": null
+      },
+      "31042": {
+        "name": "Hunter's Lizard Gloves",
+        "desc": null,
+        "story": null
+      },
+      "31043": {
+        "name": "Hunter's Ice Dragon Cloak",
+        "desc": null,
+        "story": null
+      },
+      "31044": {
+        "name": "Hunter's Soft Elkskin Boots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Ice DMG by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.1
+        ]
+      },
+      "4": {
+        "desc": "After the wearer uses their Ultimate, their CRIT DMG increases by <unbreak>#1[i]%</unbreak> for <unbreak>#2[i]</unbreak> turn(s).",
+        "param_list": [
+          0.25,
+          2
+        ]
+      }
+    }
+  },
+  "105": {
+    "id": "105",
+    "name": "Champion of Streetwise Boxing",
+    "names": {
+      "en": "Champion of Streetwise Boxing",
+      "zh": "街头出身的拳王",
+      "ja": "成り上がりチャンピオン",
+      "ko": "스트리트 격투왕"
+    },
+    "icon": "SpriteOutput/ItemIcon/71004.png",
+    "parts": {
+      "31051": {
+        "name": "Champion's Headgear",
+        "desc": null,
+        "story": null
+      },
+      "31052": {
+        "name": "Champion's Heavy Gloves",
+        "desc": null,
+        "story": null
+      },
+      "31053": {
+        "name": "Champion's Chest Guard",
+        "desc": null,
+        "story": null
+      },
+      "31054": {
+        "name": "Champion's Fleetfoot Boots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Physical DMG by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.1
+        ]
+      },
+      "4": {
+        "desc": "After the wearer attacks or is hit, their ATK increases by <unbreak>#1[i]%</unbreak> for the rest of the battle. This effect can stack up to <unbreak>#2[i]</unbreak> time(s).",
+        "param_list": [
+          0.05,
+          5
+        ]
+      }
+    }
+  },
+  "106": {
+    "id": "106",
+    "name": "Guard of Wuthering Snow",
+    "names": {
+      "en": "Guard of Wuthering Snow",
+      "zh": "戍卫风雪的铁卫",
+      "ja": "吹雪と対峙する兵士",
+      "ko": "눈보라에 맞서는 철위대"
+    },
+    "icon": "SpriteOutput/ItemIcon/71005.png",
+    "parts": {
+      "31061": {
+        "name": "Guard's Cast Iron Helmet",
+        "desc": null,
+        "story": null
+      },
+      "31062": {
+        "name": "Guard's Shining Gauntlets",
+        "desc": null,
+        "story": null
+      },
+      "31063": {
+        "name": "Guard's Uniform of Old",
+        "desc": null,
+        "story": null
+      },
+      "31064": {
+        "name": "Guard's Silver Greaves",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Reduces DMG taken by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.08
+        ]
+      },
+      "4": {
+        "desc": "At the beginning of the turn, if the wearer's HP percentage is equal to or less than <unbreak>#1[i]%</unbreak>, restores HP equal to <unbreak>#2[i]%</unbreak> of their Max HP and regenerates <unbreak>#3[i]</unbreak> Energy.",
+        "param_list": [
+          0.5,
+          0.08,
+          5
+        ]
+      }
+    }
+  },
+  "107": {
+    "id": "107",
+    "name": "Firesmith of Lava-Forging",
+    "names": {
+      "en": "Firesmith of Lava-Forging",
+      "zh": "熔岩锻铸的火匠",
+      "ja": "溶岩で鍛造する火匠",
+      "ko": "용암 단조의 화장(火匠)"
+    },
+    "icon": "SpriteOutput/ItemIcon/71006.png",
+    "parts": {
+      "31071": {
+        "name": "Firesmith's Obsidian Goggles",
+        "desc": null,
+        "story": null
+      },
+      "31072": {
+        "name": "Firesmith's Ring of Flame-Mastery",
+        "desc": null,
+        "story": null
+      },
+      "31073": {
+        "name": "Firesmith's Fireproof Apron",
+        "desc": null,
+        "story": null
+      },
+      "31074": {
+        "name": "Firesmith's Alloy Leg",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Fire DMG by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.1
+        ]
+      },
+      "4": {
+        "desc": "Increases DMG by the wearer's Skill by <unbreak>#1[i]%</unbreak>. After unleashing Ultimate, increases the wearer's Fire DMG by <unbreak>#2[i]%</unbreak> for the next attack.",
+        "param_list": [
+          0.12,
+          0.12
+        ]
+      }
+    }
+  },
+  "108": {
+    "id": "108",
+    "name": "Genius of Brilliant Stars",
+    "names": {
+      "en": "Genius of Brilliant Stars",
+      "zh": "繁星璀璨的天才",
+      "ja": "星の如く輝く天才",
+      "ko": "별처럼 빛나는 천재"
+    },
+    "icon": "SpriteOutput/ItemIcon/71007.png",
+    "parts": {
+      "31081": {
+        "name": "Genius's Ultraremote Sensing Visor",
+        "desc": null,
+        "story": null
+      },
+      "31082": {
+        "name": "Genius's Frequency Catcher",
+        "desc": null,
+        "story": null
+      },
+      "31083": {
+        "name": "Genius's Metafield Suit",
+        "desc": null,
+        "story": null
+      },
+      "31084": {
+        "name": "Genius's Gravity Walker",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Quantum DMG by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.1
+        ]
+      },
+      "4": {
+        "desc": "When the wearer deals DMG to the target enemy, ignores <unbreak>#1[i]%</unbreak> DEF. If the target enemy has Quantum Weakness, the wearer additionally ignores <unbreak>#2[i]%</unbreak> DEF.",
+        "param_list": [
+          0.1,
+          0.1
+        ]
+      }
+    }
+  },
+  "109": {
+    "id": "109",
+    "name": "Band of Sizzling Thunder",
+    "names": {
+      "en": "Band of Sizzling Thunder",
+      "zh": "激奏雷电的乐队",
+      "ja": "雷鳴轟くバンド",
+      "ko": "뇌전을 울리는 밴드"
+    },
+    "icon": "SpriteOutput/ItemIcon/71008.png",
+    "parts": {
+      "31091": {
+        "name": "Band's Polarized Sunglasses",
+        "desc": null,
+        "story": null
+      },
+      "31092": {
+        "name": "Band's Touring Bracelet",
+        "desc": null,
+        "story": null
+      },
+      "31093": {
+        "name": "Band's Leather Jacket With Studs",
+        "desc": null,
+        "story": null
+      },
+      "31094": {
+        "name": "Band's Ankle Boots With Rivets",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Lightning DMG by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.1
+        ]
+      },
+      "4": {
+        "desc": "When the wearer uses their Skill, increases the wearer's ATK by <unbreak>#1[i]%</unbreak> for <unbreak>#2[i]</unbreak> turn(s).",
+        "param_list": [
+          0.2,
+          1
+        ]
+      }
+    }
+  },
+  "110": {
+    "id": "110",
+    "name": "Eagle of Twilight Line",
+    "names": {
+      "en": "Eagle of Twilight Line",
+      "zh": "晨昏交界的翔鹰",
+      "ja": "昼夜の狭間を翔ける鷹",
+      "ko": "밤낮의 경계를 나는 매"
+    },
+    "icon": "SpriteOutput/ItemIcon/71009.png",
+    "parts": {
+      "31101": {
+        "name": "Eagle's Beaked Helmet",
+        "desc": null,
+        "story": null
+      },
+      "31102": {
+        "name": "Eagle's Soaring Ring",
+        "desc": null,
+        "story": null
+      },
+      "31103": {
+        "name": "Eagle's Winged Suit Harness",
+        "desc": null,
+        "story": null
+      },
+      "31104": {
+        "name": "Eagle's Quilted Puttees",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Wind DMG by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.1
+        ]
+      },
+      "4": {
+        "desc": "After the wearer uses their Ultimate, their action is Advanced Forward by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.25
+        ]
+      }
+    }
+  },
+  "111": {
+    "id": "111",
+    "name": "Thief of Shooting Meteor",
+    "names": {
+      "en": "Thief of Shooting Meteor",
+      "zh": "流星追迹的怪盗",
+      "ja": "流星の跡を追う怪盗",
+      "ko": "유성을 쫓는 괴도"
+    },
+    "icon": "SpriteOutput/ItemIcon/71010.png",
+    "parts": {
+      "31111": {
+        "name": "Thief's Myriad-Faced Mask",
+        "desc": null,
+        "story": null
+      },
+      "31112": {
+        "name": "Thief's Gloves With Prints",
+        "desc": null,
+        "story": null
+      },
+      "31113": {
+        "name": "Thief's Steel Grappling Hook",
+        "desc": null,
+        "story": null
+      },
+      "31114": {
+        "name": "Thief's Meteor Boots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Break Effect by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.16
+        ]
+      },
+      "4": {
+        "desc": "Increases the wearer's Break Effect by <unbreak>#1[i]%</unbreak>. After the wearer inflicts Weakness Break on an enemy, regenerates <unbreak>#2[i]</unbreak> Energy.",
+        "param_list": [
+          0.16,
+          3
+        ]
+      }
+    }
+  },
+  "112": {
+    "id": "112",
+    "name": "Wastelander of Banditry Desert",
+    "names": {
+      "en": "Wastelander of Banditry Desert",
+      "zh": "盗匪荒漠的废土客",
+      "ja": "荒地で盗みを働く廃土客",
+      "ko": "황무지의 도적, 황야인"
+    },
+    "icon": "SpriteOutput/ItemIcon/71011.png",
+    "parts": {
+      "31121": {
+        "name": "Wastelander's Breathing Mask",
+        "desc": null,
+        "story": null
+      },
+      "31122": {
+        "name": "Wastelander's Desert Terminal",
+        "desc": null,
+        "story": null
+      },
+      "31123": {
+        "name": "Wastelander's Friar Robe",
+        "desc": null,
+        "story": null
+      },
+      "31124": {
+        "name": "Wastelander's Powered Greaves",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Imaginary DMG by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.1
+        ]
+      },
+      "4": {
+        "desc": "When dealing DMG to debuffed enemy targets, the wearer has their CRIT Rate increased by <unbreak>#1[i]%</unbreak>. And when they deal DMG to Imprisoned enemy targets, their CRIT DMG increases by <unbreak>#2[i]%</unbreak>.",
+        "param_list": [
+          0.1,
+          0.2
+        ]
+      }
+    }
+  },
+  "113": {
+    "id": "113",
+    "name": "Longevous Disciple",
+    "names": {
+      "en": "Longevous Disciple",
+      "zh": "宝命长存的莳者",
+      "ja": "宝命長存の蒔者",
+      "ko": "장수를 원하는 제자"
+    },
+    "icon": "SpriteOutput/ItemIcon/71020.png",
+    "parts": {
+      "31131": {
+        "name": "Disciple's Prosthetic Eye",
+        "desc": null,
+        "story": null
+      },
+      "31132": {
+        "name": "Disciple's Ingenium Hand",
+        "desc": null,
+        "story": null
+      },
+      "31133": {
+        "name": "Disciple's Dewy Feather Garb",
+        "desc": null,
+        "story": null
+      },
+      "31134": {
+        "name": "Disciple's Celestial Silk Sandals",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Max HP by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.12
+        ]
+      },
+      "4": {
+        "desc": "When the wearer is hit or has their HP consumed by an ally or themselves, their CRIT Rate increases by <unbreak>#1[i]%</unbreak> for <unbreak>#2[i]</unbreak> turn(s) and up to <unbreak>#3[i]</unbreak> stacks.",
+        "param_list": [
+          0.08,
+          2,
+          2
+        ]
+      }
+    }
+  },
+  "114": {
+    "id": "114",
+    "name": "Messenger Traversing Hackerspace",
+    "names": {
+      "en": "Messenger Traversing Hackerspace",
+      "zh": "骇域漫游的信使",
+      "ja": "仮想空間を漫遊するメッセンジャー",
+      "ko": "가상공간을 누비는 메신저"
+    },
+    "icon": "SpriteOutput/ItemIcon/71021.png",
+    "parts": {
+      "31141": {
+        "name": "Messenger's Holovisor",
+        "desc": null,
+        "story": null
+      },
+      "31142": {
+        "name": "Messenger's Transformative Arm",
+        "desc": null,
+        "story": null
+      },
+      "31143": {
+        "name": "Messenger's Secret Satchel",
+        "desc": null,
+        "story": null
+      },
+      "31144": {
+        "name": "Messenger's Par-kool Sneakers",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases SPD by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.06
+        ]
+      },
+      "4": {
+        "desc": "When the wearer uses their Ultimate on an ally, SPD for all allies increases by <unbreak>#1[i]%</unbreak> for <unbreak>#2[i]</unbreak> turn(s). This effect cannot be stacked.",
+        "param_list": [
+          0.12,
+          1
+        ]
+      }
+    }
+  },
+  "115": {
+    "id": "115",
+    "name": "The Ashblazing Grand Duke",
+    "names": {
+      "en": "The Ashblazing Grand Duke",
+      "zh": "毁烬焚骨的大公",
+      "ja": "灰燼を燃やし尽くす大公",
+      "ko": "재와 뼈마저 불사르는 대공"
+    },
+    "icon": "SpriteOutput/ItemIcon/71024.png",
+    "parts": {
+      "31151": {
+        "name": "Grand Duke's Crown of Netherflame",
+        "desc": null,
+        "story": null
+      },
+      "31152": {
+        "name": "Grand Duke's Gloves of Fieryfur",
+        "desc": null,
+        "story": null
+      },
+      "31153": {
+        "name": "Grand Duke's Robe of Grace",
+        "desc": null,
+        "story": null
+      },
+      "31154": {
+        "name": "Grand Duke's Ceremonial Boots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the DMG dealt by Follow-Up ATK by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.2
+        ]
+      },
+      "4": {
+        "desc": "When the wearer uses a Follow-Up ATK, increases the wearer's ATK by <unbreak>#1[i]%</unbreak> for every time the Follow-Up ATK deals DMG. This effect can stack up to <unbreak>#2[i]</unbreak> time(s) and lasts for <unbreak>#3[i]</unbreak> turn(s). This effect is removed the next time the wearer uses a Follow-Up ATK.",
+        "param_list": [
+          0.06,
+          8,
+          3
+        ]
+      }
+    }
+  },
+  "116": {
+    "id": "116",
+    "name": "Prisoner in Deep Confinement",
+    "names": {
+      "en": "Prisoner in Deep Confinement",
+      "zh": "幽锁深牢的系囚",
+      "ja": "深い牢獄の囚人",
+      "ko": "깊은 감옥에 수감된 죄수"
+    },
+    "icon": "SpriteOutput/ItemIcon/71025.png",
+    "parts": {
+      "31161": {
+        "name": "Prisoner's Sealed Muzzle",
+        "desc": null,
+        "story": null
+      },
+      "31162": {
+        "name": "Prisoner's Leadstone Shackles",
+        "desc": null,
+        "story": null
+      },
+      "31163": {
+        "name": "Prisoner's Repressive Straitjacket",
+        "desc": null,
+        "story": null
+      },
+      "31164": {
+        "name": "Prisoner's Restrictive Fetters",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases ATK by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.12
+        ]
+      },
+      "4": {
+        "desc": "For every DoT the enemy target is afflicted with, the wearer will ignore <unbreak>#1[i]%</unbreak> of its DEF when dealing DMG to it. This effect is valid for a max of <unbreak>#2[i]</unbreak> DoTs.",
+        "param_list": [
+          0.06,
+          3
+        ]
+      }
+    }
+  },
+  "117": {
+    "id": "117",
+    "name": "Pioneer Diver of Dead Waters",
+    "names": {
+      "en": "Pioneer Diver of Dead Waters",
+      "zh": "死水深潜的先驱",
+      "ja": "死水に潜る先駆者",
+      "ko": "사수에 잠수한 선구자"
+    },
+    "icon": "SpriteOutput/ItemIcon/71028.png",
+    "parts": {
+      "31171": {
+        "name": "Pioneer's Heatproof Shell",
+        "desc": null,
+        "story": null
+      },
+      "31172": {
+        "name": "Pioneer's Lacuna Compass",
+        "desc": null,
+        "story": null
+      },
+      "31173": {
+        "name": "Pioneer's Sealed Lead Apron",
+        "desc": null,
+        "story": null
+      },
+      "31174": {
+        "name": "Pioneer's Starfaring Anchor",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases DMG dealt to enemies with debuffs by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.12
+        ]
+      },
+      "4": {
+        "desc": "Increases CRIT Rate by <unbreak>#1[i]%</unbreak>. The wearer deals <unbreak>#2[i]%</unbreak>/<unbreak>#3[i]%</unbreak> increased CRIT DMG to enemies with at least <unbreak>#4[i]</unbreak>/<unbreak>#5[i]</unbreak> debuffs. After the wearer inflicts a debuff on enemy targets, the aforementioned effects increase by <unbreak>100%</unbreak>, lasting for <unbreak>#6[i]</unbreak> turn(s).",
+        "param_list": [
+          0.04,
+          0.08,
+          0.12,
+          2,
+          3,
+          1
+        ]
+      }
+    }
+  },
+  "118": {
+    "id": "118",
+    "name": "Watchmaker, Master of Dream Machinations",
+    "names": {
+      "en": "Watchmaker, Master of Dream Machinations",
+      "zh": "机心戏梦的钟表匠",
+      "ja": "夢を弄ぶ時計屋",
+      "ko": "꿈을 조작하는 시계공"
+    },
+    "icon": "SpriteOutput/ItemIcon/71029.png",
+    "parts": {
+      "31181": {
+        "name": "Watchmaker's Telescoping Lens",
+        "desc": null,
+        "story": null
+      },
+      "31182": {
+        "name": "Watchmaker's Fortuitous Wristwatch",
+        "desc": null,
+        "story": null
+      },
+      "31183": {
+        "name": "Watchmaker's Illusory Formal Suit",
+        "desc": null,
+        "story": null
+      },
+      "31184": {
+        "name": "Watchmaker's Dream-Concealing Dress Shoes",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Break Effect by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.16
+        ]
+      },
+      "4": {
+        "desc": "When the wearer uses their Ultimate on an ally, all allies' Break Effect increases by <unbreak>#1[i]%</unbreak> for <unbreak>#2[i]</unbreak> turn(s). This effect cannot be stacked.",
+        "param_list": [
+          0.3,
+          2
+        ]
+      }
+    }
+  },
+  "119": {
+    "id": "119",
+    "name": "Iron Cavalry Against the Scourge",
+    "names": {
+      "en": "Iron Cavalry Against the Scourge",
+      "zh": "荡除蠹灾的铁骑",
+      "ja": "蝗害を一掃せし鉄騎",
+      "ko": "곤충 재앙을 잠재우는 철기군"
+    },
+    "icon": "SpriteOutput/ItemIcon/71032.png",
+    "parts": {
+      "31191": {
+        "name": "Iron Cavalry's Homing Helm",
+        "desc": null,
+        "story": null
+      },
+      "31192": {
+        "name": "Iron Cavalry's Crushing Wristguard",
+        "desc": null,
+        "story": null
+      },
+      "31193": {
+        "name": "Iron Cavalry's Silvery Armor",
+        "desc": null,
+        "story": null
+      },
+      "31194": {
+        "name": "Iron Cavalry's Skywalk Greaves",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Break Effect by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.16
+        ]
+      },
+      "4": {
+        "desc": "If the wearer's Break Effect is <unbreak>#1[i]%</unbreak> or higher, the Break DMG dealt to the enemy target ignores <unbreak>#3[i]%</unbreak> of their DEF. If the wearer's Break Effect is <unbreak>#2[i]%</unbreak> or higher, the Super Break DMG dealt to the enemy target additionally ignores <unbreak>#4[i]%</unbreak> of their DEF.",
+        "param_list": [
+          1.5,
+          2.5,
+          0.1,
+          0.15
+        ]
+      }
+    }
+  },
+  "120": {
+    "id": "120",
+    "name": "The Wind-Soaring Valorous",
+    "names": {
+      "en": "The Wind-Soaring Valorous",
+      "zh": "风举云飞的勇烈",
+      "ja": "風雲を薙ぎ払う勇烈",
+      "ko": "바람과 구름을 가르는 용맹함"
+    },
+    "icon": "SpriteOutput/ItemIcon/71033.png",
+    "parts": {
+      "31201": {
+        "name": "Valorous Mask of Northern Skies",
+        "desc": null,
+        "story": null
+      },
+      "31202": {
+        "name": "Valorous Bracelet of Grappling Hooks",
+        "desc": null,
+        "story": null
+      },
+      "31203": {
+        "name": "Valorous Plate of Soaring Flight",
+        "desc": null,
+        "story": null
+      },
+      "31204": {
+        "name": "Valorous Greaves of Pursuing Hunt",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases ATK by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.12
+        ]
+      },
+      "4": {
+        "desc": "Increases the wearer's CRIT Rate by <unbreak>#1[i]%</unbreak>. After the wearer uses a Follow-Up ATK, increases DMG dealt by Ultimate by <unbreak>#2[i]%</unbreak>, lasting for <unbreak>#3[i]</unbreak> turn(s).",
+        "param_list": [
+          0.06,
+          0.36,
+          1
+        ]
+      }
+    }
+  },
+  "121": {
+    "id": "121",
+    "name": "Sacerdos' Relived Ordeal",
+    "names": {
+      "en": "Sacerdos' Relived Ordeal",
+      "zh": "重循苦旅的司铎",
+      "ja": "再び苦難の道を歩む司祭",
+      "ko": "고행의 길에 다시 오른 사제"
+    },
+    "icon": "SpriteOutput/ItemIcon/71038.png",
+    "parts": {
+      "31211": {
+        "name": "Sacerdos' Melodic Earrings",
+        "desc": null,
+        "story": null
+      },
+      "31212": {
+        "name": "Sacerdos' Welcoming Gloves",
+        "desc": null,
+        "story": null
+      },
+      "31213": {
+        "name": "Sacerdos' Ceremonial Garb",
+        "desc": null,
+        "story": null
+      },
+      "31214": {
+        "name": "Sacerdos' Arduous Boots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases SPD by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.06
+        ]
+      },
+      "4": {
+        "desc": "When using Skill or Ultimate on one ally target, increases the ability target's CRIT DMG by <unbreak>#1[i]%</unbreak>, lasting for <unbreak>#2[i]</unbreak> turn(s). This effect can stack up to <unbreak>#3[i]</unbreak> time(s).",
+        "param_list": [
+          0.18,
+          2,
+          2
+        ]
+      }
+    }
+  },
+  "122": {
+    "id": "122",
+    "name": "Scholar Lost in Erudition",
+    "names": {
+      "en": "Scholar Lost in Erudition",
+      "zh": "识海迷坠的学者",
+      "ja": "知識の海に溺れる学者",
+      "ko": "지식의 바다에 빠진 학자"
+    },
+    "icon": "SpriteOutput/ItemIcon/71039.png",
+    "parts": {
+      "31221": {
+        "name": "Scholar's Silver-Rimmed Monocle",
+        "desc": null,
+        "story": null
+      },
+      "31222": {
+        "name": "Scholar's Auxiliary Knuckle",
+        "desc": null,
+        "story": null
+      },
+      "31223": {
+        "name": "Scholar's Tweed Jacket",
+        "desc": null,
+        "story": null
+      },
+      "31224": {
+        "name": "Scholar's Felt Snowboots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases CRIT Rate by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.08
+        ]
+      },
+      "4": {
+        "desc": "Increases DMG dealt by Skill and Ultimate by <unbreak>#1[i]%</unbreak>. After using Ultimate, additionally increases the DMG dealt by the next Skill by <unbreak>#2[i]%</unbreak>.",
+        "param_list": [
+          0.2,
+          0.25
+        ]
+      }
+    }
+  },
+  "123": {
+    "id": "123",
+    "name": "Hero of Triumphant Song",
+    "names": {
+      "en": "Hero of Triumphant Song",
+      "zh": "凯歌祝捷的英豪",
+      "ja": "凱歌を揚げる英雄",
+      "ko": "개선가를 울리는 영웅"
+    },
+    "icon": "SpriteOutput/ItemIcon/71040.png",
+    "parts": {
+      "31231": {
+        "name": "Hero's Wreath of Championship",
+        "desc": null,
+        "story": null
+      },
+      "31232": {
+        "name": "Hero's Gilded Bracers",
+        "desc": null,
+        "story": null
+      },
+      "31233": {
+        "name": "Hero's Gallant Golden Armor",
+        "desc": null,
+        "story": null
+      },
+      "31234": {
+        "name": "Hero's Firechasing Shinguard",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases ATK by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.12
+        ]
+      },
+      "4": {
+        "desc": "While the wearer's memosprite is on the field, increases the wearer's SPD by <unbreak>#1[i]%</unbreak>. When the wearer's memosprite attacks, increases the wearer's and memosprite's CRIT DMG by <unbreak>#2[i]%</unbreak>, lasting for <unbreak>#3[i]</unbreak> turn(s).",
+        "param_list": [
+          0.06,
+          0.3,
+          2
+        ]
+      }
+    }
+  },
+  "124": {
+    "id": "124",
+    "name": "Poet of Mourning Collapse",
+    "names": {
+      "en": "Poet of Mourning Collapse",
+      "zh": "哀歌覆国的诗人",
+      "ja": "亡国の悲哀を詠う詩人",
+      "ko": "망국을 애도하는 시인"
+    },
+    "icon": "SpriteOutput/ItemIcon/71041.png",
+    "parts": {
+      "31241": {
+        "name": "Poet's Dill Wreath",
+        "desc": null,
+        "story": null
+      },
+      "31242": {
+        "name": "Poet's Gilded Bracelet",
+        "desc": null,
+        "story": null
+      },
+      "31243": {
+        "name": "Poet's Star-Studded Skirt",
+        "desc": null,
+        "story": null
+      },
+      "31244": {
+        "name": "Poet's Silver-Studded Shoes",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Quantum DMG by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.1
+        ]
+      },
+      "4": {
+        "desc": "Decreases the wearer's SPD by <unbreak>#6[i]%</unbreak>. Before entering battle, if the wearer's SPD is lower than <unbreak>#2[i]</unbreak>/<unbreak>#3[i]</unbreak>, increases the wearer's CRIT Rate by <unbreak>#4[i]%</unbreak>/<unbreak>#5[i]%</unbreak>. This effect applies to the wearer's memosprite at the same time.",
+        "param_list": [
+          -0.08,
+          110,
+          95,
+          0.2,
+          0.32,
+          0.08
+        ]
+      }
+    }
+  },
+  "125": {
+    "id": "125",
+    "name": "Warrior Goddess of Sun and Thunder",
+    "names": {
+      "en": "Warrior Goddess of Sun and Thunder",
+      "zh": "烈阳惊雷的女武神",
+      "ja": "烈陽と雷鳴の武神",
+      "ko": "태양과 번개의 여전사"
+    },
+    "icon": "SpriteOutput/ItemIcon/71044.png",
+    "parts": {
+      "31251": {
+        "name": "Warrior Goddess's Winged Helm",
+        "desc": null,
+        "story": null
+      },
+      "31252": {
+        "name": "Warrior Goddess's Cavalry Gauntlets",
+        "desc": null,
+        "story": null
+      },
+      "31253": {
+        "name": "Warrior Goddess's Dawn Cape",
+        "desc": null,
+        "story": null
+      },
+      "31254": {
+        "name": "Warrior Goddess's Honor Spurs",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases SPD by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.06
+        ]
+      },
+      "4": {
+        "desc": "When the wearer or their memosprite provides healing to ally targets other than themselves, the wearer gains \"Gentle Rain,\" which lasts for <unbreak>#3[i]</unbreak> turn(s) and can only trigger once per turn. While the wearer has \"Gentle Rain,\" SPD increases by <unbreak>#1[i]%</unbreak> and all allies' CRIT DMG increases by <unbreak>#2[i]%</unbreak>. This effect cannot stack.",
+        "param_list": [
+          0.06,
+          0.15,
+          2
+        ]
+      }
+    }
+  },
+  "126": {
+    "id": "126",
+    "name": "Wavestrider Captain",
+    "names": {
+      "en": "Wavestrider Captain",
+      "zh": "恶海逐波的船长",
+      "ja": "荒海を越える船長",
+      "ko": "거친 파도를 헤치는 선장"
+    },
+    "icon": "SpriteOutput/ItemIcon/71045.png",
+    "parts": {
+      "31261": {
+        "name": "Captain's Navigator Hat",
+        "desc": null,
+        "story": null
+      },
+      "31262": {
+        "name": "Captain's Lightcatcher Astrolabe",
+        "desc": null,
+        "story": null
+      },
+      "31263": {
+        "name": "Captain's Wind Mantle",
+        "desc": null,
+        "story": null
+      },
+      "31264": {
+        "name": "Captain's Tidal Boots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases CRIT DMG by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.16
+        ]
+      },
+      "4": {
+        "desc": "When the wearer becomes the target of another ally target's ability, gains 1 stack of \"Help,\" stacking up to <unbreak>#1[i]</unbreak> time(s). If there are <unbreak>#1[i]</unbreak> stack(s) of \"Help\" when the wearer uses their Ultimate, consumes all \"Help\" to increase the wearer's ATK by <unbreak>#2[i]%</unbreak> for <unbreak>#3[i]</unbreak> turn(s).",
+        "param_list": [
+          2,
+          0.48,
+          1
+        ]
+      }
+    }
+  },
+  "127": {
+    "id": "127",
+    "name": "World-Remaking Deliverer",
+    "names": {
+      "en": "World-Remaking Deliverer",
+      "zh": "再创天地的救世主",
+      "ja": "天地再創の救世主",
+      "ko": "천지를 재창조한 구세주"
+    },
+    "icon": "SpriteOutput/ItemIcon/71048.png",
+    "parts": {
+      "31271": {
+        "name": "Deliverer's Hood",
+        "desc": null,
+        "story": null
+      },
+      "31272": {
+        "name": "Deliverer's Sword Gauntlet",
+        "desc": null,
+        "story": null
+      },
+      "31273": {
+        "name": "Deliverer's Robe of Legacy",
+        "desc": null,
+        "story": null
+      },
+      "31274": {
+        "name": "Deliverer's Boots of Pioneering",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases CRIT Rate by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.08
+        ]
+      },
+      "4": {
+        "desc": "After the wearer uses Basic ATK or Skill, if the wearer's memosprite is on the field, increases Max HP of the wearer and their memosprite by <unbreak>#1[i]%</unbreak>, and increases all allies' DMG dealt by <unbreak>#2[i]%</unbreak>, lasting until after the wearer's next use of Basic ATK or Skill.",
+        "param_list": [
+          0.24,
+          0.15
+        ]
+      }
+    }
+  },
+  "128": {
+    "id": "128",
+    "name": "Self-Enshrouded Recluse",
+    "names": {
+      "en": "Self-Enshrouded Recluse",
+      "zh": "自匿星芒的隐士",
+      "ja": "星の光を隠した隠者",
+      "ko": "별빛에 숨은 은둔자"
+    },
+    "icon": "SpriteOutput/ItemIcon/71049.png",
+    "parts": {
+      "31281": {
+        "name": "Recluse's Wide-Brimmed Fedora",
+        "desc": null,
+        "story": null
+      },
+      "31282": {
+        "name": "Recluse's Refined Timepiece",
+        "desc": null,
+        "story": null
+      },
+      "31283": {
+        "name": "Recluse's Camel-Colored Coat",
+        "desc": null,
+        "story": null
+      },
+      "31284": {
+        "name": "Recluse's Soft Suede Boots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "The provided Shield Effect increases by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.1
+        ]
+      },
+      "4": {
+        "desc": "Increases the Shield Effect provided by the wearer by <unbreak>#1[i]%</unbreak>. When an ally target holds a Shield provided by the wearer, the ally target's CRIT DMG increases by <unbreak>#2[i]%</unbreak>.",
+        "param_list": [
+          0.12,
+          0.15
+        ]
+      }
+    }
+  },
+  "129": {
+    "id": "129",
+    "name": "Ever-Glorious Magical Girl",
+    "names": {
+      "en": "Ever-Glorious Magical Girl",
+      "zh": "闪耀功勋的魔法少女",
+      "ja": "功績輝く魔法少女",
+      "ko": "빛나는 공훈의 마법 소녀"
+    },
+    "icon": "SpriteOutput/ItemIcon/71052.png",
+    "parts": {
+      "31291": {
+        "name": "Magical Girl's Shining Medal",
+        "desc": null,
+        "story": null
+      },
+      "31292": {
+        "name": "Magical Girl's Protective Gloves",
+        "desc": null,
+        "story": null
+      },
+      "31293": {
+        "name": "Magical Girl's Everdance Battle Skirt",
+        "desc": null,
+        "story": null
+      },
+      "31294": {
+        "name": "Magical Girl's Contract Boots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases CRIT DMG by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.16
+        ]
+      },
+      "4": {
+        "desc": "The Elation DMG dealt by the wearer and their memosprites ignores <unbreak>#1[i]%</unbreak> of targets' DEF. For every <unbreak>#2[i]</unbreak> accumulated Punchline allies gain, the Elation DMG dealt additionally ignores <unbreak>#3[i]%</unbreak> of targets' DEF, stacking up to <unbreak>#4[i]</unbreak> time(s).",
+        "param_list": [
+          0.1,
+          5,
+          0.01,
+          10
+        ]
+      }
+    }
+  },
+  "130": {
+    "id": "130",
+    "name": "Diviner of Distant Reach",
+    "names": {
+      "en": "Diviner of Distant Reach",
+      "zh": "应天涉远的卜者",
+      "ja": "天命に従う旅の卜者",
+      "ko": "천명에 응해 먼 길을 떠난 점술가"
+    },
+    "icon": "SpriteOutput/ItemIcon/71053.png",
+    "parts": {
+      "31301": {
+        "name": "Diviner's Extrapolation Jade Abacus",
+        "desc": null,
+        "story": null
+      },
+      "31302": {
+        "name": "Diviner's Ingenium Prosthetic Hand",
+        "desc": null,
+        "story": null
+      },
+      "31303": {
+        "name": "Diviner's Astral Robe",
+        "desc": null,
+        "story": null
+      },
+      "31304": {
+        "name": "Diviner's Cloud-Soaring Boots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases SPD by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.06
+        ]
+      },
+      "4": {
+        "desc": "Before entering combat, if the wearer's SPD is greater than or equal to <unbreak>#1[i]</unbreak>/<unbreak>#2[i]</unbreak>, increases the wearer's CRIT Rate by <unbreak>#3[i]%</unbreak>/<unbreak>#4[i]%</unbreak>. When the wearer uses Elation Skill for the first time in each battle, increases all allies' Elation by <unbreak>#5[i]%</unbreak>. This effect cannot stack.",
+        "param_list": [
+          120,
+          160,
+          0.1,
+          0.18,
+          0.1
+        ]
+      }
+    }
+  },
+  "131": {
+    "id": "131",
+    "name": "As Navigator Isee Sees It",
+    "names": {
+      "en": "As Navigator Isee Sees It",
+      "zh": "星如我见的领航员",
+      "ja": "星巡るナビゲーター「シケン」",
+      "ko": "별을 갈망하는 항법사 아집"
+    },
+    "icon": "SpriteOutput/ItemIcon/71056.png",
+    "parts": {
+      "31311": {
+        "name": "Navigator's Deep Space Mirror",
+        "desc": null,
+        "story": null
+      },
+      "31312": {
+        "name": "Navigator's Game Die",
+        "desc": null,
+        "story": null
+      },
+      "31313": {
+        "name": "Navigator's Astral Chart Uniform",
+        "desc": null,
+        "story": null
+      },
+      "31314": {
+        "name": "Navigator's Everstride Boots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases ATK by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.12
+        ]
+      },
+      "4": {
+        "desc": "When the wearer enters combat or uses Skill, the DMG dealt by their Skill and Ultimate increases by <unbreak>#1[i]%</unbreak>, stacking up to <unbreak>#2[i]</unbreak> time(s). At the start of the wearer's turn or after using Ultimate, removes <unbreak>#3[i]</unbreak> stack(s) of this effect.",
+        "param_list": [
+          0.18,
+          3,
+          1
+        ]
+      }
+    }
+  },
+  "132": {
+    "id": "132",
+    "name": "Divine-Querying Master Smith",
+    "names": {
+      "en": "Divine-Querying Master Smith",
+      "zh": "叩问天工的名冶",
+      "ja": "神業を探求する名匠",
+      "ko": "신공을 탐구하는 명장"
+    },
+    "icon": "SpriteOutput/ItemIcon/71057.png",
+    "parts": {
+      "31321": {
+        "name": "Smith's Fire Beast Mask",
+        "desc": null,
+        "story": null
+      },
+      "31322": {
+        "name": "Smith's Damascus Steel Gauntlets",
+        "desc": null,
+        "story": null
+      },
+      "31323": {
+        "name": "Smith's Fireproof Garment",
+        "desc": null,
+        "story": null
+      },
+      "31324": {
+        "name": "Smith's Unbridled Boots",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases Max HP by <unbreak>#1[i]%</unbreak>.",
+        "param_list": [
+          0.12
+        ]
+      },
+      "4": {
+        "desc": "Increases the wearer's CRIT DMG dealt to enemy targets in the DEF reduction state by <unbreak>#1[i]%</unbreak>. After the wearer inflicts the DEF reduction state on an enemy target, all allies gain \"Comburent\" for <unbreak>#2[i]</unbreak> turn(s). This effect cannot be stacked. The DMG dealt by ally targets with \"Comburent\" increases by <unbreak>#3[i]%</unbreak>. This effect can be triggered again after the wearer uses an attack.",
+        "param_list": [
+          0.28,
+          2,
+          0.15
+        ]
+      }
+    }
+  },
+  "301": {
+    "id": "301",
+    "name": "Space Sealing Station",
+    "names": {
+      "en": "Space Sealing Station",
+      "zh": "太空封印站",
+      "ja": "宇宙封印ステーション",
+      "ko": "우주 봉인 정거장"
+    },
+    "icon": "SpriteOutput/ItemIcon/71012.png",
+    "parts": {
+      "33015": {
+        "name": "Herta's Space Station",
+        "desc": null,
+        "story": null
+      },
+      "33016": {
+        "name": "Herta's Wandering Trek",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's ATK by <unbreak>#1[i]%</unbreak>. When the wearer's SPD reaches <unbreak>#2[i]</unbreak> or higher, the wearer's ATK increases by an extra <unbreak>#3[i]%</unbreak>.",
+        "param_list": [
+          0.12,
+          120,
+          0.12
+        ]
+      }
+    }
+  },
+  "302": {
+    "id": "302",
+    "name": "Fleet of the Ageless",
+    "names": {
+      "en": "Fleet of the Ageless",
+      "zh": "不老者的仙舟",
+      "ja": "老いぬ者の仙舟",
+      "ko": "불로인의 선주"
+    },
+    "icon": "SpriteOutput/ItemIcon/71013.png",
+    "parts": {
+      "33025": {
+        "name": "The Xianzhou Luofu's Celestial Ark",
+        "desc": null,
+        "story": null
+      },
+      "33026": {
+        "name": "The Xianzhou Luofu's Ambrosial Arbor Vines",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's Max HP by <unbreak>#1[i]%</unbreak>. When the wearer's SPD reaches <unbreak>#2[i]</unbreak> or higher, all allies' ATK increases by <unbreak>#3[i]%</unbreak>.",
+        "param_list": [
+          0.12,
+          120,
+          0.08
+        ]
+      }
+    }
+  },
+  "303": {
+    "id": "303",
+    "name": "Pan-Cosmic Commercial Enterprise",
+    "names": {
+      "en": "Pan-Cosmic Commercial Enterprise",
+      "zh": "泛银河商业公司",
+      "ja": "汎銀河商事会社",
+      "ko": "범은하 상사"
+    },
+    "icon": "SpriteOutput/ItemIcon/71014.png",
+    "parts": {
+      "33035": {
+        "name": "The IPC's Mega HQ",
+        "desc": null,
+        "story": null
+      },
+      "33036": {
+        "name": "The IPC's Trade Route",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's Effect Hit Rate by <unbreak>#1[i]%</unbreak>. Meanwhile, the wearer's ATK increases by an amount that is equal to <unbreak>#2[i]%</unbreak> of the current Effect Hit Rate, up to a maximum increase of <unbreak>#3[i]%</unbreak>.",
+        "param_list": [
+          0.1,
+          0.25,
+          0.25
+        ]
+      }
+    }
+  },
+  "304": {
+    "id": "304",
+    "name": "Belobog of the Architects",
+    "names": {
+      "en": "Belobog of the Architects",
+      "zh": "筑城者的贝洛伯格",
+      "ja": "建創者のベロブルグ",
+      "ko": "축성가의 벨로보그"
+    },
+    "icon": "SpriteOutput/ItemIcon/71015.png",
+    "parts": {
+      "33045": {
+        "name": "Belobog's Fortress of Preservation",
+        "desc": null,
+        "story": null
+      },
+      "33046": {
+        "name": "Belobog's Iron Defense",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's DEF by <unbreak>#1[i]%</unbreak>. When the wearer's Effect Hit Rate is <unbreak>#2[i]%</unbreak> or higher, the wearer gains an extra <unbreak>#3[i]%</unbreak> DEF.",
+        "param_list": [
+          0.15,
+          0.5,
+          0.15
+        ]
+      }
+    }
+  },
+  "305": {
+    "id": "305",
+    "name": "Celestial Differentiator",
+    "names": {
+      "en": "Celestial Differentiator",
+      "zh": "星体差分机",
+      "ja": "天体階差機関",
+      "ko": "천체 차분기관"
+    },
+    "icon": "SpriteOutput/ItemIcon/71016.png",
+    "parts": {
+      "33055": {
+        "name": "Planet Screwllum's Mechanical Sun",
+        "desc": null,
+        "story": null
+      },
+      "33056": {
+        "name": "Planet Screwllum's Ring System",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's CRIT DMG by <unbreak>#1[i]%</unbreak>. When the wearer's current CRIT DMG reaches <unbreak>#2[i]%</unbreak> or higher, after entering battle, the wearer's CRIT Rate increases by <unbreak>#3[i]%</unbreak> until the end of their first attack.",
+        "param_list": [
+          0.16,
+          1.2,
+          0.6
+        ]
+      }
+    }
+  },
+  "306": {
+    "id": "306",
+    "name": "Inert Salsotto",
+    "names": {
+      "en": "Inert Salsotto",
+      "zh": "停转的萨尔索图",
+      "ja": "自転が止まったサルソット",
+      "ko": "회전을 멈춘 살소토"
+    },
+    "icon": "SpriteOutput/ItemIcon/71017.png",
+    "parts": {
+      "33065": {
+        "name": "Salsotto's Moving City",
+        "desc": null,
+        "story": null
+      },
+      "33066": {
+        "name": "Salsotto's Terminator Line",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's CRIT Rate by <unbreak>#1[i]%</unbreak>. When the wearer's current CRIT Rate reaches <unbreak>#2[i]%</unbreak> or higher, the DMG dealt by the wearer's Ultimate and Follow-Up ATK increases by <unbreak>#3[i]%</unbreak>.",
+        "param_list": [
+          0.08,
+          0.5,
+          0.15
+        ]
+      }
+    }
+  },
+  "307": {
+    "id": "307",
+    "name": "Talia: Kingdom of Banditry",
+    "names": {
+      "en": "Talia: Kingdom of Banditry",
+      "zh": "盗贼公国塔利亚",
+      "ja": "盗賊公国タリア",
+      "ko": "도적국 탈리아"
+    },
+    "icon": "SpriteOutput/ItemIcon/71018.png",
+    "parts": {
+      "33075": {
+        "name": "Talia's Nailscrap Town",
+        "desc": null,
+        "story": null
+      },
+      "33076": {
+        "name": "Talia's Exposed Electric Wire",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's Break Effect by <unbreak>#1[i]%</unbreak>. When the wearer's SPD reaches <unbreak>#2[i]</unbreak> or higher, the wearer's Break Effect increases by an extra <unbreak>#3[i]%</unbreak>.",
+        "param_list": [
+          0.16,
+          145,
+          0.2
+        ]
+      }
+    }
+  },
+  "308": {
+    "id": "308",
+    "name": "Sprightly Vonwacq",
+    "names": {
+      "en": "Sprightly Vonwacq",
+      "zh": "生命的翁瓦克",
+      "ja": "生命のウェンワーク",
+      "ko": "생명의 바커 공"
+    },
+    "icon": "SpriteOutput/ItemIcon/71019.png",
+    "parts": {
+      "33085": {
+        "name": "Vonwacq's Island of Birth",
+        "desc": null,
+        "story": null
+      },
+      "33086": {
+        "name": "Vonwacq's Islandic Coast",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's Energy Regeneration Rate by <unbreak>#1[i]%</unbreak>. When the wearer's SPD reaches <unbreak>#2[i]</unbreak> or higher, the wearer's action is Advanced Forward by <unbreak>#3[i]%</unbreak> immediately upon entering battle.",
+        "param_list": [
+          0.05,
+          120,
+          0.4
+        ]
+      }
+    }
+  },
+  "309": {
+    "id": "309",
+    "name": "Rutilant Arena",
+    "names": {
+      "en": "Rutilant Arena",
+      "zh": "繁星竞技场",
+      "ja": "星々の競技場",
+      "ko": "뭇별 경기장"
+    },
+    "icon": "SpriteOutput/ItemIcon/71022.png",
+    "parts": {
+      "33095": {
+        "name": "Taikiyan Laser Stadium",
+        "desc": null,
+        "story": null
+      },
+      "33096": {
+        "name": "Taikiyan's Arclight Race Track",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's CRIT Rate by <unbreak>#1[i]%</unbreak>. When the wearer's current CRIT Rate reaches <unbreak>#2[i]%</unbreak> or higher, DMG dealt by Basic ATK and Skill increases by <unbreak>#3[i]%</unbreak>.",
+        "param_list": [
+          0.08,
+          0.7,
+          0.2
+        ]
+      }
+    }
+  },
+  "310": {
+    "id": "310",
+    "name": "Broken Keel",
+    "names": {
+      "en": "Broken Keel",
+      "zh": "折断的龙骨",
+      "ja": "折れた竜骨",
+      "ko": "부러진 용골"
+    },
+    "icon": "SpriteOutput/ItemIcon/71023.png",
+    "parts": {
+      "33105": {
+        "name": "Insumousu's Whalefall Ship",
+        "desc": null,
+        "story": null
+      },
+      "33106": {
+        "name": "Insumousu's Frayed Hawser",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's Effect RES by <unbreak>#1[i]%</unbreak>. When the wearer's Effect RES is at <unbreak>#2[i]%</unbreak> or higher, all allies' CRIT DMG increases by <unbreak>#3[i]%</unbreak>.",
+        "param_list": [
+          0.1,
+          0.3,
+          0.1
+        ]
+      }
+    }
+  },
+  "311": {
+    "id": "311",
+    "name": "Firmament Frontline: Glamoth",
+    "names": {
+      "en": "Firmament Frontline: Glamoth",
+      "zh": "苍穹战线格拉默",
+      "ja": "蒼穹戦線グラモス",
+      "ko": "창공 전선 그라모스"
+    },
+    "icon": "SpriteOutput/ItemIcon/71026.png",
+    "parts": {
+      "33115": {
+        "name": "Glamoth's Iron Cavalry Regiment",
+        "desc": null,
+        "story": null
+      },
+      "33116": {
+        "name": "Glamoth's Silent Tombstone",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's ATK by <unbreak>#1[i]%</unbreak>. When the wearer's SPD is equal to or higher than <unbreak>#2[i]</unbreak>/<unbreak>#3[i]</unbreak>, the wearer deals <unbreak>#4[i]%</unbreak>/<unbreak>#5[i]%</unbreak> more DMG.",
+        "param_list": [
+          0.12,
+          135,
+          160,
+          0.12,
+          0.18
+        ]
+      }
+    }
+  },
+  "312": {
+    "id": "312",
+    "name": "Penacony, Land of the Dreams",
+    "names": {
+      "en": "Penacony, Land of the Dreams",
+      "zh": "梦想之地匹诺康尼",
+      "ja": "夢の地ピノコニー",
+      "ko": "꿈의 땅 페나코니"
+    },
+    "icon": "SpriteOutput/ItemIcon/71027.png",
+    "parts": {
+      "33125": {
+        "name": "Penacony's Grand Hotel",
+        "desc": null,
+        "story": null
+      },
+      "33126": {
+        "name": "Penacony's Dream-Seeking Tracks",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases wearer's Energy Regeneration Rate by <unbreak>#1[i]%</unbreak>. Increases DMG by <unbreak>#2[i]%</unbreak> for all other allies that are of the same Type as the wearer.",
+        "param_list": [
+          0.05,
+          0.1
+        ]
+      }
+    }
+  },
+  "313": {
+    "id": "313",
+    "name": "Sigonia, the Unclaimed Desolation",
+    "names": {
+      "en": "Sigonia, the Unclaimed Desolation",
+      "zh": "无主荒星茨冈尼亚",
+      "ja": "荒涼の惑星ツガンニヤ",
+      "ko": "주인 없는 황폐한 별 츠가냐"
+    },
+    "icon": "SpriteOutput/ItemIcon/71030.png",
+    "parts": {
+      "33135": {
+        "name": "Sigonia's Gaiathra Berth",
+        "desc": null,
+        "story": null
+      },
+      "33136": {
+        "name": "Sigonia's Knot of Cyclicality",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's CRIT Rate by <unbreak>#3[i]%</unbreak>. When an enemy target gets defeated, the wearer's CRIT DMG increases by <unbreak>#1[i]%</unbreak>, stacking up to <unbreak>#2[i]</unbreak> time(s).",
+        "param_list": [
+          0.04,
+          10,
+          0.04
+        ]
+      }
+    }
+  },
+  "314": {
+    "id": "314",
+    "name": "Izumo Gensei and Takama Divine Realm",
+    "names": {
+      "en": "Izumo Gensei and Takama Divine Realm",
+      "zh": "出云显世与高天神国",
+      "ja": "顕世の出雲と高天の神国",
+      "ko": "이즈모 현세와 타카마 신국"
+    },
+    "icon": "SpriteOutput/ItemIcon/71031.png",
+    "parts": {
+      "33145": {
+        "name": "Izumo's Magatsu no Morokami",
+        "desc": null,
+        "story": null
+      },
+      "33146": {
+        "name": "Izumo's Blades of Origin and End",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's ATK by <unbreak>#1[i]%</unbreak>. When entering battle, if at least one teammate follows the same Path as the wearer, then the wearer's CRIT Rate increases by <unbreak>#2[i]%</unbreak>.",
+        "param_list": [
+          0.12,
+          0.12
+        ]
+      }
+    }
+  },
+  "315": {
+    "id": "315",
+    "name": "Duran, Dynasty of Running Wolves",
+    "names": {
+      "en": "Duran, Dynasty of Running Wolves",
+      "zh": "奔狼的都蓝王朝",
+      "ja": "奔狼の都藍王朝",
+      "ko": "질주하는 늑대의 도람 왕조"
+    },
+    "icon": "SpriteOutput/ItemIcon/71034.png",
+    "parts": {
+      "33155": {
+        "name": "Duran's Tent of Golden Sky",
+        "desc": null,
+        "story": null
+      },
+      "33156": {
+        "name": "Duran's Mechabeast Bridle",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "When an ally character uses a Follow-Up ATK, the wearer gains 1 stack of \"Merit,\" stacking up to <unbreak>#1[i]</unbreak> time(s). Each stack of \"Merit\" increases the DMG dealt by the wearer's Follow-Up ATKs by <unbreak>#2[i]%</unbreak>. When there are <unbreak>#1[i]</unbreak> stacks, additionally increases the wearer's CRIT DMG by <unbreak>#3[i]%</unbreak>.",
+        "param_list": [
+          5,
+          0.05,
+          0.25
+        ]
+      }
+    }
+  },
+  "316": {
+    "id": "316",
+    "name": "Forge of the Kalpagni Lantern",
+    "names": {
+      "en": "Forge of the Kalpagni Lantern",
+      "zh": "劫火莲灯铸炼宫",
+      "ja": "劫火と蓮灯の鋳煉宮",
+      "ko": "겁화 연등의 연마궁"
+    },
+    "icon": "SpriteOutput/ItemIcon/71035.png",
+    "parts": {
+      "33165": {
+        "name": "Forge's Lotus Lantern Wick",
+        "desc": null,
+        "story": null
+      },
+      "33166": {
+        "name": "Forge's Heavenly Flamewheel Silk",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's SPD by <unbreak>#1[i]%</unbreak>. When the wearer hits an enemy target that has Fire Weakness, the wearer's Break Effect increases by <unbreak>#2[i]%</unbreak>, lasting for <unbreak>#3[i]</unbreak> turn(s).",
+        "param_list": [
+          0.06,
+          0.4,
+          1
+        ]
+      }
+    }
+  },
+  "317": {
+    "id": "317",
+    "name": "Lushaka, the Sunken Seas",
+    "names": {
+      "en": "Lushaka, the Sunken Seas",
+      "zh": "沉陆海域露莎卡",
+      "ja": "海に沈んだルサカ",
+      "ko": "바다에 잠긴 루샤카"
+    },
+    "icon": "SpriteOutput/ItemIcon/71036.png",
+    "parts": {
+      "33175": {
+        "name": "Lushaka's Waterscape",
+        "desc": null,
+        "story": null
+      },
+      "33176": {
+        "name": "Lushaka's Twinlanes",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's Energy Regeneration Rate by <unbreak>#1[i]%</unbreak>. If the wearer is not the first character in the team lineup, then increases the ATK of the first character in the team lineup by <unbreak>#2[i]%</unbreak>.",
+        "param_list": [
+          0.05,
+          0.12
+        ]
+      }
+    }
+  },
+  "318": {
+    "id": "318",
+    "name": "The Wondrous BananAmusement Park",
+    "names": {
+      "en": "The Wondrous BananAmusement Park",
+      "zh": "奇想蕉乐园",
+      "ja": "奇想天外のバナダイス",
+      "ko": "기묘한 나나 낙원"
+    },
+    "icon": "SpriteOutput/ItemIcon/71037.png",
+    "parts": {
+      "33185": {
+        "name": "BananAmusement Park's BananAxis Plaza",
+        "desc": null,
+        "story": null
+      },
+      "33186": {
+        "name": "BananAmusement Park's Memetic Cables",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's CRIT DMG by <unbreak>#1[i]%</unbreak>. When a target summoned by the wearer is on the field, CRIT DMG additionally increases by <unbreak>#2[i]%</unbreak>.",
+        "param_list": [
+          0.16,
+          0.32
+        ]
+      }
+    }
+  },
+  "319": {
+    "id": "319",
+    "name": "Bone Collection's Serene Demesne",
+    "names": {
+      "en": "Bone Collection's Serene Demesne",
+      "zh": "谧宁拾骨地",
+      "ja": "静謐な拾骨地",
+      "ko": "고요한 습골지"
+    },
+    "icon": "SpriteOutput/ItemIcon/71042.png",
+    "parts": {
+      "33195": {
+        "name": "Aidonia's Deceased Gravestones",
+        "desc": null,
+        "story": null
+      },
+      "33196": {
+        "name": "Aidonia's Deathward Bone Chains",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's Max HP by <unbreak>#1[i]%</unbreak>. When the wearer's Max HP is <unbreak>#2[i]</unbreak> or higher, increases the wearer's and their memosprite's CRIT DMG by <unbreak>#3[i]%</unbreak>.",
+        "param_list": [
+          0.12,
+          5000,
+          0.28
+        ]
+      }
+    }
+  },
+  "320": {
+    "id": "320",
+    "name": "Giant Tree of Rapt Brooding",
+    "names": {
+      "en": "Giant Tree of Rapt Brooding",
+      "zh": "渊思寂虑的巨树",
+      "ja": "深慮に浸る巨樹",
+      "ko": "사색하는 거목"
+    },
+    "icon": "SpriteOutput/ItemIcon/71043.png",
+    "parts": {
+      "33205": {
+        "name": "Grove of Epiphany's Pondering Colossus",
+        "desc": null,
+        "story": null
+      },
+      "33206": {
+        "name": "Grove of Epiphany's Interwoven Veins",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's SPD by <unbreak>#1[i]%</unbreak>. When the wearer's SPD is <unbreak>#2[i]</unbreak>/<unbreak>#3[i]</unbreak> or higher, the wearer and their memosprite's Outgoing Healing increases by <unbreak>#4[i]%</unbreak>/<unbreak>#5[i]%</unbreak>.",
+        "param_list": [
+          0.06,
+          135,
+          180,
+          0.12,
+          0.2
+        ]
+      }
+    }
+  },
+  "321": {
+    "id": "321",
+    "name": "Arcadia of Woven Dreams",
+    "names": {
+      "en": "Arcadia of Woven Dreams",
+      "zh": "妖精织梦的乐园",
+      "ja": "夢を紡ぐ妖精の楽園",
+      "ko": "꿈을 엮는 요정의 낙원"
+    },
+    "icon": "SpriteOutput/ItemIcon/71046.png",
+    "parts": {
+      "33215": {
+        "name": "Membrance Maze's Serene Treehouse",
+        "desc": null,
+        "story": null
+      },
+      "33216": {
+        "name": "Membrance Maze's Wishing Whistle",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "When the number of ally targets on the field is not equal to 4, for every 1 additional/missing ally target, increases the DMG dealt by the wearer and their memosprite by <unbreak>#1[i]%</unbreak>/<unbreak>#2[i]%</unbreak>, stacking up to <unbreak>#3[i]</unbreak>/<unbreak>#4[i]</unbreak> time(s).",
+        "param_list": [
+          0.09,
+          0.12,
+          4,
+          3
+        ]
+      }
+    }
+  },
+  "322": {
+    "id": "322",
+    "name": "Revelry by the Sea",
+    "names": {
+      "en": "Revelry by the Sea",
+      "zh": "沉欢醉饮的海隅",
+      "ja": "酩酊の海域",
+      "ko": "즐거움에 취한 바다의 일각"
+    },
+    "icon": "SpriteOutput/ItemIcon/71047.png",
+    "parts": {
+      "33225": {
+        "name": "Warbling Shores' Blazing Beacon",
+        "desc": null,
+        "story": null
+      },
+      "33226": {
+        "name": "Warbling Shores' Cantillation Trail",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's ATK by <unbreak>#1[i]%</unbreak>. When the wearer's ATK is higher than or equal to <unbreak>#2[i]</unbreak>/<unbreak>#3[i]</unbreak>, increases the DoT DMG dealt by <unbreak>#4[i]%</unbreak>/<unbreak>#5[i]%</unbreak> respectively.",
+        "param_list": [
+          0.12,
+          2400,
+          3600,
+          0.12,
+          0.24
+        ]
+      }
+    }
+  },
+  "323": {
+    "id": "323",
+    "name": "Amphoreus, The Eternal Land",
+    "names": {
+      "en": "Amphoreus, The Eternal Land",
+      "zh": "永恒之地翁法罗斯",
+      "ja": "永遠の地オンパロス",
+      "ko": "영원의 땅 앰포리어스"
+    },
+    "icon": "SpriteOutput/ItemIcon/71050.png",
+    "parts": {
+      "33235": {
+        "name": "Last West Wind of Amphoreus",
+        "desc": null,
+        "story": null
+      },
+      "33236": {
+        "name": "Eternal Verses of Amphoreus",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's CRIT Rate by <unbreak>#1[i]%</unbreak>. While the wearer's memosprite is on the field, increases all allies' SPD by <unbreak>#2[i]%</unbreak>. This effect cannot be stacked.",
+        "param_list": [
+          0.08,
+          0.08
+        ]
+      }
+    }
+  },
+  "324": {
+    "id": "324",
+    "name": "Tengoku@Livestream",
+    "names": {
+      "en": "Tengoku@Livestream",
+      "zh": "天国@直播间",
+      "ja": "天国@配信ルーム",
+      "ko": "텐고쿠@라이브스트리밍"
+    },
+    "icon": "SpriteOutput/ItemIcon/71051.png",
+    "parts": {
+      "33245": {
+        "name": "Livestream's Protean Vistas",
+        "desc": null,
+        "story": null
+      },
+      "33246": {
+        "name": "Livestream's Chatter Banter",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's CRIT DMG by <unbreak>#1[i]%</unbreak>. If <unbreak>#2[i]</unbreak> or more Skill Points are consumed in the same turn, additionally increases the wearer's CRIT DMG by <unbreak>#3[i]%</unbreak>, lasting for <unbreak>#4[i]</unbreak> turns.",
+        "param_list": [
+          0.16,
+          3,
+          0.32,
+          3
+        ]
+      }
+    }
+  },
+  "325": {
+    "id": "325",
+    "name": "Punklorde Stage Zero",
+    "names": {
+      "en": "Punklorde Stage Zero",
+      "zh": "零号关卡朋克洛德",
+      "ja": "ステージゼロ：パンクロード",
+      "ko": "0호 스테이지 펑크 로드"
+    },
+    "icon": "SpriteOutput/ItemIcon/71054.png",
+    "parts": {
+      "33255": {
+        "name": "Punklorde's Rainbow City",
+        "desc": null,
+        "story": null
+      },
+      "33256": {
+        "name": "Punklorde's Data Deluge",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's Elation by <unbreak>#1[i]%</unbreak>. When Elation reaches <unbreak>#2[i]%</unbreak>/<unbreak>#3[i]%</unbreak> for the first time in combat, increases the wearer's CRIT DMG by <unbreak>#4[i]%</unbreak>/<unbreak>#5[i]%</unbreak>.",
+        "param_list": [
+          0.08,
+          0.4,
+          0.8,
+          0.2,
+          0.32
+        ]
+      }
+    }
+  },
+  "326": {
+    "id": "326",
+    "name": "City of Converging Stars",
+    "names": {
+      "en": "City of Converging Stars",
+      "zh": "千星荟萃之城",
+      "ja": "千の星が集う街",
+      "ko": "천 개의 별이 모인 도시"
+    },
+    "icon": "SpriteOutput/ItemIcon/71055.png",
+    "parts": {
+      "33265": {
+        "name": "Astropolis Media Headquarters",
+        "desc": null,
+        "story": null
+      },
+      "33266": {
+        "name": "Astropolis Employee Credentials",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "When the wearer uses Follow-Up ATK, increases ATK by <unbreak>#1[i]%</unbreak> for <unbreak>#2[i]</unbreak> turn(s). When an enemy target gets defeated, increases CRIT DMG for all allies by <unbreak>#3[i]%</unbreak> in the current battle. This effect cannot stack.",
+        "param_list": [
+          0.24,
+          2,
+          0.12
+        ]
+      }
+    }
+  },
+  "327": {
+    "id": "327",
+    "name": "Fallen Star Anchorage",
+    "names": {
+      "en": "Fallen Star Anchorage",
+      "zh": "坠星启航地",
+      "ja": "墜星の出航地",
+      "ko": "추락한 별의 출항지"
+    },
+    "icon": "SpriteOutput/ItemIcon/71058.png",
+    "parts": {
+      "33275": {
+        "name": "Stranded Express at the Anchorage",
+        "desc": null,
+        "story": null
+      },
+      "33276": {
+        "name": "Silver Rails of the Anchorage",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "Increases the wearer's CRIT Rate by <unbreak>#1[i]%</unbreak>. When entering combat, if the wearer and another teammate are both Trailblaze Companions characters, increases the wearer's CRIT DMG by <unbreak>#2[i]%</unbreak>.",
+        "param_list": [
+          0.08,
+          0.32
+        ]
+      }
+    }
+  },
+  "328": {
+    "id": "328",
+    "name": "Cosmic Life Sciences Institute",
+    "names": {
+      "en": "Cosmic Life Sciences Institute",
+      "zh": "寰宇生研院",
+      "ja": "宇宙生命科学研究院",
+      "ko": "우주 생명과학연구원"
+    },
+    "icon": "SpriteOutput/ItemIcon/71059.png",
+    "parts": {
+      "33285": {
+        "name": "Central Synapse of the Life Sciences Institute",
+        "desc": null,
+        "story": null
+      },
+      "33286": {
+        "name": "Peripheral Conduits of the Life Sciences Institute",
+        "desc": null,
+        "story": null
+      }
+    },
+    "set_bonuses": {
+      "2": {
+        "desc": "When entering combat, if the wearer's Max Energy is greater than or equal to <unbreak>#1[i]</unbreak>, for every 1 excess point, increases the wearer's DMG dealt by <unbreak>#2[f1]%</unbreak>, up to a max increase of <unbreak>#3[i]%</unbreak>.",
+        "param_list": [
+          200,
+          0.002,
+          0.32
+        ]
+      }
+    }
+  }
+}

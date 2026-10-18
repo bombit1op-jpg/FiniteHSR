@@ -1,0 +1,27 @@
+{
+ "input": {
+  "kit": "rappa",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Rappa alone, technique \"Ninja Dash: By Leaps and Bounds\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Rappa|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Rappa|-|-|-",
+  "TOUGHNESS_DAMAGE|Rappa|Ice Edge|-|- [0,1,1,30,30]",
+  "WEAKNESS_BREAK|Rappa|Ice Edge|-|- [0,1200,4998800]",
+  "BREAK_DAMAGE|Rappa|Ice Edge|-|- [0.133,1200,4998800]",
+  "ACTION_DELAY|Ice Edge|Ice Edge|-|- [0.25,94.697]",
+  "ACTION_DELAY|Ice Edge|Ice Edge|-|- [0.3399,120.447]",
+  "DOT_APPLIED|Rappa|Ice Edge|-|- [0,1,1]",
+  "CONTROL_APPLIED|Rappa|Ice Edge|-|- [1,1]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [1]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [1,2]",
+  "BREAK_DAMAGE|Rappa|Ice Edge|Ninja Dash Break|- [2720,4996080]",
+  "ENERGY_GAIN|Rappa|Rappa|-|- [0,10,140,80]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

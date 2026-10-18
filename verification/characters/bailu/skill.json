@@ -1,0 +1,63 @@
+{
+  "kit": "bailu",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/121101+121102+121103+121104 + bonus_abilities (Qihuang Analects, Vidyadhara Ichor Lines, Aquatic Benediction)",
+    "confidence": "verified",
+    "note": "Diagnostic Kick (121101): 100% single-target at L6. Singing Among Clouds (121102, Skill): heals a single ally (#1% Max HP + #2), then heals random allies #4 time(s), each subsequent heal reduced by #3%. Felicitous Thunderleap (121103, Ultimate): heals ALL allies (#1% Max HP + #2), applies Invigoration for #3 = 2 turns (extends by 1 if already Invigorated, cannot stack). Gourdful of Elixir (121104, Talent): heals the ally when Invigorated ally is hit (#5 triggers), and revives a teammate taking a killing blow (1x per battle; notes: does not trigger when Bailu herself is knocked down first or when CC'd). Qihuang Analects (Trace): overheal raises target Max HP +10% for 2 turns. Vidyadhara Ichor Lines: Invigoration +1 trigger. Aquatic Benediction: Invigorated allies take 10% less DMG."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Bailu E0 solo vs 3 Lightning-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [{ "kitId": "bailu", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 0 }],
+        "enemy": { "name": "Elite", "count": 3, "hp": 6000000, "atk": 800, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Lightning"], "res": 0 },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "invig-hit",
+      "env": "Bailu E0 + bronya (low-HP) ally vs 2 fast Lightning-weak Elites (Lv120, atk 1200, spd 200), 5 cycles, seed 7 - enemies act fast enough to hit an Invigorated ally while the buff is up",
+      "battle": {
+        "team": [
+          { "kitId": "bailu", "stats": { "hp": 12000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 0, "energyStartFrac": 1 },
+          { "kitId": "bronya", "stats": { "hp": 4000, "atk": 1000, "def": 400, "spd": 100 }, "hpFrac": 0.3 }
+        ],
+        "enemy": { "name": "Elite", "count": 2, "hp": 6000000, "atk": 1200, "spd": 200, "level": 120, "toughness": 300, "weaknesses": ["Lightning"], "res": 0 },
+        "cycles": 5,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "bl_talent_gourdful",
+      "ability": "talent",
+      "layer": "interactions",
+      "fixtures": ["invig-hit"],
+      "claim": "Talent Gourdful of Elixir: an Invigorated ally who is hit is healed — logged 'Invigoration heals' (abundance.ts:908-938). Pinned to invig-hit: in solo-3c (Bailu spd 200 vs enemy spd 90) no hit lands inside the 2-turn Invigoration window.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Invigoration heals"
+        }
+      }
+    },
+    { "id": "bl_ult_action", "fixtures": ["solo-3c"], "layer": "structure", "claim": "Felicitous Thunderleap (121103) is Bailu's Ultimate action (2 casts in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Bailu", "action": "ultimate" }, "value": 2 } },
+    { "id": "bl_skill_action", "fixtures": ["solo-3c"], "layer": "structure", "claim": "Singing Among Clouds (121102) is her Skill action (4 casts in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Bailu", "action": "skill" }, "value": 4 } },
+    { "id": "bl_basic_action", "fixtures": ["solo-3c"], "layer": "structure", "claim": "Diagnostic Kick (121101) is her Basic ATK action (1 cast in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Bailu", "action": "basic" }, "value": 1 } },
+    { "id": "bl_basic_hits", "fixtures": ["solo-3c"], "layer": "structure", "claim": "Diagnostic Kick hits its single target once (1 cast).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Bailu", "label": "Diagnostic Kick" }, "value": 1 } },
+    { "id": "bl_heals", "fixtures": ["solo-3c"], "layer": "interactions", "claim": "Healing events on Bailu in the fixture: 14 (3 per Skill cast — 1 designated + 2 random bounces that land on Bailu when solo — across 4 casts, plus 1 per Ultimate cast × 2).", "assertion": { "assert": "count", "of": { "type": "HEAL_APPLIED", "target": "Bailu" }, "value": 14 } },
+    { "id": "bl_sp_gain", "fixtures": ["solo-3c"], "layer": "interactions", "claim": "The Basic ATK regenerates 1 Skill Point (1 cast).", "assertion": { "assert": "count", "of": { "type": "SP_GAIN" }, "value": 1 } },
+    { "id": "bl_sp_loss", "fixtures": ["solo-3c"], "layer": "interactions", "claim": "The Skill costs 1 Skill Point per cast (4 casts = 4 SP).", "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Bailu" }, "value": 4 } },
+    { "id": "bl_m_basic", "fixtures": ["solo-3c"], "layer": "parameters", "claim": "Diagnostic Kick at the engine's default Basic Lv6 (121101) totals 100% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Bailu", "label": "Diagnostic Kick" }, "field": "mult", "value": 1 } },
+    { "id": "bl_energy", "fixtures": ["solo-3c"], "layer": "parameters", "claim": "Over the fixture Bailu gains exactly 155 Energy (ENERGY_GAIN sum; both Ultimates consume their full gauge).", "assertion": { "assert": "energy", "who": "Bailu", "atLeast": 155, "atMost": 155 } },
+    { "id": "bl_invig_turns", "fixtures": ["solo-3c"], "layer": "parameters", "claim": "Invigoration (121103) lasts #3 = 2 turns (applied/extended by the Ultimates).", "assertion": { "assert": "buff", "id": "bailu_invig", "target": "Bailu", "turns": 2 } },
+    { "id": "bl_a2_turns", "fixtures": ["solo-3c"], "layer": "parameters", "claim": "Aquatic Benediction (Trace: Invigorated allies take 10% less DMG) tracks Invigoration's 2-turn duration.", "assertion": { "assert": "buff", "id": "bailu_a2", "target": "Bailu", "turns": 2 } },
+    { "id": "bl_ult_after_skill", "fixtures": ["solo-3c"], "layer": "ordering", "claim": "Bailu's first Ultimate cast comes after her first Skill cast (110 Energy must build first).", "assertion": { "assert": "ordering", "before": [{ "type": "ABILITY_USED", "source": "Bailu", "action": "skill" }], "after": [{ "type": "ABILITY_USED", "source": "Bailu", "action": "ultimate" }] } }
+  ]
+}

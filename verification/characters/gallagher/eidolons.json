@@ -1,0 +1,558 @@
+{
+  "kit": "gallagher",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Gallagher/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder. E1 gallagher_e1 effRes 0.5 (plus 20 flat Energy at battle start, not a logged ENERGY_GAIN); E2 gallagher_e2 effRes 0.3 for 2 turns; E3 Basic Lv.+1 / Skill Lv.+2 raises Nectar Blitz 0.625/0.375/1.5 -> 0.6875/0.4125/1.65; E4 besotted turns 2 -> 3; E5 Ult/Talent Lv.+2 raises besotted vulnType:break 0.12 -> 0.132 and Champagne Etiquette 1.5 -> 1.65; E6 gallagher_e6 be 0.2 and +20% Weakness Break Efficiency (TOUGHNESS wbe 1.0 -> 1.2)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "gallagher E0 — eidolon ladder rung, cloned from gallagher/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gallagher",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "gallagher E1 — eidolon ladder rung, cloned from gallagher/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gallagher",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "gallagher E2 — eidolon ladder rung, cloned from gallagher/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gallagher",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "gallagher E3 — eidolon ladder rung, cloned from gallagher/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gallagher",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "gallagher E4 — eidolon ladder rung, cloned from gallagher/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gallagher",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "gallagher E5 — eidolon ladder rung, cloned from gallagher/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gallagher",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "gallagher E6 — eidolon ladder rung, cloned from gallagher/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gallagher",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "gal_e1_present",
+      "layer": "interactions",
+      "claim": "E1 grants Effect RES +50% (gallagher_e1 effRes 0.5). Present from E1.",
+      "fixtures": [
+        "e1",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "gallagher_e1"
+      }
+    },
+    {
+      "id": "gal_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: gallagher_e1 must NOT be active below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "gallagher_e1"
+      }
+    },
+    {
+      "id": "gal_e1_stat",
+      "layer": "parameters",
+      "claim": "gallagher_e1 carries effRes 0.5 (canon rank 1).",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "gallagher_e1",
+        "stat": "effRes",
+        "value": 0.5
+      }
+    },
+    {
+      "id": "gal_e2_present",
+      "layer": "interactions",
+      "claim": "E2 Skill dispels and grants Effect RES +30% for 2 turns (gallagher_e2 effRes 0.3). Present from E2.",
+      "fixtures": [
+        "e2",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "gallagher_e2",
+        "turns": 2
+      }
+    },
+    {
+      "id": "gal_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: gallagher_e2 must NOT be active below rank 2.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "gallagher_e2"
+      }
+    },
+    {
+      "id": "gal_e2_stat",
+      "layer": "parameters",
+      "claim": "gallagher_e2 carries effRes 0.3 (canon rank 2).",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "gallagher_e2",
+        "stat": "effRes",
+        "value": 0.3
+      }
+    },
+    {
+      "id": "gal_e3_present",
+      "layer": "parameters",
+      "claim": "E3 Basic Lv.+1 / Skill Lv.+2 raises Nectar Blitz 0.625 -> 0.6875 (first hit).",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Nectar Blitz"
+        },
+        "field": "mult",
+        "value": 0.6875,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gal_e3_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Nectar Blitz first hit stays at 0.625.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Nectar Blitz"
+        },
+        "field": "mult",
+        "value": 0.625,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gal_e4_present",
+      "layer": "parameters",
+      "claim": "E4 extends Besotted duration 2 -> 3 turns (besotted turns 3).",
+      "fixtures": [
+        "e4",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "besotted",
+        "turns": 3
+      }
+    },
+    {
+      "id": "gal_e4_locked",
+      "layer": "parameters",
+      "claim": "Below E4 besotted lasts 2 turns.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "besotted",
+        "turns": 2
+      }
+    },
+    {
+      "id": "gal_e5_present",
+      "layer": "parameters",
+      "claim": "E5 Ult/Talent Lv.+2 raises besotted vulnType:break 0.12 -> 0.132.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "besotted",
+        "stat": "vulnType:break",
+        "value": 0.132,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "gal_e5_locked",
+      "layer": "parameters",
+      "claim": "Below E5 besotted vulnType:break stays at 0.12.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "besotted",
+        "stat": "vulnType:break",
+        "value": 0.12,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "gal_e5_champ_present",
+      "layer": "parameters",
+      "claim": "E5 raises Champagne Etiquette 1.5 -> 1.65.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Champagne Etiquette"
+        },
+        "field": "mult",
+        "value": 1.65,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gal_e5_champ_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Champagne Etiquette stays at 1.5.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Champagne Etiquette"
+        },
+        "field": "mult",
+        "value": 1.5,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gal_e6_present",
+      "layer": "interactions",
+      "claim": "E6 grants Break Effect +20% (gallagher_e6 be 0.2). Present from E6.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "gallagher_e6"
+      }
+    },
+    {
+      "id": "gal_e6_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: gallagher_e6 must NOT be active below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "gallagher_e6"
+      }
+    },
+    {
+      "id": "gal_e6_stat",
+      "layer": "parameters",
+      "claim": "gallagher_e6 carries be 0.2 (canon rank 6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "gallagher_e6",
+        "stat": "be",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "gal_e6_wbe_present",
+      "layer": "parameters",
+      "claim": "E6 +20% Weakness Break Efficiency raises TOUGHNESS payload wbe 1.0 -> 1.2.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "TOUGHNESS_DAMAGE",
+          "source": "Gallagher"
+        },
+        "field": "wbe",
+        "value": 1.2,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gal_e6_wbe_locked",
+      "layer": "parameters",
+      "claim": "Below E6 TOUGHNESS wbe stays at 1.0.",
+      "fixtures": [
+        "e5"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "TOUGHNESS_DAMAGE",
+          "source": "Gallagher"
+        },
+        "field": "wbe",
+        "value": 1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

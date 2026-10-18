@@ -1,0 +1,207 @@
+{
+  "kit": "mortenax_blade",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json skills 150701-150714 (basic 150701/150708, skill 150702/150709, ult 150703/150714, talent 150704)",
+    "confidence": "interpreted",
+    "note": "Fire Nihility; every hit scales off Max HP (no ATK). Ult Fornax Ex Corpore deals no direct damage: it binds enemies, pays 20% Max HP and deploys a Zone that flips him into Infinite Fury with a fixed-SPD 70 countdown unit."
+  },
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Mortenax Blade E0 solo vs a Fire-weak Elite, 6 cycles. Energy starts full so the A0 overflow pool banks 20 per Basic until 80; the Ult then deploys the Zone (Balefire Bind on the enemy, Infinite Fury, a spd-70 countdown), the in-Zone Skill A Rain of Blades Seals Fate fires, and energy refilling to cap triggers the in-Zone Ult Tenax Per Ignem.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mortenax_blade",
+            "stats": {
+              "hp": 12000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 300
+            },
+            "energyStartFrac": 1.0,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1-zone",
+      "env": "Mortenax Blade E1 solo vs the same Elite, 6 cycles. E1 Ere My Death shreds enemy All-Type RES (mb_e1, resAll -20%) while the Zone is active and delays the countdown by 15% when the extra Skill fires.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mortenax_blade",
+            "stats": {
+              "hp": 12000,
+              "atk": 1500,
+              "def": 600,
+              "spd": 300
+            },
+            "energyStartFrac": 1.0,
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 6,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK A Broken Blade Still Slays (150701) deals a single-target Fire hit scaled off Max HP while outside Infinite Fury.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Mortenax Blade",
+          "label": "A Broken Blade Still Slays",
+          "attackType": "basic"
+        }
+      }
+    },
+    {
+      "id": "ult_fornax",
+      "layer": "structure",
+      "claim": "Ultimate Fornax Ex Corpore (150703) resolves as a normal 'ult' action (it deals no direct damage; it deploys the Zone).",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Mortenax Blade",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "zone_fury",
+      "layer": "interactions",
+      "claim": "While the Zone is deployed Mortenax enters Infinite Fury (mb_fury: CRIT Rate ult_a2, CRIT DMG ult_a3).",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "mb_fury"
+      }
+    },
+    {
+      "id": "balefire_bind",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent All Karma Comes Due: while the Zone is active, Fornax Ex Corpore inflicts Balefire Bind on every enemy (mb_bind: DEF ult_a7, DMG taken ult_a4) for ult_a8 (=2) turns.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "mb_bind",
+        "target": "Elite",
+        "turns": 2
+      }
+    },
+    {
+      "id": "countdown_summon",
+      "layer": "interactions",
+      "claim": "Entering Infinite Fury registers a fixed-SPD (ult_a5=70) countdown unit on the action order; its turn dispels the Zone.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "SUMMON_CREATED",
+          "target": "Infinite Fury Countdown"
+        }
+      }
+    },
+    {
+      "id": "zone_skill",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "In-Zone Skill A Rain of Blades Seals Fate is an AoE main hit (skill) plus 4 random instances (skill_a2), scaled off Max HP by 10%.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Mortenax Blade",
+          "label": "A Rain of Blades Seals Fate (main)",
+          "attackType": "skill"
+        }
+      }
+    },
+    {
+      "id": "ult_tenax",
+      "layer": "structure",
+      "claim": "Inside the Zone the Ultimate becomes Tenax Per Ignem (150714), an AoE Fire hit scaled off Max HP at ult_en.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Mortenax Blade",
+          "label": "Tenax Per Ignem",
+          "attackType": "ult"
+        }
+      }
+    },
+    {
+      "id": "e1_res_down",
+      "layer": "interactions",
+      "claim": "E1 Ere My Death applies All-Type RES down (modelled as mb_e1, resAll -0.2) to enemies while the Zone is active.",
+      "fixtures": [
+        "e1-zone"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "mb_e1",
+        "target": "Elite"
+      }
+    }
+  ],
+  "golds": []
+}

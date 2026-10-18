@@ -1,0 +1,755 @@
+{
+  "kit": "fugue",
+  "slot": "skill",
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Fugue E0 solo vs 3 Fire-weak Elite (level 95, 240 Toughness), 3 cycles — prayerTarget() finds no other living ally (nihility.ts:1285-1288), so decide() never offers the Skill: only Basic 122501 'Radiant Streak' and Ultimate 122503 'Solar Splendor' (5-hit split AoE); Foxian Prayer, Torrid Scorch and the Talent never appear",
+      "battle": {
+        "team": [
+          {
+            "kitId": "fugue",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "team-sushang",
+      "env": "Fugue E0 with Sushang (kitId sushang) vs 3 Fire-weak Elite (level 95, 240 Toughness), 3 cycles — Skill 122502 'Virtue Beckons Bliss' grants Sushang Foxian Prayer (+30% Break Effect, duration = Torrid Scorch = 3t) and enters Torrid Scorch 3t, re-casting the Skill whenever Scorch decays to <=1 (decide nihility.ts:1417); while Torrid Scorch is up Fugue's Basic becomes 122508 'Fiery Caress' (single+adjacent Blast), else 122501 'Radiant Streak'; Ultimate 122503 'Solar Splendor' hits all 3 enemies 5x per cast. Toughness 240 is never broken by this team (Sushang is Physical, the Elite is Fire-weak and Fugue supplies little Toughness DMG), so the Talent's Super Break conversion does not fire here.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "fugue",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 1800,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "break-team",
+      "env": "Fugue E0 + Sushang vs 3 Fire/Physical-weak Elite (level 95, low Toughness 60), 3 cycles — Sushang's Physical attacks (and Fugue's Fire) break the Elite early, so the Talent's Super Break conversion fires: after an ally attacks the Weakness Broken enemy, the attack's Toughness Reduction becomes one Super Break DMG instance (nihility.ts:1506-1509). Talent #2 Cloudflame Luster keeps draining the 40%-max bar on Broken hits and re-Breaks the target once it empties.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "fugue",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 1800,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 60,
+          "weaknesses": [
+            "Fire",
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "solo_basic_6",
+      "layer": "structure",
+      "claim": "Solo Fugue only uses Basic 122501: 6 basic casts in 3 cycles (decide nihility.ts:1413-1418 falls through to basic when no prayer target blocks the Skill and Energy is below 130).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Fugue",
+          "action": "basic"
+        },
+        "value": 6
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "solo_ult_2",
+      "layer": "structure",
+      "claim": "Solo: Ultimate 122503 'Solar Splendor' fires exactly twice — decide() returns ult at full Energy 130 with living enemies (nihility.ts:1414), the kit zeroes the pool (nihility.ts:1431), and the pool refills twice in 3 cycles.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Fugue",
+          "action": "ultimate"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "team_ult_1",
+      "layer": "structure",
+      "claim": "Team: with 3 Skills and 4 Basics in 3 cycles the pool reaches 130 only once (2 Skills + 4 Basics + 3 more costs = one refund), so 'Solar Splendor' fires exactly once.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Fugue",
+          "action": "ultimate"
+        },
+        "value": 1
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "solo_ult_hits_30",
+      "layer": "structure",
+      "claim": "Solo: the Ultimate hits every living enemy 5 times per cast with label 'Solar Splendor' (canon 122503 notes 'DMG is dealt in 5 hits ... 60% + 10% + 10% + 10% + 10%'; nihility.ts:1435 loop + split [0.6,0.1,0.1,0.1,0.1]) — 2 casts x 3 enemies x 5 hits = 30.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Fugue",
+          "label": "Solar Splendor"
+        },
+        "value": 30
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "team_ult_hits_15",
+      "layer": "structure",
+      "claim": "Team: 1 'Solar Splendor' cast x 3 enemies x 5 hits = 15 HIT_START events.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Fugue",
+          "label": "Solar Splendor"
+        },
+        "value": 15
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "team_skill_3",
+      "layer": "structure",
+      "claim": "The Skill is cast three times in the team battle: initially, then re-cast whenever Torrid Scorch decays to <=1 (decide nihility.ts:1417 'keep Torrid Scorch up'; onTurnStart decrement nihility.ts:1423, canon 122502 'duration decreases by 1 at the start of Fugue's every turn') — Torrid Scorch duration 3t means two re-casts fit in 3 cycles.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Fugue",
+          "action": "skill"
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "team_basic_4",
+      "layer": "structure",
+      "claim": "4 scheduled basic casts in the team battle (SP or Scorch gates route decide() to basic, nihility.ts:1418).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Fugue",
+          "action": "basic"
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "solo_radiant_6",
+      "layer": "structure",
+      "claim": "Solo each Basic is a single-target Fire hit 'Radiant Streak' against the first living enemy (nihility.ts:1478-1479, canon 122501 'to one designated enemy') — 6 casts => 6 hits (Torrid Scorch is never up solo).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Fugue",
+          "label": "Radiant Streak"
+        },
+        "value": 6
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "team_radiant_1",
+      "layer": "structure",
+      "claim": "Team: of the 4 Basic casts only the one made while Torrid Scorch is down is 'Radiant Streak' (single) — nihility.ts:1478-1480 else-branch.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Fugue",
+          "label": "Radiant Streak"
+        },
+        "value": 1
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "team_fiery_3",
+      "layer": "structure",
+      "claim": "Team: the 3 Basic casts made while Torrid Scorch is active become the enhanced Basic 122508 'Fiery Caress' — a single + adjacent Blast (nihility.ts:1472-1477). The single-target main hit carries label 'Fiery Caress', so 3 casts => 3 'Fiery Caress' HIT_START events.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Fugue",
+          "label": "Fiery Caress"
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "solo_no_skill",
+      "layer": "structure",
+      "claim": "Solo negative: the Skill is never cast — prayerTarget() returns undefined without another living ally (nihility.ts:1385-1388) and decide() gates the Skill on a truthy prayer target (nihility.ts:1417).",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Fugue",
+          "action": "skill"
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "solo_no_prayer_notes",
+      "layer": "structure",
+      "claim": "Solo negative: no Foxian Prayer / Torrid Scorch lifecycle notes exist — perform() only reaches the Skill branch with SP and a prayer target (nihility.ts:1446-1448), which solo never satisfies.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "NOTE",
+          "log": "Foxian Prayer"
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "ult_cost_130",
+      "layer": "parameters",
+      "claim": "ENERGY_LOSS reason 'ult_cost' books amount 130 = the full pool (energyMax 130, nihility.ts:1395; the kit zeroes Energy nihility.ts:1431 and adds none during the cast, so the TurnManager delta is exactly 130).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Fugue",
+          "payload": {
+            "reason": "ult_cost"
+          }
+        },
+        "field": "amount",
+        "value": 130
+      }
+    },
+    {
+      "id": "ult_refund_5",
+      "layer": "parameters",
+      "claim": "The paid Ultimate cast grants the generic castUlt +5 Energy refund (TurnManager.ts:375) — an ENERGY_GAIN n=5 that leaves the pool at exactly 5 (total=5), distinct from the n=5 clamp-to-full top-up that carries total=130.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Fugue",
+          "payload": {
+            "n": 5,
+            "total": 5
+          }
+        }
+      }
+    },
+    {
+      "id": "team_skill_energy_first_30",
+      "layer": "parameters",
+      "claim": "The Skill regenerates 30 Energy (nihility.ts:1463 sim.gainEnergy(u, 30)) and is the team battle's first Fugue Energy gain (65 -> 95).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Fugue"
+        },
+        "field": "n",
+        "value": 30,
+        "pick": "first"
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "solo_basic_energy_6",
+      "layer": "parameters",
+      "claim": "Each Basic regenerates 20 Energy (nihility.ts:1469 sim.gainEnergy(u, 20)) — 6 solo casts => 6 gains of n=20.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Fugue",
+          "payload": {
+            "n": 20
+          }
+        },
+        "value": 6
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "team_skill_sp_cost_3",
+      "layer": "parameters",
+      "claim": "Each Skill cast spends 1 SP (nihility.ts:1446 sim.spendSp(1)) — 3 team casts => 3 SP_LOSS events (the no-target refund at nihility.ts:1448 never triggers with Sushang present).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_LOSS",
+          "source": "Fugue"
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "fox_prayer_be_30",
+      "layer": "parameters",
+      "claim": "Foxian Prayer grants the target +30% Break Effect (canon 122502 level-10 param #2 = 0.3; nihility.ts:1459 mods be on fox_prayer).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "fox_prayer",
+        "stat": "be",
+        "value": 0.3,
+        "tol": 0.01
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "solo_basic_sp_gain_2",
+      "layer": "parameters",
+      "claim": "Each Basic spends no SP and returns +1 (nihility.ts:1468 sim.gainSp(1)); solo the pool starts at 3 and caps at 5, so only the first 2 gains are observable as SP_GAIN events (total 4, then 5, then clamped).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_GAIN",
+          "source": "Fugue"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "order_skill_before_prayer_buff",
+      "ability": "skill",
+      "layer": "ordering",
+      "claim": "Skill resolution order: the action is declared (ABILITY_USED) before perform() applies fox_prayer (nihility.ts:1446 cast -> 1459 addBuff).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ABILITY_USED",
+            "source": "Fugue",
+            "action": "skill"
+          }
+        ],
+        "after": [
+          {
+            "type": "BUFF_APPLIED",
+            "payload": {
+              "id": "fox_prayer"
+            }
+          }
+        ]
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "order_skill_energy_before_note",
+      "layer": "ordering",
+      "claim": "The Skill's +30 Energy (nihility.ts:1463) is granted before the 'Skill: Foxian Prayer' note is logged (nihility.ts:1464).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ENERGY_GAIN",
+            "source": "Fugue",
+            "payload": {
+              "n": 30
+            }
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "Skill: Foxian Prayer"
+          }
+        ]
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "order_ult_hits_before_cost",
+      "layer": "ordering",
+      "claim": "The kit's AoE hit loop (nihility.ts:1434-1436) runs inside kit.perform, and TurnManager books the Energy delta after perform returns — every 'Solar Splendor' hit precedes the ENERGY_LOSS 'ult_cost' event.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "HIT_START",
+            "source": "Fugue",
+            "label": "Solar Splendor"
+          }
+        ],
+        "after": [
+          {
+            "type": "ENERGY_LOSS",
+            "source": "Fugue",
+            "payload": {
+              "reason": "ult_cost"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "order_ult_cost_before_refund",
+      "layer": "ordering",
+      "claim": "TurnManager emits ENERGY_LOSS 'ult_cost' before it grants the +5 refund. The refund is matched at total=5 (the post-refund pool) so the check is not fooled by an earlier n=5 clamp-to-full top-up (total=130).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ENERGY_LOSS",
+            "source": "Fugue",
+            "payload": {
+              "reason": "ult_cost"
+            }
+          }
+        ],
+        "after": [
+          {
+            "type": "ENERGY_GAIN",
+            "source": "Fugue",
+            "payload": {
+              "n": 5,
+              "total": 5
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "scorch_reskill_note_3",
+      "layer": "interactions",
+      "claim": "Torrid Scorch drives re-casting: each Skill logs 'Torrid Scorch 3t' (nihility.ts:1464, duration = skill level-10 param #1 = 3 per canon 122502), and decide() re-casts once Scorch decays to <=1 (nihility.ts:1417) — 3 such Skill activations in the team battle.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "Torrid Scorch 3t"
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "fox_prayer_applied_3",
+      "layer": "interactions",
+      "claim": "Foxian Prayer is applied (and re-applied after expiry) once per Skill cast — perform() removeBuff+addBuff each Skill (nihility.ts:1456-1459); canon 122502 'only takes effect on the most recent target of Fugue's Skill' — 3 applications in the team battle.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "BUFF_APPLIED",
+          "payload": {
+            "id": "fox_prayer"
+          }
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "fox_prayer_on_sushang_3t",
+      "layer": "interactions",
+      "claim": "The prayer lands on Sushang — prayerTarget() picks the living ally with the highest Break Effect (nihility.ts:1386-1388; Sushang BE 0.6 gear + traces > Fugue 0.24) — for 3 turns (nihility.ts:1459 turns = the Torrid Scorch ladder = 3).",
+      "assertion": {
+        "assert": "buff",
+        "id": "fox_prayer",
+        "target": "Sushang",
+        "turns": 3
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "prayer_note_names_sushang_thrice",
+      "layer": "interactions",
+      "claim": "Each Skill cast names Sushang as the prayer recipient in the log (nihility.ts:1464 'Foxian Prayer -> ${t.name}') — 3 notes.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "Foxian Prayer → Sushang"
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "break_torrid_def_applied",
+      "layer": "interactions",
+      "claim": "Torrid Scorch DEF Reduction: the Foxian Prayer bearer's attacks apply the 'fugue_scorch' DEF↓ debuff via onAfterAttack (nihility.ts:1496-1502; a debuff, so it emits DEBUFF_APPLIED) — present in the break-team battle once Sushang (bearing fox_prayer) attacks.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DEBUFF_APPLIED",
+          "payload": {
+            "id": "fugue_scorch"
+          }
+        }
+      },
+      "fixtures": [
+        "break-team"
+      ]
+    },
+    {
+      "id": "break_superbreak_present",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent (canon 122504 #1): after an ally attacks a Weakness Broken enemy, the attack's Toughness Reduction is converted into one Super Break DMG instance (nihility.ts:1506-1509, sim.superBreak) — present in the break-team battle, where the low-Toughness Elite breaks early.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "SUPERBREAK"
+        }
+      },
+      "fixtures": [
+        "break-team"
+      ]
+    },
+    {
+      "id": "break_superbreak_normalized",
+      "layer": "parameters",
+      "claim": "The Super Break conversion normalizes by the Talent ladder value (canon 122504 #1; nihility.ts:1508 mult('fugue','talent')) — at the default talent level 10 the emitted SUPERBREAK carries abilityMult 1 (ladder index 9 = 1.0), not the raw Toughness Reduction.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "SUPERBREAK"
+        },
+        "field": "abilityMult",
+        "value": 1
+      },
+      "fixtures": [
+        "break-team"
+      ]
+    },
+    {
+      "id": "team_prayer_pierce",
+      "layer": "parameters",
+      "claim": "Foxian Prayer grants Toughness on enemies ignoring the bearer's Weakness: canon 122502 #6 = 0.5, 'can also reduce Toughness even when attacking enemies that don't have the corresponding Weakness Type, with the effect equivalent to 50% of the original Toughness Reduction value'. In the team battle Sushang (Physical, bearing fox_prayer) attacks the Fire-weak Elite: her Physical hits drop Toughness at the pierced 0.5 rate — every such TOUGHNESS_DAMAGE carries weak=false with pierceRatio 0.5 (DamagePipeline buffSum of the buff stat 'toughPierce' passed through to applyToughness).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "TOUGHNESS_DAMAGE",
+          "source": "Sushang",
+          "element": "Physical",
+          "payload": {
+            "weak": false,
+            "pierceRatio": 0.5
+          }
+        }
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "solo_no_pierce",
+      "layer": "parameters",
+      "claim": "Negative: without Foxian Prayer there is no weakness-ignore toughness — solo Fugue (Fire) vs the Fire-weak Elite always hits weak (weak=true), so no TOUGHNESS_DAMAGE ever carries weak=false with a pierceRatio.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "TOUGHNESS_DAMAGE",
+          "payload": {
+            "weak": false,
+            "pierceRatio": 0.5
+          }
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "break_cloudflame_present",
+      "layer": "interactions",
+      "claim": "Cloudflame Luster (talent 122504 #2, 40% Max Toughness = 24 for the 60-Toughness Elite): once the main bar is broken, each hit on the Broken enemy drains the cloudflame bar; when it empties the enemy takes another Weakness Break DMG and the bar refills. The break-team battle has post-break allies hitting the Broken Elite until the 24 bar drains — the generic re-break pipeline (ToughnessBars.consume) emits SECONDARY_BAR_EMPTIED with the bar's id 'cloudflame'.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "SECONDARY_BAR_EMPTIED",
+          "payload": {
+            "id": "cloudflame"
+          }
+        }
+      },
+      "fixtures": [
+        "break-team"
+      ]
+    },
+    {
+      "id": "break_cloudflame_dmg",
+      "layer": "parameters",
+      "claim": "Each emptied cloudflame bar resolves as a full re-Break through the unified consequence path (BreakResolver.fullBreak), not a bare applyTargetBreak: it re-emits WEAKNESS_BREAK with the same delay / break debuff / break hooks as the main bar, at full intensity since the target is already Broken (computeBreakDamage skips the intact x0.9). The bar drains at most once per Broken state and refills only on recovery, so the fixture lands 3 main breaks + 1 cloudflame re-break = 4 WEAKNESS_BREAK events (1 SECONDARY_BAR_EMPTIED).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "WEAKNESS_BREAK"
+        },
+        "value": 4
+      },
+      "fixtures": [
+        "break-team"
+      ]
+    },
+    {
+      "id": "solo_no_superbreak",
+      "layer": "structure",
+      "claim": "Solo negative: with no ally to carry Foxian Prayer and the Elite never Broken, the Talent's Super Break conversion never fires — no SUPERBREAK event.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "SUPERBREAK"
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    }
+  ]
+}

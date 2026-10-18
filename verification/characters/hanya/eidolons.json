@@ -1,0 +1,450 @@
+{
+  "kit": "hanya",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "reference/hsr-data/characters.json#/Hanya/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E2: after Skill, hanya_e2 (SPD +20%, 1 turn) is granted. E3 (Skill +2 / Basic +1): Samsara, Locked 2.40 -> 2.64 and Oracle Brush 1.00 -> 1.10. E4: hanya_ult duration 2 -> 3 turns. E5 (Ult +2 / Talent +2): hanya_ult ATK 0.600 -> 0.648 and hanya_sanction dmgAll 0.30 -> 0.33. E6: Talent DMG Boost +10% (hanya_sanction dmgAll 0.30 -> 0.43). E1 (advance Hanya 15% when an ally carrying her Ultimate defeats an enemy) needs an ally kill the solo fixture lacks — covered as custom. Fixtures run one battle per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "hanya E0 — eidolon ladder rung, cloned from hanya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hanya",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "hanya E1 — eidolon ladder rung, cloned from hanya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hanya",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "hanya E2 — eidolon ladder rung, cloned from hanya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hanya",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "hanya E3 — eidolon ladder rung, cloned from hanya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hanya",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "hanya E4 — eidolon ladder rung, cloned from hanya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hanya",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "hanya E5 — eidolon ladder rung, cloned from hanya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hanya",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "hanya E6 — eidolon ladder rung, cloned from hanya/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hanya",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "hanya_e2_present_e2_e6",
+      "layer": "interactions",
+      "claim": "E2: after Skill, hanya_e2 (SPD +20%, 1 turn) is granted.",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "hanya_e2"
+      }
+    },
+    {
+      "id": "hanya_e2_spd_e2",
+      "layer": "parameters",
+      "claim": "E2: hanya_e2 grants SPD +20%.",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hanya_e2",
+        "stat": "spdPct",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "hanya_e2_turns_e2",
+      "layer": "interactions",
+      "claim": "E2: hanya_e2 lasts 1 turn.",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "hanya_e2",
+        "turns": 1
+      }
+    },
+    {
+      "id": "hanya_e2_locked_e0_e1",
+      "layer": "interactions",
+      "claim": "E2 locked below its rank: no hanya_e2 at E0/E1.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "hanya_e2"
+      }
+    },
+    {
+      "id": "hanya_e3_skill_e3_e6",
+      "layer": "parameters",
+      "claim": "E3 (Skill +2): Samsara, Locked 2.40 -> 2.64.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Samsara, Locked"
+        },
+        "field": "mult",
+        "value": 2.64,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "hanya_e3_skill_locked_e0_e2",
+      "layer": "parameters",
+      "claim": "E3 locked below its rank: Samsara, Locked 2.40 at E0..E2.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Samsara, Locked"
+        },
+        "field": "mult",
+        "value": 2.4,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "hanya_e3_basic_e3_e6",
+      "layer": "parameters",
+      "claim": "E3 (Basic +1): Oracle Brush 1.00 -> 1.10.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Oracle Brush"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "hanya_e4_ult_turns_e4_e6",
+      "layer": "interactions",
+      "claim": "E4: hanya_ult duration 2 -> 3 turns.",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "hanya_ult",
+        "turns": 3
+      }
+    },
+    {
+      "id": "hanya_e4_ult_turns_locked_e0_e3",
+      "layer": "interactions",
+      "claim": "E4 locked below its rank: hanya_ult lasts 2 turns at E0..E3.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "hanya_ult",
+        "turns": 2
+      }
+    },
+    {
+      "id": "hanya_e5_ult_e5_e6",
+      "layer": "parameters",
+      "claim": "E5 (Ult +2): hanya_ult ATK +60% -> +64.8%.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hanya_ult",
+        "stat": "atkPct",
+        "value": 0.648
+      }
+    },
+    {
+      "id": "hanya_e5_talent_e5",
+      "layer": "parameters",
+      "claim": "E5 (Talent +2): hanya_sanction DMG Boost 0.30 -> 0.33.",
+      "fixtures": [
+        "e5"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hanya_sanction",
+        "stat": "dmgAll",
+        "value": 0.33
+      }
+    },
+    {
+      "id": "hanya_e6_talent_e6",
+      "layer": "parameters",
+      "claim": "E6: Talent DMG Boost +10% (hanya_sanction dmgAll 0.30 -> 0.43).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hanya_sanction",
+        "stat": "dmgAll",
+        "value": 0.43
+      }
+    },
+    {
+      "id": "hanya_e1_custom",
+      "layer": "interactions",
+      "claim": "E1: when an ally carrying Hanya's Ultimate defeats an enemy, Hanya advances 15%.",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "E1 needs an ally to land the killing blow; the solo fixture has no ally kill, so the advance is not observable."
+      }
+    }
+  ],
+  "golds": []
+}

@@ -1,0 +1,430 @@
+{
+  "kit": "argenti",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Argenti/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 each Apotheosis stack +4% CRIT DMG (argenti_e1 critDmg, up to 0.4); E2 >=3 enemies on Ultimate -> +40% ATK for 1 turn (argenti_e2 atkPct 0.4) - not exercised by the single-enemy fixture (deviation); E3 Skill/Talent Lv.+2 raises Justice, Hereby Blooms 1.2 -> 1.32; E4 +2 battle-start Apotheosis and max +2 (argenti_apotheosis critRate up to 0.336); E5 Ult Lv.+2/Basic Lv.+1 raises For In This Garden 1.6 -> 1.728; E6 Ultimate ignores 30% DEF (argenti_e6 defIgnore 0.3). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "argenti E0 — eidolon ladder rung, cloned from argenti/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "argenti",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "argenti E1 — eidolon ladder rung, cloned from argenti/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "argenti",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "argenti E2 — eidolon ladder rung, cloned from argenti/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "argenti",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "argenti E3 — eidolon ladder rung, cloned from argenti/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "argenti",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "argenti E4 — eidolon ladder rung, cloned from argenti/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "argenti",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "argenti E5 — eidolon ladder rung, cloned from argenti/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "argenti",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "argenti E6 — eidolon ladder rung, cloned from argenti/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "argenti",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "arg_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'A Lacuna in Kingdom of Aesthetics': each Apotheosis stack additionally grants +4% CRIT DMG (argenti_e1). Present from E1.",
+      "fixtures": [
+        "e1",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "argenti_e1"
+      }
+    },
+    {
+      "id": "arg_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: argenti_e1 must NOT be active below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "argenti_e1"
+      }
+    },
+    {
+      "id": "arg_e1_stat",
+      "layer": "parameters",
+      "claim": "argenti_e1 stacks to critDmg 0.4 = 5 stacks x 0.08 (canon rank 1).",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "argenti_e1",
+        "stat": "critDmg",
+        "value": 0.4
+      }
+    },
+    {
+      "id": "arg_e3_present",
+      "layer": "parameters",
+      "claim": "E3 'Thorny Road's Glory': Skill/Talent Lv.+2 raises Justice, Hereby Blooms 1.2 -> 1.32.",
+      "fixtures": [
+        "e3",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Justice, Hereby Blooms"
+        },
+        "field": "mult",
+        "value": 1.32,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "arg_e3_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Justice, Hereby Blooms stays at 1.2.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Justice, Hereby Blooms"
+        },
+        "field": "mult",
+        "value": 1.2,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "arg_e4_present",
+      "layer": "parameters",
+      "claim": "E4 'Trumpet's Dedication': +2 battle-start Apotheosis and max stack +2, so argenti_apotheosis reaches critRate 0.336 (6 stacks x 0.056).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "argenti_apotheosis",
+        "stat": "critRate",
+        "value": 0.336
+      }
+    },
+    {
+      "id": "arg_e4_locked",
+      "layer": "parameters",
+      "claim": "Below E4 argenti_apotheosis caps at critRate 0.28.",
+      "fixtures": [
+        "e3"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "argenti_apotheosis",
+        "stat": "critRate",
+        "value": 0.28
+      }
+    },
+    {
+      "id": "arg_e5_present",
+      "layer": "parameters",
+      "claim": "E5 'Snow, From Somewhere in Cosmos': Ult Lv.+2/Basic Lv.+1 raises For In This Garden, Supreme Beauty Bestows 1.6 -> 1.728.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "For In This Garden, Supreme Beauty Bestows"
+        },
+        "field": "mult",
+        "value": 1.728,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "arg_e5_locked",
+      "layer": "parameters",
+      "claim": "Below E5 For In This Garden stays at 1.6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "For In This Garden, Supreme Beauty Bestows"
+        },
+        "field": "mult",
+        "value": 1.6,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "arg_e6_present",
+      "layer": "interactions",
+      "claim": "E6 '\"Your\" Resplendence': Ultimate ignores 30% DEF (argenti_e6 defIgnore 0.3).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "argenti_e6",
+        "stat": "defIgnore",
+        "value": 0.3
+      }
+    },
+    {
+      "id": "arg_e6_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: argenti_e6 must NOT be active below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "argenti_e6"
+      }
+    }
+  ],
+  "golds": []
+}

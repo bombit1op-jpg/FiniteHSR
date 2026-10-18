@@ -1,0 +1,22 @@
+{
+ "input": {
+  "kit": "hanya",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Hanya alone, technique \"Netherworld Judgment\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Hanya|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Hanya|-|-|-",
+  "HIT_START|Hanya|Ice Edge|Netherworld Judgment|basic [1,10,30,5000000,721.92]",
+  "DAMAGE_CALCULATED|Hanya|Ice Edge|-|basic [0,0,0,0,0,0,0,0.05,0.5,1,162,722]",
+  "DAMAGE_DEALT|Hanya|Ice Edge|Netherworld Judgment|basic [0.5,162,4999838,5000000,721.92]",
+  "TOUGHNESS_DAMAGE|Hanya|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Hanya|Ice Edge|-|basic [162,4999838]",
+  "BUFF_APPLIED|-|Ice Edge|-|- [2]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

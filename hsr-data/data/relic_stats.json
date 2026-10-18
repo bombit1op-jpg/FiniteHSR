@@ -1,0 +1,337 @@
+{
+  "text": "Overview\n\nSets\n\nStats\n\nEXP\n\nContents\n\n1\n \nMain Stat Availability\n\n2\n \nMain Stat Values\n\n3\n \nSubsidiary Stat Availability\n\n4\n \nSubsidiary Stat Values\n\n5\n \nReferences\n\nMain Stat Availability\n\n[\n\n]\n\nA Relic has one randomly generated Main Stat, determined by the Relic type.\n\nThe chances of getting a Relic with a particular Main Stat appears to vary. (For example, there are four possible Main Stat possibilities for feet Relics. If these Main Stats were uniformly distributed, they would each have a 25% chance of occurring. However, user-compiled data\n\n1\n\n2\n\n indicates that this is not the case.\n\nStat\n\nAvailability\n\nHead\n\nHands\n\nBody\n\nFeet\n\nPlanar\nSphere\n\nLink\nRope\n\nHP\n\nYes\n\nNo\n\nNo\n\nNo\n\nNo\n\nNo\n\nATK\n\nNo\n\nYes\n\nNo\n\nNo\n\nNo\n\nNo\n\nHP%\n\nNo\n\nNo\n\nYes\n\nYes\n\nYes\n\nYes\n\nATK%\n\nNo\n\nNo\n\nYes\n\nYes\n\nYes\n\nYes\n\nDEF%\n\nNo\n\nNo\n\nYes\n\nYes\n\nYes\n\nYes\n\nEffect Hit Rate\n\nNo\n\nNo\n\nYes\n\nNo\n\nNo\n\nNo\n\nOutgoing Healing Boost\n\nNo\n\nNo\n\nYes\n\nNo\n\nNo\n\nNo\n\nCRIT Rate\n\nNo\n\nNo\n\nYes\n\nNo\n\nNo\n\nNo\n\nCRIT DMG\n\nNo\n\nNo\n\nYes\n\nNo\n\nNo\n\nNo\n\nSPD\n\nNo\n\nNo\n\nNo\n\nYes\n\nNo\n\nNo\n\nPhysical DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\nYes\n\nNo\n\nFire DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\nYes\n\nNo\n\nIce DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\nYes\n\nNo\n\nWind DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\nYes\n\nNo\n\nLightning DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\nYes\n\nNo\n\nQuantum DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\nYes\n\nNo\n\nImaginary DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\nYes\n\nNo\n\nBreak Effect\n\nNo\n\nNo\n\nNo\n\nNo\n\nNo\n\nYes\n\nEnergy Regeneration Rate\n\nNo\n\nNo\n\nNo\n\nNo\n\nNo\n\nYes\n\nStat\n\nProbability\n\nHead\n\nHands\n\nBody\n\nFeet\n\nPlanar\nSphere\n\nLink\nRope\n\nHP\n\n100%\n\nNo\n\nNo\n\nNo\n\nNo\n\nNo\n\nATK\n\nNo\n\n100%\n\nNo\n\nNo\n\nNo\n\nNo\n\nHP%\n\nNo\n\nNo\n\n20%\n\n28%\n\n12%\n\n26%\n\nATK%\n\nNo\n\nNo\n\n20%\n\n30%\n\n13%\n\n27%\n\nDEF%\n\nNo\n\nNo\n\n20%\n\n30%\n\n12%\n\n24%\n\nEffect Hit Rate\n\nNo\n\nNo\n\n10%\n\nNo\n\nNo\n\nNo\n\nOutgoing Healing Boost\n\nNo\n\nNo\n\n10%\n\nNo\n\nNo\n\nNo\n\nCRIT Rate\n\nNo\n\nNo\n\n10%\n\nNo\n\nNo\n\nNo\n\nCRIT DMG\n\nNo\n\nNo\n\n10%\n\nNo\n\nNo\n\nNo\n\nSPD\n\nNo\n\nNo\n\nNo\n\n12%\n\nNo\n\nNo\n\nPhysical DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\n9%\n\nNo\n\nFire DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\n9%\n\nNo\n\nIce DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\n9%\n\nNo\n\nWind DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\n9%\n\nNo\n\nLightning DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\n9%\n\nNo\n\nQuantum DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\n9%\n\nNo\n\nImaginary DMG Boost\n\nNo\n\nNo\n\nNo\n\nNo\n\n9%\n\nNo\n\nBreak Effect\n\nNo\n\nNo\n\nNo\n\nNo\n\nNo\n\n16%\n\nEnergy Regeneration Rate\n\nNo\n\nNo\n\nNo\n\nNo\n\nNo\n\n5%\n\nMain Stat Values\n\n[\n\n]\n\nThe Main Stat value is determined by Rarity and increases per level.\n\nStat\n\n5-Star\n\n4-Star\n\n3-Star\n\n2-Star\n\nBase\n\nPer Lv.\n\nMax\n\nBase\n\nPer Lv.\n\nMax\n\nBase\n\nPer Lv.\n\nMax\n\nBase\n\nPer Lv.\n\nMax\n\nSPD\n\n4.032\n\n1.4\n\n25.032\n\n3.2256\n\n1.1\n\n16.4256\n\n2.4192\n\n1\n\n11.4192\n\n1.6128\n\n1\n\n7.6128\n\nHP\n\n112.896\n\n39.5136\n\n705.6\n\n90.3168\n\n31.61088\n\n469.6474\n\n67.7376\n\n23.70816\n\n281.111\n\n45.1584\n\n15.80544\n\n139.991\n\nATK\n\n56.448\n\n19.7568\n\n352.8\n\n45.1584\n\n15.80544\n\n234.8237\n\n33.8688\n\n11.85408\n\n140.5555\n\n22.5792\n\n7.90272\n\n69.9955\n\nHP%\n\n6.9120%\n\n2.4192%\n\n43.2%\n\n5.5296%\n\n1.9354%\n\n28.7544%\n\n4.1472%\n\n1.4515%\n\n17.2107%\n\n2.7648%\n\n0.9677%\n\n8.5710%\n\nATK%\n\n6.9120%\n\n2.4192%\n\n43.2%\n\n5.5296%\n\n1.9354%\n\n28.7544%\n\n4.1472%\n\n1.4515%\n\n17.2107%\n\n2.7648%\n\n0.9677%\n\n8.5710%\n\nDEF%\n\n8.64%\n\n3.024%\n\n54%\n\n6.912%\n\n2.4192%\n\n35.9424%\n\n5.184%\n\n1.8144%\n\n21.5136%\n\n3.456%\n\n1.2096%\n\n10.7136%\n\nBreak Effect\n\n10.3680%\n\n3.6277%\n\n64.8%\n\n8.2944%\n\n2.9030%\n\n43.1304%\n\n6.2208%\n\n2.1773%\n\n25.8165%\n\n4.1472%\n\n1.4515%\n\n12.8562%\n\nEffect Hit Rate\n\n6.9120%\n\n2.4192%\n\n43.2%\n\n5.5296%\n\n1.9354%\n\n28.7544%\n\n4.1472%\n\n1.4515%\n\n17.2107%\n\n2.7648%\n\n0.9677%\n\n8.5710%\n\nEnergy Regeneration Rate\n\n3.1104%\n\n1.0886%\n\n19.4394%\n\n2.4883%\n\n0.8709%\n\n12.9391%\n\n1.8662%\n\n0.6532%\n\n7.745%\n\n1.2442%\n\n0.4355%\n\n3.8572%\n\nOutgoing Healing Boost\n\n5.5296%\n\n1.9354%\n\n34.5606%\n\n4.4237%\n\n1.5483%\n\n23.0033%\n\n3.3178%\n\n1.1612%\n\n13.7686%\n\n2.2118%\n\n0.7741%\n\n6.8564%\n\nPhysical DMG Boost\n\n6.2208%\n\n2.1773%\n\n38.8803%\n\n4.9766%\n\n1.7418%\n\n25.8782%\n\n3.7325%\n\n1.3064%\n\n15.4901%\n\n2.4883%\n\n0.8709%\n\n7.7137%\n\nFire DMG Boost\n\n6.2208%\n\n2.1773%\n\n38.8803%\n\n4.9766%\n\n1.7418%\n\n25.8782%\n\n3.7325%\n\n1.3064%\n\n15.4901%\n\n2.4883%\n\n0.8709%\n\n7.7137%\n\nIce DMG Boost\n\n6.2208%\n\n2.1773%\n\n38.8803%\n\n4.9766%\n\n1.7418%\n\n25.8782%\n\n3.7325%\n\n1.3064%\n\n15.4901%\n\n2.4883%\n\n0.8709%\n\n7.7137%\n\nWind DMG Boost\n\n6.2208%\n\n2.1773%\n\n38.8803%\n\n4.9766%\n\n1.7418%\n\n25.8782%\n\n3.7325%\n\n1.3064%\n\n15.4901%\n\n2.4883%\n\n0.8709%\n\n7.7137%\n\nLightning DMG Boost\n\n6.2208%\n\n2.1773%\n\n38.8803%\n\n4.9766%\n\n1.7418%\n\n25.8782%\n\n3.7325%\n\n1.3064%\n\n15.4901%\n\n2.4883%\n\n0.8709%\n\n7.7137%\n\nQuantum DMG Boost\n\n6.2208%\n\n2.1773%\n\n38.8803%\n\n4.9766%\n\n1.7418%\n\n25.8782%\n\n3.7325%\n\n1.3064%\n\n15.4901%\n\n2.4883%\n\n0.8709%\n\n7.7137%\n\nImaginary DMG Boost\n\n6.2208%\n\n2.1773%\n\n38.8803%\n\n4.9766%\n\n1.7418%\n\n25.8782%\n\n3.7325%\n\n1.3064%\n\n15.4901%\n\n2.4883%\n\n0.8709%\n\n7.7137%\n\nCRIT Rate\n\n5.184%\n\n1.8144%\n\n32.4%\n\n4.1472%\n\n1.4515%\n\n21.5652%\n\n3.1104%\n\n1.0886%\n\n12.9078%\n\n2.0736%\n\n0.7258%\n\n6.4284%\n\nCRIT DMG\n\n10.368%\n\n3.6288%\n\n64.8%\n\n8.2944%\n\n2.9030%\n\n43.1304%\n\n6.2208%\n\n2.1773%\n\n25.8165%\n\n4.1472%\n\n1.4515%\n\n12.8562%\n\nSubsidiary Stat Availability\n\n[\n\n]\n\nThe max level of a Relic is determined by rarity, as well as the amount of initial Sub Stats. Sub Stats can be generated, or enhanced, by leveling the Relic.\n\nRarity of Relic\n\n5-Star\n\n4-Star\n\n3-Star\n\n2-Star\n\nMax Level\n\n+15\n\n+12\n\n+9\n\n+6\n\nBase Sub Stat Amount\n\n4-3\n\n3-2\n\n2-1\n\n0\n\nA randomly generated Sub Stat is added every 3 levels, up to a max of 4 Sub Stats. Once there are 4 Sub Stats, every 3 levels will instead enhance a random, already existing, Sub Stat.\n\nThis means that a 5-star relic with 4 initial Sub Stats will be able to enhance its Sub Stats up to 5 times, due to its max level being +15 and it enhancing a Sub Stat every 3 levels. Likewise, a 3-star relic with 1 initial Sub Stat will be unable to enhance any of its Sub Stats, due to its max level being +9 and it adding a Sub Stat every 3 levels.\n\nFurthermore, a Relic cannot generate duplicate Sub Stats or ones which are the same type as the Main Stat. (e.g. a Head relic with a flat HP Main Stat cannot have a flat HP Sub Stat, but could have an HP% Sub Stat. It also would not be able to have two HP% Sub Stats. It could, however, have both flat ATK and ATK%.)\n\nSubstats are theorized to be selected in a similar way to \nGenshin Impact\n. Specifically, whenever a substat is to be selected, a weighted selection is made from the pool of substats that have not already been picked, with the following weights:\n\n3\n\nSubstat\n\nHP\n\nATK\n\nDEF\n\nHP%\n\nATK%\n\nDEF%\n\nSPD\n\nCRIT Rate%\n\nCRIT DMG%\n\nEffect Hit Rate\n\nEffect RES\n\nBreak Effect\n\nWeight\n\n10\n\n10\n\n10\n\n10\n\n10\n\n10\n\n4\n\n6\n\n6\n\n8\n\n8\n\n8\n\nThe initial weights sum to 100, though this will be reduced as substats and possibly the mainstat are taken out of the pool.\n\nSubsidiary Stat Values\n\n[\n\n]\n\nThe initial value and increase per enhancement for Sub Stats are randomly chosen from 3 possible tiers according to the values in the table below.\n\n5-Star\n\n4-Star\n\n3-Star\n\n2-Star\n\nStat\n\nLow\n\nMed\n\nHigh\n\nSPD\n\n2\n\n2.3\n\n2.6\n\nHP\n\n33.87004\n\n38.103795\n\n42.33751\n\nATK\n\n16.935\n\n19.051877\n\n21.168754\n\nDEF\n\n16.935\n\n19.051877\n\n21.168754\n\nHP%\n\n3.456%\n\n3.888%\n\n4.32%\n\nATK%\n\n3.456%\n\n3.888%\n\n4.32%\n\nDEF%\n\n4.32%\n\n4.86%\n\n5.4%\n\nBreak Effect%\n\n5.184%\n\n5.832%\n\n6.48%\n\nEffect Hit Rate%\n\n3.456%\n\n3.888%\n\n4.32%\n\nEffect RES%\n\n3.456%\n\n3.888%\n\n4.32%\n\nCRIT Rate%\n\n2.592%\n\n2.916%\n\n3.24%\n\nCRIT DMG%\n\n5.184%\n\n5.832%\n\n6.48%\n\nStat\n\nLow\n\nMed\n\nHigh\n\nSPD\n\n1.6\n\n1.8\n\n2\n\nHP\n\n27.096\n\n30.483\n\n33.87\n\nATK\n\n13.548\n\n15.2415\n\n16.935\n\nDEF\n\n13.548\n\n15.2415\n\n16.935\n\nHP%\n\n2.7648%\n\n3.1104%\n\n3.456%\n\nATK%\n\n2.7648%\n\n3.1104%\n\n3.456%\n\nDEF%\n\n3.456%\n\n3.888%\n\n4.32%\n\nBreak Effect%\n\n4.1472%\n\n4.6656%\n\n5.184%\n\nEffect Hit Rate%\n\n2.7648%\n\n3.1104%\n\n3.456%\n\nEffect RES%\n\n2.7648%\n\n3.1104%\n\n3.456%\n\nCRIT Rate%\n\n2.0736%\n\n2.3328%\n\n2.592%\n\nCRIT DMG%\n\n4.1472%\n\n4.6656%\n\n5.184%\n\nStat\n\nLow\n\nMed\n\nHigh\n\nSPD\n\n1.2\n\n1.3\n\n1.4\n\nHP\n\n20.322\n\n22.862253\n\n25.402506\n\nATK\n\n10.161\n\n11.431126\n\n12.701252\n\nDEF\n\n10.161\n\n11.431126\n\n12.701252\n\nHP%\n\n2.0736%\n\n2.3328%\n\n2.592%\n\nATK%\n\n2.0736%\n\n2.3328%\n\n2.592%\n\nDEF%\n\n2.592%\n\n2.916%\n\n3.24%\n\nBreak Effect%\n\n3.1104%\n\n3.4992%\n\n3.888%\n\nEffect Hit Rate%\n\n2.0736%\n\n2.3328%\n\n2.592%\n\nEffect RES%\n\n2.0736%\n\n2.3328%\n\n2.592%\n\nCRIT Rate%\n\n1.5552%\n\n1.7496%\n\n1.944%\n\nCRIT DMG%\n\n3.1104%\n\n3.4992%\n\n3.888%\n\nStat\n\nLow\n\nMed\n\nHigh\n\nSPD\n\n1\n\n1.1\n\n1.2\n\nHP\n\n13.548\n\n15.2415\n\n16.935\n\nATK\n\n6.774\n\n7.62075\n\n8.4675\n\nDEF\n\n16.774\n\n7.62075\n\n8.4675\n\nHP%\n\n1.3824%\n\n1.5552%\n\n1.728%\n\nATK%\n\n1.3824%\n\n1.5552%\n\n1.728%\n\nDEF%\n\n1.728%\n\n1.944%\n\n2.16%\n\nBreak Effect%\n\n2.0736%\n\n2.3328%\n\n2.592%\n\nEffect Hit Rate%\n\n1.3824%\n\n1.5552%\n\n1.728%\n\nEffect RES%\n\n1.3824%\n\n1.5552%\n\n1.728%\n\nCRIT Rate%\n\n1.0368%\n\n1.1664%\n\n1.296%\n\nCRIT DMG%\n\n2.0736%\n\n2.3328%\n\n2.592%\n\nReferences\n\n[\n\n]\n\n↑\n\n \nHSR CN Analysis (July 7, 2023). \nRelic Summary\n. Retrieved December 20 2024.\n\n↑\n\n \nssataei's HSR Artifact Calc - Echo Edit (April 19 2024). \nmainStatChances\n Retrieved December 20 2024.\n\n↑\n\n \nCommunity Document: \nHonkai: Star Rail Drop Rate Statistics",
+  "tables": [
+    [],
+    [],
+    [],
+    [
+      {
+        "Rarity of Relic": "Max Level",
+        "5-Star": "+15",
+        "4-Star": "+12",
+        "3-Star": "+9",
+        "2-Star": "+6"
+      },
+      {
+        "Rarity of Relic": "Base Sub Stat Amount",
+        "5-Star": "4-3",
+        "4-Star": "3-2",
+        "3-Star": "2-1",
+        "2-Star": "0"
+      }
+    ],
+    [
+      {
+        "Substat": "Weight",
+        "HP": "10",
+        "ATK": "10",
+        "DEF": "10",
+        "HP%": "10",
+        "ATK%": "10",
+        "DEF%": "10",
+        "SPD": "4",
+        "CRIT Rate&#160;%": "6",
+        "CRIT DMG&#160;%": "6",
+        "Effect Hit Rate": "8",
+        "Effect RES": "8",
+        "Break Effect": "8"
+      }
+    ],
+    [
+      {
+        "Stat": "SPD",
+        "Low": "2",
+        "Med": "2.3",
+        "High": "2.6"
+      },
+      {
+        "Stat": "HP",
+        "Low": "33.87004",
+        "Med": "38.103795",
+        "High": "42.33751"
+      },
+      {
+        "Stat": "ATK",
+        "Low": "16.935",
+        "Med": "19.051877",
+        "High": "21.168754"
+      },
+      {
+        "Stat": "DEF",
+        "Low": "16.935",
+        "Med": "19.051877",
+        "High": "21.168754"
+      },
+      {
+        "Stat": "HP%",
+        "Low": "3.456%",
+        "Med": "3.888%",
+        "High": "4.32%"
+      },
+      {
+        "Stat": "ATK%",
+        "Low": "3.456%",
+        "Med": "3.888%",
+        "High": "4.32%"
+      },
+      {
+        "Stat": "DEF%",
+        "Low": "4.32%",
+        "Med": "4.86%",
+        "High": "5.4%"
+      },
+      {
+        "Stat": "Break Effect%",
+        "Low": "5.184%",
+        "Med": "5.832%",
+        "High": "6.48%"
+      },
+      {
+        "Stat": "Effect Hit Rate%",
+        "Low": "3.456%",
+        "Med": "3.888%",
+        "High": "4.32%"
+      },
+      {
+        "Stat": "Effect RES%",
+        "Low": "3.456%",
+        "Med": "3.888%",
+        "High": "4.32%"
+      },
+      {
+        "Stat": "CRIT Rate%",
+        "Low": "2.592%",
+        "Med": "2.916%",
+        "High": "3.24%"
+      },
+      {
+        "Stat": "CRIT DMG%",
+        "Low": "5.184%",
+        "Med": "5.832%",
+        "High": "6.48%"
+      }
+    ],
+    [
+      {
+        "Stat": "SPD",
+        "Low": "1.6",
+        "Med": "1.8",
+        "High": "2"
+      },
+      {
+        "Stat": "HP",
+        "Low": "27.096",
+        "Med": "30.483",
+        "High": "33.87"
+      },
+      {
+        "Stat": "ATK",
+        "Low": "13.548",
+        "Med": "15.2415",
+        "High": "16.935"
+      },
+      {
+        "Stat": "DEF",
+        "Low": "13.548",
+        "Med": "15.2415",
+        "High": "16.935"
+      },
+      {
+        "Stat": "HP%",
+        "Low": "2.7648%",
+        "Med": "3.1104%",
+        "High": "3.456%"
+      },
+      {
+        "Stat": "ATK%",
+        "Low": "2.7648%",
+        "Med": "3.1104%",
+        "High": "3.456%"
+      },
+      {
+        "Stat": "DEF%",
+        "Low": "3.456%",
+        "Med": "3.888%",
+        "High": "4.32%"
+      },
+      {
+        "Stat": "Break Effect%",
+        "Low": "4.1472%",
+        "Med": "4.6656%",
+        "High": "5.184%"
+      },
+      {
+        "Stat": "Effect Hit Rate%",
+        "Low": "2.7648%",
+        "Med": "3.1104%",
+        "High": "3.456%"
+      },
+      {
+        "Stat": "Effect RES%",
+        "Low": "2.7648%",
+        "Med": "3.1104%",
+        "High": "3.456%"
+      },
+      {
+        "Stat": "CRIT Rate%",
+        "Low": "2.0736%",
+        "Med": "2.3328%",
+        "High": "2.592%"
+      },
+      {
+        "Stat": "CRIT DMG%",
+        "Low": "4.1472%",
+        "Med": "4.6656%",
+        "High": "5.184%"
+      }
+    ],
+    [
+      {
+        "Stat": "SPD",
+        "Low": "1.2",
+        "Med": "1.3",
+        "High": "1.4"
+      },
+      {
+        "Stat": "HP",
+        "Low": "20.322",
+        "Med": "22.862253",
+        "High": "25.402506"
+      },
+      {
+        "Stat": "ATK",
+        "Low": "10.161",
+        "Med": "11.431126",
+        "High": "12.701252"
+      },
+      {
+        "Stat": "DEF",
+        "Low": "10.161",
+        "Med": "11.431126",
+        "High": "12.701252"
+      },
+      {
+        "Stat": "HP%",
+        "Low": "2.0736%",
+        "Med": "2.3328%",
+        "High": "2.592%"
+      },
+      {
+        "Stat": "ATK%",
+        "Low": "2.0736%",
+        "Med": "2.3328%",
+        "High": "2.592%"
+      },
+      {
+        "Stat": "DEF%",
+        "Low": "2.592%",
+        "Med": "2.916%",
+        "High": "3.24%"
+      },
+      {
+        "Stat": "Break Effect%",
+        "Low": "3.1104%",
+        "Med": "3.4992%",
+        "High": "3.888%"
+      },
+      {
+        "Stat": "Effect Hit Rate%",
+        "Low": "2.0736%",
+        "Med": "2.3328%",
+        "High": "2.592%"
+      },
+      {
+        "Stat": "Effect RES%",
+        "Low": "2.0736%",
+        "Med": "2.3328%",
+        "High": "2.592%"
+      },
+      {
+        "Stat": "CRIT Rate%",
+        "Low": "1.5552%",
+        "Med": "1.7496%",
+        "High": "1.944%"
+      },
+      {
+        "Stat": "CRIT DMG%",
+        "Low": "3.1104%",
+        "Med": "3.4992%",
+        "High": "3.888%"
+      }
+    ],
+    [
+      {
+        "Stat": "SPD",
+        "Low": "1",
+        "Med": "1.1",
+        "High": "1.2"
+      },
+      {
+        "Stat": "HP",
+        "Low": "13.548",
+        "Med": "15.2415",
+        "High": "16.935"
+      },
+      {
+        "Stat": "ATK",
+        "Low": "6.774",
+        "Med": "7.62075",
+        "High": "8.4675"
+      },
+      {
+        "Stat": "DEF",
+        "Low": "16.774",
+        "Med": "7.62075",
+        "High": "8.4675"
+      },
+      {
+        "Stat": "HP%",
+        "Low": "1.3824%",
+        "Med": "1.5552%",
+        "High": "1.728%"
+      },
+      {
+        "Stat": "ATK%",
+        "Low": "1.3824%",
+        "Med": "1.5552%",
+        "High": "1.728%"
+      },
+      {
+        "Stat": "DEF%",
+        "Low": "1.728%",
+        "Med": "1.944%",
+        "High": "2.16%"
+      },
+      {
+        "Stat": "Break Effect%",
+        "Low": "2.0736%",
+        "Med": "2.3328%",
+        "High": "2.592%"
+      },
+      {
+        "Stat": "Effect Hit Rate%",
+        "Low": "1.3824%",
+        "Med": "1.5552%",
+        "High": "1.728%"
+      },
+      {
+        "Stat": "Effect RES%",
+        "Low": "1.3824%",
+        "Med": "1.5552%",
+        "High": "1.728%"
+      },
+      {
+        "Stat": "CRIT Rate%",
+        "Low": "1.0368%",
+        "Med": "1.1664%",
+        "High": "1.296%"
+      },
+      {
+        "Stat": "CRIT DMG%",
+        "Low": "2.0736%",
+        "Med": "2.3328%",
+        "High": "2.592%"
+      }
+    ]
+  ]
+}

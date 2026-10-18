@@ -1,0 +1,95 @@
+{
+  "kit": "trailblazer_elation",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/96/skills (Lightning, Elation Trailblazer)",
+    "confidence": "interpreted",
+    "note": "Basic Make Some Noise; Skill Let the Storm Rage On (Lightning DMG + Certified Banger to self); Elation Skill I Said \"Elation,\" Did I Stutter? (random/split hits); Ultimate May the Trailblaze Fly You Starward (no direct DMG, grants CRIT DMG to one designated other ally, 3 turns). Needs a second character on the field for the Ultimate's designated-ally buff."
+  },
+  "fixtures": [
+    {
+      "id": "tbe-main",
+      "env": "TB Elation E0 + one ally vs 1 Lightning-weak dummy, energyStartFrac 1 (Ultimate first), 6 cycles, seed 3",
+      "battle": {
+        "team": [
+          { "kitId": "trailblazer_elation", "name": "TBE", "stats": { "hp": 5000, "atk": 1600, "def": 1300, "spd": 130 }, "eidolon": 0, "energyStartFrac": 1, "skillPriority": 2 },
+          { "kitId": "danheng", "name": "Ally", "stats": { "hp": 5000, "atk": 2000, "def": 1300, "spd": 110 }, "skillPriority": 3 }
+        ],
+        "enemy": { "name": "Shard", "count": 1, "hp": 400000, "atk": 600, "spd": 120, "level": 85, "toughness": 120, "weaknesses": ["Lightning"] },
+        "cycles": 6,
+        "seed": 3
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "trailblazer_elation_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Make Some Noise (801001, Thunder) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "TBE",
+          "label": "Make Some Noise",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "tbe-main"
+      ]
+    },
+    {
+      "id": "tbe_basic_label",
+      "layer": "structure",
+      "claim": "Make Some Noise is the Basic ATK label.",
+      "fixtures": ["tbe-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBE", "label": "Make Some Noise" } }
+    },
+    {
+      "id": "tbe_skill_label",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Let the Storm Rage On is the Skill label.",
+      "fixtures": ["tbe-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBE", "label": "Let the Storm Rage On" } }
+    },
+    {
+      "id": "tbe_talent_elation_hit",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "While holding Certified Banger, the Skill additionally deals Lightning Elation DMG (That Smile Hits Different).",
+      "fixtures": ["tbe-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "TBE", "label": "That Smile Hits Different" } }
+    },
+    {
+      "id": "tbe_ult_used",
+      "layer": "structure",
+      "claim": "May the Trailblaze Fly You Starward is the Ultimate action.",
+      "fixtures": ["tbe-main"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "TBE", "action": "ultimate" } }
+    },
+    {
+      "id": "tbe_ult_buff",
+      "layer": "interactions",
+      "claim": "The Ultimate grants its CRIT DMG buff to the designated other ally (not the caster).",
+      "fixtures": ["tbe-main"],
+      "assertion": { "assert": "buff", "id": "tb_ela_ult", "target": "Ally" }
+    },
+    {
+      "id": "tbe_ult_critdmg",
+      "layer": "parameters",
+      "claim": "May the Trailblaze Fly You Starward grants CRIT DMG +50% (ult L10 = 0.5) for 3 turns (ult_a2).",
+      "fixtures": ["tbe-main"],
+      "assertion": { "assert": "buffStat", "id": "tb_ela_ult", "stat": "critDmg", "value": 0.5 }
+    },
+    {
+      "id": "tbe_no_attack_action",
+      "layer": "structure",
+      "claim": "The kit exposes Basic/Skill/Ultimate, never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "TBE", "action": "attack" } }
+    }
+  ]
+}

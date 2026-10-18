@@ -1,0 +1,272 @@
+{
+  "kit": "welt",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Welt/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ranks. E1 Legacy of Honor: attack vs Weightless -> Imaginary Additional DMG (60% of Ult mult), DAMAGE_DEALT 'Legacy of Honor (E1)' from E1. E2 Conflux of Stars: Talent trigger also restores 3 Energy (ENERGY_GAIN n=3) from E2. E3 Skill Lv.+2 / Basic Lv.+1: Edge of the Void 0.72->0.792, Gravity Suppression 1.0->1.1. E4 Appellation of Justice: Weightless enemies -30% All-Type RES, welt_weightless gains resAll -0.30. E5 Ult Lv.+2 / Talent Lv.+2: Synthetic Black Hole 0.15->0.162, Time Distortion 1.0->1.1. E6 Prospect of Glory: vs Slowed +30% CRIT Rate / +60% CRIT DMG, welt_e6_tmp."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "welt E0 — eidolon ladder rung, cloned from welt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "welt",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "welt E1 — eidolon ladder rung, cloned from welt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "welt",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "welt E2 — eidolon ladder rung, cloned from welt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "welt",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "welt E3 — eidolon ladder rung, cloned from welt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "welt",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "welt E4 — eidolon ladder rung, cloned from welt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "welt",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "welt E5 — eidolon ladder rung, cloned from welt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "welt",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "welt E6 — eidolon ladder rung, cloned from welt/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "welt",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "ehr": 0.5
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    { "id": "welt_e1_present", "layer": "parameters", "claim": "E1 'Legacy of Honor': attacks against Weightless targets deal 1 hit of Imaginary Additional DMG equal to 60% of the Ultimate's multiplier (DAMAGE_DEALT 'Legacy of Honor (E1)'). Present from E1.", "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"], "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "label": "Legacy of Honor (E1)" } } },
+    { "id": "welt_e1_locked", "layer": "interactions", "claim": "Cumulative unlock: below E1 no 'Legacy of Honor (E1)' hit occurs.", "fixtures": ["e0"], "assertion": { "assert": "absent", "of": { "type": "DAMAGE_DEALT", "label": "Legacy of Honor (E1)" } } },
+    { "id": "welt_e1_mult", "layer": "parameters", "claim": "The E1 additional hit carries the 0.6 Ultimate-multiplier coefficient (canon rank 1).", "fixtures": ["e1"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Legacy of Honor (E1)" }, "field": "mult", "value": 0.6, "tol": 0.001, "pick": "first" } },
+    { "id": "welt_e2_present", "layer": "parameters", "claim": "E2 'Conflux of Stars': the Talent's trigger also restores 3 Energy (ENERGY_GAIN n=3). Present from E2.", "fixtures": ["e2", "e3", "e4", "e5", "e6"], "assertion": { "assert": "count", "of": { "type": "ENERGY_GAIN", "target": "Welt", "payload": { "n": 3 } }, "value": 17 } },
+    { "id": "welt_e2_locked", "layer": "interactions", "claim": "Cumulative unlock: below E2 no 3-Energy Talent restore occurs.", "fixtures": ["e0", "e1"], "assertion": { "assert": "count", "of": { "type": "ENERGY_GAIN", "target": "Welt", "payload": { "n": 3 } }, "value": 0 } },
+    { "id": "welt_e3_skill", "layer": "parameters", "claim": "E3 Skill Lv.+2: Edge of the Void 0.72 -> 0.792.", "fixtures": ["e3", "e4", "e5", "e6"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Edge of the Void" }, "field": "mult", "value": 0.792, "tol": 0.001, "pick": "first" } },
+    { "id": "welt_e3_skill_locked", "layer": "parameters", "claim": "Below E3 Edge of the Void stays at 0.72.", "fixtures": ["e0", "e1", "e2"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Edge of the Void" }, "field": "mult", "value": 0.72, "tol": 0.001, "pick": "first" } },
+    { "id": "welt_e3_basic", "layer": "parameters", "claim": "E3 Basic Lv.+1: Gravity Suppression 1.0 -> 1.1.", "fixtures": ["e3", "e4", "e5", "e6"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Gravity Suppression" }, "field": "mult", "value": 1.1, "tol": 0.001, "pick": "first" } },
+    { "id": "welt_e3_basic_locked", "layer": "parameters", "claim": "Below E3 Gravity Suppression stays at 1.0.", "fixtures": ["e0", "e1", "e2"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Gravity Suppression" }, "field": "mult", "value": 1.0, "tol": 0.001, "pick": "first" } },
+    { "id": "welt_e4_present", "layer": "parameters", "claim": "E4 'Appellation of Justice': Weightless enemies get -30% All-Type RES, carried as resAll -0.30 on the welt_weightless debuff. Present from E4.", "fixtures": ["e4", "e5", "e6"], "assertion": { "assert": "buffStat", "id": "welt_weightless", "stat": "resAll", "value": -0.3 } },
+    { "id": "welt_e4_locked", "layer": "interactions", "claim": "Cumulative unlock: below E4 the welt_weightless debuff carries no resAll mod.", "fixtures": ["e0", "e1", "e2", "e3"], "assertion": { "assert": "custom", "note": "mod added to an always-present debuff; buffStat has no negative matcher — absence is guarded by probe-eidolon-ladder" } },
+    { "id": "welt_e5_ult_present", "layer": "parameters", "claim": "E5 Ultimate Lv.+2: Synthetic Black Hole 0.15 -> 0.162.", "fixtures": ["e5", "e6"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Synthetic Black Hole" }, "field": "mult", "value": 0.162, "tol": 0.001, "pick": "first" } },
+    { "id": "welt_e5_ult_locked", "layer": "parameters", "claim": "Below E5 Synthetic Black Hole stays at 0.15.", "fixtures": ["e0", "e1", "e2", "e3", "e4"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Synthetic Black Hole" }, "field": "mult", "value": 0.15, "tol": 0.001, "pick": "first" } },
+    { "id": "welt_e5_talent_present", "layer": "parameters", "claim": "E5 Talent Lv.+2: Time Distortion 1.0 -> 1.1.", "fixtures": ["e5", "e6"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Time Distortion" }, "field": "mult", "value": 1.1, "tol": 0.001, "pick": "first" } },
+    { "id": "welt_e5_talent_locked", "layer": "parameters", "claim": "Below E5 Time Distortion stays at 1.0.", "fixtures": ["e0", "e1", "e2", "e3", "e4"], "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Time Distortion" }, "field": "mult", "value": 1.0, "tol": 0.001, "pick": "first" } },
+    { "id": "welt_e6_present", "layer": "interactions", "claim": "E6 'Prospect of Glory': Skill/Ultimate against a Slowed target grants +30% CRIT Rate / +60% CRIT DMG (welt_e6_tmp). Present from E6.", "fixtures": ["e6"], "assertion": { "assert": "buff", "id": "welt_e6_tmp" } },
+    { "id": "welt_e6_locked", "layer": "interactions", "claim": "Cumulative unlock: welt_e6_tmp must NOT be active below rank 6.", "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"], "assertion": { "assert": "noBuff", "id": "welt_e6_tmp" } },
+    { "id": "welt_e6_stat_cr", "layer": "parameters", "claim": "welt_e6_tmp carries critRate 0.30 (canon rank 6).", "fixtures": ["e6"], "assertion": { "assert": "buffStat", "id": "welt_e6_tmp", "stat": "critRate", "value": 0.3 } },
+    { "id": "welt_e6_stat_cd", "layer": "parameters", "claim": "welt_e6_tmp carries critDmg 0.60 (canon rank 6).", "fixtures": ["e6"], "assertion": { "assert": "buffStat", "id": "welt_e6_tmp", "stat": "critDmg", "value": 0.6 } }
+  ],
+  "golds": []
+}

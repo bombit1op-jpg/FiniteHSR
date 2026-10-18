@@ -1,0 +1,335 @@
+{
+  "kit": "phainon",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Phainon (skills 140801-140811, bonus_abilities, ranks 1-6)",
+    "confidence": "verified",
+    "note": "Phainon does not use the Energy system: his Ultimate gate is Coreflame >= 12 (COREFLAME_CAP, destruction.ts) and the cast consumes no Energy (ultConsumption 'none', no sp_base +5). Basic Stride to Deliverance 140801 = 130% ATK. Skill Let There Be Light 140802 is a Physical Blast (main 281.25% / adjacent 112.5% ATK at rank 10) granting +2 Coreflame. Ultimate He Who Bears the World Must Burn 140803 transforms Phainon into Khaslana (8 extra turns), deploys Territory Ruinous Irontomb (every enemy gains Physical weakness) and grants A3 Bide in Flames +50% ATK. Talent Pyric Corpus 140804 adds +1 Coreflame whenever Phainon is targeted by an ability. Khaslana form runs Bloodthorn Ferry (140808), Soulscorch Edict/Counter (140809), Stardeath Verdict (140811) and the Final Let There Be Light (140803)."
+  },
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Phainon E0 solo vs three Elite (Quantum-weak) enemies, 8 cycles - Stride to Deliverance Basic; Let There Be Light Physical Blast (main + adjacent) granting +2 Coreflame; Pyric Corpus +1 Coreflame whenever Phainon is targeted; at 12 Coreflame the Ultimate transforms him into Khaslana.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "phainon",
+            "stats": {
+              "hp": 20000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 8,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "transform-full",
+      "env": "Phainon E6 solo (+6 Coreflame at battle start) vs three Elite (Quantum-weak) enemies, 8 cycles - the Ultimate gate opens on the first cycles, so the whole Khaslana action set runs: Territory Ruinous Irontomb, Bide in Flames, Bloodthorn Ferry, Soulscorch Edict/Counter, Stardeath Verdict and the Final Let There Be Light.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "phainon",
+            "stats": {
+              "hp": 20000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 8,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "ph_basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Basic ATK Stride to Deliverance (140801) is a single-hit Physical attack (130% ATK at rank 10) that builds 1 SP.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Phainon",
+          "label": "Stride to Deliverance"
+        }
+      }
+    },
+    {
+      "id": "ph_skill_blast",
+      "ability": "skill",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Skill Let There Be Light (140802) is a Physical Blast: the main hit (281.25% ATK at rank 10) plus an adjacent hit (112.5% ATK), granting +2 Coreflame.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Phainon",
+          "label": "Let There Be Light (main)",
+          "attackType": "skill"
+        }
+      }
+    },
+    {
+      "id": "ph_skill_adjacent",
+      "layer": "structure",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "Let There Be Light is a Blast, so adjacent enemies take the secondary hit (112.5% ATK at rank 10).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Phainon",
+          "label": "Let There Be Light (adj)"
+        }
+      }
+    },
+    {
+      "id": "ph_coreflame_start",
+      "layer": "interactions",
+      "fixtures": [
+        "base-solo"
+      ],
+      "claim": "A1 grants +1 Coreflame at battle start, and Pyric Corpus (140804) adds +1 each time Phainon is targeted by an ability.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Phainon: Coreflame 0"
+        }
+      }
+    },
+    {
+      "id": "ph_ult_transform",
+      "layer": "structure",
+      "fixtures": [
+        "transform-full"
+      ],
+      "claim": "Ultimate He Who Bears the World Must Burn (140803) fires once Coreflame reaches 12; it is not Energy-gated and consumes no Energy (ultConsumption 'none').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Phainon",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "ph_khaslana_summon",
+      "layer": "structure",
+      "fixtures": [
+        "transform-full"
+      ],
+      "claim": "The Ultimate transforms Phainon into Khaslana, registered as a summon owned by Phainon, and deploys Territory Ruinous Irontomb.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "SUMMON_CREATED",
+          "target": "Khaslana"
+        }
+      }
+    },
+    {
+      "id": "ph_khaslana_bloodthorn",
+      "layer": "structure",
+      "fixtures": [
+        "transform-full"
+      ],
+      "claim": "In Khaslana form the Enhanced Basic is Bloodthorn Ferry (140808), a Physical Blast that also builds +2 Scourge.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Khaslana",
+          "label": "Bloodthorn Ferry (main)"
+        }
+      }
+    },
+    {
+      "id": "ph_khaslana_soulscorch",
+      "layer": "structure",
+      "fixtures": [
+        "transform-full"
+      ],
+      "claim": "Khaslana's Calamity: Soulscorch Edict (140809) advances all enemies, then fires the deferred Counter as an AoE Physical hit.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Khaslana",
+          "label": "Soulscorch Counter (AoE)"
+        }
+      }
+    },
+    {
+      "id": "ph_khaslana_verdict",
+      "layer": "structure",
+      "fixtures": [
+        "transform-full"
+      ],
+      "claim": "Foundation: Stardeath Verdict (140811) consumes Scourge; at 4+ Scourge it adds an even Physical Ult hit to every enemy.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Khaslana",
+          "label": "Stardeath Verdict (AoE)"
+        }
+      }
+    },
+    {
+      "id": "ph_final_let_there_be_light",
+      "layer": "structure",
+      "fixtures": [
+        "transform-full"
+      ],
+      "claim": "The transformation's last extra turn ends with the Final hit Let There Be Light (140803) - Physical Ult DMG spread evenly across all enemies.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Khaslana",
+          "label": "Final: Let There Be Light"
+        }
+      }
+    },
+    {
+      "id": "ph_bide_in_flames",
+      "layer": "parameters",
+      "fixtures": [
+        "transform-full"
+      ],
+      "claim": "A3 Bide in Flames grants Phainon +50% ATK (ph_atk) around the transformation, stacking up to 2 (entering and leaving).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "ph_atk",
+        "stat": "atkPct",
+        "atLeast": 0.5
+      },
+      "after": [
+        {
+          "kitId": "phainon",
+          "stat": "buffs",
+          "op": "atLeast",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "ph_transform_atk",
+      "ability": "talent",
+      "layer": "parameters",
+      "fixtures": [
+        "transform-full"
+      ],
+      "claim": "The transformation grants He Who Bears the World Must Burn (ph_tatk) ATK% on Phainon (140805 talent share).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ph_tatk",
+        "target": "Phainon"
+      }
+    },
+    {
+      "id": "ph_transform_maxhp",
+      "layer": "parameters",
+      "fixtures": [
+        "transform-full"
+      ],
+      "claim": "The transformation grants He Who Bears the World Must Burn MaxHP% (ph_thp) on Phainon (140805 talent share).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ph_thp",
+        "target": "Phainon"
+      }
+    },
+    {
+      "id": "ph_transform_before_khaslana",
+      "layer": "ordering",
+      "fixtures": [
+        "transform-full"
+      ],
+      "claim": "The Ultimate transformation resolves before Khaslana performs any action.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ABILITY_USED",
+            "source": "Phainon",
+            "action": "ultimate"
+          }
+        ],
+        "after": [
+          {
+            "type": "HIT_START",
+            "source": "Khaslana",
+            "label": "Bloodthorn Ferry (main)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "ph_territory_weakness",
+      "layer": "interactions",
+      "fixtures": [
+        "transform-full"
+      ],
+      "claim": "Deploying Territory Ruinous Irontomb makes every enemy gain Physical weakness (applyWeakness).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "gains Physical weakness"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,403 @@
+{
+  "kit": "phainon",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Phainon/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 SPD inheritance + CRIT DMG +50% after Ult is not modeled; E2 Physical RES PEN / extra turn on 4 Scourge is not modeled; E3 Basic Lv.+1 raises Stride to Deliverance 1.0 -> 1.1; E4 Soulscorch stacks are not modeled; E5 Ultimate Lv.+2 raises Let There Be Light (main) 3.0 -> 3.3; E6 battle start +6 Coreflame (transformation, buffs ph_atk/ph_tatk/ph_thp, Khaslana summon and Stardeath Verdict). E1/E2/E4 are unimplemented/unobservable in this corpus (deviation). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "phainon E0 — eidolon ladder rung, cloned from phainon/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "phainon",
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "phainon E1 — eidolon ladder rung, cloned from phainon/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "phainon",
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "phainon E2 — eidolon ladder rung, cloned from phainon/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "phainon",
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "phainon E3 — eidolon ladder rung, cloned from phainon/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "phainon",
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "phainon E4 — eidolon ladder rung, cloned from phainon/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "phainon",
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "phainon E5 — eidolon ladder rung, cloned from phainon/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "phainon",
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "phainon E6 — eidolon ladder rung, cloned from phainon/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "phainon",
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "ph_e3_present",
+      "layer": "parameters",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "claim": "E3 Basic ATK Lv.+1 raises Stride to Deliverance 1.0 -> 1.1.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Stride to Deliverance"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "ph_e3_locked",
+      "layer": "parameters",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "claim": "Below E3 Stride to Deliverance stays at the Lv.6 floor 1.0 (cumulative unlock).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Stride to Deliverance"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "ph_e5_present",
+      "layer": "parameters",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "claim": "E5 Ultimate Lv.+2 raises Let There Be Light (main) 3.0 -> 3.3.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Let There Be Light (main)"
+        },
+        "field": "mult",
+        "value": 3.3,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "ph_e5_locked",
+      "layer": "parameters",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "claim": "Below E5 Let There Be Light (main) stays at the Lv.10 floor 3.0 (cumulative unlock).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Let There Be Light (main)"
+        },
+        "field": "mult",
+        "value": 3,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "ph_e6_buff",
+      "layer": "interactions",
+      "fixtures": [
+        "e6"
+      ],
+      "claim": "E6 grants 6 Coreflame at battle start, enabling the transformation stat buffs (ph_atk).",
+      "assertion": {
+        "assert": "buff",
+        "id": "ph_atk"
+      }
+    },
+    {
+      "id": "ph_e6_locked",
+      "layer": "interactions",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "claim": "Cumulative unlock: the E6 transformation buff must NOT be active below rank 6.",
+      "assertion": {
+        "assert": "noBuff",
+        "id": "ph_atk"
+      }
+    },
+    {
+      "id": "ph_e6_summon",
+      "layer": "structure",
+      "fixtures": [
+        "e6"
+      ],
+      "claim": "E6 leads to Khaslana being summoned (transformation) and Stardeath Verdict resolving.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "SUMMON_CREATED",
+          "target": "Khaslana"
+        }
+      }
+    }
+  ],
+  "golds": []
+}

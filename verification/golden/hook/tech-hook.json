@@ -1,0 +1,22 @@
+{
+ "input": {
+  "kit": "hook",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Hook alone, technique \"Ack! Look at This Mess!\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Hook|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Hook|-|-|-",
+  "HIT_START|Hook|Ice Edge|Ack! Look at This Mess!|basic [1,10,30,5000000,789.76]",
+  "DAMAGE_CALCULATED|Hook|Ice Edge|-|basic [0,0,0,0,0,0,0,0.05,0.5,1,177,790]",
+  "DAMAGE_DEALT|Hook|Ice Edge|Ack! Look at This Mess!|basic [0.5,177,4999823,5000000,789.76]",
+  "TOUGHNESS_DAMAGE|Hook|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Hook|Ice Edge|-|basic [177,4999823]",
+  "DOT_APPLIED|Hook|Ice Edge|-|- [1,3,395]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

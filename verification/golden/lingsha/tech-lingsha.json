@@ -1,0 +1,20 @@
+{
+ "input": {
+  "kit": "lingsha",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Lingsha alone, technique \"Wisps of Aurora\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Lingsha|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Lingsha|-|- [1,Infinity]",
+  "BUFF_APPLIED|-|Lingsha|-|- [1,Infinity]",
+  "TECHNIQUE_APPLIED|Lingsha|-|-|-",
+  "SUMMON_CREATED|Lingsha|Fuyuan|-|- [1,1,111.1111,90]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [1,2]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

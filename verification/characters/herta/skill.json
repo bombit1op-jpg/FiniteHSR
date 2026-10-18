@@ -1,0 +1,354 @@
+{
+  "kit": "herta",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/101301+101302+101303+101304 + bonus_abilities (Efficiency, A4) + ranks",
+    "confidence": "verified",
+    "note": "Basic What Are You Looking At? (101301): Ice DMG #1 = 140% of ATK at L10 to one enemy (engine default Basic Lv6 = 100%). Skill One-Time Offer (101302): Ice DMG #1 = 100% of ATK to all enemies over 2 hits 30/70; if the target's HP% is #2 = 50% or higher, DMG against it increases by #3 = 20%, and Bonus Ability Efficiency adds a further 25% (engine total 145% before split). Ultimate It's Magic, I Added Some Magic (101303): Ice DMG #1 = 200% of ATK to all enemies. Talent Fine, I'll Do It Myself (101304): when an ally attack causes an enemy's HP% to fall to #1 = 50% or lower, Herta launches a Follow-Up ATK dealing #2 = 40% of ATK Ice DMG to all enemies (engine also grants +5 Energy per trigger). Energy limit sp_need = 110."
+  },
+  "fixtures": [
+    {
+      "id": "fullhp-1e",
+      "env": "Herta E0 solo vs 1 Ice-weak Elite dummy (Lv120, 6M HP, 300 Toughness) that stays above 50% HP, 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "herta",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "lowhp-1e",
+      "env": "Herta E0 solo vs 1 Ice-weak Elite dummy (Lv120, 8000 HP, 300 Toughness) that drops below 50% HP early, 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "herta",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 8000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "herta_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK What Are You Looking At? (101301, Ice) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Herta",
+          "label": "What Are You Looking At?",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "fullhp-1e",
+        "lowhp-1e"
+      ]
+    },
+    {
+      "id": "ht_skill_action",
+      "layer": "structure",
+      "claim": "One-Time Offer (101302) is Herta's damaging Skill action.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Herta",
+          "action": "skill"
+        }
+      }
+    },
+    {
+      "id": "ht_ult_action",
+      "layer": "structure",
+      "claim": "It's Magic, I Added Some Magic (101303) executes as a standard-Energy Ultimate once the 110-Energy ladder fills.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Herta",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "ht_skill_hits",
+      "layer": "structure",
+      "claim": "One-Time Offer is dealt in 2 hits per cast (101302 notes, 30%+70%); over 4 Skill casts the solo fixture fires 8 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Herta",
+          "label": "One-Time Offer"
+        },
+        "value": 8
+      },
+      "fixtures": [
+        "fullhp-1e"
+      ]
+    },
+    {
+      "id": "ht_no_fua_fullhp",
+      "layer": "structure",
+      "claim": "While every enemy stays above 50% HP the Talent never triggers, so no Fine, I'll Do It Myself Follow-Up hit appears.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "HIT_START",
+          "source": "Herta",
+          "label": "Fine, I'll Do It Myself!"
+        }
+      },
+      "fixtures": [
+        "fullhp-1e"
+      ]
+    },
+    {
+      "id": "ht_no_generic_attack",
+      "layer": "structure",
+      "claim": "Herta's kit exposes Basic ATK, Skill and Ultimate as its action set; it never falls back to a generic attack action.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Herta",
+          "action": "attack"
+        }
+      }
+    },
+    {
+      "id": "ht_skill_mult_boosted",
+      "layer": "parameters",
+      "claim": "One-Time Offer L10 vs an enemy at >=50% HP: base #1 = 100% + #3 = 20% boost + Efficiency's extra 25% = 145% of ATK, dealt over 30%+70% (first hit 0.435).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Herta",
+          "label": "One-Time Offer"
+        },
+        "field": "mult",
+        "value": 0.435,
+        "pick": "first"
+      },
+      "fixtures": [
+        "fullhp-1e"
+      ]
+    },
+    {
+      "id": "ht_skill_mult_unboosted",
+      "layer": "parameters",
+      "claim": "Once the enemy falls below 50% HP the conditional boost disappears and One-Time Offer deals the plain L10 100% split 30/70 (first hit 0.3); the low-HP fixture records 2 such boosted-off casts.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Herta",
+          "label": "One-Time Offer",
+          "payload": {
+            "mult": 0.3
+          }
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "lowhp-1e"
+      ]
+    },
+    {
+      "id": "ht_ult_mult",
+      "layer": "parameters",
+      "claim": "It's Magic, I Added Some Magic L10 deals Ice DMG equal to 200% of ATK (101303 #1) in a single hit per target.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Herta",
+          "label": "It's Magic, I Added Some Magic"
+        },
+        "field": "mult",
+        "value": 2
+      },
+      "fixtures": [
+        "fullhp-1e"
+      ]
+    },
+    {
+      "id": "ht_basic_mult",
+      "layer": "parameters",
+      "claim": "What Are You Looking At? runs the 50%->140% ladder (101301 #1); at the engine's default Basic Lv6 it totals 100% (mult 1.0).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Herta",
+          "label": "What Are You Looking At?"
+        },
+        "field": "mult",
+        "value": 1,
+        "pick": "first"
+      },
+      "fixtures": [
+        "fullhp-1e"
+      ]
+    },
+    {
+      "id": "ht_energy_total",
+      "layer": "parameters",
+      "claim": "Herta's Ultimate uses the standard 110-Energy ladder (sp_need 110); over this fixture her action set regenerates exactly 165 Energy.",
+      "assertion": {
+        "assert": "energy",
+        "who": "Herta",
+        "atLeast": 165,
+        "atMost": 165
+      },
+      "fixtures": [
+        "fullhp-1e"
+      ]
+    },
+    {
+      "id": "ht_energy_total_lowhp",
+      "layer": "parameters",
+      "claim": "Herta's Ultimate uses the standard 110-Energy ladder (sp_need 110); over this fixture her action set plus Talent triggers regenerates exactly 165 Energy.",
+      "assertion": {
+        "assert": "energy",
+        "who": "Herta",
+        "atLeast": 165,
+        "atMost": 165
+      },
+      "fixtures": [
+        "lowhp-1e"
+      ]
+    },
+    {
+      "id": "ht_order_fua",
+      "layer": "ordering",
+      "claim": "The enemy's HP crosses the 50% threshold during One-Time Offer damage, and the Talent Follow-Up fires after that damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "DAMAGE_DEALT",
+            "source": "Herta",
+            "label": "One-Time Offer"
+          }
+        ],
+        "after": [
+          {
+            "type": "HIT_START",
+            "source": "Herta",
+            "label": "Fine, I'll Do It Myself!"
+          }
+        ]
+      },
+      "fixtures": [
+        "lowhp-1e"
+      ]
+    },
+    {
+      "id": "ht_fua_present",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "When an ally attack drops the enemy to <=50% HP, Talent 101304 launches Fine, I'll Do It Myself as a Follow-Up ATK against all enemies.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Herta",
+          "label": "Fine, I'll Do It Myself!"
+        }
+      },
+      "fixtures": [
+        "lowhp-1e"
+      ]
+    },
+    {
+      "id": "ht_fua_mult",
+      "layer": "interactions",
+      "claim": "The Follow-Up ATK deals Ice DMG equal to #2 = 40% of Herta's ATK at Talent L10 (101304).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Herta",
+          "label": "Fine, I'll Do It Myself!"
+        },
+        "field": "mult",
+        "value": 0.4,
+        "pick": "first"
+      },
+      "fixtures": [
+        "lowhp-1e"
+      ]
+    },
+    {
+      "id": "ht_fua_triggers_once_per_attack",
+      "layer": "interactions",
+      "claim": "Each qualifying attack fires at most one Follow-Up sequence; over the 4 qualifying attacks in the low-HP fixture the Talent fires exactly 3 times (the 4th Skill kills the dummy).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Herta",
+          "label": "Fine, I'll Do It Myself!"
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "lowhp-1e"
+      ]
+    }
+  ],
+  "golds": []
+}

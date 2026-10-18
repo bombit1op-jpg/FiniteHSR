@@ -1,0 +1,21 @@
+{
+ "input": {
+  "kit": "archer",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Archer alone, technique \"Clairvoyance\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Archer|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Archer|-|-|-",
+  "HIT_START|Archer|Ice Edge|Clairvoyance|basic [1,10,30,5000000,731.6]",
+  "DAMAGE_CALCULATED|Archer|Ice Edge|-|basic [0,0,0,0,0,0,0.117,0.224,1,2,732,805]",
+  "DAMAGE_DEALT|Archer|Ice Edge|Clairvoyance|basic [2,4999195,5000000,731.6,805]",
+  "TOUGHNESS_DAMAGE|Archer|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Archer|Ice Edge|-|basic [4999195,805]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

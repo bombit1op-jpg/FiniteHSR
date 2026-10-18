@@ -1,0 +1,501 @@
+{
+  "kit": "trailblazer_destruction",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/88/ranks/1..6 (Physical, Destruction Trailblazer)",
+    "confidence": "interpreted",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 'A Falling Star' (Ult kill +10 Energy) and E6 'A Trailblazing Will' (Talent also triggers on kill) and E4 'A Destructing Glance' (+25% CRIT Rate vs Weakness-Broken) fire only on kill/broken-target conditions the kept single-target dummy fixture does not exercise, so they are documented here rather than asserted. E2 'An Unwilling Host': attacking a Physical-Weak enemy restores HP (HEAL_APPLIED fires from E2 on). E3 'A Leading Whisper': Skill+2/Talent+2 raise 'RIP Home Run (main)' 1.25 -> 1.375. E5 'A Surviving Hope': Ult+2/Basic+1 raise 'Stardust Ace: Blowout Farewell Hit' 4.5 -> 4.8 and 'Farewell Hit' 1 -> 1.1. Fixtures run one battle per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "trailblazer_destruction E0 — eidolon ladder rung, cloned from trailblazer_destruction/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_destruction",
+            "name": "TBD",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 0,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e1",
+      "env": "trailblazer_destruction E1 — eidolon ladder rung, cloned from trailblazer_destruction/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_destruction",
+            "name": "TBD",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 1,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e2",
+      "env": "trailblazer_destruction E2 — eidolon ladder rung, cloned from trailblazer_destruction/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_destruction",
+            "name": "TBD",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 2,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e3",
+      "env": "trailblazer_destruction E3 — eidolon ladder rung, cloned from trailblazer_destruction/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_destruction",
+            "name": "TBD",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 3,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e4",
+      "env": "trailblazer_destruction E4 — eidolon ladder rung, cloned from trailblazer_destruction/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_destruction",
+            "name": "TBD",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 4,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e5",
+      "env": "trailblazer_destruction E5 — eidolon ladder rung, cloned from trailblazer_destruction/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_destruction",
+            "name": "TBD",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 5,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e6",
+      "env": "trailblazer_destruction E6 — eidolon ladder rung, cloned from trailblazer_destruction/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_destruction",
+            "name": "TBD",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Physical"
+          ]
+        },
+        "cycles": 4,
+        "seed": 3
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "tbd_e2_heal",
+      "layer": "interactions",
+      "claim": "E2 'An Unwilling Host': attacking a Physical-Weak enemy restores HP; the heal is observable from E2 on.",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HEAL_APPLIED"
+        },
+        "value": 2
+      }
+    },
+    {
+      "id": "tbd_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: no E2 heal below rank 2.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HEAL_APPLIED"
+        },
+        "value": 0
+      }
+    },
+    {
+      "id": "tbd_e3_skill",
+      "layer": "parameters",
+      "claim": "E3 Skill+2 raises 'RIP Home Run (main)' 1.25 -> 1.375.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "RIP Home Run (main)"
+        },
+        "field": "mult",
+        "value": 1.375,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbd_e3_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'RIP Home Run (main)' stays at 1.25.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "RIP Home Run (main)"
+        },
+        "field": "mult",
+        "value": 1.25,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbd_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 Ult+2 raises 'Stardust Ace: Blowout Farewell Hit' 4.5 -> 4.8.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Stardust Ace: Blowout Farewell Hit"
+        },
+        "field": "mult",
+        "value": 4.8,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbd_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 'Stardust Ace: Blowout Farewell Hit' stays at 4.5.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Stardust Ace: Blowout Farewell Hit"
+        },
+        "field": "mult",
+        "value": 4.5,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbd_e5_basic",
+      "layer": "parameters",
+      "claim": "E5 Basic+1 raises 'Farewell Hit' 1 -> 1.1.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Farewell Hit"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbd_e5_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E5 'Farewell Hit' stays at 1.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Farewell Hit"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

@@ -1,0 +1,21 @@
+{
+ "input": {
+  "kit": "firefly",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Firefly alone, technique \"Δ Order: Meteoric Incineration\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Firefly|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Firefly|-|-|-",
+  "HIT_START|Firefly|Ice Edge|Δ Order: Meteoric Incineration|basic [1,10,30,5000000,523]",
+  "DAMAGE_CALCULATED|Firefly|Ice Edge|-|basic [0,0,0,0,0,0,0,0.05,1,2,470,523]",
+  "DAMAGE_DEALT|Firefly|Ice Edge|Δ Order: Meteoric Incineration|basic [2,470,4999530,5000000,523]",
+  "TOUGHNESS_DAMAGE|Firefly|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Firefly|Ice Edge|-|basic [470,4999530]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

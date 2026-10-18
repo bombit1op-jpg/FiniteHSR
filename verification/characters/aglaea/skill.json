@@ -1,0 +1,290 @@
+{
+  "kit": "aglaea",
+  "slot": "skill",
+  "fixtures": [
+    {
+      "id": "solo-first-ult",
+      "env": "Solo E0 Aglaea vs a dummy Elite (atk 150 so she survives 8 cycles; Lightning weakness, 600 Toughness), 8 cycles. energyStartFrac 1 makes the very first action the full-energy Ultimate 'Dance, Destined Weaveress' (140203): it summons Garmentmaker, enters Supreme Stance, starts the SPD-100 Supreme countdown and immediately performs the Joint ATK 'Slash by a Thousandfold Kiss' (140208). While Supreme Stance lasts (countdown 100 AV, Aglaea SPD 250 so she outruns it) every action is another Joint ATK; when the countdown hits, Garmentmaker self-destructs (+20 Energy via 'Bloom of Drying Grass'). Afterwards the rotation cycles Skill 'Rise, Exalted Renown' (140202; re-summon path grants an immediate extra action) and Basic 'Thorned Nectar' (140201; re-applies each attack), Garmentmaker occasionally acts alone with memosprite skill 'Thorned Snare' (1140201), and a second full Ultimate resets the Supreme countdown. Verifies E0 kits: no E1 energy trickle, no E2 DEF-ignore stacks, no E6 RES PEN.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "aglaea",
+            "stats": {
+              "hp": 6000,
+              "atk": 3000,
+              "def": 1200,
+              "spd": 250
+            },
+            "eidolon": 0,
+            "energyStartFrac": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 150,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 3
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "aglaea_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Thorned Nectar (140201, Thunder) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Aglaea",
+          "label": "Thorned Nectar",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "solo-first-ult"
+      ]
+    },
+    {
+      "id": "ult_supreme_note",
+      "ability": "ultimate",
+      "hint": "Canon 140203 'Dance, Destined Weaveress': summons Garmentmaker, enters Supreme Stance and immediately takes action. Structure: the Ultimate must enter the stance and log it.",
+      "claim": "Engine: Ultimate activates at full Energy (350), sets its own cost to 0 and logs entering the stance.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Aglaea Ultimate: Supreme Stance \\(Joint ATK, countdown SPD 100\\)"
+        }
+      },
+      "layer": "structure"
+    },
+    {
+      "id": "countdown_note",
+      "hint": "Canon 140203: Supreme Stance runs on a countdown (Ult #4: SPD 100). Structure: entering the stance registers the countdown timer.",
+      "claim": "Engine: the memosprite countdown timer 'Supreme Countdown' (SPD 100) is registered at Ultimate time and logged.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Aglaea Supreme Stance: countdown \\(SPD 100\\) begins"
+        }
+      },
+      "layer": "structure"
+    },
+    {
+      "id": "joint_hit",
+      "hint": "Canon 140208 'Slash by a Thousandfold Kiss': Aglaea and Garmentmaker launch a Joint ATK (Blast). Structure: Supreme Stance actions are Joint ATKs, not ordinary Basics.",
+      "claim": "Engine: the immediate action after the Ultimate and every Supreme action hits with the 'Joint ATK (main)' attack.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "label": "Joint ATK (main)"
+        }
+      },
+      "layer": "structure"
+    },
+    {
+      "id": "summon_note",
+      "hint": "Canon 140204 'Rosy-Fingered': memosprite Garmentmaker has SPD = #4 of Aglaea SPD and Max HP = #5 of Aglaea Max HP + #6. Structure: the summon is created with mirrored stats.",
+      "claim": "Engine: the Ultimate summons the SPD/HP-mirrored Garmentmaker and logs its live SPD and HP.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Aglaea summons Garmentmaker \\(SPD \\d+, HP \\d+\\)"
+        }
+      },
+      "layer": "structure"
+    },
+    {
+      "id": "thorned_nectar",
+      "hint": "Canon 140201 'Thorned Nectar': Basic deals Lightning DMG to one designated enemy. Structure: the normal (non-Supreme) Basic keeps its own identity.",
+      "claim": "Engine: after the first Supreme Stance ends, the plain Basic hits with the 'Thorned Nectar' attack.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "label": "Thorned Nectar"
+        }
+      },
+      "layer": "structure"
+    },
+    {
+      "id": "stitch_buff",
+      "hint": "Canon 140204: while Garmentmaker is on the field Aglaea's attacks inflict 'Seam Stitch'. Structure: the debuff object is applied to the target.",
+      "claim": "Engine: attacks on the target apply the 'Seam Stitch DMG Taken+' buff with infinite duration. E0 follows canon: NO DMG-taken increase yet (mods empty at Eidolon 0).",
+      "assertion": {
+        "assert": "buff",
+        "id": "gm_stitch",
+        "target": "Elite"
+      },
+      "layer": "structure"
+    },
+    {
+      "id": "skill_heal",
+      "ability": "skill",
+      "hint": "Canon 140202 'Rise, Exalted Renown': restores HP to Garmentmaker by #1 of its Max HP. Parameters: the heal amount is a % of Garmentmaker's Max HP.",
+      "claim": "Engine: the Skill heals Garmentmaker and logs the actual amount.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Aglaea Skill: Garmentmaker regains \\d+ HP"
+        }
+      },
+      "layer": "parameters"
+    },
+    {
+      "id": "thorned_snare",
+      "hint": "Canon memosprite 1140201 'Thorned Snare': Garmentmaker's own Blast. Parameters: the memosprite action carries its own ability identity.",
+      "claim": "Engine: on Garmentmaker's own turn it attacks with the 'Thorned Snare' (main) / 'Thorned Snare (adj)' Blast.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "label": "Thorned Snare"
+        }
+      },
+      "layer": "parameters"
+    },
+    {
+      "id": "vanish_note",
+      "hint": "Canon 1140206 'Bloom of Drying Grass': when Garmentmaker disappears, Aglaea regenerates Energy. Parameters: Supreme Stance teardown fires the disappearance event.",
+      "claim": "Engine: when the countdown fires, the memosprite disappears and the stance end is logged.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Aglaea Supreme Stance ends; Garmentmaker vanished \\(SPD was \\d+\\)"
+        }
+      },
+      "layer": "parameters"
+    },
+    {
+      "id": "ultra_count",
+      "hint": "Canon: Energy-rich kit — a second full Ultimate must be reachable during the battle. Parameters: the Ultimate cost is 350 and every recharge path yields exactly sp_base Energy.",
+      "claim": "Engine: the second full-Energy Ultimate fires the same stance entry (countdown resets via re-registration).",
+      "assertion": {
+        "assert": "count",
+        "value": 2,
+        "of": {
+          "type": "NOTE",
+          "log": "Aglaea Ultimate: Supreme Stance \\(Joint ATK, countdown SPD 100\\)"
+        }
+      },
+      "layer": "parameters"
+    },
+    {
+      "id": "joint_after_ult",
+      "hint": "Canon 140203: the stance entry grants an immediate action. Ordering: the Joint ATK must follow the Ult that granted it.",
+      "claim": "Engine: the first 'Joint ATK (main)' hit comes after the first Supreme Stance Ultimate note.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "Aglaea Ultimate: Supreme Stance \\(Joint ATK, countdown SPD 100\\)"
+          }
+        ],
+        "after": [
+          {
+            "type": "HIT_START",
+            "label": "Joint ATK (main)"
+          }
+        ]
+      },
+      "layer": "ordering"
+    },
+    {
+      "id": "countdown_after_ult",
+      "hint": "Canon 140203: entering Supreme Stance starts the countdown. Ordering: the countdown registration happens during the Ultimate's own perform block (the engine logs the stance entry right after the countdown line).",
+      "claim": "Engine: summoning the countdown and logging its start happen as part of the Ultimate; the stance-entry note lands immediately after.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "Aglaea Supreme Stance: countdown \\(SPD 100\\) begins"
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "Aglaea Ultimate: Supreme Stance \\(Joint ATK, countdown SPD 100\\)"
+          }
+        ]
+      },
+      "layer": "ordering"
+    },
+    {
+      "id": "skill_immediate_after_heal",
+      "hint": "Canon 140202: if Garmentmaker is absent the Skill summons it and makes this unit immediately take action. Ordering: the immediate-action grant is logged after the restore (absent-path only).",
+      "claim": "Engine: after the first Supreme Stance teardown, Skill re-summon logs the heal first, then the immediate-action grant.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "Aglaea Skill: Garmentmaker regains \\d+ HP"
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "Aglaea Skill: GM summoned — immediate action"
+          }
+        ]
+      },
+      "layer": "ordering"
+    },
+    {
+      "id": "seam_stitch_add",
+      "ability": "talent",
+      "hint": "Canon 140204 Talent: attacking the Seam-Stitched enemy adds Lightning Additional DMG on top. Interactions: the talent fires the extra hit against the marked target only.",
+      "claim": "Engine: attacking the stitched Elite resolves the Talent's extra 'Seam Stitch' Lightning hit.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "label": "Seam Stitch"
+        }
+      },
+      "layer": "interactions"
+    },
+    {
+      "id": "myopic_stat",
+      "hint": "Canon trace 'The Myopic's Doom': in Supreme Stance Aglaea & Garmentmaker get ATK up by 720% of Aglaea SPD + 360% of Garmentmaker SPD. Interactions: the stance grants a real flat-ATK stat effect for both.",
+      "claim": "Engine: while Supreme, Aglaea holds the ATK-flat buff (SPD 250 gives 7.2 x 250 = 1800 plus the Garmentmaker term).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "aglaea_myopic",
+        "stat": "atkFlat",
+        "atLeast": 1800
+      },
+      "layer": "interactions"
+    },
+    {
+      "id": "no_e6",
+      "hint": "Canon E6 'Fluctuate in the Tapestry of Fates': 20% Lightning RES PEN is an Eidolon-6 effect. Interactions: an E0 run must NOT apply it.",
+      "claim": "Engine: E0 never grants the E6 RES PEN buff.",
+      "assertion": {
+        "assert": "noBuff",
+        "id": "aglaea_e6"
+      },
+      "layer": "interactions"
+    }
+  ]
+}

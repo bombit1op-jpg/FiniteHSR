@@ -1,0 +1,255 @@
+{
+  "kit": "march7th_the_hunt",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "reference/hsr-data/characters.json#/1224/skills/122402",
+    "confidence": "verified",
+    "note": "AGENTS.md kit note march7th_the_hunt: Skill 122402 'The Power of Cuteness' designates Shifu (fastest living ally, SPD%), Talent 122404 'Master, I've Ascended!' 7 Charge -> Ascended enhanced Basic, Ult 122403 stores +2 hits/+20% extra-hit chance, A2 Swan Soar +25% advance, A4 Filigree, A6 Tide Tamer, energyMax 110"
+  },
+  "fixtures": [
+    {
+      "id": "base-duo",
+      "env": "Duo E0 March 7th • The Hunt + E0 Boothill (fastest living ally = Shifu, Hunt striker path), March stats atk 3000/spd 200 (traces on: no SPD trace), skillPriority 0 so after the first Skill she only Basics and accrues Charge, Boothill stats atk 3000/spd 140 skillPriority 2, vs a dummy Elite (atk 0, Imaginary+Physical weakness, 600 Toughness), 3 cycles. Rotation: Skill 'The Power of Cuteness' designates Boothill as Shifu -> Basic 'My Sword Zaps Demons' (+1 Charge each, Shifu attacks also +1 Charge via Talent) -> 7 Charge ASCENDED (immediate turn) -> Enhanced Basic 'Brows Be Smitten, Heart Be Bitten' -> A6 Tide Tamer on Shifu; auto-Ult 'March 7th, the Apex Heroine' stores +2 hits for the next Enhanced Basic",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th_the_hunt",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 0,
+            "skillPriority": 0,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": ["Imaginary", "Physical"],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "shifu_designated",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill 122402 'The Power of Cuteness' designates the fastest living ally as Shifu (kit designate, note 'designates Boothill as \"Shifu\"'); with skillPriority 0 the first action is this Skill (no Shifu yet forces the Skill branch).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "designates Boothill as \"Shifu\""
+        }
+      }
+    },
+    {
+      "id": "basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK 122401 'My Sword Zaps Demons' is her SP-dry follow-up (decide: Shifu set and skillPriority 0 -> basic), type basic.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "March 7th • The Hunt",
+          "label": "My Sword Zaps Demons",
+          "attackType": "basic"
+        }
+      }
+    },
+    {
+      "id": "charge_accrues",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent 122404 accrues Charge on each of her Basics and each Shifu attack (kit addCharge, note 'Charge X → Y/10', cap 10 from talent_a3).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Charge \\d+ → \\d+/10"
+        }
+      }
+    },
+    {
+      "id": "ult_cast",
+      "layer": "structure",
+      "claim": "Ultimate 122403 'March 7th, the Apex Heroine' is cast from an auto-ult turn (charTurn full-energy rule: 110/110 EN).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "March 7th • The Hunt",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "enhanced_basic_hit",
+      "layer": "structure",
+      "claim": "Ascended state replaces the Basic with Enhanced Basic 'Brows Be Smitten, Heart Be Bitten' (kit perform ascended branch, type basic).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "March 7th • The Hunt",
+          "label": "Brows Be Smitten, Heart Be Bitten",
+          "attackType": "basic"
+        }
+      }
+    },
+    {
+      "id": "shifu_spd_buff",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill 122402 gives the Shifu SPD +10% at Skill Lv.10 (PROG skill ladder L10 = 0.1, buff m7h_shifu spdPct).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "m7h_shifu",
+        "stat": "spdPct",
+        "value": 0.1,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "ascend_dmg_bonus",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "Talent 122404 Ascended grants DMG +80% at Talent Lv.10 (PROG talent_a2 L10 = 0.8, buff m7h_ascend dmgAll).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "m7h_ascend",
+        "stat": "dmgAll",
+        "value": 0.8,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "ult_energy_paid",
+      "layer": "parameters",
+      "claim": "Casting the auto-ult consumes the full 110 Energy pool (Energy.md canon: castUlt ENERGY_LOSS reason ult_cost, amount 110) and energy never exceeds the 110 cap afterwards.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "March 7th • The Hunt",
+          "payload": { "reason": "ult_cost" }
+        },
+        "field": "amount",
+        "value": 110,
+        "tol": 1
+      },
+      "after": [
+        { "kitId": "march7th_the_hunt", "stat": "energy", "op": "atMost", "value": 110 }
+      ]
+    },
+    {
+      "id": "tide_tamer_stats",
+      "layer": "parameters",
+      "claim": "A6 Tide Tamer (kit hardcoded 60%/36%) lands on the Shifu after the Enhanced Basic: CRIT DMG +60%, 2 turns (buff m7h_tide).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "m7h_tide",
+        "stat": "critDmg",
+        "value": 0.6,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "shifu_before_add_dmg",
+      "layer": "ordering",
+      "claim": "Shifu Additional DMG (skill_a2, 'Master, It's Tea Time!' in Shifu's element) can only fire after the Shifu designation exists.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "NOTE", "log": "designates Boothill as \"Shifu\"" }
+        ],
+        "after": [
+          { "type": "HIT_START", "label": "Master, It's Tea Time! (Shifu Additional DMG)" }
+        ]
+      }
+    },
+    {
+      "id": "ascend_before_enhanced",
+      "layer": "ordering",
+      "claim": "The ASCENDED transition (7 Charge threshold, immediate turn) precedes the Enhanced Basic hit that consumes the Charge.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "NOTE", "log": "ASCENDED" }
+        ],
+        "after": [
+          { "type": "HIT_START", "label": "Brows Be Smitten, Heart Be Bitten" }
+        ]
+      }
+    },
+    {
+      "id": "ult_before_enhanced",
+      "ability": "ultimate",
+      "layer": "ordering",
+      "claim": "Ultimate 122403 stores +2 hits for the Enhanced Basic (kit ult: rt.ultHits += 2), so the Ult must resolve before that Enhanced Basic consumes them.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "ABILITY_USED", "source": "March 7th • The Hunt", "action": "ultimate" }
+        ],
+        "after": [
+          { "type": "HIT_START", "label": "Brows Be Smitten, Heart Be Bitten" }
+        ]
+      }
+    },
+    {
+      "id": "shifu_buff_on_boothill",
+      "layer": "interactions",
+      "claim": "The Shifu SPD buff (m7h_shifu) is applied to Boothill, the designated carrier, not to March herself (kit designate target).",
+      "assertion": {
+        "assert": "buff",
+        "id": "m7h_shifu",
+        "target": "Boothill"
+      }
+    },
+    {
+      "id": "tide_on_shifu",
+      "layer": "interactions",
+      "claim": "A6 Tide Tamer is Shifu-locked: after the Enhanced Basic the buff lands on Boothill only (kit: Shifu-gated addBuff, debug-kits m7h-tide-lock negative).",
+      "assertion": {
+        "assert": "buff",
+        "id": "m7h_tide",
+        "target": "Boothill"
+      }
+    },
+    {
+      "id": "no_e1_spd",
+      "layer": "interactions",
+      "claim": "E1 'My Sword Stirs Starlight' +10% SPD must never appear at E0 (kit refreshE1 eidolon guard).",
+      "assertion": {
+        "assert": "noBuff",
+        "id": "m7h_e1_spd"
+      }
+    }
+  ]
+}

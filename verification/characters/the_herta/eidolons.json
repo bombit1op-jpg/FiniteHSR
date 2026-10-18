@@ -1,0 +1,337 @@
+{
+  "kit": "the_herta",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/The Herta/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 'Night at Shorefall': the Enhanced Skill counts 50% of the most-stacked Interpretation target's stacks and resets to 15 instead of 10 (Hear Me Out 2.96 -> 4.08). E2 'Wind Through Keyhole': after entering combat or using Ultimate gain +1 Inspiration and after the Enhanced Skill advance 35% (th_inspiration stackable to 3). E3 'Door into Summer': Skill Lv.+2 / Talent Lv.+2 (Big Brain Energy 0.70 -> 0.77). E4 'The Sixteenth Key': Erudition characters' SPD +12% (th_e4_spd, spdPct 0.12). E5 'Bitter Pill of Truth': Ult Lv.+2 / Basic Lv.+1 (th_ult_atk atkPct 0.80 -> 0.88). E6 'Sweet Lure of Answer': Ice RES PEN +20% (th_e6_res, resPen:Ice 0.20) and Ultimate multiplier +140/250/400% by enemy count. Fixtures run one battle per eidolon rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "the_herta E0 — eidolon ladder rung, cloned from the_herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 0,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 1
+      }
+    },
+    {
+      "id": "e1",
+      "env": "the_herta E1 — eidolon ladder rung, cloned from the_herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 1,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 1
+      }
+    },
+    {
+      "id": "e2",
+      "env": "the_herta E2 — eidolon ladder rung, cloned from the_herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 2,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 1
+      }
+    },
+    {
+      "id": "e3",
+      "env": "the_herta E3 — eidolon ladder rung, cloned from the_herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 3,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 1
+      }
+    },
+    {
+      "id": "e4",
+      "env": "the_herta E4 — eidolon ladder rung, cloned from the_herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 4,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 1
+      }
+    },
+    {
+      "id": "e5",
+      "env": "the_herta E5 — eidolon ladder rung, cloned from the_herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 5,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 1
+      }
+    },
+    {
+      "id": "e6",
+      "env": "the_herta E6 — eidolon ladder rung, cloned from the_herta/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_herta",
+            "name": "The Herta",
+            "stats": {
+              "hp": 5000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 500000,
+          "atk": 500,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Ice"
+          ]
+        },
+        "cycles": 8,
+        "seed": 1
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "the_herta_e1_level",
+      "layer": "parameters",
+      "claim": "E1 'Night at Shorefall': the Enhanced Skill counts 50% of the most-stacked Interpretation target's stacks and resets to 15, raising Hear Me Out 2.96 -> 4.08.",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payloadAtLeast", "of": { "type": "DAMAGE_DEALT", "label": "Hear Me Out (1/3)" }, "field": "mult", "value": 4 }
+    },
+    {
+      "id": "the_herta_e1_absent",
+      "layer": "parameters",
+      "claim": "Cumulative unlock: below rank 1 the Enhanced Skill multiplier stays at the 2.96 floor.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "payloadAtLeast", "of": { "type": "DAMAGE_DEALT", "label": "Hear Me Out (1/3)" }, "field": "mult", "value": 2.9 }
+    },
+    {
+      "id": "the_herta_e2_stacks",
+      "layer": "interactions",
+      "claim": "E2 'Wind Through Keyhole': after entering combat or using Ultimate gain +1 Inspiration, so the stack reaches 3 (th_inspiration stackable to 3).",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "th_inspiration", "stacks": 3 }
+    },
+    {
+      "id": "the_herta_e3_level",
+      "layer": "parameters",
+      "claim": "E3 'Door into Summer': Skill Lv.+2 / Talent Lv.+2 raise Big Brain Energy 0.70 -> 0.77.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payloadAtLeast", "of": { "type": "DAMAGE_DEALT", "label": "Big Brain Energy (1/3)" }, "field": "mult", "value": 0.75 }
+    },
+    {
+      "id": "the_herta_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'The Sixteenth Key': Erudition characters' SPD +12% (th_e4_spd, spdPct 0.12).",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "th_e4_spd" }
+    },
+    {
+      "id": "the_herta_e4_spd",
+      "layer": "parameters",
+      "claim": "The E4 buff carries spdPct 0.12 (canon ranks/4).",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "buffStat", "id": "th_e4_spd", "stat": "spdPct", "value": 0.12 }
+    },
+    {
+      "id": "the_herta_e4_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E4's th_e4_spd must NOT be active below rank 4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "noBuff", "id": "th_e4_spd" }
+    },
+    {
+      "id": "the_herta_e5_level",
+      "layer": "parameters",
+      "claim": "E5 'Bitter Pill of Truth': Ult Lv.+2 / Basic Lv.+1 raise th_ult_atk atkPct 0.80 -> 0.88.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "th_ult_atk", "stat": "atkPct", "value": 0.88 }
+    },
+    {
+      "id": "the_herta_e6_present",
+      "layer": "interactions",
+      "claim": "E6 'Sweet Lure of Answer': The Herta's Ice RES PEN +20% (th_e6_res, resPen:Ice 0.20).",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buff", "id": "th_e6_res" }
+    },
+    {
+      "id": "the_herta_e6_respen",
+      "layer": "parameters",
+      "claim": "The E6 buff carries resPen:Ice 0.20 (canon ranks/6).",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buffStat", "id": "th_e6_res", "stat": "resPen:Ice", "value": 0.2 }
+    },
+    {
+      "id": "the_herta_e6_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E6's th_e6_res must NOT be active below rank 6.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "noBuff", "id": "th_e6_res" }
+    }
+  ],
+  "golds": []
+}

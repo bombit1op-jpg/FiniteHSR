@@ -1,0 +1,421 @@
+{
+  "kit": "hysilens",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Hysilens/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 'You Ask Why Hearts Cry' = ally DoT x1.16 (hys_e1 boost:dot 0.16) + a coexisting second DoT instance on Talent inflict. E2 'Tell Me Why Waves Roar High' spreads the Fiddle of Pearls DMG Boost to all allies while the Zone is active (hys_fiddle2) — unobservable here because the fixture's Hysilens has EHR below the Fiddle threshold, pinned by a custom placeholder. E3 raises Maelstrom Rhapsody 2 -> 2.16, Aeolian Mode 0.5 -> 0.55 and Zone DEF down 0.25 -> 0.27 (Ult+2 / Basic+1). E4 'Lo, How Time Flows By' = Zone All-Type RES -20% (hys_e4 resAll -0.2). E5 raises Overtone Hum 1.4 -> 1.54, skill vuln 0.2 -> 0.22 and Talent DoT 418 -> 459 (Skill+2 / Talent+2). E6 'When to Return From Where You Lie' = Zone Phys DoT cap 12 and multiplier x1.2 (observed Bleed base 1470 -> 1764). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "hysilens E0 — eidolon ladder rung, cloned from hysilens/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "hysilens",
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "hysilens E1 — eidolon ladder rung, cloned from hysilens/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "hysilens",
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "hysilens E2 — eidolon ladder rung, cloned from hysilens/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "hysilens",
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "hysilens E3 — eidolon ladder rung, cloned from hysilens/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "hysilens",
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "hysilens E4 — eidolon ladder rung, cloned from hysilens/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "hysilens",
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "hysilens E5 — eidolon ladder rung, cloned from hysilens/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "hysilens",
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "hysilens E6 — eidolon ladder rung, cloned from hysilens/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yukong",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "hysilens",
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "hys_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'You Ask Why Hearts Cry': while on the field, DoT dealt by ally targets is 116% of original (hys_e1 boost:dot 0.16). Present from E1.",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "hys_e1" }
+    },
+    {
+      "id": "hys_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: hys_e1 must NOT be active below rank 1 (rejects a gapped/leaked ladder).",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "noBuff", "id": "hys_e1" }
+    },
+    {
+      "id": "hys_e1_dotboost",
+      "layer": "parameters",
+      "claim": "hys_e1 carries boost:dot 0.16 (canon ranks/1).",
+      "fixtures": ["e1"],
+      "assertion": { "assert": "buffStat", "id": "hys_e1", "stat": "boost:dot", "value": 0.16 }
+    },
+    {
+      "id": "hys_e1_extra_dot",
+      "layer": "interactions",
+      "claim": "E1 additionally inflicts a second, coexisting DoT instance on Talent infliction: DOT_APPLIED total rises from 19 (E0) to 32 (E1).",
+      "fixtures": ["e1"],
+      "assertion": { "assert": "count", "of": { "type": "DOT_APPLIED" }, "value": 32 }
+    },
+    {
+      "id": "hys_e1_extra_dot_locked",
+      "layer": "interactions",
+      "claim": "Below E1 no second instance exists: DOT_APPLIED total stays at 19 (E0 baseline).",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "count", "of": { "type": "DOT_APPLIED" }, "value": 19 }
+    },
+    {
+      "id": "hys_e2_zone_fiddle",
+      "layer": "interactions",
+      "claim": "E2 'Tell Me Why Waves Roar High' spreads the Fiddle of Pearls DMG Boost to all allies while the Zone is active (hys_fiddle2). Not observable in this fixture: its Hysilens has no EHR, so the Fiddle value is 0 and no hys_fiddle2 buff can ever be applied.",
+      "fixtures": ["e2"],
+      "assertion": { "assert": "custom", "note": "E2 needs EHR on Hysilens to make the Fiddle DMG boost positive; fixture has base EHR 0. Add an EHR stat to a future fixture to assert hys_fiddle2." }
+    },
+    {
+      "id": "hys_e3_ult",
+      "layer": "parameters",
+      "claim": "E3 'Why Do Lights Bid Goodbye': Ultimate Lv.+2 raises Maelstrom Rhapsody 2 -> 2.16.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Maelstrom Rhapsody" }, "field": "mult", "value": 2.16, "tol": 0.002, "pick": "first" }
+    },
+    {
+      "id": "hys_e3_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Maelstrom Rhapsody stays at 2.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Maelstrom Rhapsody" }, "field": "mult", "value": 2, "tol": 0.002, "pick": "first" }
+    },
+    {
+      "id": "hys_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 Basic ATK Lv.+1 raises Aeolian Mode 0.5 -> 0.55 per half.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Aeolian Mode (1/2)" }, "field": "mult", "value": 0.55, "tol": 0.002, "pick": "first" }
+    },
+    {
+      "id": "hys_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Aeolian Mode stays at 0.5.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Aeolian Mode (1/2)" }, "field": "mult", "value": 0.5, "tol": 0.002, "pick": "first" }
+    },
+    {
+      "id": "hys_e3_zone_def",
+      "layer": "parameters",
+      "claim": "E3 Ultimate Lv.+2 also raises the Zone DEF down: hys_zone_def defRed 0.25 -> 0.27.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "hys_zone_def", "stat": "defRed", "value": 0.27, "tol": 0.005 }
+    },
+    {
+      "id": "hys_e3_zone_def_locked",
+      "layer": "parameters",
+      "claim": "Below E3 the Zone DEF down stays at 0.25.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "buffStat", "id": "hys_zone_def", "stat": "defRed", "value": 0.25, "tol": 0.005 }
+    },
+    {
+      "id": "hys_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Lo, How Time Flows By': while the Zone is active, all enemies take All-Type RES -20% (hys_e4 resAll -0.2). Present from E4.",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "hys_e4" }
+    },
+    {
+      "id": "hys_e4_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: hys_e4 must NOT be active below rank 4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "noBuff", "id": "hys_e4" }
+    },
+    {
+      "id": "hys_e4_stat",
+      "layer": "parameters",
+      "claim": "hys_e4 carries resAll -0.2 (canon ranks/4).",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "buffStat", "id": "hys_e4", "stat": "resAll", "value": -0.2 }
+    },
+    {
+      "id": "hys_e5_skill",
+      "layer": "parameters",
+      "claim": "E5 'In Ablution, I Hum and Sigh': Skill Lv.+2 raises Overtone Hum 1.4 -> 1.54.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Overtone Hum" }, "field": "mult", "value": 1.54, "tol": 0.002, "pick": "first" }
+    },
+    {
+      "id": "hys_e5_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Overtone Hum stays at 1.4.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Overtone Hum" }, "field": "mult", "value": 1.4, "tol": 0.002, "pick": "first" }
+    },
+    {
+      "id": "hys_e5_vuln",
+      "layer": "parameters",
+      "claim": "E5 Skill Lv.+2 raises the Overtone Hum DMG-taken debuff (hys_vuln) 0.2 -> 0.22.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "hys_vuln", "stat": "vulnAll", "value": 0.22 }
+    },
+    {
+      "id": "hys_e5_vuln_locked",
+      "layer": "parameters",
+      "claim": "Below E5 the skill debuff stays at 0.2.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "buffStat", "id": "hys_vuln", "stat": "vulnAll", "value": 0.2 }
+    },
+    {
+      "id": "hys_e6_zone_dot",
+      "layer": "parameters",
+      "claim": "E6 'When to Return From Where You Lie': Zone Phys DoT multiplier +20%; the applied Bleed baseDmg rises 1470 -> 1764 (x1.2) and the per-turn trigger cap becomes 12.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DOT_APPLIED", "payload": { "kind": "Bleed" } }, "field": "baseDmg", "value": 1764, "tol": 1, "pick": "first" }
+    },
+    {
+      "id": "hys_e6_zone_dot_locked",
+      "layer": "parameters",
+      "claim": "Below E6 the Zone Bleed stays at 1470 (E5 Ultimate Lv. cap).",
+      "fixtures": ["e5"],
+      "assertion": { "assert": "payload", "of": { "type": "DOT_APPLIED", "payload": { "kind": "Bleed" } }, "field": "baseDmg", "value": 1470, "tol": 1, "pick": "first" }
+    }
+  ],
+  "golds": []
+}

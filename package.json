@@ -1,0 +1,35 @@
+{
+  "name": "calcfun",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "check": "tsx src/core/check.ts",
+    "lab": "tsx debug/lab/all.ts",
+    "lab:damage": "tsx debug/lab/damage.ts",
+    "lab:timeline": "tsx debug/lab/timeline.ts",
+    "lab:break": "tsx debug/lab/break.ts",
+    "lab:buffs": "tsx debug/lab/buffs.ts",
+    "lab:energy": "tsx debug/lab/energy.ts",
+    "lab:fua": "tsx debug/lab/fua.ts",
+    "lab:gear": "tsx debug/lab/gear.ts",
+    "lab:summons": "tsx debug/lab/summons.ts",
+    "lab:teams": "tsx debug/lab/teams.ts",
+    "lab:guard": "tsx debug/lab/guard.ts",
+    "probe-eidolon": "tsx src/core/probe-eidolon-ladder.ts",
+    "test": "tsx tests/index.ts",
+    "ci": "tsc --noEmit && npm test && npm run lab",
+    "verify": "tsx src/verification/index.ts",
+    "verify:deviations": "tsx src/verification/deviations.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "happy-dom": "^21.0.3",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0",
+    "vite": "^5.4.0"
+  }
+}

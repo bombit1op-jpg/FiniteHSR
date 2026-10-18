@@ -1,0 +1,173 @@
+{
+  "kit": "xueyi",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/121001+121002+121003+121004 + bonus_abilities",
+    "confidence": "verified",
+    "note": "Basic (121001) 140% at L10, total 100% at L6. Skill Iniquity Obliteration (121002) deals #1 = 140% (L10) to the primary and #2 = 70% to adjacent enemies, gains 3 Karma Reincarnation stacks. When Karma reaches max (8, L10 #1), the talent triggers Karmic Perpetuation follow-up: #2 = 90% (L10) bounce hits. Ultimate Divine Castigation (121003) deals #1 = 250% (L10) to one enemy, ignores Weakness type to reduce Toughness, and gains up to +60% DMG based on Toughness; #2 = 15% Quantum Break DMG. Energy limit 120. BA0 (Ranks): DMG bonus equal to 100% of Break Effect, cap 240%."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Xueyi E0 solo vs 3 Quantum-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "xueyi",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Quantum"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "x_skill_action",
+      "layer": "structure",
+      "claim": "Iniquity Obliteration (121002) is Xueyi's damaging Skill action.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Xueyi", "action": "skill" } }
+    },
+    {
+      "id": "x_skill_main_hits",
+      "layer": "structure",
+      "claim": "Iniquity Obliteration hits the designated enemy once per cast (4 Skill casts in the fixture).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Xueyi", "label": "Iniquity Obliteration (main)" }, "value": 4 }
+    },
+    {
+      "id": "x_skill_adj_hits",
+      "layer": "structure",
+      "claim": "Iniquity Obliteration is a Blast attack: 2 adjacent hits per cast × 4 casts.",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Xueyi", "label": "Iniquity Obliteration (adj)" }, "value": 8 }
+    },
+    {
+      "id": "x_fua_present",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Karma at max (8 stacks) triggers the Karmic Perpetuation follow-up attack (121004) — observed as its own HIT label.",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Xueyi", "label": "Karmic Perpetuation FUA" } }
+    },
+    {
+      "id": "x_fua_hits",
+      "layer": "structure",
+      "claim": "Karmic Perpetuation fires 3 bounce hits per trigger (9 hits over the fixture's 3 triggers).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Xueyi", "label": "Karmic Perpetuation FUA" }, "value": 9 }
+    },
+    {
+      "id": "x_ult_action",
+      "layer": "structure",
+      "claim": "Divine Castigation (121003) is Xueyi's Ultimate action.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Xueyi", "action": "ultimate" } }
+    },
+    {
+      "id": "x_ult_hits",
+      "layer": "structure",
+      "claim": "Divine Castigation hits the designated enemy once per Ultimate (2 Ultimates in the fixture).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Xueyi", "label": "Divine Castigation" }, "value": 2 }
+    },
+    {
+      "id": "x_no_attack_action",
+      "layer": "structure",
+      "claim": "Xueyi's kit exposes Basic ATK, Skill and Ultimate as its action set; it never falls back to a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Xueyi", "action": "attack" } }
+    },
+    {
+      "id": "x_skill_main_mult",
+      "layer": "parameters",
+      "claim": "Iniquity Obliteration primary hit L10 = 140% of ATK (121002 #1).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Xueyi", "label": "Iniquity Obliteration (main)" }, "field": "mult", "value": 1.4 }
+    },
+    {
+      "id": "x_skill_adj_mult",
+      "layer": "parameters",
+      "claim": "Iniquity Obliteration adjacent hit L10 = 70% of ATK (121002 #2).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Xueyi", "label": "Iniquity Obliteration (adj)" }, "field": "mult", "value": 0.7 }
+    },
+    {
+      "id": "x_fua_mult",
+      "layer": "parameters",
+      "claim": "Karmic Perpetuation bounce hit L10 = 90% of ATK (121004 #2).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Xueyi", "label": "Karmic Perpetuation FUA" }, "field": "mult", "value": 0.9 }
+    },
+    {
+      "id": "x_ult_mult",
+      "layer": "parameters",
+      "claim": "Divine Castigation L10 = 250% of ATK (121003 #1) plus the Toughness-based bonus (up to +60%); observed first part = 4.0 including the full bonus.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Xueyi", "label": "Divine Castigation" }, "field": "mult", "value": 4, "pick": "first" }
+    },
+    {
+      "id": "x_basic_mult_first",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic ATK L6 total = 100% (ladder 50→140), delivered as a 40/60 split → first part 0.4.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Xueyi", "attackType": "basic" }, "field": "mult", "value": 0.4, "pick": "first" }
+    },
+    {
+      "id": "x_basic_mult_last",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic ATK's second split part carries 60% of the 100% total → 0.6.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Xueyi", "attackType": "basic" }, "field": "mult", "value": 0.6 }
+    },
+    {
+      "id": "x_energy",
+      "layer": "parameters",
+      "claim": "Xueyi's Ultimate uses the 120-Energy ladder (sp_need 120); over this fixture her action set regenerates exactly 191 Energy (includes follow-up energy).",
+      "assertion": { "assert": "energy", "who": "Xueyi", "atLeast": 191, "atMost": 191 }
+    },
+    {
+      "id": "x_ba0_buff",
+      "layer": "interactions",
+      "claim": "Bonus Ability (Ranks, BA0) grants a DMG bonus equal to 100% of Break Effect (cap 240%); the fixture's 37.3% BE yields dmgAll 0.373.",
+      "assertion": { "assert": "buffStat", "id": "xueyi_a1", "stat": "dmgAll", "value": 0.373 }
+    },
+    {
+      "id": "x_ba1_buff",
+      "layer": "interactions",
+      "claim": "Bonus Ability (BA1) grants DMG +10% for 1 turn while the enemy's Toughness is ≥50% at the start of the Ultimate.",
+      "assertion": { "assert": "buffStat", "id": "xueyi_a2", "stat": "dmgAll", "value": 0.1 }
+    },
+    {
+      "id": "x_entanglement",
+      "layer": "interactions",
+      "claim": "Divine Castigation ignores Weakness type to reduce Toughness and applies the Quantum Break (Entanglement) DoT.",
+      "assertion": { "assert": "present", "of": { "type": "DOT_APPLIED", "source": "Xueyi", "payload": { "kind": "Entanglement" } } }
+    },
+    {
+      "id": "x_skill_before_fua",
+      "ability": "skill",
+      "layer": "ordering",
+      "claim": "Skill hits build Karma before the Karmic Perpetuation follow-up can trigger in the same action window.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Xueyi", "label": "Iniquity Obliteration (main)" }],
+        "after": [{ "type": "HIT_START", "source": "Xueyi", "label": "Karmic Perpetuation FUA" }]
+      }
+    },
+    {
+      "id": "x_ult_cast_order",
+      "layer": "ordering",
+      "claim": "The Ultimate action starts before Divine Castigation damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Xueyi", "action": "ultimate" }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Xueyi", "label": "Divine Castigation" }]
+      }
+    }
+  ],
+  "golds": []
+}

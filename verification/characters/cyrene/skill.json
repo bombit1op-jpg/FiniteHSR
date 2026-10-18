@@ -1,0 +1,316 @@
+{
+  "kit": "cyrene",
+  "slot": "skill",
+  "fixtures": [
+    {
+      "id": "verse-and-reunion",
+      "env": "E0 Cyrene + E0 Boothill (Basic engine, no Chrysos/Remembrance ally so the A2 'Ripples Across Time' grant stays off) vs a dummy Elite (atk 200, Ice+Physical weakness, 600 Toughness), 8 cycles, seed 5. energyStartFrac 0.5 opens the unprecendent phase: Skill 'Bloom, Elysium of Beyond' deploys the 2-turn Zone (True DMG 24%), the Basic 'Lo, Hope Takes Flight!' fills 1 Recollection, and 6 actions push the Recollection pool (energyMax 24) to the threshold. Then the once-per-battle Ultimate 'Verse ◦ Vow ∞' (141503): drains 12, summons the off-timeline Demiurge (MaxHP = Cyrene's, SPD 0), enters the Ripples state with permanent Zone and the CRIT-rate buff 'Remembrance, Sung in Ripples', lets Demiurge cast 'This Ode, to All Lives', and activates ready teammate Ultimates (Boothill starts empty -> skipped). From then on only the Enhanced Basic 'To Love and Tomorrow' heals Recollection and the Ripples-state Ultimate 'Reunion at First Sight' drains 12 and gives Demiurge an extra turn (Minuet of Blooms and Plumes + Ode to Ego, 1 bounce from Boothill's consumed Future). Verifies E0 only: no E2 start +12, no E6 DEF shred.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "cyrene",
+            "stats": {
+              "hp": 4800,
+              "atk": 2800,
+              "def": 1000,
+              "spd": 160
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0.5
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 200,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Ice",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 8,
+        "seed": 5
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "cy_talent_hearts",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent 'Hearts Gather as One': while Cyrene is on field all ally targets gain DMG — permanent buff cy_heart (remembrance.ts:1840-1845).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "BUFF_APPLIED",
+          "payload": {
+            "id": "cy_heart"
+          }
+        }
+      }
+    },
+    {
+      "id": "cyrene_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Lo, Hope Takes Flight! (141501, Ice) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Cyrene",
+          "label": "Lo, Hope Takes Flight!",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "verse-and-reunion"
+      ]
+    },
+    {
+      "id": "verse_note",
+      "layer": "structure",
+      "hint": "Canon 141503 'Verse ◦ Vow ∞': First Verse, once per battle, summons Demiurge, enters the Ripples state with a permanent Zone and the 'Remembrance, Sung in Ripples' crit buff, then activates ready allies' Ultimates. Structure: this is one Ultimate activation with its own log.",
+      "claim": "Engine: at full Recollection the kit performs the once-per-battle Verse, logs the stance/Zone/crit grant and the ally-Ultimate fan-out.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Cyrene Ultimate: Ripples of Past Reverie \\(CRIT \\+50\\.0%, Zone permanent\\); activates all teammates' Ultimates"
+        }
+      }
+    },
+    {
+      "id": "reunion_note",
+      "layer": "structure",
+      "hint": "Canon (Energy.md) + PROG ult_en: in the Ripples state the Ultimate becomes 'Reunion at First Sight', costing ULТ_COST (12) instead of the full 24-threshold drain. Structure: both Ultimate forms exist as separate actions.",
+      "claim": "Engine: the Ripples-state Ultimate performs its own action and logs 'Reunion at First Sight'.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Cyrene Ultimate: Reunion at First Sight"
+        }
+      }
+    },
+    {
+      "id": "demi_summon",
+      "layer": "structure",
+      "hint": "Canon 141503: Demiurge's initial Max HP equals Cyrene's Max HP (fraction #1 = 1) and it is SPD 0; memosprite talent 'Waiting, In Every Past' adds mem_talent% Max HP to both. Structure: summoning creates the off-timeline token with mirrored HP.",
+      "claim": "Engine: Verse summons Demiurge with Cyrene's MaxHP and logs the SPD-0 token plus the %MaxHP boost.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Cyrene summons Demiurge \\(MaxHP \\d+, SPD 0 off\\-timeline, \\+[\\d.]+% MaxHP\\)"
+        }
+      }
+    },
+    {
+      "id": "enhanced_basic",
+      "layer": "structure",
+      "hint": "Canon BASIC_EN 'To Love and Tomorrow' (only ability usable in Ripples, cannot recover SP, HP-scaled Ice). Structure: the state machine switches the Basic identity.",
+      "claim": "Engine: in Ripples the Basic becomes the HP-scaled 'To Love and Tomorrow (single)' + '(AoE)' double hit.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "label": "To Love and Tomorrow (single)"
+        }
+      }
+    },
+    {
+      "id": "plain_basic",
+      "layer": "structure",
+      "hint": "Canon 141505 'Lo, Hope Takes Flight': normal Basic restores 1 Skill Point and 1 # Recollection. Structure: the pre-Verse Basic keeps its own identity.",
+      "claim": "Engine: before Verse the normal Basic hits with 'Lo, Hope Takes Flight!' and feeds 1 Recollection.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "label": "Lo, Hope Takes Flight!"
+        }
+      }
+    },
+    {
+      "id": "skill_zone",
+      "ability": "skill",
+      "layer": "structure",
+      "hint": "Canon 141502 'Bloom, Elysium of Beyond': Skill deploys the Elysium Zone for #2 turns with True DMG #1%. Structure: pre-Verse the zone is duration-limited.",
+      "claim": "Engine: the Skill deploys the 2-turn Zone and logs its True-DMG value.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Cyrene Skill: deploys Elysium Zone \\(2 turns, True DMG 24%\\)"
+        }
+      }
+    },
+    {
+      "id": "verse_crit",
+      "layer": "parameters",
+      "hint": "Canon 141503 param #3 = 0.5 at level 10: Verse raises CRIT Rate by 50% for Cyrene and Demiurge. Parameters: the crit grant is a real stat buff with the canon value.",
+      "claim": "Engine: the crash buff 'Remembrance, Sung in Ripples' carries critRate 0.5.",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "cy_ripples_cr",
+        "stat": "critRate",
+        "value": 0.5
+      }
+    },
+    {
+      "id": "future_consumed",
+      "layer": "parameters",
+      "hint": "Canon talent 'Hearts Gather as One' + A1: allies holding 'Future' consume it when acting, each distinct ally feeding Cyrene +1 Recollection. Parameters: the grant is quantified per consumer with a distinct-source counter.",
+      "claim": "Engine: Boothill's first action consumes Future and logs '+1 Recollection (Ode source 1)'.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Boothill consumed Future → Cyrene \\+1 Recollection \\(Ode source 1\\)"
+        }
+      }
+    },
+    {
+      "id": "minuet",
+      "layer": "parameters",
+      "hint": "Canon memosprite skill 1141526 'Minuet of Blooms and Plumes': Demiurge's later actions deal an Ice AoE. Parameters: the Demiurge turn owns its damage identity.",
+      "claim": "Engine: on Demiurge's Reunion-granted extra turn it performs 'Minuet of Blooms and Plumes'.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "label": "Minuet of Blooms and Plumes"
+        }
+      }
+    },
+    {
+      "id": "ode_label",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "hint": "Canon 1141526 'Ode to Ego': +1 bounce per distinct teammate who fed Recollection (1 from Boothill). Parameters: extra-damage instances keep their own label.",
+      "claim": "Engine: the Ode-to-Ego bounce hits exist once Boothill's distinct source is registered.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "label": "Ode to Ego"
+        }
+      }
+    },
+    {
+      "id": "verse_before_reunion",
+      "layer": "ordering",
+      "hint": "Canon: Reunion at First Sight is only usable inside Ripples, which Verse enters. Ordering: the first Ripples-state Ultimate must follow the Verse that opened the state.",
+      "claim": "Engine: the first 'Reunion at First Sight' note comes after the Verse note.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "Cyrene Ultimate: Ripples of Past Reverie \\(CRIT \\+50\\.0%, Zone permanent\\); activates all teammates' Ultimates"
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "Cyrene Ultimate: Reunion at First Sight"
+          }
+        ]
+      }
+    },
+    {
+      "id": "skill_zone_before_ult",
+      "layer": "ordering",
+      "hint": "Canon: the 2-turn Zone from Skill is deployed while collecting Recollection, before the Verse replaces it with the permanent Zone. Ordering: the skill zone deployment happens pre-Verse.",
+      "claim": "Engine: the Elysium Zone skill note precedes the Verse note.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "Cyrene Skill: deploys Elysium Zone \\(2 turns, True DMG 24%\\)"
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "Cyrene Ultimate: Ripples of Past Reverie \\(CRIT \\+50\\.0%, Zone permanent\\); activates all teammates' Ultimates"
+          }
+        ]
+      }
+    },
+    {
+      "id": "future_before_reunion",
+      "layer": "ordering",
+      "hint": "Canon: the distinct-consumer set that sizes Ode to Ego is filled by pre-Ripples basic turns. Ordering: the Future consumption precedes the first Reunion.",
+      "claim": "Engine: the Future-consumed note lands before the first Reunion at First Sight.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "NOTE",
+            "log": "Boothill consumed Future → Cyrene \\+1 Recollection \\(Ode source 1\\)"
+          }
+        ],
+        "after": [
+          {
+            "type": "NOTE",
+            "log": "Cyrene Ultimate: Reunion at First Sight"
+          }
+        ]
+      }
+    },
+    {
+      "id": "story_full",
+      "layer": "interactions",
+      "hint": "Canon 1141526: every 3 Story charges consume into a Demiurge extra turn (Story caps at 3). Interactions: the counter lifecycle (Verse 2 + first Reunion 1 = 3) fires the extra turn.",
+      "claim": "Engine: reaching 3 Story consumes the counter and grants the Demiurge extra turn with the auto-Minuet log.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Demiurge Story full → extra turn \\+ auto Minuet"
+        }
+      }
+    },
+    {
+      "id": "heart_aura",
+      "layer": "interactions",
+      "hint": "Canon talent_a2 (0.2 at level 10): 'Hearts Gather as One' — while Cyrene is on the field all ally targets gain DMG+. Interactions: the on-field aura applies to teammates with the canon value.",
+      "claim": "Engine: Boothill carries the 'Hearts Gather as One' dmgAll 0.2 aura while Cyrene lives.",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "cy_heart",
+        "stat": "dmgAll",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "no_e6",
+      "layer": "interactions",
+      "hint": "Canon E6: the 1st Ode to Ego shreds all enemies' DEF -20% (cy_e6_def). Interactions: an E0 run must NOT apply Eidolon-6 effects.",
+      "claim": "Engine: E0 never grants the E6 DEF-shred debuff on the Elite.",
+      "assertion": {
+        "assert": "noBuff",
+        "id": "cy_e6_def"
+      }
+    }
+  ]
+}

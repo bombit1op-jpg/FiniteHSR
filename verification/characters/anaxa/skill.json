@@ -1,0 +1,143 @@
+{
+  "kit": "anaxa",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/66/skills (Wind, Erudition)",
+    "confidence": "interpreted",
+    "note": "Basic Pain, Brews Truth; Skill Fractal, Exiles Fallacy (Wind main + bounces); Ultimate Sprouting Life Sculpts Earth (implant/weakness expansion via Sublimation axa_sub); Talent Tetrad Wisdom Reigns Thrice (each hit implants one random missing Weakness; >=5 unique weaknesses on a target -> Qualitative Disclosure). Imperative Hiatus: 2+ Erudition allies -> team DMG +50%; solo -> self CRIT DMG +140%. Energy limit 140."
+  },
+  "fixtures": [
+    {
+      "id": "axa-2er",
+      "env": "Anaxa E0 with The Herta (2nd Erudition) vs 2 Physical-weak dummies, energyStartFrac 1 (Ultimate), 6 cycles, seed 7",
+      "battle": {
+        "team": [
+          { "kitId": "anaxa", "name": "Anaxa", "stats": { "hp": 5000, "atk": 2400, "def": 1300, "spd": 97 }, "eidolon": 0, "energyStartFrac": 1, "skillPriority": 2 },
+          { "kitId": "the_herta", "name": "The Herta", "stats": { "hp": 5000, "atk": 2200, "def": 1300, "spd": 130 }, "skillPriority": 3 }
+        ],
+        "enemy": { "name": "Mob", "count": 2, "hp": 300000, "atk": 500, "spd": 120, "level": 85, "toughness": 100, "weaknesses": ["Physical"] },
+        "cycles": 6,
+        "seed": 7
+      }
+    },
+    {
+      "id": "axa-e6",
+      "env": "Anaxa E6 solo (1 Erudition) vs 2 Physical-weak dummies, energyStartFrac 1, 6 cycles, seed 3 — E6 grants BOTH Imperative Hiatus effects",
+      "battle": {
+        "team": [
+          { "kitId": "anaxa", "name": "Anaxa", "stats": { "hp": 5000, "atk": 2400, "def": 1300, "spd": 97 }, "eidolon": 6, "energyStartFrac": 1, "skillPriority": 2 }
+        ],
+        "enemy": { "name": "Mob", "count": 2, "hp": 300000, "atk": 500, "spd": 120, "level": 85, "toughness": 100, "weaknesses": ["Physical"] },
+        "cycles": 6,
+        "seed": 3
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "anaxa_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Pain, Brews Truth (140501, Wind) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Anaxa",
+          "label": "Pain, Brews Truth",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "axa-2er"
+      ]
+    },
+    {
+      "id": "axa_skill_label",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Fractal, Exiles Fallacy is the Skill's main hit.",
+      "fixtures": ["axa-2er"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Anaxa", "label": "Fractal, Exiles Fallacy" } }
+    },
+    {
+      "id": "axa_skill_mult",
+      "layer": "parameters",
+      "claim": "Fractal, Exiles Fallacy main = skill L10 (0.70) x (1 + skill_a3(0.20) x 2 enemies) x (1 + talent(0.30) on a Disclosure target) = 1.274.",
+      "fixtures": ["axa-2er"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Anaxa", "label": "Fractal, Exiles Fallacy" }, "field": "mult", "value": 1.274, "tol": 1e-6 }
+    },
+    {
+      "id": "axa_skill_bounce",
+      "layer": "structure",
+      "claim": "The Skill bounces onto adjacent targets (Fractal bounce).",
+      "fixtures": ["axa-2er"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Anaxa", "label": "Fractal bounce" } }
+    },
+    {
+      "id": "axa_ult_label",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Sprouting Life Sculpts Earth is the Ultimate.",
+      "fixtures": ["axa-2er"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Anaxa", "label": "Sprouting Life Sculpts Earth" } }
+    },
+    {
+      "id": "axa_weakness_implant",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "The Talent implants a random missing Weakness (axa_weak).",
+      "fixtures": ["axa-2er"],
+      "assertion": { "assert": "buff", "id": "axa_weak" }
+    },
+    {
+      "id": "axa_disclosure",
+      "layer": "interactions",
+      "claim": "A target with >=5 unique weaknesses gains Qualitative Disclosure (axa_disclosure).",
+      "fixtures": ["axa-2er"],
+      "assertion": { "assert": "buff", "id": "axa_disclosure" }
+    },
+    {
+      "id": "axa_sublimation",
+      "layer": "interactions",
+      "claim": "The Ultimate applies Sublimation (axa_sub) to a qualifying enemy.",
+      "fixtures": ["axa-2er"],
+      "assertion": { "assert": "buff", "id": "axa_sub" }
+    },
+    {
+      "id": "axa_a4_team",
+      "layer": "parameters",
+      "claim": "2+ Erudition allies (Imperative Hiatus): all allies DMG +50% (axa_a4_team).",
+      "fixtures": ["axa-2er"],
+      "assertion": { "assert": "buffStat", "id": "axa_a4_team", "stat": "dmgAll", "value": 0.5 }
+    },
+    {
+      "id": "axa_e6_boost",
+      "layer": "parameters",
+      "claim": "E6: final DMG x1.3 (axa_e6 finalDmgBoost = 0.3).",
+      "fixtures": ["axa-e6"],
+      "assertion": { "assert": "buffStat", "id": "axa_e6", "stat": "finalDmgBoost", "value": 0.3 }
+    },
+    {
+      "id": "axa_e6_team",
+      "layer": "parameters",
+      "claim": "E6 makes a solo Anaxa count as 2 Erudition, so Imperative Hiatus team DMG +50% still applies.",
+      "fixtures": ["axa-e6"],
+      "assertion": { "assert": "buffStat", "id": "axa_a4_team", "stat": "dmgAll", "value": 0.5 }
+    },
+    {
+      "id": "axa_e6_critdmg",
+      "layer": "parameters",
+      "claim": "Imperative Hiatus self CRIT DMG +140% (axa_a4_cd).",
+      "fixtures": ["axa-e6"],
+      "assertion": { "assert": "buffStat", "id": "axa_a4_cd", "stat": "critDmg", "value": 1.4 }
+    },
+    {
+      "id": "axa_no_attack_action",
+      "layer": "structure",
+      "claim": "The kit exposes Basic/Skill/Ultimate, never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Anaxa", "action": "attack" } }
+    }
+  ]
+}

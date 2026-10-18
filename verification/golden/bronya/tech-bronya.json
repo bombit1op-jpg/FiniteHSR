@@ -1,0 +1,19 @@
+{
+ "input": {
+  "kit": "bronya",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Bronya alone, technique \"Banner of Command\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Bronya|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Bronya|-|- [1,2]",
+  "BUFF_APPLIED|-|Bronya|-|- [1]",
+  "TECHNIQUE_APPLIED|Bronya|-|-|-",
+  "BUFF_APPLIED|-|Bronya|-|- [1,2]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

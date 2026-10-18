@@ -1,0 +1,71 @@
+{
+  "kit": "clara",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Clara/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E2 = after Ultimate ATK +30% for 2 turns (clara_e2). E4 = after Clara is hit, DMG taken -30% until the start of her next turn (clara_e4). E1/E3/E5 are ability-level bumps (+Skill+2/Basic+1; +Ult+2/Talent+2), E6 raises Enhanced Counter count 2->3 plus a fixed 50% counter on ally hits — no dedicated buff id. Fixtures run one battle per eidolon rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    { "id": "e0", "env": "Clara E0 + Bronya vs 1 Physical-weak Boss (Lv120, 150k HP), 6 cycles, seed 11", "battle": { "team": [{ "kitId": "clara", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 0 }, { "kitId": "bronya", "stats": { "hp": 10000, "atk": 1500, "def": 600, "spd": 134 } }], "enemy": { "name": "Boss", "count": 1, "hp": 150000, "atk": 140, "spd": 160, "level": 120, "toughness": 1800, "weaknesses": ["Physical"] }, "cycles": 6, "seed": 11 } },
+    { "id": "e1", "env": "Clara E1 + Bronya vs 1 Physical-weak Boss (Lv120, 150k HP), 6 cycles, seed 11", "battle": { "team": [{ "kitId": "clara", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 1 }, { "kitId": "bronya", "stats": { "hp": 10000, "atk": 1500, "def": 600, "spd": 134 } }], "enemy": { "name": "Boss", "count": 1, "hp": 150000, "atk": 140, "spd": 160, "level": 120, "toughness": 1800, "weaknesses": ["Physical"] }, "cycles": 6, "seed": 11 } },
+    { "id": "e2", "env": "Clara E2 + Bronya vs 1 Physical-weak Boss (Lv120, 150k HP), 6 cycles, seed 11", "battle": { "team": [{ "kitId": "clara", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 2 }, { "kitId": "bronya", "stats": { "hp": 10000, "atk": 1500, "def": 600, "spd": 134 } }], "enemy": { "name": "Boss", "count": 1, "hp": 150000, "atk": 140, "spd": 160, "level": 120, "toughness": 1800, "weaknesses": ["Physical"] }, "cycles": 6, "seed": 11 } },
+    { "id": "e3", "env": "Clara E3 + Bronya vs 1 Physical-weak Boss (Lv120, 150k HP), 6 cycles, seed 11", "battle": { "team": [{ "kitId": "clara", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 3 }, { "kitId": "bronya", "stats": { "hp": 10000, "atk": 1500, "def": 600, "spd": 134 } }], "enemy": { "name": "Boss", "count": 1, "hp": 150000, "atk": 140, "spd": 160, "level": 120, "toughness": 1800, "weaknesses": ["Physical"] }, "cycles": 6, "seed": 11 } },
+    { "id": "e4", "env": "Clara E4 + Bronya vs 1 Physical-weak Boss (Lv120, 150k HP), 6 cycles, seed 11", "battle": { "team": [{ "kitId": "clara", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 4 }, { "kitId": "bronya", "stats": { "hp": 10000, "atk": 1500, "def": 600, "spd": 134 } }], "enemy": { "name": "Boss", "count": 1, "hp": 150000, "atk": 140, "spd": 160, "level": 120, "toughness": 1800, "weaknesses": ["Physical"] }, "cycles": 6, "seed": 11 } },
+    { "id": "e5", "env": "Clara E5 + Bronya vs 1 Physical-weak Boss (Lv120, 150k HP), 6 cycles, seed 11", "battle": { "team": [{ "kitId": "clara", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 5 }, { "kitId": "bronya", "stats": { "hp": 10000, "atk": 1500, "def": 600, "spd": 134 } }], "enemy": { "name": "Boss", "count": 1, "hp": 150000, "atk": 140, "spd": 160, "level": 120, "toughness": 1800, "weaknesses": ["Physical"] }, "cycles": 6, "seed": 11 } },
+    { "id": "e6", "env": "Clara E6 + Bronya vs 1 Physical-weak Boss (Lv120, 150k HP), 6 cycles, seed 11", "battle": { "team": [{ "kitId": "clara", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 6 }, { "kitId": "bronya", "stats": { "hp": 10000, "atk": 1500, "def": 600, "spd": 134 } }], "enemy": { "name": "Boss", "count": 1, "hp": 150000, "atk": 140, "spd": 160, "level": 120, "toughness": 1800, "weaknesses": ["Physical"] }, "cycles": 6, "seed": 11 } }
+  ],
+  "requirements": [
+    {
+      "id": "cl_e0_base",
+      "layer": "structure",
+      "claim": "At E0 Clara still enters battle with her Talent mitigation buff, so the ladder's base state is alive in every fixture.",
+      "fixtures": ["e0", "e6"],
+      "assertion": { "assert": "buff", "id": "clara_protect" }
+    },
+    {
+      "id": "cl_e2_present",
+      "layer": "interactions",
+      "claim": "E2 'A Tight Embrace': after using the Ultimate ATK +30% for 2 turns (clara_e2). Present from E2 onward.",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "clara_e2" }
+    },
+    {
+      "id": "cl_e2_atk",
+      "layer": "parameters",
+      "claim": "The E2 buff carries atkPct 0.30 (canon ranks/2).",
+      "fixtures": ["e2"],
+      "assertion": { "assert": "buffStat", "id": "clara_e2", "stat": "atkPct", "value": 0.3 }
+    },
+    {
+      "id": "cl_e2_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E2 must NOT be active below rank 2 (rejects a gapped/leaked ladder).",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "noBuff", "id": "clara_e2" }
+    },
+    {
+      "id": "cl_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Family's Warmth': after Clara is hit, DMG taken -30% until the start of her next turn (clara_e4). Present from E4 onward.",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "clara_e4" }
+    },
+    {
+      "id": "cl_e4_mit",
+      "layer": "parameters",
+      "claim": "The E4 buff carries mitigation 0.30 (canon ranks/4).",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "buffStat", "id": "clara_e4", "stat": "mitigation", "value": 0.3 }
+    },
+    {
+      "id": "cl_e4_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E4 must NOT be active below rank 4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "noBuff", "id": "clara_e4" }
+    }
+  ],
+  "golds": []
+}

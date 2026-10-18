@@ -1,0 +1,524 @@
+{
+  "kit": "moze",
+  "slot": "skill",
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Moze E0 solo vs 3 Lightning-weak Elite (level 95, 240 Toughness), 3 cycles — Basic 122301 'Hurlthorn', Ultimate 122304 'Dash In, Gash Out' typed as Follow-Up with the Cascading Featherblade FUA follow-up; no Skill cast, so no Prey mark exists",
+      "battle": {
+        "team": [
+          {
+            "kitId": "moze",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "team-sushang",
+      "env": "Moze E0 with Sushang (kitId sushang) vs 3 Lightning-weak Elite (level 95, 240 Toughness), 3 cycles — Skill 122302 'Fleetwinged Raid' marks Prey and applies the Vengewise FUA-taken debuff, Moze enters the Departed state and skips his turns, Sushang's attacks on Prey trigger Cascading Featherblade Additional hits and charge-fed FUA strikes",
+      "battle": {
+        "team": [
+          {
+            "kitId": "moze",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 1800,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "skill_cast",
+      "layer": "structure",
+      "claim": "Skill 'Fleetwinged Raid' (characters.json 122302) is cast as a skill action and marks the target as Prey (hunt.ts:1004-1011).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Moze",
+          "action": "skill"
+        }
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "skill_hits_3",
+      "layer": "structure",
+      "claim": "Fleetwinged Raid deals 3 hits with split 15/15/70 (hunt.ts:1004, split [0.15, 0.15, 0.7]); one skill cast in this battle => 3 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Moze",
+          "label": "Fleetwinged Raid"
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "basic_cast",
+      "layer": "structure",
+      "claim": "Basic ATK 'Hurlthorn' (characters.json 122301) is cast as a basic action (hunt.ts:1029).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Moze",
+          "action": "basic"
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "basic_hits_6",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic 122301 is a single-target single-hit attack (hunt.ts:1029, one sim.hit, 10 Toughness); 6 basic actions are taken across 3 cycles => 6 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Moze",
+          "label": "Hurlthorn"
+        },
+        "value": 6
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "ult_cast",
+      "layer": "structure",
+      "claim": "Ultimate 'Dash In, Gash Out' (characters.json 122304) fires as an ultimate action when Energy fills; two Ultimates fit into 3 cycles (60 start Energy, +20/basic, +10/attack taken, energyMax 120).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Moze",
+          "action": "ultimate"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "ult_typed_as_fua",
+      "layer": "structure",
+      "claim": "Trace A4 Vengewise makes the Ultimate count as a Follow-Up ATK — its hit carries attackType 'fua' (AGENTS §moze: 'A4 Vengewise: ult считается FUA (тип fua)'; hunt.ts:989 type 'fua').",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Moze",
+          "label": "Dash In, Gash Out",
+          "attackType": "fua"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "ult_fua_followup_hits_12",
+      "layer": "structure",
+      "claim": "Each Ultimate fires the Cascading Featherblade FUA follow-up against the ult target (label suffixed '(Ult)', hunt.ts:904 with tag 'Ult'; AGENTS §moze audit: ult FUA retargets instead of dying with the target); the FUA splits into 6 hits [0.08 x5, 0.6] => 2 casts x 6 = 12.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Moze",
+          "label": "Cascading Featherblade FUA (Ult)"
+        },
+        "value": 12
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "no_dot_from_kit",
+      "layer": "structure",
+      "claim": "Moze's kit (characters.json 122301-122304) inflicts no Damage-over-Time, and no Weakness Break occurs in this battle (no BREAK events, 240 Toughness), so no Lightning DoT from the break can appear either.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "DOT_APPLIED",
+          "source": "Moze"
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "ult_cost_120",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate payment books ENERGY_LOSS reason 'ult_cost' with amount 120 = full Energy pool (energyMax 120, no Energy is gained inside the ult body before the cost is booked).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Moze",
+          "payload": {
+            "reason": "ult_cost"
+          }
+        },
+        "field": "amount",
+        "value": 120
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "ult_energy_refund_5",
+      "layer": "parameters",
+      "claim": "The Ultimate cast grants the generic castUlt +5 Energy refund after the cost is paid (AGENTS: '+5 Energy (из castUlt)'; observed post-cost ENERGY_GAIN n=5).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Moze",
+          "payload": {
+            "n": 5
+          }
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "skill_grants_energy_30",
+      "layer": "parameters",
+      "claim": "Casting the Skill grants 30 Energy (standard skill gain): the first Moze Energy event of the team battle is n=30 (60 start -> 90).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Moze"
+        },
+        "field": "n",
+        "value": 30,
+        "pick": "first"
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "basic_grants_energy_20",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic 122301 grants +20 Energy (standard basic gain).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Moze",
+          "payload": {
+            "n": 20
+          }
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "vengeewise_vuln_fua_25",
+      "layer": "parameters",
+      "claim": "Trace A4 applies 'Vengewise FUA Taken+' to the Prey with vulnType:fua 0.25 (AGENTS §moze: 'Prey получает несъёмный moze_vengeful vulnType:fua +0.25'; hunt.ts:1013).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "moze_vengeful",
+        "stat": "vulnType:fua",
+        "value": 0.25,
+        "tol": 0.01
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "nightfeather_sp_gain",
+      "layer": "parameters",
+      "claim": "Trace A1 Nightfeather grants +1 SP after the Talent FUA, once per turn (AGENTS §moze: '+1 SP после FUA, раз за 1 ход'; hunt.ts:905-911 log 'Nightfeather: +1 SP').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Nightfeather: \\+1 SP"
+        }
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "daggerhold_wave_advance_30",
+      "layer": "parameters",
+      "claim": "Trace A2 Daggerhold advances Moze by 30% at the start of the wave (AGENTS §moze: '+30% advance на старте волны'; hunt.ts:1072).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ACTION_ADVANCE",
+          "source": "Moze",
+          "payload": {
+            "pct": 0.3
+          }
+        }
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "order_skill_before_prey_mark",
+      "layer": "ordering",
+      "claim": "The Skill action resolves first, then the Prey debuff lands on its target (hunt.ts:1004 hit, then 1011 addBuff).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ABILITY_USED",
+            "source": "Moze",
+            "action": "skill"
+          }
+        ],
+        "after": [
+          {
+            "type": "DEBUFF_APPLIED",
+            "payload": {
+              "id": "prey"
+            }
+          }
+        ]
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "order_prey_before_ally_additional",
+      "layer": "ordering",
+      "claim": "Prey must exist before an ally attack on it triggers Cascading Featherblade (Additional) — the mark (T1) precedes Sushang's first Additional hit (T2).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "DEBUFF_APPLIED",
+            "payload": {
+              "id": "prey"
+            }
+          }
+        ],
+        "after": [
+          {
+            "type": "HIT_START",
+            "source": "Moze",
+            "label": "Cascading Featherblade (Additional)"
+          }
+        ]
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "order_ult_dash_before_fua",
+      "layer": "ordering",
+      "claim": "Within one Ultimate, the Dash In, Gash Out hit resolves first, then the Cascading Featherblade FUA (Ult) follow-up strikes (hunt.ts:989, then 904).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "HIT_START",
+            "source": "Moze",
+            "label": "Dash In, Gash Out"
+          }
+        ],
+        "after": [
+          {
+            "type": "HIT_START",
+            "source": "Moze",
+            "label": "Cascading Featherblade FUA (Ult)"
+          }
+        ]
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "order_ult_cost_before_refund",
+      "ability": "ultimate",
+      "layer": "ordering",
+      "claim": "Ultimate Energy is consumed first (ENERGY_LOSS reason ult_cost), then the +5 refund arrives.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ENERGY_LOSS",
+            "source": "Moze",
+            "payload": {
+              "reason": "ult_cost"
+            }
+          }
+        ],
+        "after": [
+          {
+            "type": "ENERGY_GAIN",
+            "source": "Moze",
+            "payload": {
+              "n": 5
+            }
+          }
+        ]
+      },
+      "fixtures": [
+        "base-solo"
+      ]
+    },
+    {
+      "id": "prey_mark_applied",
+      "layer": "interactions",
+      "claim": "Fleetwinged Raid marks the target with the Prey debuff 'Fleetwinged Raid' (hunt.ts:1011, turns Infinity — the mark persists until consumed).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DEBUFF_APPLIED",
+          "target": "Elite #1",
+          "payload": {
+            "id": "prey"
+          }
+        }
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "additional_on_ally_attack",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Cascading Featherblade: every ally attack on Prey deals one Additional DMG hit and spends 1 Charge (AGENTS §moze; hunt.ts:1055); Sushang takes 7 actions against Prey across the battle => 7 Additional hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Moze",
+          "label": "Cascading Featherblade (Additional)"
+        },
+        "value": 7
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "talent_fua_every_3_charge",
+      "layer": "interactions",
+      "claim": "Every 3 Charge spent (talent_a2 = 3) fires the Talent FUA as 6 hits [0.08 x5, 0.6] (AGENTS §moze; hunt.ts:904); 9 starting Charge from the Skill yields 2 triggers x 6 = 12 FUA hits in this battle.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Moze",
+          "label": "Cascading Featherblade FUA"
+        },
+        "value": 12
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    },
+    {
+      "id": "departed_state_skips_turns",
+      "layer": "interactions",
+      "claim": "While Prey exists Moze enters the Departed state and cannot act: his scheduled turns are skipped with the note 'Moze departs — cannot act' (AGENTS §moze: 'Departed РЕАЛИЗОВАН 26-09-2026 — Moze вне action order'; 7 skipped turns across the battle).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "NOTE",
+          "log": "Moze departs"
+        },
+        "value": 7
+      },
+      "fixtures": [
+        "team-sushang"
+      ]
+    }
+  ]
+}

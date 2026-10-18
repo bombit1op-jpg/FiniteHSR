@@ -1,0 +1,16 @@
+{
+ "input": {
+  "kit": "lynx",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Lynx alone, technique \"Chocolate Energy Bar\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Lynx|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Lynx|-|-|-",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "input": {
+  "kit": "welt",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Welt alone, technique \"Gravitational Imprisonment\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Welt|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "ENERGY_GAIN|Welt|Welt|-|- [0,120,30,90]",
+  "TECHNIQUE_APPLIED|Welt|-|-|-",
+  "ACTION_DELAY|Ice Edge|Ice Edge|-|- [0.2,90.9091]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [1,1]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

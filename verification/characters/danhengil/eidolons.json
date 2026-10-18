@@ -1,0 +1,323 @@
+{
+  "kit": "danhengil",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "hsr-data/characters.json#/Dan Heng • Imbibitor Lunae/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E1: Righteous Heart stackable count +4 (dhl_heart reaches stacks 10 at E1 vs 6 at E0). E3 (Skill+2/Basic+1): Fulgurant Leap 5.0->5.5 and dhl_outroar critDmg 0.12->0.132. E4: Outroar lasts until the end of the next turn (dhl_outroar turns 1->2). E5 (Ult+2/Talent+2): Azure's Aqua (adj) 1.4->1.512 and dhl_heart dmgAll 0.10->0.11. E2 (Ult advance + Squama bonus) and E6 (Imaginary RES PEN on ally Ultimate) need team members the single-character fixture lacks; covered as custom. Fixtures battle one run per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "danhengil E0 — eidolon ladder rung, cloned from danhengil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengil",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "danhengil E1 — eidolon ladder rung, cloned from danhengil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengil",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "danhengil E2 — eidolon ladder rung, cloned from danhengil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengil",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "danhengil E3 — eidolon ladder rung, cloned from danhengil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengil",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "danhengil E4 — eidolon ladder rung, cloned from danhengil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengil",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "danhengil E5 — eidolon ladder rung, cloned from danhengil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengil",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "danhengil E6 — eidolon ladder rung, cloned from danhengil/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengil",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "danhengil_e1_stacks",
+      "layer": "parameters",
+      "claim": "E1 adds +4 to the Righteous Heart stack cap (dhl_heart reaches stacks 10).",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "dhl_heart", "stacks": 10 }
+    },
+    {
+      "id": "danhengil_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 (Skill+2/Basic+1) raises Fulgurant Leap 5.0 -> 5.5; last (14.8%) piece = 0.814.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Fulgurant Leap" }, "field": "mult", "value": 0.814, "pick": "last", "tol": 0.002 }
+    },
+    {
+      "id": "danhengil_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Fulgurant Leap stays 5.0; last (14.8%) piece = 0.74.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Fulgurant Leap" }, "field": "mult", "value": 0.74, "pick": "last", "tol": 0.002 }
+    },
+    {
+      "id": "danhengil_e3_outroar",
+      "layer": "parameters",
+      "claim": "E3 raises dhl_outroar critDmg 0.12 -> 0.132.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "dhl_outroar", "stat": "critDmg", "value": 0.132 }
+    },
+    {
+      "id": "danhengil_e4_outroar",
+      "layer": "interactions",
+      "claim": "E4 extends Outroar to 2 turns (dhl_outroar turns 2).",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "dhl_outroar", "turns": 2 }
+    },
+    {
+      "id": "danhengil_e4_outroar_locked",
+      "layer": "interactions",
+      "claim": "Below E4 Outroar lasts 1 turn only.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "buff", "id": "dhl_outroar", "turns": 1 }
+    },
+    {
+      "id": "danhengil_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 (Ult+2/Talent+2) raises Azure's Aqua (adj) 1.4 -> 1.512; last (40%) piece = 0.6048.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Azure's Aqua (adj)" }, "field": "mult", "value": 0.6048, "pick": "last", "tol": 0.002 }
+    },
+    {
+      "id": "danhengil_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Azure's Aqua (adj) stays 1.4; last (40%) piece = 0.56.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Azure's Aqua (adj)" }, "field": "mult", "value": 0.56, "pick": "last", "tol": 0.002 }
+    },
+    {
+      "id": "danhengil_e5_talent",
+      "layer": "parameters",
+      "claim": "E5 raises dhl_heart dmgAll 0.10 -> 0.11.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "dhl_heart", "stat": "dmgAll", "value": 0.11 }
+    },
+    {
+      "id": "danhengil_e2_custom",
+      "layer": "interactions",
+      "claim": "E2 (Ult action advance + Squama bonus) needs the full-team attack rotation.",
+      "fixtures": ["e2"],
+      "assertion": { "assert": "custom", "note": "ult-advance E2 needs multi-ally fixture" }
+    },
+    {
+      "id": "danhengil_e6_custom",
+      "layer": "interactions",
+      "claim": "E6 (Imaginary RES PEN on ally Ultimate) needs a teammate Ultimate.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "custom", "note": "ally-Ult resonance E6 needs a teammate" }
+    }
+  ],
+  "golds": []
+}

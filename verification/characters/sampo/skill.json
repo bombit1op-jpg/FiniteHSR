@@ -1,0 +1,348 @@
+{
+  "kit": "sampo",
+  "slot": "skill",
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Sampo E0 solo vs 3 Wind-weak Elite (level 95, 240 Toughness), 3 cycles — Skill 110802 'Ricochet Love' main + 4 bounces with per-hit Wind Shear rolls, Basic 110801 'Dazzling Blades' 3 hits, Ultimate 110803 'Surprise Present' 4 hits x 3 enemies with DoT-taken debuff and 4 more Wind Shear rolls",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sampo",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Wind"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "skill_cast",
+      "layer": "structure",
+      "claim": "Skill 'Ricochet Love' (characters.json 110802, Bounce) is cast as a skill action (1 SP, +30 Energy — see skill_grants_energy_30).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Sampo",
+          "action": "skill"
+        }
+      }
+    },
+    {
+      "id": "skill_bounces_4",
+      "layer": "structure",
+      "claim": "Ricochet Love = main hit + 4 bounces (AGENTS §sampo: 'главный + 4 отскока, E1 +1 отскок = 5'; eidolon 0 ⇒ 4 bounces per cast) — 4 casts x 4 bounces = 16 bounce hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Sampo",
+          "label": "Ricochet Love (bounce)"
+        },
+        "value": 16
+      }
+    },
+    {
+      "id": "basic_cast",
+      "layer": "structure",
+      "claim": "Basic ATK 'Dazzling Blades' (characters.json 110801) is cast as a basic action (kit label 'Dazzling Blades', erudition/nihility kit source).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Sampo",
+          "action": "basic"
+        }
+      }
+    },
+    {
+      "id": "basic_hits_3",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic 110801 hits 3 times with split 30/30/40 (AGENTS §sampo: '3 хита 30/30/40'); one basic was cast in this battle => 3 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Sampo",
+          "label": "Dazzling Blades"
+        },
+        "value": 3
+      }
+    },
+    {
+      "id": "ult_cast",
+      "layer": "structure",
+      "claim": "Ultimate 'Surprise Present' (characters.json 110803, AoEAttack) fires as an ultimate action once Energy fills (energyMax 120).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Sampo",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "ult_hits_4x3",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Ultimate 110803 = 4 hits per enemy (AGENTS §sampo: '4 хита 25×4, AoE') against all 3 enemies; 2 casts x 4 x 3 = 24 hits (kit: 'Talent: 4 ult hits -> 4 rolls', nihility.ts:1423).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Sampo",
+          "label": "Surprise Present"
+        },
+        "value": 24
+      }
+    },
+    {
+      "id": "no_followup_attack",
+      "layer": "structure",
+      "claim": "Sampo's kit has no Follow-Up ATK — characters.json 110801-110804 define only Basic/Skill/Ult/Talent, so no attackType 'fua' hit ever originates from him.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "HIT_START",
+          "source": "Sampo",
+          "attackType": "fua"
+        }
+      }
+    },
+    {
+      "id": "skill_grants_energy_30",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill 110802 grants 30 Energy (AGENTS §sampo: sp_base 6 in json is an artifact, 'реальная цена 30 Energy' — i.e. the skill's Energy gain is 30), so the first Energy event of the battle is n=30.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Sampo"
+        },
+        "field": "n",
+        "value": 30,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "basic_grants_energy_20",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic 110801 grants +20 Energy (standard basic gain; AGENTS §sampo audit: EN = 20/Basic identity holds for the kit family).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Sampo",
+          "payload": { "n": 20 }
+        }
+      }
+    },
+    {
+      "id": "ult_cost_accounting",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate payment books ENERGY_LOSS reason 'ult_cost' with amount 110 = 120 max Energy - 10 Energy granted by A2 inside the ult body before the loss is booked (AGENTS §sampo: 'A2 +10 Energy'; TurnManager.castUlt books before - u.energy, TurnManager.ts:374).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Sampo",
+          "payload": { "reason": "ult_cost" }
+        },
+        "field": "amount",
+        "value": 110
+      }
+    },
+    {
+      "id": "ult_energy_refund_5",
+      "layer": "parameters",
+      "claim": "The Ultimate cast grants the generic castUlt +5 Energy refund after the cost is paid (AGENTS: '+5 Energy (из castUlt)').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Sampo",
+          "payload": { "n": 5 }
+        }
+      }
+    },
+    {
+      "id": "ult_vuln_dot_taken_30",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate applies the enemy debuff 'Surprise Present DoT Taken+' with dotVuln 0.30 for 2 turns (AGENTS §sampo: ult DoT-taken 20->35% 2t; kit: mods dotVuln = mult('sampo','ult_a2'), turns 2, nihility.ts:1421).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "sampo_ult_vuln",
+        "stat": "dotVuln",
+        "value": 0.3,
+        "tol": 0.01
+      }
+    },
+    {
+      "id": "wind_shear_duration_4",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "Wind Shear (Talent 110804) runs for 4 turns — kit constant WIND_SHEAR_TURNS = 4 = '3 + A1 Trap' folded in (nihility.ts:1357; AGENTS §sampo: 'талант ... 3 хода (A1 Trap -> 4)').",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DOT_APPLIED",
+          "source": "Sampo",
+          "payload": { "kind": "WindShear" }
+        },
+        "field": "turns",
+        "value": 4
+      }
+    },
+    {
+      "id": "wind_shear_stack_cap_5",
+      "layer": "parameters",
+      "claim": "Wind Shear stacks up to the talent cap of 5 (AGENTS §sampo: 'кап 5 стаков'); ticks reach stacks=5 in this battle.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DOT_TICK",
+          "source": "Sampo",
+          "payload": { "kind": "WindShear", "stacks": 5 }
+        }
+      }
+    },
+    {
+      "id": "order_skill_before_bounce",
+      "layer": "ordering",
+      "claim": "The skill action starts first, then the bounce hits of the same cast follow (main hit -> 4 bounces).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "ABILITY_USED", "source": "Sampo", "action": "skill" }
+        ],
+        "after": [
+          { "type": "HIT_START", "source": "Sampo", "label": "Ricochet Love (bounce)" }
+        ]
+      }
+    },
+    {
+      "id": "order_ult_hits_before_debuff",
+      "ability": "ultimate",
+      "layer": "ordering",
+      "claim": "Ultimate damage hits resolve first, then 'Surprise Present DoT Taken+' is applied to the enemies (kit: debuff loop after the hit loop, nihility.ts:1421).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "HIT_START", "source": "Sampo", "label": "Surprise Present" }
+        ],
+        "after": [
+          { "type": "DEBUFF_APPLIED", "payload": { "id": "sampo_ult_vuln" } }
+        ]
+      }
+    },
+    {
+      "id": "order_ult_cost_before_refund",
+      "ability": "ultimate",
+      "layer": "ordering",
+      "claim": "Ultimate Energy is consumed first (ENERGY_LOSS reason ult_cost), then the +5 refund arrives.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "ENERGY_LOSS", "source": "Sampo", "payload": { "reason": "ult_cost" } }
+        ],
+        "after": [
+          { "type": "ENERGY_GAIN", "source": "Sampo", "payload": { "n": 5 } }
+        ]
+      }
+    },
+    {
+      "id": "order_shear_land_before_tick",
+      "layer": "ordering",
+      "claim": "A Wind Shear roll that lands applies the DoT before any tick of that DoT consumes it ('Wind Shear lands on X' note precedes DOT_TICK events).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "NOTE", "log": "Wind Shear lands on" }
+        ],
+        "after": [
+          { "type": "DOT_TICK", "source": "Sampo", "payload": { "kind": "WindShear" } }
+        ]
+      }
+    },
+    {
+      "id": "a4_spice_up_mitigation",
+      "layer": "interactions",
+      "claim": "Trace A4 'Spice Up': when an enemy that has Wind Shear takes a turn, Sampo gains mitigation 15% for 1 turn (AGENTS §sampo: 'A4 Spice Up: враг с Wind Shear -> Sampo mitigation 0.15 на его ход'; kit nihility.ts:1469-1470).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "BUFF_APPLIED",
+          "target": "Sampo",
+          "payload": { "id": "sampo_a4" }
+        }
+      }
+    },
+    {
+      "id": "wind_shear_roll_chance",
+      "layer": "interactions",
+      "claim": "Each hit rolls Wind Shear independently against the target's Effect RES — both outcomes occur in one battle: 'Wind Shear lands on X' and 'RESISTS Wind Shear (77% chance)' (base chance 65% + Sampo's EHR 18% => 77%, AGENTS §sampo; kit applyWindShear baseChance 0.65, nihility.ts:1363).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "RESISTS Wind Shear \\(77% chance\\)"
+        }
+      }
+    },
+    {
+      "id": "ult_vuln_on_all_enemies",
+      "layer": "interactions",
+      "claim": "Both Ultimates apply the DoT-taken debuff to every enemy: 3 enemies x 2 casts = 6 DEBUFF_APPLIED events (kit loops over livingEnemiesOf, nihility.ts:1421).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DEBUFF_APPLIED",
+          "payload": { "id": "sampo_ult_vuln" }
+        },
+        "value": 6
+      }
+    },
+    {
+      "id": "shear_rolls_on_basic_hits",
+      "ability": "basic",
+      "layer": "interactions",
+      "claim": "Basic 110801 rolls Wind Shear once per hit — 3 rolls per basic, all 3 landing somewhere across the battle (kit: 'Talent: 3 basic hits -> 3 rolls', nihility.ts:1456; AGENTS §sampo: roll on every hit).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Wind Shear lands on"
+        }
+      }
+    }
+  ]
+}

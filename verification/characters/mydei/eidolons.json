@@ -1,0 +1,471 @@
+{
+  "kit": "mydei",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Mydei/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 'Frost Hones Spine of Steel' = 'Godslayer Be God' primary DMG +30% and the ability deals that DMG to all enemies (splash 'adj' instances disappear; primary 1.4 -> 1.82). E2 'Strife Beholds Cry of Dead' = during Vendetta DMG ignores 15% DEF (mydei_e2_def defIgnore 0.15) and 40% of healing converts to Charge. E3 'Honor Exalts Feast of Faith' +Skill Lv.2 / Basic Lv.1 raises 'Deaths are Legion' 0.90 -> 0.99 (and Kingslayer 1.1 -> 1.21). E4 'Siren Jolts the Laconic Lion' = during Vendetta CRIT DMG +30% (mydei_vend +critDmg 0.3) and heals 10% Max HP after enemy attacks. E5 'War Chisels Flesh of Flame' +Ultimate Lv.2 / Talent Lv.2 raises 'Throne of Bones' 1.6 -> 1.728. E6 'Legacy Scales Mound of Blood' = enters Vendetta at battle start and lowers the 'Godslayer Be God' Charge requirement to 100."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "mydei E0 — eidolon ladder rung, cloned from mydei/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mydei",
+            "name": "Mydei",
+            "stats": {
+              "hp": 9000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 900000,
+          "atk": 300,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 15,
+        "seed": 1
+      }
+    },
+    {
+      "id": "e1",
+      "env": "mydei E1 — eidolon ladder rung, cloned from mydei/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mydei",
+            "name": "Mydei",
+            "stats": {
+              "hp": 9000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 1,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 900000,
+          "atk": 300,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 15,
+        "seed": 1
+      }
+    },
+    {
+      "id": "e2",
+      "env": "mydei E2 — eidolon ladder rung, cloned from mydei/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mydei",
+            "name": "Mydei",
+            "stats": {
+              "hp": 9000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 2,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 900000,
+          "atk": 300,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 15,
+        "seed": 1
+      }
+    },
+    {
+      "id": "e3",
+      "env": "mydei E3 — eidolon ladder rung, cloned from mydei/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mydei",
+            "name": "Mydei",
+            "stats": {
+              "hp": 9000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 3,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 900000,
+          "atk": 300,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 15,
+        "seed": 1
+      }
+    },
+    {
+      "id": "e4",
+      "env": "mydei E4 — eidolon ladder rung, cloned from mydei/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mydei",
+            "name": "Mydei",
+            "stats": {
+              "hp": 9000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 4,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 900000,
+          "atk": 300,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 15,
+        "seed": 1
+      }
+    },
+    {
+      "id": "e5",
+      "env": "mydei E5 — eidolon ladder rung, cloned from mydei/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mydei",
+            "name": "Mydei",
+            "stats": {
+              "hp": 9000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 5,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 900000,
+          "atk": 300,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 15,
+        "seed": 1
+      }
+    },
+    {
+      "id": "e6",
+      "env": "mydei E6 — eidolon ladder rung, cloned from mydei/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "mydei",
+            "name": "Mydei",
+            "stats": {
+              "hp": 9000,
+              "atk": 2200,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 6,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Mob",
+          "count": 2,
+          "hp": 900000,
+          "atk": 300,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Imaginary"
+          ]
+        },
+        "cycles": 15,
+        "seed": 1
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "mydei_e1_mult",
+      "layer": "parameters",
+      "claim": "E1 'Frost Hones Spine of Steel': 'Godslayer Be God' primary DMG +30% raises the primary multiplier 1.4 -> 1.82.",
+      "fixtures": [
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Godslayer Be God (1/2)"
+        },
+        "field": "mult",
+        "value": 1.82,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "mydei_e1_mult_locked",
+      "layer": "parameters",
+      "claim": "Below E1 the 'Godslayer Be God' primary multiplier stays at 1.4.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Godslayer Be God (1/2)"
+        },
+        "field": "mult",
+        "value": 1.4,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "mydei_e1_adj_absent",
+      "layer": "interactions",
+      "claim": "E1 makes 'Godslayer Be God' hit all enemies, so the blast-only 'adj' instances no longer exist.",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Godslayer Be God (1/2 adj)"
+        }
+      }
+    },
+    {
+      "id": "mydei_e1_adj_present",
+      "layer": "interactions",
+      "claim": "At E0 'Godslayer Be God' is a blast skill with a separate 'adj' instance.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Godslayer Be God (1/2 adj)"
+        }
+      }
+    },
+    {
+      "id": "mydei_e2_present",
+      "layer": "interactions",
+      "claim": "E2 'Strife Beholds Cry of Dead': during Vendetta DMG ignores 15% DEF (mydei_e2_def).",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "mydei_e2_def"
+      }
+    },
+    {
+      "id": "mydei_e2_stat",
+      "layer": "parameters",
+      "claim": "mydei_e2_def carries defIgnore 0.15 (canon ranks/2).",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "mydei_e2_def",
+        "stat": "defIgnore",
+        "value": 0.15
+      }
+    },
+    {
+      "id": "mydei_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: mydei_e2_def must NOT be active below rank 2.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "mydei_e2_def"
+      }
+    },
+    {
+      "id": "mydei_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 'Honor Exalts Feast of Faith': Basic ATK Lv.+1 raises 'Deaths are Legion (main)' 0.90 -> 0.99. (E6 enters Vendetta from battle start and replaces the Basic, so e6 is excluded.)",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Deaths are Legion (main)"
+        },
+        "field": "mult",
+        "value": 0.99,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "mydei_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'Deaths are Legion (main)' stays at 0.90.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Deaths are Legion (main)"
+        },
+        "field": "mult",
+        "value": 0.9,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "mydei_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Siren Jolts the Laconic Lion': during Vendetta CRIT DMG +30% and heals 10% Max HP after enemy attacks (mydei_vend gains critDmg 0.3).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "mydei_vend",
+        "stat": "critDmg",
+        "value": 0.3
+      }
+    },
+    {
+      "id": "mydei_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 'War Chisels Flesh of Flame': Ultimate Lv.+2 raises 'Throne of Bones (main)' 1.6 -> 1.728.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Throne of Bones (main)"
+        },
+        "field": "mult",
+        "value": 1.728,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "mydei_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 'Throne of Bones (main)' stays at 1.6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Throne of Bones (main)"
+        },
+        "field": "mult",
+        "value": 1.6,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

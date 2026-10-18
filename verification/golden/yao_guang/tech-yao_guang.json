@@ -1,0 +1,20 @@
+{
+ "input": {
+  "kit": "yao_guang",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Yao Guang alone, technique \"Untethered Glimmer Sails Far\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Yao Guang|-|- [1]",
+  "BUFF_APPLIED|-|Aha|-|- [1,Infinity]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Yao Guang|-|- [1,Infinity]",
+  "TECHNIQUE_APPLIED|Yao Guang|-|-|-",
+  "ENERGY_GAIN|Yao Guang|Yao Guang|-|- [0,120,180,30]",
+  "BUFF_APPLIED|-|Yao Guang|-|- [1,Infinity]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

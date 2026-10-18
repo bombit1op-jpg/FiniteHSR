@@ -1,0 +1,153 @@
+{
+  "kit": "sushang",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/120601+120602+120603+120604 + bonus_abilities (Guileless, Riposte, Vanquisher)",
+    "confidence": "verified",
+    "note": "Basic Starshine (120601) 140% of ATK at L10. Skill Mountainfall (120602) deals #1 = 210% (L10) Physical DMG to one enemy, with #3 = 33% chance to trigger Sword Stance on the final hit for #2 = 100% extra DMG; guaranteed on Weakness Broken targets. Ultimate Dawn Herald (120603) deals #1 = 320% (L10) DMG to one enemy, Sushang immediately takes action, ATK + #4 = 30% and 2 extra Sword Stance chances at #3 = 50% of original DMG for #2 = 2 turns. Talent Dancing Blade (120604): when an enemy is Weakness Broken on the field, SPD + #1 = 20% for #2 = 2 turns. Energy limit 120."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Sushang E0 solo vs 3 Physical-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sushang",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Physical"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "s_skill_action",
+      "layer": "structure",
+      "claim": "Mountainfall (120602) is Sushang's damaging Skill action.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Sushang", "action": "skill" } }
+    },
+    {
+      "id": "s_skill_hits",
+      "layer": "structure",
+      "claim": "Mountainfall delivers the 210% (L10) Skill multiplier as a 30/70 two-hit split per cast; the fixture's 5 casts (3 own + 2 post-Ultimate extra actions) produce 10 hits.",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Sushang", "label": "Mountainfall" }, "value": 10 }
+    },
+    {
+      "id": "s_ult_action",
+      "layer": "structure",
+      "claim": "Sushang's Ultimate action is Dawn Herald (120603).",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Sushang", "action": "ultimate" } }
+    },
+    {
+      "id": "s_ult_hits",
+      "layer": "structure",
+      "claim": "Dawn Herald hits the designated enemy once per Ultimate (2 Ultimates in the fixture).",
+      "assertion": { "assert": "count", "of": { "type": "HIT_START", "source": "Sushang", "label": "Dawn Herald" }, "value": 2 }
+    },
+    {
+      "id": "s_no_attack_action",
+      "layer": "structure",
+      "claim": "Sushang's kit exposes Basic ATK, Skill and Ultimate as its action set; it never falls back to a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Sushang", "action": "attack" } }
+    },
+    {
+      "id": "s_db_negative",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent Dancing Blade (120604) requires an enemy Weakness Broken on the field; the fixture never breaks one, so the SPD buff never applies.",
+      "assertion": { "assert": "noBuff", "id": "sushang_db" }
+    },
+    {
+      "id": "s_skill_mult_first",
+      "layer": "parameters",
+      "claim": "Mountainfall L10 total = 210% of ATK (120602 #1); the first split part carries 30% → 0.63.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Sushang", "label": "Mountainfall" }, "field": "mult", "value": 0.63, "pick": "first" }
+    },
+    {
+      "id": "s_skill_mult_last",
+      "layer": "parameters",
+      "claim": "Mountainfall's second split part carries 70% of the 210% total → 1.47.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Sushang", "label": "Mountainfall" }, "field": "mult", "value": 1.47 }
+    },
+    {
+      "id": "s_ult_mult",
+      "layer": "parameters",
+      "claim": "Dawn Herald (120603 #1) deals Physical DMG equal to 320% of ATK at L10 in a single hit.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Sushang", "label": "Dawn Herald" }, "field": "mult", "value": 3.2 }
+    },
+    {
+      "id": "s_basic_mult",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic Starshine (120601) runs the 50%→140% ladder (L10 = 140%); at the engine's default Basic Lv6 it totals 100%.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Sushang", "label": "Starshine" }, "field": "mult", "value": 1 }
+    },
+    {
+      "id": "s_ult_buff_turns",
+      "layer": "parameters",
+      "claim": "Dawn Herald's ATK boost lasts #2 = 2 turns (120603).",
+      "assertion": { "assert": "buff", "id": "sushang_ult", "target": "Sushang", "turns": 2 }
+    },
+    {
+      "id": "s_ult_buff_atk",
+      "layer": "parameters",
+      "claim": "Dawn Herald increases Sushang's ATK by #4 = 30% at L10 (120603).",
+      "assertion": { "assert": "buffStat", "id": "sushang_ult", "stat": "atkPct", "value": 0.3 }
+    },
+    {
+      "id": "s_energy",
+      "layer": "parameters",
+      "claim": "Sushang's Ultimate uses the standard 120-Energy ladder (sp_need 120); over this fixture her action set regenerates exactly 215 Energy.",
+      "assertion": { "assert": "energy", "who": "Sushang", "atLeast": 215, "atMost": 215 }
+    },
+    {
+      "id": "s_extra_turn_order",
+      "layer": "ordering",
+      "claim": "The post-Ultimate extra-action Skill's Sword Stance opportunities resolve only after Dawn Herald's damage (the buff window must be active first).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "HIT_START", "source": "Sushang", "label": "Dawn Herald" }],
+        "after": [{ "type": "HIT_START", "source": "Sushang", "label": "Sword Stance (extra)" }]
+      }
+    },
+    {
+      "id": "s_ult_cast_order",
+      "layer": "ordering",
+      "claim": "The Ultimate action starts before Dawn Herald damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Sushang", "action": "ultimate" }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Sushang", "label": "Dawn Herald" }]
+      }
+    },
+    {
+      "id": "s_sp_extra_action",
+      "layer": "interactions",
+      "claim": "The extra action granted by Dawn Herald is a real Skill that spends Skill Points: 5 SP spent over the fixture (3 own Skill casts + 2 extra-action Skill casts).",
+      "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Sushang" }, "value": 5 }
+    },
+    {
+      "id": "s_sword_stance_extra",
+      "layer": "interactions",
+      "claim": "While Dawn Herald is active, Skill gains 2 extra Sword Stance chances dealing 50% of the original DMG (120603 #3) — observed as the extra-chance Additional DMG event.",
+      "assertion": { "assert": "present", "of": { "type": "HIT_START", "source": "Sushang", "label": "Sword Stance (extra)" } }
+    }
+  ],
+  "golds": []
+}

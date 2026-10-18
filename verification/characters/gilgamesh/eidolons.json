@@ -1,0 +1,671 @@
+{
+  "kit": "gilgamesh",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Gilgamesh/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder. E1 gil_e1_atk atkPct 0.6 and +40 Energy on Skill (total ENERGY 365 -> 525); E2 gil_interest_spd spdPct 0.3 -> 1.3 and Gate of Babylon main x2 (0.28 -> 0.56) / adjacent x1.5 (1.4 -> 2.1); E3 Basic Lv.+1 / Skill Lv.+2 raises Gate of Babylon main 0.56 -> 0.616 and gil_ack defIgnore 0.3 -> 0.33; E4 gil_e4 err 0.2; E5 Ult Lv.+2 / Talent Lv.+2 raises Enuma Elish 4.0 -> 4.4; E6 gil_e6 resPenAll 0.2 and Enuma Elish bounce 1.1 -> 1.98."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "gilgamesh E0 — eidolon ladder rung, cloned from gilgamesh/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gilgamesh",
+            "stats": {
+              "hp": 12000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 4,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "gilgamesh E1 — eidolon ladder rung, cloned from gilgamesh/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gilgamesh",
+            "stats": {
+              "hp": 12000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 4,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "gilgamesh E2 — eidolon ladder rung, cloned from gilgamesh/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gilgamesh",
+            "stats": {
+              "hp": 12000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 4,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "gilgamesh E3 — eidolon ladder rung, cloned from gilgamesh/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gilgamesh",
+            "stats": {
+              "hp": 12000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 4,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "gilgamesh E4 — eidolon ladder rung, cloned from gilgamesh/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gilgamesh",
+            "stats": {
+              "hp": 12000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 4,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "gilgamesh E5 — eidolon ladder rung, cloned from gilgamesh/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gilgamesh",
+            "stats": {
+              "hp": 12000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 4,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "gilgamesh E6 — eidolon ladder rung, cloned from gilgamesh/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gilgamesh",
+            "stats": {
+              "hp": 12000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 4,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "gil_e1_present",
+      "layer": "interactions",
+      "claim": "E1 grants ATK +60% (gil_e1_atk atkPct 0.6). Present from E1.",
+      "fixtures": [
+        "e1",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "gil_e1_atk"
+      }
+    },
+    {
+      "id": "gil_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: gil_e1_atk must NOT be active below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "gil_e1_atk"
+      }
+    },
+    {
+      "id": "gil_e1_stat",
+      "layer": "parameters",
+      "claim": "gil_e1_atk carries atkPct 0.6 (canon rank 1).",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "gil_e1_atk",
+        "stat": "atkPct",
+        "value": 0.6
+      }
+    },
+    {
+      "id": "gil_e1_energy_present",
+      "layer": "parameters",
+      "claim": "E1 +40 Energy per Skill raises the total ENERGY (365 -> 525).",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "energy",
+        "who": "Gilgamesh",
+        "atLeast": 500
+      }
+    },
+    {
+      "id": "gil_e1_energy_locked",
+      "layer": "parameters",
+      "claim": "Below E1 total ENERGY stays at the base 365.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "energy",
+        "who": "Gilgamesh",
+        "atMost": 400
+      }
+    },
+    {
+      "id": "gil_e2_main_present",
+      "layer": "parameters",
+      "claim": "E2 doubles Gate of Babylon primary (0.28 -> 0.56).",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Gate of Babylon (main)"
+        },
+        "field": "mult",
+        "value": 0.56,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gil_e2_main_locked",
+      "layer": "parameters",
+      "claim": "Below E2 Gate of Babylon primary stays at 0.28.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Gate of Babylon (main)"
+        },
+        "field": "mult",
+        "value": 0.28,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gil_e2_adj_present",
+      "layer": "parameters",
+      "claim": "E2 raises Gate of Babylon adjacent 1.4 -> 2.1 (x1.5).",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Gate of Babylon (adj)"
+        },
+        "field": "mult",
+        "value": 2.1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gil_e2_adj_locked",
+      "layer": "parameters",
+      "claim": "Below E2 Gate of Babylon adjacent stays at 1.4.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Gate of Babylon (adj)"
+        },
+        "field": "mult",
+        "value": 1.4,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gil_e2_interest_present",
+      "layer": "parameters",
+      "claim": "E2 raises Interest SPD 0.3 -> 1.3 (gil_interest_spd spdPct 1.3).",
+      "fixtures": [
+        "e2",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "gil_interest_spd",
+        "stat": "spdPct",
+        "value": 1.3
+      }
+    },
+    {
+      "id": "gil_e2_interest_locked",
+      "layer": "parameters",
+      "claim": "Below E2 gil_interest_spd spdPct stays at 0.3.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "gil_interest_spd",
+        "stat": "spdPct",
+        "value": 0.3
+      }
+    },
+    {
+      "id": "gil_e3_present",
+      "layer": "parameters",
+      "claim": "E3 Basic Lv.+1 / Skill Lv.+2 raises Gate of Babylon primary 0.56 -> 0.616.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Gate of Babylon (main)"
+        },
+        "field": "mult",
+        "value": 0.616,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gil_e3_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Gate of Babylon primary stays at 0.56.",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Gate of Babylon (main)"
+        },
+        "field": "mult",
+        "value": 0.56,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gil_e3_ack_present",
+      "layer": "parameters",
+      "claim": "E3 raises King's Acknowledgement defIgnore 0.3 -> 0.33 (gil_ack).",
+      "fixtures": [
+        "e3"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "gil_ack",
+        "stat": "defIgnore",
+        "value": 0.33,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "gil_e3_ack_locked",
+      "layer": "parameters",
+      "claim": "Below E3 gil_ack defIgnore stays at 0.3.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "gil_ack",
+        "stat": "defIgnore",
+        "value": 0.3,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "gil_e4_present",
+      "layer": "interactions",
+      "claim": "E4 grants Energy Regeneration Rate +20% (gil_e4 err 0.2). Present from E4.",
+      "fixtures": [
+        "e4",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "gil_e4"
+      }
+    },
+    {
+      "id": "gil_e4_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: gil_e4 must NOT be active below rank 4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "gil_e4"
+      }
+    },
+    {
+      "id": "gil_e4_stat",
+      "layer": "parameters",
+      "claim": "gil_e4 carries err 0.2 (canon rank 4).",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "gil_e4",
+        "stat": "err",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "gil_e4_energy",
+      "layer": "parameters",
+      "claim": "E4 raises total ENERGY to 666.",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "energy",
+        "who": "Gilgamesh",
+        "atLeast": 650
+      }
+    },
+    {
+      "id": "gil_e5_present",
+      "layer": "parameters",
+      "claim": "E5 Ult Lv.+2 / Talent Lv.+2 raises Enuma Elish 4.0 -> 4.4.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Enuma Elish"
+        },
+        "field": "mult",
+        "value": 4.4,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gil_e5_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Enuma Elish stays at 4.0.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Enuma Elish"
+        },
+        "field": "mult",
+        "value": 4,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gil_e6_present",
+      "layer": "interactions",
+      "claim": "E6 grants All-Type RES PEN 20% (gil_e6 resPenAll 0.2). Present from E6.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "gil_e6"
+      }
+    },
+    {
+      "id": "gil_e6_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: gil_e6 must NOT be active below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "gil_e6"
+      }
+    },
+    {
+      "id": "gil_e6_stat",
+      "layer": "parameters",
+      "claim": "gil_e6 carries resPenAll 0.2 (canon rank 6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "gil_e6",
+        "stat": "resPenAll",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "gil_e6_bounce_present",
+      "layer": "parameters",
+      "claim": "E6 +80% raises Enuma Elish bounce 1.1 -> 1.98.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Enuma Elish bounce"
+        },
+        "field": "mult",
+        "value": 1.98,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "gil_e6_bounce_locked",
+      "layer": "parameters",
+      "claim": "Below E6 Enuma Elish bounce stays at 1.1.",
+      "fixtures": [
+        "e5"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Enuma Elish bounce"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

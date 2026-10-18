@@ -1,0 +1,17 @@
+{
+ "input": {
+  "kit": "trailblazer_harmony",
+  "slot": "technique",
+  "env": "Technique activation (mode init): {NICKNAME} alone, technique \"Now! I'm the Band!\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|{NICKNAME}|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|{NICKNAME}|-|-|-",
+  "BUFF_APPLIED|-|{NICKNAME}|-|- [1,2]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

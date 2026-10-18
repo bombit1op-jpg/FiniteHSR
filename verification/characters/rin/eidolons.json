@@ -1,0 +1,477 @@
+{
+  "kit": "rin",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Rin Tohsaka/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 grants Shadow Gem when a Skill consumes >=30 Gem Energy and upgrades the next Skill to Second Magic (Second Magic (AoE) instances rise 8 -> 12); E2 Skill DMG +30% for Rin and allies (rin_e2 boost:skill 0.3, allies' Skill DMG becomes 130%); E3 Skill Lv.+2/Basic Lv.+1 raises Bajiquan 1.0 -> 1.1; E4 Gem Magecraft CRIT DMG boost stacks up to 2x - the stack count is not surfaced (deviation); E5 Ult Lv.+2/Talent Lv.+2 raises An Gal Ta Ki Gal (main) 6.0 -> 6.6; E6 All-Type RES PEN +20% (rin_e6 resPenAll 0.2) plus +24 Gem Energy and an extra turn on Ultimate (Second Magic (AoE) instances rise 12 -> 16). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "rin E0 — eidolon ladder rung, cloned from rin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "rin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7,
+        "techniques": ["rin"]
+      }
+    },
+    {
+      "id": "e1",
+      "env": "rin E1 — eidolon ladder rung, cloned from rin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "rin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7,
+        "techniques": ["rin"]
+      }
+    },
+    {
+      "id": "e2",
+      "env": "rin E2 — eidolon ladder rung, cloned from rin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "rin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7,
+        "techniques": ["rin"]
+      }
+    },
+    {
+      "id": "e3",
+      "env": "rin E3 — eidolon ladder rung, cloned from rin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "rin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7,
+        "techniques": ["rin"]
+      }
+    },
+    {
+      "id": "e4",
+      "env": "rin E4 — eidolon ladder rung, cloned from rin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "rin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7,
+        "techniques": ["rin"]
+      }
+    },
+    {
+      "id": "e5",
+      "env": "rin E5 — eidolon ladder rung, cloned from rin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "rin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7,
+        "techniques": ["rin"]
+      }
+    },
+    {
+      "id": "e6",
+      "env": "rin E6 — eidolon ladder rung, cloned from rin/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "rin",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Quantum"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7,
+        "techniques": ["rin"]
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "rin_e1_present",
+      "layer": "parameters",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "claim": "E1 Shadow Gem upgrades the next Skill to Second Magic (Second Magic (AoE) instances = 12).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Second Magic (AoE)"
+        },
+        "value": 12
+      }
+    },
+    {
+      "id": "rin_e1_locked",
+      "layer": "parameters",
+      "fixtures": [
+        "e0"
+      ],
+      "claim": "Below E1 the Enhanced-Skill Shadow Gem path is absent (Second Magic (AoE) instances = 8).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Second Magic (AoE)"
+        },
+        "value": 8
+      }
+    },
+    {
+      "id": "rin_e2_present",
+      "layer": "interactions",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "claim": "E2 \"Dimensional Traveler\": Rin Skill DMG +30% (rin_e2 boost:skill 0.3).",
+      "assertion": {
+        "assert": "buff",
+        "id": "rin_e2"
+      }
+    },
+    {
+      "id": "rin_e2_locked",
+      "layer": "interactions",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "claim": "Cumulative unlock: rin_e2 must NOT be active below rank 2.",
+      "assertion": {
+        "assert": "noBuff",
+        "id": "rin_e2"
+      }
+    },
+    {
+      "id": "rin_e2_stat",
+      "layer": "parameters",
+      "fixtures": [
+        "e2"
+      ],
+      "claim": "The E2 buff carries boost:skill 0.30 (canon ranks/2).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "rin_e2",
+        "stat": "boost:skill",
+        "value": 0.3
+      }
+    },
+    {
+      "id": "rin_e3_present",
+      "layer": "parameters",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "claim": "E3 Basic ATK Lv.+1 raises Bajiquan 1.0 -> 1.1.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Bajiquan"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "rin_e3_locked",
+      "layer": "parameters",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "claim": "Below E3 Bajiquan stays at the Lv.6 floor 1.0 (cumulative unlock).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Bajiquan"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "rin_e5_present",
+      "layer": "parameters",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "claim": "E5 Ultimate Lv.+2 raises An Gal Ta Ki Gal (main) 6.0 -> 6.6.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "An Gal Ta Ki Gal (main)"
+        },
+        "field": "mult",
+        "value": 6.6,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "rin_e5_locked",
+      "layer": "parameters",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "claim": "Below E5 An Gal Ta Ki Gal (main) stays at the Lv.10 floor 6.0 (cumulative unlock).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "An Gal Ta Ki Gal (main)"
+        },
+        "field": "mult",
+        "value": 6,
+        "tol": 0.01,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "rin_e6_present",
+      "layer": "interactions",
+      "fixtures": [
+        "e6"
+      ],
+      "claim": "E6 \"Nailed It This Time!\": All-Type RES PEN +20% (rin_e6).",
+      "assertion": {
+        "assert": "buff",
+        "id": "rin_e6"
+      }
+    },
+    {
+      "id": "rin_e6_locked",
+      "layer": "interactions",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "claim": "Cumulative unlock: rin_e6 must NOT be active below rank 6.",
+      "assertion": {
+        "assert": "noBuff",
+        "id": "rin_e6"
+      }
+    },
+    {
+      "id": "rin_e6_stat",
+      "layer": "parameters",
+      "fixtures": [
+        "e6"
+      ],
+      "claim": "The E6 buff carries resPenAll 0.20 (canon ranks/6).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "rin_e6",
+        "stat": "resPenAll",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "rin_e6_count",
+      "layer": "parameters",
+      "fixtures": [
+        "e6"
+      ],
+      "claim": "E6 Ultimate grants +24 Gem Energy and an extra turn (Second Magic (AoE) instances = 16).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Second Magic (AoE)"
+        },
+        "value": 16
+      }
+    }
+  ],
+  "golds": []
+}

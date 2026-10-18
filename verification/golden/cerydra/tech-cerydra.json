@@ -1,0 +1,18 @@
+{
+ "input": {
+  "kit": "cerydra",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Cerydra alone, technique \"First-Move Advantage\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Cerydra|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Cerydra|-|- [1]",
+  "TECHNIQUE_APPLIED|Cerydra|-|-|-",
+  "ENERGY_GAIN|Cerydra|Cerydra|-|- [0,130,30,95]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

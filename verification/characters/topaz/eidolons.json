@@ -1,0 +1,484 @@
+{
+  "kit": "topaz",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Topaz & Numby/ranks/1..6",
+    "confidence": "interpreted",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 'Future Market': FUA on a Proof-of-Debt enemy applies Debtor, +25% FUA CRIT DMG up to 2 stacks (topaz_debtor critDmgTaken:fua 0.25). E2 'Bona Fide Acquisition': after Numby acts, Topaz gains 5 Energy — not asserted because the kept fixture's E0 already draws the same energy from the ult refund and turn ticks, so the delta is not separable. E3 'Seize the Big and Free the Small': Skill+2/Basic+1 raise Difficulty Paying? 0.21428571428571427->0.23571428571428568 and Deficit... 1->1.1. E4 'Agile Operation': when Numby's turn begins Topaz advances 20% (ACTION_ADVANCE pct 0.2). E5 'Inflationary Demand': Ult+2/Talent+2 raise Numby 0.21428571428571427->0.23571428571428568 and Windfall Bonanza 0.5357142857142857->0.624642857142857. E6 'Incentive Mechanism': attack count +1 and Fire RES PEN +10% (numby_e6 resPen:Fire 0.1). Fixtures run one battle per rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "topaz E0 — eidolon ladder rung, cloned from topaz/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "topaz",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "topaz E1 — eidolon ladder rung, cloned from topaz/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "topaz",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "topaz E2 — eidolon ladder rung, cloned from topaz/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "topaz",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "topaz E3 — eidolon ladder rung, cloned from topaz/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "topaz",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "topaz E4 — eidolon ladder rung, cloned from topaz/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "topaz",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "topaz E5 — eidolon ladder rung, cloned from topaz/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "topaz",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "topaz E6 — eidolon ladder rung, cloned from topaz/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "topaz",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "topaz_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'Future Market': FUA on a Proof-of-Debt target applies Debtor (topaz_debtor). Present from E1.",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "topaz_debtor"
+      }
+    },
+    {
+      "id": "topaz_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: topaz_debtor must NOT apply below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "topaz_debtor"
+      }
+    },
+    {
+      "id": "topaz_e1_stat",
+      "layer": "parameters",
+      "claim": "topaz_debtor carries critDmgTaken:fua 0.25 (canon E1).",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "topaz_debtor",
+        "stat": "critDmgTaken:fua",
+        "value": 0.25
+      }
+    },
+    {
+      "id": "topaz_e3_skill",
+      "layer": "parameters",
+      "claim": "E3 Skill+2 raises 'Difficulty Paying?' 0.21428571428571427 -> 0.23571428571428568.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Difficulty Paying?"
+        },
+        "field": "mult",
+        "value": 0.23571428571428568,
+        "tol": 0.000001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "topaz_e3_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'Difficulty Paying?' stays at 0.21428571428571427.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Difficulty Paying?"
+        },
+        "field": "mult",
+        "value": 0.21428571428571427,
+        "tol": 0.000001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "topaz_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 Basic+1 raises 'Deficit...' 1 -> 1.1.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Deficit..."
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "topaz_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'Deficit...' stays at 1.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Deficit..."
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "topaz_e4_advance",
+      "layer": "interactions",
+      "claim": "E4 'Agile Operation': when Numby's turn begins, Topaz's action advances by 20%.",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ACTION_ADVANCE",
+          "target": "Topaz & Numby",
+          "payload": {
+            "pct": 0.2
+          }
+        }
+      }
+    },
+    {
+      "id": "topaz_e4_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: no 20% Topaz action-advance below rank 4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ACTION_ADVANCE",
+          "target": "Topaz & Numby",
+          "payload": {
+            "pct": 0.2
+          }
+        }
+      }
+    },
+    {
+      "id": "topaz_e5_numby",
+      "layer": "parameters",
+      "claim": "E5 Ult+2/Talent+2 raise the Windfall Bonanza Numby hit to 0.624642857142857 (>0.6).",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Numby"
+        },
+        "field": "mult",
+        "value": 0.6
+      }
+    },
+    {
+      "id": "topaz_e6_present",
+      "layer": "interactions",
+      "claim": "E6 'Incentive Mechanism': Numby attacks gain Fire RES PEN (numby_e6). Present at E6.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "numby_e6"
+      }
+    },
+    {
+      "id": "topaz_e6_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: numby_e6 must NOT be active below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "numby_e6"
+      }
+    },
+    {
+      "id": "topaz_e6_stat",
+      "layer": "parameters",
+      "claim": "numby_e6 carries resPen:Fire 0.1 (canon E6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "numby_e6",
+        "stat": "resPen:Fire",
+        "value": 0.1
+      }
+    }
+  ],
+  "golds": []
+}

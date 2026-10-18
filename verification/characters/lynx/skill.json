@@ -1,0 +1,179 @@
+{
+  "kit": "lynx",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/111101+111102+111103+111104 (Ice Crampon Technique basic, Greenland passive, Coconut Elementary ult, Survival Response)",
+    "confidence": "verified",
+    "note": "Basic Ice Crampon Technique (111101): single Ice hit = 50% of Lynx's Max HP (scaleStat hp). Skill Survival Response (111102): heals the lowest-HP-share ally (#4/#5) and grants lynx_sr = max-HP buff (#1% + #2 flat for #3 turns, engine flat 1429 at L6) + refunds +30 Energy; decide() only picks it while an ally is below 85% HP. Ultimate Coconut Elementary (111104): dispels one debuff per ally and heals the team (#2/#3) + refunds +15 Energy; cost 100. Talent HoT ticks at the affected ally's turn start. Traces add +28% HP (fixture hp 12800 -> engine maxHp 16384). Fixture enemies are tuned (ATK 5000 x3 / 8000 x1) so the 85% threshold is actually crossed and the Skill path runs."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Lynx E0 solo vs 3 Quantum-weak Elite dummies (Lv120, 6M HP, 300 Toughness, ATK 5000), 5 cycles, seed 7 - Skill path triggers",
+      "battle": {
+        "team": [
+          { "kitId": "lynx", "stats": { "hp": 12800, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 0 }
+        ],
+        "enemy": { "name": "Elite", "count": 3, "hp": 6000000, "atk": 5000, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Quantum"], "res": 0 },
+        "cycles": 5,
+        "seed": 7
+      }
+    },
+    {
+      "id": "solo-1e",
+      "env": "Lynx E0 solo vs a single Quantum-weak Elite dummy (Lv120, 6M HP, 300 Toughness, ATK 8000), 3 cycles, seed 7 - single-target rotation",
+      "battle": {
+        "team": [
+          { "kitId": "lynx", "stats": { "hp": 12800, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 0 }
+        ],
+        "enemy": { "name": "Elite", "count": 1, "hp": 6000000, "atk": 8000, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Quantum"], "res": 0 },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "lx_skill_cast",
+      "layer": "structure",
+      "claim": "The Skill (Survival Response) casts 5 times in the fixture - the 85% HP threshold is crossed and SP is available.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Lynx", "action": "skill" }, "value": 5 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_ult_cast",
+      "layer": "structure",
+      "claim": "Coconut Elementary (111104) is cast 3 times (standard 100-Energy activation).",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Lynx", "action": "ultimate" }, "value": 3 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_basic_mult",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic Ice Crampon Technique deals 0.5x of Lynx's Max HP (canon 111101, scaleStat hp).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Lynx", "label": "Ice Crampon Technique" }, "field": "mult", "value": 0.5, "pick": "first" },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_basic_hits",
+      "layer": "structure",
+      "claim": "The Basic is a single hit per cast - 3 casts, 3 hits (not a 4-hit chain).",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Lynx", "label": "Ice Crampon Technique" }, "value": 3 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_skill_heal_buff",
+      "layer": "interactions",
+      "claim": "The Skill applies lynx_sr (Survival Response) lasting 2 turns.",
+      "assertion": { "assert": "buff", "id": "lynx_sr", "turns": 2 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_skill_buff_value",
+      "layer": "parameters",
+      "claim": "lynx_sr grants 1429 flat max HP at Skill L6 (canon #1% + #2 flat of Lynx's Max HP).",
+      "assertion": { "assert": "buffStat", "id": "lynx_sr", "stat": "hpFlat", "value": 1429 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_skill_energy",
+      "layer": "parameters",
+      "claim": "Each Skill cast refunds +30 Energy (canon 111102 #2); 4 uncapped +30 gains (the 5th is clamped at max Energy).",
+      "assertion": { "assert": "count", "of": { "type": "ENERGY_GAIN", "source": "Lynx", "payload": { "n": 30 } }, "value": 4 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_heal",
+      "layer": "interactions",
+      "claim": "The kit heals 16 times (5 skill heals + 3 ult team heals + talent HoT ticks).",
+      "assertion": { "assert": "count", "of": { "type": "HEAL_APPLIED", "source": "Lynx" }, "value": 16 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_talent_hot",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Outdoor Survival Experience: the continuous heal (HoT) ticks at the start of the affected ally's turn (canon 111103; abundance.ts:664-672).",
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "Lynx Talent:.*Outdoor Survival Experience" } },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_energy_sum",
+      "layer": "parameters",
+      "claim": "Total Lynx Energy regenerated across the fixture: 305.",
+      "assertion": { "assert": "energy", "who": "Lynx", "atLeast": 305, "atMost": 305 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_ult_loss",
+      "layer": "parameters",
+      "claim": "Three Ultimate Energy spends occur (100 each).",
+      "assertion": { "assert": "count", "of": { "type": "ENERGY_LOSS", "source": "Lynx" }, "value": 3 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_sp_loss",
+      "layer": "structure",
+      "claim": "SP spent: 5 (one per Skill cast).",
+      "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Lynx" }, "value": 5 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_sp_gain",
+      "layer": "structure",
+      "claim": "SP regenerated: 3 (from the Basic casts; the rest is capped at 5).",
+      "assertion": { "assert": "count", "of": { "type": "SP_GAIN", "source": "Lynx" }, "value": 3 },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_no_attack",
+      "layer": "structure",
+      "claim": "Lynx never falls back to a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Lynx", "action": "attack" } },
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_after_state",
+      "layer": "interactions",
+      "claim": "Fixture end state: 11694/16384 HP, 55 Energy, 1 SP.",
+      "assertion": { "assert": "unitState", "who": "Lynx", "field": "hp", "value": 11694 },
+      "after": [
+        { "unit": "Lynx", "stat": "hp", "op": "eq", "value": 11694 },
+        { "unit": "Lynx", "stat": "energy", "op": "eq", "value": 55 },
+        { "unit": "Lynx", "stat": "sp", "op": "eq", "value": 1 }
+      ],
+      "fixtures": ["solo-3c"]
+    },
+    {
+      "id": "lx_1e_skill",
+      "layer": "structure",
+      "claim": "Single-target fixture still reaches the Skill path.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Lynx", "action": "skill" } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "lx_1e_ult",
+      "layer": "structure",
+      "claim": "Single-target fixture: the Ultimate still fires.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "Lynx", "action": "ultimate" } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "lx_1e_no_attack",
+      "layer": "structure",
+      "claim": "Single-target fixture: no generic attack fallback.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Lynx", "action": "attack" } },
+      "fixtures": ["solo-1e"]
+    },
+    {
+      "id": "lx_1e_energy_sum",
+      "layer": "parameters",
+      "claim": "Single-target fixture regenerates 155 Energy.",
+      "assertion": { "assert": "energy", "who": "Lynx", "atLeast": 155, "atMost": 155 },
+      "fixtures": ["solo-1e"]
+    }
+  ],
+  "golds": []
+}

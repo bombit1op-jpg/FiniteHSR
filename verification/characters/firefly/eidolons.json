@@ -1,0 +1,478 @@
+{
+  "kit": "firefly",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Firefly/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder. E1 ff_e1_def defIgnore 0.15 (plus SP-free Enhanced Skill); E2 extra turn on break/kill; E3 Skill Lv.+2 / Basic Lv.+1 raises Deathstar Overload 0.34749 -> 0.37749; E4 cc_state effRes 0.3 -> 0.8; E5 Ult/Talent Lv.+2 raises cc_state boost:break 0.2 -> 0.22, effRes 0.8 -> 0.84, mitigation 0.4 -> 0.44; E6 cc_state resPen:Fire 0.2 and +50% Weakness Break Efficiency (TOUGHNESS payload wbe 1.5 -> 2.0)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "firefly E0 — eidolon ladder rung, cloned from firefly/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 0,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "firefly E1 — eidolon ladder rung, cloned from firefly/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 1,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "firefly E2 — eidolon ladder rung, cloned from firefly/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 2,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "firefly E3 — eidolon ladder rung, cloned from firefly/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 3,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "firefly E4 — eidolon ladder rung, cloned from firefly/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 4,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "firefly E5 — eidolon ladder rung, cloned from firefly/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 5,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "firefly E6 — eidolon ladder rung, cloned from firefly/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "firefly",
+            "stats": {
+              "hp": 40000,
+              "atk": 3000,
+              "def": 800,
+              "spd": 200
+            },
+            "eidolon": 6,
+            "energyStartFrac": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 0,
+          "spd": 90,
+          "level": 95,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "ff_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'In Red, She Sheds Old Shells': Enhanced Skill ignores 15% DEF (ff_e1_def defIgnore 0.15). Present from E1.",
+      "fixtures": [
+        "e1",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "ff_e1_def"
+      }
+    },
+    {
+      "id": "ff_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: ff_e1_def must NOT be active below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "ff_e1_def"
+      }
+    },
+    {
+      "id": "ff_e1_stat",
+      "layer": "parameters",
+      "claim": "ff_e1_def carries defIgnore 0.15 (canon rank 1).",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "ff_e1_def",
+        "stat": "defIgnore",
+        "value": 0.15
+      }
+    },
+    {
+      "id": "ff_e2_custom",
+      "layer": "interactions",
+      "claim": "E2 grants an extra turn on break/kill; the fixture neither breaks nor kills, so it is unobservable.",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "break/kill extra turn not reachable in the fixture"
+      }
+    },
+    {
+      "id": "ff_e3_present",
+      "layer": "parameters",
+      "claim": "E3 Skill Lv.+2 / Basic Lv.+1 raises Deathstar Overload 0.34749 -> 0.37749.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Deathstar Overload"
+        },
+        "field": "mult",
+        "value": 0.37749,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "ff_e3_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Deathstar Overload stays at 0.34749.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Deathstar Overload"
+        },
+        "field": "mult",
+        "value": 0.34749,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "ff_e4_present",
+      "layer": "parameters",
+      "claim": "E4 raises cc_state Effect RES 0.3 -> 0.8.",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "cc_state",
+        "stat": "effRes",
+        "value": 0.8
+      }
+    },
+    {
+      "id": "ff_e4_locked",
+      "layer": "parameters",
+      "claim": "Below E4 cc_state Effect RES stays at 0.3.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "cc_state",
+        "stat": "effRes",
+        "value": 0.3
+      }
+    },
+    {
+      "id": "ff_e5_present",
+      "layer": "parameters",
+      "claim": "E5 Ult/Talent Lv.+2 raises cc_state boost:break 0.2 -> 0.22.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "cc_state",
+        "stat": "boost:break",
+        "value": 0.22
+      }
+    },
+    {
+      "id": "ff_e5_locked",
+      "layer": "parameters",
+      "claim": "Below E5 cc_state boost:break stays at 0.2.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "cc_state",
+        "stat": "boost:break",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "ff_e5_mit_present",
+      "layer": "parameters",
+      "claim": "E5 raises cc_state mitigation 0.4 -> 0.44.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "cc_state",
+        "stat": "mitigation",
+        "value": 0.44
+      }
+    },
+    {
+      "id": "ff_e6_respen",
+      "layer": "parameters",
+      "claim": "E6 adds Fire RES PEN 20% to cc_state (resPen:Fire 0.2).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "cc_state",
+        "stat": "resPen:Fire",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "ff_e6_wbe_present",
+      "layer": "parameters",
+      "claim": "E6 +50% Weakness Break Efficiency raises TOUGHNESS payload wbe 1.5 -> 2.0.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "TOUGHNESS_DAMAGE",
+          "source": "Firefly"
+        },
+        "field": "wbe",
+        "value": 2,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "ff_e6_wbe_locked",
+      "layer": "parameters",
+      "claim": "Below E6 TOUGHNESS wbe stays at 1.5.",
+      "fixtures": [
+        "e5"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "TOUGHNESS_DAMAGE",
+          "source": "Firefly"
+        },
+        "field": "wbe",
+        "value": 1.5,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

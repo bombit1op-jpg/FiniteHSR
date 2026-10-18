@@ -1,0 +1,552 @@
+{
+  "kit": "trailblazer_elation",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/96/ranks/1..6 (Lightning, Elation Trailblazer)",
+    "confidence": "interpreted",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 'Believe In the Light' adds +2 Certified Banger to ally Ultimate targets (a CB-resource change with no buff id and no damage in this fixture, so documented not asserted). E2 'History in the Making...' Ultimate also gives one designated ally +12% Elation for 2 turns (tb_ela_e2 elation 0.12). E3 'Into the Spotlight' Skill+2/Talent+2/Elation Skill+1 raise 'Let the Storm Rage On' 0.6 -> 0.66. E4 'Save the World. Just Because.' Elation Skill makes enemies take +10% DMG for 2 turns (tb_ela_e4 vulnAll 0.10). E5 'Love & Courage' Ult+2/Basic+1/Elation Skill+1 raise 'Make Some Noise' 1 -> 1.1. E6 'The Cosmic Legend Cometh!' Elation Skill gives self +100% CRIT DMG for 3 turns (tb_ela_e6 critDmg 1.0). Fixtures run one battle per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "trailblazer_elation E0 — eidolon ladder rung, cloned from trailblazer_elation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_elation",
+            "name": "TBE",
+            "stats": {
+              "hp": 5000,
+              "atk": 1600,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 0,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Shard",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Lightning"
+          ]
+        },
+        "cycles": 6,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e1",
+      "env": "trailblazer_elation E1 — eidolon ladder rung, cloned from trailblazer_elation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_elation",
+            "name": "TBE",
+            "stats": {
+              "hp": 5000,
+              "atk": 1600,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 1,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Shard",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Lightning"
+          ]
+        },
+        "cycles": 6,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e2",
+      "env": "trailblazer_elation E2 — eidolon ladder rung, cloned from trailblazer_elation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_elation",
+            "name": "TBE",
+            "stats": {
+              "hp": 5000,
+              "atk": 1600,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 2,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Shard",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Lightning"
+          ]
+        },
+        "cycles": 6,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e3",
+      "env": "trailblazer_elation E3 — eidolon ladder rung, cloned from trailblazer_elation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_elation",
+            "name": "TBE",
+            "stats": {
+              "hp": 5000,
+              "atk": 1600,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 3,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Shard",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Lightning"
+          ]
+        },
+        "cycles": 6,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e4",
+      "env": "trailblazer_elation E4 — eidolon ladder rung, cloned from trailblazer_elation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_elation",
+            "name": "TBE",
+            "stats": {
+              "hp": 5000,
+              "atk": 1600,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 4,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Shard",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Lightning"
+          ]
+        },
+        "cycles": 6,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e5",
+      "env": "trailblazer_elation E5 — eidolon ladder rung, cloned from trailblazer_elation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_elation",
+            "name": "TBE",
+            "stats": {
+              "hp": 5000,
+              "atk": 1600,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 5,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Shard",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Lightning"
+          ]
+        },
+        "cycles": 6,
+        "seed": 3
+      }
+    },
+    {
+      "id": "e6",
+      "env": "trailblazer_elation E6 — eidolon ladder rung, cloned from trailblazer_elation/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "trailblazer_elation",
+            "name": "TBE",
+            "stats": {
+              "hp": 5000,
+              "atk": 1600,
+              "def": 1300,
+              "spd": 130
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "danheng",
+            "name": "Ally",
+            "stats": {
+              "hp": 5000,
+              "atk": 2000,
+              "def": 1300,
+              "spd": 110
+            },
+            "skillPriority": 3
+          }
+        ],
+        "enemy": {
+          "name": "Shard",
+          "count": 1,
+          "hp": 400000,
+          "atk": 600,
+          "spd": 120,
+          "level": 85,
+          "toughness": 120,
+          "weaknesses": [
+            "Lightning"
+          ]
+        },
+        "cycles": 6,
+        "seed": 3
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "tbe_e2_present",
+      "layer": "interactions",
+      "claim": "E2 'History in the Making...': Ultimate additionally gives one ally +12% Elation for 2 turns (tb_ela_e2).",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "tb_ela_e2"
+      }
+    },
+    {
+      "id": "tbe_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: tb_ela_e2 must NOT be active below rank 2.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "tb_ela_e2"
+      }
+    },
+    {
+      "id": "tbe_e2_stat",
+      "layer": "parameters",
+      "claim": "tb_ela_e2 carries elation 0.12 (canon E2).",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "tb_ela_e2",
+        "stat": "elation",
+        "value": 0.12
+      }
+    },
+    {
+      "id": "tbe_e3_skill",
+      "layer": "parameters",
+      "claim": "E3 Skill+2 raises 'Let the Storm Rage On' 0.6 -> 0.66.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Let the Storm Rage On"
+        },
+        "field": "mult",
+        "value": 0.66,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbe_e3_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'Let the Storm Rage On' stays at 0.6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Let the Storm Rage On"
+        },
+        "field": "mult",
+        "value": 0.6,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbe_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Save the World. Just Because.': Elation Skill makes enemies take +10% DMG for 2 turns (tb_ela_e4).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "tb_ela_e4"
+      }
+    },
+    {
+      "id": "tbe_e4_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: tb_ela_e4 must NOT be active below rank 4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "tb_ela_e4"
+      }
+    },
+    {
+      "id": "tbe_e4_stat",
+      "layer": "parameters",
+      "claim": "tb_ela_e4 carries vulnAll 0.10 (canon E4).",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "tb_ela_e4",
+        "stat": "vulnAll",
+        "value": 0.1
+      }
+    },
+    {
+      "id": "tbe_e5_basic",
+      "layer": "parameters",
+      "claim": "E5 Basic+1 raises 'Make Some Noise' 1 -> 1.1.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Make Some Noise"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbe_e5_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E5 'Make Some Noise' stays at 1.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Make Some Noise"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "tbe_e6_present",
+      "layer": "interactions",
+      "claim": "E6 'The Cosmic Legend Cometh!': Elation Skill gives self +100% CRIT DMG for 3 turns (tb_ela_e6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "tb_ela_e6"
+      }
+    },
+    {
+      "id": "tbe_e6_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: tb_ela_e6 must NOT be active below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "tb_ela_e6"
+      }
+    },
+    {
+      "id": "tbe_e6_stat",
+      "layer": "parameters",
+      "claim": "tb_ela_e6 carries critDmg 1.0 (canon E6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "tb_ela_e6",
+        "stat": "critDmg",
+        "value": 1
+      }
+    }
+  ],
+  "golds": []
+}

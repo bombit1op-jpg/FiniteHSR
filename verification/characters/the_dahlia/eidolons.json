@@ -1,0 +1,526 @@
+{
+  "kit": "the_dahlia",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/The Dahlia/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 'When a Bud Readies to Bloom': the Talent's Super Break multiplier to Dance Partners now applies to all allies and Dance Partners get +40%, and a Dance Partner's attack fixes Toughness reduction at 25% of max Toughness (min 10, max 300; once per enemy) — no buff id, tracked as deviation. E2 'Fresh, Ethereal, and Beloved': enemies' All-Type RES -20% (dahl_a2, resAll -0.20, permanent) and enemy field-entry inflicts Wilt 3 turns. E3 'Pity Its Petals Thin as Mist': Ult Lv.+2 / Basic Lv.+1 (Wallow: Entombed Ash 3.0 -> 3.24). E4 'Pity Its Heart Gnawed by Worms': Talent FUA +5 instances and on use all enemies take +12% DMG for 2 turns (dahl_r4, vulnAll 0.12). E5 'Fallen, Decayed, and Despised': Skill Lv.+2 / Talent Lv.+2 (Talent FUA 0.30 -> 0.33). E6 'And Yet, Always, Deathly Beautiful': Dance Partners' Break Effect +150% (dahl_e6, be 1.5) and the Talent FUA advances the next Dance Partner action by 20%. Fixtures run one battle per eidolon rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "the_dahlia E0 — eidolon ladder rung, cloned from the_dahlia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_dahlia",
+            "stats": {
+              "hp": 8000,
+              "atk": 1800,
+              "def": 600,
+              "spd": 150,
+              "breakEffect": 2,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "feixiao",
+            "stats": {
+              "hp": 8000,
+              "atk": 2400,
+              "def": 600,
+              "spd": 160,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 400000,
+          "spd": 60,
+          "level": 120,
+          "toughness": 400,
+          "weaknesses": [
+            "Fire"
+          ],
+          "atk": 1200
+        },
+        "cycles": 12,
+        "seed": 81
+      }
+    },
+    {
+      "id": "e1",
+      "env": "the_dahlia E1 — eidolon ladder rung, cloned from the_dahlia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_dahlia",
+            "stats": {
+              "hp": 8000,
+              "atk": 1800,
+              "def": 600,
+              "spd": 150,
+              "breakEffect": 2,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 1,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "feixiao",
+            "stats": {
+              "hp": 8000,
+              "atk": 2400,
+              "def": 600,
+              "spd": 160,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 400000,
+          "spd": 60,
+          "level": 120,
+          "toughness": 400,
+          "weaknesses": [
+            "Fire"
+          ],
+          "atk": 1200
+        },
+        "cycles": 12,
+        "seed": 81
+      }
+    },
+    {
+      "id": "e2",
+      "env": "the_dahlia E2 — eidolon ladder rung, cloned from the_dahlia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_dahlia",
+            "stats": {
+              "hp": 8000,
+              "atk": 1800,
+              "def": 600,
+              "spd": 150,
+              "breakEffect": 2,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 2,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "feixiao",
+            "stats": {
+              "hp": 8000,
+              "atk": 2400,
+              "def": 600,
+              "spd": 160,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 400000,
+          "spd": 60,
+          "level": 120,
+          "toughness": 400,
+          "weaknesses": [
+            "Fire"
+          ],
+          "atk": 1200
+        },
+        "cycles": 12,
+        "seed": 81
+      }
+    },
+    {
+      "id": "e3",
+      "env": "the_dahlia E3 — eidolon ladder rung, cloned from the_dahlia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_dahlia",
+            "stats": {
+              "hp": 8000,
+              "atk": 1800,
+              "def": 600,
+              "spd": 150,
+              "breakEffect": 2,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 3,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "feixiao",
+            "stats": {
+              "hp": 8000,
+              "atk": 2400,
+              "def": 600,
+              "spd": 160,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 400000,
+          "spd": 60,
+          "level": 120,
+          "toughness": 400,
+          "weaknesses": [
+            "Fire"
+          ],
+          "atk": 1200
+        },
+        "cycles": 12,
+        "seed": 81
+      }
+    },
+    {
+      "id": "e4",
+      "env": "the_dahlia E4 — eidolon ladder rung, cloned from the_dahlia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_dahlia",
+            "stats": {
+              "hp": 8000,
+              "atk": 1800,
+              "def": 600,
+              "spd": 150,
+              "breakEffect": 2,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 4,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "feixiao",
+            "stats": {
+              "hp": 8000,
+              "atk": 2400,
+              "def": 600,
+              "spd": 160,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 400000,
+          "spd": 60,
+          "level": 120,
+          "toughness": 400,
+          "weaknesses": [
+            "Fire"
+          ],
+          "atk": 1200
+        },
+        "cycles": 12,
+        "seed": 81
+      }
+    },
+    {
+      "id": "e5",
+      "env": "the_dahlia E5 — eidolon ladder rung, cloned from the_dahlia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_dahlia",
+            "stats": {
+              "hp": 8000,
+              "atk": 1800,
+              "def": 600,
+              "spd": 150,
+              "breakEffect": 2,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 5,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "feixiao",
+            "stats": {
+              "hp": 8000,
+              "atk": 2400,
+              "def": 600,
+              "spd": 160,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 400000,
+          "spd": 60,
+          "level": 120,
+          "toughness": 400,
+          "weaknesses": [
+            "Fire"
+          ],
+          "atk": 1200
+        },
+        "cycles": 12,
+        "seed": 81
+      }
+    },
+    {
+      "id": "e6",
+      "env": "the_dahlia E6 — eidolon ladder rung, cloned from the_dahlia/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "the_dahlia",
+            "stats": {
+              "hp": 8000,
+              "atk": 1800,
+              "def": 600,
+              "spd": 150,
+              "breakEffect": 2,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 6,
+            "skillPriority": 2
+          },
+          {
+            "kitId": "feixiao",
+            "stats": {
+              "hp": 8000,
+              "atk": 2400,
+              "def": 600,
+              "spd": 160,
+              "critRate": 1,
+              "critDmg": 1
+            },
+            "eidolon": 0,
+            "skillPriority": 2
+          }
+        ],
+        "enemy": {
+          "name": "Boss",
+          "count": 1,
+          "hp": 400000,
+          "spd": 60,
+          "level": 120,
+          "toughness": 400,
+          "weaknesses": [
+            "Fire"
+          ],
+          "atk": 1200
+        },
+        "cycles": 12,
+        "seed": 81
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "dahl_e2_present",
+      "layer": "interactions",
+      "claim": "E2 'Fresh, Ethereal, and Beloved': enemies' All-Type RES -20% (dahl_a2, resAll -0.20, permanent).",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "dahl_a2"
+      }
+    },
+    {
+      "id": "dahl_e2_vuln",
+      "layer": "parameters",
+      "claim": "The E2 debuff carries resAll -0.20 (canon ranks/2).",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "dahl_a2",
+        "stat": "resAll",
+        "value": -0.2
+      }
+    },
+    {
+      "id": "dahl_e2_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E2's dahl_a2 must NOT be active below rank 2.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "dahl_a2"
+      }
+    },
+    {
+      "id": "dahl_e3_level",
+      "layer": "parameters",
+      "claim": "E3 'Pity Its Petals Thin as Mist': Ult Lv.+2 / Basic Lv.+1 raise Wallow: Entombed Ash 3.0 -> 3.24.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Wallow: Entombed Ash"
+        },
+        "field": "mult",
+        "value": 3.2
+      }
+    },
+    {
+      "id": "dahl_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Pity Its Heart Gnawed by Worms': on Talent FUA, all enemies take +12% DMG for 2 turns (dahl_r4).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "dahl_r4",
+        "turns": 2
+      }
+    },
+    {
+      "id": "dahl_e4_vuln",
+      "layer": "parameters",
+      "claim": "The E4 debuff carries vulnAll 0.12 (canon ranks/4).",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "dahl_r4",
+        "stat": "vulnAll",
+        "value": 0.12
+      }
+    },
+    {
+      "id": "dahl_e4_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E4's dahl_r4 must NOT be active below rank 4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "dahl_r4"
+      }
+    },
+    {
+      "id": "dahl_e5_level",
+      "layer": "parameters",
+      "claim": "E5 'Fallen, Decayed, and Despised': Skill Lv.+2 / Talent Lv.+2 raise the Talent FUA 0.30 -> 0.33.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Talent FUA"
+        },
+        "field": "mult",
+        "value": 0.32
+      }
+    },
+    {
+      "id": "dahl_e6_present",
+      "layer": "interactions",
+      "claim": "E6 'And Yet, Always, Deathly Beautiful': Dance Partners' Break Effect +150% (dahl_e6, permanent).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "dahl_e6"
+      }
+    },
+    {
+      "id": "dahl_e6_be",
+      "layer": "parameters",
+      "claim": "The E6 buff carries be 1.5 (canon ranks/6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "dahl_e6",
+        "stat": "be",
+        "value": 1.5
+      }
+    },
+    {
+      "id": "dahl_e6_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E6's dahl_e6 must NOT be active below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "dahl_e6"
+      }
+    }
+  ],
+  "golds": []
+}

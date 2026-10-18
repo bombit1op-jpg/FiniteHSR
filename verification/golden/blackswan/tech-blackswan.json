@@ -1,0 +1,18 @@
+{
+ "input": {
+  "kit": "blackswan",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Black Swan alone, technique \"From Façade to Vérité\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Black Swan|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Black Swan|-|- [1,Infinity]",
+  "DEBUFF_APPLIED|-|Ice Edge|-|- [1,3]",
+  "TECHNIQUE_APPLIED|Black Swan|-|-|-",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

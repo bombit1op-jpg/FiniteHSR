@@ -1,0 +1,24 @@
+{
+ "input": {
+  "kit": "silverwolf",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Silver Wolf alone, technique \"Force Quit Program\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Silver Wolf|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "ENERGY_GAIN|Silver Wolf|Silver Wolf|-|- [0,110,20,75]",
+  "BUFF_APPLIED|-|Silver Wolf|-|- [1]",
+  "TECHNIQUE_APPLIED|Silver Wolf|-|-|-",
+  "HIT_START|Silver Wolf|Ice Edge|Force Quit Program|basic [1,10,30,5000000,883.2]",
+  "DAMAGE_CALCULATED|Silver Wolf|Ice Edge|-|basic [0,0,0,0,0,0,0.05,0.08,0.8,1,343,883]",
+  "DAMAGE_DEALT|Silver Wolf|Ice Edge|Force Quit Program|basic [0.8,343,4999657,5000000,883.2]",
+  "TOUGHNESS_DAMAGE|Silver Wolf|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Silver Wolf|Ice Edge|-|basic [343,4999657]",
+  "BUFF_APPLIED|-|Ice Edge|-|- [1,4]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "input": {
+  "kit": "seele",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Seele alone, technique \"Phantom Illusion\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Seele|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Seele|-|-|-",
+  "HIT_START|Seele|Ice Edge|Phantom Illusion|skill [1,20,30,5000000,819.2]",
+  "DAMAGE_CALCULATED|Seele|Ice Edge|-|skill [0,0,0,0,0,0,0,0.05,1,2309,3.6,819]",
+  "DAMAGE_DEALT|Seele|Ice Edge|Phantom Illusion|skill [2309,3.6,4997691,5000000,819.2]",
+  "TOUGHNESS_DAMAGE|Seele|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Seele|Ice Edge|-|skill [2309,4997691]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

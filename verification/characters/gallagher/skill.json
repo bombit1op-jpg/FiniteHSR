@@ -1,0 +1,513 @@
+{
+  "kit": "gallagher",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/130101+130102+130103+130104+130107+130108 + bonus_abilities (Novel Concoction, Organic Yeast, Bottoms Up)",
+    "confidence": "verified",
+    "note": "Basic Champagne Etiquette (130101) is a single-hit AoE at 150% ATK. Skill (130102) heals and applies besotted (vulnType:break +0.12, 2 turns) to all enemies, refunding +30 Energy. Ultimate (130104) refunds +5 Energy, clears debuffs and grants an extra turn whose action resolves as Nectar Blitz (130103), a 3-hit single-target chain at 0.625/0.375/1.5. Engine model: the extra turn after Ult resolves as the enhanced Basic (Nectar Blitz), and the heal AI casts Special Brew separately (5 Skill casts, 1 SP each, in the fixture)."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Gallagher E0 solo vs 3 Fire-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gallagher",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "solo-3c-s2",
+      "env": "Same battle, seed 17 (rotation variant)",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gallagher",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 17
+      }
+    },
+    {
+      "id": "solo-1e",
+      "env": "Single Elite dummy (single-target rotation), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "gallagher",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Fire"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "gl_talent_tipsy",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Tipsy Tussle: attacking a Besotted enemy heals the attacking ally — logged 'Besotted Talent' (abundance.ts:138-151).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Besotted Talent"
+        }
+      }
+    },
+    {
+      "id": "gallagher_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Nectar Blitz (130108, Fire) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Gallagher",
+          "label": "Nectar Blitz",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "solo-1e",
+        "solo-3c",
+        "solo-3c-s2"
+      ]
+    },
+    {
+      "id": "gl_skill_action",
+      "layer": "structure",
+      "claim": "The Skill is the team-heal action: 5 casts in the fixture (1 SP each, the Ult's extra turn resolves as Nectar Blitz instead).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Gallagher",
+          "action": "skill"
+        },
+        "value": 5
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_basic_hits",
+      "layer": "structure",
+      "claim": "Champagne Etiquette (130101) hits every enemy once per cast (2 bursts x 3 enemies = 6 hits) at 1.5 of ATK.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Gallagher",
+          "label": "Champagne Etiquette"
+        },
+        "value": 6
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_basic_mult",
+      "layer": "parameters",
+      "claim": "Champagne Etiquette carries the 1.5 multiplier.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Gallagher",
+          "label": "Champagne Etiquette"
+        },
+        "field": "mult",
+        "value": 1.5,
+        "pick": "first"
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_ult_extra_turn",
+      "layer": "interactions",
+      "claim": "The Ultimate (2 casts) grants the extra turn that resolves as Nectar Blitz (130103): 2 chains x 3 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Gallagher",
+          "label": "Nectar Blitz"
+        },
+        "value": 6
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_nectar_mult",
+      "layer": "parameters",
+      "claim": "The Nectar Blitz chain opens at 0.625 of ATK.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Gallagher",
+          "label": "Nectar Blitz"
+        },
+        "field": "mult",
+        "value": 0.625,
+        "pick": "first"
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_ult_action",
+      "layer": "structure",
+      "claim": "The Ultimate fires twice.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Gallagher",
+          "action": "ultimate"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_besotted",
+      "layer": "interactions",
+      "claim": "Every Skill applies besotted to all enemies: 3 fresh applications + 3 refreshes.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "BUFF_APPLIED",
+          "payload": {
+            "id": "besotted"
+          }
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_besotted_refresh",
+      "layer": "interactions",
+      "claim": "The second and later Skill casts refresh besotted (3 refreshes in the fixture).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "BUFF_REFRESHED",
+          "source": "Gallagher"
+        },
+        "value": 3
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_besotted_value",
+      "layer": "parameters",
+      "claim": "besotted raises Break vulnerability of the target by 0.12 (130102 #3).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "besotted",
+        "stat": "vulnType:break",
+        "value": 0.12
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_besotted_turns",
+      "layer": "parameters",
+      "claim": "besotted lasts 2 turns.",
+      "assertion": {
+        "assert": "buff",
+        "id": "besotted",
+        "target": "Elite #1",
+        "turns": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_heal",
+      "layer": "interactions",
+      "claim": "The kit heals 13 times across the fixture (Skill heals + talent FUA heals).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HEAL_APPLIED",
+          "source": "Gallagher"
+        },
+        "value": 13
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_sp_extra",
+      "layer": "parameters",
+      "claim": "Exactly 1 SP per Skill cast: 5 casts spend 5 SP (the Ult's extra turn is the SP-free enhanced Basic).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "SP_LOSS",
+          "source": "Gallagher"
+        },
+        "value": 5
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_energy_sum",
+      "layer": "parameters",
+      "claim": "Total Gallagher Energy regenerated: 250.",
+      "assertion": {
+        "assert": "energy",
+        "who": "Gallagher",
+        "atLeast": 250,
+        "atMost": 250
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_full_count",
+      "layer": "interactions",
+      "claim": "Gallagher hits full Energy twice, enabling the two Ultimates.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_FULL",
+          "source": "Gallagher"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_loss_count",
+      "layer": "parameters",
+      "claim": "Two Ultimate Energy spends occur.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Gallagher"
+        },
+        "value": 2
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_no_attack",
+      "layer": "structure",
+      "claim": "Gallagher never falls back to a generic attack action.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Gallagher",
+          "action": "attack"
+        }
+      },
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_after_state",
+      "layer": "interactions",
+      "claim": "Fixture end state: 11800/11800 HP, 85/110 Energy, 0 SP, only traces active.",
+      "assertion": {
+        "assert": "unitState",
+        "who": "Gallagher",
+        "field": "hp",
+        "value": 11800
+      },
+      "after": [
+        {
+          "unit": "Gallagher",
+          "stat": "hp",
+          "op": "eq",
+          "value": 11800
+        },
+        {
+          "unit": "Gallagher",
+          "stat": "energy",
+          "op": "eq",
+          "value": 85
+        },
+        {
+          "unit": "Gallagher",
+          "stat": "sp",
+          "op": "eq",
+          "value": 0
+        },
+        {
+          "unit": "Gallagher",
+          "stat": "buffs",
+          "op": "eq",
+          "value": 1
+        }
+      ],
+      "fixtures": [
+        "solo-3c"
+      ]
+    },
+    {
+      "id": "gl_s2_rotation",
+      "layer": "structure",
+      "claim": "Seed 17 keeps the rotation: Skill and Ultimate fire, no generic attack.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Gallagher",
+          "action": "skill"
+        }
+      },
+      "fixtures": [
+        "solo-3c-s2"
+      ]
+    },
+    {
+      "id": "gl_s2_no_attack",
+      "layer": "structure",
+      "claim": "Seed 17: no generic attack fallback.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Gallagher",
+          "action": "attack"
+        }
+      },
+      "fixtures": [
+        "solo-3c-s2"
+      ]
+    },
+    {
+      "id": "gl_1e_single",
+      "layer": "structure",
+      "claim": "Single-target fixture still runs Skill and Ultimate; no generic attack.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Gallagher",
+          "action": "ultimate"
+        }
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "gl_1e_no_attack",
+      "layer": "structure",
+      "claim": "Single-target fixture: no generic attack fallback.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Gallagher",
+          "action": "attack"
+        }
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    }
+  ],
+  "golds": []
+}

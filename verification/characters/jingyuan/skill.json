@@ -1,0 +1,466 @@
+{
+  "kit": "jingyuan",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/120401+120402+120403+120404 + bonus_abilities (War Marshal, Savant Providence) + ranks",
+    "confidence": "verified",
+    "note": "Basic Glistening Light (120401): Lightning DMG #1 = 140% of ATK at L10 (engine default Basic Lv6 = 100%); canon distributes it over 2 hits 45%+55%. Skill Rifting Zenith (120402): Lightning DMG #1 = 100% of ATK to all enemies over 3 hits 40/30/30, raises Lightning-Lord Hits Per Action by #2 = 2; Trace War Marshal grants CRIT Rate +10% for 2 turns. Ultimate Lightbringer (120403): Lightning DMG #1 = 200% of ATK to all enemies, raises Hits Per Action by #2 = 3. Talent Prana Extirpated (120404): summons Lightning-Lord at battle start with base SPD #1 = 60 and base Hits Per Action #4 = 3; each LL hit is a Follow-Up ATK dealing #2 = 66% of ATK to a random enemy, adjacent enemies take #5 = 25% of the primary damage. Trace A4 Savant Providence: +15 Energy at battle start. Trace Battalia Crush: Lightning-Lord gains CRIT DMG +25% when its Hits Per Action for the turn is 6 or higher. Energy limit sp_need = 130."
+  },
+  "fixtures": [
+    {
+      "id": "solo-1e",
+      "env": "Jing Yuan E0 solo vs 1 Lightning-weak Elite dummy (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingyuan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "trio-3e",
+      "env": "Jing Yuan E0 solo vs 3 Lightning-weak Elite dummies (Lv120, 6M HP each, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingyuan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "jingyuan_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Glistening Light (120401, Thunder) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Jing Yuan",
+          "label": "Glistening Light",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "solo-1e",
+        "trio-3e"
+      ]
+    },
+    {
+      "id": "jy_summon_ll",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent Prana Extirpated (120404) summons Lightning-Lord at the start of the battle, owned by Jing Yuan.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "SUMMON_CREATED",
+          "source": "Jing Yuan",
+          "target": "Lightning-Lord"
+        }
+      }
+    },
+    {
+      "id": "jy_ll_acts",
+      "layer": "structure",
+      "claim": "Lightning-Lord takes its own off-turn actions on the timeline (Hits Per Action resolve as its ability turn, tagged Follow-Up ATK).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Lightning-Lord",
+          "action": "ability"
+        }
+      }
+    },
+    {
+      "id": "jy_skill_hits",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Rifting Zenith (120402) hits the target3 times per cast; over 4 Skill casts in the solo fixture it fires12 hits.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Jing Yuan",
+          "label": "Rifting Zenith"
+        },
+        "value": 12
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "jy_skill_aoe_hits",
+      "layer": "structure",
+      "claim": "Rifting Zenith is an AoE Skill:4 casts x3 hits x3 enemies = 36 hit events in the trio fixture.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Jing Yuan",
+          "label": "Rifting Zenith"
+        },
+        "value": 36
+      },
+      "fixtures": [
+        "trio-3e"
+      ]
+    },
+    {
+      "id": "jy_ll_hits",
+      "layer": "structure",
+      "claim": "Over this fixture the Lightning-Lord acts twice for a total of 15 Follow-Up hits (3 base Hits Per Action + 2 per Skill cast, +3 per Ultimate).",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Lightning-Lord",
+          "label": "Lightning-Lord"
+        },
+        "value": 15
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "jy_no_generic_attack",
+      "layer": "structure",
+      "claim": "Jing Yuan's kit exposes Basic ATK, Skill and Ultimate as its action set; it never falls back to a generic attack action.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Jing Yuan",
+          "action": "attack"
+        }
+      }
+    },
+    {
+      "id": "jy_ult_present",
+      "layer": "structure",
+      "claim": "Lightbringer (120403) executes as a standard-Energy Ultimate once the 130-Energy ladder fills.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Jing Yuan",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "jy_skill_mult",
+      "layer": "parameters",
+      "claim": "Rifting Zenith L10 = 100% of ATK (120402 #1), dealt over the canon split 40%+30%+30% (first hit 0.4).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Jing Yuan",
+          "label": "Rifting Zenith"
+        },
+        "field": "mult",
+        "value": 0.4,
+        "pick": "first"
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "jy_skill_split_tail",
+      "layer": "parameters",
+      "claim": "Rifting Zenith's 2nd and 3rd hits carry 30% each; the solo fixture records 4 casts x 2 tail hits = 8 events at mult 0.3.",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Jing Yuan",
+          "label": "Rifting Zenith",
+          "payload": {
+            "mult": 0.3
+          }
+        },
+        "value": 8
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "jy_ult_mult",
+      "layer": "parameters",
+      "claim": "Lightbringer L10 deals Lightning DMG equal to 200% of ATK (120403 #1) in a single hit per target.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Jing Yuan",
+          "label": "Lightbringer"
+        },
+        "field": "mult",
+        "value": 2
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "jy_basic_mult",
+      "layer": "parameters",
+      "claim": "Glistening Light distributes the Basic over 2 hits (45%+55% of the 50%->140% 120401 #1 ladder); at the engine's default Basic Lv6 the first hit carries 0.45.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Jing Yuan",
+          "label": "Glistening Light"
+        },
+        "field": "mult",
+        "value": 0.45,
+        "pick": "first"
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "jy_basic_split_tail",
+      "layer": "parameters",
+      "claim": "The second Basic hit carries 0.55 at Basic Lv6 (both hits = the full 1.0).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Jing Yuan",
+          "label": "Glistening Light"
+        },
+        "field": "mult",
+        "value": 0.55,
+        "pick": "last"
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "jy_ll_mult",
+      "layer": "parameters",
+      "claim": "Each Lightning-Lord hit deals Lightning DMG equal to #2 = 66% of ATK at Talent L10 (120404).",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Lightning-Lord",
+          "label": "Lightning-Lord"
+        },
+        "field": "mult",
+        "value": 0.66,
+        "pick": "first"
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "jy_war_marshal_buff",
+      "layer": "parameters",
+      "claim": "Trace War Marshal: after using Rifting Zenith, Jing Yuan's CRIT Rate increases by 10% for 2 turns (engine records turns=2).",
+      "assertion": {
+        "assert": "buff",
+        "id": "war_marshal",
+        "target": "Jing Yuan",
+        "turns": 2
+      }
+    },
+    {
+      "id": "jy_war_marshal_stat",
+      "layer": "parameters",
+      "claim": "War Marshal applies a +10% CRIT Rate modifier.",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "war_marshal",
+        "stat": "critRate",
+        "value": 0.1
+      }
+    },
+    {
+      "id": "jy_a4_start_energy",
+      "layer": "parameters",
+      "claim": "Trace A4 Savant Providence grants +15 Energy at battle start: with energyStartFrac 0.5 Jing Yuan opens at 65 + 15 = 80 / 130 Energy.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "BATTLE_START"
+        }
+      },
+      "before": [
+        {
+          "kitId": "jingyuan",
+          "stat": "energy",
+          "op": "eq",
+          "value": 80
+        }
+      ]
+    },
+    {
+      "id": "jy_energy_total",
+      "layer": "parameters",
+      "claim": "Jing Yuan's Ultimate uses the standard 130-Energy ladder (sp_need 130); over this fixture his action set regenerates exactly 175 Energy.",
+      "assertion": {
+        "assert": "energy",
+        "who": "Jing Yuan",
+        "atLeast": 175,
+        "atMost": 175
+      },
+      "fixtures": [
+        "solo-1e"
+      ]
+    },
+    {
+      "id": "jy_order_war_marshal",
+      "layer": "ordering",
+      "claim": "War Marshal is applied during the Skill before Rifting Zenith damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "BUFF_APPLIED",
+            "target": "Jing Yuan",
+            "payload": {
+              "id": "war_marshal"
+            }
+          }
+        ],
+        "after": [
+          {
+            "type": "DAMAGE_DEALT",
+            "source": "Jing Yuan",
+            "label": "Rifting Zenith"
+          }
+        ]
+      }
+    },
+    {
+      "id": "jy_order_ult",
+      "layer": "ordering",
+      "claim": "The Ultimate action starts before Lightbringer damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          {
+            "type": "ABILITY_USED",
+            "source": "Jing Yuan",
+            "action": "ultimate"
+          }
+        ],
+        "after": [
+          {
+            "type": "DAMAGE_DEALT",
+            "source": "Jing Yuan",
+            "label": "Lightbringer"
+          }
+        ]
+      }
+    },
+    {
+      "id": "jy_battalia_crush",
+      "layer": "interactions",
+      "claim": "Trace Battalia Crush: when Lightning-Lord's Hits Per Action for the turn reaches 6 or higher, Jing Yuan gains CRIT DMG +25% for that turn.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "BUFF_APPLIED",
+          "target": "Jing Yuan",
+          "payload": {
+            "id": "battalia"
+          }
+        }
+      }
+    },
+    {
+      "id": "jy_ll_adjacent",
+      "layer": "interactions",
+      "claim": "Lightning-Lord hits a random enemy; enemies adjacent to it also take damage equal to #5 = 25% of the primary hit (E0).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "source": "Lightning-Lord",
+          "label": "Lightning-Lord",
+          "payload": {
+            "adjacent": true
+          }
+        }
+      },
+      "fixtures": [
+        "trio-3e"
+      ]
+    },
+    {
+      "id": "jy_ll_shared_buffs",
+      "layer": "interactions",
+      "claim": "Battalia Crush lands on Jing Yuan (shared owner buffs), not on the Lightning-Lord unit itself.",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "BUFF_APPLIED",
+          "target": "Lightning-Lord"
+        }
+      }
+    }
+  ],
+  "golds": []
+}

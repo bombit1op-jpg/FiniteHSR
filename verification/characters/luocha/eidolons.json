@@ -1,0 +1,460 @@
+{
+  "kit": "luocha",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Luocha/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 'Ablution of the Quick' = while the Zone is active all allies gain ATK +20% (luocha_e1) — applied on every OTHER ally's turn start, so invisible in the solo fixture (self excluded). E2 'Bestowal From the Pure' = Skill healing a target at >=50% HP grants a shield equal to 18% ATK plus 240 for 2 turns (luocha_e2_shield). E3 'Surveyal by the Fool' +Skill Lv.2 / Basic Lv.1 raises Basic 'Thorns of the Abyss' 0.30 -> 0.33. E4 'Heavy Lies the Crown' = while the Zone is active enemies are Weakened, dealing 12% less DMG (luocha_e4 weaken 0.12). E5 \"Cicatrix 'Neath the Pain\" +Ultimate Lv.2 / Talent Lv.2 raises Ultimate 'Death Wish' 2.0 -> 2.16. E6 'Reunion With the Dust' = Ultimate reduces all enemies' All-Type RES by 20% for 2 turns (luocha_e6 resAll -0.2)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "luocha E0 — eidolon ladder rung, cloned from luocha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luocha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "luocha E1 — eidolon ladder rung, cloned from luocha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luocha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "luocha E2 — eidolon ladder rung, cloned from luocha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luocha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "luocha E3 — eidolon ladder rung, cloned from luocha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luocha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "luocha E4 — eidolon ladder rung, cloned from luocha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luocha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "luocha E5 — eidolon ladder rung, cloned from luocha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luocha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "luocha E6 — eidolon ladder rung, cloned from luocha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "luocha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Imaginary"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "luocha_e2_present",
+      "layer": "interactions",
+      "claim": "E2 'Bestowal From the Pure': Skill on a target at >=50% HP grants a shield (luocha_e2_shield, 18% ATK + 240, 2 turns). Present from E2.",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "luocha_e2_shield"
+      }
+    },
+    {
+      "id": "luocha_e2_capped",
+      "layer": "parameters",
+      "claim": "luocha_e2_shield persists for 2 turns (canon ranks/2 param_list[3]).",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "luocha_e2_shield",
+        "turns": 2
+      }
+    },
+    {
+      "id": "luocha_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: luocha_e2_shield must NOT be active below rank 2.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "luocha_e2_shield"
+      }
+    },
+    {
+      "id": "luocha_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 'Surveyal by the Fool': Basic ATK Lv.+1 raises 'Thorns of the Abyss' 0.30 -> 0.33.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Thorns of the Abyss"
+        },
+        "field": "mult",
+        "value": 0.33,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "luocha_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'Thorns of the Abyss' stays at 0.30.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Thorns of the Abyss"
+        },
+        "field": "mult",
+        "value": 0.3,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "luocha_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Heavy Lies the Crown': while the Zone is active enemies are Weakened (luocha_e4 weaken 0.12). Present from E4.",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "luocha_e4"
+      }
+    },
+    {
+      "id": "luocha_e4_stat",
+      "layer": "parameters",
+      "claim": "luocha_e4 carries weaken 0.12 (canon ranks/4).",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "luocha_e4",
+        "stat": "weaken",
+        "value": 0.12
+      }
+    },
+    {
+      "id": "luocha_e4_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: luocha_e4 must NOT be active below rank 4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "luocha_e4"
+      }
+    },
+    {
+      "id": "luocha_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 \"Cicatrix 'Neath the Pain\": Ultimate Lv.+2 raises 'Death Wish' 2.0 -> 2.16.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Death Wish"
+        },
+        "field": "mult",
+        "value": 2.16,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "luocha_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 'Death Wish' stays at 2.0.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Death Wish"
+        },
+        "field": "mult",
+        "value": 2,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "luocha_e6_present",
+      "layer": "interactions",
+      "claim": "E6 'Reunion With the Dust': Ultimate reduces all enemies' All-Type RES by 20% for 2 turns (luocha_e6 resAll -0.2).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "luocha_e6"
+      }
+    },
+    {
+      "id": "luocha_e6_stat",
+      "layer": "parameters",
+      "claim": "luocha_e6 carries resAll -0.2 (canon ranks/6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "luocha_e6",
+        "stat": "resAll",
+        "value": -0.2
+      }
+    },
+    {
+      "id": "luocha_e6_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: luocha_e6 must NOT be active below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "luocha_e6"
+      }
+    }
+  ],
+  "golds": []
+}

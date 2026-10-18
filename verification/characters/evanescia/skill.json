@@ -1,0 +1,261 @@
+{
+  "kit": "evanescia",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json skills 150501-150520 (basic 150501, skill 150502, ult 150503, talent 150504, el_skill 150520)",
+    "confidence": "interpreted",
+    "note": "Physical Elation; 480 Max Energy with a half-threshold Ultimate (240). Talent converts Energy<->Certified Banger and drives the 240-Energy Master Fox FUA."
+  },
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Evanescia E0 solo vs a Physical-weak Elite, 8 cycles. Energy starts at 25% so the half-threshold Ult is not available turn 1: Skill Discipline: Final Verdict (Blast 20/20/20/40, +10 Punchline), Basic Syllabus: Pop Quiz once SP runs dry, and the half-threshold Ultimate Swordsong: Absolution Denied (AoE + bounces) once energy reaches 240.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "evanescia",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 160
+            },
+            "energyStartFrac": 0.25,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 8,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6-revels",
+      "env": "Evanescia E6 solo vs the same Elite, 8 cycles. Same rotation but E6 Maiden: A Step into Dreams adds the permanent ev_e6_merry Merrymake buff when she uses an Elation Skill / Master Fox.",
+      "battle": {
+        "team": [
+          {
+            "kitId": "evanescia",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 160
+            },
+            "energyStartFrac": 0.25,
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 8,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "basic_hit",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Syllabus: Pop Quiz (150501) deals a single-target Physical hit.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Evanescia",
+          "label": "Syllabus: Pop Quiz",
+          "attackType": "basic"
+        }
+      }
+    },
+    {
+      "id": "skill_blast",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill Discipline: Final Verdict (150502) is a Physical Blast whose main target takes 4 hits split 20/20/20/40 of the rank-10 multiplier (elation.ts hitBlast split [0.2,0.2,0.2,0.4]).",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Evanescia",
+          "label": "Discipline: Final Verdict",
+          "attackType": "skill"
+        }
+      }
+    },
+    {
+      "id": "skill_energy",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill grants +30 Energy (elation.ts perform).",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Evanescia",
+          "payload": {
+            "n": 30
+          }
+        }
+      }
+    },
+    {
+      "id": "ult_aoe",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Ultimate Swordsong: Absolution Denied (150503) is a Physical AoE hit against every enemy, usable at HALF Max Energy (240 of 480).",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Evanescia",
+          "label": "Swordsong: Absolution Denied",
+          "attackType": "ult"
+        }
+      }
+    },
+    {
+      "id": "ult_bounce",
+      "ability": "ultimate",
+      "layer": "structure",
+      "claim": "Ultimate additionally deals 5 random bounce hits (ult_a2=5, +4 vs a single enemy from A2), each at ult_a3, labelled 'Swordsong: Absolution Denied (bounce)'.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Evanescia",
+          "label": "Swordsong: Absolution Denied (bounce)"
+        }
+      }
+    },
+    {
+      "id": "ult_consumption",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate pays its cost by zeroing Energy (castUlt drops the pool -> ENERGY_LOSS reason 'ult_cost'; half-threshold activation, ultConsumption default Energy).",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Evanescia",
+          "payload": {
+            "reason": "ult_cost"
+          }
+        }
+      }
+    },
+    {
+      "id": "a2_crit",
+      "layer": "interactions",
+      "claim": "A2 trace Watch All Revels grants +30% CRIT Rate (ev_a2_crit, critRate 0.3) for the whole battle.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "ev_a2_crit",
+        "stat": "critRate",
+        "value": 0.3
+      }
+    },
+    {
+      "id": "talent_elation",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Youth: Halcyon Evermore folds Elation = 20% of CRIT DMG into the permanent ev_el buff.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "ev_el"
+      }
+    },
+    {
+      "id": "master_fox",
+      "layer": "interactions",
+      "claim": "Every 240 accumulated Energy (talent_a3) triggers the Master Fox Follow-Up ATK (a Physical FUA to all enemies), then +10 Energy (talent_a4).",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Evanescia",
+          "label": "Master Fox"
+        }
+      }
+    },
+    {
+      "id": "master_fox_vuln",
+      "layer": "interactions",
+      "claim": "Master Fox applies Weigh All Truths (ev_a4_vuln, vulnAll +12%, 3 turns) to every enemy hit.",
+      "fixtures": [
+        "base-solo"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "ev_a4_vuln",
+        "target": "Elite",
+        "turns": 3
+      }
+    },
+    {
+      "id": "e6_merrymake",
+      "layer": "interactions",
+      "claim": "E6 Maiden: A Step into Dreams grants the ev_e6_merry Merrymake buff (+15% base, +2% per 100 CB held) whenever an Elation Skill / Master Fox resolves.",
+      "fixtures": [
+        "e6-revels"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "ev_e6_merry"
+      }
+    }
+  ],
+  "golds": []
+}

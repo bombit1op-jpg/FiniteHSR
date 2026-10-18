@@ -1,0 +1,562 @@
+{
+  "kit": "hyacine",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "reference/hsr-data/characters.json#/Hyacine/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E1: while in After Rain, allies gain hy_ar (Max HP +50%) and are healed 8% of Hyacine's Max HP after attacking. E2: when an ally's HP drops, hy_e2 (SPD +30%, 2 turns) is granted. E3 (Ult +2 / Basic +1 / Memosprite Skill +1): hy_ar_base hpPct 0.30 -> 0.33 and hpFlat 600 -> 667.5. E5 (Skill +2 / Talent +2 / Memosprite Talent +1): hy_dmg DMG +80% -> +88%. E6: while Little Ica is on the field, hy_e6 (All-Type RES PEN +20%) applies to all allies. E4 (Tempestuous Halt enhanced: +2% CRIT DMG per excess SPD over 200) is inert here because Hyacine's SPD does not exceed 200 — covered as custom. Fixtures run one battle per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "hyacine E0 — eidolon ladder rung, cloned from hyacine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hyacine",
+            "stats": {
+              "hp": 6000,
+              "atk": 1400,
+              "def": 1800,
+              "spd": 130
+            },
+            "eidolon": 0,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "hyacine E1 — eidolon ladder rung, cloned from hyacine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hyacine",
+            "stats": {
+              "hp": 6000,
+              "atk": 1400,
+              "def": 1800,
+              "spd": 130
+            },
+            "eidolon": 1,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "hyacine E2 — eidolon ladder rung, cloned from hyacine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hyacine",
+            "stats": {
+              "hp": 6000,
+              "atk": 1400,
+              "def": 1800,
+              "spd": 130
+            },
+            "eidolon": 2,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "hyacine E3 — eidolon ladder rung, cloned from hyacine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hyacine",
+            "stats": {
+              "hp": 6000,
+              "atk": 1400,
+              "def": 1800,
+              "spd": 130
+            },
+            "eidolon": 3,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "hyacine E4 — eidolon ladder rung, cloned from hyacine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hyacine",
+            "stats": {
+              "hp": 6000,
+              "atk": 1400,
+              "def": 1800,
+              "spd": 130
+            },
+            "eidolon": 4,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "hyacine E5 — eidolon ladder rung, cloned from hyacine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hyacine",
+            "stats": {
+              "hp": 6000,
+              "atk": 1400,
+              "def": 1800,
+              "spd": 130
+            },
+            "eidolon": 5,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "hyacine E6 — eidolon ladder rung, cloned from hyacine/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "hyacine",
+            "stats": {
+              "hp": 6000,
+              "atk": 1400,
+              "def": 1800,
+              "spd": 130
+            },
+            "eidolon": 6,
+            "energyStartFrac": 1
+          },
+          {
+            "kitId": "boothill",
+            "stats": {
+              "hp": 5500,
+              "atk": 3000,
+              "def": 800,
+              "spd": 140
+            },
+            "eidolon": 0,
+            "skillPriority": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 95,
+          "toughness": 600,
+          "weaknesses": [
+            "Wind",
+            "Physical"
+          ],
+          "res": {}
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "hyacine_e1_present_e1_e6",
+      "layer": "interactions",
+      "claim": "E1: while in After Rain, hy_ar (Max HP +50%) is granted.",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "hy_ar"
+      }
+    },
+    {
+      "id": "hyacine_e1_hp_e1_e6",
+      "layer": "parameters",
+      "claim": "E1: hy_ar grants Max HP +50%.",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hy_ar",
+        "stat": "hpPct",
+        "value": 0.5
+      }
+    },
+    {
+      "id": "hyacine_e1_locked_e0",
+      "layer": "interactions",
+      "claim": "E1 locked below its rank: no hy_ar at E0.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "hy_ar"
+      }
+    },
+    {
+      "id": "hyacine_e2_present_e2_e6",
+      "layer": "interactions",
+      "claim": "E2: when an ally HP drops, hy_e2 (SPD +30%, 2 turns) is granted.",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "hy_e2"
+      }
+    },
+    {
+      "id": "hyacine_e2_spd_e2",
+      "layer": "parameters",
+      "claim": "E2: hy_e2 grants SPD +30%.",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hy_e2",
+        "stat": "spdPct",
+        "value": 0.3
+      }
+    },
+    {
+      "id": "hyacine_e2_turns_e2",
+      "layer": "interactions",
+      "claim": "E2: hy_e2 lasts 2 turns.",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "hy_e2",
+        "turns": 2
+      }
+    },
+    {
+      "id": "hyacine_e2_locked_e0_e1",
+      "layer": "interactions",
+      "claim": "E2 locked below its rank: no hy_e2 at E0/E1.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "hy_e2"
+      }
+    },
+    {
+      "id": "hyacine_e3_hp_e3_e6",
+      "layer": "parameters",
+      "claim": "E3: hy_ar_base hpPct 0.30 -> 0.33.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hy_ar_base",
+        "stat": "hpPct",
+        "value": 0.33
+      }
+    },
+    {
+      "id": "hyacine_e3_hp_locked_e0_e2",
+      "layer": "parameters",
+      "claim": "E3 locked below its rank: hy_ar_base hpPct 0.30 at E0..E2.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hy_ar_base",
+        "stat": "hpPct",
+        "value": 0.3
+      }
+    },
+    {
+      "id": "hyacine_e5_dmg_e5_e6",
+      "layer": "parameters",
+      "claim": "E5: hy_dmg DMG +80% -> +88%.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hy_dmg",
+        "stat": "dmgAll",
+        "value": 0.88
+      }
+    },
+    {
+      "id": "hyacine_e5_dmg_locked_e0_e4",
+      "layer": "parameters",
+      "claim": "E5 locked below its rank: hy_dmg DMG +80% at E0..E4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hy_dmg",
+        "stat": "dmgAll",
+        "value": 0.8
+      }
+    },
+    {
+      "id": "hyacine_e6_present_e6",
+      "layer": "interactions",
+      "claim": "E6: while Little Ica is on field, hy_e6 (All-Type RES PEN +20%) is granted.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "hy_e6"
+      }
+    },
+    {
+      "id": "hyacine_e6_respen_e6",
+      "layer": "parameters",
+      "claim": "E6: hy_e6 grants All-Type RES PEN +20%.",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "hy_e6",
+        "stat": "resPenAll",
+        "value": 0.2
+      }
+    },
+    {
+      "id": "hyacine_e6_locked_e0_e5",
+      "layer": "interactions",
+      "claim": "E6 locked below its rank: no hy_e6 at E0..E5.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "hy_e6"
+      }
+    },
+    {
+      "id": "hyacine_e4_custom",
+      "layer": "interactions",
+      "claim": "E4: Tempestuous Halt enhanced: +2% CRIT DMG per excess SPD over 200.",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "E4 is inert because Hyacine's SPD does not exceed 200 in this fixture, so no critDmg change is observable."
+      }
+    }
+  ],
+  "golds": []
+}

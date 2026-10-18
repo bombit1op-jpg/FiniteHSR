@@ -1,0 +1,351 @@
+{
+  "kit": "jingyuan",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "hsr-data/characters.json#/Jing Yuan/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 (+25% Lightning-Lord adjacent multiplier) is NOT implemented in the kit, so E1 is identical to E0 and documented as a deviation. E2 applies jy_e2 (dmgAll 0.2 to Lightbringer and Lightning-Lord) from rank E2. E3 (Ult+2/Basic+1) raises Lightbringer 2 -> 2.16 and Glistening Light 1 -> 1.1. E4 makes the Lightning-Lord grant an extra Energy (ENERGY_GAIN count 9 -> 10, total 175 -> 180). E5 raises Rifting Zenith 0.4/0.3 -> 0.44/0.33 and Lightning-Lord 0.66 -> 0.726. E6 applies jy_e6 (vulnAll 0.12, 1 turn). Fixtures run Jing Yuan + Lightning-Lord vs one Elite, one run per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "jingyuan E0 — eidolon ladder rung, cloned from jingyuan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingyuan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "jingyuan E1 — eidolon ladder rung, cloned from jingyuan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingyuan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "jingyuan E2 — eidolon ladder rung, cloned from jingyuan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingyuan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "jingyuan E3 — eidolon ladder rung, cloned from jingyuan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingyuan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "jingyuan E4 — eidolon ladder rung, cloned from jingyuan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingyuan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "jingyuan E5 — eidolon ladder rung, cloned from jingyuan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingyuan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "jingyuan E6 — eidolon ladder rung, cloned from jingyuan/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "jingyuan",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 1,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "jy_e2_present",
+      "layer": "interactions",
+      "claim": "E2 applies jy_e2 from rank E2 onward.",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "jy_e2" }
+    },
+    {
+      "id": "jy_e2_dmgall",
+      "layer": "parameters",
+      "claim": "jy_e2 carries dmgAll 0.2 (canon ranks/2).",
+      "fixtures": ["e2"],
+      "assertion": { "assert": "buffStat", "id": "jy_e2", "stat": "dmgAll", "value": 0.2 }
+    },
+    {
+      "id": "jy_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: jy_e2 must NOT be active below rank E2.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "noBuff", "id": "jy_e2" }
+    },
+    {
+      "id": "jy_e3_ult",
+      "layer": "parameters",
+      "claim": "E3 (Ult+2/Basic+1) raises Lightbringer 2 -> 2.16.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Lightbringer" }, "field": "mult", "value": 2.16, "tol": 0.002 }
+    },
+    {
+      "id": "jy_e3_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Lightbringer stays 2.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Lightbringer" }, "field": "mult", "value": 2, "tol": 0.002 }
+    },
+    {
+      "id": "jy_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 raises Glistening Light 1 -> 1.1; with the 2-hit Basic the 55% tail carries 0.605.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Glistening Light" }, "field": "mult", "value": 0.605, "pick": "last", "tol": 0.002 }
+    },
+    {
+      "id": "jy_e4_energy",
+      "layer": "parameters",
+      "claim": "E4 makes the Lightning-Lord grant an extra Energy (10 ENERGY_GAIN events to Jing Yuan).",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "count", "of": { "type": "ENERGY_GAIN", "target": "Jing Yuan" }, "value": 10 }
+    },
+    {
+      "id": "jy_e4_energy_locked",
+      "layer": "parameters",
+      "claim": "Below E4 there are 9 ENERGY_GAIN events to Jing Yuan.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "count", "of": { "type": "ENERGY_GAIN", "target": "Jing Yuan" }, "value": 9 }
+    },
+    {
+      "id": "jy_e5_skill",
+      "layer": "parameters",
+      "claim": "E5 raises Rifting Zenith 0.4/0.3 -> 0.44/0.33.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Rifting Zenith" }, "field": "mult", "value": 0.33, "tol": 0.002 }
+    },
+    {
+      "id": "jy_e5_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Rifting Zenith stays 0.4/0.3.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Rifting Zenith" }, "field": "mult", "value": 0.3, "tol": 0.002 }
+    },
+    {
+      "id": "jy_e5_fua",
+      "layer": "parameters",
+      "claim": "E5 raises Lightning-Lord 0.66 -> 0.726.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Lightning-Lord" }, "field": "mult", "value": 0.726, "tol": 0.002 }
+    },
+    {
+      "id": "jy_e6_present",
+      "layer": "interactions",
+      "claim": "E6 applies jy_e6.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buff", "id": "jy_e6" }
+    },
+    {
+      "id": "jy_e6_vuln",
+      "layer": "parameters",
+      "claim": "jy_e6 carries vulnAll 0.12 (canon ranks/6).",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buffStat", "id": "jy_e6", "stat": "vulnAll", "value": 0.12 }
+    },
+    {
+      "id": "jy_e6_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: jy_e6 must NOT be active below rank E6.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "noBuff", "id": "jy_e6" }
+    },
+    {
+      "id": "jy_e1_custom",
+      "layer": "interactions",
+      "claim": "E1 (+25% Lightning-Lord adjacent multiplier) is not implemented; E1 runs identically to E0.",
+      "fixtures": ["e1"],
+      "assertion": { "assert": "custom", "note": "E1 Lightning-Lord adjacent multiplier not implemented" }
+    }
+  ],
+  "golds": []
+}

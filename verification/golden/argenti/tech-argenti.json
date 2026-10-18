@@ -1,0 +1,22 @@
+{
+ "input": {
+  "kit": "argenti",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Argenti alone, technique \"Manifesto of Purest Virtue\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Argenti|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|Argenti|-|-|-",
+  "HIT_START|Argenti|Ice Edge|Manifesto of Purest Virtue|basic [1,10,30,5000000,943.36]",
+  "DAMAGE_CALCULATED|Argenti|Ice Edge|-|basic [0,0,0,0,0,0,0.05,0.144,0.8,1,388,943]",
+  "DAMAGE_DEALT|Argenti|Ice Edge|Manifesto of Purest Virtue|basic [0.8,388,4999612,5000000,943.36]",
+  "TOUGHNESS_DAMAGE|Argenti|Ice Edge|-|- [1,10,20,30]",
+  "HIT_END|Argenti|Ice Edge|-|basic [388,4999612]",
+  "ENERGY_GAIN|Argenti|Argenti|-|- [0,105,15,180]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

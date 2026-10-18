@@ -1,0 +1,546 @@
+{
+  "kit": "yanqing",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Yanqing/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ranks. E1 Svelte Saber: attacking a Frozen target deals 1 hit of Ice Additional DMG equal to 60% ATK (DAMAGE_DEALT 'E1 Svelte Saber'). E2 Supine Serenade: entering Soulsteel Sync grants +10% ERR (yanqing_soulsteel gains err 0.1). E3 Skill Lv.+2 / Basic Lv.+1: Darting Ironthorn 0.55->0.605, Frost Thorn 0.5->0.55. E4 Searing Sting: while HP >= 80%, +12% Ice RES PEN (yanqing_e4 resPen:Ice 0.12). E5 Ult Lv.+2 / Talent Lv.+2: Amidst the Raining Bliss 3.5->3.78, Soulsteel Sync FUA 0.15->0.165. E6 Swift Swoop: on kill extends Soulsteel Sync / the Ultimate buff by 1 turn — not observable solo (deviation)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "yanqing E0 — eidolon ladder rung, cloned from yanqing/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yanqing",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "yanqing E1 — eidolon ladder rung, cloned from yanqing/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yanqing",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "yanqing E2 — eidolon ladder rung, cloned from yanqing/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yanqing",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "yanqing E3 — eidolon ladder rung, cloned from yanqing/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yanqing",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "yanqing E4 — eidolon ladder rung, cloned from yanqing/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yanqing",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "yanqing E5 — eidolon ladder rung, cloned from yanqing/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yanqing",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "yanqing E6 — eidolon ladder rung, cloned from yanqing/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "yanqing",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "yanqing_e1_present",
+      "layer": "parameters",
+      "claim": "E1 Svelte Saber: attacking a Frozen target deals 1 hit of Ice Additional DMG equal to 60% ATK (DAMAGE_DEALT 'E1 Svelte Saber'). Present from E1.",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "E1 Svelte Saber"
+        }
+      }
+    },
+    {
+      "id": "yanqing_e1_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: below E1 no 'E1 Svelte Saber' hit occurs.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "E1 Svelte Saber"
+        }
+      }
+    },
+    {
+      "id": "yanqing_e1_mult",
+      "layer": "parameters",
+      "claim": "The E1 additional hit carries the 0.6 ATK coefficient (canon rank 1).",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "E1 Svelte Saber"
+        },
+        "field": "mult",
+        "value": 0.6,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "yanqing_e2_stat",
+      "layer": "parameters",
+      "claim": "E2 Supine Serenade: entering Soulsteel Sync adds +10% ERR to yanqing_soulsteel (err 0.1). Present from E2.",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "yanqing_soulsteel",
+        "stat": "err",
+        "value": 0.1
+      }
+    },
+    {
+      "id": "yanqing_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: below E2 yanqing_soulsteel carries no err mod.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "custom",
+        "note": "mod added to an always-present buff; buffStat has no negative matcher — absence is guarded by probe-eidolon-ladder"
+      }
+    },
+    {
+      "id": "yanqing_e3_skill",
+      "layer": "parameters",
+      "claim": "E3 Skill Lv.+2: Darting Ironthorn 0.55 -> 0.605.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Darting Ironthorn"
+        },
+        "field": "mult",
+        "value": 0.605,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "yanqing_e3_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Darting Ironthorn stays at 0.55.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Darting Ironthorn"
+        },
+        "field": "mult",
+        "value": 0.55,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "yanqing_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 Basic Lv.+1: Frost Thorn 0.5 -> 0.55.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Frost Thorn"
+        },
+        "field": "mult",
+        "value": 0.55,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "yanqing_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Frost Thorn stays at 0.5.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Frost Thorn"
+        },
+        "field": "mult",
+        "value": 0.5,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "yanqing_e4_present",
+      "layer": "interactions",
+      "claim": "E4 Searing Sting: while HP >= 80%, +12% Ice RES PEN (yanqing_e4). Present from E4.",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "yanqing_e4"
+      }
+    },
+    {
+      "id": "yanqing_e4_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: yanqing_e4 must NOT be active below rank 4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "yanqing_e4"
+      }
+    },
+    {
+      "id": "yanqing_e4_stat",
+      "layer": "parameters",
+      "claim": "yanqing_e4 carries resPen:Ice 0.12 (canon rank 4).",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "yanqing_e4",
+        "stat": "resPen:Ice",
+        "value": 0.12
+      }
+    },
+    {
+      "id": "yanqing_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 Ultimate Lv.+2: Amidst the Raining Bliss 3.5 -> 3.78.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Amidst the Raining Bliss"
+        },
+        "field": "mult",
+        "value": 3.78,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "yanqing_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Amidst the Raining Bliss stays at 3.5.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Amidst the Raining Bliss"
+        },
+        "field": "mult",
+        "value": 3.5,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "yanqing_e5_talent",
+      "layer": "parameters",
+      "claim": "E5 Talent Lv.+2: Soulsteel Sync FUA 0.15 -> 0.165.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Soulsteel Sync FUA"
+        },
+        "field": "mult",
+        "value": 0.165,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "yanqing_e5_talent_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Soulsteel Sync FUA stays at 0.15.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Soulsteel Sync FUA"
+        },
+        "field": "mult",
+        "value": 0.15,
+        "tol": 0.001,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

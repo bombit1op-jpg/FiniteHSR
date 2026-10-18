@@ -1,0 +1,18 @@
+{
+ "input": {
+  "kit": "silver_wolf_lv999",
+  "slot": "technique",
+  "env": "Technique activation (mode init): Silver Wolf LV.999 alone, technique \"This? Absolute Meta!\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|Silver Wolf LV.999|-|- [1]",
+  "BUFF_APPLIED|-|Aha|-|- [1,Infinity]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "BUFF_APPLIED|-|Silver Wolf LV.999|-|- [1,Infinity]",
+  "TECHNIQUE_APPLIED|Silver Wolf LV.999|-|-|-",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

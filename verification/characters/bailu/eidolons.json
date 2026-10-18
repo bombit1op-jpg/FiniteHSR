@@ -1,0 +1,309 @@
+{
+  "kit": "bailu",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Bailu/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder E1..E6. E1 'Ambrosial Aqua' regenerates 8 extra Energy for a full-HP ally when Invigoration ends (log 'E1 Ambrosial Aqua: ... +8 energy'; no buff id). E2 'Sylphic Slumber' grants +15% Outgoing Healing for 2 turns after the Ultimate (bailu_e2 outHeal 0.15). E4 'Evil Excision' each Skill heal grants the recipient +10% DMG for 2 turns, stacking up to 3 (bailu_e4 dmgAll 0.1). E6 'Drooling Drop of Clouded Dreams' allows one extra killing-blow revive per battle (no dedicated buff). E3 (Skill+2/Talent+2) and E5 (Ult+2/Basic+1) are ability-level bumps; guarded by probe-eidolon-ladder.ts."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "bailu E0 — eidolon ladder rung, cloned from bailu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bailu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "bailu E1 — eidolon ladder rung, cloned from bailu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bailu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "bailu E2 — eidolon ladder rung, cloned from bailu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bailu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "bailu E3 — eidolon ladder rung, cloned from bailu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bailu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "bailu E4 — eidolon ladder rung, cloned from bailu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bailu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "bailu E5 — eidolon ladder rung, cloned from bailu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bailu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "bailu E6 — eidolon ladder rung, cloned from bailu/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "bailu",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Lightning"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "bailu_e1_log",
+      "layer": "interactions",
+      "claim": "E1 'Ambrosial Aqua' regenerates 8 extra Energy for a full-HP ally when Invigoration ends; observable as the dedicated log line. Present from E1 onward.",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "E1 Ambrosial Aqua" } }
+    },
+    {
+      "id": "bailu_e1_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: the E1 log must NOT appear below rank 1.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "absent", "of": { "type": "NOTE", "log": "E1 Ambrosial Aqua" } }
+    },
+    {
+      "id": "bailu_e2_present",
+      "layer": "interactions",
+      "claim": "E2 'Sylphic Slumber': +15% Outgoing Healing for 2 turns after the Ultimate (bailu_e2). Present from E2 onward.",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "bailu_e2" }
+    },
+    {
+      "id": "bailu_e2_outheal",
+      "layer": "parameters",
+      "claim": "The E2 buff carries outHeal 0.15 (canon ranks/2).",
+      "fixtures": ["e2"],
+      "assertion": { "assert": "buffStat", "id": "bailu_e2", "stat": "outHeal", "value": 0.15 }
+    },
+    {
+      "id": "bailu_e2_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E2 must NOT be active below rank 2.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "noBuff", "id": "bailu_e2" }
+    },
+    {
+      "id": "bailu_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Evil Excision': Skill heals grant the recipient +10% DMG, stacking (bailu_e4). Present from E4 onward.",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buff", "id": "bailu_e4" }
+    },
+    {
+      "id": "bailu_e4_dmg",
+      "layer": "parameters",
+      "claim": "The E4 buff carries dmgAll 0.10 per stack (canon ranks/4).",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "buffStat", "id": "bailu_e4", "stat": "dmgAll", "value": 0.1 }
+    },
+    {
+      "id": "bailu_e4_stacks",
+      "layer": "parameters",
+      "claim": "E4 stacks to 2 in this scenario (max 3).",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "buff", "id": "bailu_e4", "stacks": 2 }
+    },
+    {
+      "id": "bailu_e4_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E4 must NOT be active below rank 4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "noBuff", "id": "bailu_e4" }
+    }
+  ],
+  "golds": []
+}

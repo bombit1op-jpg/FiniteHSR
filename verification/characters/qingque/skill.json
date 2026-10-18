@@ -1,0 +1,396 @@
+{
+  "kit": "qingque",
+  "slot": "skill",
+  "golds": [],
+  "fixtures": [
+    {
+      "id": "base-solo",
+      "env": "Qingque E0 solo vs 3 Quantum-weak Elite (level 95, 240 Toughness), 3 cycles — Skill 120102 chains to a full quartet with hand-full discards, Hidden Hand (120104) Cherry on Top! enhanced basic, Ultimate 120103 hits all 3 enemies and refills the hand",
+      "battle": {
+        "team": [
+          {
+            "kitId": "qingque",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Quantum"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    },
+    {
+      "id": "team-sushang",
+      "env": "Qingque E0 with Sushang (kitId sushang) vs the same Elite — Talent Celestial Jade (120104) draws a tile at every Sushang turn start, the chain fills a 4-tile hand and discards, an empty-hand turn tosses nothing",
+      "battle": {
+        "team": [
+          {
+            "kitId": "qingque",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 1800,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": ["Quantum"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      },
+      "input": {},
+      "gold": []
+    }
+  ],
+  "requirements": [
+    {
+      "id": "skill_cast",
+      "layer": "structure",
+      "claim": "Skill 'A Scoop of Moon' (characters.json 120102, Enhance) is cast as a skill action; AGENTS §qingque: it draws skill=2 tiles, spends 1 SP, and grants an Extra Turn so the chain repeats inside one turn.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Qingque",
+          "action": "skill"
+        }
+      }
+    },
+    {
+      "id": "skill_no_damage",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "Skill 120102 is pure Enhance: it deals no damage itself, so Qingque never lands an attackType 'skill' hit — damage only comes from Basic 120101 / Enhanced Basic 120108 / Ultimate 120103. (erudition.ts:585-603 — skill path only draws tiles and refreshes qingque_draw.)",
+      "assertion": {
+        "assert": "absent",
+        "of": {
+          "type": "HIT_START",
+          "source": "Qingque",
+          "attackType": "skill"
+        }
+      }
+    },
+    {
+      "id": "basic_flower_pick",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK 'Flower Pick' (characters.json 120101) hits the primary target as attackType basic (erudition.ts:641, label 'Flower Pick', 10 Toughness).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Qingque",
+          "label": "Flower Pick",
+          "attackType": "basic"
+        }
+      }
+    },
+    {
+      "id": "ult_cast",
+      "layer": "structure",
+      "claim": "Ultimate 'A Quartet? Woo-hoo!' (characters.json 120103) fires as an ultimate action once Energy fills (energyMax 140).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ABILITY_USED",
+          "source": "Qingque",
+          "action": "ultimate"
+        }
+      }
+    },
+    {
+      "id": "enhanced_basic_cherry",
+      "layer": "structure",
+      "claim": "Hidden Hand (120104) upgrades the next Basic into Enhanced Basic 'Cherry on Top!' (characters.json 120108, Blast) with main + adjacent hits (erudition.ts:624-625, labels 'Cherry on Top! (main)' / '(adj)').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Qingque",
+          "label": "Cherry on Top! (main)",
+          "attackType": "basic"
+        }
+      }
+    },
+    {
+      "id": "tile_battle_sp",
+      "layer": "structure",
+      "claim": "Trace A0 'Tile Battle': the first Skill of the battle refunds +1 SP (AGENTS §qingque; erudition.ts:577-581 logs 'Tile Battle: +1 SP').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Tile Battle: \\+1 SP"
+        }
+      }
+    },
+    {
+      "id": "skill_grants_no_energy",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill 120102 grants no Energy — characters.json params of 120102 contain none (AGENTS §qingque audit removed an invented +30 Energy), so the first Energy event for Qingque in the battle is Basic 120101's +20.",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Qingque"
+        },
+        "field": "n",
+        "value": 20,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "ult_cost_140",
+      "layer": "parameters",
+      "claim": "Casting the Ultimate consumes the full Energy pool of 140 (energyMax = sp_need 140, AGENTS §qingque; ENERGY_LOSS reason 'ult_cost').",
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "ENERGY_LOSS",
+          "source": "Qingque",
+          "payload": { "reason": "ult_cost" }
+        },
+        "field": "amount",
+        "value": 140
+      }
+    },
+    {
+      "id": "ult_energy_refund_5",
+      "layer": "parameters",
+      "claim": "The Ultimate cast grants the generic castUlt +5 Energy refund after the cost is paid (AGENTS: '+5 Energy (из castUlt)'; observed post-cost ENERGY_GAIN n=5).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "ENERGY_GAIN",
+          "source": "Qingque",
+          "payload": { "n": 5 }
+        }
+      }
+    },
+    {
+      "id": "draw_stack_cap_4",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill stacks qingque_draw as dmgAll = (skill_a2 + 0.10) per stack up to the skill_a3 cap of 4 (AGENTS §qingque 'boost N/4 с реальным потолком 4'; erudition.ts:589-595) — a full chain ends at 0.38×4 = 1.52.",
+      "fixtures": ["team-sushang"],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "qingque_draw",
+        "stat": "dmgAll",
+        "value": 1.52,
+        "tol": 0.01
+      }
+    },
+    {
+      "id": "draw_duration_1_turn",
+      "layer": "parameters",
+      "claim": "qingque_draw (A Scoop of Moon DMG boost) lasts exactly 1 turn — it expires at the end of the casting turn (BUFF_EXPIRED qingque_draw each turn).",
+      "assertion": {
+        "assert": "buff",
+        "id": "qingque_draw",
+        "turns": 1
+      }
+    },
+    {
+      "id": "hidden_hand_atk_72",
+      "layer": "parameters",
+      "claim": "Hidden Hand grants atkPct equal to the Talent trace value at level 10 — 0.72 (AGENTS §qingque: qingque_hidden_hand atkPct = трейс таланта; erudition.ts:537 mult('qingque','talent')) — lasting Infinity until the enhanced basic consumes it.",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "qingque_hidden_hand",
+        "stat": "atkPct",
+        "value": 0.72,
+        "tol": 0.01
+      }
+    },
+    {
+      "id": "winning_hand_spd_10",
+      "layer": "parameters",
+      "claim": "Cherry on Top! grants A0 'Winning Hand' +10% SPD for 1 turn (AGENTS §qingque; erudition.ts:636 spdPct 0.1, turns 1).",
+      "assertion": {
+        "assert": "buffStat",
+        "id": "qingque_winning_hand",
+        "stat": "spdPct",
+        "value": 0.1,
+        "tol": 0.001
+      }
+    },
+    {
+      "id": "ult_hits_every_enemy",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate 120103 is AoEAttack: one hit per living enemy — exactly 3 hits against the 3-Elite fixture (erudition.ts:560 sim.hitAoe label 'A Quartet? Woo-hoo!').",
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "HIT_START",
+          "source": "Qingque",
+          "label": "A Quartet? Woo-hoo!"
+        },
+        "value": 3
+      }
+    },
+    {
+      "id": "order_skill_before_basic",
+      "layer": "ordering",
+      "claim": "Turn order inside the chain: the Skill action resolves first, then the tossed Basic 'Flower Pick' hit (skill chain ends in a basic — erudition.ts decide path).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "ABILITY_USED", "source": "Qingque", "action": "skill" }
+        ],
+        "after": [
+          { "type": "HIT_START", "source": "Qingque", "label": "Flower Pick" }
+        ]
+      }
+    },
+    {
+      "id": "order_draw_before_hit",
+      "layer": "ordering",
+      "claim": "The qingque_draw DMG-boost buff is applied during the Skill, before the 'Flower Pick' hit it boosts.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "BUFF_APPLIED", "target": "Qingque", "payload": { "id": "qingque_draw" } }
+        ],
+        "after": [
+          { "type": "HIT_START", "source": "Qingque", "label": "Flower Pick" }
+        ]
+      }
+    },
+    {
+      "id": "order_hidden_hand_before_cherry",
+      "layer": "ordering",
+      "claim": "Hidden Hand (120104) is entered at the start of the holding turn, before the enhanced 'Cherry on Top!' hit fires (erudition.ts:527-540 onTurnStart, then perform basic).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "BUFF_APPLIED", "target": "Qingque", "payload": { "id": "qingque_hidden_hand" } }
+        ],
+        "after": [
+          { "type": "HIT_START", "source": "Qingque", "label": "Cherry on Top! (main)" }
+        ]
+      }
+    },
+    {
+      "id": "order_ult_cost_before_refund",
+      "ability": "ultimate",
+      "layer": "ordering",
+      "claim": "Ultimate Energy is consumed first (ENERGY_LOSS 140, reason ult_cost), then the +5 refund arrives — cost resolves before refund.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "ENERGY_LOSS", "source": "Qingque", "payload": { "reason": "ult_cost" } }
+        ],
+        "after": [
+          { "type": "ENERGY_GAIN", "source": "Qingque", "payload": { "n": 5 } }
+        ]
+      }
+    },
+    {
+      "id": "order_boost_ramp_to_cap",
+      "layer": "ordering",
+      "claim": "The skill chain ramps boost 1/4 → 4/4 in order inside one turn (erudition.ts:603 'boost ${st}/${cap}', cap = mult('qingque','skill_a3') = 4).",
+      "assertion": {
+        "assert": "ordering",
+        "before": [
+          { "type": "NOTE", "log": "boost 1\\/4" }
+        ],
+        "after": [
+          { "type": "NOTE", "log": "boost 4\\/4" }
+        ]
+      }
+    },
+    {
+      "id": "talent_draw_on_ally_turn",
+      "ability": "talent",
+      "layer": "interactions",
+      "claim": "Talent Celestial Jade (characters.json 120104, 'When an ally's turn starts... draws 1 tile') fires at Sushang's turn start — every other ally's turn draws a tile (erudition.ts:515 'EVERY other ally's turn start').",
+      "fixtures": ["team-sushang"],
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "draws a .+ tile \\(Celestial Jade\\)"
+        }
+      }
+    },
+    {
+      "id": "hand_full_discard",
+      "layer": "interactions",
+      "claim": "Hand capacity is 4 (HAND_MAX, AGENTS §qingque): a draw while the hand is full discards the drawn tile (erudition.ts:478 drawOne discard branch — 'discards a … (A Scoop of Moon, hand full)').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "discards a .+ tile \\(A Scoop of Moon, hand full\\)"
+        }
+      }
+    },
+    {
+      "id": "empty_hand_tosses_nothing",
+      "layer": "interactions",
+      "claim": "An empty-hand Enhanced Basic tosses nothing and still lands Cherry on Top! (erudition.ts:617 'has an empty hand — nothing to toss'; AGENTS §qingque: empty hand → Basic without a toss).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "has an empty hand"
+        }
+      }
+    },
+    {
+      "id": "ult_replaces_hand",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate 120103 'obtains 4 jade tiles of the same suit' — the whole hand is replaced by 4 identical tiles (characters.json 120103 desc; erudition.ts:566 logs 'A Quartet? Woo-hoo! — 4 <suit> tiles').",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "A Quartet\\? Woo-hoo! — 4 (Heart|Diamond|Spade) tiles"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "kit": "the_herta",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/62/skills (Ice, Erudition)",
+    "confidence": "interpreted",
+    "note": "Basic Did You Get It; Skill Big Brain Energy / Enhanced Skill Hear Me Out (Interpretation scaling); Ultimate Told Ya! Magic Happens (AoE Ice, self ATK +ult_a4 for ult_a5 turns, grants an Extra Turn and +1 Inspiration); Talent Hand Them Over (Interpretation engine). Energy limit 220. Message From Beyond the Veil: with >=2 Erudition allies, all allies CRIT DMG +80%."
+  },
+  "fixtures": [
+    {
+      "id": "herta-main",
+      "env": "The Herta E0 solo vs 1 Ice-weak Elite dummy, energyStartFrac 1 (Ultimate first -> Extra Turn -> Enhanced Skill), 8 cycles, seed 1",
+      "battle": {
+        "team": [
+          { "kitId": "the_herta", "name": "The Herta", "stats": { "hp": 5000, "atk": 2200, "def": 1300, "spd": 130 }, "eidolon": 0, "energyStartFrac": 1, "skillPriority": 2 }
+        ],
+        "enemy": { "name": "Elite", "count": 1, "hp": 500000, "atk": 500, "spd": 120, "level": 85, "toughness": 120, "weaknesses": ["Ice"] },
+        "cycles": 8,
+        "seed": 1
+      }
+    },
+    {
+      "id": "herta-msg",
+      "env": "The Herta E0 with Herta (2nd Erudition) vs 2 Ice-weak dummies, energyStartFrac 1, 6 cycles, seed 2 — Message From Beyond the Veil",
+      "battle": {
+        "team": [
+          { "kitId": "the_herta", "name": "The Herta", "stats": { "hp": 5000, "atk": 2200, "def": 1300, "spd": 130 }, "eidolon": 0, "energyStartFrac": 1, "skillPriority": 2 },
+          { "kitId": "herta", "name": "Herta", "stats": { "hp": 5000, "atk": 2000, "def": 1300, "spd": 110 }, "skillPriority": 3 }
+        ],
+        "enemy": { "name": "Mob", "count": 2, "hp": 500000, "atk": 500, "spd": 120, "level": 85, "toughness": 120, "weaknesses": ["Ice"] },
+        "cycles": 6,
+        "seed": 2
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "th_talent_interpretation",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent: enemies carry Interpretation stacks and every attack on them adds one — logged 'Aloofly Honest: <ally> attacked → Interpretation +1' (erudition.ts:1320, 1501).",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "NOTE",
+          "log": "Interpretation \\+1"
+        }
+      }
+    },
+    {
+      "id": "the_herta_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Did You Get It (140101, Ice) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "The Herta",
+          "label": "Did You Get It",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "herta-main",
+        "herta-msg"
+      ]
+    },
+    {
+      "id": "th_ult_used",
+      "layer": "structure",
+      "claim": "Told Ya! Magic Happens is the Ultimate action.",
+      "fixtures": ["herta-main"],
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "The Herta", "action": "ultimate" } }
+    },
+    {
+      "id": "th_ult_label",
+      "layer": "structure",
+      "claim": "The Ultimate deals AoE Ice damage labelled Told Ya! Magic Happens.",
+      "fixtures": ["herta-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "The Herta", "label": "Told Ya! Magic Happens" } }
+    },
+    {
+      "id": "th_ult_extra_turn",
+      "layer": "interactions",
+      "claim": "After the Ultimate, The Herta immediately takes an Extra Turn.",
+      "fixtures": ["herta-main"],
+      "assertion": { "assert": "present", "of": { "log": "The Herta gains an Extra Turn" } }
+    },
+    {
+      "id": "th_ult_atk_buff",
+      "layer": "interactions",
+      "claim": "The Ultimate grants the caster ATK +80% (ult_a4 L10) for 3 turns (ult_a5).",
+      "fixtures": ["herta-main"],
+      "assertion": { "assert": "buff", "id": "th_ult_atk", "target": "The Herta", "turns": 3 }
+    },
+    {
+      "id": "th_ult_atk_value",
+      "layer": "parameters",
+      "claim": "th_ult_atk ATK bonus = ult_a4 L10 = 0.8.",
+      "fixtures": ["herta-main"],
+      "assertion": { "assert": "buffStat", "id": "th_ult_atk", "stat": "atkPct", "value": 0.8 }
+    },
+    {
+      "id": "th_inspiration",
+      "layer": "interactions",
+      "claim": "The Ultimate grants 1 Inspiration (th_inspiration), enabling the Enhanced Skill.",
+      "fixtures": ["herta-main"],
+      "assertion": { "assert": "buff", "id": "th_inspiration", "target": "The Herta" }
+    },
+    {
+      "id": "th_enhanced_skill",
+      "ability": "skill",
+      "layer": "structure",
+      "claim": "With Inspiration the Skill resolves as the Enhanced Skill Hear Me Out (final AoE hit).",
+      "fixtures": ["herta-main"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "The Herta", "label": "Hear Me Out (final AoE)" } }
+    },
+    {
+      "id": "th_interpretation",
+      "layer": "interactions",
+      "claim": "Enemies carry Interpretation (Hand Them Over, th_interpretation).",
+      "fixtures": ["herta-main"],
+      "assertion": { "assert": "buff", "id": "th_interpretation" }
+    },
+    {
+      "id": "th_no_msg_solo",
+      "layer": "interactions",
+      "claim": "Solo (1 Erudition) The Herta grants no Message From Beyond the Veil CRIT DMG buff.",
+      "fixtures": ["herta-main"],
+      "assertion": { "assert": "noBuff", "id": "th_msg_cd" }
+    },
+    {
+      "id": "th_msg_two_erudition",
+      "layer": "interactions",
+      "claim": "With 2 Erudition characters, Message From Beyond the Veil grants all allies CRIT DMG +80%.",
+      "fixtures": ["herta-msg"],
+      "assertion": { "assert": "buffStat", "id": "th_msg_cd", "stat": "critDmg", "value": 0.8 }
+    },
+    {
+      "id": "th_no_attack_action",
+      "layer": "structure",
+      "claim": "The kit exposes Basic/Skill/Ultimate, never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "The Herta", "action": "attack" } }
+    }
+  ]
+}

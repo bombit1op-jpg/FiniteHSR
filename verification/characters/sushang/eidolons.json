@@ -1,0 +1,356 @@
+{
+  "kit": "sushang",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Sushang/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 'Cut With Ease': after using Skill against a Weakness-Broken enemy, +1 SP — the fixture never breaks the target, tracked as deviation. E2 'Refine in Toil': after Sword Stance triggers, DMG taken -20% for 1 turn (sushang_e2) — Sword Stance never triggers here, tracked as deviation. E3 'Rise From Fame': Ult Lv.+2 / Talent Lv.+2 (Dawn Herald 3.2 -> 3.456). E4 'Cleave With Heart': Break Effect +40% (sushang_e4, be 0.4, permanent). E5 'Prevail via Taixu': Skill Lv.+2 / Basic Lv.+1 (Mountainfall 0.63 -> 0.693). E6 'Dwell Like Water': Talent SPD boost stackable to 2 and applied at battle start (sushang_db, maxStacks 2). Fixtures run one battle per eidolon rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "sushang E0 — eidolon ladder rung, cloned from sushang/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "sushang E1 — eidolon ladder rung, cloned from sushang/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "sushang E2 — eidolon ladder rung, cloned from sushang/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "sushang E3 — eidolon ladder rung, cloned from sushang/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "sushang E4 — eidolon ladder rung, cloned from sushang/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "sushang E5 — eidolon ladder rung, cloned from sushang/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "sushang E6 — eidolon ladder rung, cloned from sushang/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "sushang_e3_level",
+      "layer": "parameters",
+      "claim": "E3 'Rise From Fame': Ult Lv.+2 / Talent Lv.+2 raise Dawn Herald 3.2 -> 3.456.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Dawn Herald"
+        },
+        "field": "mult",
+        "value": 3.4
+      }
+    },
+    {
+      "id": "sushang_e4_present",
+      "layer": "interactions",
+      "claim": "E4 'Cleave With Heart': Sushang's Break Effect +40% (sushang_e4, permanent).",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "sushang_e4"
+      }
+    },
+    {
+      "id": "sushang_e4_be",
+      "layer": "parameters",
+      "claim": "The E4 buff carries be 0.40 (canon ranks/4).",
+      "fixtures": [
+        "e4"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "sushang_e4",
+        "stat": "be",
+        "value": 0.4
+      }
+    },
+    {
+      "id": "sushang_e4_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E4's sushang_e4 must NOT be active below rank 4.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "sushang_e4"
+      }
+    },
+    {
+      "id": "sushang_e5_level",
+      "layer": "parameters",
+      "claim": "E5 'Prevail via Taixu': Skill Lv.+2 / Basic Lv.+1 raise Mountainfall 0.63 -> 0.693.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payloadAtLeast",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Mountainfall"
+        },
+        "field": "mult",
+        "value": 0.68
+      }
+    },
+    {
+      "id": "sushang_e6_present",
+      "layer": "interactions",
+      "claim": "E6 'Dwell Like Water': Talent SPD boost applied at battle start (sushang_db).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "sushang_db"
+      }
+    },
+    {
+      "id": "sushang_e6_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: below rank 6 sushang_db is granted only when an enemy is Weakness-Broken, which never happens in this fixture, so it must be absent.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "sushang_db"
+      }
+    }
+  ],
+  "golds": []
+}

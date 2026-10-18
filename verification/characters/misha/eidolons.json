@@ -1,0 +1,495 @@
+{
+  "kit": "misha",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Misha/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n. E1 'Whimsicality of Fancy' = Ultimate adds 1 Hit Per Action per enemy on the field, up to +5 ('G—Gonna Be Late!' hit count 12 -> 18). E2 'Yearning of Youth' = before each Ultimate hit, 24% base chance to reduce DEF 16% for 3 turns (misha_e2 defRed 0.16). E3 'Vestige of Happiness' +Ultimate Lv.2 / Basic Lv.1 raises Basic 'E—Excuse Me, Please!' 1.0 -> 1.1 (and the Ultimate hit 0.6 -> 0.648). E4 'Visage of Kinship' increases each Ultimate hit multiplier by 6% ('G—Gonna Be Late!' 0.648 -> 0.68688). E5 'Genesis of First Love' +Skill Lv.2 / Talent Lv.2 raises Skill 'R—Room Service!' 2.0 -> 2.2. E6 'Estrangement of Dream' = Ultimate grants own DMG +30% until end of turn (misha_e6 dmgAll 0.3) and refunds 1 Skill Point on the next Skill."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "misha E0 — eidolon ladder rung, cloned from misha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "misha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "misha E1 — eidolon ladder rung, cloned from misha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "misha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "misha E2 — eidolon ladder rung, cloned from misha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "misha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "misha E3 — eidolon ladder rung, cloned from misha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "misha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "misha E4 — eidolon ladder rung, cloned from misha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "misha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "misha E5 — eidolon ladder rung, cloned from misha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "misha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "misha E6 — eidolon ladder rung, cloned from misha/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "misha",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "misha_e1_hits",
+      "layer": "parameters",
+      "claim": "E1 'Whimsicality of Fancy': per-enemy +1 Ultimate hit raises 'G—Gonna Be Late!' hit count 12 -> 18.",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "G—Gonna Be Late!"
+        },
+        "value": 18
+      }
+    },
+    {
+      "id": "misha_e1_hits_locked",
+      "layer": "parameters",
+      "claim": "Below E1 the Ultimate hit count stays 12.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "count",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "G—Gonna Be Late!"
+        },
+        "value": 12
+      }
+    },
+    {
+      "id": "misha_e2_present",
+      "layer": "interactions",
+      "claim": "E2 'Yearning of Youth': Ultimate hits roll DEF -16% for 3 turns (misha_e2).",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "misha_e2"
+      }
+    },
+    {
+      "id": "misha_e2_stat",
+      "layer": "parameters",
+      "claim": "misha_e2 carries defRed 0.16 for 3 turns (canon ranks/2).",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "misha_e2",
+        "stat": "defRed",
+        "value": 0.16
+      }
+    },
+    {
+      "id": "misha_e2_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: misha_e2 must NOT be active below rank 2.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "misha_e2"
+      }
+    },
+    {
+      "id": "misha_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 'Vestige of Happiness': Basic ATK Lv.+1 raises 'E—Excuse Me, Please!' 1.0 -> 1.1.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "E—Excuse Me, Please!"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "misha_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'E—Excuse Me, Please!' stays at 1.0.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "E—Excuse Me, Please!"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "misha_e4_ult",
+      "layer": "parameters",
+      "claim": "E4 'Visage of Kinship': each Ultimate hit multiplier +6% raises 'G—Gonna Be Late!' 0.648 -> 0.68688.",
+      "fixtures": [
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "G—Gonna Be Late!"
+        },
+        "field": "mult",
+        "value": 0.68688,
+        "tol": 0.0005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "misha_e4_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E4 'G—Gonna Be Late!' is the E3 value 0.648.",
+      "fixtures": [
+        "e3"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "G—Gonna Be Late!"
+        },
+        "field": "mult",
+        "value": 0.648,
+        "tol": 0.0005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "misha_e5_skill",
+      "layer": "parameters",
+      "claim": "E5 'Genesis of First Love': Skill Lv.+2 raises 'R—Room Service! (main)' 2.0 -> 2.2.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "R—Room Service! (main)"
+        },
+        "field": "mult",
+        "value": 2.2,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "misha_e5_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E5 'R—Room Service! (main)' stays at 2.0.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "R—Room Service! (main)"
+        },
+        "field": "mult",
+        "value": 2,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "misha_e6_present",
+      "layer": "interactions",
+      "claim": "E6 'Estrangement of Dream': Ultimate grants own DMG +30% until end of turn (misha_e6 dmgAll 0.3).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "misha_e6"
+      }
+    },
+    {
+      "id": "misha_e6_stat",
+      "layer": "parameters",
+      "claim": "misha_e6 carries dmgAll 0.3 (canon ranks/6).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "misha_e6",
+        "stat": "dmgAll",
+        "value": 0.3
+      }
+    },
+    {
+      "id": "misha_e6_locked",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: misha_e6 must NOT be active below rank 6.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "misha_e6"
+      }
+    }
+  ],
+  "golds": []
+}

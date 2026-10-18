@@ -1,0 +1,344 @@
+{
+  "kit": "danhengperman",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "hsr-data/characters.json#/Dan Heng • Permansor Terrae/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E1: Souldragon's attack applies resPenAll 0.18 (dh_respen) and Aegis Vitae hits are halved. E2: Souldragon FUA count 48->60 (Bondmate's DMG 12->15). E3 (Skill+2/Basic+1): A Dragon's Zenith 3.0->3.3 and Souldragon FUA 0.2->0.22. E4: dh_e4 mitigation 0.20. E6: dh_e6_def defIgnore 0.12, dh_e6_vuln vulnAll 0.20 on enemies, and a bonus 'E6 Bondmate DMG' hit (+energy 338->379). E5 (Skill+2/Talent+2) is an internal shield-value bump not visible in the fixture; covered as custom. Fixtures battle one run per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "danhengperman E0 — eidolon ladder rung, cloned from danhengperman/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengperman",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "danhengperman E1 — eidolon ladder rung, cloned from danhengperman/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengperman",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "danhengperman E2 — eidolon ladder rung, cloned from danhengperman/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengperman",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "danhengperman E3 — eidolon ladder rung, cloned from danhengperman/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengperman",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "danhengperman E4 — eidolon ladder rung, cloned from danhengperman/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengperman",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "danhengperman E5 — eidolon ladder rung, cloned from danhengperman/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengperman",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "danhengperman E6 — eidolon ladder rung, cloned from danhengperman/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danhengperman",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "danhengperman_e1_respen",
+      "layer": "interactions",
+      "claim": "E1 makes Souldragon's attack apply resPenAll 0.18 (dh_respen).",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "dh_respen", "stat": "resPenAll", "value": 0.18 }
+    },
+    {
+      "id": "danhengperman_e1_respen_locked",
+      "layer": "interactions",
+      "claim": "dh_respen (E1) is absent at E0.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "noBuff", "id": "dh_respen" }
+    },
+    {
+      "id": "danhengperman_e2_fua",
+      "layer": "parameters",
+      "claim": "E2 raises Souldragon FUA hit count 48 -> 60.",
+      "fixtures": ["e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "label": "Souldragon FUA" }, "value": 60 }
+    },
+    {
+      "id": "danhengperman_e2_fua_locked",
+      "layer": "parameters",
+      "claim": "Below E2 Souldragon FUA hits 48 times.",
+      "fixtures": ["e0", "e1"],
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "label": "Souldragon FUA" }, "value": 48 }
+    },
+    {
+      "id": "danhengperman_e3_ult",
+      "layer": "parameters",
+      "claim": "E3 (Skill+2/Basic+1) raises A Dragon's Zenith 3.0 -> 3.3.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "A Dragon's Zenith" }, "field": "mult", "value": 3.3, "tol": 0.002 }
+    },
+    {
+      "id": "danhengperman_e3_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E3 A Dragon's Zenith stays 3.0.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "A Dragon's Zenith" }, "field": "mult", "value": 3.0, "tol": 0.002 }
+    },
+    {
+      "id": "danhengperman_e4_mit",
+      "layer": "interactions",
+      "claim": "E4 grants dh_e4 mitigation 0.20.",
+      "fixtures": ["e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "dh_e4", "stat": "mitigation", "value": 0.2 }
+    },
+    {
+      "id": "danhengperman_e4_mit_locked",
+      "layer": "interactions",
+      "claim": "dh_e4 (E4) is absent below E4.",
+      "fixtures": ["e0", "e1", "e2", "e3"],
+      "assertion": { "assert": "noBuff", "id": "dh_e4" }
+    },
+    {
+      "id": "danhengperman_e6_def",
+      "layer": "parameters",
+      "claim": "E6 grants dh_e6_def defIgnore 0.12.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buffStat", "id": "dh_e6_def", "stat": "defIgnore", "value": 0.12 }
+    },
+    {
+      "id": "danhengperman_e6_def_locked",
+      "layer": "interactions",
+      "claim": "dh_e6_def (E6) is absent below E6.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "noBuff", "id": "dh_e6_def" }
+    },
+    {
+      "id": "danhengperman_e6_vuln",
+      "layer": "parameters",
+      "claim": "E6 applies dh_e6_vuln vulnAll 0.20 to enemies.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buffStat", "id": "dh_e6_vuln", "stat": "vulnAll", "value": 0.2 }
+    },
+    {
+      "id": "danhengperman_e6_bondmate",
+      "layer": "interactions",
+      "claim": "E6 adds the bonus 'E6 Bondmate DMG' hit.",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "label": "E6 Bondmate DMG" } }
+    },
+    {
+      "id": "danhengperman_e6_bondmate_locked",
+      "layer": "interactions",
+      "claim": "Below E6 no 'E6 Bondmate DMG' hit occurs.",
+      "fixtures": ["e5"],
+      "assertion": { "assert": "absent", "of": { "type": "DAMAGE_DEALT", "label": "E6 Bondmate DMG" } }
+    },
+    {
+      "id": "danhengperman_e5_custom",
+      "layer": "parameters",
+      "claim": "E5 (Skill+2/Talent+2) is an internal shield-value bump not visible in the fixture.",
+      "fixtures": ["e5"],
+      "assertion": { "assert": "custom", "note": "shield value not asserted by event matcher" }
+    }
+  ],
+  "golds": []
+}

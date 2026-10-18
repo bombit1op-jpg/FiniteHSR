@@ -1,0 +1,248 @@
+{
+  "kit": "danheng",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/100201+100202+100203 + bonus_abilities + ranks",
+    "confidence": "verified",
+    "note": "Skill Cloudlancer Art: Torrent (100202) Wind DMG #1 L10 = 260% of ATK; when its DMG triggers CRIT it has a fixed chance to apply Slowed: SPD -#2 = 12% for #3 = 2 turns. Basic Cloudlancer Art: North Wind (100201) totals 100% at Lv6 / 140% at L10; the High Gale bonus deals +40% DMG against Slowed targets. Ultimate Cloudlancer Art: Ethereal Dream (100203) Wind DMG #1 L10 = 400% of ATK plus #2 = 120% extra against Slowed targets (= 520%). Bonus: hitting a Slowed enemy grants Dan Heng SPD +20% for 2 turns (50% fixed chance). Energy limit 130."
+  },
+  "fixtures": [
+    {
+      "id": "danheng-3c",
+      "env": "Dan Heng E0 solo vs 3 Wind-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7, critRate 1 so every Skill hit Crits and applies Slow",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danheng",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200, "critRate": 1 },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Wind"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "danheng-duo",
+      "env": "Dan Heng E0 + bronya ally vs 3 Wind-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7 - an ally's ability is required so the Talent (Wild Wind) can arm",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danheng",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200, "critRate": 1 },
+            "skillPriority": 1,
+            "eidolon": 0
+          },
+          {
+            "kitId": "bronya",
+            "stats": { "hp": 10000, "atk": 1500, "def": 600, "spd": 134 },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Wind"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "dh_talent_wild_wind",
+      "ability": "talent",
+      "layer": "interactions",
+      "fixtures": ["danheng-duo"],
+      "claim": "Talent Wild Wind: an ally's ability makes Dan Heng's next attack gain Wind RES PEN — buff danheng_talent (hunt.ts:261-283). The ally hooks (onAllyUlt/onAllyTurnStart) skip the caster, so a duo fixture is required.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "BUFF_APPLIED",
+          "payload": {
+            "id": "danheng_talent"
+          }
+        }
+      }
+    },
+    {
+      "id": "danheng_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Cloudlancer Art: North Wind (100201, Wind) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Dan Heng",
+          "label": "Cloudlancer Art: North Wind",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "danheng-3c"
+      ]
+    },
+    {
+      "id": "dh_skill_action",
+      "fixtures": ["danheng-3c"],
+      "layer": "structure",
+      "claim": "Cloudlancer Art: Torrent (100202) is Dan Heng's damaging Skill; the fixture casts it 4 times.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Dan Heng", "action": "skill" }, "value": 4 }
+    },
+    {
+      "id": "dh_ult_action",
+      "fixtures": ["danheng-3c"],
+      "layer": "structure",
+      "claim": "Cloudlancer Art: Ethereal Dream (100203) is Dan Heng's Ultimate action; cast twice.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Dan Heng", "action": "ultimate" }, "value": 2 }
+    },
+    {
+      "id": "dh_no_attack_action",
+      "fixtures": ["danheng-3c"],
+      "layer": "structure",
+      "claim": "Dan Heng's kit exposes Basic ATK, Skill and Ultimate as its action set; never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Dan Heng", "action": "attack" } }
+    },
+    {
+      "id": "dh_torrent_count",
+      "fixtures": ["danheng-3c"],
+      "layer": "structure",
+      "claim": "4 Skill casts x 4 hits each = 16 Torrent damage events.",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng", "label": "Cloudlancer Art: Torrent" }, "value": 16 }
+    },
+    {
+      "id": "dh_torrent_first",
+      "fixtures": ["danheng-3c"],
+      "layer": "parameters",
+      "claim": "Torrent #1 = 260% of ATK at L10 (100202); the engine delivers 4 hits with a 30% opening hit (0.78).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng", "label": "Cloudlancer Art: Torrent" }, "field": "mult", "value": 0.78, "pick": "first" }
+    },
+    {
+      "id": "dh_torrent_last",
+      "fixtures": ["danheng-3c"],
+      "layer": "parameters",
+      "claim": "The final Torrent hit lands at 40% of the total (1.04 of 2.6 at L10).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng", "label": "Cloudlancer Art: Torrent" }, "field": "mult", "value": 1.04, "pick": "last" }
+    },
+    {
+      "id": "dh_ethereal_mult",
+      "fixtures": ["danheng-3c"],
+      "layer": "parameters",
+      "claim": "Ethereal Dream deals 400% of ATK (#1, L10) plus 120% against Slowed targets (#2) = 520% total (100203).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng", "label": "Ethereal Dream" }, "field": "mult", "value": 5.2 }
+    },
+    {
+      "id": "dh_northwind_first",
+      "fixtures": ["danheng-3c"],
+      "layer": "parameters",
+      "claim": "North Wind totals 100% at Basic Lv6 (canon L10 = 140%); High Gale adds +40% vs Slowed targets (1.4 total), opening hit 0.63.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng", "label": "Cloudlancer Art: North Wind" }, "field": "mult", "value": 0.63, "pick": "first" }
+    },
+    {
+      "id": "dh_northwind_last",
+      "fixtures": ["danheng-3c"],
+      "layer": "parameters",
+      "claim": "North Wind's second hit closes the High Gale total at 0.77 (0.63 + 0.77 = 1.4).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Dan Heng", "label": "Cloudlancer Art: North Wind" }, "field": "mult", "value": 0.77, "pick": "last" }
+    },
+    {
+      "id": "dh_slow_debuff",
+      "fixtures": ["danheng-3c"],
+      "layer": "structure",
+      "claim": "When Torrent's DMG triggers CRIT it has a fixed chance to Slowed the target (100202); critRate 1 in this fixture makes it deterministic.",
+      "assertion": { "assert": "present", "of": { "type": "DEBUFF_APPLIED", "payload": { "id": "danheng_slow" } } }
+    },
+    {
+      "id": "dh_slow_turns",
+      "fixtures": ["danheng-3c"],
+      "layer": "parameters",
+      "claim": "Slowed lasts #3 = 2 turns (100202).",
+      "assertion": { "assert": "buff", "id": "danheng_slow", "turns": 2 }
+    },
+    {
+      "id": "dh_slow_spd",
+      "fixtures": ["danheng-3c"],
+      "layer": "parameters",
+      "claim": "Slowed reduces SPD by #2 = 12% (100202).",
+      "assertion": { "assert": "buffStat", "id": "danheng_slow", "stat": "spdDown", "value": 0.12 }
+    },
+    {
+      "id": "dh_a4_buff",
+      "fixtures": ["danheng-3c"],
+      "layer": "interactions",
+      "claim": "Hitting a Slowed enemy grants Dan Heng a bonus for 2 turns (bonus ability).",
+      "assertion": { "assert": "buff", "id": "danheng_a4", "turns": 2 }
+    },
+    {
+      "id": "dh_a4_spd",
+      "fixtures": ["danheng-3c"],
+      "layer": "interactions",
+      "claim": "The bonus is SPD +20% for 2 turns (50% fixed chance; guaranteed by critRate 1 fixture setup).",
+      "assertion": { "assert": "buffStat", "id": "danheng_a4", "stat": "spdPct", "value": 0.2 }
+    },
+    {
+      "id": "dh_sp_loss",
+      "fixtures": ["danheng-3c"],
+      "layer": "structure",
+      "claim": "Each Torrent costs 1 Skill Point; 4 Skill casts spend 4 SP.",
+      "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Dan Heng" }, "value": 4 }
+    },
+    {
+      "id": "dh_sp_gain",
+      "fixtures": ["danheng-3c"],
+      "layer": "structure",
+      "claim": "Each Basic ATK restores 1 Skill Point; 2 Basics gain 2 SP.",
+      "assertion": { "assert": "count", "of": { "type": "SP_GAIN", "source": "Dan Heng" }, "value": 2 }
+    },
+    {
+      "id": "dh_energy",
+      "fixtures": ["danheng-3c"],
+      "layer": "parameters",
+      "claim": "Dan Heng's Ultimate uses the standard Energy ladder (130); this rotation regenerates exactly 195 Energy.",
+      "assertion": { "assert": "energy", "who": "Dan Heng", "atLeast": 195, "atMost": 195 }
+    },
+    {
+      "id": "dh_order_slow",
+      "fixtures": ["danheng-3c"],
+      "layer": "ordering",
+      "claim": "The CRIT-triggered Slow lands during the first Torrent hit, before the first Torrent damage event resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "DEBUFF_APPLIED", "payload": { "id": "danheng_slow" } }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Dan Heng", "label": "Cloudlancer Art: Torrent" }]
+      }
+    },
+    {
+      "id": "dh_order_ult",
+      "fixtures": ["danheng-3c"],
+      "layer": "ordering",
+      "claim": "The Ultimate action starts before Ethereal Dream damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Dan Heng", "action": "ultimate" }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Dan Heng", "label": "Ethereal Dream" }]
+      }
+    }
+  ]
+}

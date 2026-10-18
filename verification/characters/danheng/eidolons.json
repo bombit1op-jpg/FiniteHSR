@@ -1,0 +1,330 @@
+{
+  "kit": "danheng",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "hsr-data/characters.json#/Dan Heng/ranks",
+    "confidence": "verified",
+    "note": "Cumulative E1..E6. E1: +12% CRIT Rate vs targets at >=50% HP (danheng_e1 critRate 0.12). E3 (Skill+2/Basic+1): Cloudlancer Art: North Wind multiplier 0.77->0.847. E5 (Ult+2/Talent+2): Ethereal Dream multiplier 5.2->5.616. E6: Slow inflicts spdDown 0.12->0.20 (danheng_slow). E2 (Talent CD -1) and E4 (Ult-kill -> extra action) are internal/timeline effects not observable in the 6M-HP solo fixture; covered as custom. Fixtures battle one run per rank e0..e6."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "danheng E0 — eidolon ladder rung, cloned from danheng/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danheng",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "critRate": 1
+            },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "danheng E1 — eidolon ladder rung, cloned from danheng/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danheng",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "critRate": 1
+            },
+            "skillPriority": 1,
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "danheng E2 — eidolon ladder rung, cloned from danheng/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danheng",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "critRate": 1
+            },
+            "skillPriority": 1,
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "danheng E3 — eidolon ladder rung, cloned from danheng/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danheng",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "critRate": 1
+            },
+            "skillPriority": 1,
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "danheng E4 — eidolon ladder rung, cloned from danheng/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danheng",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "critRate": 1
+            },
+            "skillPriority": 1,
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "danheng E5 — eidolon ladder rung, cloned from danheng/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danheng",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "critRate": 1
+            },
+            "skillPriority": 1,
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "danheng E6 — eidolon ladder rung, cloned from danheng/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "danheng",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200,
+              "critRate": 1
+            },
+            "skillPriority": 1,
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Wind"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "danheng_e1_crit",
+      "layer": "interactions",
+      "claim": "E1 grants +12% CRIT Rate (danheng_e1 critRate 0.12).",
+      "fixtures": ["e1", "e2", "e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "buffStat", "id": "danheng_e1", "stat": "critRate", "value": 0.12 }
+    },
+    {
+      "id": "danheng_e1_locked",
+      "layer": "interactions",
+      "claim": "danheng_e1 (E1) is absent at E0.",
+      "fixtures": ["e0"],
+      "assertion": { "assert": "noBuff", "id": "danheng_e1" }
+    },
+    {
+      "id": "danheng_e3_skill",
+      "layer": "parameters",
+      "claim": "E3 (Skill+2/Basic+1) raises Cloudlancer Art: North Wind 0.77 -> 0.847.",
+      "fixtures": ["e3", "e4", "e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Cloudlancer Art: North Wind" }, "field": "mult", "value": 0.847, "tol": 0.002 }
+    },
+    {
+      "id": "danheng_e3_skill_locked",
+      "layer": "parameters",
+      "claim": "Below E3 Cloudlancer Art: North Wind stays 0.77.",
+      "fixtures": ["e0", "e1", "e2"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Cloudlancer Art: North Wind" }, "field": "mult", "value": 0.77, "tol": 0.002 }
+    },
+    {
+      "id": "danheng_e5_ult",
+      "layer": "parameters",
+      "claim": "E5 (Ult+2/Talent+2) raises Ethereal Dream 5.2 -> 5.616.",
+      "fixtures": ["e5", "e6"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Ethereal Dream" }, "field": "mult", "value": 5.616, "tol": 0.002 }
+    },
+    {
+      "id": "danheng_e5_ult_locked",
+      "layer": "parameters",
+      "claim": "Below E5 Ethereal Dream stays 5.2.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4"],
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "label": "Ethereal Dream" }, "field": "mult", "value": 5.2, "tol": 0.002 }
+    },
+    {
+      "id": "danheng_e6_slow",
+      "layer": "parameters",
+      "claim": "E6 raises Slow's spdDown 0.12 -> 0.20 (danheng_slow).",
+      "fixtures": ["e6"],
+      "assertion": { "assert": "buffStat", "id": "danheng_slow", "stat": "spdDown", "value": 0.2 }
+    },
+    {
+      "id": "danheng_e6_slow_locked",
+      "layer": "parameters",
+      "claim": "Below E6 Slow's spdDown stays 0.12.",
+      "fixtures": ["e0", "e1", "e2", "e3", "e4", "e5"],
+      "assertion": { "assert": "buffStat", "id": "danheng_slow", "stat": "spdDown", "value": 0.12 }
+    },
+    {
+      "id": "danheng_e2_custom",
+      "layer": "interactions",
+      "claim": "E2 (Talent CD -1) is internal cooldown; not visible in the fixture event stream.",
+      "fixtures": ["e2"],
+      "assertion": { "assert": "custom", "note": "talent-CD shrink is internal" }
+    },
+    {
+      "id": "danheng_e4_custom",
+      "layer": "interactions",
+      "claim": "E4 (Ult-kill -> extra action) needs a kill the 6M-HP fixture never reaches.",
+      "fixtures": ["e4"],
+      "assertion": { "assert": "custom", "note": "ult-kill extra action not exercised" }
+    }
+  ],
+  "golds": []
+}

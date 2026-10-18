@@ -1,0 +1,18 @@
+{
+ "input": {
+  "kit": "trailblazer_preservation",
+  "slot": "technique",
+  "env": "Technique activation (mode init): {NICKNAME} alone, technique \"Call of the Guardian\" active, seed 7",
+  "seed": 7,
+  "cycles": 1
+ },
+ "expectedKeys": [
+  "BUFF_APPLIED|-|{NICKNAME}|-|- [1]",
+  "BATTLE_START|-|-|-|- [1,1,7]",
+  "TECHNIQUE_APPLIED|{NICKNAME}|-|-|-",
+  "BUFF_APPLIED|{NICKNAME}|{NICKNAME}|-|- [1,1,629]",
+  "SHIELD_APPLIED|{NICKNAME}|{NICKNAME}|-|- [629]",
+  "WAVE_START|-|-|-|- [1,1]",
+  "CYCLE_START|-|-|-|- [0,1]"
+ ]
+}

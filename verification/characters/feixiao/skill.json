@@ -1,0 +1,184 @@
+{
+  "kit": "feixiao",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/122001+122002+122003+122004+122008+122009 + bonus_abilities + ranks",
+    "confidence": "verified",
+    "note": "Skill Waraxe (122002) Wind DMG #1 L10 = 200% of ATK over 3 hits. Ultimate Terrasplit (122003) first launches Boltsunder Blitz (122008) or Waraxe Skyward (122009) on the target for a total of #3 = 6 hits, then deals #1 = 160% of ATK at L10 (122003); Blitz adds +30% vs Weakness Broken targets (122008 #2), Skyward adds +30% vs non-Broken (122009 #2); both base 60% at L10. Notes: the Ultimate's accumulated damage minimum of 6 points starts from 0, is accumulated for every two attacks made by Feixiao's allies (Ultimate does not count), and its activation threshold is 6/12 points (special resource, not Energy). Talent Thunderhunt FUA (122004): #1 L10 = 110% of ATK, #5 = +60% DMG for #6 = 2 turns. Bonuses: after Ultimate, ATK +48% for 3 turns; Formshift: Ultimate damage counts as Follow-Up ATK DMG and follow-up CRIT DMG +36%. Energy limit 130 (standard, unused by the Ultimate)."
+  },
+  "fixtures": [
+    {
+      "id": "feixiao-3c",
+      "env": "Feixiao E0 solo vs 3 Wind-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7 — Flying Aureus accrues from Feixiao's own attacks (+1 per 2, Ultimate excluded); enemy attacks never feed the pool",
+      "battle": {
+        "team": [
+          {
+            "kitId": "feixiao",
+            "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": ["Wind"],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "feixiao_basic_present",
+      "ability": "basic",
+      "layer": "structure",
+      "claim": "Basic ATK Boltsunder (122001, Wind) is the kit's Basic and fires in the fixture.",
+      "assertion": {
+        "assert": "present",
+        "of": {
+          "type": "HIT_START",
+          "source": "Feixiao",
+          "label": "Boltsunder",
+          "attackType": "basic"
+        }
+      },
+      "fixtures": [
+        "feixiao-3c"
+      ]
+    },
+    {
+      "id": "fx_ult_action",
+      "layer": "structure",
+      "claim": "Terrasplit (122003) is Feixiao's Ultimate; it runs on the special Follow-Up Attack points resource (activation at 6/12 points, not Energy) and the canon accrual sustains 2 casts in this fixture.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Feixiao", "action": "ultimate" }, "value": 2 }
+    },
+    {
+      "id": "fx_skill_action",
+      "layer": "structure",
+      "claim": "Waraxe (122002) is Feixiao's damaging Skill; the slower canon pool accrual lets the fixture cast it 4 times.",
+      "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Feixiao", "action": "skill" }, "value": 4 }
+    },
+    {
+      "id": "fx_no_attack_action",
+      "layer": "structure",
+      "claim": "Feixiao's kit exposes Basic ATK, Skill and Ultimate as its action set; never a generic attack action.",
+      "assertion": { "assert": "absent", "of": { "type": "ABILITY_USED", "source": "Feixiao", "action": "attack" } }
+    },
+    {
+      "id": "fx_blitz_count",
+      "layer": "structure",
+      "claim": "Terrasplit first launches the mid-ult strike #3 = 6 times per Ultimate (122003); the fixture's 2 Ultimates land 12 strikes, all Waraxe Skyward (targets stay intact during casts).",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Feixiao", "label": "Waraxe Skyward" }, "value": 12 }
+    },
+    {
+      "id": "fx_blitz_broken_count",
+      "layer": "structure",
+      "claim": "No mid-ult strike hits a Broken target in this fixture (Boltsunder Blitz label never used).",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Feixiao", "label": "Boltsunder Blitz" }, "value": 0 }
+    },
+    {
+      "id": "fx_blitz_mult",
+      "layer": "parameters",
+      "claim": "Waraxe Skyward L10 = 60% base (#1) + 30% conditional (#2) = 0.9 per strike while the target is intact (122009); Boltsunder Blitz (122008) uses the symmetric broken-target ladder, so the value matches either state.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Feixiao", "label": "Waraxe Skyward" }, "field": "mult", "value": 0.9 }
+    },
+    {
+      "id": "fx_terrasplit_mult",
+      "layer": "parameters",
+      "claim": "Terrasplit's closing hit #1 = 160% of ATK at L10 (122003).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Feixiao", "label": "Terrasplit" }, "field": "mult", "value": 1.6 }
+    },
+    {
+      "id": "fx_waraxe_mult",
+      "layer": "parameters",
+      "claim": "Waraxe (122002) #1 = 200% of ATK at L10 over 3 hits: 0.68 + 0.66 + 0.66 = 2.0.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Feixiao", "label": "Waraxe" }, "field": "mult", "value": 0.68, "pick": "first" }
+    },
+    {
+      "id": "fx_thunderhunt_mult",
+      "layer": "parameters",
+      "claim": "Thunderhunt FUA (122004) #1 = 110% of ATK at L10.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Feixiao", "label": "Thunderhunt FUA" }, "field": "mult", "value": 1.1 }
+    },
+    {
+      "id": "fx_formshift_buff",
+      "layer": "structure",
+      "claim": "Formshift (bonus) is a permanent state on Feixiao once unlocked.",
+      "assertion": { "assert": "buff", "id": "feixiao_formshift", "target": "Feixiao" }
+    },
+    {
+      "id": "fx_formshift_fua_cd",
+      "layer": "interactions",
+      "claim": "Formshift: damage from this Ultimate is considered Follow-Up DMG and follow-up CRIT DMG increases by 36% (122003/122004 Notes).",
+      "assertion": { "assert": "buffStat", "id": "feixiao_formshift", "stat": "critDmg:fua", "value": 0.36 }
+    },
+    {
+      "id": "fx_formshift_ult_cd",
+      "layer": "interactions",
+      "claim": "Formshift: the Ultimate's DMG counts as Follow-Up ATK DMG (dual tag), so Terrasplit's hits carry the Follow-Up tag and receive FUA-only modifiers — Formshift's +36% CRIT DMG.",
+      "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Feixiao", "label": "Terrasplit", "tags": "fua" } }
+    },
+    {
+      "id": "fx_boltcatch_buff",
+      "layer": "parameters",
+      "claim": "After using the Ultimate, Feixiao gains a buff for 3 turns (bonus ability).",
+      "assertion": { "assert": "buff", "id": "feixiao_boltcatch", "turns": 3 }
+    },
+    {
+      "id": "fx_boltcatch_stat",
+      "layer": "parameters",
+      "claim": "The post-Ultimate buff is ATK +48% (bonus ability).",
+      "assertion": { "assert": "buffStat", "id": "feixiao_boltcatch", "stat": "atkPct", "value": 0.48 }
+    },
+    {
+      "id": "fx_fua_dmg_buff",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "Thunderhunt FUA grants +60% DMG for #6 = 2 turns (122004).",
+      "assertion": { "assert": "buff", "id": "feixiao_fua_dmg", "turns": 2 }
+    },
+    {
+      "id": "fx_fua_dmg_stat",
+      "layer": "parameters",
+      "claim": "The Thunderhunt DMG bonus is +60% (#5, L10).",
+      "assertion": { "assert": "buffStat", "id": "feixiao_fua_dmg", "stat": "dmgAll", "value": 0.6 }
+    },
+    {
+      "id": "fx_sp_loss",
+      "layer": "structure",
+      "claim": "The 4 Skill casts spend 4 Skill Points.",
+      "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Feixiao" }, "value": 4 }
+    },
+    {
+      "id": "fx_points_pool",
+      "layer": "parameters",
+      "claim": "Flying Aureus (special Resource, not Energy) accrues from the wearer's attacks +1 per 2 and other canon sources; the engine gate on ultConsumption 'none' means enemy attacks never feed the pool. Zero ENERGY_GAIN events reach Feixiao in this fixture, so the 2 Ultimate casts are sustained entirely by canon accrual.",
+      "assertion": { "assert": "energy", "who": "Feixiao", "atLeast": 0, "atMost": 0 }
+    },
+    {
+      "id": "fx_pool_final",
+      "layer": "parameters",
+      "claim": "The canon pool spends 6 points per Ultimate; the fixture ends with 3/12 Flying Aureus.",
+      "assertion": { "assert": "unitState", "who": "Feixiao", "field": "energy", "value": 3 }
+    },
+    {
+      "id": "fx_order_ult",
+      "layer": "ordering",
+      "claim": "The Ultimate action starts before Terrasplit damage resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "Feixiao", "action": "ultimate" }],
+        "after": [{ "type": "DAMAGE_DEALT", "source": "Feixiao", "label": "Terrasplit" }]
+      }
+    }
+  ]
+}

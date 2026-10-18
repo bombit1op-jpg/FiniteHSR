@@ -1,0 +1,387 @@
+{
+  "kit": "march7th",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/March 7th/ranks/1..6",
+    "confidence": "verified",
+    "note": "Cumulative ladder: rank E_n grants E_1..E_n (Preservation / Ice). E1 'Memory of You' = each Ultimate Freeze regenerates 6 Energy (ENERGY_GAIN count 13 -> 17, sum 185 -> 203). E2 'Memory of It' = on entering battle grants the lowest-HP ally a Shield equal to 24% DEF + 320 for 3 turns (extra march_shield application with turns=3; the Skill shield is turns=4). E3 'Memory of Everything' +Ultimate Lv.2 / Basic Lv.1 raises Basic 'Frigid Cold Arrow' 1.0 -> 1.1. E4 'Never Forfeit Again' = Talent Counter triggers 1 more time per turn and Counter DMG +30% DEF (flat, not a multiplier). E5 'Never Forget Again' +Skill Lv.2 / Talent Lv.2 raises Counter 'Girl Power (Counter)' 1.0 -> 1.1. E6 'Just Like This, Always...' = allies under the Skill Shield restore 4% Max HP + 106 at turn start (fired onAllyTurnStart, self excluded)."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "march7th E0 — eidolon ladder rung, cloned from march7th/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "march7th E1 — eidolon ladder rung, cloned from march7th/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 1
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "march7th E2 — eidolon ladder rung, cloned from march7th/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 2
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "march7th E3 — eidolon ladder rung, cloned from march7th/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 3
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "march7th E4 — eidolon ladder rung, cloned from march7th/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 4
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "march7th E5 — eidolon ladder rung, cloned from march7th/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 5
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "march7th E6 — eidolon ladder rung, cloned from march7th/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "march7th",
+            "stats": {
+              "hp": 10000,
+              "atk": 2000,
+              "def": 600,
+              "spd": 200
+            },
+            "skillPriority": 1,
+            "eidolon": 6
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 6000000,
+          "atk": 800,
+          "spd": 90,
+          "level": 120,
+          "toughness": 300,
+          "weaknesses": [
+            "Ice"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "m7_e1_energy",
+      "layer": "interactions",
+      "claim": "E1 'Memory of You': each Ultimate Freeze regenerates 6 Energy (total ENERGY_GAIN sum 185 -> 203).",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "energy",
+        "who": "March 7th",
+        "atLeast": 203
+      }
+    },
+    {
+      "id": "m7_e1_energy_locked",
+      "layer": "interactions",
+      "claim": "Below E1 no Freeze energy: total ENERGY_GAIN sum stays 185.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "energy",
+        "who": "March 7th",
+        "atMost": 185
+      }
+    },
+    {
+      "id": "m7_e2_shield",
+      "layer": "interactions",
+      "claim": "E2 'Memory of It': battle-start Shield (24% DEF + 320, 3 turns) adds a march_shield instance with turns=3.",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "march_shield",
+        "turns": 3
+      }
+    },
+    {
+      "id": "m7_e3_basic",
+      "layer": "parameters",
+      "claim": "E3 'Memory of Everything': Basic ATK Lv.+1 raises 'Frigid Cold Arrow' 1.0 -> 1.1.",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Frigid Cold Arrow"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "m7_e3_basic_locked",
+      "layer": "parameters",
+      "claim": "Below E3 'Frigid Cold Arrow' stays at 1.0.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Frigid Cold Arrow"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "m7_e5_counter",
+      "layer": "parameters",
+      "claim": "E5 'Never Forget Again': Talent Lv.+2 raises Counter 'Girl Power (Counter)' 1.0 -> 1.1.",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Girl Power (Counter)"
+        },
+        "field": "mult",
+        "value": 1.1,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    },
+    {
+      "id": "m7_e5_counter_locked",
+      "layer": "parameters",
+      "claim": "Below E5 'Girl Power (Counter)' stays at 1.0.",
+      "fixtures": [
+        "e0",
+        "e1",
+        "e2",
+        "e3",
+        "e4"
+      ],
+      "assertion": {
+        "assert": "payload",
+        "of": {
+          "type": "DAMAGE_DEALT",
+          "label": "Girl Power (Counter)"
+        },
+        "field": "mult",
+        "value": 1,
+        "tol": 0.005,
+        "pick": "first"
+      }
+    }
+  ],
+  "golds": []
+}

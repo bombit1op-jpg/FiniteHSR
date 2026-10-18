@@ -1,0 +1,192 @@
+{
+  "kit": "the_dahlia",
+  "slot": "skill",
+  "canon": {
+    "source": "reference/hsr-data/characters.json",
+    "ref": "The Dahlia skill IDs 132101-132104 + bonus_abilities (traces)",
+    "confidence": "interpreted",
+    "note": "Fire Nihility, energyMax 130. Basic 132101 Fiddle... Fissured Memory: single-hit Fire DMG; engine L6 mult 1.0. Skill 132102 Lick... Enkindled Betrayal (Blast): deploys a Zone lasting skill_a2 (=3) turns that gives all allies WBE +skill_a3 (=0.5) and enables Super Break from non-broken Toughness Reduction; deals Fire DMG = #1% to target + adjacent (skill_a3 also feeds WBE here; engine applies the same #1 coeff to both, primary Toughness 60 / adjacent 30); engine L6 mult 1.6. Ultimate 132103 Wallow... Entombed Ash (AoE): inflicts Wilt (DEF -ult_a3, turns ult_a2) on all enemies then deals Fire DMG = #1% distributed evenly; engine L6 mult 3.0, ult_a3 defRed, ult_a2 turns; also implant Weakness of all Dance Partners' Types via A2 (applyToughness +20). Talent 132104 Who's Afraid of Constance?: on combat entry +talent_a4 Energy and Dance Partner = highest-Break-Effect teammate; when the OTHER Dance Partner attacks, Dahlia launches a Follow-Up ATK of talent_a2 instances (each Fire DMG = #1% to a random enemy) and converts each instance's Toughness Reduction on a Broken target into talent_a3% Super Break; the partner's attack on a Broken target converts its Toughness Reduction into talent_a5% Super Break; A1 recovers 1 SP per 2 FUA uses. A0 Yet Another Funeral: allies' Break Effect = 24% of Dahlia's + 50%, 1 turn. E1: talent conversion applies to ALL allies (+40% on partner) and partner attacks drain 25% Max Toughness once per enemy. E2: all enemies All-RES -20% (resAll) + Wilt on entry. E4: Talent FUA +5 instances and enemies DMG taken +12% 2t. E6: Dance Partner Break Effect +150% and 20% Action Advance on Talent FUA."
+  },
+  "fixtures": [
+    {
+      "id": "pair-e0",
+      "env": "The Dahlia E0 + Feixiao E0 vs 1 Fire-weak Boss (Lv120, 400k HP, 400 Toughness), auto rotation, 12 cycles, seed 81 — exercises Skill Zone, Ult Wilt, Basic, and the Dance Partner Talent FUA + Super Break",
+      "battle": {
+        "team": [
+          { "kitId": "the_dahlia", "stats": { "hp": 8000, "atk": 1800, "def": 600, "spd": 150, "breakEffect": 2.0, "critRate": 1.0, "critDmg": 1.0 }, "eidolon": 0, "skillPriority": 2 },
+          { "kitId": "feixiao", "stats": { "hp": 8000, "atk": 2400, "def": 600, "spd": 160, "critRate": 1.0, "critDmg": 1.0 }, "eidolon": 0, "skillPriority": 2 }
+        ],
+        "enemy": { "name": "Boss", "count": 1, "hp": 400000, "spd": 60, "level": 120, "toughness": 400, "weaknesses": ["Fire"], "atk": 1200 },
+        "cycles": 12,
+        "seed": 81
+      }
+    },
+    {
+      "id": "pair-e6",
+      "env": "The Dahlia E6 + Feixiao E0 vs the same Fire-weak Boss, 12 cycles, seed 84 — exercises the cumulative level bumps (E3 Talent +2 / E5 Skill +2) plus the E2/E4/E6 runtime buffs",
+      "battle": {
+        "team": [
+          { "kitId": "the_dahlia", "stats": { "hp": 8000, "atk": 1800, "def": 600, "spd": 150, "breakEffect": 2.0, "critRate": 1.0, "critDmg": 1.0 }, "eidolon": 6, "skillPriority": 2 },
+          { "kitId": "feixiao", "stats": { "hp": 8000, "atk": 2400, "def": 600, "spd": 160, "critRate": 1.0, "critDmg": 1.0 }, "eidolon": 0, "skillPriority": 2 }
+        ],
+        "enemy": { "name": "Boss", "count": 1, "hp": 400000, "spd": 60, "level": 120, "toughness": 400, "weaknesses": ["Fire"], "atk": 1200 },
+        "cycles": 12,
+        "seed": 84
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "dahl_skill_cast",
+      "layer": "structure",
+      "claim": "The Skill (Lick... Enkindled Betrayal) is cast in the fixture.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "The Dahlia", "action": "skill" } },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_ult_cast",
+      "layer": "structure",
+      "claim": "The Ultimate (Wallow... Entombed Ash) is cast in the fixture.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "The Dahlia", "action": "ultimate" } },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_basic_cast",
+      "layer": "structure",
+      "claim": "The Basic (Fiddle... Fissured Memory) is cast when SP runs out.",
+      "assertion": { "assert": "present", "of": { "type": "ABILITY_USED", "source": "The Dahlia", "action": "basic" } },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_skill_mult",
+      "ability": "skill",
+      "layer": "parameters",
+      "claim": "Skill primary deals 1.6x at engine L6 (canon 132102 #1).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "The Dahlia", "label": "Lick: Enkindled Betrayal" }, "field": "mult", "value": 1.6, "pick": "first" },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_ult_mult",
+      "ability": "ultimate",
+      "layer": "parameters",
+      "claim": "Ultimate deals 3.0x at engine L6 (canon 132103 #1).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "The Dahlia", "label": "Wallow: Entombed Ash" }, "field": "mult", "value": 3.0, "pick": "first" },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_talent_mult",
+      "ability": "talent",
+      "layer": "parameters",
+      "claim": "Talent FUA instances deal 0.3x at engine L6 (canon 132104 #1).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "The Dahlia", "label": "Talent FUA" }, "field": "mult", "value": 0.3, "pick": "first" },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_basic_mult",
+      "ability": "basic",
+      "layer": "parameters",
+      "claim": "Basic deals 1.0x at engine L6 (canon 132101 #1).",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "The Dahlia", "label": "Fiddle: Fissured Memory" }, "field": "mult", "value": 1.0, "pick": "first" },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_ult_wilt",
+      "ability": "ultimate",
+      "layer": "interactions",
+      "claim": "Ultimate inflicts Wilt (DEF reduction) on the enemy (canon 132103).",
+      "assertion": { "assert": "buff", "id": "dahl_wilt" },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_zone",
+      "ability": "skill",
+      "layer": "interactions",
+      "claim": "Skill deploys the Zone buff on allies (WBE; canon 132102).",
+      "assertion": { "assert": "buff", "id": "dahl_zone" },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_a0_break_effect",
+      "layer": "interactions",
+      "claim": "A0 Yet Another Funeral gives allies Break Effect at battle start (bonus_abilities).",
+      "assertion": { "assert": "buff", "id": "dahl_a0" },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_talent_fua_total",
+      "ability": "talent",
+      "layer": "structure",
+      "claim": "Talent Follow-Up ATK fires repeatedly when the Dance Partner attacks (25 instances in the fixture).",
+      "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "The Dahlia", "label": "Talent FUA" }, "value": 25 },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_super_break",
+      "layer": "interactions",
+      "claim": "Toughness Reduction from the Dance Partner's attacks / Talent FUA on a Broken target is converted to Super Break.",
+      "assertion": { "assert": "present", "of": { "type": "SUPERBREAK" } },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_weakness_break",
+      "layer": "interactions",
+      "claim": "The Fire-weak Boss is broken during the fixture (enables the Super Break conversion).",
+      "assertion": { "assert": "present", "of": { "type": "WEAKNESS_BREAK" } },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_zone_before_superbreak",
+      "layer": "ordering",
+      "claim": "The Skill Zone that enables Super Break is deployed before the first Super Break resolves.",
+      "assertion": {
+        "assert": "ordering",
+        "before": [{ "type": "ABILITY_USED", "source": "The Dahlia", "action": "skill" }],
+        "after": [{ "type": "SUPERBREAK" }]
+      },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_energy_sum",
+      "layer": "parameters",
+      "claim": "The Dahlia regenerates exactly 173 Energy across the E0 fixture (Basic +20, Skill +30, Talent +35 on entry, A2 ult +13).",
+      "assertion": { "assert": "energy", "who": "The Dahlia", "atLeast": 173, "atMost": 173 },
+      "fixtures": ["pair-e0"]
+    },
+    {
+      "id": "dahl_e6_partner_be",
+      "layer": "interactions",
+      "claim": "E6 gives the Dance Partner +150% Break Effect (dahl_e6).",
+      "assertion": { "assert": "buff", "id": "dahl_e6" },
+      "fixtures": ["pair-e6"]
+    },
+    {
+      "id": "dahl_e2_vuln",
+      "layer": "interactions",
+      "claim": "E2 reduces all enemies' All-Type RES by 20% (dahl_a2 resAll -0.2).",
+      "assertion": { "assert": "buff", "id": "dahl_a2" },
+      "fixtures": ["pair-e6"]
+    },
+    {
+      "id": "dahl_e4_vuln",
+      "layer": "interactions",
+      "claim": "E4 Talent FUA applies DMG-taken +12% (dahl_r4) on enemies.",
+      "assertion": { "assert": "buff", "id": "dahl_r4" },
+      "fixtures": ["pair-e6"]
+    },
+    {
+      "id": "dahl_e6_advance",
+      "layer": "interactions",
+      "claim": "E6 Talent FUA grants the 20% Action Advance (self real, partner mid-turn lost).",
+      "assertion": { "assert": "present", "of": { "type": "NOTE", "log": "E6: advance self 20%" } },
+      "fixtures": ["pair-e6"]
+    },
+    {
+      "id": "dahl_skill_mult_e5",
+      "layer": "parameters",
+      "claim": "At E6 the Skill mult rises to 1.76x: the cumulative E5 'Skill Lv.+2' is applied.",
+      "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "The Dahlia", "label": "Lick: Enkindled Betrayal" }, "field": "mult", "value": 1.76, "pick": "first" },
+      "fixtures": ["pair-e6"]
+    }
+  ],
+  "golds": []
+}

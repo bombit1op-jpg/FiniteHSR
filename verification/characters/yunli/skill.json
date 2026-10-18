@@ -1,0 +1,52 @@
+{
+  "kit": "yunli",
+  "slot": "skill",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/skills/122101+122102+122103+122104 + bonus_abilities (Fiery Wheel, Demon Quell, True Sunder)",
+    "confidence": "verified",
+    "note": "Bladeborne Quake (122102) L10: #1 = 120% main, #2 = 60% adjacent, heals #3 = 30% ATK + 200. Earthbind, Etherbreak (122103): consumes #8 = 120 of her 240 Max Energy; Parry lasts until end of the next ally/enemy turn; Intuit: Slash = #1 = 220% main, #6 = 110% adjacent; Intuit: Cull = same base + #4 = 6 random instances of #7 = 72%; Slash/Cull count as Ultimate AND Follow-Up damage but NOT as using an Ultimate (canon notes). Flashforge (122104) L10: Counter = 120% main, 60% adjacent, +15 Energy. Galespin Summersault (122101) L6 = 100%. BA True Sunder: Counter grants ATK +30% for 1 turn."
+  },
+  "fixtures": [
+    {
+      "id": "solo-3c",
+      "env": "Yunli E0 solo vs 3 Physical-weak Elite dummies (Lv120, 6M HP, 300 Toughness), 3 cycles, seed 7",
+      "battle": {
+        "team": [{ "kitId": "yunli", "stats": { "hp": 10000, "atk": 2000, "def": 600, "spd": 200 }, "eidolon": 0 }],
+        "enemy": { "name": "Elite", "count": 3, "hp": 6000000, "atk": 800, "spd": 90, "level": 120, "toughness": 300, "weaknesses": ["Physical"], "res": 0 },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    { "id": "y_ult_action", "layer": "structure", "claim": "Earthbind, Etherbreak (122103) is Yunli's Ultimate action (3 casts in the fixture; 240 Max Energy allows double-Ultimate charges).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Yunli", "action": "ultimate" }, "value": 3 } },
+    { "id": "y_skill_action", "layer": "structure", "claim": "Bladeborne Quake (122102) is her Skill action (3 casts in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Yunli", "action": "skill" }, "value": 3 } },
+    { "id": "y_basic_action", "layer": "structure", "claim": "Galespin Summersault (122101) is her Basic ATK action (1 cast in the fixture).", "assertion": { "assert": "count", "of": { "type": "ABILITY_USED", "source": "Yunli", "action": "basic" }, "value": 1 } },
+    { "id": "y_slash_hits", "layer": "structure", "claim": "Every triggered Parry Counter launches Intuit: Slash Blast first, main-target hit — 2 Parry counters in the fixture, 2 main hits. (The UNTRIGGERED fallback Intuit: Slash does not fire here: each Parry window is consumed by a real counter.)", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Intuit: Slash" }, "value": 2 } },
+    { "id": "y_slash_adj", "layer": "structure", "claim": "Intuit: Slash deals adjacent damage (#6 = 50% of main) — 2 procs x 2 adjacent = 4.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Intuit: Slash (adj)" }, "value": 4 } },
+    { "id": "y_cull_instances", "layer": "structure", "claim": "Intuit: Cull's random instances (#4 = 6 per proc) land 12 times in the fixture (2 Cull procs, one per triggered Parry Counter).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Intuit: Cull (hit)" }, "value": 12 } },
+    { "id": "y_quake_hits", "layer": "structure", "claim": "Bladeborne Quake hits its main target once per cast (3 casts).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Bladeborne Quake" }, "value": 3 } },
+    { "id": "y_quake_adj", "layer": "structure", "claim": "Bladeborne Quake is a Blast attack: both adjacent enemies per cast (3 x 2 = 6).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Bladeborne Quake (adj)" }, "value": 6 } },
+    { "id": "y_flash_hits", "layer": "structure", "claim": "Flashforge (122104) Counters trigger 7 times in the fixture: all 9 enemy attacks against Yunli, minus the 2 consumed by triggered Parry Counters.", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Flashforge Counter" }, "value": 7 } },
+    { "id": "y_flash_adj", "layer": "structure", "claim": "Flashforge Counter hits adjacent enemies (7 x 2 = 14).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Flashforge Counter (adj)" }, "value": 14 } },
+    { "id": "y_basic_hits", "layer": "structure", "claim": "Galespin Summersault hits its single target once (1 cast).", "assertion": { "assert": "count", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Galespin Summersault" }, "value": 1 } },
+    { "id": "y_sp_gain", "layer": "interactions", "claim": "The Basic ATK regenerates 1 Skill Point (1 cast).", "assertion": { "assert": "count", "of": { "type": "SP_GAIN" }, "value": 1 } },
+    { "id": "y_sp_loss", "layer": "interactions", "claim": "The Skill costs 1 Skill Point per cast (3 casts = 3 SP).", "assertion": { "assert": "count", "of": { "type": "SP_LOSS", "source": "Yunli" }, "value": 3 } },
+    { "id": "y_heals", "layer": "interactions", "claim": "Bladeborne Quake restores HP equal to #3 = 30% ATK + #4 = 200 per cast — 3 self-heals in the fixture.", "assertion": { "assert": "count", "of": { "type": "HEAL_APPLIED", "target": "Yunli" }, "value": 3 } },
+    { "id": "y_m_slash", "layer": "parameters", "claim": "Intuit: Slash main multiplier (122103 #1) is 220% of ATK at L10.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Intuit: Slash" }, "field": "mult", "value": 2.2 } },
+    { "id": "y_m_slash_adj", "layer": "parameters", "claim": "Intuit: Slash adjacent multiplier (122103 #6) is 110% of ATK at L10.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Intuit: Slash (adj)" }, "field": "mult", "value": 1.1 } },
+    { "id": "y_m_cull", "layer": "parameters", "claim": "Intuit: Cull's random instance multiplier (122103 #7) is 72% of ATK at L10.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Intuit: Cull (hit)" }, "field": "mult", "value": 0.72 } },
+    { "id": "y_m_quake", "layer": "parameters", "claim": "Bladeborne Quake L10 (122102 #1) main multiplier is 120% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Bladeborne Quake" }, "field": "mult", "value": 1.2 } },
+    { "id": "y_m_quake_adj", "layer": "parameters", "claim": "Bladeborne Quake L10 (122102 #2) adjacent multiplier is 60% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Bladeborne Quake (adj)" }, "field": "mult", "value": 0.6 } },
+    { "id": "y_m_flash", "layer": "parameters", "claim": "Flashforge L10 (122104 #1) Counter main multiplier is 120% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Flashforge Counter" }, "field": "mult", "value": 1.2 } },
+    { "id": "y_m_flash_adj", "layer": "parameters", "claim": "Flashforge L10 (122104 #2) Counter adjacent multiplier is 60% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Flashforge Counter (adj)" }, "field": "mult", "value": 0.6 } },
+    { "id": "y_m_basic", "layer": "parameters", "claim": "Galespin Summersault at the engine's default Basic Lv6 (122101 L6) totals 100% of ATK.", "assertion": { "assert": "payload", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Galespin Summersault" }, "field": "mult", "value": 1 } },
+    { "id": "y_energy", "layer": "parameters", "claim": "Over the fixture Yunli regenerates exactly 320 Energy (ENERGY_GAIN summed by target; 7 Flashforge counters +15 each plus the Ultimate use itself, minus 240 Max Energy ceiling).", "assertion": { "assert": "energy", "who": "Yunli", "atLeast": 320, "atMost": 320 } },
+    { "id": "y_parry_dr", "layer": "parameters", "claim": "BA Demon Quell applies DMG −20% for the WHOLE Parry window: added with the Ultimate, removed the moment the Parry is used by a Counter or the window closes untriggered (122103). 3 applications, one per Ultimate.", "assertion": { "assert": "count", "of": { "type": "BUFF_APPLIED", "target": "Yunli", "payload": { "id": "yunli_parry_dr" } }, "value": 3 } },
+    { "id": "y_sunder_turns", "layer": "parameters", "claim": "BA True Sunder: after each Counter, ATK +30% for 1 turn (10 applications in the fixture).", "assertion": { "assert": "buff", "id": "yunli_sunder", "target": "Yunli", "turns": 1 } },
+    { "id": "y_intuit_cd_turns", "layer": "parameters", "claim": "The Intuit counter readiness state after an Ultimate lasts 1 turn in the engine.", "assertion": { "assert": "buff", "id": "yunli_intuit_cd", "target": "Yunli", "turns": 1 } },
+    { "id": "y_counters_offturn", "layer": "ordering", "claim": "Flashforge Counters react off-turn: the first Counter resolves after the first Skill damage.", "assertion": { "assert": "ordering", "before": [{ "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Bladeborne Quake" }], "after": [{ "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Flashforge Counter" }] } },
+    { "id": "y_intuit_tags", "ability": "talent", "layer": "interactions", "claim": "Intuit damage counts as both Ultimate DMG and Follow-Up ATK DMG (122103 Notes): its hits are ult-typed and carry the Follow-Up tag (triggering it is NOT considered using an Ultimate).", "assertion": { "assert": "present", "of": { "type": "DAMAGE_DEALT", "source": "Yunli", "label": "Intuit: Slash", "attackType": "ult", "tags": "fua" } } }
+  ]
+}

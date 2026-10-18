@@ -1,0 +1,495 @@
+{
+  "kit": "sparkle",
+  "slot": "eidolons",
+  "canon": {
+    "source": "dataset",
+    "ref": "characters.json#/Sparkle/ranks/1..6",
+    "confidence": "verified",
+    "note": "Eidolon ladder is cumulative: rank E_n grants E_1..E_n. E1 'Suspension of Disbelief': Cipher allies +40% ATK (cipher_atk) and, at battle start / after Skill, Sparkle SPD +15% for 2 turns (sod_spd). E2 'Purely Fictitious': each Talent (Figment) stack additionally reduces the target's DEF by 10% (sparkle_e2, defRed 0.1, max 3). E3 'Pipedream': Skill Lv.+2 raises the Dreamdiver CD boost (critDmg 0.6276 -> 0.6814). E4 'Life Is a Gamble': Ultimate recovers 1 more SP and Talent raises max SP by 1 — no buff id, tracked as deviation. E5 'Parallax Truth': Ult Lv.+2 / Talent Lv.+2 (figment dmgAll 0.040 -> 0.044; cipher_dmg 0.060 -> 0.0648). E6 'Narrative Polysemy': Skill CD boost gains +30% of Sparkle's CRIT DMG and spreads to Cipher teammates (a second dreamdiver, critDmg >= 0.90). Fixtures run one battle per eidolon rank e0..e6; each requirement pins the ranks where its effect must be present or absent."
+  },
+  "fixtures": [
+    {
+      "id": "e0",
+      "env": "sparkle E0 — eidolon ladder rung, cloned from sparkle/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparkle",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 0,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e1",
+      "env": "sparkle E1 — eidolon ladder rung, cloned from sparkle/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparkle",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 1,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e2",
+      "env": "sparkle E2 — eidolon ladder rung, cloned from sparkle/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparkle",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 2,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e3",
+      "env": "sparkle E3 — eidolon ladder rung, cloned from sparkle/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparkle",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 3,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e4",
+      "env": "sparkle E4 — eidolon ladder rung, cloned from sparkle/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparkle",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 4,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e5",
+      "env": "sparkle E5 — eidolon ladder rung, cloned from sparkle/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparkle",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 5,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    },
+    {
+      "id": "e6",
+      "env": "sparkle E6 — eidolon ladder rung, cloned from sparkle/skill.json",
+      "battle": {
+        "team": [
+          {
+            "kitId": "sparkle",
+            "stats": {
+              "hp": 10000,
+              "atk": 1600,
+              "def": 600,
+              "spd": 185
+            },
+            "eidolon": 6,
+            "skillPriority": 1
+          },
+          {
+            "kitId": "sushang",
+            "stats": {
+              "hp": 9000,
+              "atk": 2000,
+              "def": 550,
+              "spd": 180,
+              "be": 0.6
+            },
+            "eidolon": 0
+          }
+        ],
+        "enemy": {
+          "name": "Elite",
+          "count": 3,
+          "hp": 4000000,
+          "atk": 400,
+          "spd": 90,
+          "level": 95,
+          "toughness": 240,
+          "weaknesses": [
+            "Physical"
+          ],
+          "res": 0
+        },
+        "cycles": 3,
+        "seed": 7
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "sparkle_e1_present",
+      "layer": "interactions",
+      "claim": "E1 'Suspension of Disbelief': at battle start and after using her Skill, Sparkle gains SPD +15% for 2 turns (sod_spd).",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "sod_spd",
+        "turns": 2
+      }
+    },
+    {
+      "id": "sparkle_e1_spd",
+      "layer": "parameters",
+      "claim": "The E1 SPD buff carries spdPct 0.15 (canon ranks/1).",
+      "fixtures": [
+        "e1"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "sod_spd",
+        "stat": "spdPct",
+        "value": 0.15
+      }
+    },
+    {
+      "id": "sparkle_e1_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E1's sod_spd must NOT be active below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "sod_spd"
+      }
+    },
+    {
+      "id": "sparkle_e1_cipher_atk",
+      "layer": "parameters",
+      "claim": "E1: the Ultimate's Cipher additionally grants all allies ATK +40% (cipher_atk, atkPct 0.40).",
+      "fixtures": [
+        "e1",
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "cipher_atk",
+        "stat": "atkPct",
+        "value": 0.4
+      }
+    },
+    {
+      "id": "sparkle_e1_cipher_atk_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: cipher_atk must NOT be applied below rank 1.",
+      "fixtures": [
+        "e0"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "cipher_atk"
+      }
+    },
+    {
+      "id": "sparkle_e2_present",
+      "layer": "interactions",
+      "claim": "E2 'Purely Fictitious': each Figment stack makes the target ignore 10% DEF (sparkle_e2, stackable to 3).",
+      "fixtures": [
+        "e2",
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buff",
+        "id": "sparkle_e2",
+        "stacks": 3
+      }
+    },
+    {
+      "id": "sparkle_e2_defred",
+      "layer": "parameters",
+      "claim": "The E2 debuff carries defRed 0.10 (canon ranks/2).",
+      "fixtures": [
+        "e2"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "sparkle_e2",
+        "stat": "defRed",
+        "value": 0.1
+      }
+    },
+    {
+      "id": "sparkle_e2_absent",
+      "layer": "interactions",
+      "claim": "Cumulative unlock: E2's sparkle_e2 must NOT be active below rank 2.",
+      "fixtures": [
+        "e0",
+        "e1"
+      ],
+      "assertion": {
+        "assert": "noBuff",
+        "id": "sparkle_e2"
+      }
+    },
+    {
+      "id": "sparkle_e3_level",
+      "layer": "parameters",
+      "claim": "E3 'Pipedream': Skill Lv.+2 raises the Dreamdiver CD boost (critDmg 0.6276 -> 0.6814).",
+      "fixtures": [
+        "e3",
+        "e4",
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "dreamdiver",
+        "stat": "critDmg",
+        "atLeast": 0.68
+      }
+    },
+    {
+      "id": "sparkle_e5_level",
+      "layer": "parameters",
+      "claim": "E5 'Parallax Truth': Talent Lv.+2 raises Figment's DMG boost (dmgAll 0.040 -> 0.044).",
+      "fixtures": [
+        "e5",
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "figment",
+        "stat": "dmgAll",
+        "value": 0.044
+      }
+    },
+    {
+      "id": "sparkle_e6_spread",
+      "layer": "interactions",
+      "claim": "E6 'Narrative Polysemy': the Skill's CD boost grows by 30% of Sparkle's CRIT DMG and spreads to every teammate holding Cipher (a second dreamdiver, critDmg >= 0.90).",
+      "fixtures": [
+        "e6"
+      ],
+      "assertion": {
+        "assert": "buffStat",
+        "id": "dreamdiver",
+        "stat": "critDmg",
+        "atLeast": 0.9
+      }
+    }
+  ],
+  "golds": []
+}
