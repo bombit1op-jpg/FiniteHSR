@@ -1,0 +1,37 @@
+# core runtime
+src/
+tests/
+verification/
+hsr-data/
+debug/lab/
+index.html
+package.json
+package-lock.json
+tsconfig.json
+.github/
+
+# docs/info (optional, excluding per scope)
+README.md
+TODO.md
+AGENTS.md
+docs/
+
+# heavy, not needed
+reference/
+debug/*
+!debug/lab/
+sheets/
+.codegraph/
+node_modules/
+dist/
+_build/
+build/
+coverage/
+_archive/
+battlelog/
+*.log
+*.zip
+*.xlsx
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
