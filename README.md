@@ -12,10 +12,12 @@ Deterministic damage simulator for Honkai: Star Rail.
 
 ## Quick Start
 
+    git clone https://github.com/bombit1op-jpg/FiniteHSR.git
+    cd FiniteHSR
     npm install
     npm run dev     # http://localhost:5173
-    npm run build   # tsc --noEmit + vite build
     npm run test    # full test suite
+    npm run build   # tsc --noEmit + vite build
 
 ## Structure
 
