@@ -1,4 +1,4 @@
-# FiniteHSR - HSR Damage Simulator
+﻿# FiniteHSR - HSR Damage Simulator
 
 Симулятор боя Honkai: Star Rail: расчёт урона, AV-анализ, цикл-тайминг, баффы/дебаффы,
 брокен/DoT, контроли и сравнение билдов в один клик.
