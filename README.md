@@ -12,18 +12,21 @@ Deterministic damage simulator for Honkai: Star Rail.
 
 ## Quick Start
 
-`ash
-npm install
-npm run dev     # http://localhost:5173
-npm run build   # tsc --noEmit + vite build
-npm run test    # full test suite
-`
+    npm install
+    npm run dev     # http://localhost:5173
+    npm run build   # tsc --noEmit + vite build
+    npm run test    # full test suite
 
 ## Structure
 
-- src/ — engine, UI, analysis, optimizer, verification
-- 	ests/ — unit, scenario, regression, golden, UI
-- erification/ — specs, golden traces, interactions
-- hsr-data/ — game data
-- docs/ — docs
-- debug/lab/ — lab checks
+    FiniteHSR/
+    ├── src/                # Engine, UI, analysis, optimizer, verification
+    ├── tests/              # Unit, scenario, regression, golden, UI tests
+    ├── verification/       # Specs, golden traces, interactions, meta
+    ├── hsr-data/           # Game data (characters/enemies/lightcones + data/)
+    ├── docs/               # Documentation
+    ├── debug/lab/          # Lab harness and checks
+    ├── index.html          # Vite entry
+    ├── package.json
+    ├── tsconfig.json
+    └── README.md
