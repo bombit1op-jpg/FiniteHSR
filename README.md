@@ -52,9 +52,15 @@ package.json
 
 ## Гейты/качество
 
-	sc --noEmit, 
-pm test (2951/0), 
-pm run lab, 
-pm run verify, 
-px tsx src/core/debug-kits.ts, 
-px tsx tests/index.ts enemies (933/0).
+- 
+px tsc --noEmit — 0 ошибок типов
+- 
+pm test — 2951/0
+- 
+pm run lab — ALL PASSED
+- 
+px tsx tests/index.ts enemies — 933/0
+- 
+px tsx src/core/debug-kits.ts — 0 failures
+- 
+pm run verify — ALL SPECS PASSED
