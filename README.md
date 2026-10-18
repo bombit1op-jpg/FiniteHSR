@@ -1,44 +1,44 @@
 # FiniteHSR - HSR Damage Simulator
 
-РЎРёРјСѓР»СЏС‚РѕСЂ Р±РѕСЏ Honkai: Star Rail: СЂР°СЃС‡С‘С‚ СѓСЂРѕРЅР°, AV-Р°РЅР°Р»РёР·, С†РёРєР»-С‚Р°Р№РјРёРЅРі, Р±Р°С„С„С‹/РґРµР±Р°С„С„С‹,
-Р±СЂРѕРєРµРЅ/DoT, РєРѕРЅС‚СЂРѕР»Рё Рё СЃСЂР°РІРЅРµРЅРёРµ Р±РёР»РґРѕРІ РІ РѕРґРёРЅ РєР»РёРє.
+Симулятор боя Honkai: Star Rail: расчёт урона, AV-анализ, цикл-тайминг, баффы/дебаффы,
+брокен/DoT, контроли и сравнение билдов в один клик.
 
-> РЎС‚Р°С‚СѓСЃ: СЃС‚Р°Р±РёР»РµРЅ (16.10.2026). Gates: 
+> Статус: стабилен (16.10.2026). Gates: 
 px tsc --noEmit 0; 
 pm test 2951/0; 
 pm run lab ALL PASSED; 
 px tsx tests/index.ts enemies 933/0; 
 px tsx src/core/debug-kits.ts 0 failures.
 
-## РљР°Рє РїРѕР»СЊР·РѕРІР°С‚СЊСЃСЏ
+## Как пользоваться
 
 `ash
 npm install
-npm run dev       # dev-СЃРµСЂРІРµСЂ Vite (http://localhost:5173)
+npm run dev       # dev-сервер Vite (http://localhost:5173)
 npm run build     # tsc --noEmit + vite build
-npm run preview   # РїСЂРµРґРїСЂРѕСЃРјРѕС‚СЂ Р±РёР»РґР°
+npm run preview   # предпросмотр билда
 npm run check     # self-check
-npm test          # РїСЂРѕРіРѕРЅ С‚РµСЃС‚РѕРІ (2951 cases, 0 failed)
+npm test          # прогон тестов (2951 cases, 0 failed)
 npm run verify    # verification gate
 npm run lab       # debug/lab sanity
 npm run ci        # tsc --noEmit && npm test && npm run lab
-`
+` 
 
-GUI РґРѕСЃС‚СѓРїРµРЅ РїРѕ http://localhost:5173 РїРѕСЃР»Рµ 
+GUI доступен по http://localhost:5173 после 
 pm run dev.
 
-## Р§С‚Рѕ СЂРµР°Р»РёР·РѕРІР°РЅРѕ
+## Что реализовано
 
-- Р”РµС‚РµСЂРјРёРЅРёСЂРѕРІР°РЅРЅС‹Р№ Р±РѕРµРІРѕР№ СЃРёРјСѓР»СЏС‚РѕСЂ (timeline, actions, AV, energy/SP, triggers, events)
-- РњРµС…Р°РЅРёРєРё СѓСЂРѕРЅР°, РєСЂРёС‚Р°, Р·Р°С‰РёС‚С‹, СЂРµР·РёСЃС‚Р°, СѓСЏР·РІРёРјРѕСЃС‚Рё, Р±СЂР°РєР°/СЃСѓРїРµСЂР±СЂР°РєР°, DoT, РєРѕРЅС‚СЂРѕР»СЊ, С‰РёС‚С‹/С…РёР»
-- Р‘РѕСЃСЃС‹/РјРѕР±С‹ + РїРѕРєСЂС‹С‚РёРµ РІСЂР°РіРѕРІ (E0вЂ“E6 + РёРЅРІРµРЅС‚Р°СЂСЊ/РЅРµРіР°С‚РёРІС‹)
-- Р’РµСЂРёС„РёРєР°С†РёСЏ: golden/spec + comparison + audit + deviations
+- Детерминированный боевой симулятор (timeline, actions, AV, energy/SP, triggers, events)
+- Механики урона, крита, защиты, резиста, уязвимости, брака/супербрака, DoT, контроль, щиты/хил
+- Боссы/мобы + покрытие врагов (E0–E6 + инвентарь/негативы)
+- Верификация: golden/spec + comparison + audit + deviations
 - GUI (Vite): dashboard/build/team/encounter/run/compare/profiles/optimizer/verification/catalog/deviations/settings
-- Р›Р°Р±РѕСЂР°С‚РѕСЂРёСЏ debug/lab + CLI-СѓС‚РёР»РёС‚С‹ РІР°Р»РёРґР°С†РёРё
+- Лаборатория debug/lab + CLI-утилиты валидации
 
-## РЎС‚СЂСѓРєС‚СѓСЂР° РїСЂРѕРµРєС‚Р°
+## Структура проекта
 
-`
+`	ext
 src/            # core engine, UI, analysis, optimizer, verification helpers
 tests/          # unit/scenario/regression/golden suites + UI tests
 verification/   # specs, golden traces, interactions, meta
@@ -48,19 +48,19 @@ debug/lab/       # lab harness + checks (CI)
 index.html       # Vite entry
 tsconfig.json
 package.json
-`
+` 
 
-## Р“РµР№С‚С‹/РєР°С‡РµСЃС‚РІРѕ
+## Гейты/качество
 
 - 
-px tsc --noEmit вЂ” 0 РѕС€РёР±РѕРє С‚РёРїРѕРІ
+px tsc --noEmit — 0 ошибок типов
 - 
-pm test вЂ” 2951/0
+pm test — 2951/0
 - 
-pm run lab вЂ” ALL PASSED
+pm run lab — ALL PASSED
 - 
-px tsx tests/index.ts enemies вЂ” 933/0
+px tsx tests/index.ts enemies — 933/0
 - 
-px tsx src/core/debug-kits.ts вЂ” 0 failures
+px tsx src/core/debug-kits.ts — 0 failures
 - 
-pm run verify вЂ” ALL SPECS PASSED
+pm run verify — ALL SPECS PASSED
