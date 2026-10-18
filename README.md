@@ -22,7 +22,7 @@ npm test          # прогон тестов (2951 cases, 0 failed)
 npm run verify    # verification gate
 npm run lab       # debug/lab sanity
 npm run ci        # tsc --noEmit && npm test && npm run lab
-` 
+`
 
 GUI доступен по http://localhost:5173 после 
 pm run dev.
@@ -38,7 +38,7 @@ pm run dev.
 
 ## Структура проекта
 
-`	ext
+`
 src/            # core engine, UI, analysis, optimizer, verification helpers
 tests/          # unit/scenario/regression/golden suites + UI tests
 verification/   # specs, golden traces, interactions, meta
@@ -48,7 +48,7 @@ debug/lab/       # lab harness + checks (CI)
 index.html       # Vite entry
 tsconfig.json
 package.json
-` 
+`
 
 ## Гейты/качество
 
