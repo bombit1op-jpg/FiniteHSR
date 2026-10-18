@@ -62,3 +62,7 @@ pm run build (tsc --noEmit && vite build) | 0 | vite build ok |
 - **Capabilities:** 31 total (20 available, 10 partial, 1 unavailable). UI tests green (90/90).
 - **fetch_all.py:** data fetcher, no image downloader/manifest writer for UI assets.
 - **Baseline:** all gates green; no command failed.
+
+## A1 quick check (current vs audit)
+- Current commit: 6d05443 (audit recorded BASELINE at 8e2626c; docs/audit updated in newer commits but BASELINE.md still shows old commit line) — can update BASELINE commit if needed, but numbers match.
+- Gates match: tsc 0, all 2951/0, ui 90/0, enemies 933/0, lab ok, verify ok, deviations NO FAILURES.
