@@ -1612,3 +1612,8 @@ diagnosable/reproducible, не заменять и не переинтерпре
 engine-correctness работ.
 
 
+
+## Audit update (B-I, 2026-10-18)
+- Phase C: core exists (PreCombat, BattleEngine.applyTechniques). UI gap: no per-char technique checkboxes; TeamRowState/BattleSetup.techniques not wired from UI. collect() omits techniques.
+- Phase D: energyStartFrac defaults 0.5 (ok); traces global only, per-node UI missing.
+- Phase E: UI omits log -> logger.events empty in UI runs; results uses logLines only.
