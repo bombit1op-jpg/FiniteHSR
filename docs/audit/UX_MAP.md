@@ -1,12 +1,33 @@
 # FiniteHSR - UX Map (Phase B)
 
-## Routes (shell.ts:47-80)
-- WORKSPACE: dashboard, , , , , , , , 
-- ANALYSIS: analysis (analysis.run), compare (analysis.compare), profiles (analysis.profile), optimizer (optimize.search)
-- ENGINEERING: verification (verification.specs), catalog, deviations (known.deviations)
-- SETTINGS: settings
+## Routes (shell.ts:25-47, регруппировка 19-10-2026)
+4 пользовательских раздела (route id/deep links `#/<id>` не менялись, 18 роутов как раньше):
+- БОЙ (BATTLE): dashboard, team, build, encounter, battle, gear, results, calc, reference
+- АНАЛИЗ (ANALYSIS): analysis, compare, profiles
+- ОПТИМИЗАЦИЯ (OPTIMIZATION): optimizer
+- ПРОВЕРКА ДВИЖКА (ENGINEERING): verification, catalog, deviations, diagnostics, settings
 
-ROUTES=18, DEFAULT_ROUTE=dashboard. Panel IDs = panel-<id> (panelOf).
+Заголовки разделов — кнопки-секции (сворачивание, `GROUP_LABELS`, состояние в localStorage
+`nav.collapsed`, дефолт: ENGINEERING свёрнут; переход на роут внутри свёрнутого раздела
+раскрывает его — `expandGroup` в `activate`). Кнопки роутов всегда остаются в DOM.
+Соответствует §2 брифа: технические инструменты — не равнозначные пункты главного меню.
+
+## Иконки (fallback, 19-10-2026)
+Проверено: 0 image-файлов в репо/hsr-data; `characters.json` — только числовой `avatar_id`;
+`lightcones.json` — без icon/url полей; `relicsets.json` — строки `SpriteOutput/...` (путь в игре,
+без файлов и без базового URL); `enemies.json` — ссылка на страницу вики, не картинка.
+Реализован только data-driven fallback: `src/ui/icons.ts` `charBadge/updateCharBadge` —
+круглый бейдж с первой буквой имени, цвет по `KitDef.elem` (7 элементов), tooltip называет
+имя+элемент+пробел. Точки: team-карточка (`charHead`) и Build Editor («Персонаж»).
+`<img>` в UI — 0; URL не выдумываются. Пробел = локальные ассеты (Phase G) — не закрыт.
+Тесты: `tests/ui/icons.ts` 6/6 (тint по палитре, смена кита, неизвестный id → `?`, без throw).
+
+## Long operations (§4 брифа — проверка, изменений нет)
+Уже есть и покрыто тестами: `withBusy` = единый loading/error контракт; оптимизатор печатает
+effective options ДО и ПОСЛЕ запуска (`drawPre`, `maxCandidates` = «не задан»/значение),
+F-отчёт помечает неполноту («исследовано X из Y…не глобальный оптимум», exhaustive-badge).
+Отмены нет ни в одном алгоритме → фейковая кнопка отмены не добавлялась (правило 84.1).
+Статусы `available/partial/unavailable/N/A` не менялись (`capabilities.ts` не тронут).
 
 ## Capability mapping (capabilities.ts)
 - Non-available shown with badge (~=partial, !=unavailable) + full reason in .cap-notice.
@@ -31,11 +52,8 @@ ROUTES=18, DEFAULT_ROUTE=dashboard. Panel IDs = panel-<id> (panelOf).
 - No engine duplication in shell (UI-only).
 - No fake metrics; only status surface for missing backend.
 
-## Gaps for Phases C–I
-- C: pre-combat technique selection UI not visible in current routes? team/build/battle encoders — need to check 84.6.1.
-- D: per-node traces UI — buildEditor has single global traces checkbox only.
-- E: results.ts uses logLines only; no structured events feed (but event count visible in dashboard/analysis). Main issue: UI runs without log config.
-- G: asset manifest/provenance missing (fetch_all.py no image download).
-- I: Diagnostics screen — not in ROUTES; 'deviations' exists but separate from per-run Diagnostics.
-
-Routes missing obvious Diagnostics screen: 84.15 mentions Diagnostics; current ROUTES have 'deviations' (ENGINEERING) — may need dedicated Diagnostics (I) or extend.
+## Gaps (актуально, 19-10-2026)
+- C/D/E/I — закрыты (см. TODO.md, 18–20-10): техника в Team Builder, per-node traces, action-log из `sim.logger.events`, экран Диагностика есть (ROUTES: diagnostics).
+- G: ассетов/манифеста по-прежнему нет — закрыт только fallback-бейдж (см. «Иконки» выше); `PHASE_G.md` = спецификация downloader'а, deliberate deferral.
+- Адаптивность: в `src/style.css` нет ни одного `@media`-запроса (проверено 19-10) — навигация в 4 сворачиваемых секции облегчает узкие экраны, но breakpoint'ов нет; массовый responsive-рефактор вне задачи.
+- Отмена долгих прогонов: механизма отмены нет → кнопка не рисуется (см. «Long operations»).

@@ -12,7 +12,7 @@ import { ENGINE_VERSION, RULES_VERSION, DATASET_VERSION } from '../verification/
 export interface Route {
   id: string
   label: string
-  group: 'WORKSPACE' | 'ANALYSIS' | 'ENGINEERING' | 'SETTINGS'
+  group: 'BATTLE' | 'ANALYSIS' | 'OPTIMIZATION' | 'ENGINEERING'
   /** capability id this route is backed by; when its status !== 'available' the panel shows why */
   capability?: string
   /** refreshed every time the route becomes active (pages render their own empty/loading states) */
@@ -23,28 +23,38 @@ export interface Route {
 export function panelOf(r: Route): string { return `panel-${r.id}` }
 
 export const ROUTES: Route[] = [
-  { id: 'dashboard', label: 'Dashboard', group: 'WORKSPACE' },
-  { id: 'team', label: 'Отряд', group: 'WORKSPACE' },
-  { id: 'build', label: 'Билд', group: 'WORKSPACE', capability: 'build.editor' },
-  { id: 'encounter', label: 'Противники', group: 'WORKSPACE', capability: 'encounter.editor' },
-  { id: 'battle', label: 'Симулятор', group: 'WORKSPACE' },
-  { id: 'gear', label: 'Экипировка', group: 'WORKSPACE' },
-  { id: 'results', label: 'Результаты', group: 'WORKSPACE' },
-  { id: 'calc', label: 'Калькулятор', group: 'WORKSPACE' },
-  { id: 'reference', label: 'Справочник', group: 'WORKSPACE' },
+  { id: 'dashboard', label: 'Dashboard', group: 'BATTLE' },
+  { id: 'team', label: 'Отряд', group: 'BATTLE' },
+  { id: 'build', label: 'Билд', group: 'BATTLE', capability: 'build.editor' },
+  { id: 'encounter', label: 'Противники', group: 'BATTLE', capability: 'encounter.editor' },
+  { id: 'battle', label: 'Симулятор', group: 'BATTLE' },
+  { id: 'gear', label: 'Экипировка', group: 'BATTLE' },
+  { id: 'results', label: 'Результаты', group: 'BATTLE' },
+  { id: 'calc', label: 'Калькулятор', group: 'BATTLE' },
+  { id: 'reference', label: 'Справочник', group: 'BATTLE' },
 
   { id: 'analysis', label: 'Анализ боя', group: 'ANALYSIS', capability: 'analysis.run' },
   { id: 'compare', label: 'Сравнение', group: 'ANALYSIS', capability: 'analysis.compare' },
   { id: 'profiles', label: 'Профили отряда', group: 'ANALYSIS', capability: 'analysis.profile' },
-  { id: 'optimizer', label: 'Оптимизатор', group: 'ANALYSIS', capability: 'optimize.search' },
+
+  { id: 'optimizer', label: 'Оптимизатор', group: 'OPTIMIZATION', capability: 'optimize.search' },
 
   { id: 'verification', label: 'Проверка и покрытие', group: 'ENGINEERING', capability: 'verification.specs' },
   { id: 'catalog', label: 'Каталог данных', group: 'ENGINEERING' },
   { id: 'deviations', label: 'Отклонения', group: 'ENGINEERING', capability: 'known.deviations' },
   { id: 'diagnostics', label: 'Диагностика', group: 'ENGINEERING' },
-
-  { id: 'settings', label: 'Настройки', group: 'SETTINGS' },
+  { id: 'settings', label: 'Настройки', group: 'ENGINEERING' },
 ]
+
+/** nav section titles — the 4 user-facing groups (target IA; route ids/deep links unchanged) */
+export const GROUP_LABELS: Record<Route['group'], string> = {
+  BATTLE: 'Бой',
+  ANALYSIS: 'Анализ',
+  OPTIMIZATION: 'Оптимизация',
+  ENGINEERING: 'Проверка движка',
+}
+/** rarely-used technical section starts collapsed; activating one of its routes expands it */
+const DEFAULT_COLLAPSED: Record<string, boolean> = { ENGINEERING: true }
 
 const DEFAULT_ROUTE = ROUTES[0].id
 
@@ -69,6 +79,7 @@ export function navigate(id: string): void {
 /** activate a route's nav button + panel; render the capability notice when not available */
 function activate(id: string): void {
   const route = routeOf(id) ?? routeOf(DEFAULT_ROUTE)!
+  expandGroup(route.group)
   for (const b of document.querySelectorAll<HTMLButtonElement>('#navRail .nav-btn'))
     b.classList.toggle('active', b.dataset.route === route.id)
   for (const p of document.querySelectorAll('.route-panel'))
@@ -130,6 +141,38 @@ export async function withBusy<T>(label: string, fn: () => Promise<T> | T): Prom
   }
 }
 
+// ---------------------------------------------------------------- collapsible nav groups
+
+const COLLAPSED_KEY = 'nav.collapsed'
+let collapsed: Record<string, boolean> = { ...DEFAULT_COLLAPSED }
+
+function loadCollapsed(): void {
+  try {
+    const raw = globalThis.localStorage?.getItem(COLLAPSED_KEY)
+    if (raw) collapsed = { ...DEFAULT_COLLAPSED, ...JSON.parse(raw) as Record<string, boolean> }
+  } catch { /* node harness без storage — остаются дефолты */ }
+}
+function saveCollapsed(): void {
+  try { globalThis.localStorage?.setItem(COLLAPSED_KEY, JSON.stringify(collapsed)) } catch { /* no-op */ }
+}
+function syncGroupStates(): void {
+  for (const g of document.querySelectorAll<HTMLElement>('.nav-group-body'))
+    g.classList.toggle('collapsed', !!collapsed[g.dataset.group ?? ''])
+  for (const h of document.querySelectorAll<HTMLElement>('.nav-group'))
+    h.classList.toggle('collapsed', !!collapsed[h.dataset.group ?? ''])
+}
+function toggleGroup(group: string): void {
+  collapsed[group] = !collapsed[group]
+  saveCollapsed()
+  syncGroupStates()
+}
+function expandGroup(group: string): void {
+  if (!collapsed[group]) return
+  collapsed[group] = false
+  saveCollapsed()
+  syncGroupStates()
+}
+
 // ---------------------------------------------------------------- init
 
 /** §84.15/§84.8 — engine/rules/dataset versions visible at all times (reproducibility, rule 84.1.5) */
@@ -150,14 +193,24 @@ export function initShell(): void {
   const rail = document.getElementById('navRail')
   if (!rail) return
   rail.innerHTML = ''
+  loadCollapsed()
   let lastGroup = ''
+  let body: HTMLElement | null = null
   for (const r of ROUTES) {
     if (r.group !== lastGroup) {
       lastGroup = r.group
-      const h = document.createElement('div')
+      const h = document.createElement('button')
       h.className = 'nav-group'
-      h.textContent = r.group
+      h.dataset.group = r.group
+      h.type = 'button'
+      h.textContent = GROUP_LABELS[r.group]
+      h.title = 'Свернуть / развернуть раздел'
+      h.onclick = () => toggleGroup(r.group)
       rail.append(h)
+      body = document.createElement('div')
+      body.className = 'nav-group-body'
+      body.dataset.group = r.group
+      rail.append(body)
     }
     const b = document.createElement('button')
     b.className = 'nav-btn'
@@ -172,8 +225,9 @@ export function initShell(): void {
       b.append(badge)
     }
     b.onclick = () => navigate(r.id)
-    rail.append(b)
+    ;(body ?? rail).append(b)
   }
+  syncGroupStates()
   renderVersionBar()
   window.addEventListener('hashchange', () => activate(currentRoute()))
   if (!location.hash) location.hash = `#/${DEFAULT_ROUTE}`

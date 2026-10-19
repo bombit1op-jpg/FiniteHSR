@@ -11,6 +11,7 @@ import { resolveBuild, validateBuild, type BuildSpec } from '../core/build'
 import { el, fillSelect } from './dom'
 import { specToJson, specFromJson, downloadJson, pickJsonFile, readFileText } from './specs'
 import { showStatus, withBusy } from './shell'
+import { charBadge, updateCharBadge } from './icons'
 import { store } from './store'
 import { syncRow, teamRows } from './team'
 
@@ -118,9 +119,12 @@ export function initBuildEditor(): void {
 
   // ---------------------------------------------------------------- assemble
 
+  const badge = charBadge(kitSel.value)
+  kitSel.onchange = () => updateCharBadge(badge, kitSel.value)
+
   const form = el('div', 'buildForm')
   form.append(
-    row('Персонаж', kitSel),
+    row('Персонаж', badge, kitSel),
     row('Light Cone', coneSel), row('Superimposition', siSel),
     row('Реликвия', relicSel), row('Кол-во', countSel), row('Реликвия 2 (2+2)', relic2Sel),
     row('Планарный', planarSel),

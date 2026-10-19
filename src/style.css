@@ -72,6 +72,13 @@ body.busy { cursor: progress; }
 .charCard:hover { border-color: #3a4a63; }
 .charHead { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
 .charHead select { flex: 1; font-weight: 600; }
+.charBadge {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: color-mix(in srgb, var(--elem, #55606f) 22%, #131820);
+  border: 1px solid var(--elem, #55606f); color: var(--elem, #aab6c5);
+  font-size: 13px; font-weight: 700; cursor: default;
+}
 .del { background: transparent; border: none; color: #7b8595; cursor: pointer; font-size: 13px; padding: 4px 8px; border-radius: 4px; }
 .del:hover { background: #2a1d1d; color: #c96a6a; }
 
@@ -189,8 +196,18 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .verChip i { color: #55606f; font-style: normal; text-transform: uppercase; letter-spacing: .04em; }
 .verChip b { color: #aab6c5; font-weight: 600; }
 
-.nav-group { margin: 14px 4px 4px; font-size: 10px; letter-spacing: .08em; color: #55606f; text-transform: uppercase; }
+.nav-group {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; margin: 14px 0 4px; padding: 4px 6px;
+  background: none; border: none; cursor: pointer;
+  font-size: 10px; letter-spacing: .08em; color: #55606f; text-transform: uppercase;
+}
 .nav-group:first-child { margin-top: 4px; }
+.nav-group:hover { color: #aab6c5; }
+.nav-group::after { content: '▾'; font-size: 9px; }
+.nav-group-body { display: flex; flex-direction: column; gap: 2px; }
+.nav-group-body.collapsed { display: none; }
+.nav-group.collapsed::after { content: '▸'; }
 
 .wsTitle { margin: 18px 0 2px; font-size: 14px; color: #e6ebf2; }
 .wsHint { margin: 2px 0 8px; font-size: 12px; color: #7b8595; }

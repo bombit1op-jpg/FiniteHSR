@@ -7,6 +7,7 @@ import { el, fillSelect, fmtStatVal, escapeHtml, STAT_LABELS } from './dom'
 import { store, techniquesForRows } from './store'
 import type { PieceState, TeamRowState } from './store'
 import { loadSettings } from './settings'
+import { charBadge, updateCharBadge } from './icons'
 import type { DebugLevel } from '../core/battlelog'
 
 interface SubEditor { statSel: HTMLSelectElement; tierSel: HTMLSelectElement; rollsInp: HTMLInputElement }
@@ -136,6 +137,7 @@ export function addCharRow(): void {
   const card = el('div', 'charCard')
 
   const head = el('div', 'charHead')
+  const badge = charBadge(free.id)
   const sel = el('select') as HTMLSelectElement
   fillSelect(sel, KITS.map(k => [k.id, `${k.name} (${k.elem})`]))
   sel.value = free.id
@@ -151,7 +153,7 @@ export function addCharRow(): void {
     renderRelicTabs()
   }
   del.onclick = onDelete
-  head.append(sel, del)
+  head.append(badge, sel, del)
   card.append(head)
 
   // stat inputs
@@ -305,6 +307,7 @@ export function addCharRow(): void {
 
   sel.onchange = () => {
     r.kitId = sel.value
+    updateCharBadge(badge, sel.value)
     for (const [k] of Object.entries(stats)) applyDefault(stats[k], sel.value, k)
     coneSel.value = DEFAULT_CONE[sel.value] ?? ''
     fillTechniqueOpts(sel.value)
