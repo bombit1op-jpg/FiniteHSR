@@ -14,6 +14,7 @@ import { el } from './dom'
 import { specToJson, specFromJson, downloadJson, pickJsonFile, readFileText } from './specs'
 import { showStatus, withBusy, navigate } from './shell'
 import { store } from './store'
+// Loaded on demand: endgame.json is a large historical archive and should not slow initial app startup.
 
 type Elem = EnemySpec['weaknesses'][number]
 
@@ -38,6 +39,19 @@ export function initEncounterEditor(): void {
     id: 'custom', mode: 'Open field', cycles: 6,
     waves: [[cloneGroup({ ...(ENEMY_PRESETS.mob as EnemySpec), count: 1 })]],
   }
+
+  const archiveRoot = el('div', 'mocArchive')
+  const archiveTitle = el('h3')
+  archiveTitle.textContent = 'Исторический Memory of Chaos'
+  const archiveDescription = el('p', 'dim')
+  archiveDescription.textContent = 'Выбери версию, этап и комнату. Состав противников берётся из hsr-data/endgame.json и связывается с существующими профилями врагов.'
+  const archiveButton = el('button', 'btn-secondary')
+  archiveButton.textContent = 'Открыть архив MoC'
+  const archiveControls = el('div', 'mocArchiveControls')
+  archiveControls.style.display = 'none'
+  archiveRoot.append(archiveTitle, archiveDescription, archiveButton, archiveControls)
+  let archiveModule: typeof import('../core/endgame') | undefined
+  let archiveInitialized = false
 
   const idInp = text(cur.id)
   const modeInp = text(cur.mode ?? '')
@@ -97,6 +111,176 @@ export function initEncounterEditor(): void {
     return card
   }
 
+  // ---------------------------------------------------------------- historical MoC archive (lazy-load the large dataset)
+
+  archiveButton.onclick = () => {
+    if (archiveInitialized) {
+      const hidden = archiveControls.style.display !== 'none'
+      archiveControls.style.display = hidden ? 'none' : ''
+      archiveButton.textContent = hidden ? 'Показать архив MoC' : 'Скрыть архив MoC'
+      return
+    }
+
+    archiveButton.disabled = true
+    void withBusy('Загрузка исторического архива MoC…', async () => {
+      if (!archiveModule) archiveModule = await import('../core/endgame')
+      const api = archiveModule
+      const versionSel = el('select') as HTMLSelectElement
+      const stageSel = el('select') as HTMLSelectElement
+      const roomSel = el('select') as HTMLSelectElement
+      const effectSel = el('select') as HTMLSelectElement
+      const effectInfo = el('div', 'mocEffectInfo')
+      const roomPreview = el('div', 'mocRoomPreview')
+      const loadRoomButton = el('button', 'btn-primary')
+      loadRoomButton.textContent = 'Загрузить выбранную комнату'
+
+      const fields = el('div', 'row')
+      fields.append(
+        lab('Версия MoC', versionSel),
+        lab('Этап', stageSel),
+        lab('Комната', roomSel),
+        lab('Бафф периода (справочно)', effectSel),
+      )
+      const warning = el('p', 'dim')
+      warning.textContent = 'Важно: описание Memory Turbulence загружается из архива. Его эффект не применяется к боевой математике автоматически; это требует отдельной реализации механики.'
+      archiveControls.replaceChildren(fields, effectInfo, roomPreview, warning, loadRoomButton)
+
+      const setOptions = (select: HTMLSelectElement, entries: Array<[string, string]>): void => {
+        select.innerHTML = ''
+        for (const entry of entries) {
+          const option = el('option') as HTMLOptionElement
+          option.value = entry[0]
+          option.textContent = entry[1]
+          select.append(option)
+        }
+      }
+
+      const selectedEffect = () => api.endgameEffects('MoC', versionSel.value)
+        .find(effect => effect.id === effectSel.value)
+
+      const refreshEffects = (): void => {
+        const effects = api.endgameEffects('MoC', versionSel.value)
+        setOptions(effectSel, effects.map(effect => [
+          effect.id,
+          effect.label + ' — ' + effect.description.slice(0, 76) + (effect.description.length > 76 ? '…' : ''),
+        ]))
+        effectSel.disabled = effects.length === 0
+        if (!effects.length) {
+          const empty = el('option') as HTMLOptionElement
+          empty.value = ''
+          empty.textContent = 'Описание эффекта отсутствует'
+          effectSel.append(empty)
+        }
+      }
+
+      const refreshRoom = (): void => {
+        const stage = api.endgameStage('MoC', versionSel.value, stageSel.value)
+        const rooms = stage?.battles ?? []
+        setOptions(roomSel, rooms.map((room, i) => [
+          String(i),
+          'Комната ' + (i + 1) + ' — ' + room.id,
+        ]))
+        roomSel.disabled = rooms.length === 0
+        roomPreview.replaceChildren()
+        if (!stage || !rooms.length) {
+          roomPreview.textContent = 'Для выбранной записи нет комнаты с распознанными боевыми данными.'
+          loadRoomButton.disabled = true
+          return
+        }
+
+        const room = rooms[Number(roomSel.value) || 0]
+        const cycles = Array.isArray(stage.maxCycles)
+          ? stage.maxCycles.reduce((sum, value) => sum + value, 0)
+          : stage.maxCycles
+        const summary = el('p')
+        summary.textContent = stage.title + ' · ' + room.id + ' · уровень врагов ' + room.level +
+          ' · общий лимит этапа: ' + (cycles || 'не указан') + ' циклов'
+        roomPreview.append(summary)
+
+        let groupCount = 0
+        room.waves.forEach((groups, waveIndex) => {
+          const waveLine = el('p')
+          const names = groups.map(group => {
+            groupCount += 1
+            return group.name + ' ×' + group.count
+          })
+          waveLine.textContent = 'Волна ' + (waveIndex + 1) + ': ' +
+            (names.length ? names.join(', ') : 'враги не сопоставлены с каталогом')
+          roomPreview.append(waveLine)
+          const details = el('p', 'dim')
+          details.textContent = groups.map(group =>
+            group.name + ' — HP ' + group.hp.toLocaleString('ru-RU') +
+            ', ATK ' + (group.atk ?? 0).toLocaleString('ru-RU') +
+            ', SPD ' + group.spd +
+            ', слабости: ' + (group.weaknesses?.join(', ') || 'не указаны')
+          ).join(' · ')
+          if (details.textContent) roomPreview.append(details)
+        })
+        loadRoomButton.disabled = groupCount === 0
+        const effect = selectedEffect()
+        effectInfo.textContent = effect
+          ? effect.label + ': ' + effect.description
+          : 'В архиве нет описания баффа для выбранной версии.'
+      }
+
+      const refreshStages = (): void => {
+        const stages = api.endgameSections('MoC', versionSel.value)
+        setOptions(stageSel, stages.map(stage => [stage.id, stage.title]))
+        stageSel.disabled = stages.length === 0
+        refreshRoom()
+      }
+
+      const versions = api.endgameVersions('MoC').slice().reverse()
+      setOptions(versionSel, versions.map(version => [version, 'MoC ' + version]))
+      versionSel.onchange = () => {
+        refreshEffects()
+        refreshStages()
+      }
+      stageSel.onchange = refreshRoom
+      roomSel.onchange = refreshRoom
+      effectSel.onchange = refreshRoom
+
+      loadRoomButton.onclick = () => {
+        const stage = api.endgameStage('MoC', versionSel.value, stageSel.value)
+        const room = stage?.battles[Number(roomSel.value) || 0]
+        if (!stage || !room || !room.waves.some(wave => wave.length > 0)) {
+          showStatus('Не удалось загрузить выбранную комнату: в ней нет распознанных врагов.', 'error')
+          return
+        }
+        const effect = selectedEffect()
+        const cycles = Array.isArray(stage.maxCycles)
+          ? stage.maxCycles.reduce((sum, value) => sum + value, 0)
+          : stage.maxCycles
+        cur.id = ('moc-' + versionSel.value + '-' + stage.id + '-' + room.id).replace(/[^a-zA-Z0-9_-]+/g, '_')
+        cur.mode = 'MoC ' + versionSel.value + ' · ' + stage.title + ' · ' + room.id +
+          (effect ? ' · ' + effect.label : '')
+        cur.stageId = stage.id
+        cur.cycles = cycles > 0 ? cycles : 10
+        cur.waves = room.waves.map(wave => wave.map(cloneGroup))
+        cur.effects = undefined
+        cur.stageModifiers = undefined
+        cur.startingRules = undefined
+        idInp.value = cur.id
+        modeInp.value = cur.mode
+        cyclesInp.value = String(cur.cycles)
+        renderWaves()
+        const enemyCount = cur.waves.reduce((sum, wave) =>
+          sum + wave.reduce((n, enemy) => n + enemy.count, 0), 0)
+        showStatus(
+          'Загружена ' + stage.title + ' · ' + room.id + ' (' + enemyCount +
+          ' врагов). Бафф выбран для справки и пока не применяется автоматически.',
+          'info',
+        )
+      }
+
+      refreshEffects()
+      refreshStages()
+      archiveControls.style.display = ''
+      archiveButton.textContent = 'Скрыть архив MoC'
+      archiveInitialized = true
+    }).finally(() => { archiveButton.disabled = false })
+  }
+
   // ---------------------------------------------------------------- header wiring
 
   idInp.oninput = () => { cur.id = idInp.value; validate() }
@@ -151,7 +335,7 @@ export function initEncounterEditor(): void {
   const useBtn = el('button', 'btn-primary'); useBtn.textContent = 'Использовать в бою'; useBtn.onclick = useInBattle
   tools.append(presetSel, loadBtn, addWave, expBtn, impBtn, useBtn)
 
-  root.append(header, tools, wavesBox, validation)
+  root.append(archiveRoot, header, tools, wavesBox, validation)
   renderWaves()
 }
 
