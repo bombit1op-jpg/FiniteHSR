@@ -98,6 +98,16 @@ Produce a manifest/audit table with: entity kind, stable data ID, display name, 
 - Use consistent icon sizes: portrait larger than Light Cone/set icons, slot icons smallest.
 - Avoid giant headers, duplicate page titles, raw IDs, and always-open technical tables.
 
+## Historical MoC archive behavior
+
+- `hsr-data/endgame.json` is the source of truth for archived MoC versions, stage layouts, enemy groups and Memory Turbulence descriptions.
+- A stage may contain a variable number of rooms. Do not hardcode two. Some pages flatten multiple layouts into repeated `General Information` / `Objectives` / `Enemies` block groups; explicit `layouts` arrays are also supported.
+- When one source section contains multiple layouts, expose each layout as a separate stage-selector choice. Show room count and cycle budget in its label and put the latest/current layout first. Example: MoC 4.4 Stage 12 has a two-room / 30-cycle layout and a three-room / 45-cycle layout.
+- For MoC, rooms are sequential waves within one selected stage run, so the stage keeps its shared cycle budget. Show each room name and its enemy groups separately in the preview.
+- Resolve enemies through the existing enemy catalog and apply the endgame level conversion; do not duplicate enemy definitions or invent wiki image/URL paths.
+- The archived Memory Turbulence text is currently descriptive metadata only. UI must not claim that a displayed buff affects damage or battle behavior unless its mechanic is implemented and covered by tests.
+- Regression coverage lives in `tests/scenarios/endgame/archive-rooms.ts`; it checks two-room historical stages, three-room newer layouts, distinct layout selection, enemy resolution and cycle-budget semantics.
+
 ## Architecture constraints
 
 - UI is presentation/orchestration only; no damage formula or combat rules in DOM code.
