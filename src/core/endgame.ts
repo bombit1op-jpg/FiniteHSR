@@ -68,17 +68,16 @@ export interface EndgameEffect {
 function plainText(html: string): string {
   return html
     .replace(/<br\\s*\\/?\\s*>/gi, ' ')
-    .replace(/<[^>]*>/g, ' ')
+    .replace(/<[^>]+>/g, ' ')
     .replace(/&nbsp;/gi, ' ')
     .replace(/&amp;/gi, '&')
-    .replace(/&quot;/gi, '\"')
-    .replace(/&#39;/gi, \"'\")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
     .replace(/&lt;/gi, '<')
     .replace(/&gt;/gi, '>')
     .replace(/\\s+/g, ' ')
     .trim()
 }
-
 // ---------------------------------------------------------------- sources
 
 const data = (ENDGAME as any).modes as Record<EndgameMode, any[]>
@@ -199,13 +198,34 @@ function endgameSectionId(mode: EndgameMode, version: string, secId: string): En
 export function endgameSections(mode: EndgameMode, version: string): { id: string; title: string }[] {
   const ver = data[mode].find((v: any) => v.version === version)
   if (!ver) return []
+  // Metadata-only sections (e.g. Memory Turbulence / PF Cacophony) are not rooms/floors.
   return (ver.sections ?? [])
-    .filter((s: any) => blocksOf(s).length)
-    .map((s: any) => ({ id: s.id, title: s.title ?? '' }))
+    .filter((s: any) => blocksOf(s).some((b: EndgameBlock) => /^Enemies(?:\\s|$)/.test(b.label)))
+    .map((s: any) => ({ id: s.id, title: s.title ?? s.id }))
 }
 
 export function endgameVersions(mode: EndgameMode): string[] {
   return data[mode].map((v: any) => v.version)
+}
+
+/** Archive effect descriptions are display metadata, not proof of executable engine support. */
+export function endgameEffects(mode: EndgameMode, version: string): EndgameEffect[] {
+  const ver = data[mode].find((v: any) => v.version === version)
+  if (!ver) return []
+  const meta = (ver.sections ?? []).find((s: any) => {
+    const blocks = blocksOf(s) as EndgameBlock[]
+    return !blocks.some(b => /^Enemies(?:\\s|$)/.test(b.label)) &&
+      blocks.some(b => !!b.content && b.label !== 'Duration')
+  })
+  if (!meta) return []
+  return (blocksOf(meta) as EndgameBlock[])
+    .filter(b => !!b.content && b.label !== 'Duration')
+    .map((b, i) => ({
+      id: meta.id + ':' + i,
+      label: b.label || meta.title || 'Effect',
+      description: plainText(b.content!),
+      types: b.types,
+    }))
 }
 
 // ---------------------------------------------------------------- stage assembly
@@ -251,9 +271,11 @@ export function endgameStage(mode: EndgameMode, version: string, secId: string, 
     ? levels[Math.min(stagePick, levels.length - 1)]
     : levels.length ? levels[levels.length - 1] : 80
 
-  if (mode === 'PF' || mode === 'AS') {
+  if (mode === 'MoC' || mode === 'PF' || mode === 'AS') {
+    // MoC floors can contain two or three rooms depending on the historical data.
+    // A Node is an independently selectable room; enemy groups inside it form its first wave.
     const battles: EndgameBattle[] = nodes.map((n, i) => ({
-      id: n.label || `Node ${i + 1}`,
+      id: n.label || 'Room ' + (i + 1),
       level: stageLevel,
       waves: [buildEnemies(n.cards, stageLevel)],
       types: n.types,
@@ -261,7 +283,7 @@ export function endgameStage(mode: EndgameMode, version: string, secId: string, 
     return { mode, version, id: sec.id, title: sec.title, maxCycles: cycles, enemyLevels: levels, objectives, battles }
   }
 
-  // MoC / AA: nodes are sequential rooms/waves of a single fight
+  // Arbitral Arena retains its mode-specific wave interpretation for now.
   const waves = nodes.map(n => buildEnemies(n.cards, stageLevel))
   return {
     mode, version, id: sec.id, title: sec.title,
