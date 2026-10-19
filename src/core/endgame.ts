@@ -31,6 +31,7 @@ export interface EndgameSection {
 export interface EndgameBlock {
   label: string
   list?: string[]
+  content?: string
   types?: Elem[]
   cards?: EndgameCard[]
   nodes?: EndgameNode[]
@@ -48,13 +49,34 @@ export interface EndgameStage {
 }
 
 export interface EndgameBattle {
-  /** 'Node 1' / 'Wave 1' — the fight this side represents */
+  /** Independently selectable room/fight, e.g. 'Node 1'. */
   id: string
-  /** enemy level of this fight (AS: chosen stage level) */
+  /** Enemy level of this room (AS: chosen stage level). */
   level: number
-  /** sequential waves of this fight (MoC/AA: one per Node/Wave) */
+  /** Sequential waves inside this room; a Node is not itself a wave. */
   waves: EnemySpec[][]
   types?: Elem[]
+}
+
+export interface EndgameEffect {
+  id: string
+  label: string
+  description: string
+  types?: Elem[]
+}
+
+function plainText(html: string): string {
+  return html
+    .replace(/<br\\s*\\/?\\s*>/gi, ' ')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '\"')
+    .replace(/&#39;/gi, \"'\")
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/\\s+/g, ' ')
+    .trim()
 }
 
 // ---------------------------------------------------------------- sources
