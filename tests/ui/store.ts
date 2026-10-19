@@ -1,5 +1,5 @@
 import { raw } from '../_helpers/battle'
-import { createStore, subscribeSlice, store, rootReducer, initialState, type TeamRowState } from '../../src/ui/store'
+import { createStore, subscribeSlice, store, rootReducer, initialState, techniquesForRows, type TeamRowState } from '../../src/ui/store'
 
 /**
  * §84 G6 — store slice-reducer semantics. The store is the GUI's only state owner
@@ -52,6 +52,14 @@ export default () => {
   for (let i = 0; i < 15; i++) s2.dispatch({ type: 'history/add', sim: {} as never, setup: {} as never, label: `run${i}` })
   const hist = s2.getState().history
 
+  // §84.6.1: pre-combat Techniques expand in team-row order; uses > 1 repeat the kitId
+  const techOut = techniquesForRows([
+    row('t1', { kitId: 'seele', techniqueUses: 1 }),
+    row('t2', { kitId: 'bronya', techniqueUses: 2 }),
+    row('t3', { kitId: 'pela', techniqueUses: 1 }),
+    row('t4', { kitId: 'gallagher' }),
+  ])
+
   return [
     raw('createStore returns the exact object it was given', probe.getState() === given),
     raw('team/add appends a row', one.team.length === 1 && one.team[0].id === 'a'),
@@ -65,5 +73,7 @@ export default () => {
     raw('subscribeSlice fires only on its own slice', enemyHits === 1 && teamHits === 0, `enemy=${enemyHits} team=${teamHits}`),
     raw('history is capped at 12 records', hist.length === 12, `${hist.length}`),
     raw('history keeps the most recent records', hist[hist.length - 1].label === 'run14', hist[hist.length - 1].label),
+    raw('techniquesForRows expands in row order with repeats', JSON.stringify(techOut) === JSON.stringify(['seele', 'bronya', 'bronya', 'pela']), JSON.stringify(techOut)),
+    raw('techniquesForRows: absent uses -> no activations', techniquesForRows([]).length === 0 && techniquesForRows([row('t5')]).length === 0),
   ]
 }

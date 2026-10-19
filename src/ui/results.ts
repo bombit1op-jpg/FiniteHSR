@@ -5,6 +5,47 @@ import type { Action } from '../core/kit'
 import type { Unit } from '../core/entities/Unit'
 import { el, fillSelect, fmt, escapeHtml } from './dom'
 import { store } from './store'
+import type { BattleEvent } from '../core/battlelog'
+
+// ---------------------------------------------------------------- structured action log (E)
+
+/** canonical subset of the typed event stream the human log shows; diagnostics/internal events
+ *  (eventId/traceId/stacktraces) stay in the Diagnostics workspace (§84.9/I), not here. */
+const ACTION_LOG_TYPES: ReadonlySet<string> = new Set([
+  'BATTLE_START', 'WAVE_START', 'CYCLE_START',
+  'ACTION_START', 'ABILITY_USED', 'TARGET_SELECTED', 'HIT_START',
+  'DAMAGE_DEALT', 'TOUGHNESS_DAMAGE', 'WEAKNESS_BREAK', 'BREAK_DAMAGE', 'SUPERBREAK',
+  'HEAL_APPLIED', 'DEATH', 'ENCOUNTER_VICTORY', 'ENCOUNTER_DEFEAT', 'BATTLE_END',
+])
+
+const LOG_CLASS: Record<string, string> = {
+  DAMAGE_DEALT: 'crit',
+  TOUGHNESS_DAMAGE: 'break', WEAKNESS_BREAK: 'break', BREAK_DAMAGE: 'break', SUPERBREAK: 'break',
+  DEATH: 'kill',
+  BATTLE_START: 'special', WAVE_START: 'special', CYCLE_START: 'special',
+  ENCOUNTER_VICTORY: 'special', ENCOUNTER_DEFEAT: 'miss', BATTLE_END: 'special',
+}
+
+function eventDetail(e: BattleEvent): string {
+  const p = e.payload
+  if ((e.type === 'DAMAGE_DEALT' || e.type === 'HEAL_APPLIED') && typeof p.amount === 'number')
+    return `${p.crit ? 'CRIT ' : ''}${fmt(p.amount)}`
+  if (e.type === 'ABILITY_USED' && typeof p.label === 'string') return p.label
+  return ''
+}
+
+/** render typed events as the human action log; '' when nothing was recorded. */
+export function actionLogHtml(events: BattleEvent[]): string {
+  const rows = events.filter(e => ACTION_LOG_TYPES.has(e.type))
+  if (!rows.length) return ''
+  return rows.map(e => {
+    const av = `[${e.time.toFixed(2)}]`
+    const who = e.source && e.target ? `${e.source} → ${e.target}` : (e.source ?? e.target ?? '')
+    const detail = eventDetail(e)
+    const bits = [e.type, who, detail].filter(Boolean).map(escapeHtml).join(' ')
+    return `<div class="logline ${LOG_CLASS[e.type] ?? ''}"><span class="av">${av}</span>${bits}</div>`
+  }).join('\n')
+}
 
 // ---------------------------------------------------------------- results
 
@@ -73,7 +114,8 @@ export function render(sim: ReturnType<typeof runBattle>, setup: Parameters<type
   document.getElementById('hpPanel')!.innerHTML = hpHtml
 
   renderStatsPanel(setup)
-  document.getElementById('log')!.innerHTML = colorizeLog(sim.logLines)
+  const actionLog = actionLogHtml(sim.logger.events)
+  document.getElementById('log')!.innerHTML = actionLog || colorizeLog(sim.logLines)
 }
 
 // ---------------------------------------------------------------- пошаговый режим

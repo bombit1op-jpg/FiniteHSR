@@ -41,6 +41,7 @@ export const ROUTES: Route[] = [
   { id: 'verification', label: 'Проверка и покрытие', group: 'ENGINEERING', capability: 'verification.specs' },
   { id: 'catalog', label: 'Каталог данных', group: 'ENGINEERING' },
   { id: 'deviations', label: 'Отклонения', group: 'ENGINEERING', capability: 'known.deviations' },
+  { id: 'diagnostics', label: 'Диагностика', group: 'ENGINEERING' },
 
   { id: 'settings', label: 'Настройки', group: 'SETTINGS' },
 ]

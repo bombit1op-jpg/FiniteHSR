@@ -16,7 +16,10 @@ export interface UiSettings {
 }
 
 const KEY = 'FiniteHSR.settings'
-const DEFAULTS: UiSettings = { defaultSeed: 1, debugLevel: 0 }
+/** debugLevel 4 (damage) by default: an interactive UI run must record typed events so the
+ *  Results/Analysis workspaces can render a structured log (§84.6/E); sweeps keep their own
+ *  LogConfig at 0 and never read this. Set 0 to get the old off behavior for UI runs too. */
+const DEFAULTS: UiSettings = { defaultSeed: 1, debugLevel: 4 }
 
 export function loadSettings(): UiSettings {
   try {

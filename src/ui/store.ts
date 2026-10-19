@@ -54,11 +54,21 @@ export interface TeamRowState {
   eidolon: number
   levels: AbilityLevels
   traces: boolean
+  /** start energy as a fraction of max (engine default 0.5 when absent) */
+  energyStartFrac?: number
+  /** pre-fight Technique uses for this character (§84.6.1): 0/absent = not activated */
+  techniqueUses?: number
   skillPriority: number
   skillPattern: SkillPattern
   skillRotation: string
   strategy: Record<string, boolean>
   pieces: PieceState[]
+}
+
+/** §84.6.1 — pre-combat Technique activations from team rows. Row order IS the activation order;
+ *  `techniqueUses` > 1 is an additional use of the same kit (the engine's repeat-cap still applies). */
+export function techniquesForRows(rows: readonly TeamRowState[]): string[] {
+  return rows.flatMap(r => Array.from({ length: r.techniqueUses ?? 0 }, () => r.kitId))
 }
 
 export interface EnemyState {

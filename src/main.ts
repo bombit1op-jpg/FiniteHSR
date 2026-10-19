@@ -19,6 +19,7 @@ import { initOptimizer, renderOptimizer } from './ui/optimizerPage'
 import { initVerification, renderVerification } from './ui/verificationPage'
 import { initCatalog, renderCatalog } from './ui/catalog'
 import { initDeviations, renderDeviations } from './ui/deviations'
+import { initDiagnostics, renderDiagnostics } from './ui/diagnostics'
 import { initSettings, renderSettings } from './ui/settings'
 
 function wireInputs(): void {
@@ -109,6 +110,7 @@ initOptimizer()
 initVerification()
 initCatalog()
 initDeviations()
+initDiagnostics()
 initSettings()
 setRouteEnter('dashboard', () => initDashboard())
 setRouteEnter('analysis', () => renderRunAnalysis())
@@ -118,6 +120,7 @@ setRouteEnter('optimizer', () => renderOptimizer())
 setRouteEnter('verification', () => renderVerification())
 setRouteEnter('catalog', () => renderCatalog())
 setRouteEnter('deviations', () => renderDeviations())
+setRouteEnter('diagnostics', () => renderDiagnostics())
 setRouteEnter('settings', () => renderSettings())
 for (let i = 0; i < 4; i++) addCharRow()
 enemyFormInit()

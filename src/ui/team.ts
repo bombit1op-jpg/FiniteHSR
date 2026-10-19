@@ -4,8 +4,10 @@ import type { BattleSetup, ManualMod, TeamSpec } from '../core/battle'
 import { LIGHT_CONES, RELIC_SETS, PLANAR_SETS, SLOT_MAINS, SUBSTAT_TIERS, RELIC_MAIN_VALUES, SPHERE_DMG_MAIN } from '../core/gear'
 import type { GearConfig, RelicPiece } from '../core/entities/Unit'
 import { el, fillSelect, fmtStatVal, escapeHtml, STAT_LABELS } from './dom'
-import { store } from './store'
+import { store, techniquesForRows } from './store'
 import type { PieceState, TeamRowState } from './store'
+import { loadSettings } from './settings'
+import type { DebugLevel } from '../core/battlelog'
 
 interface SubEditor { statSel: HTMLSelectElement; tierSel: HTMLSelectElement; rollsInp: HTMLInputElement }
 
@@ -33,6 +35,8 @@ export interface CharRow {
   eidSel: HTMLSelectElement
   levels: Record<'basic' | 'skill' | 'ult' | 'talent', HTMLInputElement>
   tracesChk: HTMLInputElement
+  energyFracSel: HTMLSelectElement
+  techniqueSel: HTMLSelectElement
   pieces: PieceEditor[]
   relicRoot: HTMLElement
   // strategy controls
@@ -99,6 +103,8 @@ export function syncRow(r: CharRow): void {
     eidolon: Number(r.eidSel.value) || 0,
     levels: rowLevels(r),
     traces: r.tracesChk.checked,
+    energyStartFrac: (Number(r.energyFracSel.value) || 0) / 100,
+    techniqueUses: Number(r.techniqueSel.value) || 0,
     skillPriority: Number(r.skillPriorityInp.value) || 0,
     skillPattern: (r.skillPatternSel.value as TeamSpec['skillPattern']) || 'auto',
     skillRotation: r.skillRotationInp.value || '',
@@ -209,9 +215,14 @@ export function addCharRow(): void {
   const tracesChk = el('input') as HTMLInputElement
   tracesChk.type = 'checkbox'; tracesChk.checked = true; tracesChk.title = 'Минорные трейсы'
   const trLab = el('label'); trLab.textContent = 'Трейсы'; trLab.append(tracesChk)
+  const energyFracSel = el('select') as HTMLSelectElement
+  fillSelect(energyFracSel, [0, 25, 50, 75, 100].map(n => [String(n), `${n}%`] as [string, string]))
+  energyFracSel.value = '50'
+  energyFracSel.title = 'Старт боя: энергия в % от максимума (движок по умолчанию 50%)'
+  const enLab = el('label'); enLab.textContent = 'Энергия'; enLab.append(energyFracSel)
   eidSel.title = 'Эйдолон'
   progRow.append(mkGearLabel('Eidolon', eidSel),
-    lvWrap('basic', 'BAS', 7), lvWrap('skill', 'SKL', 12), lvWrap('ult', 'ULT', 12), lvWrap('talent', 'TAL', 12), trLab)
+    lvWrap('basic', 'BAS', 7), lvWrap('skill', 'SKL', 12), lvWrap('ult', 'ULT', 12), lvWrap('talent', 'TAL', 12), trLab, enLab)
   card.append(progRow)
 
   // strategy / AI controls
@@ -233,7 +244,17 @@ export function addCharRow(): void {
   skillRotationInp.type = 'text'; skillRotationInp.placeholder = 'B S B S U'; skillRotationInp.title = 'Rotation (space-separated): B=Basic, S=Skill, U=Ult'
   const skillRotationLab = el('label'); skillRotationLab.textContent = 'Rotation'; skillRotationLab.append(skillRotationInp)
 
-  stratRow.append(skillPriorityLab, skillPatternLab, skillRotationLab)
+  // pre-fight Technique (§84.6.1): 0 = off; N = N uses of this kit's Technique in activation order
+  const techniqueSel = el('select') as HTMLSelectElement
+  const techniqueLab = el('label'); techniqueLab.textContent = 'Техника'; techniqueLab.append(techniqueSel)
+  const fillTechniqueOpts = (kitId: string): void => {
+    const t = KITS.find(k => k.id === kitId)?.technique
+    fillSelect(techniqueSel, [['0', '—'], ...Array.from({ length: t?.maxUses ?? 1 }, (_, i) => [String(i + 1), `${i + 1}×`] as [string, string])])
+    techniqueSel.title = t ? `Претехника: ${t.name} (${t.kind}${t.zone ? ', zone' : ''})` : 'У персонажа нет претехники'
+  }
+  fillTechniqueOpts(free.id)
+
+  stratRow.append(skillPriorityLab, skillPatternLab, skillRotationLab, techniqueLab)
   card.append(stratRow)
 
   // character-specific strategy flags (per kit)
@@ -259,7 +280,7 @@ export function addCharRow(): void {
   const preview = el('div', 'gearPreview')
   card.append(preview)
 
-  const r: CharRow = { id, root: card, kitId: free.id, stats, coneSel, siSel, relic1, relic2, planarSel, eidSel, levels, tracesChk, pieces, relicRoot, skillPriorityInp, skillPatternSel, skillRotationInp, strategyChks }
+  const r: CharRow = { id, root: card, kitId: free.id, stats, coneSel, siSel, relic1, relic2, planarSel, eidSel, levels, tracesChk, energyFracSel, techniqueSel, pieces, relicRoot, skillPriorityInp, skillPatternSel, skillRotationInp, strategyChks }
   const refresh = () => {
     syncRow(r)
     preview.innerHTML = gearPreviewHtml(storeRow(r))
@@ -274,6 +295,8 @@ export function addCharRow(): void {
   for (const [k] of Object.entries(stats)) stats[k].oninput = refresh
   for (const k of Object.keys(levels)) (levels[k as keyof CharRow['levels']] as HTMLInputElement).oninput = refresh
   tracesChk.onchange = refresh
+  energyFracSel.onchange = refresh
+  techniqueSel.onchange = refresh
   eidSel.onchange = refresh
   skillPriorityInp.oninput = refresh
   skillPatternSel.onchange = refresh
@@ -284,13 +307,15 @@ export function addCharRow(): void {
     r.kitId = sel.value
     for (const [k] of Object.entries(stats)) applyDefault(stats[k], sel.value, k)
     coneSel.value = DEFAULT_CONE[sel.value] ?? ''
+    fillTechniqueOpts(sel.value)
+    techniqueSel.value = '0'
     refresh()
     renderRelicTabs()
   }
 
   document.getElementById('team')!.append(card)
   teamRows.push(r)
-  store.dispatch({ type: 'team/add', row: { id, kitId: free.id, stats: rowStatsOf(r), coneId: coneSel.value, si: 1, relic1: '', relic2: '', planar: '', eidolon: 0, levels: { basic: 6, skill: 10, ult: 10, talent: 10 }, traces: true, skillPriority: 0, skillPattern: 'auto', skillRotation: '', strategy: {}, pieces: pieces.map(pieceOf) } as TeamRowState })
+  store.dispatch({ type: 'team/add', row: { id, kitId: free.id, stats: rowStatsOf(r), coneId: coneSel.value, si: 1, relic1: '', relic2: '', planar: '', eidolon: 0, levels: { basic: 6, skill: 10, ult: 10, talent: 10 }, traces: true, techniqueUses: 0, skillPriority: 0, skillPattern: 'auto', skillRotation: '', strategy: {}, pieces: pieces.map(pieceOf) } as TeamRowState })
   refresh()
   renderRelicTabs()
 }
@@ -313,7 +338,7 @@ export function getTeamRow(id: string): CharRow | undefined {
 }
 
 const storeRow = (r: CharRow): TeamRowState =>
-  store.getState().team.find(t => t.id === r.id) ?? { id: r.id, kitId: r.kitId, stats: {}, coneId: '', si: 1, relic1: '', relic2: '', planar: '', eidolon: 0, levels: { basic: 6, skill: 10, ult: 10, talent: 10 }, traces: true, skillPriority: 0, skillPattern: 'auto', skillRotation: '', strategy: {}, pieces: [] }
+  store.getState().team.find(t => t.id === r.id) ?? { id: r.id, kitId: r.kitId, stats: {}, coneId: '', si: 1, relic1: '', relic2: '', planar: '', eidolon: 0, levels: { basic: 6, skill: 10, ult: 10, talent: 10 }, traces: true, techniqueUses: 0, skillPriority: 0, skillPattern: 'auto', skillRotation: '', strategy: {}, pieces: [] }
 
 /** aggregate a row's gear config from the store */
 export function gearOfRow(tr: TeamRowState): GearConfig | undefined {
@@ -351,6 +376,7 @@ export function toTeamSpec(tr: TeamRowState): TeamSpec {
     eidolon: tr.eidolon,
     levels: tr.levels,
     traces: tr.traces,
+    energyStartFrac: tr.energyStartFrac,
     skillPriority: tr.skillPriority,
     skillPattern: tr.skillPattern,
     skillRotation: tr.skillRotation,
@@ -489,6 +515,10 @@ export function collect(): BattleSetup {
     manualMods,
   }
   if (s.encounterSpec) setup.encounter = s.encounterSpec
+  const techniques = techniquesForRows(s.team)
+  if (techniques.length) setup.techniques = techniques
+  const dbg = loadSettings().debugLevel
+  if (dbg > 0) setup.log = { debug: dbg as DebugLevel }
   return setup
 }
 
