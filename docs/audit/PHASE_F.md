@@ -1,55 +1,93 @@
 # FiniteHSR - Phase F: build recommendations via production APIs
 
-Status: **BLOCKED: SPEC MISSING** (19-10-2026). No algorithm implemented, no requirements invented.
+Status: **IMPLEMENTED + VERIFIED** (19-10-2026). Spec: direct user statement, 19-10-2026
+(F1 improve-one-build + F2 rank-replacement-candidates, production simulator as sole source of
+truth, existing optimizer API, no invented synergy, honest incompleteness). The earlier
+"BLOCKED: SPEC MISSING" record is superseded by this file.
 
-## 1. Spec sources: opened vs missing
+## 1. API contract
 
-Opened:
-- `AGENTS.md`, `TODO.md` (§84 pointers, audit tail), `docs/audit/*` (10 tracked files), `REPORT_A.md:62` (only F/H mention in repo), `MATRIX.md`, `UX_MAP.md`.
-- All `src/ui/*`, `src/optimizer/*` (12 files), `src/analysis/*` (8 files) — code as its own evidence.
-- Git: single branch `main`, no tags, no stash, `origin/main` fetched (1670 files) == local HEAD `69ab287`.
+Engine module `src/optimizer/recommend.ts`:
 
-Missing (verified, not assumed):
-- `docs/gui/traceability.md` (§84.17) — `.gitignore: docs/`; never committed (`git log --all -- docs/gui` empty); absent on `origin/main`; absent locally (`Test-Path = False`).
-- guide §84 (TODO: `reference/total_guide.txt` lines 6343-6900) — local file = 6331 lines, ends pre-§84; `reference/` untracked, never in git history.
-- `docs/audit/PHASE_F.md` / `PHASE_H.md` — did not exist (this file = F record).
-- No `D:\` drive on this machine (source machine paths unavailable).
+```ts
+buildRecommendations(ctx, pool, opts?)        // F1: vary ONE slot's build, team fixed
+replacementRecommendations(ctx, candidates, opts?)  // F2: rank replacement characters for ONE slot
+```
 
-Conclusion: only F artifact in repo = REPORT_A phrase. Acceptance criteria for "build recommendations" unknowable from repo.
+Both return `RecommendationReport`:
 
-## 2. Functionality map (what exists today)
+```ts
+{
+  baselineLabel, baselineValues, baselineTotalDamage  // baseline = current Team Builder team
+  rows: RecommendationRow[]   // rank asc by delta desc; infeasible last
+  exhaustive                  // true iff every declared candidate was evaluated
+  candidatesConsidered        // declared set size
+  evaluated                   // actually simulated set size (<= candidatesConsidered via maxCandidates)
+  warnings                    // dropped invalid builds, truncation, empty set — always visible in UI
+}
 
-### Recommendation-like, wired to UI (true ranking via production APIs)
-| Surface | UI | Production API |
-|---|---|---|
-| Optimizer search candidates | `src/ui/optimizerPage.ts:23-27` | `optimizer/search:evaluateSpace/rank/bruteForce`, `beam:beamSearch`, `mc:mcReport`, `joint:jointReport` |
-| Cross-encounter team ranking | `optimizerPage.ts:27` | `optimizer/encounter:teamRankTable` (`rankAcrossEncounters`) |
-| Kit compatibility scoring | `src/ui/profiles.ts:12-15` | `analysis/team:scoreKits/predictCompatibility/pairInteraction`, `analysis/causal`, `analysis/profile`, `analysis/probe` |
-| Team delta comparison | `src/ui/compare.ts:8` | `analysis/compare:compareTeams` |
+RecommendationRow = {
+  rank, label, build?, kitId, team   // team = other slots verbatim, target slot swapped
+  metrics, values, constraints, feasible
+  delta                              // values[primary] − baselineValues[primary]
+  reason                             // verifiable sentence: delta vs baseline, or failed constraint
+}
+```
 
-### Production APIs with NO UI surface (tested by `tests/golden/optimizer/*`)
-- `optimizer/ablation.ts` — `teamAblation`, `replacementMatrix` (closest thing to "team member recommendations"); capability registry honestly marks `optimize.ablation = partial` (`capabilities.ts:176`).
-- `optimizer/exact.ts`, `optimizer/calibration.ts`, `optimizer/pipeline.ts`, `optimizer/sample.ts`, `optimizer/score.ts`.
+Contract points (each pinned by a test):
 
-### Display/edit only, NOT recommendations
-- `buildEditor.ts` — edits `BuildSpec`; validation/compilation delegate to `core/build:validateBuild/resolveBuild`; static dropdowns from `core/gear` (LIGHT_CONES/RELIC_SETS/PLANAR_SETS) + `core/kits`.
-- `catalog.ts`, `dashboard.ts`, `enemy.ts` (static enemy presets), `runAnalysis.ts` (post-run metrics via `analysis/*`).
+- **Single source of truth**: every row evaluated by `evaluateCandidate` on the same
+  `EncounterSpec` + seed + log level via `configToSetup`; baseline independently recomputed
+  through the same path. `core/calcs.ts` never used for results.
+- **Fixed slots**: only the target slot's build (F1) or character (F2) varies; other members
+  pass through verbatim (`recommend.ts` team mapping).
+- **Validation**: per-build `validateBuild`; invalid builds dropped with a visible warning,
+  never silently zero-filled or fabricated.
+- **Determinism**: same inputs → identical rank/label/delta sequence (fixed seed, no RNG outside
+  the engine's seeded stream).
+- **Honesty**: `exhaustive=false` + "исследовано X из Y …не глобальный оптимум" warning when
+  `maxCandidates` truncates; empty candidate set → explicit "нет допустимых кандидатов", zero rows.
+- **Multi-run metrics** (`variance`, `consistency`): throw via `assertSingleRun` — no fabricated
+  number for a single deterministic run.
 
-### Data available for any future recommendation feature
-- Characters: `core/kits` (KITS), raw `hsr-data/data/characters.json`.
-- Light Cones / Relics: `core/gear` (LIGHT_CONES, RELIC_SETS, PLANAR_SETS, aggregateGear), raw `hsr-data/data/lightcones.json`.
-- Build validation: `core/build` (BuildSpec, validateBuild, resolveBuild).
-- Search space / objectives: `optimizer/space.ts` (CharacterPool, memberBuilds, teamCandidates, Objective+constraints).
-- Scoring / exactness: `optimizer/search`, `optimizer/score`, `optimizer/exact` (exact simulator = authority per guide).
+## 2. UI contract
 
-### The feature itself
-No "build recommendation" implementation exists anywhere: no UI term match (`recommend|suggest|Рекомен|Предл|подбор|Совет|лучш` over `src/ui` = only optimizer ranking rows), no API with recommendation contract in `src/optimizer` or `src/analysis`.
+Existing page `src/ui/optimizerPage.ts` — no new route. Section "Рекомендации (фаза F)":
 
-## 3. Status
-- `F = BLOCKED: SPEC MISSING`.
-- Not done on purpose: no algorithm, no UI, no static-preset substitution presented as recommendations (would violate §84.1 anti-fabrication as paraphrased in TODO:1555).
+- inputs: slot (populated from Team Builder team), eidolons/cones/SI/relicSets/planarSets pool
+  fields (F1), candidate kitIds (F2); encounter/seed/primary reuse the page's existing controls;
+  maxCandidates reuses the existing field.
+- pool is labelled explicitly as the allowed catalog (`CharacterPool`), not account inventory.
+- output via exported `renderRecommendationReport(report, mount, primary)`: baseline kv,
+  exhaustive/incomplete badge, warnings list, ranked table with feasible/pruned badges, delta,
+  and reason. Render function is UI-only — no engine logic; tested independently.
 
-## 4. Unblock requires
-- `docs/gui/traceability.md` (§84.17 rows for recommendations), or
-- guide §84 lines 6343-6900 from source machine, or
-- direct statement of: which surface (build editor suggestion vs optimizer page vs new route), which API is authoritative (`rank` vs `replacementMatrix` vs `exact`), input/output contract, and acceptance test.
+## 3. Test coverage (§9 list)
+
+`tests/golden/optimizer/recommend.ts` (13 cases) — F1 rows match an independent production-API
+run of the same setup; fixed-slot invariant; invalid-cone pool drops the bad build with warning;
+delta and baseline recomputed independently; deterministic ranking; empty F2 set; maxCandidates
+truncation marks the report incomplete; multi-run metric throws; F2 fixed other slots +
+deterministic; reasons are numeric/constraint sentences; infeasible rows rank last with the
+failed constraint named; pool id must match the varied slot kitId.
+
+`tests/ui/optimizer-recommend.ts` (9 cases, happy-dom) — ranked table rows, exhaustive pass
+badge, zero warnings on clean exhaustive run, delta visible in variant cell, infeasible row
+shows its constraint, feasible badge present, incomplete run shows honest fail badge + exact
+"исследовано 3 из 8" warning, empty set renders explicit empty state with no ranked table.
+
+## 4. Verified gates (19-10-2026)
+
+`npx tsc --noEmit` 0 · `npm test` 3006/0 (was 2984 before F) · `npm run check` exit 0 ·
+`npm run verify` ALL SPECS PASSED (93/93) · `npm run verify:deviations` NO FAILURES ·
+`npm run lab` ALL LABS PASSED · `npm run build` OK (pre-existing chunk-size warning).
+
+## 5. Honest limits (kept, not silently "fixed")
+
+- F2 candidates use their pool-default build (no per-candidate relic search) — v1 scope per
+  spec option "narrowed v1"; per-candidate build search would compose F1 inside F2 rows.
+- Ranking = simulated metrics on the fixed encounter; cross-encounter generalisation is the
+  separate `optimizer/encounter` surface, not mixed into the report metric (spec: never mix
+  scenarios).
+- `maxCandidates` truncation is deterministic (set order preserved), not importance-sampled —
+  bounded search is marked incomplete rather than estimated.

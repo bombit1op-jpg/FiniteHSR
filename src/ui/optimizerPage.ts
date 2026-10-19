@@ -25,6 +25,8 @@ import { beamSearch, pruningReport } from '../optimizer/beam'
 import { mcReport, objectiveUsesMultiRun } from '../optimizer/mc'
 import { jointReport } from '../optimizer/joint'
 import { teamRankTable } from '../optimizer/encounter'
+import { buildRecommendations, replacementRecommendations, type RecommendationContext, type RecommendationReport } from '../optimizer/recommend'
+import { collect } from './team'
 import { KITS } from '../core/kits'
 import { withBusy } from './shell'
 import { button, emptyState, jsonBlock, kv, n, label, row, select, table, title, badge, type Status } from './render'
@@ -50,6 +52,39 @@ const teamKey = (c: FullTeamConfig): string =>
     const gear = [b.eidolon ? `E${b.eidolon}` : '', b.cone ? `${b.cone}${b.si ? `@S${b.si}` : ''}` : '', b.relic ?? '', b.planar ?? ''].filter(Boolean).join('/')
     return `${m.kitId}${gear ? `[${gear}]` : ''}`
   }).join(' + ')
+
+/** §84.12/phase F — render one recommendation report: baseline, honesty badges, ranked table. */
+export function renderRecommendationReport(report: RecommendationReport, mount: HTMLElement, primary: string): void {
+  mount.innerHTML = ''
+  mount.append(
+    kv([
+      ['baseline', `${report.baselineLabel} — ${primary} ${n((report.baselineValues as Record<string, number>)[primary] ?? 0, 2)}, суммарный урон ${n(report.baselineTotalDamage, 0)}`],
+      ['кандидатов объявлено / оценено', `${report.candidatesConsidered} / ${report.evaluated}`],
+    ]),
+    report.exhaustive
+      ? badge('исследовано всё объявленное пространство', 'pass')
+      : badge('НЕ полный поиск: рейтинг относится только к исследованному подмножеству — не глобальный оптимум', 'fail'),
+  )
+  for (const w of report.warnings) {
+    const d = el('div', 'warn')
+    d.textContent = `⚠ ${w}`
+    mount.append(d)
+  }
+  if (!report.rows.length) {
+    mount.append(emptyState('Нет кандидатов для сравнения — см. предупреждения выше.'))
+    return
+  }
+  mount.append(table(
+    ['#', 'feasible', `вариант (Δ ${primary})`, 'totalDamage', 'причина'],
+    report.rows.map(r => [
+      r.rank,
+      badge(r.feasible ? 'feasible' : 'pruned', r.feasible ? 'pass' : 'warn'),
+      `${r.label}  [Δ ${n(r.delta, 2)}]`,
+      n(r.metrics.totalDamage, 0),
+      r.reason,
+    ]),
+  ))
+}
 
 export function initOptimizer(): void {
   const root = document.getElementById('optimizerWs')
@@ -156,6 +191,75 @@ export function initOptimizer(): void {
   })
 
   root.append(inputs, row(runBtn, validateBtn), preBox, outBox)
+
+  // ---------------- phase F: recommendations (F1 build / F2 replacement) on this page
+  const fSlot = el('select') as HTMLSelectElement
+  const fEid = el('input') as HTMLInputElement; fEid.value = '0,1'; fEid.placeholder = 'напр. 0,1,2'
+  const fCones = el('input') as HTMLInputElement; fCones.placeholder = 'cone ids через запятую'
+  const fSi = el('input') as HTMLInputElement; fSi.value = '1,2'; fSi.placeholder = 'напр. 1,2'
+  const fRelics = el('input') as HTMLInputElement; fRelics.placeholder = 'relic set ids через запятую'
+  const fPlanars = el('input') as HTMLInputElement; fPlanars.placeholder = 'planar set ids через запятую'
+  const fCands = el('input') as HTMLInputElement; fCands.value = 'pela,luocha'; fCands.placeholder = 'kitId,kitId кандидатов на замену'
+  const fOut = el('div', 'wsBody')
+  const parseList = (s: string): string[] => s.split(',').map(x => x.trim()).filter(Boolean)
+  const numList = (s: string): number[] => parseList(s).map(Number).filter(x => Number.isFinite(x))
+  function refreshSlot(): void {
+    const team = collect().team
+    fSlot.innerHTML = ''
+    team.forEach((m, i) => {
+      const o = el('option') as HTMLOptionElement
+      o.value = String(i); o.textContent = `${i}: ${m.kitId}`
+      fSlot.append(o)
+    })
+  }
+  function fContext(): RecommendationContext {
+    return {
+      team: collect().team,
+      slot: Math.max(0, Math.min(Number(fSlot.value) || 0, collect().team.length - 1)),
+      encounter: ENCOUNTER_PRESETS[encSel.value] as EncounterSpec,
+      seed: Number(seedIn.value) || 0,
+      objective: { primary: primarySel.value as ObjectiveMetric },
+      maxCandidates: Number(maxCandIn.value) || undefined,
+    }
+  }
+  const fNoTeam = (): void => { fOut.innerHTML = ''; fOut.append(emptyState('Соберите команду в Team Builder — рекомендации сравнивают её с вариантами.')) }
+  const runF1 = async (): Promise<void> => {
+    await withBusy('F1: подбор сборки (production-симуляция каждого кандидата)…', () => {
+      const team = collect().team
+      if (!team.length) { fNoTeam(); return }
+      refreshSlot()
+      const ctx = fContext()
+      const pool: CharacterPool = {
+        id: team[ctx.slot]!.kitId,
+        eidolons: numList(fEid.value), cones: parseList(fCones.value), si: numList(fSi.value),
+        relicSets: parseList(fRelics.value), planarSets: parseList(fPlanars.value),
+      }
+      fOut.innerHTML = ''
+      renderRecommendationReport(buildRecommendations(ctx, pool), fOut, ctx.objective.primary)
+    })
+  }
+  const runF2 = async (): Promise<void> => {
+    await withBusy('F2: ранжирование замен (production-симуляция каждого кандидата)…', () => {
+      const team = collect().team
+      if (!team.length) { fNoTeam(); return }
+      refreshSlot()
+      const ctx = fContext()
+      const candidates: CharacterPool[] = parseList(fCands.value).filter(id => id !== team[ctx.slot]!.kitId).map(id => ({ id }))
+      fOut.innerHTML = ''
+      renderRecommendationReport(replacementRecommendations(ctx, candidates), fOut, ctx.objective.primary)
+    })
+  }
+  const fHint = el('span', 'dim')
+  fHint.textContent = 'пул кандидатов = разрешённый каталог (CharacterPool), не инвентарь аккаунта; для F2 кандидат участвует со своим дефолтным билдом из пула'
+  root.append(
+    title('Рекомендации (фаза F)', 'F1 — билд одного персонажа; F2 — замены в слоте. Кандидаты оцениваются production-симулятором на ОДНИХ И ТЕХ ЖЕ encounter/seed/правилах; baseline — текущая команда из Team Builder'),
+    row(label('слот', fSlot), label('eidolons', fEid), label('cones', fCones), label('SI', fSi), label('relicSets', fRelics), label('planarSets', fPlanars)),
+    row(button('F1: подобрать сборку', runF1, 'btn-primary')),
+    row(label('кандидаты (F2)', fCands), button('F2: ранжировать замены', runF2, 'btn-primary')),
+    row(fHint),
+    fOut,
+  )
+  refreshSlot()
 
   // ---------------- space assembly
   function buildSpace(): SearchSpace {
