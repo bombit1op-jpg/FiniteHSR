@@ -57,3 +57,13 @@ F-отчёт помечает неполноту («исследовано X и�
 - G: ассетов/манифеста по-прежнему нет — закрыт только fallback-бейдж (см. «Иконки» выше); `PHASE_G.md` = спецификация downloader'а, deliberate deferral.
 - Адаптивность: в `src/style.css` нет ни одного `@media`-запроса (проверено 19-10) — навигация в 4 сворачиваемых секции облегчает узкие экраны, но breakpoint'ов нет; массовый responsive-рефактор вне задачи.
 - Отмена долгих прогонов: механизма отмены нет → кнопка не рисуется (см. «Long operations»).
+
+## UX refresh (19-10-2026) — branch `ui/streamlined-game-like-navigation`
+
+- Main navigation labels are player-facing and Russian; route ids/hash deep links are unchanged.
+- Battle group now reads in a clearer order: Обзор → Отряд → Билды → Реликвии и конусы → Враги и волны → Начать бой → Итоги боя, followed by advanced calculation/reference pages.
+- Analysis and optimization labels are simplified; the engineering section is labelled «Инструменты разработчика» and remains collapsed by default.
+- Dashboard primary tiles now follow the user journey: configure team/build → configure enemies → run → results → analysis / optimization. Coverage and technical capabilities remain below as secondary material.
+- Navigation groups expose `aria-expanded` / `aria-controls`; responsive layouts added for tablet and mobile widths.
+- This is a presentation/navigation change only. It does not alter combat rules, data, simulator setup contracts, or backend capability statuses.
+- Validation note: changes were authored through GitHub file operations; no local browser session or test runner was available in this editing environment. Run the repository's normal typecheck, UI tests, full tests, and build before merging.
