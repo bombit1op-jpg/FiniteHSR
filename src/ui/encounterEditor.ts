@@ -127,23 +127,21 @@ export function initEncounterEditor(): void {
       const api = archiveModule
       const versionSel = el('select') as HTMLSelectElement
       const stageSel = el('select') as HTMLSelectElement
-      const roomSel = el('select') as HTMLSelectElement
       const effectSel = el('select') as HTMLSelectElement
       const effectInfo = el('div', 'mocEffectInfo')
-      const roomPreview = el('div', 'mocRoomPreview')
-      const loadRoomButton = el('button', 'btn-primary')
-      loadRoomButton.textContent = 'Загрузить выбранную комнату'
+      const roomsPreview = el('div', 'mocRoomsPreview')
+      const loadStageButton = el('button', 'btn-primary')
+      loadStageButton.textContent = 'Загрузить весь этап'
 
       const fields = el('div', 'row')
       fields.append(
         lab('Версия MoC', versionSel),
         lab('Этап', stageSel),
-        lab('Комната', roomSel),
         lab('Бафф периода (справочно)', effectSel),
       )
       const warning = el('p', 'dim')
-      warning.textContent = 'Важно: описание Memory Turbulence загружается из архива. Его эффект не применяется к боевой математике автоматически; это требует отдельной реализации механики.'
-      archiveControls.replaceChildren(fields, effectInfo, roomPreview, warning, loadRoomButton)
+      warning.textContent = 'Бафф показывается из архива как описание. Его игровая механика не применяется к боевой математике автоматически; это требует отдельной реализации.'
+      archiveControls.replaceChildren(fields, effectInfo, roomsPreview, warning, loadStageButton)
 
       const setOptions = (select: HTMLSelectElement, entries: Array<[string, string]>): void => {
         select.innerHTML = ''
@@ -173,50 +171,52 @@ export function initEncounterEditor(): void {
         }
       }
 
-      const refreshRoom = (): void => {
+      const refreshStage = (): void => {
         const stage = api.endgameStage('MoC', versionSel.value, stageSel.value)
-        const rooms = stage?.battles ?? []
-        setOptions(roomSel, rooms.map((room, i) => [
-          String(i),
-          'Комната ' + (i + 1) + ' — ' + room.id,
-        ]))
-        roomSel.disabled = rooms.length === 0
-        roomPreview.replaceChildren()
-        if (!stage || !rooms.length) {
-          roomPreview.textContent = 'Для выбранной записи нет комнаты с распознанными боевыми данными.'
-          loadRoomButton.disabled = true
+        roomsPreview.replaceChildren()
+        if (!stage || !stage.rooms.length) {
+          roomsPreview.textContent = 'Для выбранного этапа нет распознанных комнат или врагов.'
+          loadStageButton.disabled = true
           return
         }
 
-        const room = rooms[Number(roomSel.value) || 0]
         const cycles = Array.isArray(stage.maxCycles)
           ? stage.maxCycles.reduce((sum, value) => sum + value, 0)
           : stage.maxCycles
         const summary = el('p')
-        summary.textContent = stage.title + ' · ' + room.id + ' · уровень врагов ' + room.level +
+        summary.textContent = stage.title + ' · комнат: ' + stage.rooms.length +
+          ' · уровни врагов: ' + (stage.enemyLevels.length ? stage.enemyLevels.join(' / ') : 'по умолчанию') +
           ' · общий лимит этапа: ' + (cycles || 'не указан') + ' циклов'
-        roomPreview.append(summary)
+        roomsPreview.append(summary)
 
         let groupCount = 0
-        room.waves.forEach((groups, waveIndex) => {
-          const waveLine = el('p')
-          const names = groups.map(group => {
+        stage.rooms.forEach((room, roomIndex) => {
+          const roomCard = el('section', 'mocRoomCard')
+          const heading = el('h4')
+          heading.textContent = 'Комната ' + (roomIndex + 1) + ' — ' + room.id
+          roomCard.append(heading)
+
+          if (!room.enemies.length) {
+            const missing = el('p', 'dim')
+            missing.textContent = 'Не удалось сопоставить врагов этой комнаты с каталогом.'
+            roomCard.append(missing)
+          }
+          room.enemies.forEach(enemy => {
             groupCount += 1
-            return group.name + ' ×' + group.count
+            const line = el('p')
+            line.textContent = enemy.name + ' ×' + enemy.count +
+              ' · ур. ' + enemy.level +
+              ' · HP ' + enemy.hp.toLocaleString('ru-RU') +
+              ' · ATK ' + (enemy.atk ?? 0).toLocaleString('ru-RU') +
+              ' · SPD ' + enemy.spd
+            roomCard.append(line)
+            const details = el('p', 'dim')
+            details.textContent = 'Слабости: ' + (enemy.weaknesses?.join(', ') || 'не указаны')
+            roomCard.append(details)
           })
-          waveLine.textContent = 'Волна ' + (waveIndex + 1) + ': ' +
-            (names.length ? names.join(', ') : 'враги не сопоставлены с каталогом')
-          roomPreview.append(waveLine)
-          const details = el('p', 'dim')
-          details.textContent = groups.map(group =>
-            group.name + ' — HP ' + group.hp.toLocaleString('ru-RU') +
-            ', ATK ' + (group.atk ?? 0).toLocaleString('ru-RU') +
-            ', SPD ' + group.spd +
-            ', слабости: ' + (group.weaknesses?.join(', ') || 'не указаны')
-          ).join(' · ')
-          if (details.textContent) roomPreview.append(details)
+          roomsPreview.append(roomCard)
         })
-        loadRoomButton.disabled = groupCount === 0
+        loadStageButton.disabled = groupCount === 0
         const effect = selectedEffect()
         effectInfo.textContent = effect
           ? effect.label + ': ' + effect.description
@@ -227,7 +227,7 @@ export function initEncounterEditor(): void {
         const stages = api.endgameSections('MoC', versionSel.value)
         setOptions(stageSel, stages.map(stage => [stage.id, stage.title]))
         stageSel.disabled = stages.length === 0
-        refreshRoom()
+        refreshStage()
       }
 
       const versions = api.endgameVersions('MoC').slice().reverse()
@@ -236,27 +236,25 @@ export function initEncounterEditor(): void {
         refreshEffects()
         refreshStages()
       }
-      stageSel.onchange = refreshRoom
-      roomSel.onchange = refreshRoom
-      effectSel.onchange = refreshRoom
+      stageSel.onchange = refreshStage
+      effectSel.onchange = refreshStage
 
-      loadRoomButton.onclick = () => {
+      loadStageButton.onclick = () => {
         const stage = api.endgameStage('MoC', versionSel.value, stageSel.value)
-        const room = stage?.battles[Number(roomSel.value) || 0]
-        if (!stage || !room || !room.waves.some(wave => wave.length > 0)) {
-          showStatus('Не удалось загрузить выбранную комнату: в ней нет распознанных врагов.', 'error')
+        const battle = stage?.battles[0]
+        if (!stage || !battle || !battle.waves.some(wave => wave.length > 0)) {
+          showStatus('Не удалось загрузить этап: в нём нет распознанных врагов.', 'error')
           return
         }
         const effect = selectedEffect()
         const cycles = Array.isArray(stage.maxCycles)
           ? stage.maxCycles.reduce((sum, value) => sum + value, 0)
           : stage.maxCycles
-        cur.id = ('moc-' + versionSel.value + '-' + stage.id + '-' + room.id).replace(/[^a-zA-Z0-9_-]+/g, '_')
-        cur.mode = 'MoC ' + versionSel.value + ' · ' + stage.title + ' · ' + room.id +
-          (effect ? ' · ' + effect.label : '')
+        cur.id = ('moc-' + versionSel.value + '-' + stage.id).replace(/[^a-zA-Z0-9_-]+/g, '_')
+        cur.mode = 'MoC ' + versionSel.value + ' · ' + stage.title + (effect ? ' · ' + effect.label : '')
         cur.stageId = stage.id
         cur.cycles = cycles > 0 ? cycles : 10
-        cur.waves = room.waves.map(wave => wave.map(cloneGroup))
+        cur.waves = battle.waves.map(wave => wave.map(cloneGroup))
         cur.effects = undefined
         cur.stageModifiers = undefined
         cur.startingRules = undefined
@@ -267,8 +265,9 @@ export function initEncounterEditor(): void {
         const enemyCount = cur.waves.reduce((sum, wave) =>
           sum + wave.reduce((n, enemy) => n + enemy.count, 0), 0)
         showStatus(
-          'Загружена ' + stage.title + ' · ' + room.id + ' (' + enemyCount +
-          ' врагов). Бафф выбран для справки и пока не применяется автоматически.',
+          'Загружен MoC ' + versionSel.value + ' · ' + stage.title +
+          ' · комнат: ' + stage.rooms.length + ' · врагов: ' + enemyCount +
+          '. Общий лимит циклов сохранён; выбранный бафф пока справочный.',
           'info',
         )
       }
