@@ -84,17 +84,17 @@ export function initDashboard(): void {
   if (!root) return
   root.innerHTML = ''
 
-  root.append(title('Что можно сделать', 'все плитки ведут на реальные экраны и реальные backend-вызовы'))
+  root.append(title('С чего начать', 'Настройте отряд → выберите врагов → запустите бой → разберите результат'))
   root.append(row(
-    tile('Настроить бой', `${KITS.length} китов`, 'Билд · Отряд · Столкновение', () => navigate('build')),
-    tile('Запустить симуляцию', 'run', 'пошагово или авто', () => navigate('battle')),
-    tile('Разобрать результат', 'analysis', 'метрики, урон, аудит', () => navigate('analysis')),
-    tile('Сравнить два отряда', 'B − A', '§77-отчёт', () => navigate('compare')),
-    tile('Подобрать билд', 'search', 'пространство + цель', () => navigate('optimizer')),
-    tile('Проверить движок', 'gates', 'покрытие и инварианты', () => navigate('verification')),
+    tile('1 · Отряд и билды', `${KITS.length} персонажей`, 'Выберите персонажей и настройте их', () => navigate('team')),
+    tile('2 · Враги', 'Волны', 'Настройте противников и условия боя', () => navigate('encounter')),
+    tile('3 · Запустить бой', '▶', 'Автоматический или пошаговый режим', () => navigate('battle')),
+    tile('4 · Результат', 'Урон и ходы', 'Лог, сводка и состояние после боя', () => navigate('results')),
+    tile('Разобрать бой', 'Анализ', 'Причины урона и вклад персонажей', () => navigate('analysis')),
+    tile('Подобрать билд', 'Оптимизация', 'Поиск с явными ограничениями', () => navigate('optimizer')),
   ))
 
-  root.append(title('Покрытие (реестры, не оценки)', 'каждая плитка открывает подробный отчёт'))
+  root.append(title('Каталог и покрытие', 'Сводные данные проекта; подробности доступны в соответствующих разделах'))
   const reg = gearRegistry()
   const cones = reg.filter(e => e.kind === 'cone')
   const relics = reg.filter(e => e.kind === 'relic')
@@ -108,10 +108,10 @@ export function initDashboard(): void {
     tile('Враги (behavior)', `${enf.behavioral}/${enf.bases}`, `${enf.records} записей каталога`, () => navigate('catalog')),
   ))
 
-  root.append(title('Reproducibility последнего прогона', 'seed + RulesSnapshot + версии — то, что нужно для повтора'))
+  root.append(title('Последний прогон', 'Параметры, по которым можно повторить симуляцию'))
   root.append(reproBlock())
 
-  root.append(title('Возможности backend (§84.1)', 'статус честный: partial/unavailable всегда с причиной'))
+  root.append(title('Технические возможности', 'Справка для продвинутой проверки; ограничения показаны явно'))
   root.append(capabilitiesTable())
 
   const dmgHint = el('div', 'wsHint')
