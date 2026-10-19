@@ -1,26 +1,41 @@
 # FiniteHSR - UX Map (Phase B)
 
-## Routes (shell.ts:25-47, регруппировка 19-10-2026)
-4 пользовательских раздела (route id/deep links `#/<id>` не менялись, 18 роутов как раньше):
-- БОЙ (BATTLE): dashboard, team, build, encounter, battle, gear, results, calc, reference
+## Routes (shell.ts:25-48, регруппировка 19-10-2026; single-page player 20-10-2026)
+4 пользовательских раздела (прежние 18 route id/deep links `#/<id>` сохранены; добавлен `player` = 19 роутов):
+- БОЙ (BATTLE): player, dashboard, team, build, encounter, battle, gear, results, calc, reference
 - АНАЛИЗ (ANALYSIS): analysis, compare, profiles
 - ОПТИМИЗАЦИЯ (OPTIMIZATION): optimizer
 - ПРОВЕРКА ДВИЖКА (ENGINEERING): verification, catalog, deviations, diagnostics, settings
+
+### Single-page player flow (20-10-2026)
+`player` — первый роут и `DEFAULT_ROUTE`; панель `#panel-player` держит существующие редакторы
+в порядке из `docs/gui/PLAYER_FLOW_AND_ASSETS.md`: отряд (`#team`/`#addChar`) → билд/реликвии
+(`#relicTabs`/`#relicPanel`) → противники (`#enemyCfg`) → модификаторы (`#modRows`/`#addMod`) →
+режим и запуск (`#cycles`/`#seed`/`#runMode`/`#run`/`#check`) → результаты ниже (`#summary`,
+`#statPanel`, `#hpPanel`, `#log`, `#manualPanel`). Контейнеры **перенесены**, не скопированы: одна
+живая копия каждого контрола, второй источник истины не создан. Старые роуты team/gear/battle/results
+сохранили id и показывают указатель с кнопкой `[data-go="player"]` (`initShell` делегирует клик в
+`navigate`). Покрытие: `tests/ui/player-page.ts` 7/7 (порядок секций, уникальность id, единый дом,
+указатели); `tests/ui/nav.ts` обновлён на 19 роутов.
 
 Заголовки разделов — кнопки-секции (сворачивание, `GROUP_LABELS`, состояние в localStorage
 `nav.collapsed`, дефолт: ENGINEERING свёрнут; переход на роут внутри свёрнутого раздела
 раскрывает его — `expandGroup` в `activate`). Кнопки роутов всегда остаются в DOM.
 Соответствует §2 брифа: технические инструменты — не равнозначные пункты главного меню.
 
-## Иконки (fallback, 19-10-2026)
-Проверено: 0 image-файлов в репо/hsr-data; `characters.json` — только числовой `avatar_id`;
-`lightcones.json` — без icon/url полей; `relicsets.json` — строки `SpriteOutput/...` (путь в игре,
-без файлов и без базового URL); `enemies.json` — ссылка на страницу вики, не картинка.
-Реализован только data-driven fallback: `src/ui/icons.ts` `charBadge/updateCharBadge` —
-круглый бейдж с первой буквой имени, цвет по `KitDef.elem` (7 элементов), tooltip называет
-имя+элемент+пробел. Точки: team-карточка (`charHead`) и Build Editor («Персонаж»).
-`<img>` в UI — 0; URL не выдумываются. Пробел = локальные ассеты (Phase G) — не закрыт.
-Тесты: `tests/ui/icons.ts` 6/6 (тint по палитре, смена кита, неизвестный id → `?`, без throw).
+## Иконки (реальные ассеты, 20-10-2026)
+Ассеты добавлены в `public/icons/` (1874 PNG: characters/enemies/lightcones/relicsets/planarsets/
+eidolons/stats/paths/elements/types/buffs/debuffs/states/abilities + `_manifest.json`), served at
+`/icons/...`. Манифест генерируется `src/core/gen-icon-manifest.ts` → `src/ui/iconManifest.ts`
+(typed `Record<name,path>` ×kind + вложенный `EIDOLON_ICONS`); id→display-name резолв через
+kit/gear таблицы (`PATH_KEY` алиасит `Hunt`→`The Hunt`).
+`src/ui/icons.ts` — единый компонент: `charIconUrl/gearIconUrl/elemIconUrl/pathIconUrl/statIconUrl/
+enemyIconUrl` + `iconNode` рисует `<img>` (`alt`, `width/height`, `object-fit`, `loading="lazy"`,
+`decoding="async"`, `onerror`→скрыть картинку и показать fallback-chip). Неизвестный/пустой id →
+детерминированный chip по элементу; URL не выдумываются, вики не хотлинкается. Публичные контракты
+`charBadge/updateCharBadge/gearBadge/updateGearBadge` сохранены.
+Тесты: `tests/ui/icons.ts` 8/8 (резолв манифеста, alt+lazy, смена кита, неизвестный/пустой → chip,
+резолв gear id, отсутствие выдуманных URL). Прежний пробел Phase G закрыт.
 
 ## Long operations (§4 брифа — проверка, изменений нет)
 Уже есть и покрыто тестами: `withBusy` = единый loading/error контракт; оптимизатор печатает
@@ -52,8 +67,9 @@ F-отчёт помечает неполноту («исследовано X и�
 - No engine duplication in shell (UI-only).
 - No fake metrics; only status surface for missing backend.
 
-## Gaps (актуально, 19-10-2026)
+## Gaps (актуально, 20-10-2026)
 - C/D/E/I — закрыты (см. TODO.md, 18–20-10): техника в Team Builder, per-node traces, action-log из `sim.logger.events`, экран Диагностика есть (ROUTES: diagnostics).
-- G: ассетов/манифеста по-прежнему нет — закрыт только fallback-бейдж (см. «Иконки» выше); `PHASE_G.md` = спецификация downloader'а, deliberate deferral.
+- G — закрыт (20-10-2026): ассеты и манифест добавлены (`public/icons/` + `src/ui/iconManifest.ts`), иконки рендерятся через единый компонент с graceful fallback (см. «Иконки» выше).
+- Single-page player flow — реализован (20-10-2026): см. «Single-page player flow» выше; `docs/gui/PLAYER_FLOW_AND_ASSETS.md` перенесён на main как целевой reference.
 - Адаптивность: в `src/style.css` нет ни одного `@media`-запроса (проверено 19-10) — навигация в 4 сворачиваемых секции облегчает узкие экраны, но breakpoint'ов нет; массовый responsive-рефактор вне задачи.
 - Отмена долгих прогонов: механизма отмены нет → кнопка не рисуется (см. «Long operations»).
