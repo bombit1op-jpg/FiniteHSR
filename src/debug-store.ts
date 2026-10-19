@@ -145,6 +145,7 @@ rootEl('summary'); rootEl('statPanel'); rootEl('hpPanel'); rootEl('log')
 rootEl('relicTabs'); rootEl('relicPanel'); rootEl('manualPanel')
 rootEl('reference')
 const mainTabs = rootEl('mainTabs')
+const body = rootEl('body')
 const names = ['team', 'battle', 'gear', 'calc', 'results', 'reference']
 for (const n of names) {
   const t = new El('button'); t.className = 'tab'; t.dataset['tab'] = n; TABS.push(t); mainTabs.append(t)
@@ -152,6 +153,7 @@ for (const n of names) {
 }
 
 const documentShim = {
+  body,
   getElementById(id: string): El | null {
     if (byId.has(id)) return byId.get(id)!
     return null
@@ -166,6 +168,7 @@ const documentShim = {
   addEventListener(): void { /* teamChanged → renderReference: no-op in shim, not asserted */ },
 }
 ;(globalThis as Record<string, unknown>).document = documentShim
+;(globalThis as Record<string, unknown>).location = { hash: '' }
 
 // ---------------------------------------------------------------- boot
 

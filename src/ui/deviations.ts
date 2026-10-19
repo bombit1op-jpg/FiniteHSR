@@ -3,11 +3,12 @@
  *
  * The authoritative deviation registry lives in `TODO.md` (§33: deviations are documented,
  * not silently "fixed"). The browser cannot run the CLI gate (`src/verification/deviations.ts`
- * is node/fs), so this workspace reads TODO.md verbatim via Vite `?raw`, extracts the
- * deviation-related lines, and shows them with the CLI gate's status as a capability.
+ * is node/fs), so this workspace reads TODO.md verbatim via `./todoRaw` (vite `define` in the
+ * browser, `node:fs` under tsx harnesses), extracts the deviation-related lines, and shows
+ * them with the CLI gate's status as a capability.
  * It never invents a PASS for something it did not run.
  */
-import todoRaw from '../../TODO.md?raw'
+import { todoRaw } from './todoRaw'
 import { badge, button, emptyState, jsonBlock, kv, n, row, table, title } from './render'
 import { el } from './dom'
 import { capability } from './capabilities'
