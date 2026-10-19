@@ -71,5 +71,6 @@ F-отчёт помечает неполноту («исследовано X и�
 - C/D/E/I — закрыты (см. TODO.md, 18–20-10): техника в Team Builder, per-node traces, action-log из `sim.logger.events`, экран Диагностика есть (ROUTES: diagnostics).
 - G — закрыт (20-10-2026): ассеты и манифест добавлены (`public/icons/` + `src/ui/iconManifest.ts`), иконки рендерятся через единый компонент с graceful fallback (см. «Иконки» выше).
 - Single-page player flow — реализован (20-10-2026): см. «Single-page player flow» выше; `docs/gui/PLAYER_FLOW_AND_ASSETS.md` перенесён на main как целевой reference.
-- Адаптивность: в `src/style.css` нет ни одного `@media`-запроса (проверено 19-10) — навигация в 4 сворачиваемых секции облегчает узкие экраны, но breakpoint'ов нет; массовый responsive-рефактор вне задачи.
+- Адаптивность — закрыта (20-10-2026): в `src/style.css` добавлены breakpoints `@media (max-width: 860px)` (nav rail → горизонтальная прокручиваемая полоса, team/relic-гриды в одну колонку) и `(max-width: 560px)` (topbar/mod-строки/сабстаты), плюс `@media (prefers-reduced-motion)`. Прежний leftover-gap снят.
+- Доступность (20-10-2026): `:focus-visible`-кольцо на всех интерактивных контролах (кнопки/ссылки/input/select/nav/tab), у иконок всегда `alt`, Start (`#run`) — единственная prominent primary-кнопка (`btn-primary btn-large`).
 - Отмена долгих прогонов: механизма отмены нет → кнопка не рисуется (см. «Long operations»).

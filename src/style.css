@@ -85,6 +85,10 @@ body.busy { cursor: progress; }
 .gearBadge:has(.gameIcon img) { width: auto; height: auto; border-radius: 6px; }
 .gameIcon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
 .gameIcon img { display: block; border-radius: inherit; }
+
+/* consistent icon sizes: portrait (team/eidolon) > gear (cone/set) > slot */
+.gameIcon.charIcon img { width: 44px; height: 44px; }
+.gameIcon.gearIcon img { width: 30px; height: 30px; }
 .iconChip {
   display: inline-flex; align-items: center; justify-content: center;
   width: 26px; height: 26px; border-radius: 50%;
@@ -92,6 +96,8 @@ body.busy { cursor: progress; }
   border: 1px solid var(--elem, #55606f); color: var(--elem, #aab6c5);
   font-size: 13px; font-weight: 700;
 }
+.gameIcon.charIcon .iconChip { width: 44px; height: 44px; font-size: 15px; }
+.gameIcon.gearIcon .iconChip { width: 30px; height: 30px; font-size: 13px; }
 .del { background: transparent; border: none; color: #7b8595; cursor: pointer; font-size: 13px; padding: 4px 8px; border-radius: 4px; }
 .del:hover { background: #2a1d1d; color: #c96a6a; }
 
@@ -113,10 +119,18 @@ input[type="number"] { width: 84px; }
 input[type="checkbox"] { width: 14px; height: 14px; accent-color: #f2c94c; }
 input:focus, select:focus { outline: none; border-color: #f2c94c; }
 
+/* keyboard focus: a visible ring on every interactive control, only for keyboard users */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+.tab:focus-visible, .nav-btn:focus-visible, .nav-group:focus-visible,
+.relicTab:focus-visible, .addSub:focus-visible, .chk:focus-visible, .tile:focus-visible {
+  outline: 2px solid #f2c94c; outline-offset: 2px; border-radius: 8px;
+}
+
 .btn-primary { background: #f2c94c; color: #101319; font-weight: 600; border: none; border-radius: 8px; padding: 10px 18px; cursor: pointer; width: auto; font: inherit; }
 .btn-primary:hover { background: #ffd76a; }
 .btn-primary:disabled { background: #3a3f47; color: #6a737d; cursor: not-allowed; }
-.btn-large { width: 100%; padding: 12px; font-size: 15px; }
+/* the one prominent primary action (§5): larger, brighter, sits apart from secondary buttons */
+.btn-large { width: 100%; padding: 14px; font-size: 16px; font-weight: 700; letter-spacing: .02em; margin-top: 6px; box-shadow: 0 2px 12px rgba(242,201,76,0.25); }
 .btn-secondary { background: #2b3a55; color: #e6ebf2; border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; font: inherit; }
 .btn-secondary:hover { background: #37496b; }
 .btn-secondary:disabled { opacity: .45; cursor: not-allowed; }
@@ -270,3 +284,38 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .listBox { display: flex; flex-direction: column; gap: 4px; margin: 6px 0 10px; }
 
 .arrowLink { color: #6fb3e0; cursor: pointer; }
+
+/* ---------------------------------------------------------------- responsive (narrow screens) */
+/* nav rail becomes a horizontal, scrollable strip; content and grids go single-column. */
+
+@media (max-width: 860px) {
+  .app { flex-direction: column; }
+  .navRail {
+    position: static; flex-direction: row; flex-wrap: nowrap; overflow-x: auto;
+    min-width: 0; width: 100%; min-height: 0; padding: 8px 12px;
+    border-right: none; border-bottom: 1px solid #1e2530; gap: 8px;
+  }
+  .nav-group { display: none; }
+  .nav-group-body { flex-direction: row; gap: 6px; flex-wrap: nowrap; }
+  .nav-group-body.collapsed { display: flex; }
+  .nav-btn { white-space: nowrap; }
+  main { padding: 16px 14px 48px; }
+  .cardGrid { grid-template-columns: 1fr; }
+  .relicGrid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+}
+
+@media (max-width: 560px) {
+  .topbar { gap: 12px; padding: 8px 14px; }
+  #mainTabs { gap: 2px; }
+  .tab { padding: 6px 12px; font-size: 12px; }
+  .modRow { grid-template-columns: 1fr 1fr; }
+  .modRow .del { grid-column: 2; justify-self: end; }
+  .subRow { grid-template-columns: 1fr 1fr; }
+  .row { gap: 6px; }
+  input[type="number"] { width: 72px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-panel.active { animation: none; }
+  .tab, .nav-btn { transition: none; }
+}

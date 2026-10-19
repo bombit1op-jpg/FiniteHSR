@@ -54,5 +54,8 @@ export default () => {
     }), OLD.join(',')),
     raw('replaced BATTLE routes point to the player page', OLD.every(pid => !!doc.getElementById(pid)?.querySelector('[data-go="player"]')),
       OLD.filter(pid => !doc.getElementById(pid)?.querySelector('[data-go="player"]')).join(',') || 'all point'),
+    raw('Start is the single prominent primary action', doc.getElementById('run')?.classList.contains('btn-primary') === true
+      && doc.getElementById('run')?.classList.contains('btn-large') === true),
+    raw('setup inputs are wrapped by a label (accessible name)', ['cycles', 'seed', 'runMode'].every(id => !!doc.getElementById(id)?.closest('label'))),
   ]
 }
