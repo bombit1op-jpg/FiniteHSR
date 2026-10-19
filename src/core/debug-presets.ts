@@ -184,23 +184,29 @@ function sheetSubs(rng: () => number, mains: Record<RelicPiece['slot'], string>,
     used[i]++
   }
 
-  // biggest budget first, concentrated on as few pieces as the cap allows so a stat
-  // never burns more of the 24 line slots than it needs
+  // most constrained first: a stat that is main-blocked on many slots (e.g. DEF% on an
+  // all-DEF% sheet) claims its line slots before stats that are legal everywhere; ties
+  // break by budget, and each stat concentrates on as few pieces as the cap allows.
   const want = Object.entries(desire)
     .filter(([s, n]) => n > 0 && fillers.includes(s))
-    .sort((a, b) => b[1] - a[1])
-  for (const [stat, n] of want) {
-    for (let left = Math.round(n); left > 0; left--) {
+    .map(([s, n]) => {
+      let places = 0
+      for (let i = 0; i < slots.length; i++) if (mains[slots[i]] !== s) places++
+      return { stat: s, n: Math.round(n), places }
+    })
+    .sort((a, b) => a.places - b.places || b.n - a.n)
+  for (const w of want) {
+    for (let left = w.n; left > 0; left--) {
       let withStat = -1, newStat = -1
       for (let i = 0; i < slots.length; i++) {
-        if (!free(i, stat)) continue
-        if (lines[i][stat] !== undefined) { if (withStat < 0) withStat = i } else if (newStat < 0) newStat = i
+        if (!free(i, w.stat)) continue
+        if (lines[i][w.stat] !== undefined) { if (withStat < 0) withStat = i } else if (newStat < 0) newStat = i
       }
       const pick = withStat >= 0 ? withStat : newStat
       // no legal piece left for this stat: the rest of its budget cannot be placed.
       // probe-roll-budget.ts catches this by comparing placed rolls against blockFor().desire
       if (pick < 0) break
-      add(pick, stat)
+      add(pick, w.stat)
     }
   }
   for (let i = 0; i < slots.length; i++) {
