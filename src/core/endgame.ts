@@ -45,7 +45,16 @@ export interface EndgameStage {
   maxCycles: number | number[]
   enemyLevels: number[]
   objectives: string[]
+  /** Named rooms in source order; MoC rooms are sequential waves of one stage run. */
+  rooms: EndgameRoom[]
   battles: EndgameBattle[]
+}
+
+export interface EndgameRoom {
+  id: string
+  /** Existing enemy profiles with the archive's level curve applied. */
+  enemies: EnemySpec[]
+  types?: Elem[]
 }
 
 export interface EndgameBattle {
@@ -272,24 +281,39 @@ export function endgameStage(mode: EndgameMode, version: string, secId: string, 
     ? levels[Math.min(stagePick, levels.length - 1)]
     : levels.length ? levels[levels.length - 1] : 80
 
-  if (mode === 'MoC' || mode === 'PF' || mode === 'AS') {
-    // MoC floors can contain two or three rooms depending on the historical data.
-    // A Node is an independently selectable room; enemy groups inside it form its first wave.
-    const battles: EndgameBattle[] = nodes.map((n, i) => ({
-      id: n.label || 'Room ' + (i + 1),
+  // Keep the variable room count and names from endgame.json. A room contains enemy groups;
+  // for MoC, rooms are sequential parts of one stage and share its total cycle budget.
+  const rooms: EndgameRoom[] = nodes.map((node, i) => ({
+    id: node.label || 'Room ' + (i + 1),
+    enemies: buildEnemies(node.cards, stageLevel),
+    types: node.types,
+  }))
+
+  if (mode === 'MoC') {
+    const waves = rooms.map(room => room.enemies)
+    return {
+      mode, version, id: sec.id, title: sec.title,
+      maxCycles: cycles, enemyLevels: levels, objectives, rooms,
+      battles: [{ id: sec.title || sec.id, level: stageLevel, waves }],
+    }
+  }
+
+  if (mode === 'PF' || mode === 'AS') {
+    const battles: EndgameBattle[] = rooms.map(room => ({
+      id: room.id,
       level: stageLevel,
-      waves: [buildEnemies(n.cards, stageLevel)],
-      types: n.types,
+      waves: [room.enemies],
+      types: room.types,
     }))
-    return { mode, version, id: sec.id, title: sec.title, maxCycles: cycles, enemyLevels: levels, objectives, battles }
+    return { mode, version, id: sec.id, title: sec.title, maxCycles: cycles, enemyLevels: levels, objectives, rooms, battles }
   }
 
   // Arbitral Arena retains its mode-specific wave interpretation for now.
-  const waves = nodes.map(n => buildEnemies(n.cards, stageLevel))
+  const waves = rooms.map(room => room.enemies)
   return {
     mode, version, id: sec.id, title: sec.title,
-    maxCycles: cycles, enemyLevels: levels, objectives,
-    battles: [{ id: nodes[0]?.label ?? 'Stage', level: stageLevel, waves }],
+    maxCycles: cycles, enemyLevels: levels, objectives, rooms,
+    battles: [{ id: rooms[0]?.id ?? 'Stage', level: stageLevel, waves }],
   }
 }
 
