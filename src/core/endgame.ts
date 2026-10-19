@@ -67,7 +67,7 @@ export interface EndgameEffect {
 
 function plainText(html: string): string {
   return html
-    .replace(/<br\\s*\\/?\\s*>/gi, ' ')
+    .replace(/<br\s*\/?\s*>/gi, ' ')
     .replace(/<[^>]+>/g, ' ')
     .replace(/&nbsp;/gi, ' ')
     .replace(/&amp;/gi, '&')
@@ -75,9 +75,10 @@ function plainText(html: string): string {
     .replace(/&#39;/gi, "'")
     .replace(/&lt;/gi, '<')
     .replace(/&gt;/gi, '>')
-    .replace(/\\s+/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim()
 }
+
 // ---------------------------------------------------------------- sources
 
 const data = (ENDGAME as any).modes as Record<EndgameMode, any[]>
@@ -200,7 +201,7 @@ export function endgameSections(mode: EndgameMode, version: string): { id: strin
   if (!ver) return []
   // Metadata-only sections (e.g. Memory Turbulence / PF Cacophony) are not rooms/floors.
   return (ver.sections ?? [])
-    .filter((s: any) => blocksOf(s).some((b: EndgameBlock) => /^Enemies(?:\\s|$)/.test(b.label)))
+    .filter((s: any) => (blocksOf(s) as EndgameBlock[]).some(b => b.label === 'Enemies' || b.label.startsWith('Enemies ')))
     .map((s: any) => ({ id: s.id, title: s.title ?? s.id }))
 }
 
@@ -214,7 +215,7 @@ export function endgameEffects(mode: EndgameMode, version: string): EndgameEffec
   if (!ver) return []
   const meta = (ver.sections ?? []).find((s: any) => {
     const blocks = blocksOf(s) as EndgameBlock[]
-    return !blocks.some(b => /^Enemies(?:\\s|$)/.test(b.label)) &&
+    return !blocks.some(b => b.label === 'Enemies' || b.label.startsWith('Enemies ')) &&
       blocks.some(b => !!b.content && b.label !== 'Duration')
   })
   if (!meta) return []
