@@ -1,0 +1,1478 @@
+# FiniteHSR — Индекс иконок
+
+Все изображения подписаны именем объекта (имя файла = название).
+
+## Персонажи — `characters/` (87)
+
+- Acheron
+- Aglaea
+- Anaxa
+- Archer
+- Argenti
+- Arlan
+- Ashveil
+- Asta
+- Aventurine • Waveflair
+- Aventurine
+- Bailu
+- Black Swan
+- Blade
+- Boothill
+- Bronya
+- Castorice
+- Cerydra
+- Cipher
+- Clara
+- Cyrene
+- Dan Heng • Imbibitor Lunae
+- Dan Heng • Permansor Terrae
+- Dan Heng
+- Dr. Ratio
+- Evanescia
+- Evernight
+- Feixiao
+- Firefly
+- Fu Xuan
+- Fugue
+- Gallagher
+- Gepard
+- Gilgamesh
+- Guinaifen
+- Hanya
+- Herta
+- Himeko • Nova
+- Himeko
+- Hook
+- Huohuo
+- Hyacine
+- Hysilens
+- Jade
+- Jiaoqiu
+- Jing Yuan
+- Jingliu
+- Kafka
+- Lingsha
+- Luka
+- Luocha
+- Lynx
+- March 7th
+- Misha
+- Mortenax Blade
+- Moze
+- Mydei
+- Natasha
+- Pearl
+- Pela
+- Phainon
+- Qingque
+- Rappa
+- Rin Tohsaka
+- Robin • Summeretto
+- Robin
+- Ruan Mei
+- Saber
+- Sampo
+- Seele
+- Serval
+- Silver Wolf LV.999
+- Silver Wolf
+- Sparkle
+- Sparxie
+- Sunday
+- Sushang
+- The Dahlia
+- The Herta
+- Tingyun
+- Topaz & Numby
+- Tribbie
+- Welt
+- Xueyi
+- Yanqing
+- Yao Guang
+- Yukong
+- Yunli
+
+## Враги — `enemies/` (379)
+
+- -All or Nothing- (Apocalyptic Shadow)
+- -All or Nothing- Double Fortune-
+- -All or Nothing-
+- -Alloy Pommy-
+- -Harmonious Choir- The Great Septimus
+- -Past Confined and Caged- (Bug)
+- -Past Confined and Caged- (Complete)
+- -Past Confined and Caged-
+- -Present Inebriated in Revelry- (Bug)
+- -Present Inebriated in Revelry- (Complete)
+- -Present Inebriated in Revelry-
+- -Speartip-
+- -Spirithief- Bartholos
+- -The Honored-
+- -The Shield-
+- -Tomorrow in Harmonious Chords- (Bug)
+- -Tomorrow in Harmonious Chords- (Complete)
+- -Tomorrow in Harmonious Chords-
+- @SparxiConOfficial
+- Abundance Lotus (Phase 1)
+- Abundance Lotus (Phase 3)
+- Abundance Sprite- Golden Hound
+- Abundance Sprite- Malefic Ape (Bug)
+- Abundance Sprite- Malefic Ape
+- Abundance Sprite- Wooden Lupus (Aether Spirit Enemy)
+- Abundance Sprite- Wooden Lupus
+- Abundant Ebon Deer (Complete)
+- Abundant Ebon Deer (Illusion)
+- Abundant Ebon Deer
+- Aggressive Reading Material
+- Alloy Mechatron- King Pom-Pom
+- Annihilator of Desolation Mistral- Mother of Deception
+- Annihilator of Desolation Mistral
+- Anti-Creator, Hatred Inundate
+- Antibaryon
+- Antimatter Engine (Apocalyptic Shadow)
+- Antimatter Engine
+- Arbiter of the Lost Abyss
+- Argenti (Boss)
+- Argenti (Complete)
+- Assistant Graffiti- Demander
+- Assistant Graffiti- Rusher
+- Assistant Graffiti- Slacker
+- Astropolis Sentinel
+- Aurumaton Gatekeeper (Aether Spirit Enemy)
+- Aurumaton Gatekeeper (Bug)
+- Aurumaton Gatekeeper
+- Aurumaton Spectral Envoy (Bug)
+- Aurumaton Spectral Envoy
+- Automaton Beetle
+- Automaton Direwolf (Aether Spirit Enemy)
+- Automaton Direwolf (Bug)
+- Automaton Direwolf (Complete)
+- Automaton Direwolf
+- Automaton Grizzly (Aether Spirit Enemy)
+- Automaton Grizzly (Bug)
+- Automaton Grizzly (Complete)
+- Automaton Grizzly
+- Automaton Hound
+- Automaton Spider (Aether Spirit Enemy)
+- Automaton Spider
+- Autonomous Wand
+- Auxiliary Robot Arm Unit
+- Banacademic Office's Assistanana (Apocalyptic Shadow)
+- Banacademic Office's Assistanana (Complete)
+- Banacademic Office's Assistanana
+- Banacademic Office's Charmony BananAdvisor (Apocalyptic Shadow)
+- Banacademic Office's Charmony BananAdvisor (Complete)
+- Banacademic Office's Charmony BananAdvisor
+- Banacademic Office's Dreamweaver BananAdvisor (Apocalyptic Shadow)
+- Banacademic Office's Dreamweaver BananAdvisor (Complete)
+- Banacademic Office's Dreamweaver BananAdvisor
+- Banacademic Office's Fortune BananAdvisor (Apocalyptic Shadow)
+- Banacademic Office's Fortune BananAdvisor (Complete)
+- Banacademic Office's Fortune BananAdvisor
+- Baryon
+- Black Tide Council
+- Black Tide's Champion (Bug)
+- Black Tide's Champion
+- Black Tide's Corroded Axe
+- Black Tide's Corroded Daemon
+- Black Tide's Decrepit Bow
+- Blaze Out of Space (Aether Spirit Enemy)
+- Blaze Out of Space (Bug)
+- Blaze Out of Space
+- Blaznana Monkey Trick
+- Borisin Warhead- Hoolay (Complete)
+- Borisin Warhead- Hoolay
+- Bronya (Boss)
+- Bronya (Complete)
+- Bronya (Illusion)
+- Cacophonic Conductor
+- Canvas Peacock (Bug)
+- Canvas Peacock
+- Celestial Cherub
+- Celestial Maiden
+- Cirrus (Boss)
+- Cirrus (Complete)
+- Cloud Knight Lieutenant- Yanqing (Complete)
+- Cloud Knight Lieutenant- Yanqing (Illusion)
+- Cloud Knight Lieutenant- Yanqing
+- Cloud Knights Patroller
+- Cocolia (Boss)
+- Cocolia (Complete)
+- Cocolia (Illusion)
+- Cocolia, Mother of Deception (Illusion)
+- Cocolia, Mother of Deception
+- Comediologist
+- Commerce Trotter
+- Conquer or Be Conquered
+- Corrupting Shadowfiend- Torrential Rotbringer
+- Cyclonic Swarm Mother
+- Daring Diceroller
+- Dark Sun Gryphon
+- Dawn's Left Hand (Apocalyptic Shadow)
+- Dawn's Left Hand
+- Daybreak Squadron- Azurewing
+- Daybreak Squadron- Blazeweaver
+- Daybreak Squadron- Cinderborne
+- Daybreak Squadron- Dawnlance
+- Daythunder Raven
+- Decaying Shadow (Bug)
+- Decaying Shadow
+- Decimator, Karma of Daythunder, Eye of Twilight
+- Destruction Lotus (Phase 2)
+- Destruction Lotus (Phase 3)
+- Disaster's Right Hand (Apocalyptic Shadow)
+- Disaster's Right Hand
+- Disciples of Sanctus Medicus- Ballistarius
+- Disciples of Sanctus Medicus- Internal Alchemist
+- Disciples of Sanctus Medicus- Shape Shifter (Bug)
+- Disciples of Sanctus Medicus- Shape Shifter
+- Doomsday Beast
+- Dreamjolt Troupe's Beyond Overcooked (Bug)
+- Dreamjolt Troupe's Beyond Overcooked (Projection)
+- Dreamjolt Troupe's Beyond Overcooked
+- Dreamjolt Troupe's Birdskull
+- Dreamjolt Troupe's Bubble Hound
+- Dreamjolt Troupe's Fortune Seller
+- Dreamjolt Troupe's Mr. Domescreen (Projection)
+- Dreamjolt Troupe's Mr. Domescreen
+- Dreamjolt Troupe's Spring Loader
+- Dreamjolt Troupe's Sweet Gorilla (Bug)
+- Dreamjolt Troupe's Sweet Gorilla (Projection)
+- Dreamjolt Troupe's Sweet Gorilla
+- Dreamjolt Troupe's Winder Goon
+- Dried Lacrimal Bone
+- Earthshaker Leo- Solblaze Winged Beast
+- Echo of Faded Dreams (Apocalyptic Shadow)
+- Echo of Faded Dreams
+- Eclipse Wolftrooper
+- Ecliptic Inner Beast & Shadow of -Feixiao-
+- Elegy Siren- Insatiable Leviathan
+- Entranced Ingenium- Golden Cloud Toad
+- Entranced Ingenium- Illumination Dragonfish (Aether Spirit Enemy)
+- Entranced Ingenium- Illumination Dragonfish
+- Entranced Ingenium- Obedient Dracolion (Aether Spirit Enemy)
+- Entranced Ingenium- Obedient Dracolion
+- Everwinter Shadewalker (Aether Spirit Enemy)
+- Everwinter Shadewalker
+- First Genius, Entelechy, Zandar
+- Flame Reaver of Doomsday Led Astray
+- Flame Reaver of the Deepest Dark
+- Flamespawn
+- Flying Sword (Illusion)
+- Flying Sword
+- Frigid Prowler (Aether Spirit Enemy)
+- Frigid Prowler (Bug)
+- Frigid Prowler
+- Frostspawn
+- Fulminating Wolflord
+- Furbo Journalist
+- Furiae Archer
+- Furiae Philosopher
+- Furiae Praetor (Bug)
+- Furiae Praetor
+- Furiae Troupe
+- Furiae Warrior
+- Gepard (Boss)
+- Gepard (Complete)
+- Gepard (Illusion)
+- Gnaw Sting
+- God-Devourer Offspring (Bug)
+- God-Devourer Offspring
+- Greatsword Guardian- Vanguard Wallbreaker
+- Grunt- Field Personnel (Aether Spirit Enemy)
+- Grunt- Field Personnel (Illusion)
+- Grunt- Field Personnel
+- Grunt- Security Personnel (Aether Spirit Enemy)
+- Grunt- Security Personnel (Illusion)
+- Grunt- Security Personnel
+- Guardian Shadow (Bug)
+- Guardian Shadow
+- Guide of Withering and Decay
+- Hallucinogenic Mermaid
+- Harbinger of Death- Swarm Nightmare (Complete)
+- Harbinger of Death- Swarm Nightmare
+- Hellcharred Shadow General
+- Herta ErrorModel
+- Howling Casket (Bug)
+- Howling Casket
+- Ice Edge (1)
+- Ice Edge (2)
+- Ice Edge (Illusion) (1)
+- Ice Edge (Illusion) (2)
+- Ice Out of Space (Bug)
+- Ice Out of Space
+- Ichor Memosprite- Canine
+- Ichor Memosprite- Judge of Oblivion (Complete)
+- Ichor Memosprite- Judge of Oblivion
+- Ichor Memosprite- Pheasant
+- Ichor Memosprite- Winged Serpent (Bug)
+- Ichor Memosprite- Winged Serpent
+- Illwish Lotus
+- Imaginary Weaver (Aether Spirit Enemy)
+- Imaginary Weaver
+- Imprisoned Mythos
+- Incineration Shadewalker (Aether Spirit Enemy)
+- Incineration Shadewalker
+- Irontomb, Anti-Nous, Funeral of Gnosis
+- Joy Ascendant
+- Juvenile Sting
+- Lady of Crashing Waves (Bug)
+- Lady of Crashing Waves
+- Lance of the Eternal Freeze (1)
+- Lance of the Eternal Freeze (2)
+- Lance of the Eternal Freeze (Illusion) (1)
+- Lance of the Eternal Freeze (Illusion) (2)
+- Languid Ethmoid Bone
+- Lesser Sting
+- Lighthouse
+- Live Stream Assistant
+- Long-Shattered Vessel
+- Lord of Saṃvartasthāyi, Asat Pramad- -Decay-
+- Lord of Saṃvartasthāyi, Asat Pramad- -Existence-
+- Lord of Saṃvartasthāyi, Asat Pramad
+- Lordly Trashcan (Projection)
+- Lordly Trashcan
+- Maddened Feixiao
+- Magical Girl Troupe (Enemy)
+- Manipulated Logos
+- Mara-Struck Soldier
+- Mara-Struck Warden
+- Mask of No Thought
+- Memory Zone Meme -Allseer-
+- Memory Zone Meme -Heartbreaker-
+- Memory Zone Meme -Insatiable Vanity-
+- Memory Zone Meme -Shell of Faded Rage- (Bug)
+- Memory Zone Meme -Shell of Faded Rage-
+- Memory Zone Meme -Something In The Mirror-
+- Memory Zone Meme -Something Unto Death- (Complete)
+- Memory Zone Meme -Something Unto Death- (Projection)
+- Memory Zone Meme -Something Unto Death-
+- Meteoric Eagle
+- Mirage Fizzle Kid
+- Monitoring Automaton Prototype 2
+- Moonlit Pegasus
+- Murata Graphia, Founding Artist
+- Nebula Devourer (Apocalyptic Shadow)
+- Nebula Devourer
+- Noontide Gryphon (Bug)
+- Noontide Gryphon
+- Opportunistic Provocateur
+- Output Port 1
+- Output Port 2
+- Paramount Bliss Inverted- Illwish Archlotus (Complete)
+- Paramount Bliss Inverted- Illwish Archlotus
+- Phantylia the Undying
+- Planeshred Claws (Apocalyptic Shadow)
+- Planeshred Claws
+- Pollux, Netherwing Husk, Ferry of Souls (Complete)
+- Pollux, Netherwing Husk, Ferry of Souls
+- Rocking Rebel (Bug)
+- Rocking Rebel
+- SD Civilian Mechatron
+- Sableclaw Wolftrooper
+- Sanerot Hearteater
+- Savage God, Mad King, Incarnation of Strife (Complete)
+- Savage God, Mad King, Incarnation of Strife
+- Searing Prowler (Aether Spirit Enemy)
+- Searing Prowler (Bug)
+- Searing Prowler
+- Security Doggo
+- Senior Staff- Team Leader (Aether Spirit Enemy)
+- Senior Staff- Team Leader (Bug)
+- Senior Staff- Team Leader
+- Sequence Trotter (Giant)
+- Sequence Trotter
+- Servant of Tides
+- Shadow Jackhyena (Aether Spirit Enemy)
+- Shadow Jackhyena
+- Shadow of -Feixiao-
+- Shadow of -Hatred-
+- Shoot of Hundred Eyes
+- Silver Knight of Virtuous Gallantry
+- Silvermane Cannoneer (Aether Spirit Enemy)
+- Silvermane Cannoneer
+- Silvermane Gunner (Aether Spirit Enemy)
+- Silvermane Gunner
+- Silvermane Lieutenant (Aether Spirit Enemy)
+- Silvermane Lieutenant (Bug)
+- Silvermane Lieutenant (Complete)
+- Silvermane Lieutenant
+- Silvermane Soldier (Aether Spirit Enemy)
+- Silvermane Soldier
+- Sky-Shrouding Stardevourer Swarm
+- Sombrous Sepulcher
+- Soulhook Sovereign
+- Starbane Doombringer
+- Starcrusher Swarm King- Skaracabaz (Synthetic)
+- Stellaron Hunter- Kafka (Complete)
+- Stellaron Hunter- Kafka (Illusion)
+- Stellaron Hunter- Kafka
+- Stellaron Hunter- Sam (Complete)
+- Stellaron Hunter- Sam
+- Stormbringer (Bug)
+- Stormbringer
+- Sublime, Radiant, Avatar of the Sky
+- Super Idol- Center of Attention
+- Svarog (Boss)
+- Svarog (Complete)
+- Swarm- True Sting (Complete)
+- Swarm- True Sting
+- Synergy Duo- Bloodbound Dark Duelist
+- Synergy Duo- Ironclad White Guard
+- Ten Stonehearts- Aventurine of Stratagems (Complete)
+- Ten Stonehearts- Aventurine of Stratagems
+- Ternary Assimilation Unit
+- The Ascended (Bug)
+- The Ascended
+- The Conquered
+- The Giver, Master of Legions, Lance of Fury (Apocalyptic Shadow)
+- The Giver, Master of Legions, Lance of Fury (Complete)
+- The Giver, Master of Legions, Lance of Fury
+- The Long Arms of Sorrow (Apocalyptic Shadow)
+- The Long Arms of Sorrow
+- The Past, Present, and Eternal Show (Complete)
+- The Past, Present, and Eternal Show
+- The Ravaged Unconquerable
+- Thunderspawn
+- Tide-Eroded Blade
+- Trot Deuce
+- Trot Prime
+- Trot Tri
+- Trotter of Abundance (Giant)
+- Trotter of Abundance
+- Trotter of Destruction (Giant)
+- Trotter of Destruction
+- Trotter of Preservation (Giant)
+- Trotter of Preservation
+- Twig of Glorious Blooms (Illusion)
+- Twig of Glorious Blooms
+- Twig of Hundred Eyes
+- Twig of Lavish Fruits (Illusion)
+- Twig of Lavish Fruits
+- Twig of Marple Leaf (Illusion)
+- Twig of Marple Leaf
+- Twig of Wintry Wind (Illusion)
+- Twig of Wintry Wind
+- Unwaning Ageless Immortal
+- Vagrant (Aether Spirit Enemy)
+- Vagrant
+- Vessel of the Destruction, Khaslana
+- Voidranger- Distorter
+- Voidranger- Eliminator (Aether Spirit Enemy)
+- Voidranger- Eliminator
+- Voidranger- Reaver (Aether Spirit Enemy)
+- Voidranger- Reaver
+- Voidranger- Trampler (Aether Spirit Enemy)
+- Voidranger- Trampler (Bug)
+- Voidranger- Trampler
+- Warp Trotter (Aether Spirit Enemy)
+- Warp Trotter
+- Windspawn
+- Wonder Forest's Banacademic Office Staff (Complete)
+- Wonder Forest's Banacademic Office Staff
+- Worldpurge Tail (Apocalyptic Shadow)
+- Worldpurge Tail
+- Wraith Warden
+
+## Световые конусы — `lightcones/` (169)
+
+- A Dream Scented in Wheat
+- A Grounded Ascent
+- A Little Getaway
+- A Secret Vow
+- A Star That Lights the Night
+- A Thankless Coronation
+- A Trail of Bygone Blood
+- Adversarial
+- After the Charmony Fall
+- Along the Passing Shore
+- Amber
+- An Instant Before A Gaze
+- Arrows
+- Baptism of Pure Thought
+- Before Dawn
+- Before the Tutorial Mission Starts
+- Boundless Choreo
+- Brighter Than the Sun
+- But the Battle Isn't Over
+- Carve the Moon, Weave the Clouds
+- Chorus
+- Collapsing Sky
+- Concert for Two
+- Cornucopia
+- Cruising in the Stellar Sea
+- Dance at Sunset
+- Dance! Dance! Dance!
+- Darting Arrow
+- Data Bank
+- Day One of My New Life
+- Dazzled by a Flowery World
+- Defense
+- Destiny's Threads Forewoven
+- Dream's Montage
+- Dreamville Adventure
+- Earthly Escapade
+- Echoes of the Coffin
+- Elation Brimming With Blessings
+- Epoch Etched in Golden Blood
+- Eternal Calculus
+- Eyes of the Prey
+- Fermata
+- Final Victor
+- Fine Fruit
+- Flame of Blood, Blaze My Path
+- Flames Afar
+- Flickering Stars
+- Flowing Nightglow
+- Fly Into a Pink Tomorrow
+- For Tomorrow's Journey
+- Geniuses' Greetings
+- Geniuses' Repose
+- Good Night and Sleep Well
+- Hey, Over Here
+- Hidden Shadow
+- Holiday Thermae Escapade
+- I Am As You Behold
+- I Shall Be My Own Sword
+- I Venture Forth to Hunt
+- If Time Were a Flower
+- In Pursuit of the Wind
+- In the Name of the World
+- In the Night
+- Incessant Rain
+- Indelible Promise
+- Inherently Unjust Destiny
+- Into the Unreachable Veil
+- It's Showtime
+- Journey, Forever Peaceful
+- Landau's Choice
+- Lies Dance on the Breeze
+- Life Should Be Cast to Flames
+- Lingering Tear
+- Long May Rainbows Adorn the Sky
+- Long Road Leads Home
+- Loop
+- Make Farewells More Beautiful
+- Make the World Clamor
+- Mediation
+- Memories of the Past
+- Memory's Curtain Never Falls
+- Meshing Cogs
+- Moment of Victory
+- Multiplication
+- Mushy Shroomy's Adventures
+- Mutual Demise
+- Never Forget Her Flame
+- Night of Fright
+- Night on the Milky Way
+- Ninja Record- Sound Hunt
+- Ninjutsu Inscription- Dazzling Evilbreaker
+- Nowhere to Run
+- On the Fall of an Aeon
+- Only Silence Remains
+- Passkey
+- Past Self in Mirror
+- Past and Future
+- Patience Is All You Need
+- Perfect Timing
+- Pioneering
+- Planetary Rendezvous
+- Poised to Bloom
+- Post-Op Conversation
+- Quid Pro Quo
+- Race to the Horizon
+- Reforged Remembrance
+- Reforged in Hellfire
+- Reminiscence
+- Resolution Shines As Pearls of Sweat
+- Return to Darkness
+- Rise and Sing
+- River Flows in Spring
+- Sagacity
+- Sailing Towards a Second Life
+- Scent Alone Stays True
+- See You at the End
+- Shadowburn
+- Shadowed by Night
+- Shared Feeling
+- Shattered Home
+- She Already Shut Her Eyes
+- Sleep Like the Dead
+- Sneering
+- Solitary Healing
+- Something Irreplaceable
+- Subscribe for More!
+- Summer Rides the Surf
+- Sweat Now, Cry Less
+- Swordplay
+- Texture of Memories
+- The Birth of the Self
+- The Day The Cosmos Fell
+- The Finale of a Lie
+- The Flower Remembers
+- The Forever Victual
+- The Great Cosmic Enterprise
+- The Hell Where Ideals Burn
+- The Moles Welcome You
+- The Seriousness of Breakfast
+- The Story's Next Page
+- The Unreachable Side
+- This Is Me!
+- This Love, Forever
+- Those Many Springs
+- Though Worlds Apart
+- Thus Burns the Dawn
+- Time Waits for No One
+- Time Woven Into Gold
+- To Evernight's Stars
+- Today Is Another Peaceful Day
+- Today's Good Luck
+- Tomorrow, Together
+- Trend of the Universal Market
+- Under the Blue Sky
+- Until the Flowers Bloom Again
+- Unto Tomorrow's Morrow
+- Victory In a Blink
+- Void
+- Warmth Shortens Cold Nights
+- We Are Wildfire
+- We Will Meet Again
+- Welcome to the Cosmic City
+- What Is Real-
+- When She Decided to See
+- Whereabouts Should Dreams Rest
+- Why Does the Ocean Sing
+- Woof! Walk Time!
+- Worrisome, Blissful
+- Yet Hope Is Priceless
+
+## Реликвии (Cavern Relics) — `relicsets/` (32)
+
+- As Navigator Isee Sees It
+- Band of Sizzling Thunder
+- Champion of Streetwise Boxing
+- Divine-Querying Master Smith
+- Diviner of Distant Reach
+- Eagle of Twilight Line
+- Ever-Glorious Magical Girl
+- Firesmith of Lava-Forging
+- Genius of Brilliant Stars
+- Guard of Wuthering Snow
+- Hero of Triumphant Song
+- Hunter of Glacial Forest
+- Iron Cavalry Against the Scourge
+- Knight of Purity Palace
+- Longevous Disciple
+- Messenger Traversing Hackerspace
+- Musketeer of Wild Wheat
+- Passerby of Wandering Cloud
+- Pioneer Diver of Dead Waters
+- Poet of Mourning Collapse
+- Prisoner in Deep Confinement
+- Sacerdos' Relived Ordeal
+- Scholar Lost in Erudition
+- Self-Enshrouded Recluse
+- The Ashblazing Grand Duke
+- The Wind-Soaring Valorous
+- Thief of Shooting Meteor
+- Warrior Goddess of Sun and Thunder
+- Wastelander of Banditry Desert
+- Watchmaker, Master of Dream Machinations
+- Wavestrider Captain
+- World-Remaking Deliverer
+
+## Планарные наборы — `planarsets/` (28)
+
+- Amphoreus, The Eternal Land
+- Arcadia of Woven Dreams
+- Belobog of the Architects
+- Bone Collection's Serene Demesne
+- Broken Keel
+- Celestial Differentiator
+- City of Converging Stars
+- Cosmic Life Sciences Institute
+- Duran, Dynasty of Running Wolves
+- Fallen Star Anchorage
+- Firmament Frontline- Glamoth
+- Fleet of the Ageless
+- Forge of the Kalpagni Lantern
+- Giant Tree of Rapt Brooding
+- Inert Salsotto
+- Izumo Gensei and Takama Divine Realm
+- Lushaka, the Sunken Seas
+- Pan-Cosmic Commercial Enterprise
+- Penacony, Land of the Dreams
+- Punklorde Stage Zero
+- Revelry by the Sea
+- Rutilant Arena
+- Sigonia, the Unclaimed Desolation
+- Space Sealing Station
+- Sprightly Vonwacq
+- Talia- Kingdom of Banditry
+- Tengoku@Livestream
+- The Wondrous BananAmusement Park
+
+## Эйдолоны (скиллы персонажей) — `eidolons/` (528)
+
+- **Acheron** (6): Apocalypse, the Emancipator; Frost Bites in Death; Mute Thunder in Still Tempest; Shrined Fire for Mirrored Soul; Silenced Sky Spake Sooth; Strewn Souls on Erased Earths
+- **Aglaea** (6): Bequeath in the Coalescence of Dew; Drift at the Whim of Venus; Flicker Below the Surface of Marble; Fluctuate in the Tapestry of Fates; Sail on the Raft of Eyelids; Weave Under the Shroud of Woe
+- **Anaxa** (6): Blaze, Plunged to Canyon; Embryo, Set Beyond Vortex; Everything Is in Everything; Magician, Isolated by Stars; Pupil, Etched into Cosmos; Soul, True to History
+- **Archer** (6): The Endless Pilgrimage; The Nameless Watch; The Unfulfilled Happiness; The Unreached Dream; The Unsung Life; The Untamed Will
+- **Argenti** (6): -Your- Resplendence; A Lacuna in Kingdom of Aesthetics; Agate's Humility; Snow, From Somewhere in Cosmos; Thorny Road's Glory; Trumpet's Dedication
+- **Arlan** (6): Breaking Free; Hammer and Tongs; Power Through; Self-Sacrifice; To the Bitter End; Turn the Tables
+- **Ashveil** (6): Beware- Venture Not at Full Moon; Caution- Sleuth Turns Slayer; Finale- And Then There Were None; Heed- Swallow Truth Whole; Hush- Unsaid Between Friends; Knock- Where Snickers Echo
+- **Asta** (6): Aurora Basks in Beauty and Bliss; Cosmos Dreams in Calm and Comfort; Meteor Showers for Wish and Want; Moon Speaks in Wax and Wane; Nebula Secludes in Runes and Riddles; Star Sings Sans Verses or Vocals
+- **Aventurine** (6): Ambiguity Aversion; Bounded Rationality; Droprate Maxing; Prisoner's Dilemma; Stag Hunt Game; Unexpected Hanging Paradox
+- **Aventurine • Waveflair** (6): A Holiday on the Line; A Rendezvous Served Chilled; Idle as the Turning Tide; Into the Eye of the Jackpot; Sunlight Runs No Tab; The Past in Fast Lane
+- **Bailu** (6): Ambrosial Aqua; Drooling Drop of Draconic Divinity; Evil Excision; Omniscient Opulence; Sylphic Slumber; Waning Worries
+- **Black Swan** (6): As Above, So Below; In Tears We Gift; Linnutee Flyway; Pantheon Merciful, Masses Pitiful; Seven Pillars of Wisdom; Weep Not For Me, My Lamb
+- **Blade** (6): Blade Cuts the Deepest in Hell; Death By Ten Lords' Gaze; Hardened Blade Bleeds Coldest Shade; Reborn Into an Empty Husk; Rejected by Death, Infected With Life; Ten Thousand Sorrows From One Broken Dream
+- **Boothill** (6): Cold Cuts Chef; Crowbar Hotel's Raccoon; Dusty Trail's Lone Star; Marble Orchard's Guard; Milestonemonger; Stump Speech
+- **Bronya** (6): Bombardment; Hone Your Strength; Piercing Rainbow; Quick March; Take by Surprise; Unstoppable
+- **Castorice** (6): Await for Years to Loom; Crown on Wings of Bloom; Pious Pilgrim, Dance in Doom; Pristine Pages, Prophecy as Plume; Rest in Songs of Gloom; Snowbound Maiden, Memory to Tomb
+- **Cerydra** (6): A Journey Set Starward; Forge the Dreams of Many; Help and Hurt Repaid in Full; Remake the Realms of Men; Seize the Crowns of All; Torch the Laws of Old
+- **Cipher** (6): From Thin Air, Hard to Foresee; In the Fray, Nab On a Spree; Read the Room, Seek the Glee; Safe in Numbers, Light as a Bee; The Jig Is Up, Quick to Flee; The Thief's Game, Unsung and Free
+- **Clara** (6): A Small Promise; A Tall Figure; A Tight Embrace; Cold Steel Armor; Family's Warmth; Long Company
+- **Cyrene** (6): A Tomorrow in Thirteen Shades; By Thy Being, As I've Written; Epics, Born on a Blank Slate; Gaze, Steeped in Yesterbloom; Please Write On, With a Smile; Remembrance, Sung in Ripples ♪
+- **Dan Heng** (6): A Drop of Rain Feeds a Torrent; Quell the Venom Octet, Quench the Vice O'Flame; Roaring Dragon and Soaring Sun; Seen and Unseen; The Higher You Fly, the Harder You Fall; The Troubled Soul Lies in Wait
+- **Dan Heng • Imbibitor Lunae** (6): Clothed in Clouds; Fall is the Pride; Imperium On Cloud Nine; Reign, Returned; Tethered to Sky; Zephyr's Bliss
+- **Dan Heng • Permansor Terrae** (6): Bear Weight of Worlds; By Oath, This Vessel Is I; One Dream to Enfold All Wilds; Shed Scales of Old; The Path of Permanence Sweeps Far; Watch Trails to Blaze
+- **Dr. Ratio** (6): Ignorance Is Blight; Know Thyself; Pride Comes Before a Fall; Sic Itur Ad Astra; The Divine Is in the Details; Vincit Omnia Veritas
+- **Evanescia** (6): Arcadia- A Glimpse of Fates; Blade- A Feast on Evils; Home- A Prayer in Dance; Maiden- A Step into Dreams; Meadow- A Ruin by Vice; Voyage- A Wish for Everbloom
+- **Evernight** (6): Fear Not, the Nightmare Lies Past; Let Go, the -Me- in Memories; Like This, Always; Listen Up, the Slumber Speaks Soft; Sleep Tight, the Night Dreams Long; Wake Up, the Tomorrow is Yours
+- **Feixiao** (6): Heavenward I Leap; Homeward I Near; Moonward I Wish; Skyward I Quell; Starward I Bode; Stormward I Hear
+- **Firefly** (6): Amidst Silenced Stars, I Deep Sleep; From Shattered Sky, I Free Fall; From Undreamt Night, I Thence Shine; In Finalized Morrow, I Full Bloom; In Reddened Chrysalis, I Once Rest; Upon Lighted Fyrefly, I Soon Gaze
+- **Fu Xuan** (6): Apex Nexus; Arbiter Primus; Dominus Pacis; Fortuna Stellaris; Omnia Vita; Optimus Felix
+- **Fugue** (6): Beatitude Dawns for the Worthy; Bereft of Form, Which Name to Bear; Clairvoyance of Boom and Doom; Colored Cloud Rains Fortune; Earthbound I Was, Cloudward I Be; Verity Weaves Thoughts to Blade
+- **Gallagher** (6): Blood and Sand; Corpse Reviver; Death in the Afternoon; Last Word; Lion's Tail; Salty Dog
+- **Gepard** (6): Cold Iron Fist; Due Diligence; Faith Moves Mountains; Lingering Cold; Never Surrender; Unyielding Resolve
+- **Gilgamesh** (6): He Who Saw the Deep; Journey That Spanned Far; King Who Bowed to None; Soul That Bore Friendship; Sword That Parted Gods from Man; Wisdom That Encompassed All
+- **Guinaifen** (6): Blocking Pike with Neck; Brushing Teeth While Whistling; Catching Bullet with Hands; Slurping Noodles During Handstand; Smashing Boulder on Chest; Swallowing Sword to Stomach
+- **Hanya** (6): Five Skandhas; Four Truths; One Heart; Six Reverences; Three Temptations; Two Views
+- **Herta** (6): Cuss Big or Cuss Nothing; Hit Where It Hurts; Keep the Ball Rolling; Kick You When You're Down; No One Can Betray Me; That's the Kind of Girl I Am
+- **Himeko** (6): Aspiration; Childhood; Convergence; Dedication; Poised; Trailblaze!
+- **Himeko • Nova** (6): Let No Skyward Hand Stay Unheld; Ours Is the Oath to Sail Starward; That Which We Stride Is the Trailblaze; The Colors We Never Strike; To Cross the Cosmos and Beyond; We Who Are Starborn Muse Starward
+- **Hook** (6): Always Ready to Punch and Kick; Don't Be Picky, Nothing's Icky; Early to Bed, Early to Rise; Happy Tummy, Happy Body; It's Okay to Not Know; Let the Moles' Deeds Be Known
+- **Huohuo** (6): Anchored to Vessel, Specters Nestled; Cursed by Fate, Moths to Flame; Mandated by Edict, Evils Evicted; Sealed in Tail, Wraith Subdued; Tied in Life, Bound to Strife; Woven Together, Cohere Forever
+- **Hyacine** (6): Come Sit in My Courtyard; Cradle the Candle of Night; Depart, Unto the Sun!; O Sky, Heed My Plea; Sunlit Amber, Yours to Keep; Twilight Drapes the Tide
+- **Hysilens** (6): In Ablution, I Hum and Sigh; Lo, How Time Flows By; Tell Me Why Waves Roar High; When to Return From Where You Lie; Why Do Lights Bid Goodbye; You Ask Why Hearts Cry
+- **Jade** (6): Altruism- Nevertheless Tradable; Equity- Pending Sponsorship; Honesty- Soon Mortgaged; Hope- Hitherto Forfeited; Morality- Herein Authenticated; Sincerity- Put Option Only
+- **Jiaoqiu** (6): Duel in Dawn, Dash in Dusk; Flavored Euphony Reigns Supreme; From Savor Comes Suffer; Leisure In, Luster Out; Nonamorphic Pyrobind; Pentapathic Transference
+- **Jing Yuan** (6): Slash, Seas Split; Spin, Stars Sieged; Stride, Spoils Seized; Strike, Suns Subdued; Sweep, Souls Slain; Swing, Skies Squashed
+- **Jingliu** (6): Crescent Shadows Qixing Dipper; Eclipse Hollows Corporeal Husk; Halfmoon Gapes Mercurial Haze; Lunarlance Shines Skyward Dome; Moon Crashes Tianguan Gate; Night Shades Astral Radiance
+- **Kafka** (6): Capriccio; Da Capo; Doloroso; Fortississimo; Leggiero; Recitativo
+- **Lingsha** (6): Arcadia Under Deep Seclusion; Bloom on Vileward Bouquet; Leisure in Carmine Smokeveil; Poise Atop Twists and Turns; Redolence from Canopied Banquet; Shine of Floral Wick
+- **Luka** (6): A Champion's Applause; Born for the Ring; Fighting Endlessly; Never Turning Back; The Enemy is Weak, I am Strong; The Spirit of Wildfire
+- **Luocha** (6): Ablution of the Quick; Bestowal From the Pure; Cicatrix 'Neath the Pain; Heavy Lies the Crown; Reunion With the Dust; Surveyal by the Fool
+- **Lynx** (6): Afternoon of Avalanche Beacon; Dawn of Explorers' Chart; Dusk of Warm Campfire; Morning of Snow Hike; Night of Aurora Tea; Noon of Portable Furnace
+- **March 7th** (12): Being Fabulous Never Frights; Blade Dances on Waves' Fight; Just Like This, Always; Me, the Best Girl in Sight; Memory of Everything; Memory of It; Memory of You; My Sword Stirs Starlight; Never Forfeit Again; Never Forget Again; Sharp Wit in Martial Might; Sword Delights, Sugar Blights
+- **Misha** (6): Estrangement of Dream; Genesis of First Love; Vestige of Happiness; Visage of Kinship; Whimsicality of Fancy; Yearning of Youth
+- **Mortenax Blade** (6): Across the Shore, Wrath Laid Bare; Ash Was My Heart, Yet the Flame Stayed; Ere My Death, I Stood Unmade; I Severed My Woes, Knowing Death Begets Life; If Immortality Could Die, I Swore THEM Slain; Odium I've Smitten, Thence Came the Blade
+- **Moze** (6): Deathchaser; Faithbinder; Heathprowler; Oathkeeper; Truthbender; Wrathbearer
+- **Mydei** (6): Frost Hones Spine of Steel; Honor Exalts Feast of Faith; Legacy Scales Mound of Blood; Siren Jolts the Laconic Lion; Strife Beholds Cry of Dead; War Chisels Flesh of Flame
+- **Natasha** (6): Clinical Research; Doctor's Grace; Miracle Cure; Pharmacology Expertise; Preventive Treatment; The Right Cure
+- **Pearl** (6): Compute Life From One Shell; Crop That Dappled Dawn; Nestle That Pearl in Uninked Tides; Render Those Starlit Swirls; Sketch That Suspended Wave; Study That Veiled Smile
+- **Pela** (6): Absolute Jeopardy; Adamant Charge; Feeble Pursuit; Full Analysis; Suppressive Force; Victory Report
+- **Phainon** (6): Depths of Quiet, Entombed in Ruin; Embers of Old Rise Still; Faces of Titans, Blurred by Time; Fire and Light Bind Virtue and Vice; Sky and Earth Churn Mortal Froth; The Wheel Spins Forevermore
+- **Qingque** (6): Gambit for the Tiles; Prevail Beyond the Tiles; Read Between the Tiles; Right on the Tiles; Rise Through the Tiles; Sleep on the Tiles
+- **Rappa** (6): Free Is the Mind Enlightened by Haikus; Lost Is the Nindō Devoured by Time; Many Are the Shrines That Repel No Hell; Returned Is the Revenant With No Ferry Toll; Righteous Is the Wrath That Spares No Evil; Steady Is The Ranger With Unerring Arrows
+- **Rin Tohsaka** (6): Dimensional Traveler; Goddess of Venus's Favor; Holy Grail War- Victory Memorial; Nailed It This Time!; Red Devil- Triple Speed; Zelretch's Apprentice
+- **Robin** (6): Afternoon Tea For Two; Inverted Tuning; Land of Smiles; Lonestar's Lament; Moonless Midnight; Raindrop Key
+- **Robin • Summeretto** (6): A Heart of Still Water; A Song Yet Unnamed; Echoes Left Along the Way; Her Variation on the Theme; Stray Bird of Summer; To Chase the Dawn Anew
+- **Ruan Mei** (6): Chatoyant Éclat; Languid Barrette; Neuronic Embroidery; Reedside Promenade; Sash Cascade; Viridescent Pirouette
+- **Saber** (6): A Wish Across Fifteen Centuries; The Dreamed Utopian Dawn; The Long Fated Night; The Lost Oath of the Round Table; The Lost White Walls; The Saga of Sixteen Winter Days
+- **Sampo** (6): Big Money!; Huuuuge Money!; Increased Spending; Infectious Enthusiasm; Rising Love; The Deeper the Love, the Stronger the Hate
+- **Seele** (6): Dancing Butterfly; Dazzling Tumult; Extirpating Slash; Flitting Phantasm; Piercing Shards; Shattering Shambles
+- **Serval** (6): Belobog's Loudest Roar!; Echo Chamber; Encore!; Listen, the Heartbeat of the Gears; Make Some Noise!; This Song Rocks to Heaven!
+- **Silver Wolf** (6): Bounce Attack; Brute Force Attack; Overlay Network; Payload; Social Engineering; Zombie Network
+- **Silver Wolf LV.999** (6): Aether Editing- Eidolon +1; Basic ATK Is the New Ultimate; I Came. I Saw. I One-Shot; It's a Feature, Not a Bug; Max Lv. 15- Says who-; Solo Maxxing!
+- **Sparkle** (6): Life Is a Gamble; Narrative Polysemy; Parallax Truth; Pipedream; Purely Fictitious; Suspension of Disbelief
+- **Sparxie** (6): #AudienceKnows; #BuiltDifferent #GoingExtinct; #GoingViral #WhoIsShe; #HealingTheWorld #GoodVibesOnly; #LinkUp #HeartSkip; #LockedIn #FaceCard
+- **Sunday** (6): Dawn of Sidereal Cacophony; Faith Outstrips Frailty; Hermitage of Thorns; Millennium's Quietus; Paper Raft in Silver Bay; Sculpture's Preamble
+- **Sushang** (6): Cleave With Heart; Cut With Ease; Dwell Like Water; Prevail via Taixu; Refine in Toil; Rise From Fame
+- **The Dahlia** (6): And Yet, Always, Deathly Beautiful; Fallen, Decayed, and Despised; Fresh, Ethereal, and Beloved; Pity Its Heart Gnawed by Worms; Pity Its Petals Thin as Mist; When a Bud Readies to Bloom
+- **The Herta** (6): Bitter Pill of Truth; Door into Summer; Night at Shorefall; Sweet Lure of Answer; The Sixteenth Key; Wind Through Keyhole
+- **Tingyun** (6): Gainfully Gives, Givingly Gains; Halcyon Bequest; Jovial Versatility; Peace Brings Wealth to All; Sauntering Coquette; Windfall of Lucky Springs
+- **Topaz & Numby** (6): Agile Operation; Bona Fide Acquisition; Future Market; Incentive Mechanism; Inflationary Demand; Seize the Big and Free the Small
+- **Tribbie** (6): Clock of Wonder Origin; Guide of Dream Tour; Morrow of Star Shine; Peace of Empathy Bond; Rite of Sugar Scoop; Trove of Morning Glow
+- **Welt** (6): Appellation of Justice; Conflux of Stars; Legacy of Honor; Power of Kindness; Prayer of Peace; Prospect of Glory
+- **Xueyi** (6): Deva, Enthralled; Duḥkha, Ceased; Dvesha, Inhibited; Karma, Severed; Klesha, Breached; Saṃsāra, Mastered
+- **Yanqing** (6): Searing Sting; Supine Serenade; Surging Strife; Svelte Saber; Swift Swoop; Sword Savant
+- **Yao Guang** (6): Auspices Mirrored In Decalight; Bejeweled in Radiant Grace; Blind Arrows Guided by Feathers; Chuckle Chimes Where Jade Falls; Ferried Along the Astral Arc; Threads of Fate Colored by Plumes
+- **Yukong** (6): Aerial Marshal; August Deadshot; Bowstring Thunderclap; Skyward Command; Torrential Fusillade; Zephyrean Echoes
+- **Yunli** (6): Artisan's Ironsong; Blade of Old Outlasts All; First Luster Breaks Dawn; Mastlength Twirls Mountweight; Walk in Blade, Talk in Zither; Weathered Blade Does Not Sully
+
+## Характеристики / механики — `stats/` (43)
+
+- ATK
+- Additional DMG
+- Aggro
+- Aha Instant
+- Alien Dream
+- Barrier
+- Break Effect
+- CRIT DMG
+- CRIT Rate
+- Certified Banger
+- Corrosion
+- DEF
+- DMG Boost
+- DMG Mitigation
+- Damage RES
+- Damage
+- DoT
+- Effect Hit Rate
+- Effect RES
+- Eidolon
+- Elation (Stat)
+- Elation DMG
+- Energy Regeneration Rate
+- Energy
+- Extra Turn
+- Final DMG Boost
+- Follow-Up Attack
+- HP
+- Healing
+- Memosprite
+- Outgoing Healing Boost
+- Path
+- Punchline
+- Safeguard
+- Shield
+- Skill Point
+- Status Effect
+- Summon
+- Toughness
+- Trace
+- Vulnerability
+- War Armor
+- Weaken
+
+## Баффы — `buffs/` (168)
+
+- A Small Price for Victory
+- ATK Boost (God-Devourer Offspring)
+- ATK Boost
+- ATK Down
+- After Rain
+- Aggro Up
+- All DMG Boost
+- All Wishes
+- Ally Gratuity
+- Apotheosis
+- Aria
+- Backup Dancer
+- Barrier (Gepard)
+- Barrier
+- Behold, the King of Knights
+- Beyond-Human Realm
+- Biting Obituary
+- Bleed
+- Blood Fervor
+- Blood Surge
+- Bloom, Elysium of Beyond
+- Bloom
+- Book-Smart
+- Break Effect
+- Break Efficiency
+- Buff
+- Burn
+- CRIT DMG
+- CRIT Rate
+- Certified Banger
+- Charging
+- Cipher
+- Circuit Connection
+- Collective Shield
+- Concerto
+- Crystallite
+- DEF Up
+- Dance Partner
+- Darkest Riddle
+- Dawn Herald
+- Daybreak Forcefield
+- Debt Collector
+- Debuff Application
+- Decalight Unveils All
+- Depredate Evolution
+- Divine Provision
+- Divine Vessel
+- DoT
+- Draining Hit
+- Eagerness
+- Earth and Water
+- Eclipse's Ire
+- Effect Hit Rate
+- Effect RES
+- Endocytosis (Status)
+- Enemy Gratuity
+- Energy Regeneration Rate
+- Enhanced Counter
+- Entanglement
+- Fealty
+- Fickle Fortune
+- Fire DMG Boost
+- Flooding Viewers
+- Follow-Up Attack Boost
+- Fortified Wager Spades
+- Fortitude
+- Foxian Prayer
+- Freeze
+- Frost Wraith
+- Frozen
+- Gene Duplication
+- Glass Ball with Wings!
+- Gleaned Instruction
+- Helium Flash
+- Hexagram of Feathered Fortune
+- House Advantage (I)
+- Ice DMG Boost
+- If We Live In the Light
+- Ignited Flame
+- Imaginary DMG Boost
+- Imprisonment
+- Indomitable
+- Infinite Recursion
+- Inspire (Lighthouse)
+- Inverted Severance
+- Invigoration
+- Ionization
+- Irate
+- Japa
+- Lasting Antibac
+- Lick... Enkindled Betrayal
+- Lightning DMG Boost
+- Lupine Lord's Majesty
+- Lurking
+- Maddened
+- Maelstrom's Eye
+- Make Headlines, Please!
+- Mania
+- Matrix of Prescience
+- Mem's Support
+- Military Merit
+- Millennium's Quietus
+- Moon Rage Eclipse Enhanced
+- Moon Rage Eclipse
+- Moon Rage Sableclaw Enhanced
+- Moon Rage Sableclaw
+- Moon Rage
+- Morrow of Star Shine
+- Multiply
+- Ninja Tech Endurance Gauge
+- Now! I'm the Band!
+- Numinosity
+- Obscure Blaze
+- Ode to Genesis
+- Overtone
+- Parry
+- Peace of Empathy Bond
+- Peerage
+- Performance Points
+- Petals to Stream, Repose in Dream
+- Physical DMG Boost
+- Potential Realization
+- Privacy Protection
+- P—Protect You
+- Quantum DMG Boost
+- Rebirth
+- Reinforced
+- Returned Is the Revenant With No Ferry Toll
+- Riposte
+- Roaring Bowstrings 2
+- Roaring Bowstrings
+- SPD Boost
+- Sanction Mode
+- Sanguine Gaze
+- Self-Sufficer
+- Seven Layers, One Arrow
+- Shield
+- Shock
+- Sincerity Put Option Only
+- Skygash
+- Soulfreed
+- Soulsteel Sync
+- Steam Wash
+- Stormride
+- Superiority of Reach
+- Support
+- Supreme Stance
+- Survival Response
+- Synwood Renewal
+- Terrathorn
+- The Beatified
+- The Belobog March
+- The Can's Battle Pose
+- The One True Sword
+- Thermocumulative Upgrade
+- Turn the Tables
+- Untethered Glimmer Sails Far
+- Vestige Valor
+- Vigor
+- Vulnerability
+- War Song
+- Weaken
+- Weakness Protected
+- Whirling Carapace
+- Wicked Grin
+- Wind DMG Boost
+- Wind Shear
+- Windfall Bonanza!
+
+## Дебаффы — `debuffs/` (84)
+
+- ATK Down
+- Action Lock
+- Alien Dream
+- Arcana
+- Ashen Roast
+- Ban (Attack)
+- Ban (Basic ATK)
+- Ban (Skill)
+- Besotted
+- Black Tide Fever
+- Bleed
+- Blind Fealty
+- Blind
+- Block
+- Bloodline Frailty
+- Burn
+- Butterfly Flurry
+- Commotion
+- Daze
+- Debtor
+- Decay
+- Deep Freeze
+- Descent into Chaos
+- Detonated
+- Disheartened
+- Dream Prison
+- Entanglement
+- Enthralled
+- Epiphany (Debuff)
+- Epiphany
+- Essence Devour
+- Firekiss
+- Flamebound
+- Freeze
+- Frozen
+- Gravitational Imprisonment
+- Grudge Ablaze
+- Guess Who Lives Here
+- HP Cap
+- Happiness Puppet
+- Hastened Death
+- Hemotort Corruption
+- Hemotort Drench
+- Hemotort Stain
+- Horror-Struck
+- Imprisoned
+- Imprisonment
+- Incomplete Combustion
+- Inebrated Daze
+- Maelstrom Rhapsody
+- Meme'd
+- Mind Control
+- Mirage Fizzle
+- Mold of Idolatry
+- Outrage
+- Patron
+- Prey
+- Proof of Debt
+- Psychological Suggestion
+- Pyrograph Arcanum
+- Qualitative Disclosure
+- Revelry Rocking Rebel
+- Revelry
+- Reverberation
+- Ruined
+- Seam Stitch
+- Shock
+- Snarelock
+- Soulstruck
+- Spur of Thunderwoe
+- Standoff
+- Strong Reverberation
+- Sublimation
+- Teasing
+- Terrified
+- Terror Grip
+- Thanatoplum Rebloom
+- This Moment, Forever
+- Tide-Corrosion
+- Tilted
+- Time Stop
+- Weaken
+- Wilt
+- Wind Shear
+
+## Состояния / прочие эффекты — `states/` (266)
+
+- Abundance Buff
+- Abyss Flower
+- Accomplice
+- Aim
+- All Back to Nil
+- All as One
+- Ally Popularity
+- Answer
+- Antinomy
+- Aquila's Mark
+- Ardent Will
+- Back to the Black
+- Banner of Command
+- Bated Wings
+- Beast's Gaze
+- Bide in Flames
+- Bingo!
+- Bitter Fracture
+- Bitterly Cold
+- Blade Dances on Waves' Fight
+- Blessing of the Lake
+- Blood-Brain Barrier
+- Bloodlust
+- Boil
+- Bondmate
+- Brainteaser
+- Breeding Frenzy
+- Buff
+- Burden
+- Busy as Tribbie
+- Calamity Power
+- Calibration
+- Call of the Guardian
+- Centirefined War Armor
+- Chaotic Order
+- Charge (Blade)
+- Charge (March 7th The Hunt)
+- Charge (Trailblazer Remembrance)
+- Charge
+- Charging Rocking Rebel
+- Chocolate Energy Bar
+- Chronicled -Love-
+- Classroom Channel
+- Cloudflame Luster
+- Color
+- Colorless
+- Complete Vessel
+- Comradery
+- Conquer
+- Conquered
+- Core Resonance
+- Coreflame
+- Corrosion
+- Corrosive Retaliation
+- Counter
+- Crescent Transmigration
+- Crimson Knot
+- C—Cure You
+- Damage Resonance
+- Day So Right, Life So Fine!
+- Dazzling Ninja Talisman
+- Death Rattle
+- Death Sentence
+- Deception's Crown
+- Degraded Vessel
+- Deliverance of Relief
+- Devour
+- Dream of Demise
+- Dying Sobs
+- ERROR
+- Ember's Echo
+- Enemy Popularity
+- Enfettered
+- Enhanced Skill
+- Epic showdown in progress!
+- Epic
+- Excessive Praise
+- Execute Justice
+- Execution Squad
+- Exhaustion
+- Expedite Verdict Weakness Broken
+- Expedite Verdict
+- Explicit Subsidy
+- Fallen God's Decay
+- Feast in One Go
+- Fetal Movement of the Ocean
+- Fight in Unity
+- First Offense
+- Formation Core
+- Forthcoming Strife
+- Fragrance of Death
+- Freezing Point
+- Frenzied Rendition
+- Fright Channel
+- From Shattered Sky, I Free Fall
+- Futility
+- Future
+- Fyrefly Type-IV Complete Combustion
+- Gamble
+- Game Solitaire
+- Gauge Recollection
+- Gentle but Cruel
+- Gleaner of the Past
+- Glory
+- Grave Wound
+- Growth Hormones
+- Gusto
+- G—Gonna Be Late!
+- Happiness
+- Happy Smiles
+- Hellscape
+- Hemotort Resonance
+- Hone Your Strength
+- Hounding Pursuit
+- If You're Happy and You Know It
+- Im Anfang war die Kraft
+- Imaginary Infusion
+- Indigo
+- Indulging Slumber
+- Insect Egg
+- Inspiration
+- Interpretation
+- It Can Still Be Optimized
+- Jade Green
+- Karma
+- Laughter's End
+- Leaping Dragon
+- Legacy of Honor
+- Let it Rain Cold On Thee
+- Live Showdown
+- Loading Mythos
+- Look, Don't Speak
+- Magma Will
+- Mana Burst
+- March 7th, the Apex Heroine
+- Marine Layer
+- Mark of Counter
+- May You Dispel the Sky's Gloom
+- Memes Incoming
+- Memory
+- Mercy of a Fool
+- Milestonemonger
+- Mirage Rush
+- Mitosis Warning
+- Molten Core
+- Monitor
+- Monoform Merger
+- Mooncocoon
+- Moonward I Wish
+- Morbid Dream
+- Music Madness
+- Mutual Sacrifice Fading Fate
+- Mutual Sacrifice
+- Nemesis
+- Netherveil
+- Nightfall
+- Nightfeather
+- Of Fortune Comes Fate
+- Off-Class Channel
+- Ominous Degeneration
+- Onrush
+- Ordeal
+- Oronyx's Mark
+- Overdue Obituary
+- Overloadable
+- Pale Yellow
+- Paramount Bliss
+- Peace at West Wind's End
+- Peaceful Calm
+- Penance Prep
+- Perspicacious Mainframe
+- Phantom Illusion
+- Pocket Trickshot
+- Pouring Rain
+- Prana Extirpated
+- Prayer of Abyss Flower
+- Preparing Heaven's Fall
+- Primordial Hunger
+- Propagation
+- Proselytize
+- Pure Crimson
+- Pursuer
+- Quadrivalent Ascendance
+- Quantum Infusion
+- Radiant Flame
+- Rainclouds, Time to Go!
+- Rainy Day
+- Rapid Evolution
+- Raring to Go
+- Rebellious
+- Red Karma
+- Reminiscence
+- Repose
+- Resist and Destroy
+- Resonate
+- Resonating Echo
+- Respite By the Waters
+- Resurgence
+- Retribution of -Law-
+- Revel in Destruction
+- Right-Hand Man
+- Safeguard Broken
+- Safeguard
+- Saunter in the Rain
+- Scourge
+- Secondary Combustion
+- Self-Destruct
+- Set Alarm
+- Shackle Shatter
+- Shifu
+- Shine of Truth
+- Silent Sorrow
+- Silken Serenade
+- Simmer
+- Soul Departure Experience
+- Soul Pact
+- SoulGlad Revel
+- Soulscorch
+- Spiritus Invocation
+- Splitting Spearhead
+- Spontaneous Combustion
+- Squama Sacrosancta
+- Still Water Runs Deep
+- Stove Heating
+- Stove Overheating
+- Streets Abuzz
+- Strength Boost!
+- Summation
+- Sunny Day
+- Sunset
+- Surprise Channel
+- Sword Formation
+- Target Locked On
+- The Creation's Prelude
+- The Dead Winds Cometh
+- The Glorious Mysteries
+- The Long Fated Night
+- Thrill
+- Throne of Bones
+- Thunderhunt
+- Titanic Corpus
+- To Logos
+- Torrid Scorch
+- Total HP lost
+- Tutoring
+- T—Taking Revenge
+- Ultramarine
+- Unbleached Silk
+- Unreliable Narrator
+- Vendetta
+- Vibe Checker
+- Victory Rush (Himeko)
+- Vidi
+- Vulnerability
+- War Armor
+- War-Flaming Lance
+- Ward
+- Who's Afraid of Constance-
+- Windchaser
+- Wingbeats
+- Wiseman's Folly
+- Wisps of Aurora
+- Wisteria Purple
+- Work Is Bliss!
+- Yearning for a Shared Dance
+- Zagreus's Blessing
+
+## Уникальные баффы/дебаффы от способностей — `abilities/` (59)
+
+- Ack! Look at This Mess!
+- Anticipator
+- At Ocean's Abode
+- Blazing Welcome
+- Bliss of Otherworld's Embrace
+- Chrysalid Pyronexus
+- Combat Redeployment
+- Dance, Destined Weaveress
+- Daunting Smite
+- Death Wish
+- Fate- Divine Vessel
+- Foundation Stardeath Verdict
+- Foundation- Stardeath Verdict
+- Freezing Beauty
+- Frostbite
+- Gentle but Cruel
+- Glacial Cascade
+- Good Night, Belobog
+- Gravitational Imprisonment
+- G—Gonna Be Late!
+- Hearts Gather as One
+- Hey! Remember Hook- (Blast)
+- Hey! Remember Hook- (Single Target)
+- Hey! Remember Hook-
+- I Carry, We Win
+- Lacerating Fist
+- Lightning Flash
+- Loom of Fate's Caprice
+- May the Trailblaze Fly You Starward
+- McAwolfee 999
+- Mercy Is Not Forgiveness
+- Mistdance Manifest
+- Night, Trailing, In Step
+- O Wakeful World, Goodnight
+- Ode to Strife
+- Of Virtue, Forms Unfold
+- One With the Sword
+- Pawn's Promotion
+- Possession Ethereal Metaflow
+- Possession- Ethereal Metaflow
+- Pyric Corpus
+- Quartet Finesse, Octave Finery
+- Shine of Truth
+- Shot Loaded Right
+- Sirenic Serenade
+- Snowfield First Aid
+- Solitude, Drifting, In Murk
+- Synthetic Black Hole
+- Take Sky in Hand
+- Talisman Protection
+- Talisman- Protection
+- This Ode, to All Lives
+- Together, We Script Tomorrow!
+- Twilight Trill
+- Vox Harmonique, Opus Cosmique
+- Waiting, In Every Past
+- Windtorn Dagger
+- Wings Heed No Borders
+- With Me, This Night
+
+## Типы урона — `types/` (14)
+
+- Fire Small
+- Fire
+- Ice Small
+- Ice
+- Imaginary Small
+- Imaginary
+- Lightning Small
+- Lightning
+- Physical Small
+- Physical
+- Quantum Small
+- Quantum
+- Wind Small
+- Wind
+
+## Пути (Path) — `paths/` (10)
+
+- Abundance
+- Destruction
+- Elation
+- Erudition
+- Harmony
+- Nihility
+- Preservation
+- Propagation
+- Remembrance
+- The Hunt
+
+## Элементы (Type) — `elements/` (7)
+
+- Fire
+- Ice
+- Imaginary
+- Lightning
+- Physical
+- Quantum
+- Wind
