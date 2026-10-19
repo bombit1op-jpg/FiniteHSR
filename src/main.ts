@@ -48,7 +48,7 @@ function autoRerun(): void {
         const sim = runBattle(setup)
         render(sim, setup)
         recordRun(sim, setup, `Авто (rerun) · ${r.cycles} цикл(ов) · seed ${r.seed}`)
-        navigate('results')
+        navigate('player')
       }, 0)
     }
   })
@@ -74,7 +74,7 @@ document.getElementById('run')!.onclick = () => {
     const mode = store.getState().run.mode
     let sim: Simulator
     if (mode === 'manual') {
-      navigate('results')
+      navigate('player')
       document.getElementById('summary')!.innerHTML = '<em>Бой идёт…</em>'
       sim = await runBattleManual(setup, uiIO())
       document.getElementById('manualPanel')!.style.display = 'none'
@@ -84,7 +84,7 @@ document.getElementById('run')!.onclick = () => {
       sim = runBattle(setup)
       render(sim, setup)
       store.dispatch({ type: 'results/set', sim, setup })
-      navigate('results')
+      navigate('player')
     }
     recordRun(sim, setup, `${mode === 'manual' ? 'Пошагово' : 'Авто'} · ${setup.cycles} цикл(ов) · seed ${setup.seed}`)
   })

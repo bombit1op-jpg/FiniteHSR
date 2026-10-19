@@ -15,11 +15,60 @@
   <div class="app">
     <aside class="navRail" id="navRail"></aside>
     <main>
-      <div class="route-panel active" id="panel-team">
+      <div class="route-panel active" id="panel-player">
+        <section class="panel-section">
+          <h2>1. Отряд</h2>
+          <div id="team" class="cardGrid"></div>
+          <button id="addChar" class="btn-primary">+ Добавить персонажа</button>
+        </section>
+        <section class="panel-section">
+          <h2>2. Билд и реликвии персонажа</h2>
+          <div id="relicTabs" class="tabBar"></div>
+          <div id="relicPanel"></div>
+        </section>
+        <section class="panel-section">
+          <h2>3. Противники</h2>
+          <div id="enemyCfg"></div>
+        </section>
+        <section class="panel-section">
+          <h2>4. Баффы / дебаффы перед боем</h2>
+          <div id="modRows"></div>
+          <button id="addMod" class="btn-secondary">+ Модификатор</button>
+        </section>
+        <section class="panel-section">
+          <h2>5. Режим и запуск</h2>
+          <label>Циклов (150 AV + 100/цикл): <input id="cycles" type="number" value="4" min="1" max="20" /></label>
+          <label>Seed: <input id="seed" type="number" value="42" /></label>
+          <label>Режим: <select id="runMode">
+            <option value="auto">Авто (стратегии)</option>
+            <option value="manual">Пошагово</option>
+          </select></label>
+          <button id="run" class="btn-primary btn-large">Симулировать бой</button>
+          <button id="check" class="btn-secondary">Self-check формул</button>
+        </section>
+        <section class="panel-section">
+          <h2>Результаты</h2>
+          <div id="manualPanel" style="display:none"></div>
+          <h3>Сводка урона</h3>
+          <div id="summary"><em>Запустите бой</em></div>
+          <h3>Характеристики отряда</h3>
+          <div id="statPanel"><em>—</em></div>
+          <h3>HP после боя</h3>
+          <div id="hpPanel"><em>—</em></div>
+          <h3>Лог боя</h3>
+          <pre id="log"></pre>
+        </section>
+      </div>
+      <div class="route-panel" id="panel-dashboard">
+        <section class="panel-section">
+          <div id="dashboard"><em>Загрузка…</em></div>
+        </section>
+      </div>
+      <div class="route-panel" id="panel-team">
         <section class="panel-section">
           <h2>Персонажи</h2>
-          <div id="team" class="cardGrid"></div>
-          <button id="addChar" class="btn-primary">+ Добавить</button>
+          <p class="panel-pointer">Настройка отряда объединена на странице «Настройка боя».</p>
+          <button class="btn-primary" data-go="player">Перейти к настройке боя</button>
         </section>
       </div>
       <div class="route-panel" id="panel-build">
@@ -37,33 +86,15 @@
       <div class="route-panel" id="panel-battle">
         <section class="panel-section">
           <h2>Параметры боя</h2>
-          <label>Циклов (150 AV + 100/цикл): <input id="cycles" type="number" value="4" min="1" max="20" /></label>
-          <label>Seed: <input id="seed" type="number" value="42" /></label>
-        </section>
-        <section class="panel-section">
-          <h2>Враги</h2>
-          <div id="enemyCfg"></div>
-        </section>
-        <section class="panel-section">
-          <h2>Баффы / дебаффы перед боем</h2>
-          <div id="modRows"></div>
-          <button id="addMod" class="btn-secondary">+ Модификатор</button>
-        </section>
-        <section class="panel-section">
-          <h2>Запуск</h2>
-          <label>Режим: <select id="runMode">
-            <option value="auto">Авто (стратегии)</option>
-            <option value="manual">Пошагово</option>
-          </select></label>
-          <button id="run" class="btn-primary btn-large">Симулировать бой</button>
-          <button id="check" class="btn-secondary">Self-check формул</button>
+          <p class="panel-pointer">Параметры боя, враги и запуск объединены на странице «Настройка боя».</p>
+          <button class="btn-primary" data-go="player">Перейти к настройке боя</button>
         </section>
       </div>
       <div class="route-panel" id="panel-gear">
         <section class="panel-section">
           <h2>Реликвии по персонажам</h2>
-          <div id="relicTabs" class="tabBar"></div>
-          <div id="relicPanel"></div>
+          <p class="panel-pointer">Редактор реликвий объединён на странице «Настройка боя» (раздел «Билд»).</p>
+          <button class="btn-primary" data-go="player">Перейти к настройке боя</button>
         </section>
       </div>
       <div class="route-panel" id="panel-calc">
@@ -73,23 +104,9 @@
       </div>
       <div class="route-panel" id="panel-results">
         <section class="panel-section">
-          <div id="manualPanel" style="display:none"></div>
-        </section>
-        <section class="panel-section">
-          <h2>Сводка урона</h2>
-          <div id="summary"><em>Запустите бой</em></div>
-        </section>
-        <section class="panel-section">
-          <h2>Характеристики отряда</h2>
-          <div id="statPanel"><em>—</em></div>
-        </section>
-        <section class="panel-section">
-          <h2>HP после боя</h2>
-          <div id="hpPanel"><em>—</em></div>
-        </section>
-        <section class="panel-section">
-          <h2>Лог боя</h2>
-          <pre id="log"></pre>
+          <h2>Результаты</h2>
+          <p class="panel-pointer">Результаты выводятся под формой на странице «Настройка боя».</p>
+          <button class="btn-primary" data-go="player">Перейти к настройке боя</button>
         </section>
       </div>
       <div class="route-panel" id="panel-reference">
@@ -98,11 +115,6 @@
         </section>
       </div>
 
-      <div class="route-panel" id="panel-dashboard">
-        <section class="panel-section">
-          <div id="dashboard"><em>Загрузка…</em></div>
-        </section>
-      </div>
       <div class="route-panel" id="panel-analysis">
         <section class="panel-section">
           <div id="runAnalysis"><em>Запустите бой или откройте сохранённый прогон.</em></div>

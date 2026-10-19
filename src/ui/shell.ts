@@ -23,6 +23,7 @@ export interface Route {
 export function panelOf(r: Route): string { return `panel-${r.id}` }
 
 export const ROUTES: Route[] = [
+  { id: 'player', label: 'Настройка боя', group: 'BATTLE' },
   { id: 'dashboard', label: 'Dashboard', group: 'BATTLE' },
   { id: 'team', label: 'Отряд', group: 'BATTLE' },
   { id: 'build', label: 'Билд', group: 'BATTLE', capability: 'build.editor' },
@@ -229,6 +230,7 @@ export function initShell(): void {
   }
   syncGroupStates()
   renderVersionBar()
+  document.querySelectorAll<HTMLElement>('[data-go]').forEach(b => { b.onclick = () => navigate(b.dataset.go as string) })
   window.addEventListener('hashchange', () => activate(currentRoute()))
   if (!location.hash) location.hash = `#/${DEFAULT_ROUTE}`
   else activate(currentRoute())

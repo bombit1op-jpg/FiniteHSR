@@ -1,0 +1,58 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { Window } from 'happy-dom'
+import { raw } from '../_helpers/battle'
+import { REPO_ROOT } from '../suites'
+
+/**
+ * Single-page player flow (docs/gui/PLAYER_FLOW_AND_ASSETS.md): the normal setup lives on ONE
+ * route panel (`#panel-player`) in the spec order — team → build/relics → enemies → pre-battle
+ * mods → run mode/Start → results below. The existing editors keep their singleton container ids;
+ * those containers are *relocated* into the player panel, and the old BATTLE routes become pointers,
+ * so there is exactly one live copy of each control (no parallel state, no duplicate DOM).
+ */
+export default () => {
+  const html = readFileSync(join(REPO_ROOT, 'index.html'), 'utf8')
+  const win = new Window({ url: 'http://localhost/' })
+  const doc = win.document as unknown as Document
+  doc.body.innerHTML = html
+
+  const main = doc.querySelector('main') as HTMLElement
+  const panels = [...main.querySelectorAll<HTMLElement>('.route-panel')]
+  const player = doc.getElementById('panel-player') as HTMLElement
+
+  const SINGLETONS = [
+    'team', 'addChar', 'relicTabs', 'relicPanel', 'enemyCfg', 'modRows', 'addMod',
+    'runMode', 'cycles', 'seed', 'run', 'check',
+    'manualPanel', 'summary', 'statPanel', 'hpPanel', 'log',
+  ]
+  const OLD = ['panel-team', 'panel-battle', 'panel-gear', 'panel-results']
+
+  const inPlayer = (id: string): boolean => !!player?.querySelector(`#${id}`)
+  const counts = (id: string): number => main.querySelectorAll(`#${id}`).length
+
+  // spec order of the section headings inside the player panel
+  const headings = [...(player?.querySelectorAll('h2') ?? [])].map(h => (h.textContent ?? '').trim())
+  const ordered = headings[0]?.startsWith('1.') === true
+    && headings[1]?.startsWith('2.') === true
+    && headings[2]?.startsWith('3.') === true
+    && headings[3]?.startsWith('4.') === true
+    && headings[4]?.startsWith('5.') === true
+    && headings[5] === 'Результаты'
+
+  return [
+    raw('player panel exists and is the first route panel', panels[0]?.id === 'panel-player', panels[0]?.id ?? 'none'),
+    raw('player panel is active by default', player?.classList.contains('active') === true),
+    raw('player sections follow the spec order (team→build→enemies→mods→run→results)', ordered, headings.join(' | ')),
+    raw('every setup control lives inside the player panel', SINGLETONS.every(inPlayer),
+      SINGLETONS.filter(id => !inPlayer(id)).join(',') || 'all present'),
+    raw('each setup control id is unique in <main> (no parallel copy)', SINGLETONS.every(id => counts(id) === 1),
+      SINGLETONS.filter(id => counts(id) !== 1).map(id => `${id}×${counts(id)}`).join(',') || 'unique'),
+    raw('old BATTLE panels no longer own the setup controls', OLD.every(pid => {
+      const p = doc.getElementById(pid)
+      return p && SINGLETONS.every(id => !p.querySelector(`#${id}`))
+    }), OLD.join(',')),
+    raw('replaced BATTLE routes point to the player page', OLD.every(pid => !!doc.getElementById(pid)?.querySelector('[data-go="player"]')),
+      OLD.filter(pid => !doc.getElementById(pid)?.querySelector('[data-go="player"]')).join(',') || 'all point'),
+  ]
+}

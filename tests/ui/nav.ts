@@ -28,9 +28,9 @@ export default () => {
   const bodies = () => [...rail.querySelectorAll<HTMLElement>('.nav-group-body')]
   const engBody = () => bodies().find(b => b.dataset.group === 'ENGINEERING')
 
-  // deep links: exact 18 route ids, nothing added/renamed/removed
+  // deep links: the 18 original route ids are kept, plus the new `player` composition route
   const railIds = [...rail.querySelectorAll('.nav-btn')].map(b => (b as HTMLElement).dataset.route)
-  const deepLinksOk = JSON.stringify(railIds) === JSON.stringify(ROUTES.map(r => r.id)) && railIds.length === 18
+  const deepLinksOk = JSON.stringify(railIds) === JSON.stringify(ROUTES.map(r => r.id)) && railIds.length === 19
 
   // 4 sections with the target labels
   const labelsOk = headers.length === 4 && headers.every(h => Object.values(GROUP_LABELS).includes(h.textContent ?? ''))
@@ -54,7 +54,7 @@ export default () => {
     && rail2.querySelector('.nav-btn[data-route="diagnostics"]') !== null
 
   return [
-    raw('nav renders exactly the 18 known route ids (deep links unchanged)', deepLinksOk, railIds.join(',')),
+    raw('nav renders the known route ids incl. new player route (deep links unchanged)', deepLinksOk, railIds.join(',')),
     raw('nav has the 4 user-facing section headers', labelsOk, headers.map(h => h.textContent).join('|')),
     raw('ENGINEERING starts collapsed but keeps its 5 route buttons in the DOM', defCollapsed, String(defCollapsed)),
     raw('group header click expands the collapsed section', opened, String(opened)),
