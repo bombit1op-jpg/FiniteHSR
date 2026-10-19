@@ -207,6 +207,13 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 }
 .mocRoomPreview p { margin: 4px 0; }
 .mocRoomPreview .dim { font-size: 12px; }
+.mocRoomsPreview { display: grid; gap: 8px; margin: 10px 0; }
+.mocRoomCard {
+  padding: 10px; overflow-wrap: anywhere;
+  background: #131820; border: 1px solid #232a35; border-radius: 8px;
+}
+.mocRoomCard h4 { margin: 0 0 6px; color: #f2c94c; }
+.mocRoomCard p { margin: 4px 0; }
 
 /* ---------------------------------------------------------------- §84 workspaces toolkit */
 
