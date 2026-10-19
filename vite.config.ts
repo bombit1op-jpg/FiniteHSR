@@ -7,4 +7,7 @@ export default defineConfig({
   define: {
     __TODO_RAW__: JSON.stringify(readFileSync('TODO.md', 'utf8')),
   },
+  server: {
+    host: '127.0.0.1',
+  },
 })

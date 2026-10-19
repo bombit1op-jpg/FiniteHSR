@@ -11,7 +11,7 @@ import { resolveBuild, validateBuild, type BuildSpec } from '../core/build'
 import { el, fillSelect } from './dom'
 import { specToJson, specFromJson, downloadJson, pickJsonFile, readFileText } from './specs'
 import { showStatus, withBusy } from './shell'
-import { charBadge, updateCharBadge } from './icons'
+import { charBadge, gearBadge, updateCharBadge, updateGearBadge } from './icons'
 import { store } from './store'
 import { syncRow, teamRows } from './team'
 
@@ -61,6 +61,11 @@ export function initBuildEditor(): void {
   const validation = el('div', 'buildValidation')
   const resolved = el('pre', 'buildResolved')
 
+  const coneBadge = gearBadge('cone', coneSel.value)
+  const relicBadge = gearBadge('relic', relicSel.value)
+  const relic2Badge = gearBadge('relic', relic2Sel.value)
+  const planarBadge = gearBadge('planar', planarSel.value)
+
   // ---------------------------------------------------------------- sync + render
 
   const readForm = (): void => {
@@ -77,6 +82,10 @@ export function initBuildEditor(): void {
 
   const renderOut = (): void => {
     readForm()
+    updateGearBadge(coneBadge, 'cone', coneSel.value)
+    updateGearBadge(relicBadge, 'relic', relicSel.value)
+    updateGearBadge(relic2Badge, 'relic', relic2Sel.value)
+    updateGearBadge(planarBadge, 'planar', planarSel.value)
     const bad = validateBuild(cur)
     validation.dataset.ok = bad.length ? '0' : '1'
     validation.textContent = bad.length ? '✗ ' + bad.join(', ') : '✓ все id разрешаются'
@@ -125,9 +134,9 @@ export function initBuildEditor(): void {
   const form = el('div', 'buildForm')
   form.append(
     row('Персонаж', badge, kitSel),
-    row('Light Cone', coneSel), row('Superimposition', siSel),
-    row('Реликвия', relicSel), row('Кол-во', countSel), row('Реликвия 2 (2+2)', relic2Sel),
-    row('Планарный', planarSel),
+    row('Light Cone', coneBadge, coneSel), row('Superimposition', siSel),
+    row('Реликвия', relicBadge, relicSel), row('Кол-во', countSel), row('Реликвия 2 (2+2)', relic2Badge, relic2Sel),
+    row('Планарный', planarBadge, planarSel),
     row('Эйдолон', eidSel),
     row('Уровни', lvl.basic, lvl.skill, lvl.ult, lvl.talent, label('Трейсы', tracesChk)),
   )

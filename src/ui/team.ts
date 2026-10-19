@@ -7,7 +7,7 @@ import { el, fillSelect, fmtStatVal, escapeHtml, STAT_LABELS } from './dom'
 import { store, techniquesForRows } from './store'
 import type { PieceState, TeamRowState } from './store'
 import { loadSettings } from './settings'
-import { charBadge, updateCharBadge } from './icons'
+import { charBadge, gearBadge, updateCharBadge, updateGearBadge } from './icons'
 import type { DebugLevel } from '../core/battlelog'
 
 interface SubEditor { statSel: HTMLSelectElement; tierSel: HTMLSelectElement; rollsInp: HTMLInputElement }
@@ -177,7 +177,7 @@ export function addCharRow(): void {
 
   // gear selects
   const gear = el('div', 'gear')
-  const mkGearLabel = (text: string, s: HTMLSelectElement) => {
+  const mkGearLabel = (text: string, s: HTMLElement) => {
     const l = el('label'); l.textContent = text; l.append(s); return l
   }
 
@@ -185,19 +185,23 @@ export function addCharRow(): void {
   fillSelect(coneSel, [['', '— Light Cone —'],
     ...LIGHT_CONES.map(c => [c.id, `★${c.rarity} ${c.name}`] as [string, string])])
   coneSel.value = DEFAULT_CONE[free.id] ?? ''
+  const coneBadge = gearBadge('cone', coneSel.value)
 
   const siSel = el('select') as HTMLSelectElement
   fillSelect(siSel, [1, 2, 3, 4, 5].map(n => [String(n), `S${n}`] as [string, string]))
 
   const relic1 = el('select') as HTMLSelectElement
   fillSelect(relic1, [['', '— Relic A —'], ...RELIC_SETS.map(r => [r.id, r.name] as [string, string])])
+  const relic1Badge = gearBadge('relic', relic1.value)
   const relic2 = el('select') as HTMLSelectElement
   fillSelect(relic2, [['', '— Relic B —'], ...RELIC_SETS.map(r => [r.id, r.name] as [string, string])])
+  const relic2Badge = gearBadge('relic', relic2.value)
 
   const planarSel = el('select') as HTMLSelectElement
   fillSelect(planarSel, [['', '— Planar —'], ...PLANAR_SETS.map(p => [p.id, p.name] as [string, string])])
+  const planarBadge = gearBadge('planar', planarSel.value)
 
-  gear.append(mkGearLabel('Cone', coneSel), mkGearLabel('SI', siSel), mkGearLabel('Relics', relic1), mkGearLabel('+', relic2), mkGearLabel('Planar', planarSel))
+  gear.append(mkGearLabel('Cone', coneBadge), mkGearLabel('Cone', coneSel), mkGearLabel('SI', siSel), mkGearLabel('Relics', relic1Badge), mkGearLabel('Relics', relic1), mkGearLabel('+', relic2Badge), mkGearLabel('+', relic2), mkGearLabel('Planar', planarBadge), mkGearLabel('Planar', planarSel))
   card.append(gear)
 
   // eidolon + ability levels + traces
@@ -285,6 +289,10 @@ export function addCharRow(): void {
   const r: CharRow = { id, root: card, kitId: free.id, stats, coneSel, siSel, relic1, relic2, planarSel, eidSel, levels, tracesChk, energyFracSel, techniqueSel, pieces, relicRoot, skillPriorityInp, skillPatternSel, skillRotationInp, strategyChks }
   const refresh = () => {
     syncRow(r)
+    updateGearBadge(coneBadge, 'cone', coneSel.value)
+    updateGearBadge(relic1Badge, 'relic', relic1.value)
+    updateGearBadge(relic2Badge, 'relic', relic2.value)
+    updateGearBadge(planarBadge, 'planar', planarSel.value)
     preview.innerHTML = gearPreviewHtml(storeRow(r))
   }
 
@@ -310,6 +318,7 @@ export function addCharRow(): void {
     updateCharBadge(badge, sel.value)
     for (const [k] of Object.entries(stats)) applyDefault(stats[k], sel.value, k)
     coneSel.value = DEFAULT_CONE[sel.value] ?? ''
+    updateGearBadge(coneBadge, 'cone', coneSel.value)
     fillTechniqueOpts(sel.value)
     techniqueSel.value = '0'
     refresh()
