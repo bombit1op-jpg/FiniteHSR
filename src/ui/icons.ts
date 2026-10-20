@@ -138,6 +138,7 @@ export function ratingTierClass(rating: string): string {
   if (rating === 'C' || rating === 'C+' || rating === 'B' || rating === 'B+' || rating === 'A') return 'r-mid'
   if (rating === 'A+' || rating === 'S' || rating === 'S+') return 'r-good'
   if (rating === 'SS' || rating === 'SS+' || rating === 'SSS' || rating === 'SSS+') return 'r-great'
+  if (rating === 'CHETAH') return 'r-chetah'
   return 'r-perfect' // WTF, WTF+, AEON
 }
 

@@ -147,6 +147,8 @@ const RATING_TIERS: [number, string][] = [
   [0, 'F'], [5, 'F+'], [10, 'D'], [15, 'D+'], [20, 'C'], [25, 'C+'], [30, 'B'], [35, 'B+'],
   [40, 'A'], [45, 'A+'], [50, 'S'], [55, 'S+'], [60, 'SS'], [65, 'SS+'], [70, 'SSS'], [75, 'SSS+'],
   [80, 'WTF'], [85, 'WTF+'], [90, 'AEON'],
+  // overflow tier above Fribbels' AEON: score exceeds 100% of the 6-roll ideal
+  [200, 'CHETAH'],
 ]
 
 export function pctToRating(pct: number, part: RelicSlot, hasCorrectMain: boolean, aeonEligible = false): string {
@@ -155,7 +157,8 @@ export function pctToRating(pct: number, part: RelicSlot, hasCorrectMain: boolea
   for (let i = RATING_TIERS.length - 1; i >= 0; i--) {
     if (pct >= RATING_TIERS[i][0]) {
       const rating = RATING_TIERS[i][1]
-      return rating === 'AEON' && !aeonEligible ? 'WTF+' : rating
+      // AEON and above require verified weights (mirrors Fribbels' aeonEligible gate)
+      return (rating === 'AEON' || rating === 'CHETAH') && !aeonEligible ? 'WTF+' : rating
     }
   }
   return '?'
