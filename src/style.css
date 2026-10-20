@@ -167,9 +167,21 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .pieceCard h4 { margin: 0; font-size: 11px; color: #9aa7ba; text-transform: uppercase; letter-spacing: .05em; }
 .pieceHead { display: flex; align-items: center; gap: 8px; }
 .pieceHead .pieceBadge:has(.gameIcon img) { width: auto; height: auto; border-radius: 8px; background: #0d1117; }
+.pieceRating { margin-left: auto; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 6px; background: #1a1f29; color: #9aa7ba; border: 1px solid #2a3342; }
+.pieceRating.r-low { color: #8a94a3; }
+.pieceRating.r-mid { color: #7fb3ff; border-color: #2c3f5c; }
+.pieceRating.r-good { color: #6fd3ff; border-color: #2c4a5c; }
+.pieceRating.r-great { color: #b98cff; border-color: #4a3a63; }
+.pieceRating.r-perfect { color: #ffd76a; border-color: #6b5a2a; background: #241f10; }
 .pieceMain { font-size: 13px; color: #6fd3ff; padding: 6px 8px; background: #0d1117; border-radius: 6px; border: 1px solid #1e2530; }
-.subRow { display: grid; grid-template-columns: 1fr 64px 46px 70px 24px; gap: 4px; align-items: center; font-size: 11px; }
+.subRow { display: grid; grid-template-columns: 1fr 64px 46px 62px 52px 24px; gap: 4px; align-items: center; font-size: 11px; }
 .subVal { color: #aab6c5; text-align: right; font-family: monospace; }
+.subCubes { display: inline-flex; gap: 2px; align-items: center; }
+.subCube { width: 6px; height: 6px; border-radius: 2px; background: #232a35; border: 1px solid #2a3342; }
+.subCube.on { background: #2ecc71; border-color: #27ae60; box-shadow: 0 0 3px rgba(46,204,113,.5); }
+.subCubes[data-tier="0"] .subCube.on { background: #3fb970; border-color: #2f8f57; }
+.subCubes[data-tier="1"] .subCube.on { background: #37c47a; border-color: #2ba063; }
+.subCubes[data-tier="2"] .subCube.on { background: #2ecc71; border-color: #27ae60; }
 .addSub { font-size: 11px; padding: 5px 8px; background: #232a35; border: 1px solid #2a3342; color: #aab6c5; border-radius: 6px; cursor: pointer; width: 100%; }
 .addSub:hover { background: #2a3a4f; }
 

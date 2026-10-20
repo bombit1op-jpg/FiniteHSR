@@ -109,6 +109,38 @@ export function relicPieceIconUrl(setId: string, slot: RelicSlot): string | unde
   return RELICPIECES_ICONS[setId]?.[String(RELIC_SLOT_INDEX[slot])]
 }
 
+// ---------------------------------------------------------------- relic roll cubes
+
+/**
+ * Green quality cubes: one cube per substat roll (1..6). Custom design (not Fribbels' chevrons).
+ * The node reuses a single element; `updateSubCubes` repaints the count without re-mounting.
+ */
+export function subCubes(rolls: number, tier: 0 | 1 | 2 = 2): HTMLElement {
+  const node = el('span', 'subCubes')
+  updateSubCubes(node, rolls, tier)
+  return node
+}
+
+export function updateSubCubes(node: HTMLElement, rolls: number, tier: 0 | 1 | 2 = 2): void {
+  const n = Math.max(0, Math.min(6, Math.floor(rolls) || 0))
+  node.dataset.tier = String(tier)
+  node.title = `${n} ${n === 1 ? 'roll' : 'rolls'}` + (tier === 0 ? ' (low)' : tier === 1 ? ' (mid)' : ' (high)')
+  node.textContent = ''
+  for (let i = 0; i < 6; i++) {
+    const cube = el('span', 'subCube' + (i < n ? ' on' : ''))
+    node.append(cube)
+  }
+}
+
+/** piece rating letter -> tier class, for coloring the badge. */
+export function ratingTierClass(rating: string): string {
+  if (rating === '?' || rating === '' || rating === 'F' || rating === 'F+' || rating === 'D' || rating === 'D+') return 'r-low'
+  if (rating === 'C' || rating === 'C+' || rating === 'B' || rating === 'B+' || rating === 'A') return 'r-mid'
+  if (rating === 'A+' || rating === 'S' || rating === 'S+') return 'r-good'
+  if (rating === 'SS' || rating === 'SS+' || rating === 'SSS' || rating === 'SSS+') return 'r-great'
+  return 'r-perfect' // WTF, WTF+, AEON
+}
+
 // ---------------------------------------------------------------- reusable image node
 
 export type IconFit = 'contain' | 'cover'

@@ -1,0 +1,152 @@
+// One-off generator: imports Fribbels (hsr-optimizer) per-character scoring weights
+// verbatim into src/core/relicWeights.ts, mapped to our kit slugs by character name (+ path for Trailblazer).
+//
+// Source of truth: reference/hsr-optimizer-main/src/lib/conditionals/character/**/*.ts  (const scoring = ...)
+// Run: npx tsx src/core/gen-relic-weights.ts
+import fs from 'node:fs'
+import path from 'node:path'
+import { KITS, KIT_PATH } from './kits/index'
+
+const REF = path.join('reference', 'hsr-optimizer-main')
+const GD = path.join(REF, 'src', 'data', 'game_data.json')
+const CHAR_DIR = path.join(REF, 'src', 'lib', 'conditionals', 'character')
+const OUT = path.join('src', 'core', 'relicWeights.ts')
+
+const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
+
+// Stat name map: Fribbels Stats.X -> our kit/stat keys
+const STAT_MAP: Record<string, string> = {
+  HP: 'hp', HP_P: 'hpPct', ATK: 'atk', ATK_P: 'atkPct', DEF: 'def', DEF_P: 'defPct',
+  SPD: 'spd', CR: 'critRate', CD: 'critDmg', EHR: 'ehr', RES: 'effRes', BE: 'be',
+  ERR: 'err', OHB: 'outHeal',
+  Physical_DMG: 'dmg:Physical', Fire_DMG: 'dmg:Fire', Ice_DMG: 'dmg:Ice',
+  Wind_DMG: 'dmg:Wind', Lightning_DMG: 'dmg:Lightning', Quantum_DMG: 'dmg:Quantum',
+  Imaginary_DMG: 'dmg:Imaginary',
+}
+const mapStat = (n: string) => STAT_MAP[n]
+
+type Weights = Record<string, number>
+type Parts = Record<string, string[]>
+
+function walk(dir: string): string[] {
+  const out: string[] = []
+  for (const f of fs.readdirSync(dir)) {
+    const p = path.join(dir, f)
+    if (fs.statSync(p).isDirectory()) out.push(...walk(p))
+    else if (f.endsWith('.ts') && !f.includes('.test.')) out.push(p)
+  }
+  return out
+}
+
+function extractWeights(src: string): Weights | null {
+  const sc = src.match(/const scoring\s*=\s*\(\)\s*:\s*ScoringMetadata\s*=>\s*\(\{([\s\S]*?)\n\}\)/)
+  if (!sc) return null
+  const statsBlock = sc[1].match(/stats\s*:\s*\{([\s\S]*?)\n\s*\},/)
+  if (!statsBlock) return null
+  const w: Weights = {}
+  for (const m of statsBlock[1].matchAll(/\[Stats\.(\w+)\]:\s*([\d.]+)/g)) {
+    const our = mapStat(m[1])
+    if (our) w[our] = Number(m[2])
+  }
+  return w
+}
+
+// Parts block: Fribbels Parts.Body/Feet/PlanarSphere/LinkRope -> our slot keys
+const PART_MAP: Record<string, string> = {
+  Body: 'body', Feet: 'feet', PlanarSphere: 'sphere', LinkRope: 'rope',
+}
+
+function extractParts(src: string): Parts {
+  const sc = src.match(/const scoring\s*=\s*\(\)\s*:\s*ScoringMetadata\s*=>\s*\(\{([\s\S]*?)\n\}\)/)
+  const parts: Parts = {}
+  if (!sc) return parts
+  const pb = sc[1].match(/parts\s*:\s*\{([\s\S]*?)\n\s*\},/)
+  if (!pb) return parts
+  for (const m of pb[1].matchAll(/\[Parts\.(\w+)\]:\s*\[([\s\S]*?)\]/g)) {
+    const slot = PART_MAP[m[1]]
+    if (!slot) continue
+    const list: string[] = []
+    for (const s of m[2].matchAll(/Stats\.(\w+)/g)) {
+      const our = mapStat(s[1])
+      if (our) list.push(our)
+    }
+    parts[slot] = list
+  }
+  return parts
+}
+
+const gd = JSON.parse(fs.readFileSync(GD, 'utf8')) as { characters: Record<string, { name: string; path?: string }> }
+
+type Abs = { id: string; name: string; path: string; weights: Weights; parts: Parts }
+const abstracts: Abs[] = []
+for (const fp of walk(CHAR_DIR)) {
+  const src = fs.readFileSync(fp, 'utf8')
+  const idm = src.match(/\bid:\s*'(\d+)'/)
+  if (!idm) continue // skip *B1 variants (e.g. '1102b1')
+  const id = idm[1]
+  const meta = gd.characters[id]
+  if (!meta) continue
+  const weights = extractWeights(src)
+  if (!weights) continue
+  abstracts.push({ id, name: meta.name, path: meta.path ?? '', weights, parts: extractParts(src) })
+}
+
+// slug -> name / path from our kits
+const slugName: Record<string, string> = {}
+const slugPath: Record<string, string> = {}
+for (const k of KITS) {
+  slugName[k.id] = k.name
+  slugPath[k.id] = (KIT_PATH as Record<string, string>)[k.id] ?? (k.base as any)?.path ?? ''
+}
+
+const byName = new Map<string, string>() // norm(name) -> slug
+for (const slug of Object.keys(slugName)) byName.set(norm(slugName[slug]), slug)
+
+// Name+path collisions (same display name, different kit). Fribbels path -> our slug.
+// Trailblazer is handled generically below; this covers the rest.
+const NAME_PATH_TO_SLUG: Record<string, Record<string, string>> = {
+  march7th: { Preservation: 'march7th', Hunt: 'march7th_the_hunt' },
+}
+
+const result: Record<string, Abs> = {}
+const unmatched: string[] = []
+for (const a of abstracts) {
+  let slug: string | undefined
+  if (norm(a.name) === 'trailblazer') {
+    slug = `trailblazer_${a.path.toLowerCase()}`
+    if (!slugName[slug]) slug = undefined
+  } else {
+    const key = norm(a.name)
+    slug = NAME_PATH_TO_SLUG[key]?.[a.path] ?? byName.get(key)
+  }
+  if (!slug) { unmatched.push(`${a.id}=${a.name}${a.path ? ' (' + a.path + ')' : ''}`); continue }
+  result[slug] = a
+}
+
+const slugs = Object.keys(result).sort()
+const lines: string[] = []
+lines.push('// AUTO-GENERATED by src/core/gen-relic-weights.ts — do not hand-edit.')
+lines.push('// Per-character relic scoring metadata imported verbatim from Fribbels hsr-optimizer')
+lines.push('// (reference/hsr-optimizer-main, const scoring = ... in each character config).')
+lines.push('// Keys are our kit slugs; stats values are 0..1 weights per substat; parts are ideal mains per slot.')
+lines.push('')
+lines.push('export type RelicWeightTable = Record<string, number>')
+lines.push('export type RelicMainTable = Record<string, string[]>')
+lines.push('export type RelicScoringMeta = { stats: RelicWeightTable; parts: RelicMainTable }')
+lines.push('')
+lines.push('export const RELIC_WEIGHTS: Record<string, RelicScoringMeta> = {')
+for (const slug of slugs) {
+  const a = result[slug]
+  const wBody = Object.keys(a.weights).map(k => `${JSON.stringify(k)}:${a.weights[k]}`).join(', ')
+  const pBody = Object.keys(a.parts).map(k => `${k}:[${a.parts[k].map(x => JSON.stringify(x)).join(',')}]`).join(', ')
+  lines.push(`  ${slug}: {`)
+  lines.push(`    stats: { ${wBody} },`)
+  lines.push(`    parts: { ${pBody} },`)
+  lines.push(`  },`)
+}
+lines.push('}')
+lines.push('')
+fs.writeFileSync(OUT, lines.join('\n'))
+
+console.log(`abstracts=${abstracts.length} matched=${slugs.length} unmatched=${unmatched.length}`)
+if (unmatched.length) console.log('UNMATCHED:\n' + unmatched.join('\n'))

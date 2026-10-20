@@ -7,17 +7,19 @@ import { el, fillSelect, fmtStatVal, escapeHtml, STAT_LABELS } from './dom'
 import { store, techniquesForRows } from './store'
 import type { PieceState, TeamRowState } from './store'
 import { loadSettings } from './settings'
-import { charBadge, gearBadge, updateCharBadge, updateGearBadge, metaBadge, updateMetaBadges, pieceBadge, updatePieceBadge, statBadge } from './icons'
+import { charBadge, gearBadge, updateCharBadge, updateGearBadge, metaBadge, updateMetaBadges, pieceBadge, updatePieceBadge, statBadge, subCubes, updateSubCubes, ratingTierClass } from './icons'
 import { KIT_PATH } from '../core/kits'
+import { scoreRelic } from '../core/relicScore'
 import type { DebugLevel } from '../core/battlelog'
 
-interface SubEditor { statSel: HTMLSelectElement; tierSel: HTMLSelectElement; rollsInp: HTMLInputElement }
+interface SubEditor { statSel: HTMLSelectElement; tierSel: HTMLSelectElement; rollsInp: HTMLInputElement; cubes: HTMLElement }
 
 interface PieceEditor {
   slot: RelicPiece['slot']
   card: HTMLElement
   setSel: HTMLSelectElement
   pieceBadgeEl: HTMLElement
+  ratingEl: HTMLElement
   mainSel: HTMLSelectElement
   mainVal: HTMLElement
   subs: SubEditor[]
@@ -310,6 +312,7 @@ export function addCharRow(): void {
     updateGearBadge(relic1Badge, 'relic', relic1.value)
     updateGearBadge(relic2Badge, 'relic', relic2.value)
     updateGearBadge(planarBadge, 'planar', planarSel.value)
+    paintPieceRatings(r)
     preview.innerHTML = gearPreviewHtml(storeRow(r))
   }
 
@@ -413,13 +416,26 @@ export function toTeamSpec(tr: TeamRowState): TeamSpec {
   }
 }
 
+/** paint the per-piece relic rating badge (WTF/AEON/...) for the current kit */
+function paintPieceRatings(r: CharRow): void {
+  for (const p of r.pieces) {
+    const subs = p.subs
+      .map(s => ({ stat: s.statSel.value, tier: Number(s.tierSel.value) as 0 | 1 | 2, rolls: Number(s.rollsInp.value) || 0 }))
+      .filter(s => s.stat && s.rolls > 0)
+    const { rating } = scoreRelic(r.kitId, p.slot, p.mainSel.value, subs)
+    p.ratingEl.textContent = rating
+    p.ratingEl.className = 'pieceRating ' + ratingTierClass(rating)
+  }
+}
+
 function buildPieceEditors(): PieceEditor[] {
   const out: PieceEditor[] = []
   for (const [slot, title] of SLOT_TITLES) {
     const card = el('div', 'pieceCard')
     const h = el('h4'); h.textContent = title
     const pieceBadgeEl = pieceBadge('', slot)
-    const head = el('div', 'pieceHead'); head.append(pieceBadgeEl, h)
+    const ratingEl = el('span', 'pieceRating'); ratingEl.textContent = '?'
+    const head = el('div', 'pieceHead'); head.append(pieceBadgeEl, h, ratingEl)
     const setSel = el('select') as HTMLSelectElement
     const pool = (slot === 'sphere' || slot === 'rope') ? PLANAR_SETS : RELIC_SETS
     fillSelect(setSel, [['', '— сет —'], ...pool.map(s => [s.id, s.name] as [string, string])])
@@ -447,12 +463,16 @@ function buildPieceEditors(): PieceEditor[] {
       const rollsInp = el('input') as HTMLInputElement
       rollsInp.type = 'number'; rollsInp.min = '1'; rollsInp.max = '6'; rollsInp.value = '1'
       const val = el('span', 'subVal')
+      const cubes = subCubes(1, 2)
       const x = el('button', 'del'); x.textContent = '✕'
       const upd = () => {
         const st = statSel.value
         if (!st) { val.textContent = ''; return }
-        const v = SUBSTAT_TIERS[st][Number(tierSel.value)] * (Number(rollsInp.value) || 0)
+        const tier = Number(tierSel.value) as 0 | 1 | 2
+        const rolls = Number(rollsInp.value) || 0
+        const v = SUBSTAT_TIERS[st][tier] * rolls
         val.textContent = '+ ' + fmtStatVal(st, v)
+        updateSubCubes(cubes, rolls, tier)
       }
       const onChange = () => { upd() }
       statSel.onchange = onChange
@@ -463,10 +483,10 @@ function buildPieceEditors(): PieceEditor[] {
         const idx = subs.findIndex(s => s.statSel === statSel)
         if (idx >= 0) subs.splice(idx, 1)
       }
-      row.append(statSel, tierSel, rollsInp, val, x)
+      row.append(statSel, tierSel, rollsInp, val, cubes, x)
       subRows.append(row)
       upd()
-      return { statSel, tierSel, rollsInp }
+      return { statSel, tierSel, rollsInp, cubes }
     }
     const addBtn = el('button', 'addSub')
     addBtn.textContent = '+ саб'
@@ -476,7 +496,7 @@ function buildPieceEditors(): PieceEditor[] {
     }
     setSel.onchange = () => updatePieceBadge(pieceBadgeEl, setSel.value, slot)
     card.append(head, setSel, mainSel, mainVal, subRows, addBtn)
-    out.push({ slot, card, setSel, pieceBadgeEl, mainSel, mainVal, subs, subRows, addBtn })
+    out.push({ slot, card, setSel, pieceBadgeEl, ratingEl, mainSel, mainVal, subs, subRows, addBtn })
   }
   return out
 }
