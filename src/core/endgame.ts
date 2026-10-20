@@ -31,6 +31,7 @@ export interface EndgameSection {
 export interface EndgameBlock {
   label: string
   list?: string[]
+  content?: string
   types?: Elem[]
   cards?: EndgameCard[]
   nodes?: EndgameNode[]
@@ -44,17 +45,47 @@ export interface EndgameStage {
   maxCycles: number | number[]
   enemyLevels: number[]
   objectives: string[]
+  /** Named rooms in source order; MoC rooms are sequential waves of one stage run. */
+  rooms: EndgameRoom[]
   battles: EndgameBattle[]
 }
 
-export interface EndgameBattle {
-  /** 'Node 1' / 'Wave 1' — the fight this side represents */
+export interface EndgameRoom {
   id: string
-  /** enemy level of this fight (AS: chosen stage level) */
+  /** Existing enemy profiles with the archive's level curve applied. */
+  enemies: EnemySpec[]
+  types?: Elem[]
+}
+
+export interface EndgameBattle {
+  /** Independently selectable room/fight, e.g. 'Node 1'. */
+  id: string
+  /** Enemy level of this room (AS: chosen stage level). */
   level: number
-  /** sequential waves of this fight (MoC/AA: one per Node/Wave) */
+  /** Sequential waves inside this room; a Node is not itself a wave. */
   waves: EnemySpec[][]
   types?: Elem[]
+}
+
+export interface EndgameEffect {
+  id: string
+  label: string
+  description: string
+  types?: Elem[]
+}
+
+function plainText(html: string): string {
+  return html
+    .replace(/<br\s*\/?\s*>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/\s+/g, ' ')
+    .trim()
 }
 
 // ---------------------------------------------------------------- sources
@@ -157,33 +188,127 @@ export function buildEnemies(cards: EndgameCard[], level: number): EnemySpec[] {
 
 // ---------------------------------------------------------------- GI helpers
 
-function blocksOf(sec: any): EndgameBlock[] {
-  const layouts = sec.layouts
-  if (layouts?.length) {
-    const cur = layouts.find((l: any) => l.current)
-    return (cur ?? layouts[layouts.length - 1]).blocks
+const LAYOUT_SUFFIX = '__layout_'
+
+function allBlockLayouts(sec: any): EndgameBlock[][] {
+  if (sec.layouts?.length) return sec.layouts.map((layout: any) => layout.blocks ?? [])
+  const raw = (sec.blocks ?? []) as EndgameBlock[]
+  if (!raw.some(b => b.label === 'General Information')) return raw.length ? [raw] : []
+
+  // Some source pages contain multiple archived versions of the same stage flattened into
+  // one blocks array. A repeated General Information starts another layout.
+  const layouts: EndgameBlock[][] = []
+  let current: EndgameBlock[] = []
+  for (const block of raw) {
+    if (block.label === 'General Information' && current.some(b => b.label === 'General Information')) {
+      layouts.push(current)
+      current = []
+    }
+    current.push(block)
   }
-  return sec.blocks ?? []
+  if (current.length) layouts.push(current)
+  return layouts
 }
 
-function endgameSectionId(mode: EndgameMode, version: string, secId: string): EndgameSection | undefined {
+function currentLayoutIndex(sec: any, layouts = allBlockLayouts(sec)): number {
+  if (sec.layouts?.length) {
+    const current = sec.layouts.findIndex((layout: any) => layout.current)
+    if (current >= 0) return current
+  }
+  return Math.max(0, layouts.length - 1)
+}
+
+function blocksOf(sec: any, layoutIndex?: number): EndgameBlock[] {
+  const layouts = allBlockLayouts(sec)
+  if (!layouts.length) return []
+  const index = layoutIndex ?? currentLayoutIndex(sec, layouts)
+  return layouts[Math.max(0, Math.min(index, layouts.length - 1))]
+}
+
+function hasEnemyBlock(blocks: EndgameBlock[]): boolean {
+  return blocks.some(b => b.label === 'Enemies' || b.label.startsWith('Enemies '))
+}
+
+function layoutTitle(sec: any, blocks: EndgameBlock[], layoutCount: number): string {
+  const base = sec.title || sec.id
+  if (layoutCount <= 1) return base
+  const enemyBlock = blocks.find(b => b.label === 'Enemies' || b.label.startsWith('Enemies '))
+  const roomCount = extract(enemyBlock).length
+  const general = blocks.find(b => b.label === 'General Information')
+  const cycleLine = general?.list?.find(x => x.includes('Maximum Cycles'))
+  const cycleValue = cycleLine?.match(/:\s*([\d+ ]+)/)?.[1]?.replace(/\s+/g, '')
+  const roomText = roomCount === 1 ? '1 комната' : roomCount >= 2 && roomCount <= 4 ? roomCount + ' комнаты' : roomCount + ' комнат'
+  return base + ' · ' + roomText + (cycleValue ? ' · ' + cycleValue + ' циклов' : '')
+}
+
+function layoutOrder(sec: any, layouts: EndgameBlock[][]): number[] {
+  const current = currentLayoutIndex(sec, layouts)
+  return [current, ...layouts.map((_, i) => i).filter(i => i !== current).sort((a, b) => b - a)]
+}
+
+function endgameSectionId(mode: EndgameMode, version: string, selectedId: string): EndgameSection | undefined {
   const ver = data[mode].find((v: any) => v.version === version)
   if (!ver) return undefined
-  const sec = (ver.sections ?? []).find((s: any) => s.id === secId)
-  if (!sec || !blocksOf(sec).length) return undefined
-  return { id: sec.id, title: sec.title ?? '', url: sec.url ?? '', blocks: blocksOf(sec) }
+  const suffixAt = selectedId.lastIndexOf(LAYOUT_SUFFIX)
+  const hasLayoutSuffix = suffixAt >= 0 && /^\d+$/.test(selectedId.slice(suffixAt + LAYOUT_SUFFIX.length))
+  const sourceId = hasLayoutSuffix ? selectedId.slice(0, suffixAt) : selectedId
+  const requestedIndex = hasLayoutSuffix ? Number(selectedId.slice(suffixAt + LAYOUT_SUFFIX.length)) - 1 : undefined
+  const sec = (ver.sections ?? []).find((s: any) => s.id === sourceId)
+  if (!sec) return undefined
+  const layouts = allBlockLayouts(sec)
+  if (!layouts.length) return undefined
+  const index = requestedIndex ?? currentLayoutIndex(sec, layouts)
+  if (index < 0 || index >= layouts.length) return undefined
+  const blocks = blocksOf(sec, index)
+  if (!blocks.length) return undefined
+  return {
+    id: layouts.length > 1 ? sec.id + LAYOUT_SUFFIX + (index + 1) : sec.id,
+    title: layoutTitle(sec, blocks, layouts.length),
+    url: sec.url ?? '',
+    blocks,
+  }
 }
 
 export function endgameSections(mode: EndgameMode, version: string): { id: string; title: string }[] {
   const ver = data[mode].find((v: any) => v.version === version)
   if (!ver) return []
-  return (ver.sections ?? [])
-    .filter((s: any) => blocksOf(s).length)
-    .map((s: any) => ({ id: s.id, title: s.title ?? '' }))
+  const out: { id: string; title: string }[] = []
+  for (const sec of ver.sections ?? []) {
+    const layouts = allBlockLayouts(sec)
+    for (const index of layoutOrder(sec, layouts)) {
+      const blocks = layouts[index] ?? []
+      if (!hasEnemyBlock(blocks)) continue
+      out.push({
+        id: layouts.length > 1 ? sec.id + LAYOUT_SUFFIX + (index + 1) : sec.id,
+        title: layoutTitle(sec, blocks, layouts.length),
+      })
+    }
+  }
+  return out
 }
 
 export function endgameVersions(mode: EndgameMode): string[] {
   return data[mode].map((v: any) => v.version)
+}
+
+/** Archive effect descriptions are display metadata, not proof of executable engine support. */
+export function endgameEffects(mode: EndgameMode, version: string): EndgameEffect[] {
+  const ver = data[mode].find((v: any) => v.version === version)
+  if (!ver) return []
+  const meta = (ver.sections ?? []).find((s: any) => {
+    const blocks = blocksOf(s) as EndgameBlock[]
+    return !blocks.some(b => b.label === 'Enemies' || b.label.startsWith('Enemies ')) &&
+      blocks.some(b => !!b.content && b.label !== 'Duration')
+  })
+  if (!meta) return []
+  return (blocksOf(meta) as EndgameBlock[])
+    .filter(b => !!b.content && b.label !== 'Duration')
+    .map((b, i) => ({
+      id: meta.id + ':' + i,
+      label: b.label || meta.title || 'Effect',
+      description: plainText(b.content!),
+      types: b.types,
+    }))
 }
 
 // ---------------------------------------------------------------- stage assembly
@@ -229,22 +354,39 @@ export function endgameStage(mode: EndgameMode, version: string, secId: string, 
     ? levels[Math.min(stagePick, levels.length - 1)]
     : levels.length ? levels[levels.length - 1] : 80
 
-  if (mode === 'PF' || mode === 'AS') {
-    const battles: EndgameBattle[] = nodes.map((n, i) => ({
-      id: n.label || `Node ${i + 1}`,
-      level: stageLevel,
-      waves: [buildEnemies(n.cards, stageLevel)],
-      types: n.types,
-    }))
-    return { mode, version, id: sec.id, title: sec.title, maxCycles: cycles, enemyLevels: levels, objectives, battles }
+  // Keep the variable room count and names from endgame.json. A room contains enemy groups;
+  // for MoC, rooms are sequential parts of one stage and share its total cycle budget.
+  const rooms: EndgameRoom[] = nodes.map((node, i) => ({
+    id: node.label || 'Room ' + (i + 1),
+    enemies: buildEnemies(node.cards, stageLevel),
+    types: node.types,
+  }))
+
+  if (mode === 'MoC') {
+    const waves = rooms.map(room => room.enemies)
+    return {
+      mode, version, id: sec.id, title: sec.title,
+      maxCycles: cycles, enemyLevels: levels, objectives, rooms,
+      battles: [{ id: sec.title || sec.id, level: stageLevel, waves }],
+    }
   }
 
-  // MoC / AA: nodes are sequential rooms/waves of a single fight
-  const waves = nodes.map(n => buildEnemies(n.cards, stageLevel))
+  if (mode === 'PF' || mode === 'AS') {
+    const battles: EndgameBattle[] = rooms.map(room => ({
+      id: room.id,
+      level: stageLevel,
+      waves: [room.enemies],
+      types: room.types,
+    }))
+    return { mode, version, id: sec.id, title: sec.title, maxCycles: cycles, enemyLevels: levels, objectives, rooms, battles }
+  }
+
+  // Arbitral Arena retains its mode-specific wave interpretation for now.
+  const waves = rooms.map(room => room.enemies)
   return {
     mode, version, id: sec.id, title: sec.title,
-    maxCycles: cycles, enemyLevels: levels, objectives,
-    battles: [{ id: nodes[0]?.label ?? 'Stage', level: stageLevel, waves }],
+    maxCycles: cycles, enemyLevels: levels, objectives, rooms,
+    battles: [{ id: rooms[0]?.id ?? 'Stage', level: stageLevel, waves }],
   }
 }
 

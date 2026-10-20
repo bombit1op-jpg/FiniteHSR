@@ -24,19 +24,19 @@ export function panelOf(r: Route): string { return `panel-${r.id}` }
 
 export const ROUTES: Route[] = [
   { id: 'player', label: 'Настройка боя', group: 'BATTLE' },
-  { id: 'dashboard', label: 'Dashboard', group: 'BATTLE' },
+  { id: 'dashboard', label: 'Обзор', group: 'BATTLE' },
   { id: 'team', label: 'Отряд', group: 'BATTLE' },
-  { id: 'build', label: 'Билд', group: 'BATTLE', capability: 'build.editor' },
-  { id: 'encounter', label: 'Противники', group: 'BATTLE', capability: 'encounter.editor' },
-  { id: 'battle', label: 'Симулятор', group: 'BATTLE' },
-  { id: 'gear', label: 'Экипировка', group: 'BATTLE' },
-  { id: 'results', label: 'Результаты', group: 'BATTLE' },
-  { id: 'calc', label: 'Калькулятор', group: 'BATTLE' },
+  { id: 'build', label: 'Билды', group: 'BATTLE', capability: 'build.editor' },
+  { id: 'gear', label: 'Реликвии и конусы', group: 'BATTLE' },
+  { id: 'encounter', label: 'Враги и волны', group: 'BATTLE', capability: 'encounter.editor' },
+  { id: 'battle', label: 'Начать бой', group: 'BATTLE' },
+  { id: 'results', label: 'Итоги боя', group: 'BATTLE' },
+  { id: 'calc', label: 'Расчёт урона', group: 'BATTLE' },
   { id: 'reference', label: 'Справочник', group: 'BATTLE' },
 
-  { id: 'analysis', label: 'Анализ боя', group: 'ANALYSIS', capability: 'analysis.run' },
-  { id: 'compare', label: 'Сравнение', group: 'ANALYSIS', capability: 'analysis.compare' },
-  { id: 'profiles', label: 'Профили отряда', group: 'ANALYSIS', capability: 'analysis.profile' },
+  { id: 'analysis', label: 'Разбор боя', group: 'ANALYSIS', capability: 'analysis.run' },
+  { id: 'compare', label: 'Сравнить прогоны', group: 'ANALYSIS', capability: 'analysis.compare' },
+  { id: 'profiles', label: 'Профиль отряда', group: 'ANALYSIS', capability: 'analysis.profile' },
 
   { id: 'optimizer', label: 'Оптимизатор', group: 'OPTIMIZATION', capability: 'optimize.search' },
 
@@ -51,8 +51,8 @@ export const ROUTES: Route[] = [
 export const GROUP_LABELS: Record<Route['group'], string> = {
   BATTLE: 'Бой',
   ANALYSIS: 'Анализ',
-  OPTIMIZATION: 'Оптимизация',
-  ENGINEERING: 'Проверка движка',
+  OPTIMIZATION: 'Подбор билда',
+  ENGINEERING: 'Инструменты разработчика',
 }
 /** rarely-used technical section starts collapsed; activating one of its routes expands it */
 const DEFAULT_COLLAPSED: Record<string, boolean> = { ENGINEERING: true }
@@ -157,10 +157,16 @@ function saveCollapsed(): void {
   try { globalThis.localStorage?.setItem(COLLAPSED_KEY, JSON.stringify(collapsed)) } catch { /* no-op */ }
 }
 function syncGroupStates(): void {
-  for (const g of document.querySelectorAll<HTMLElement>('.nav-group-body'))
-    g.classList.toggle('collapsed', !!collapsed[g.dataset.group ?? ''])
-  for (const h of document.querySelectorAll<HTMLElement>('.nav-group'))
-    h.classList.toggle('collapsed', !!collapsed[h.dataset.group ?? ''])
+  for (const g of document.querySelectorAll<HTMLElement>('.nav-group-body')) {
+    const isCollapsed = !!collapsed[g.dataset.group ?? '']
+    g.classList.toggle('collapsed', isCollapsed)
+    g.setAttribute('aria-hidden', String(isCollapsed))
+  }
+  for (const h of document.querySelectorAll<HTMLButtonElement>('.nav-group')) {
+    const isCollapsed = !!collapsed[h.dataset.group ?? '']
+    h.classList.toggle('collapsed', isCollapsed)
+    h.setAttribute('aria-expanded', String(!isCollapsed))
+  }
 }
 function toggleGroup(group: string): void {
   collapsed[group] = !collapsed[group]
@@ -204,6 +210,7 @@ export function initShell(): void {
       h.className = 'nav-group'
       h.dataset.group = r.group
       h.type = 'button'
+      h.setAttribute('aria-controls', `nav-group-${r.group.toLowerCase()}`)
       h.textContent = GROUP_LABELS[r.group]
       h.title = 'Свернуть / развернуть раздел'
       h.onclick = () => toggleGroup(r.group)
@@ -211,6 +218,7 @@ export function initShell(): void {
       body = document.createElement('div')
       body.className = 'nav-group-body'
       body.dataset.group = r.group
+      body.id = `nav-group-${r.group.toLowerCase()}`
       rail.append(body)
     }
     const b = document.createElement('button')

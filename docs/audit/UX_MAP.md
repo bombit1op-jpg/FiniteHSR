@@ -81,3 +81,24 @@ F-отчёт помечает неполноту («исследовано X и�
 - Адаптивность — закрыта (20-10-2026): в `src/style.css` добавлены breakpoints `@media (max-width: 860px)` (nav rail → горизонтальная прокручиваемая полоса, team/relic-гриды в одну колонку) и `(max-width: 560px)` (topbar/mod-строки/сабстаты), плюс `@media (prefers-reduced-motion)`. Прежний leftover-gap снят.
 - Доступность (20-10-2026): `:focus-visible`-кольцо на всех интерактивных контролах (кнопки/ссылки/input/select/nav/tab), у иконок всегда `alt`, Start (`#run`) — единственная prominent primary-кнопка (`btn-primary btn-large`).
 - Отмена долгих прогонов: механизма отмены нет → кнопка не рисуется (см. «Long operations»).
+
+## UX refresh (19-10-2026) — branch `ui/streamlined-game-like-navigation`
+
+- Main navigation labels are player-facing and Russian; route ids/hash deep links are unchanged.
+- Battle group now reads in a clearer order: Обзор → Отряд → Билды → Реликвии и конусы → Враги и волны → Начать бой → Итоги боя, followed by advanced calculation/reference pages.
+- Analysis and optimization labels are simplified; the engineering section is labelled «Инструменты разработчика» and remains collapsed by default.
+- Dashboard primary tiles now follow the user journey: configure team/build → configure enemies → run → results → analysis / optimization. Coverage and technical capabilities remain below as secondary material.
+- Navigation groups expose `aria-expanded` / `aria-controls`; responsive layouts added for tablet and mobile widths.
+- This is a presentation/navigation change only. It does not alter combat rules, data, simulator setup contracts, or backend capability statuses.
+- Validation note: changes were authored through GitHub file operations; no local browser session or test runner was available in this editing environment. Run the repository's normal typecheck, UI tests, full tests, and build before merging.
+
+
+## Целевой player flow и assets guide (20-10-2026)
+
+Новый прикладной reference: `docs/gui/PLAYER_FLOW_AND_ASSETS.md`.
+Он определяет последовательность одного основного экрана: отряд → конусы/реликвии → характеристики → стратегия каждого персонажа → противники/режим → запуск → результаты на той же странице. Это целевое требование, а не утверждение о завершённой реализации.
+
+Указания для coding-agent: `docs/gui/OPENCODE_SINGLE_PAGE_UI_TASK.md`.
+Перед UI-работой агент должен проверить фактический checkout и все новые image assets, сделать манифест по стабильным ID и локальным путям, использовать graceful fallback, повторно использовать текущие store/domain contracts и существующий запуск симуляции. Не использовать hotlink-и вики и не менять боевую механику ради UI.
+
+Примечание по веткам: документация добавлена в ветку `ui/streamlined-game-like-navigation`. Перед реализацией проверь, что эта ветка содержит последние пользовательские коммиты с ассетами; при необходимости перенеси изменения поверх актуальной ветки, не затирая новые файлы.
