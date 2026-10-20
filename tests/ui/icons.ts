@@ -1,8 +1,8 @@
 import { Window } from 'happy-dom'
 import { raw } from '../_helpers/battle'
-import { charBadge, updateCharBadge, gearBadge, updateGearBadge, gearIconUrl } from '../../src/ui/icons'
+import { charBadge, updateCharBadge, gearBadge, updateGearBadge, gearIconUrl, pieceBadge, updatePieceBadge, relicPieceIconUrl } from '../../src/ui/icons'
 import { KITS } from '../../src/core/kits'
-import { CHARACTERS_ICONS, LIGHTCONES_ICONS, RELICSETS_ICONS } from '../../src/ui/iconManifest'
+import { CHARACTERS_ICONS, LIGHTCONES_ICONS, RELICSETS_ICONS, RELICPIECES_ICONS } from '../../src/ui/iconManifest'
 
 /**
  * PLAYER_FLOW_AND_ASSETS — local game-art icons: the badge resolves a real `<img>` through the
@@ -53,6 +53,22 @@ export default () => {
   // 5-star cone should resolve and carry the exact committed path (no invented URL)
   const noInvented = [imgSrc, gearBadgeImg].every(s => s === '' || s.startsWith('/icons/'))
 
+  // relic/planar piece art: setId + slot resolves to a committed piece name -> path
+  const slotUrl = relicPieceIconUrl('passerby', 'head')
+  const slotOk = slotUrl !== undefined && slotUrl.startsWith('/icons/relicpieces/')
+    && slotUrl === `${RELICPIECES_ICONS['passerby']?.['0']}`
+  const planarUrl = relicPieceIconUrl('passerby', 'sphere')
+  const planarUndefined = planarUrl === undefined
+  const unknownSet = relicPieceIconUrl('no_such_set', 'body') === undefined
+  const emptySet = relicPieceIconUrl('', 'body') === undefined
+
+  const pb = pieceBadge('passerby', 'head')
+  const pieceImg = pb.querySelector('img')?.getAttribute('src') ?? ''
+  const pieceHasIcon = pieceImg === slotUrl && pieceImg.startsWith('/icons/relicpieces/')
+  updatePieceBadge(pb, '', 'head')
+  const pieceEmptyFallback = pb.querySelector('img') === null && (pb.textContent ?? '').includes('—')
+  const pieceNoInvented = pieceImg === '' || pieceImg.startsWith('/icons/relicpieces/')
+
   return [
     raw('portrait badge resolves a real <img> from the manifest', hasRealIcon, `${pela.name} -> ${imgSrc}`),
     raw('img carries alt text and lazy loading', altOk && lazyOk, `${img?.getAttribute('alt')}/${img?.getAttribute('loading')}`),
@@ -62,5 +78,9 @@ export default () => {
     raw('gear badge renders the resolved icon', gearHasIcon, gearBadgeImg),
     raw('empty gear id renders the neutral dash chip, no <img>', emptyGearFallback, gb.textContent ?? ''),
     raw('no invented / hotlinked URLs — every src is a local /icons path', noInvented, [imgSrc, gearBadgeImg].join(' ')),
+    raw('piece art resolves for a set+slot, planar slot unknown on a cavern set', slotOk && planarUndefined, `${slotUrl}/${planarUrl}`),
+    raw('unknown or empty set id yields no piece url, no throw', unknownSet && emptySet, `${unknownSet}/${emptySet}`),
+    raw('piece badge renders the resolved icon; empty set falls back to a chip', pieceHasIcon && pieceEmptyFallback, pieceImg),
+    raw('piece art never invents a URL — every src is a local /icons/relicpieces path', pieceNoInvented, pieceImg),
   ]
 }

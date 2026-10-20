@@ -66,9 +66,13 @@ body.busy { cursor: progress; }
   margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid #1e2530;
 }
 .panel-pointer { color: #9aa7ba; margin: 0 0 12px; }
+.linkBtn { background: none; border: none; padding: 0; color: #7fb3ff; cursor: pointer; font: inherit; text-decoration: underline; }
+.linkBtn:hover { color: #a9ccff; }
 
-/* Team grid */
-.cardGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; margin-bottom: 12px; }
+/* Team grid — 4 character columns (party setup page) */
+.cardGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 12px; align-items: start; }
+@media (max-width: 1180px) { .cardGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 720px) { .cardGrid { grid-template-columns: 1fr; } }
 .charCard { background: #131820; border: 1px solid #2a3342; border-radius: 10px; padding: 12px; transition: border-color .15s; }
 .charCard:hover { border-color: #3a4a63; }
 .charHead { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
@@ -86,9 +90,10 @@ body.busy { cursor: progress; }
 .gameIcon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
 .gameIcon img { display: block; border-radius: inherit; }
 
-/* consistent icon sizes: portrait (team/eidolon) > gear (cone/set) > slot */
+/* consistent icon sizes: portrait (team/eidolon) > gear (cone/set) > piece > slot */
 .gameIcon.charIcon img { width: 44px; height: 44px; }
 .gameIcon.gearIcon img { width: 30px; height: 30px; }
+.gameIcon.pieceIcon img { width: 34px; height: 34px; border-radius: 6px; }
 .iconChip {
   display: inline-flex; align-items: center; justify-content: center;
   width: 26px; height: 26px; border-radius: 50%;
@@ -98,10 +103,14 @@ body.busy { cursor: progress; }
 }
 .gameIcon.charIcon .iconChip { width: 44px; height: 44px; font-size: 15px; }
 .gameIcon.gearIcon .iconChip { width: 30px; height: 30px; font-size: 13px; }
+.gameIcon.pieceIcon .iconChip { width: 34px; height: 34px; border-radius: 8px; font-size: 14px; }
 /* element / path chip (§1) — small, inline with the character name */
 .metaBadge { flex: none; display: inline-flex; align-items: center; }
 .gameIcon.metaIcon img { width: 18px; height: 18px; }
 .gameIcon.metaIcon .iconChip { width: 18px; height: 18px; font-size: 11px; }
+/* stat label chip in the pre-battle stat inputs */
+.row .statBadge { margin-right: 4px; }
+.row label:has(.statBadge) { flex-direction: row; align-items: center; gap: 4px; }
 .del { background: transparent; border: none; color: #7b8595; cursor: pointer; font-size: 13px; padding: 4px 8px; border-radius: 4px; }
 .del:hover { background: #2a1d1d; color: #c96a6a; }
 
@@ -156,6 +165,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .pieceCard { background: #12161f; border: 1px solid #2a3342; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
 .pieceCard:hover { border-color: #3a4a63; }
 .pieceCard h4 { margin: 0; font-size: 11px; color: #9aa7ba; text-transform: uppercase; letter-spacing: .05em; }
+.pieceHead { display: flex; align-items: center; gap: 8px; }
+.pieceHead .pieceBadge:has(.gameIcon img) { width: auto; height: auto; border-radius: 8px; background: #0d1117; }
 .pieceMain { font-size: 13px; color: #6fd3ff; padding: 6px 8px; background: #0d1117; border-radius: 6px; border: 1px solid #1e2530; }
 .subRow { display: grid; grid-template-columns: 1fr 64px 46px 70px 24px; gap: 4px; align-items: center; font-size: 11px; }
 .subVal { color: #aab6c5; text-align: right; font-family: monospace; }

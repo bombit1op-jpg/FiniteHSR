@@ -8,14 +8,17 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { RELIC_SETS, PLANAR_SETS } from './gear'
 
 const ROOT = join(import.meta.dirname, '..', '..')
 const SRC = join(ROOT, 'public', 'icons', '_manifest.json')
+const RELIC_DATA = join(ROOT, 'hsr-data', 'data', 'relicsets.json')
 const OUT = join(ROOT, 'src', 'ui', 'iconManifest.ts')
 
 interface IconEntry { file: string; name: string; character?: string }
 interface Category { icons: IconEntry[] }
 type RawManifest = Record<string, Category>
+interface RelicSet { name: string; parts: Record<string, { name: string }> }
 
 const SIMPLE = [
   'characters', 'enemies', 'lightcones', 'relicsets', 'planarsets',
@@ -38,6 +41,29 @@ function buildEidolons(cat: Category): Record<string, Record<string, string>> {
     ;(byChar[c] ??= {})[it.name] = toAppPath(it.file)
   }
   return byChar
+}
+
+/**
+ * relic/planar piece art, keyed `setSlug -> slot -> path`. Slot order comes from the local
+ * `relicsets.json` part order (HEAD/HAND/BODY/FOOT for cavern relics, NECK/OBJECT for planar),
+ * which is the same order the downloader (`fetch-relic-piece-icons.ts`) used, so the two agree.
+ * Output is keyed by the gear-table slug (what the UI selects by), resolved via set name.
+ */
+function buildRelicPieces(pieces: Category): Record<string, Record<string, string>> {
+  const byName: Record<string, string> = {}
+  for (const it of pieces.icons) byName[it.name] = toAppPath(it.file)
+  const slugByName: Record<string, string> = {}
+  for (const s of [...RELIC_SETS, ...PLANAR_SETS]) slugByName[s.name] = s.id
+  const sets = JSON.parse(readFileSync(RELIC_DATA, 'utf8')) as Record<string, RelicSet>
+  const out: Record<string, Record<string, string>> = {}
+  for (const set of Object.values(sets)) {
+    const slug = slugByName[set.name]
+    if (!slug) continue
+    const slots: Record<string, string> = {}
+    Object.values(set.parts).forEach((p, slot) => { const url = byName[p.name]; if (url) slots[String(slot)] = url })
+    if (Object.keys(slots).length) out[slug] = slots
+  }
+  return out
 }
 
 function emitRecord(map: Record<string, string>, indent: string): string {
@@ -70,6 +96,16 @@ function main(): void {
   for (const c of Object.keys(eid).sort()) {
     parts.push(`  ${quote(c)}: {`)
     parts.push(emitRecord(eid[c], '    '))
+    parts.push('  },')
+  }
+  parts.push('}')
+  parts.push('')
+
+  const rp = buildRelicPieces(manifest.relicpieces)
+  parts.push('export const RELICPIECES_ICONS: Record<string, Record<string, string>> = {')
+  for (const setId of Object.keys(rp).sort()) {
+    parts.push(`  ${quote(setId)}: {`)
+    parts.push(emitRecord(rp[setId], '    '))
     parts.push('  },')
   }
   parts.push('}')

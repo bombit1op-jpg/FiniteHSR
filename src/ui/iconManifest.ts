@@ -3,7 +3,7 @@
  * Maps stable display keys (character/Light Cone/set/stat/... names) to committed icon paths.
  * Keys are display names because that is the identity the raw game data and the manifest share;
  * the UI call sites do the id -> name lookup through the existing gear/kit tables.
- * Source: public/icons/_manifest.json (1874 files).
+ * Source: public/icons/_manifest.json (2058 files).
  */
 
 export const CHARACTERS_ICONS: Record<string, string> = {
@@ -2093,5 +2093,308 @@ export const EIDOLON_ICONS: Record<string, Record<string, string>> = {
     'Mastlength Twirls Mountweight': '/icons/eidolons/Yunli/Mastlength Twirls Mountweight.png',
     'Walk in Blade, Talk in Zither': '/icons/eidolons/Yunli/Walk in Blade, Talk in Zither.png',
     'Weathered Blade Does Not Sully': '/icons/eidolons/Yunli/Weathered Blade Does Not Sully.png',
+  },
+}
+
+export const RELICPIECES_ICONS: Record<string, Record<string, string>> = {
+  'amphoreus': {
+    '0': '/icons/relicpieces/Last West Wind of Amphoreus.png',
+    '1': '/icons/relicpieces/Eternal Verses of Amphoreus.png',
+  },
+  'arcadia': {
+    '0': '/icons/relicpieces/Membrance Maze\'s Serene Treehouse.png',
+    '1': '/icons/relicpieces/Membrance Maze\'s Wishing Whistle.png',
+  },
+  'banana': {
+    '0': '/icons/relicpieces/BananAmusement Park\'s BananAxis Plaza.png',
+    '1': '/icons/relicpieces/BananAmusement Park\'s Memetic Cables.png',
+  },
+  'belobog': {
+    '0': '/icons/relicpieces/Belobog\'s Fortress of Preservation.png',
+    '1': '/icons/relicpieces/Belobog\'s Iron Defense.png',
+  },
+  'bone': {
+    '0': '/icons/relicpieces/Aidonia\'s Deceased Gravestones.png',
+    '1': '/icons/relicpieces/Aidonia\'s Deathward Bone Chains.png',
+  },
+  'boxing': {
+    '0': '/icons/relicpieces/Champion\'s Headgear.png',
+    '1': '/icons/relicpieces/Champion\'s Heavy Gloves.png',
+    '2': '/icons/relicpieces/Champion\'s Chest Guard.png',
+    '3': '/icons/relicpieces/Champion\'s Fleetfoot Boots.png',
+  },
+  'broken_keel': {
+    '0': '/icons/relicpieces/Insumousu\'s Whalefall Ship.png',
+    '1': '/icons/relicpieces/Insumousu\'s Frayed Hawser.png',
+  },
+  'celestial': {
+    '0': '/icons/relicpieces/Planet Screwllum\'s Mechanical Sun.png',
+    '1': '/icons/relicpieces/Planet Screwllum\'s Ring System.png',
+  },
+  'converging': {
+    '0': '/icons/relicpieces/Astropolis Media Headquarters.png',
+    '1': '/icons/relicpieces/Astropolis Employee Credentials.png',
+  },
+  'cosmic': {
+    '0': '/icons/relicpieces/Central Synapse of the Life Sciences Institute.png',
+    '1': '/icons/relicpieces/Peripheral Conduits of the Life Sciences Institute.png',
+  },
+  'diviner': {
+    '0': '/icons/relicpieces/Diviner\'s Extrapolation Jade Abacus.png',
+    '1': '/icons/relicpieces/Diviner\'s Ingenium Prosthetic Hand.png',
+    '2': '/icons/relicpieces/Diviner\'s Astral Robe.png',
+    '3': '/icons/relicpieces/Diviner\'s Cloud-Soaring Boots.png',
+  },
+  'duran': {
+    '0': '/icons/relicpieces/Duran\'s Tent of Golden Sky.png',
+    '1': '/icons/relicpieces/Duran\'s Mechabeast Bridle.png',
+  },
+  'eagle': {
+    '0': '/icons/relicpieces/Eagle\'s Beaked Helmet.png',
+    '1': '/icons/relicpieces/Eagle\'s Soaring Ring.png',
+    '2': '/icons/relicpieces/Eagle\'s Winged Suit Harness.png',
+    '3': '/icons/relicpieces/Eagle\'s Quilted Puttees.png',
+  },
+  'fallen': {
+    '0': '/icons/relicpieces/Stranded Express at the Anchorage.png',
+    '1': '/icons/relicpieces/Silver Rails of the Anchorage.png',
+  },
+  'firesmith': {
+    '0': '/icons/relicpieces/Firesmith\'s Obsidian Goggles.png',
+    '1': '/icons/relicpieces/Firesmith\'s Ring of Flame-Mastery.png',
+    '2': '/icons/relicpieces/Firesmith\'s Fireproof Apron.png',
+    '3': '/icons/relicpieces/Firesmith\'s Alloy Leg.png',
+  },
+  'fleet': {
+    '0': '/icons/relicpieces/The Xianzhou Luofu\'s Celestial Ark.png',
+    '1': '/icons/relicpieces/The Xianzhou Luofu\'s Ambrosial Arbor Vines.png',
+  },
+  'genius': {
+    '0': '/icons/relicpieces/Genius\'s Ultraremote Sensing Visor.png',
+    '1': '/icons/relicpieces/Genius\'s Frequency Catcher.png',
+    '2': '/icons/relicpieces/Genius\'s Metafield Suit.png',
+    '3': '/icons/relicpieces/Genius\'s Gravity Walker.png',
+  },
+  'giant_tree': {
+    '0': '/icons/relicpieces/Grove of Epiphany\'s Pondering Colossus.png',
+    '1': '/icons/relicpieces/Grove of Epiphany\'s Interwoven Veins.png',
+  },
+  'grand_duke': {
+    '0': '/icons/relicpieces/Grand Duke\'s Crown of Netherflame.png',
+    '1': '/icons/relicpieces/Grand Duke\'s Gloves of Fieryfur.png',
+    '2': '/icons/relicpieces/Grand Duke\'s Robe of Grace.png',
+    '3': '/icons/relicpieces/Grand Duke\'s Ceremonial Boots.png',
+  },
+  'guard': {
+    '0': '/icons/relicpieces/Guard\'s Cast Iron Helmet.png',
+    '1': '/icons/relicpieces/Guard\'s Shining Gauntlets.png',
+    '2': '/icons/relicpieces/Guard\'s Uniform of Old.png',
+    '3': '/icons/relicpieces/Guard\'s Silver Greaves.png',
+  },
+  'hero': {
+    '0': '/icons/relicpieces/Hero\'s Wreath of Championship.png',
+    '1': '/icons/relicpieces/Hero\'s Gilded Bracers.png',
+    '2': '/icons/relicpieces/Hero\'s Gallant Golden Armor.png',
+    '3': '/icons/relicpieces/Hero\'s Firechasing Shinguard.png',
+  },
+  'hunter_glacial': {
+    '0': '/icons/relicpieces/Hunter\'s Artaius Hood.png',
+    '1': '/icons/relicpieces/Hunter\'s Lizard Gloves.png',
+    '2': '/icons/relicpieces/Hunter\'s Ice Dragon Cloak.png',
+    '3': '/icons/relicpieces/Hunter\'s Soft Elkskin Boots.png',
+  },
+  'iron_cavalry': {
+    '0': '/icons/relicpieces/Iron Cavalry\'s Homing Helm.png',
+    '1': '/icons/relicpieces/Iron Cavalry\'s Crushing Wristguard.png',
+    '2': '/icons/relicpieces/Iron Cavalry\'s Silvery Armor.png',
+    '3': '/icons/relicpieces/Iron Cavalry\'s Skywalk Greaves.png',
+  },
+  'izumo': {
+    '0': '/icons/relicpieces/Izumo\'s Magatsu no Morokami.png',
+    '1': '/icons/relicpieces/Izumo\'s Blades of Origin and End.png',
+  },
+  'kalpagni': {
+    '0': '/icons/relicpieces/Forge\'s Lotus Lantern Wick.png',
+    '1': '/icons/relicpieces/Forge\'s Heavenly Flamewheel Silk.png',
+  },
+  'knight': {
+    '0': '/icons/relicpieces/Knight\'s Forgiving Casque.png',
+    '1': '/icons/relicpieces/Knight\'s Silent Oath Ring.png',
+    '2': '/icons/relicpieces/Knight\'s Solemn Breastplate.png',
+    '3': '/icons/relicpieces/Knight\'s Iron Boots of Order.png',
+  },
+  'longevous': {
+    '0': '/icons/relicpieces/Disciple\'s Prosthetic Eye.png',
+    '1': '/icons/relicpieces/Disciple\'s Ingenium Hand.png',
+    '2': '/icons/relicpieces/Disciple\'s Dewy Feather Garb.png',
+    '3': '/icons/relicpieces/Disciple\'s Celestial Silk Sandals.png',
+  },
+  'lushaka': {
+    '0': '/icons/relicpieces/Lushaka\'s Waterscape.png',
+    '1': '/icons/relicpieces/Lushaka\'s Twinlanes.png',
+  },
+  'magical_girl': {
+    '0': '/icons/relicpieces/Magical Girl\'s Shining Medal.png',
+    '1': '/icons/relicpieces/Magical Girl\'s Protective Gloves.png',
+    '2': '/icons/relicpieces/Magical Girl\'s Everdance Battle Skirt.png',
+    '3': '/icons/relicpieces/Magical Girl\'s Contract Boots.png',
+  },
+  'messenger': {
+    '0': '/icons/relicpieces/Messenger\'s Holovisor.png',
+    '1': '/icons/relicpieces/Messenger\'s Transformative Arm.png',
+    '2': '/icons/relicpieces/Messenger\'s Secret Satchel.png',
+    '3': '/icons/relicpieces/Messenger\'s Par-kool Sneakers.png',
+  },
+  'musketeer': {
+    '0': '/icons/relicpieces/Musketeer\'s Wild Wheat Felt Hat.png',
+    '1': '/icons/relicpieces/Musketeer\'s Coarse Leather Gloves.png',
+    '2': '/icons/relicpieces/Musketeer\'s Wind-Hunting Shawl.png',
+    '3': '/icons/relicpieces/Musketeer\'s Rivets Riding Boots.png',
+  },
+  'navigator': {
+    '0': '/icons/relicpieces/Navigator\'s Deep Space Mirror.png',
+    '1': '/icons/relicpieces/Navigator\'s Game Die.png',
+    '2': '/icons/relicpieces/Navigator\'s Astral Chart Uniform.png',
+    '3': '/icons/relicpieces/Navigator\'s Everstride Boots.png',
+  },
+  'pan_cosmic': {
+    '0': '/icons/relicpieces/The IPC\'s Mega HQ.png',
+    '1': '/icons/relicpieces/The IPC\'s Trade Route.png',
+  },
+  'passerby': {
+    '0': '/icons/relicpieces/Passerby\'s Rejuvenated Wooden Hairstick.png',
+    '1': '/icons/relicpieces/Passerby\'s Roaming Dragon Bracer.png',
+    '2': '/icons/relicpieces/Passerby\'s Ragged Embroidered Coat.png',
+    '3': '/icons/relicpieces/Passerby\'s Stygian Hiking Boots.png',
+  },
+  'penacony': {
+    '0': '/icons/relicpieces/Penacony\'s Grand Hotel.png',
+    '1': '/icons/relicpieces/Penacony\'s Dream-Seeking Tracks.png',
+  },
+  'pioneer': {
+    '0': '/icons/relicpieces/Pioneer\'s Heatproof Shell.png',
+    '1': '/icons/relicpieces/Pioneer\'s Lacuna Compass.png',
+    '2': '/icons/relicpieces/Pioneer\'s Sealed Lead Apron.png',
+    '3': '/icons/relicpieces/Pioneer\'s Starfaring Anchor.png',
+  },
+  'poet': {
+    '0': '/icons/relicpieces/Poet\'s Dill Wreath.png',
+    '1': '/icons/relicpieces/Poet\'s Gilded Bracelet.png',
+    '2': '/icons/relicpieces/Poet\'s Star-Studded Skirt.png',
+    '3': '/icons/relicpieces/Poet\'s Silver-Studded Shoes.png',
+  },
+  'prisoner': {
+    '0': '/icons/relicpieces/Prisoner\'s Sealed Muzzle.png',
+    '1': '/icons/relicpieces/Prisoner\'s Leadstone Shackles.png',
+    '2': '/icons/relicpieces/Prisoner\'s Repressive Straitjacket.png',
+    '3': '/icons/relicpieces/Prisoner\'s Restrictive Fetters.png',
+  },
+  'punklorde': {
+    '0': '/icons/relicpieces/Punklorde\'s Rainbow City.png',
+    '1': '/icons/relicpieces/Punklorde\'s Data Deluge.png',
+  },
+  'revelry': {
+    '0': '/icons/relicpieces/Warbling Shores\' Blazing Beacon.png',
+    '1': '/icons/relicpieces/Warbling Shores\' Cantillation Trail.png',
+  },
+  'rutilant': {
+    '0': '/icons/relicpieces/Taikiyan Laser Stadium.png',
+    '1': '/icons/relicpieces/Taikiyan\'s Arclight Race Track.png',
+  },
+  'sacerdos': {
+    '0': '/icons/relicpieces/Sacerdos\' Melodic Earrings.png',
+    '1': '/icons/relicpieces/Sacerdos\' Welcoming Gloves.png',
+    '2': '/icons/relicpieces/Sacerdos\' Ceremonial Garb.png',
+    '3': '/icons/relicpieces/Sacerdos\' Arduous Boots.png',
+  },
+  'salsotto': {
+    '0': '/icons/relicpieces/Salsotto\'s Moving City.png',
+    '1': '/icons/relicpieces/Salsotto\'s Terminator Line.png',
+  },
+  'scholar': {
+    '0': '/icons/relicpieces/Scholar\'s Silver-Rimmed Monocle.png',
+    '1': '/icons/relicpieces/Scholar\'s Auxiliary Knuckle.png',
+    '2': '/icons/relicpieces/Scholar\'s Tweed Jacket.png',
+    '3': '/icons/relicpieces/Scholar\'s Felt Snowboots.png',
+  },
+  'self_enshrouded': {
+    '0': '/icons/relicpieces/Recluse\'s Wide-Brimmed Fedora.png',
+    '1': '/icons/relicpieces/Recluse\'s Refined Timepiece.png',
+    '2': '/icons/relicpieces/Recluse\'s Camel-Colored Coat.png',
+    '3': '/icons/relicpieces/Recluse\'s Soft Suede Boots.png',
+  },
+  'sigonia': {
+    '0': '/icons/relicpieces/Sigonia\'s Gaiathra Berth.png',
+    '1': '/icons/relicpieces/Sigonia\'s Knot of Cyclicality.png',
+  },
+  'sizzling': {
+    '0': '/icons/relicpieces/Band\'s Polarized Sunglasses.png',
+    '1': '/icons/relicpieces/Band\'s Touring Bracelet.png',
+    '2': '/icons/relicpieces/Band\'s Leather Jacket With Studs.png',
+    '3': '/icons/relicpieces/Band\'s Ankle Boots With Rivets.png',
+  },
+  'smith': {
+    '0': '/icons/relicpieces/Smith\'s Fire Beast Mask.png',
+    '1': '/icons/relicpieces/Smith\'s Damascus Steel Gauntlets.png',
+    '2': '/icons/relicpieces/Smith\'s Fireproof Garment.png',
+    '3': '/icons/relicpieces/Smith\'s Unbridled Boots.png',
+  },
+  'sss': {
+    '0': '/icons/relicpieces/Herta\'s Space Station.png',
+    '1': '/icons/relicpieces/Herta\'s Wandering Trek.png',
+  },
+  'talia': {
+    '0': '/icons/relicpieces/Talia\'s Nailscrap Town.png',
+    '1': '/icons/relicpieces/Talia\'s Exposed Electric Wire.png',
+  },
+  'tengoku': {
+    '0': '/icons/relicpieces/Livestream\'s Protean Vistas.png',
+    '1': '/icons/relicpieces/Livestream\'s Chatter Banter.png',
+  },
+  'thief': {
+    '0': '/icons/relicpieces/Thief\'s Myriad-Faced Mask.png',
+    '1': '/icons/relicpieces/Thief\'s Gloves With Prints.png',
+    '2': '/icons/relicpieces/Thief\'s Steel Grappling Hook.png',
+    '3': '/icons/relicpieces/Thief\'s Meteor Boots.png',
+  },
+  'valorous': {
+    '0': '/icons/relicpieces/Valorous Mask of Northern Skies.png',
+    '1': '/icons/relicpieces/Valorous Bracelet of Grappling Hooks.png',
+    '2': '/icons/relicpieces/Valorous Plate of Soaring Flight.png',
+    '3': '/icons/relicpieces/Valorous Greaves of Pursuing Hunt.png',
+  },
+  'vonwacq': {
+    '0': '/icons/relicpieces/Vonwacq\'s Island of Birth.png',
+    '1': '/icons/relicpieces/Vonwacq\'s Islandic Coast.png',
+  },
+  'warrior_goddess': {
+    '0': '/icons/relicpieces/Warrior Goddess\'s Winged Helm.png',
+    '1': '/icons/relicpieces/Warrior Goddess\'s Cavalry Gauntlets.png',
+    '2': '/icons/relicpieces/Warrior Goddess\'s Dawn Cape.png',
+    '3': '/icons/relicpieces/Warrior Goddess\'s Honor Spurs.png',
+  },
+  'wastelander': {
+    '0': '/icons/relicpieces/Wastelander\'s Breathing Mask.png',
+    '1': '/icons/relicpieces/Wastelander\'s Desert Terminal.png',
+    '2': '/icons/relicpieces/Wastelander\'s Friar Robe.png',
+    '3': '/icons/relicpieces/Wastelander\'s Powered Greaves.png',
+  },
+  'watchmaker': {
+    '0': '/icons/relicpieces/Watchmaker\'s Telescoping Lens.png',
+    '1': '/icons/relicpieces/Watchmaker\'s Fortuitous Wristwatch.png',
+    '2': '/icons/relicpieces/Watchmaker\'s Illusory Formal Suit.png',
+    '3': '/icons/relicpieces/Watchmaker\'s Dream-Concealing Dress Shoes.png',
+  },
+  'wavestrider': {
+    '0': '/icons/relicpieces/Captain\'s Navigator Hat.png',
+    '1': '/icons/relicpieces/Captain\'s Lightcatcher Astrolabe.png',
+    '2': '/icons/relicpieces/Captain\'s Wind Mantle.png',
+    '3': '/icons/relicpieces/Captain\'s Tidal Boots.png',
+  },
+  'world_remaking': {
+    '0': '/icons/relicpieces/Deliverer\'s Hood.png',
+    '1': '/icons/relicpieces/Deliverer\'s Sword Gauntlet.png',
+    '2': '/icons/relicpieces/Deliverer\'s Robe of Legacy.png',
+    '3': '/icons/relicpieces/Deliverer\'s Boots of Pioneering.png',
   },
 }

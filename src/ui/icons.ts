@@ -13,10 +13,13 @@
 import { el } from './dom'
 import { KITS } from '../core/kits'
 import { LIGHT_CONES, RELIC_SETS, PLANAR_SETS } from '../core/gear'
+import type { RelicPiece } from '../core/entities/Unit'
 import {
   CHARACTERS_ICONS, LIGHTCONES_ICONS, RELICSETS_ICONS, PLANARSETS_ICONS,
-  ELEMENTS_ICONS, PATHS_ICONS, STATS_ICONS, ENEMIES_ICONS,
+  ELEMENTS_ICONS, PATHS_ICONS, STATS_ICONS, ENEMIES_ICONS, RELICPIECES_ICONS,
 } from './iconManifest'
+
+type RelicSlot = RelicPiece['slot']
 
 const ELEM_COLOR: Record<string, string> = {
   Physical: '#9fa9b3',
@@ -56,8 +59,55 @@ export function gearIconUrl(kind: GearKind, id: string): string | undefined {
 
 export function elemIconUrl(elem: string): string | undefined { return ELEMENTS_ICONS[elem] }
 export function pathIconUrl(path: string): string | undefined { return PATHS_ICONS[PATH_KEY[path] ?? path] }
-export function statIconUrl(stat: string): string | undefined { return STATS_ICONS[stat] }
 export function enemyIconUrl(name: string): string | undefined { return ENEMIES_ICONS[name] }
+
+/** display-name keys of the stat/mechanic icon set (`public/icons/stats`) */
+export type StatIconKey =
+  | 'ATK' | 'HP' | 'DEF' | 'SPD' | 'CRIT Rate' | 'CRIT DMG' | 'Break Effect'
+  | 'Effect Hit Rate' | 'Effect RES' | 'Energy Regeneration Rate' | 'DMG Boost'
+  | 'Toughness' | 'Trace' | 'Eidolon' | 'Skill Point' | 'Energy' | 'Path'
+
+export function statIconUrl(name: StatIconKey | string): string | undefined { return STATS_ICONS[name] }
+
+/** engine stat key -> display name used by the stat icon manifest (undefined = no committed art) */
+const STAT_ICON_KEY: Record<string, StatIconKey> = {
+  atk: 'ATK', hp: 'HP', def: 'DEF', spd: 'SPD',
+  critRate: 'CRIT Rate', critDmg: 'CRIT DMG', be: 'Break Effect',
+  ehr: 'Effect Hit Rate', effRes: 'Effect RES',
+}
+
+/** small stat icon chip (real art or a neutral letter chip); `stat` is an engine stat key or display name */
+export function statBadge(stat: string): HTMLElement {
+  const key = STAT_ICON_KEY[stat] ?? stat
+  const url = statIconUrl(key)
+  const node = el('span', 'metaBadge statBadge')
+  node.dataset.stat = key
+  node.title = `Характеристика: ${key}`
+  node.append(iconNode(url, key, {
+    cls: 'statIcon', size: 18, fit: 'contain',
+    fallbackText: key.charAt(0).toUpperCase(), tint: '#7fb3ff', title: node.title,
+  }))
+  return node
+}
+
+/**
+ * Slot -> index within a set's piece list. Cavern relic pieces are HEAD/HAND/BODY/FOOT (0-3);
+ * planar pieces are sphere(NECK)/rope(OBJECT) (0-1). Must match the order the generator and
+ * `fetch-relic-piece-icons.ts` used (both derive it from `relicsets.json` part order).
+ */
+const RELIC_SLOT_INDEX: Record<RelicSlot, number> = {
+  head: 0, hands: 1, body: 2, feet: 3, sphere: 0, rope: 1,
+}
+const SPHERE_SLOTS = new Set<RelicSlot>(['sphere', 'rope'])
+
+/** relic/planar piece art path for a set id + slot, or undefined when the piece is unknown */
+export function relicPieceIconUrl(setId: string, slot: RelicSlot): string | undefined {
+  if (!setId) return undefined
+  // cavern relics only have piece art for the 4 armor slots, planar sets only for sphere/rope
+  const isPlanarSet = PLANAR_SETS.some(s => s.id === setId)
+  if (isPlanarSet !== SPHERE_SLOTS.has(slot)) return undefined
+  return RELICPIECES_ICONS[setId]?.[String(RELIC_SLOT_INDEX[slot])]
+}
 
 // ---------------------------------------------------------------- reusable image node
 
@@ -172,6 +222,36 @@ export function gearBadge(kind: GearKind, id: string): HTMLElement {
 
 /** point the gear badge at another id (select changed) — same node, no re-mount */
 export function updateGearBadge(b: HTMLElement, kind: GearKind, id: string): void { paintGear(b, kind, id) }
+
+// ---------------------------------------------------------------- relic/planar piece icon
+
+function paintPiece(node: HTMLElement, setId: string, slot: RelicSlot): void {
+  const setName_ = !setId ? undefined : setName(setId)
+  const url = relicPieceIconUrl(setId, slot)
+  const label = setName_ ? `${setName_} — ${slot}` : 'часть'
+  const title = !setId ? 'Часть: сет не выбран' : url ? `${label}` : `нет изображения: ${label}`
+  node.dataset.elem = ''
+  node.title = title
+  node.innerHTML = ''
+  node.append(iconNode(url, label, {
+    cls: 'pieceIcon',
+    size: 34,
+    fit: 'contain',
+    fallbackText: !setId ? '—' : (setName_?.trim().charAt(0).toUpperCase() || '?'),
+    tint: setId ? tintOf(setId) : '#55606f',
+    title,
+  }))
+}
+
+/** icon for one relic/planar piece (set id + slot); ''/unknown renders a neutral chip */
+export function pieceBadge(setId: string, slot: RelicSlot): HTMLElement {
+  const b = el('span', 'charBadge pieceBadge')
+  paintPiece(b, setId, slot)
+  return b
+}
+
+/** point the piece badge at another set (slot select changed) — same node, no re-mount */
+export function updatePieceBadge(b: HTMLElement, setId: string, slot: RelicSlot): void { paintPiece(b, setId, slot) }
 
 // ---------------------------------------------------------------- element / path chips (§1)
 

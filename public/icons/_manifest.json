@@ -2809,6 +2809,748 @@
       }
     ]
   },
+  "relicpieces": {
+    "label": "Части реликвий",
+    "count": 184,
+    "icons": [
+      {
+        "file": "relicpieces/Aidonia's Deathward Bone Chains.png",
+        "name": "Aidonia's Deathward Bone Chains"
+      },
+      {
+        "file": "relicpieces/Aidonia's Deceased Gravestones.png",
+        "name": "Aidonia's Deceased Gravestones"
+      },
+      {
+        "file": "relicpieces/Astropolis Employee Credentials.png",
+        "name": "Astropolis Employee Credentials"
+      },
+      {
+        "file": "relicpieces/Astropolis Media Headquarters.png",
+        "name": "Astropolis Media Headquarters"
+      },
+      {
+        "file": "relicpieces/BananAmusement Park's BananAxis Plaza.png",
+        "name": "BananAmusement Park's BananAxis Plaza"
+      },
+      {
+        "file": "relicpieces/BananAmusement Park's Memetic Cables.png",
+        "name": "BananAmusement Park's Memetic Cables"
+      },
+      {
+        "file": "relicpieces/Band's Ankle Boots With Rivets.png",
+        "name": "Band's Ankle Boots With Rivets"
+      },
+      {
+        "file": "relicpieces/Band's Leather Jacket With Studs.png",
+        "name": "Band's Leather Jacket With Studs"
+      },
+      {
+        "file": "relicpieces/Band's Polarized Sunglasses.png",
+        "name": "Band's Polarized Sunglasses"
+      },
+      {
+        "file": "relicpieces/Band's Touring Bracelet.png",
+        "name": "Band's Touring Bracelet"
+      },
+      {
+        "file": "relicpieces/Belobog's Fortress of Preservation.png",
+        "name": "Belobog's Fortress of Preservation"
+      },
+      {
+        "file": "relicpieces/Belobog's Iron Defense.png",
+        "name": "Belobog's Iron Defense"
+      },
+      {
+        "file": "relicpieces/Captain's Lightcatcher Astrolabe.png",
+        "name": "Captain's Lightcatcher Astrolabe"
+      },
+      {
+        "file": "relicpieces/Captain's Navigator Hat.png",
+        "name": "Captain's Navigator Hat"
+      },
+      {
+        "file": "relicpieces/Captain's Tidal Boots.png",
+        "name": "Captain's Tidal Boots"
+      },
+      {
+        "file": "relicpieces/Captain's Wind Mantle.png",
+        "name": "Captain's Wind Mantle"
+      },
+      {
+        "file": "relicpieces/Central Synapse of the Life Sciences Institute.png",
+        "name": "Central Synapse of the Life Sciences Institute"
+      },
+      {
+        "file": "relicpieces/Champion's Chest Guard.png",
+        "name": "Champion's Chest Guard"
+      },
+      {
+        "file": "relicpieces/Champion's Fleetfoot Boots.png",
+        "name": "Champion's Fleetfoot Boots"
+      },
+      {
+        "file": "relicpieces/Champion's Headgear.png",
+        "name": "Champion's Headgear"
+      },
+      {
+        "file": "relicpieces/Champion's Heavy Gloves.png",
+        "name": "Champion's Heavy Gloves"
+      },
+      {
+        "file": "relicpieces/Deliverer's Boots of Pioneering.png",
+        "name": "Deliverer's Boots of Pioneering"
+      },
+      {
+        "file": "relicpieces/Deliverer's Hood.png",
+        "name": "Deliverer's Hood"
+      },
+      {
+        "file": "relicpieces/Deliverer's Robe of Legacy.png",
+        "name": "Deliverer's Robe of Legacy"
+      },
+      {
+        "file": "relicpieces/Deliverer's Sword Gauntlet.png",
+        "name": "Deliverer's Sword Gauntlet"
+      },
+      {
+        "file": "relicpieces/Disciple's Celestial Silk Sandals.png",
+        "name": "Disciple's Celestial Silk Sandals"
+      },
+      {
+        "file": "relicpieces/Disciple's Dewy Feather Garb.png",
+        "name": "Disciple's Dewy Feather Garb"
+      },
+      {
+        "file": "relicpieces/Disciple's Ingenium Hand.png",
+        "name": "Disciple's Ingenium Hand"
+      },
+      {
+        "file": "relicpieces/Disciple's Prosthetic Eye.png",
+        "name": "Disciple's Prosthetic Eye"
+      },
+      {
+        "file": "relicpieces/Diviner's Astral Robe.png",
+        "name": "Diviner's Astral Robe"
+      },
+      {
+        "file": "relicpieces/Diviner's Cloud-Soaring Boots.png",
+        "name": "Diviner's Cloud-Soaring Boots"
+      },
+      {
+        "file": "relicpieces/Diviner's Extrapolation Jade Abacus.png",
+        "name": "Diviner's Extrapolation Jade Abacus"
+      },
+      {
+        "file": "relicpieces/Diviner's Ingenium Prosthetic Hand.png",
+        "name": "Diviner's Ingenium Prosthetic Hand"
+      },
+      {
+        "file": "relicpieces/Duran's Mechabeast Bridle.png",
+        "name": "Duran's Mechabeast Bridle"
+      },
+      {
+        "file": "relicpieces/Duran's Tent of Golden Sky.png",
+        "name": "Duran's Tent of Golden Sky"
+      },
+      {
+        "file": "relicpieces/Eagle's Beaked Helmet.png",
+        "name": "Eagle's Beaked Helmet"
+      },
+      {
+        "file": "relicpieces/Eagle's Quilted Puttees.png",
+        "name": "Eagle's Quilted Puttees"
+      },
+      {
+        "file": "relicpieces/Eagle's Soaring Ring.png",
+        "name": "Eagle's Soaring Ring"
+      },
+      {
+        "file": "relicpieces/Eagle's Winged Suit Harness.png",
+        "name": "Eagle's Winged Suit Harness"
+      },
+      {
+        "file": "relicpieces/Eternal Verses of Amphoreus.png",
+        "name": "Eternal Verses of Amphoreus"
+      },
+      {
+        "file": "relicpieces/Firesmith's Alloy Leg.png",
+        "name": "Firesmith's Alloy Leg"
+      },
+      {
+        "file": "relicpieces/Firesmith's Fireproof Apron.png",
+        "name": "Firesmith's Fireproof Apron"
+      },
+      {
+        "file": "relicpieces/Firesmith's Obsidian Goggles.png",
+        "name": "Firesmith's Obsidian Goggles"
+      },
+      {
+        "file": "relicpieces/Firesmith's Ring of Flame-Mastery.png",
+        "name": "Firesmith's Ring of Flame-Mastery"
+      },
+      {
+        "file": "relicpieces/Forge's Heavenly Flamewheel Silk.png",
+        "name": "Forge's Heavenly Flamewheel Silk"
+      },
+      {
+        "file": "relicpieces/Forge's Lotus Lantern Wick.png",
+        "name": "Forge's Lotus Lantern Wick"
+      },
+      {
+        "file": "relicpieces/Genius's Frequency Catcher.png",
+        "name": "Genius's Frequency Catcher"
+      },
+      {
+        "file": "relicpieces/Genius's Gravity Walker.png",
+        "name": "Genius's Gravity Walker"
+      },
+      {
+        "file": "relicpieces/Genius's Metafield Suit.png",
+        "name": "Genius's Metafield Suit"
+      },
+      {
+        "file": "relicpieces/Genius's Ultraremote Sensing Visor.png",
+        "name": "Genius's Ultraremote Sensing Visor"
+      },
+      {
+        "file": "relicpieces/Glamoth's Iron Cavalry Regiment.png",
+        "name": "Glamoth's Iron Cavalry Regiment"
+      },
+      {
+        "file": "relicpieces/Glamoth's Silent Tombstone.png",
+        "name": "Glamoth's Silent Tombstone"
+      },
+      {
+        "file": "relicpieces/Grand Duke's Ceremonial Boots.png",
+        "name": "Grand Duke's Ceremonial Boots"
+      },
+      {
+        "file": "relicpieces/Grand Duke's Crown of Netherflame.png",
+        "name": "Grand Duke's Crown of Netherflame"
+      },
+      {
+        "file": "relicpieces/Grand Duke's Gloves of Fieryfur.png",
+        "name": "Grand Duke's Gloves of Fieryfur"
+      },
+      {
+        "file": "relicpieces/Grand Duke's Robe of Grace.png",
+        "name": "Grand Duke's Robe of Grace"
+      },
+      {
+        "file": "relicpieces/Grove of Epiphany's Interwoven Veins.png",
+        "name": "Grove of Epiphany's Interwoven Veins"
+      },
+      {
+        "file": "relicpieces/Grove of Epiphany's Pondering Colossus.png",
+        "name": "Grove of Epiphany's Pondering Colossus"
+      },
+      {
+        "file": "relicpieces/Guard's Cast Iron Helmet.png",
+        "name": "Guard's Cast Iron Helmet"
+      },
+      {
+        "file": "relicpieces/Guard's Shining Gauntlets.png",
+        "name": "Guard's Shining Gauntlets"
+      },
+      {
+        "file": "relicpieces/Guard's Silver Greaves.png",
+        "name": "Guard's Silver Greaves"
+      },
+      {
+        "file": "relicpieces/Guard's Uniform of Old.png",
+        "name": "Guard's Uniform of Old"
+      },
+      {
+        "file": "relicpieces/Hero's Firechasing Shinguard.png",
+        "name": "Hero's Firechasing Shinguard"
+      },
+      {
+        "file": "relicpieces/Hero's Gallant Golden Armor.png",
+        "name": "Hero's Gallant Golden Armor"
+      },
+      {
+        "file": "relicpieces/Hero's Gilded Bracers.png",
+        "name": "Hero's Gilded Bracers"
+      },
+      {
+        "file": "relicpieces/Hero's Wreath of Championship.png",
+        "name": "Hero's Wreath of Championship"
+      },
+      {
+        "file": "relicpieces/Herta's Space Station.png",
+        "name": "Herta's Space Station"
+      },
+      {
+        "file": "relicpieces/Herta's Wandering Trek.png",
+        "name": "Herta's Wandering Trek"
+      },
+      {
+        "file": "relicpieces/Hunter's Artaius Hood.png",
+        "name": "Hunter's Artaius Hood"
+      },
+      {
+        "file": "relicpieces/Hunter's Ice Dragon Cloak.png",
+        "name": "Hunter's Ice Dragon Cloak"
+      },
+      {
+        "file": "relicpieces/Hunter's Lizard Gloves.png",
+        "name": "Hunter's Lizard Gloves"
+      },
+      {
+        "file": "relicpieces/Hunter's Soft Elkskin Boots.png",
+        "name": "Hunter's Soft Elkskin Boots"
+      },
+      {
+        "file": "relicpieces/Insumousu's Frayed Hawser.png",
+        "name": "Insumousu's Frayed Hawser"
+      },
+      {
+        "file": "relicpieces/Insumousu's Whalefall Ship.png",
+        "name": "Insumousu's Whalefall Ship"
+      },
+      {
+        "file": "relicpieces/Iron Cavalry's Crushing Wristguard.png",
+        "name": "Iron Cavalry's Crushing Wristguard"
+      },
+      {
+        "file": "relicpieces/Iron Cavalry's Homing Helm.png",
+        "name": "Iron Cavalry's Homing Helm"
+      },
+      {
+        "file": "relicpieces/Iron Cavalry's Silvery Armor.png",
+        "name": "Iron Cavalry's Silvery Armor"
+      },
+      {
+        "file": "relicpieces/Iron Cavalry's Skywalk Greaves.png",
+        "name": "Iron Cavalry's Skywalk Greaves"
+      },
+      {
+        "file": "relicpieces/Izumo's Blades of Origin and End.png",
+        "name": "Izumo's Blades of Origin and End"
+      },
+      {
+        "file": "relicpieces/Izumo's Magatsu no Morokami.png",
+        "name": "Izumo's Magatsu no Morokami"
+      },
+      {
+        "file": "relicpieces/Knight's Forgiving Casque.png",
+        "name": "Knight's Forgiving Casque"
+      },
+      {
+        "file": "relicpieces/Knight's Iron Boots of Order.png",
+        "name": "Knight's Iron Boots of Order"
+      },
+      {
+        "file": "relicpieces/Knight's Silent Oath Ring.png",
+        "name": "Knight's Silent Oath Ring"
+      },
+      {
+        "file": "relicpieces/Knight's Solemn Breastplate.png",
+        "name": "Knight's Solemn Breastplate"
+      },
+      {
+        "file": "relicpieces/Last West Wind of Amphoreus.png",
+        "name": "Last West Wind of Amphoreus"
+      },
+      {
+        "file": "relicpieces/Livestream's Chatter Banter.png",
+        "name": "Livestream's Chatter Banter"
+      },
+      {
+        "file": "relicpieces/Livestream's Protean Vistas.png",
+        "name": "Livestream's Protean Vistas"
+      },
+      {
+        "file": "relicpieces/Lushaka's Twinlanes.png",
+        "name": "Lushaka's Twinlanes"
+      },
+      {
+        "file": "relicpieces/Lushaka's Waterscape.png",
+        "name": "Lushaka's Waterscape"
+      },
+      {
+        "file": "relicpieces/Magical Girl's Contract Boots.png",
+        "name": "Magical Girl's Contract Boots"
+      },
+      {
+        "file": "relicpieces/Magical Girl's Everdance Battle Skirt.png",
+        "name": "Magical Girl's Everdance Battle Skirt"
+      },
+      {
+        "file": "relicpieces/Magical Girl's Protective Gloves.png",
+        "name": "Magical Girl's Protective Gloves"
+      },
+      {
+        "file": "relicpieces/Magical Girl's Shining Medal.png",
+        "name": "Magical Girl's Shining Medal"
+      },
+      {
+        "file": "relicpieces/Membrance Maze's Serene Treehouse.png",
+        "name": "Membrance Maze's Serene Treehouse"
+      },
+      {
+        "file": "relicpieces/Membrance Maze's Wishing Whistle.png",
+        "name": "Membrance Maze's Wishing Whistle"
+      },
+      {
+        "file": "relicpieces/Messenger's Holovisor.png",
+        "name": "Messenger's Holovisor"
+      },
+      {
+        "file": "relicpieces/Messenger's Par-kool Sneakers.png",
+        "name": "Messenger's Par-kool Sneakers"
+      },
+      {
+        "file": "relicpieces/Messenger's Secret Satchel.png",
+        "name": "Messenger's Secret Satchel"
+      },
+      {
+        "file": "relicpieces/Messenger's Transformative Arm.png",
+        "name": "Messenger's Transformative Arm"
+      },
+      {
+        "file": "relicpieces/Musketeer's Coarse Leather Gloves.png",
+        "name": "Musketeer's Coarse Leather Gloves"
+      },
+      {
+        "file": "relicpieces/Musketeer's Rivets Riding Boots.png",
+        "name": "Musketeer's Rivets Riding Boots"
+      },
+      {
+        "file": "relicpieces/Musketeer's Wild Wheat Felt Hat.png",
+        "name": "Musketeer's Wild Wheat Felt Hat"
+      },
+      {
+        "file": "relicpieces/Musketeer's Wind-Hunting Shawl.png",
+        "name": "Musketeer's Wind-Hunting Shawl"
+      },
+      {
+        "file": "relicpieces/Navigator's Astral Chart Uniform.png",
+        "name": "Navigator's Astral Chart Uniform"
+      },
+      {
+        "file": "relicpieces/Navigator's Deep Space Mirror.png",
+        "name": "Navigator's Deep Space Mirror"
+      },
+      {
+        "file": "relicpieces/Navigator's Everstride Boots.png",
+        "name": "Navigator's Everstride Boots"
+      },
+      {
+        "file": "relicpieces/Navigator's Game Die.png",
+        "name": "Navigator's Game Die"
+      },
+      {
+        "file": "relicpieces/Passerby's Ragged Embroidered Coat.png",
+        "name": "Passerby's Ragged Embroidered Coat"
+      },
+      {
+        "file": "relicpieces/Passerby's Rejuvenated Wooden Hairstick.png",
+        "name": "Passerby's Rejuvenated Wooden Hairstick"
+      },
+      {
+        "file": "relicpieces/Passerby's Roaming Dragon Bracer.png",
+        "name": "Passerby's Roaming Dragon Bracer"
+      },
+      {
+        "file": "relicpieces/Passerby's Stygian Hiking Boots.png",
+        "name": "Passerby's Stygian Hiking Boots"
+      },
+      {
+        "file": "relicpieces/Penacony's Dream-Seeking Tracks.png",
+        "name": "Penacony's Dream-Seeking Tracks"
+      },
+      {
+        "file": "relicpieces/Penacony's Grand Hotel.png",
+        "name": "Penacony's Grand Hotel"
+      },
+      {
+        "file": "relicpieces/Peripheral Conduits of the Life Sciences Institute.png",
+        "name": "Peripheral Conduits of the Life Sciences Institute"
+      },
+      {
+        "file": "relicpieces/Pioneer's Heatproof Shell.png",
+        "name": "Pioneer's Heatproof Shell"
+      },
+      {
+        "file": "relicpieces/Pioneer's Lacuna Compass.png",
+        "name": "Pioneer's Lacuna Compass"
+      },
+      {
+        "file": "relicpieces/Pioneer's Sealed Lead Apron.png",
+        "name": "Pioneer's Sealed Lead Apron"
+      },
+      {
+        "file": "relicpieces/Pioneer's Starfaring Anchor.png",
+        "name": "Pioneer's Starfaring Anchor"
+      },
+      {
+        "file": "relicpieces/Planet Screwllum's Mechanical Sun.png",
+        "name": "Planet Screwllum's Mechanical Sun"
+      },
+      {
+        "file": "relicpieces/Planet Screwllum's Ring System.png",
+        "name": "Planet Screwllum's Ring System"
+      },
+      {
+        "file": "relicpieces/Poet's Dill Wreath.png",
+        "name": "Poet's Dill Wreath"
+      },
+      {
+        "file": "relicpieces/Poet's Gilded Bracelet.png",
+        "name": "Poet's Gilded Bracelet"
+      },
+      {
+        "file": "relicpieces/Poet's Silver-Studded Shoes.png",
+        "name": "Poet's Silver-Studded Shoes"
+      },
+      {
+        "file": "relicpieces/Poet's Star-Studded Skirt.png",
+        "name": "Poet's Star-Studded Skirt"
+      },
+      {
+        "file": "relicpieces/Prisoner's Leadstone Shackles.png",
+        "name": "Prisoner's Leadstone Shackles"
+      },
+      {
+        "file": "relicpieces/Prisoner's Repressive Straitjacket.png",
+        "name": "Prisoner's Repressive Straitjacket"
+      },
+      {
+        "file": "relicpieces/Prisoner's Restrictive Fetters.png",
+        "name": "Prisoner's Restrictive Fetters"
+      },
+      {
+        "file": "relicpieces/Prisoner's Sealed Muzzle.png",
+        "name": "Prisoner's Sealed Muzzle"
+      },
+      {
+        "file": "relicpieces/Punklorde's Data Deluge.png",
+        "name": "Punklorde's Data Deluge"
+      },
+      {
+        "file": "relicpieces/Punklorde's Rainbow City.png",
+        "name": "Punklorde's Rainbow City"
+      },
+      {
+        "file": "relicpieces/Recluse's Camel-Colored Coat.png",
+        "name": "Recluse's Camel-Colored Coat"
+      },
+      {
+        "file": "relicpieces/Recluse's Refined Timepiece.png",
+        "name": "Recluse's Refined Timepiece"
+      },
+      {
+        "file": "relicpieces/Recluse's Soft Suede Boots.png",
+        "name": "Recluse's Soft Suede Boots"
+      },
+      {
+        "file": "relicpieces/Recluse's Wide-Brimmed Fedora.png",
+        "name": "Recluse's Wide-Brimmed Fedora"
+      },
+      {
+        "file": "relicpieces/Sacerdos' Arduous Boots.png",
+        "name": "Sacerdos' Arduous Boots"
+      },
+      {
+        "file": "relicpieces/Sacerdos' Ceremonial Garb.png",
+        "name": "Sacerdos' Ceremonial Garb"
+      },
+      {
+        "file": "relicpieces/Sacerdos' Melodic Earrings.png",
+        "name": "Sacerdos' Melodic Earrings"
+      },
+      {
+        "file": "relicpieces/Sacerdos' Welcoming Gloves.png",
+        "name": "Sacerdos' Welcoming Gloves"
+      },
+      {
+        "file": "relicpieces/Salsotto's Moving City.png",
+        "name": "Salsotto's Moving City"
+      },
+      {
+        "file": "relicpieces/Salsotto's Terminator Line.png",
+        "name": "Salsotto's Terminator Line"
+      },
+      {
+        "file": "relicpieces/Scholar's Auxiliary Knuckle.png",
+        "name": "Scholar's Auxiliary Knuckle"
+      },
+      {
+        "file": "relicpieces/Scholar's Felt Snowboots.png",
+        "name": "Scholar's Felt Snowboots"
+      },
+      {
+        "file": "relicpieces/Scholar's Silver-Rimmed Monocle.png",
+        "name": "Scholar's Silver-Rimmed Monocle"
+      },
+      {
+        "file": "relicpieces/Scholar's Tweed Jacket.png",
+        "name": "Scholar's Tweed Jacket"
+      },
+      {
+        "file": "relicpieces/Sigonia's Gaiathra Berth.png",
+        "name": "Sigonia's Gaiathra Berth"
+      },
+      {
+        "file": "relicpieces/Sigonia's Knot of Cyclicality.png",
+        "name": "Sigonia's Knot of Cyclicality"
+      },
+      {
+        "file": "relicpieces/Silver Rails of the Anchorage.png",
+        "name": "Silver Rails of the Anchorage"
+      },
+      {
+        "file": "relicpieces/Smith's Damascus Steel Gauntlets.png",
+        "name": "Smith's Damascus Steel Gauntlets"
+      },
+      {
+        "file": "relicpieces/Smith's Fire Beast Mask.png",
+        "name": "Smith's Fire Beast Mask"
+      },
+      {
+        "file": "relicpieces/Smith's Fireproof Garment.png",
+        "name": "Smith's Fireproof Garment"
+      },
+      {
+        "file": "relicpieces/Smith's Unbridled Boots.png",
+        "name": "Smith's Unbridled Boots"
+      },
+      {
+        "file": "relicpieces/Stranded Express at the Anchorage.png",
+        "name": "Stranded Express at the Anchorage"
+      },
+      {
+        "file": "relicpieces/Taikiyan Laser Stadium.png",
+        "name": "Taikiyan Laser Stadium"
+      },
+      {
+        "file": "relicpieces/Taikiyan's Arclight Race Track.png",
+        "name": "Taikiyan's Arclight Race Track"
+      },
+      {
+        "file": "relicpieces/Talia's Exposed Electric Wire.png",
+        "name": "Talia's Exposed Electric Wire"
+      },
+      {
+        "file": "relicpieces/Talia's Nailscrap Town.png",
+        "name": "Talia's Nailscrap Town"
+      },
+      {
+        "file": "relicpieces/The IPC's Mega HQ.png",
+        "name": "The IPC's Mega HQ"
+      },
+      {
+        "file": "relicpieces/The IPC's Trade Route.png",
+        "name": "The IPC's Trade Route"
+      },
+      {
+        "file": "relicpieces/The Xianzhou Luofu's Ambrosial Arbor Vines.png",
+        "name": "The Xianzhou Luofu's Ambrosial Arbor Vines"
+      },
+      {
+        "file": "relicpieces/The Xianzhou Luofu's Celestial Ark.png",
+        "name": "The Xianzhou Luofu's Celestial Ark"
+      },
+      {
+        "file": "relicpieces/Thief's Gloves With Prints.png",
+        "name": "Thief's Gloves With Prints"
+      },
+      {
+        "file": "relicpieces/Thief's Meteor Boots.png",
+        "name": "Thief's Meteor Boots"
+      },
+      {
+        "file": "relicpieces/Thief's Myriad-Faced Mask.png",
+        "name": "Thief's Myriad-Faced Mask"
+      },
+      {
+        "file": "relicpieces/Thief's Steel Grappling Hook.png",
+        "name": "Thief's Steel Grappling Hook"
+      },
+      {
+        "file": "relicpieces/Valorous Bracelet of Grappling Hooks.png",
+        "name": "Valorous Bracelet of Grappling Hooks"
+      },
+      {
+        "file": "relicpieces/Valorous Greaves of Pursuing Hunt.png",
+        "name": "Valorous Greaves of Pursuing Hunt"
+      },
+      {
+        "file": "relicpieces/Valorous Mask of Northern Skies.png",
+        "name": "Valorous Mask of Northern Skies"
+      },
+      {
+        "file": "relicpieces/Valorous Plate of Soaring Flight.png",
+        "name": "Valorous Plate of Soaring Flight"
+      },
+      {
+        "file": "relicpieces/Vonwacq's Island of Birth.png",
+        "name": "Vonwacq's Island of Birth"
+      },
+      {
+        "file": "relicpieces/Vonwacq's Islandic Coast.png",
+        "name": "Vonwacq's Islandic Coast"
+      },
+      {
+        "file": "relicpieces/Warbling Shores' Blazing Beacon.png",
+        "name": "Warbling Shores' Blazing Beacon"
+      },
+      {
+        "file": "relicpieces/Warbling Shores' Cantillation Trail.png",
+        "name": "Warbling Shores' Cantillation Trail"
+      },
+      {
+        "file": "relicpieces/Warrior Goddess's Cavalry Gauntlets.png",
+        "name": "Warrior Goddess's Cavalry Gauntlets"
+      },
+      {
+        "file": "relicpieces/Warrior Goddess's Dawn Cape.png",
+        "name": "Warrior Goddess's Dawn Cape"
+      },
+      {
+        "file": "relicpieces/Warrior Goddess's Honor Spurs.png",
+        "name": "Warrior Goddess's Honor Spurs"
+      },
+      {
+        "file": "relicpieces/Warrior Goddess's Winged Helm.png",
+        "name": "Warrior Goddess's Winged Helm"
+      },
+      {
+        "file": "relicpieces/Wastelander's Breathing Mask.png",
+        "name": "Wastelander's Breathing Mask"
+      },
+      {
+        "file": "relicpieces/Wastelander's Desert Terminal.png",
+        "name": "Wastelander's Desert Terminal"
+      },
+      {
+        "file": "relicpieces/Wastelander's Friar Robe.png",
+        "name": "Wastelander's Friar Robe"
+      },
+      {
+        "file": "relicpieces/Wastelander's Powered Greaves.png",
+        "name": "Wastelander's Powered Greaves"
+      },
+      {
+        "file": "relicpieces/Watchmaker's Dream-Concealing Dress Shoes.png",
+        "name": "Watchmaker's Dream-Concealing Dress Shoes"
+      },
+      {
+        "file": "relicpieces/Watchmaker's Fortuitous Wristwatch.png",
+        "name": "Watchmaker's Fortuitous Wristwatch"
+      },
+      {
+        "file": "relicpieces/Watchmaker's Illusory Formal Suit.png",
+        "name": "Watchmaker's Illusory Formal Suit"
+      },
+      {
+        "file": "relicpieces/Watchmaker's Telescoping Lens.png",
+        "name": "Watchmaker's Telescoping Lens"
+      }
+    ]
+  },
   "eidolons": {
     "label": "Эйдолоны (скиллы персонажей)",
     "count": 528,
