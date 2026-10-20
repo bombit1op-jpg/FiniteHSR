@@ -148,7 +148,7 @@ const RATING_TIERS: [number, string][] = [
   [40, 'A'], [45, 'A+'], [50, 'S'], [55, 'S+'], [60, 'SS'], [65, 'SS+'], [70, 'SSS'], [75, 'SSS+'],
   [80, 'WTF'], [85, 'WTF+'], [90, 'AEON'],
   // overflow tier above Fribbels' AEON: score exceeds 100% of the 6-roll ideal
-  [200, 'CHETAH'],
+  [100, 'CHETAH'],
 ]
 
 export function pctToRating(pct: number, part: RelicSlot, hasCorrectMain: boolean, aeonEligible = false): string {

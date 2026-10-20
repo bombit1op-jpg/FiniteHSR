@@ -54,10 +54,10 @@ export default () => {
   c('unverified 95% -> WTF+', pctToRating(95, 'body', true, false) === 'WTF+')
   c('verified 95% -> AEON', pctToRating(95, 'body', true, true) === 'AEON')
 
-  // ---- CHETAH: overflow tier above AEON at pct >= 200 (verified only)
-  c('verified 200% -> CHETAH', pctToRating(200, 'body', true, true) === 'CHETAH')
-  c('verified 199% -> AEON', pctToRating(199, 'body', true, true) === 'AEON')
-  c('unverified 200% -> WTF+', pctToRating(200, 'body', true, false) === 'WTF+')
+  // ---- CHETAH: overflow tier above AEON at pct >= 100 (verified only)
+  c('verified 100% -> CHETAH', pctToRating(100, 'body', true, true) === 'CHETAH')
+  c('verified 99% -> AEON', pctToRating(99, 'body', true, true) === 'AEON')
+  c('unverified 100% -> WTF+', pctToRating(100, 'body', true, false) === 'WTF+')
 
   // ---- tier boundaries (each grade = 5%)
   c('pct 30 -> B', pctToRating(30, 'body', true) === 'B')
