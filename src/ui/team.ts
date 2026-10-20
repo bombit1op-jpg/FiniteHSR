@@ -16,7 +16,7 @@ import type { DebugLevel } from '../core/battlelog'
 
 interface SubEditor { statSel: HTMLSelectElement; tierSel: HTMLSelectElement; rollsInp: HTMLInputElement; cubes: HTMLElement }
 
-interface PieceEditor {
+export interface PieceEditor {
   slot: RelicPiece['slot']
   card: HTMLElement
   setSel: HTMLSelectElement
@@ -121,7 +121,7 @@ export function syncRow(r: CharRow): void {
   store.dispatch({ type: 'team/update', id: r.id, patch })
 }
 
-const pieceOf = (p: PieceEditor): PieceState => ({
+export const pieceOf = (p: PieceEditor): PieceState => ({
   slot: p.slot,
   setId: p.setSel.value,
   main: p.mainSel.value,
@@ -435,7 +435,7 @@ function paintPieceRatings(r: CharRow): void {
   }
 }
 
-function buildPieceEditors(): PieceEditor[] {
+export function buildPieceEditors(onChange?: () => void): PieceEditor[] {
   const out: PieceEditor[] = []
   for (const [slot, title] of SLOT_TITLES) {
     const card = el('div', 'pieceCard')
@@ -481,14 +481,15 @@ function buildPieceEditors(): PieceEditor[] {
         val.textContent = '+ ' + fmtStatVal(st, v)
         updateSubCubes(cubes, rolls, tier)
       }
-      const onChange = () => { upd() }
-      statSel.onchange = onChange
-      tierSel.onchange = onChange
-      rollsInp.oninput = onChange
+      const onChange_ = () => { upd() }
+      statSel.onchange = () => { onChange_(); onChange?.() }
+      tierSel.onchange = () => { onChange_(); onChange?.() }
+      rollsInp.oninput = () => { onChange_(); onChange?.() }
       x.onclick = () => {
         row.remove()
         const idx = subs.findIndex(s => s.statSel === statSel)
         if (idx >= 0) subs.splice(idx, 1)
+        onChange?.()
       }
       row.append(statSel, tierSel, rollsInp, val, cubes, x)
       subRows.append(row)
@@ -500,8 +501,10 @@ function buildPieceEditors(): PieceEditor[] {
     addBtn.onclick = () => {
       if (subs.length >= 4) return
       subs.push(mkSubRow())
+      onChange?.()
     }
-    setSel.onchange = () => updatePieceBadge(pieceBadgeEl, setSel.value, slot)
+    setSel.onchange = () => { updatePieceBadge(pieceBadgeEl, setSel.value, slot); onChange?.() }
+    mainSel.onchange = () => { updateMainVal(); onChange?.() }
     card.append(head, setSel, mainSel, mainVal, subRows, addBtn)
     out.push({ slot, card, setSel, pieceBadgeEl, ratingEl, mainSel, mainVal, subs, subRows, addBtn })
   }

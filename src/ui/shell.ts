@@ -12,7 +12,7 @@ import { ENGINE_VERSION, RULES_VERSION, DATASET_VERSION } from '../verification/
 export interface Route {
   id: string
   label: string
-  group: 'BATTLE' | 'ANALYSIS' | 'OPTIMIZATION' | 'ENGINEERING'
+  group: 'PARTY'
   /** capability id this route is backed by; when its status !== 'available' the panel shows why */
   capability?: string
   /** refreshed every time the route becomes active (pages render their own empty/loading states) */
@@ -23,39 +23,15 @@ export interface Route {
 export function panelOf(r: Route): string { return `panel-${r.id}` }
 
 export const ROUTES: Route[] = [
-  { id: 'player', label: 'Настройка боя', group: 'BATTLE' },
-  { id: 'dashboard', label: 'Обзор', group: 'BATTLE' },
-  { id: 'team', label: 'Отряд', group: 'BATTLE' },
-  { id: 'build', label: 'Билды', group: 'BATTLE', capability: 'build.editor' },
-  { id: 'gear', label: 'Реликвии и конусы', group: 'BATTLE' },
-  { id: 'encounter', label: 'Враги и волны', group: 'BATTLE', capability: 'encounter.editor' },
-  { id: 'battle', label: 'Начать бой', group: 'BATTLE' },
-  { id: 'results', label: 'Итоги боя', group: 'BATTLE' },
-  { id: 'calc', label: 'Расчёт урона', group: 'BATTLE' },
-  { id: 'reference', label: 'Справочник', group: 'BATTLE' },
-
-  { id: 'analysis', label: 'Разбор боя', group: 'ANALYSIS', capability: 'analysis.run' },
-  { id: 'compare', label: 'Сравнить прогоны', group: 'ANALYSIS', capability: 'analysis.compare' },
-  { id: 'profiles', label: 'Профиль отряда', group: 'ANALYSIS', capability: 'analysis.profile' },
-
-  { id: 'optimizer', label: 'Оптимизатор', group: 'OPTIMIZATION', capability: 'optimize.search' },
-
-  { id: 'verification', label: 'Проверка и покрытие', group: 'ENGINEERING', capability: 'verification.specs' },
-  { id: 'catalog', label: 'Каталог данных', group: 'ENGINEERING' },
-  { id: 'deviations', label: 'Отклонения', group: 'ENGINEERING', capability: 'known.deviations' },
-  { id: 'diagnostics', label: 'Диагностика', group: 'ENGINEERING' },
-  { id: 'settings', label: 'Настройки', group: 'ENGINEERING' },
+  { id: 'team', label: 'Отряд', group: 'PARTY' },
 ]
 
-/** nav section titles — the 4 user-facing groups (target IA; route ids/deep links unchanged) */
+/** nav section titles */
 export const GROUP_LABELS: Record<Route['group'], string> = {
-  BATTLE: 'Бой',
-  ANALYSIS: 'Анализ',
-  OPTIMIZATION: 'Подбор билда',
-  ENGINEERING: 'Инструменты разработчика',
+  PARTY: 'Отряд',
 }
 /** rarely-used technical section starts collapsed; activating one of its routes expands it */
-const DEFAULT_COLLAPSED: Record<string, boolean> = { ENGINEERING: true }
+const DEFAULT_COLLAPSED: Record<string, boolean> = {}
 
 const DEFAULT_ROUTE = ROUTES[0].id
 

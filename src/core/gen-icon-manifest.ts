@@ -6,13 +6,15 @@
  * the UI resolves images by stable display key without fetching JSON at runtime. Re-run after
  * assets change:  npx tsx src/core/gen-icon-manifest.ts
  */
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { RELIC_SETS, PLANAR_SETS } from './gear'
 
 const ROOT = join(import.meta.dirname, '..', '..')
 const SRC = join(ROOT, 'public', 'icons', '_manifest.json')
 const RELIC_DATA = join(ROOT, 'hsr-data', 'data', 'relicsets.json')
+const PORTRAIT_DIR = join(ROOT, 'public', 'portraits')
+const GAME_DATA = join(ROOT, 'reference', 'hsr-optimizer-main', 'src', 'data', 'game_data.json')
 const OUT = join(ROOT, 'src', 'ui', 'iconManifest.ts')
 
 interface IconEntry { file: string; name: string; character?: string }
@@ -71,6 +73,25 @@ function emitRecord(map: Record<string, string>, indent: string): string {
   return keys.map(k => `${indent}${quote(k)}: ${quote(map[k])},`).join('\n')
 }
 
+/**
+ * Full-character art (`public/portraits/<id>.webp`, 376x512) keyed by the same display name the
+ * rest of the manifest uses. Files are named by the game's numeric character id; the name is
+ * resolved through `game_data.json` (id -> name), which matches the icon manifest's character keys
+ * 1:1. Only files that actually exist on disk are emitted, so the map never points at a 404.
+ */
+function buildPortraits(names: readonly string[]): Record<string, string> {
+  const game = JSON.parse(readFileSync(GAME_DATA, 'utf8')) as { characters: Record<string, { name: string }> }
+  const idByName: Record<string, string> = {}
+  for (const [id, c] of Object.entries(game.characters)) idByName[c.name] = id
+  const have = new Set(readdirSync(PORTRAIT_DIR).filter(f => f.endsWith('.webp')).map(f => f.slice(0, -5)))
+  const out: Record<string, string> = {}
+  for (const name of names) {
+    const id = idByName[name]
+    if (id && have.has(id)) out[name] = `/portraits/${id}.webp`
+  }
+  return out
+}
+
 function main(): void {
   const manifest = JSON.parse(readFileSync(SRC, 'utf8')) as RawManifest
   const parts: string[] = []
@@ -111,8 +132,14 @@ function main(): void {
   parts.push('}')
   parts.push('')
 
+  const portraits = buildPortraits(manifest.characters.icons.map(i => i.name))
+  parts.push('export const CHARACTER_PORTRAITS: Record<string, string> = {')
+  parts.push(emitRecord(portraits, '  '))
+  parts.push('}')
+  parts.push('')
+
   writeFileSync(OUT, parts.join('\n'), 'utf8')
-  console.log(`wrote ${OUT} (${parts.join('\n').length} bytes)`)
+  console.log(`wrote ${OUT} (${parts.join('\n').length} bytes, ${Object.keys(portraits).length} portraits)`)
 }
 
 main()

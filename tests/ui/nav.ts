@@ -1,11 +1,11 @@
 import { Window } from 'happy-dom'
 import { raw } from '../_helpers/battle'
-import { initShell, ROUTES, GROUP_LABELS } from '../../src/ui/shell'
+import { initShell, navigate, currentRoute, ROUTES, GROUP_LABELS } from '../../src/ui/shell'
 
 /**
- * UX-slice 1 — nav regrouping: the 4 user-facing sections are collapsible headers, every route
- * keeps its id (deep links `#/<id>` unchanged), all route buttons stay in the DOM, and entering
- * a collapsed section auto-expands it. Rarely-used ENGINEERING starts collapsed.
+ * Single-tab shell: the shipped nav exposes exactly the Party Setup route. The route id stays
+ * `team` (deep link `#/team` unchanged) and its group header renders under one collapsed-capable
+ * section. All other UI pages were removed from the shell.
  */
 export default () => {
   const win = new Window({ url: 'http://localhost/' })
@@ -24,41 +24,22 @@ export default () => {
   }
 
   const rail = boot()
-  const headers = [...rail.querySelectorAll<HTMLButtonElement>('.nav-group')]
-  const bodies = () => [...rail.querySelectorAll<HTMLElement>('.nav-group-body')]
-  const engBody = () => bodies().find(b => b.dataset.group === 'ENGINEERING')
-
-  // deep links: the 18 original route ids are kept, plus the new `player` composition route
   const railIds = [...rail.querySelectorAll('.nav-btn')].map(b => (b as HTMLElement).dataset.route)
-  const deepLinksOk = JSON.stringify(railIds) === JSON.stringify(ROUTES.map(r => r.id)) && railIds.length === 19
+  const headers = [...rail.querySelectorAll<HTMLButtonElement>('.nav-group')]
 
-  // 4 sections with the target labels
-  const labelsOk = headers.length === 4 && headers.every(h => Object.values(GROUP_LABELS).includes(h.textContent ?? ''))
+  const onlyTeam = JSON.stringify(railIds) === JSON.stringify(ROUTES.map(r => r.id)) && railIds.length === 1 && railIds[0] === 'team'
+  const oneGroup = headers.length === 1 && headers[0].textContent === GROUP_LABELS.PARTY
 
-  // rarely-used technical section starts collapsed; its buttons still exist in the DOM
-  const defCollapsed = engBody()?.classList.contains('collapsed') === true
-    && rail.querySelectorAll('.nav-group-body[data-group="ENGINEERING"] .nav-btn').length === 5
-
-  // clicking a group header toggles it (round-trip restores state)
-  const engHeader = headers.find(h => h.dataset.group === 'ENGINEERING') as HTMLButtonElement
-  engHeader.click()
-  const opened = engBody()?.classList.contains('collapsed') === false
-  engHeader.click()
-  const reclosed = engBody()?.classList.contains('collapsed') === true
-
-  // active route auto-expands its own section: boot straight into a collapsed-section deep link
-  ;(win as unknown as { location: { hash: string } }).location.hash = '#/diagnostics'
-  const rail2 = boot()
-  const engBody2 = rail2.querySelector('.nav-group-body[data-group="ENGINEERING"]')
-  const autoExpanded = engBody2?.classList.contains('collapsed') !== true
-    && rail2.querySelector('.nav-btn[data-route="diagnostics"]') !== null
+  // navigation still targets the single route; unknown ids fall back to it (no crash)
+  navigate('team')
+  const teamOk = currentRoute() === 'team'
+  navigate('dashboard')
+  const fallbackOk = currentRoute() === 'team'
 
   return [
-    raw('nav renders the known route ids incl. new player route (deep links unchanged)', deepLinksOk, railIds.join(',')),
-    raw('nav has the 4 user-facing section headers', labelsOk, headers.map(h => h.textContent).join('|')),
-    raw('ENGINEERING starts collapsed but keeps its 5 route buttons in the DOM', defCollapsed, String(defCollapsed)),
-    raw('group header click expands the collapsed section', opened, String(opened)),
-    raw('group header click again re-collapses it', reclosed, String(reclosed)),
-    raw('entering a collapsed-section route auto-expands that section', autoExpanded, String(autoExpanded)),
+    raw('nav renders exactly the team route', onlyTeam, railIds.join(',')),
+    raw('nav renders the single Отряд group header', oneGroup, headers.map(h => h.textContent).join('|')),
+    raw('#/team resolves to the team route', teamOk, currentRoute()),
+    raw('an unknown route id falls back to team', fallbackOk, currentRoute()),
   ]
 }

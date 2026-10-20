@@ -17,6 +17,7 @@ import type { RelicPiece } from '../core/entities/Unit'
 import {
   CHARACTERS_ICONS, LIGHTCONES_ICONS, RELICSETS_ICONS, PLANARSETS_ICONS,
   ELEMENTS_ICONS, PATHS_ICONS, STATS_ICONS, ENEMIES_ICONS, RELICPIECES_ICONS,
+  CHARACTER_PORTRAITS,
 } from './iconManifest'
 
 type RelicSlot = RelicPiece['slot']
@@ -46,6 +47,12 @@ const PATH_KEY: Record<string, string> = { Hunt: 'The Hunt', 'The Hunt': 'The Hu
 export function charIconUrl(kitId: string): string | undefined {
   const name = kitName(kitId)
   return name ? CHARACTERS_ICONS[name] : undefined
+}
+
+/** full-character art path for a kit id (376x512, undefined when unknown / no committed art) */
+export function charPortraitUrl(kitId: string): string | undefined {
+  const name = kitName(kitId)
+  return name ? CHARACTER_PORTRAITS[name] : undefined
 }
 
 /** Light Cone / relic set / planar set icon path (undefined when unknown / none selected) */
@@ -211,6 +218,36 @@ export function charBadge(kitId: string): HTMLElement {
 
 /** point the badge at another kit (character select changed) — same node, no re-mount */
 export function updateCharBadge(b: HTMLElement, kitId: string): void { paintChar(b, kitId) }
+
+// ---------------------------------------------------------------- full-character card art
+
+function paintPortrait(node: HTMLElement, kitId: string): void {
+  const kit = KITS.find(k => k.id === kitId)
+  const tint = ELEM_COLOR[kit?.elem ?? ''] ?? '#55606f'
+  const title = kit ? kit.name : 'персонаж не выбран'
+  node.dataset.elem = kit?.elem ?? ''
+  node.dataset.empty = kit ? 'false' : 'true'
+  node.title = title
+  node.innerHTML = ''
+  const url = kit ? charPortraitUrl(kitId) : undefined
+  node.append(iconNode(url, kit ? kit.name : '—', {
+    cls: 'portraitImg',
+    fit: 'contain',
+    fallbackText: kit ? (kit.name.trim().charAt(0).toUpperCase() || '?') : '＋',
+    tint,
+    title,
+  }))
+}
+
+/** big full-character art panel (fills its container; element-tinted chip when unknown/none) */
+export function charPortrait(kitId: string): HTMLElement {
+  const b = el('div', 'charPortrait')
+  paintPortrait(b, kitId)
+  return b
+}
+
+/** point the card art at another kit — same node, no re-mount */
+export function updateCharPortrait(node: HTMLElement, kitId: string): void { paintPortrait(node, kitId) }
 
 // ---------------------------------------------------------------- gear badge (contract preserved)
 
