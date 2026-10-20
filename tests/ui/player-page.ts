@@ -22,11 +22,11 @@ export default () => {
   const player = doc.getElementById('panel-player') as HTMLElement
 
   const SINGLETONS = [
-    'team', 'addChar', 'relicTabs', 'relicPanel', 'enemyCfg', 'modRows', 'addMod',
+    'team', 'addChar', 'enemyCfg', 'modRows', 'addMod',
     'runMode', 'cycles', 'seed', 'run', 'check',
     'manualPanel', 'summary', 'statPanel', 'hpPanel', 'log',
   ]
-  const OLD = ['panel-team', 'panel-battle', 'panel-gear', 'panel-results']
+  const OLD = ['panel-team', 'panel-battle', 'panel-gear', 'panel-results', 'panel-build']
 
   const inPlayer = (id: string): boolean => !!player?.querySelector(`#${id}`)
   const counts = (id: string): number => main.querySelectorAll(`#${id}`).length
@@ -37,13 +37,12 @@ export default () => {
     && headings[1]?.startsWith('2.') === true
     && headings[2]?.startsWith('3.') === true
     && headings[3]?.startsWith('4.') === true
-    && headings[4]?.startsWith('5.') === true
-    && headings[5] === 'Результаты'
+    && headings[4] === 'Результаты'
 
   return [
     raw('player panel exists and is the first route panel', panels[0]?.id === 'panel-player', panels[0]?.id ?? 'none'),
     raw('player panel is active by default', player?.classList.contains('active') === true),
-    raw('player sections follow the spec order (team→build→enemies→mods→run→results)', ordered, headings.join(' | ')),
+    raw('player sections follow the spec order (team→enemies→mods→run→results)', ordered, headings.join(' | ')),
     raw('every setup control lives inside the player panel', SINGLETONS.every(inPlayer),
       SINGLETONS.filter(id => !inPlayer(id)).join(',') || 'all present'),
     raw('each setup control id is unique in <main> (no parallel copy)', SINGLETONS.every(id => counts(id) === 1),
@@ -57,5 +56,7 @@ export default () => {
     raw('Start is the single prominent primary action', doc.getElementById('run')?.classList.contains('btn-primary') === true
       && doc.getElementById('run')?.classList.contains('btn-large') === true),
     raw('setup inputs are wrapped by a label (accessible name)', ['cycles', 'seed', 'runMode'].every(id => !!doc.getElementById(id)?.closest('label'))),
+    raw('build editor (BuildSpec import/export) is mounted inside the player panel', inPlayer('buildEditor')),
+    raw('no separate relic tab panel remains', !doc.getElementById('relicTabs') && !doc.getElementById('relicPanel')),
   ]
 }

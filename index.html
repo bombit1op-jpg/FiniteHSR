@@ -20,23 +20,22 @@
           <h2>1. Отряд</h2>
           <div id="team" class="cardGrid"></div>
           <button id="addChar" class="btn-primary">+ Добавить персонажа</button>
+          <details class="advSection">
+            <summary>Импорт / экспорт BuildSpec</summary>
+            <div id="buildEditor"><em>Загрузка…</em></div>
+          </details>
         </section>
         <section class="panel-section">
-          <h2>2. Билд и реликвии персонажа</h2>
-          <div id="relicTabs" class="tabBar"></div>
-          <div id="relicPanel"></div>
-        </section>
-        <section class="panel-section">
-          <h2>3. Противники</h2>
+          <h2>2. Противники</h2>
           <div id="enemyCfg"></div>
         </section>
         <section class="panel-section">
-          <h2>4. Баффы / дебаффы перед боем</h2>
+          <h2>3. Баффы / дебаффы перед боем</h2>
           <div id="modRows"></div>
           <button id="addMod" class="btn-secondary">+ Модификатор</button>
         </section>
         <section class="panel-section">
-          <h2>5. Режим и запуск</h2>
+          <h2>4. Режим и запуск</h2>
           <label>Циклов (150 AV + 100/цикл): <input id="cycles" type="number" value="4" min="1" max="20" /></label>
           <label>Seed: <input id="seed" type="number" value="42" /></label>
           <label>Режим: <select id="runMode">
@@ -74,7 +73,8 @@
       <div class="route-panel" id="panel-build">
         <section class="panel-section">
           <h2>Редактор билда (BuildSpec)</h2>
-          <div id="buildEditor"><em>Загрузка…</em></div>
+          <p class="panel-pointer">Редактор билда объединён на странице «Настройка боя» (импорт/экспорт BuildSpec в разделе «Отряд»).</p>
+          <button class="btn-primary" data-go="player">Перейти к настройке боя</button>
         </section>
       </div>
       <div class="route-panel" id="panel-encounter">

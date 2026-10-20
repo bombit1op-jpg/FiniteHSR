@@ -7,7 +7,8 @@ import { el, fillSelect, fmtStatVal, escapeHtml, STAT_LABELS } from './dom'
 import { store, techniquesForRows } from './store'
 import type { PieceState, TeamRowState } from './store'
 import { loadSettings } from './settings'
-import { charBadge, gearBadge, updateCharBadge, updateGearBadge } from './icons'
+import { charBadge, gearBadge, updateCharBadge, updateGearBadge, metaBadge, updateMetaBadges } from './icons'
+import { KIT_PATH } from '../core/kits'
 import type { DebugLevel } from '../core/battlelog'
 
 interface SubEditor { statSel: HTMLSelectElement; tierSel: HTMLSelectElement; rollsInp: HTMLInputElement }
@@ -138,6 +139,8 @@ export function addCharRow(): void {
 
   const head = el('div', 'charHead')
   const badge = charBadge(free.id)
+  const elemChip = metaBadge('elem', free.elem)
+  const pathChip = metaBadge('path', KIT_PATH[free.id] ?? '')
   const sel = el('select') as HTMLSelectElement
   fillSelect(sel, KITS.map(k => [k.id, `${k.name} (${k.elem})`]))
   sel.value = free.id
@@ -149,11 +152,9 @@ export function addCharRow(): void {
     const idx = teamRows.findIndex(x => x.id === id)
     if (idx >= 0) teamRows.splice(idx, 1)
     card.remove()
-    ensureRelicRow()
-    renderRelicTabs()
   }
   del.onclick = onDelete
-  head.append(badge, sel, del)
+  head.append(badge, sel, elemChip, pathChip, del)
   card.append(head)
 
   // stat inputs
@@ -173,7 +174,7 @@ export function addCharRow(): void {
     lab.append(inp)
     row.append(lab)
   }
-  card.append(row)
+  // stats row is appended later (after build/gear) to follow the §2 order: gear → slots → stats
 
   // gear selects
   const gear = el('div', 'gear')
@@ -231,7 +232,33 @@ export function addCharRow(): void {
     lvWrap('basic', 'BAS', 7), lvWrap('skill', 'SKL', 12), lvWrap('ult', 'ULT', 12), lvWrap('talent', 'TAL', 12), trLab, enLab)
   card.append(progRow)
 
-  // strategy / AI controls
+  // technique (§84.6.1): 0 = off; N = N uses of this kit's Technique in activation order.
+  // Kept visible — it is part of the normal per-character setup, not advanced tuning.
+  const techniqueSel = el('select') as HTMLSelectElement
+  const techniqueLab = el('label'); techniqueLab.textContent = 'Техника'; techniqueLab.append(techniqueSel)
+  const fillTechniqueOpts = (kitId: string): void => {
+    const t = KITS.find(k => k.id === kitId)?.technique
+    fillSelect(techniqueSel, [['0', '—'], ...Array.from({ length: t?.maxUses ?? 1 }, (_, i) => [String(i + 1), `${i + 1}×`] as [string, string])])
+    techniqueSel.title = t ? `Претехника: ${t.name} (${t.kind}${t.zone ? ', zone' : ''})` : 'У персонажа нет претехники'
+  }
+  fillTechniqueOpts(free.id)
+  const techRow = el('div', 'row stratRow')
+  techRow.append(techniqueLab)
+  card.append(techRow)
+
+  // relic slots — the 6 piece editors live inside the character card (§2 order), collapsed by default
+  const pieces = buildPieceEditors()
+  const relicRoot = el('div', 'relicGrid')
+  for (const p of pieces) relicRoot.append(p.card)
+  const relicDetails = el('details', 'advSection')
+  const relicSum = el('summary'); relicSum.textContent = 'Реликвии (6 слотов)'
+  relicDetails.append(relicSum, relicRoot)
+  card.append(relicDetails)
+
+  // stats (§2: after gear/slots)
+  card.append(row)
+
+  // advanced strategy (§3) — skill priority/pattern/rotation + kit flags, collapsed by default
   const stratRow = el('div', 'row stratRow')
   const skillPriorityInp = el('input') as HTMLInputElement
   skillPriorityInp.type = 'number'; skillPriorityInp.min = '0'; skillPriorityInp.max = '10'; skillPriorityInp.value = '0'; skillPriorityInp.title = 'Skill Priority: higher = prefers skill when SP available'
@@ -250,18 +277,7 @@ export function addCharRow(): void {
   skillRotationInp.type = 'text'; skillRotationInp.placeholder = 'B S B S U'; skillRotationInp.title = 'Rotation (space-separated): B=Basic, S=Skill, U=Ult'
   const skillRotationLab = el('label'); skillRotationLab.textContent = 'Rotation'; skillRotationLab.append(skillRotationInp)
 
-  // pre-fight Technique (§84.6.1): 0 = off; N = N uses of this kit's Technique in activation order
-  const techniqueSel = el('select') as HTMLSelectElement
-  const techniqueLab = el('label'); techniqueLab.textContent = 'Техника'; techniqueLab.append(techniqueSel)
-  const fillTechniqueOpts = (kitId: string): void => {
-    const t = KITS.find(k => k.id === kitId)?.technique
-    fillSelect(techniqueSel, [['0', '—'], ...Array.from({ length: t?.maxUses ?? 1 }, (_, i) => [String(i + 1), `${i + 1}×`] as [string, string])])
-    techniqueSel.title = t ? `Претехника: ${t.name} (${t.kind}${t.zone ? ', zone' : ''})` : 'У персонажа нет претехники'
-  }
-  fillTechniqueOpts(free.id)
-
-  stratRow.append(skillPriorityLab, skillPatternLab, skillRotationLab, techniqueLab)
-  card.append(stratRow)
+  stratRow.append(skillPriorityLab, skillPatternLab, skillRotationLab)
 
   // character-specific strategy flags (per kit)
   const strategyChks: Record<string, HTMLInputElement> = {}
@@ -276,12 +292,10 @@ export function addCharRow(): void {
     const lab = el('label'); lab.style.fontSize = '11px'; lab.style.marginRight = '8px'; lab.append(inp, document.createTextNode(' ' + label))
     stratFlagsRow.append(lab)
   }
-  card.append(stratFlagsRow)
-
-  // build relic editor (detached, goes to tab panel)
-  const pieces = buildPieceEditors()
-  const relicRoot = el('div', 'relicGrid')
-  for (const p of pieces) relicRoot.append(p.card)
+  const stratDetails = el('details', 'advSection')
+  const stratSum = el('summary'); stratSum.textContent = 'Advanced strategy'
+  stratDetails.append(stratSum, stratRow, stratFlagsRow)
+  card.append(stratDetails)
 
   const preview = el('div', 'gearPreview')
   card.append(preview)
@@ -315,21 +329,21 @@ export function addCharRow(): void {
 
   sel.onchange = () => {
     r.kitId = sel.value
+    const kit = KITS.find(k => k.id === sel.value)
     updateCharBadge(badge, sel.value)
+    updateMetaBadges(elemChip, pathChip, kit?.elem ?? '', KIT_PATH[sel.value] ?? '')
     for (const [k] of Object.entries(stats)) applyDefault(stats[k], sel.value, k)
     coneSel.value = DEFAULT_CONE[sel.value] ?? ''
     updateGearBadge(coneBadge, 'cone', coneSel.value)
     fillTechniqueOpts(sel.value)
     techniqueSel.value = '0'
     refresh()
-    renderRelicTabs()
   }
 
   document.getElementById('team')!.append(card)
   teamRows.push(r)
   store.dispatch({ type: 'team/add', row: { id, kitId: free.id, stats: rowStatsOf(r), coneId: coneSel.value, si: 1, relic1: '', relic2: '', planar: '', eidolon: 0, levels: { basic: 6, skill: 10, ult: 10, talent: 10 }, traces: true, techniqueUses: 0, skillPriority: 0, skillPattern: 'auto', skillRotation: '', strategy: {}, pieces: pieces.map(pieceOf) } as TeamRowState })
   refresh()
-  renderRelicTabs()
 }
 
 function rowStatsOf(r: CharRow): TeamRowState['stats'] {
@@ -459,40 +473,6 @@ function buildPieceEditors(): PieceEditor[] {
     out.push({ slot, card, setSel, mainSel, mainVal, subs, subRows, addBtn })
   }
   return out
-}
-
-function ensureRelicRow(): void {
-  const st = store.getState()
-  const active = st.ui.activeRelic
-  if (active && !st.team.some(t => t.id === active)) {
-    store.dispatch({ type: 'ui/setRelic', id: st.team[0]?.id ?? null })
-  }
-}
-
-export function renderRelicTabs(): void {
-  const bar = document.getElementById('relicTabs')!
-  const panel = document.getElementById('relicPanel')!
-  const st = store.getState()
-  const rows = st.team
-  bar.innerHTML = ''
-  panel.innerHTML = ''
-  if (!rows.length) {
-    panel.innerHTML = '<em class="dim">Добавьте персонажа</em>'
-    return
-  }
-  const activeId = rows.some(t => t.id === st.ui.activeRelic) ? st.ui.activeRelic : rows[0].id
-  for (const t of rows) {
-    const kit = KITS.find(k => k.id === t.kitId)!
-    const b = el('button', 'relicTab' + (t.id === activeId ? ' active' : ''))
-    b.textContent = `${kit.name} · E${t.eidolon}`
-    b.onclick = () => {
-      store.dispatch({ type: 'ui/setRelic', id: t.id })
-      renderRelicTabs()
-    }
-    bar.append(b)
-  }
-  const dom = teamRows.find(x => x.id === activeId)
-  if (dom) panel.append(dom.relicRoot)
 }
 
 export function rowLevels(r: CharRow) {

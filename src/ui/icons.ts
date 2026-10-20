@@ -68,7 +68,7 @@ export type IconFit = 'contain' | 'cover'
  * shown only if the image is missing or fails to load. `fallbackText`/`tint` paint the chip.
  * The node is the reusable unit shared by every caller; `alt` is always set.
  */
-function iconNode(url: string | undefined, alt: string, opts: {
+export function iconNode(url: string | undefined, alt: string, opts: {
   cls?: string
   size?: number
   fit?: IconFit
@@ -172,3 +172,35 @@ export function gearBadge(kind: GearKind, id: string): HTMLElement {
 
 /** point the gear badge at another id (select changed) — same node, no re-mount */
 export function updateGearBadge(b: HTMLElement, kind: GearKind, id: string): void { paintGear(b, kind, id) }
+
+// ---------------------------------------------------------------- element / path chips (§1)
+
+function paintMeta(node: HTMLElement, kind: 'elem' | 'path', key: string): void {
+  const url = kind === 'elem' ? elemIconUrl(key) : pathIconUrl(key)
+  const text = key || '—'
+  const title = kind === 'elem' ? `Элемент: ${text}` : `Путь: ${text}`
+  node.dataset.elem = ''
+  node.title = title
+  node.innerHTML = ''
+  node.append(iconNode(url, text, {
+    cls: 'metaIcon',
+    size: 18,
+    fit: 'contain',
+    fallbackText: text.charAt(0).toUpperCase(),
+    tint: ELEM_COLOR[key] ?? '#55606f',
+    title,
+  }))
+}
+
+/** element / path icon chip; unknown key renders a letter chip instead of a broken image */
+export function metaBadge(kind: 'elem' | 'path', key: string): HTMLElement {
+  const b = el('span', 'metaBadge')
+  paintMeta(b, kind, key)
+  return b
+}
+
+/** point both chips at another kit (character select changed) — same nodes, no re-mount */
+export function updateMetaBadges(elemNode: HTMLElement, pathNode: HTMLElement, elem: string, path: string): void {
+  paintMeta(elemNode, 'elem', elem)
+  paintMeta(pathNode, 'path', path)
+}

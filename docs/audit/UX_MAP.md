@@ -7,16 +7,21 @@
 - ОПТИМИЗАЦИЯ (OPTIMIZATION): optimizer
 - ПРОВЕРКА ДВИЖКА (ENGINEERING): verification, catalog, deviations, diagnostics, settings
 
-### Single-page player flow (20-10-2026)
+### Single-page player flow (обновлено 20-10-2026)
 `player` — первый роут и `DEFAULT_ROUTE`; панель `#panel-player` держит существующие редакторы
-в порядке из `docs/gui/PLAYER_FLOW_AND_ASSETS.md`: отряд (`#team`/`#addChar`) → билд/реликвии
-(`#relicTabs`/`#relicPanel`) → противники (`#enemyCfg`) → модификаторы (`#modRows`/`#addMod`) →
+в порядке из `docs/gui/PLAYER_FLOW_AND_ASSETS.md`: отряд (`#team`/`#addChar`; каждая карточка
+персонажа несёт **свой билд** — Light Cone/SI/eidolon/уровни/трейсы/энергия — и **6 relic slots**
+под `<details>`, а **техника** остаётся видимой; продвинутая ротация и kit-флаги — под `<details>`
+«Advanced strategy») → противники (`#enemyCfg`) → модификаторы (`#modRows`/`#addMod`) →
 режим и запуск (`#cycles`/`#seed`/`#runMode`/`#run`/`#check`) → результаты ниже (`#summary`,
 `#statPanel`, `#hpPanel`, `#log`, `#manualPanel`). Контейнеры **перенесены**, не скопированы: одна
-живая копия каждого контрола, второй источник истины не создан. Старые роуты team/gear/battle/results
+живая копия каждого контрола, второй источник истины не создан. Импорт/экспорт `BuildSpec`
+(`#buildEditor`) — `<details>` в секции «Отряд». Прежний отдельный таб-панель реликвий
+(`#relicTabs`/`#relicPanel`) **убран**: слоты реликвий теперь в карточке (§2), параллельного
+build-представления нет (§56). Старые роуты team/build/gear/battle/results
 сохранили id и показывают указатель с кнопкой `[data-go="player"]` (`initShell` делегирует клик в
-`navigate`). Покрытие: `tests/ui/player-page.ts` 7/7 (порядок секций, уникальность id, единый дом,
-указатели); `tests/ui/nav.ts` обновлён на 19 роутов.
+`navigate`). Покрытие: `tests/ui/player-page.ts` 11/11 (порядок секций, уникальность id, единый дом,
+указатели, buildEditor в player, отсутствие relic-таба); `tests/ui/nav.ts` — 19 роутов.
 
 Заголовки разделов — кнопки-секции (сворачивание, `GROUP_LABELS`, состояние в localStorage
 `nav.collapsed`, дефолт: ENGINEERING свёрнут; переход на роут внутри свёрнутого раздела
@@ -33,7 +38,9 @@ kit/gear таблицы (`PATH_KEY` алиасит `Hunt`→`The Hunt`).
 enemyIconUrl` + `iconNode` рисует `<img>` (`alt`, `width/height`, `object-fit`, `loading="lazy"`,
 `decoding="async"`, `onerror`→скрыть картинку и показать fallback-chip). Неизвестный/пустой id →
 детерминированный chip по элементу; URL не выдумываются, вики не хотлинкается. Публичные контракты
-`charBadge/updateCharBadge/gearBadge/updateGearBadge` сохранены.
+`charBadge/updateCharBadge/gearBadge/updateGearBadge` сохранены. §1: карточка персонажа также несёт
+element- и path-иконки через `metaBadge`/`updateMetaBadges` (`elemIconUrl`/`pathIconUrl`, fallback —
+буква-чип), путь берётся из `KIT_PATH`.
 Тесты: `tests/ui/icons.ts` 8/8 (резолв манифеста, alt+lazy, смена кита, неизвестный/пустой → chip,
 резолв gear id, отсутствие выдуманных URL). Прежний пробел Phase G закрыт.
 
@@ -70,7 +77,7 @@ F-отчёт помечает неполноту («исследовано X и�
 ## Gaps (актуально, 20-10-2026)
 - C/D/E/I — закрыты (см. TODO.md, 18–20-10): техника в Team Builder, per-node traces, action-log из `sim.logger.events`, экран Диагностика есть (ROUTES: diagnostics).
 - G — закрыт (20-10-2026): ассеты и манифест добавлены (`public/icons/` + `src/ui/iconManifest.ts`), иконки рендерятся через единый компонент с graceful fallback (см. «Иконки» выше).
-- Single-page player flow — реализован (20-10-2026): см. «Single-page player flow» выше; `docs/gui/PLAYER_FLOW_AND_ASSETS.md` перенесён на main как целевой reference.
+- Single-page player flow — реализован и консолидирован (20-10-2026): §1 (element/path иконки), §2 (6 relic slots внутри карточки, `#buildEditor` import/export в секции «Отряд», роут build → указатель), §3 (advanced strategy под `<details>`). Прежний отдельный relic-таб убран, параллельного build-представления нет. См. «Single-page player flow» выше; `docs/gui/PLAYER_FLOW_AND_ASSETS.md` перенесён на main как целевой reference.
 - Адаптивность — закрыта (20-10-2026): в `src/style.css` добавлены breakpoints `@media (max-width: 860px)` (nav rail → горизонтальная прокручиваемая полоса, team/relic-гриды в одну колонку) и `(max-width: 560px)` (topbar/mod-строки/сабстаты), плюс `@media (prefers-reduced-motion)`. Прежний leftover-gap снят.
 - Доступность (20-10-2026): `:focus-visible`-кольцо на всех интерактивных контролах (кнопки/ссылки/input/select/nav/tab), у иконок всегда `alt`, Start (`#run`) — единственная prominent primary-кнопка (`btn-primary btn-large`).
 - Отмена долгих прогонов: механизма отмены нет → кнопка не рисуется (см. «Long operations»).

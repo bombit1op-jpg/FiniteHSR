@@ -98,6 +98,10 @@ body.busy { cursor: progress; }
 }
 .gameIcon.charIcon .iconChip { width: 44px; height: 44px; font-size: 15px; }
 .gameIcon.gearIcon .iconChip { width: 30px; height: 30px; font-size: 13px; }
+/* element / path chip (§1) — small, inline with the character name */
+.metaBadge { flex: none; display: inline-flex; align-items: center; }
+.gameIcon.metaIcon img { width: 18px; height: 18px; }
+.gameIcon.metaIcon .iconChip { width: 18px; height: 18px; font-size: 11px; }
 .del { background: transparent; border: none; color: #7b8595; cursor: pointer; font-size: 13px; padding: 4px 8px; border-radius: 4px; }
 .del:hover { background: #2a1d1d; color: #c96a6a; }
 
@@ -108,6 +112,11 @@ body.busy { cursor: progress; }
 .stratFlagsRow { margin-top: 2px; }
 .stratFlagsRow label { flex-direction: row; align-items: center; text-transform: none; font-size: 11px; color: #aab6c5; }
 .gearPreview { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #232a35; font-size: 11px; color: #9fb3c8; min-height: 16px; }
+/* progressive disclosure (§2/§3): relic slots and advanced strategy collapse inside the card */
+.advSection { margin-top: 8px; border-top: 1px dashed #232a35; padding-top: 6px; }
+.advSection > summary { cursor: pointer; font-size: 12px; color: #9aa7ba; user-select: none; }
+.advSection > summary:hover { color: #c9d6e6; }
+.advSection[open] > summary { margin-bottom: 6px; }
 
 /* Forms */
 label { display: block; font-size: 12px; color: #9aa7ba; margin: 8px 0 4px; }

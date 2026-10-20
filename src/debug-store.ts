@@ -9,12 +9,15 @@ export {}
 
 // ---------------------------------------------------------------- DOM shim
 
+/** minimal CSSStyleDeclaration stand-in: property bag + setProperty (populated per-El) */
+const styleProto = { setProperty(this: Record<string, string>, k: string, v: string): void { this[k] = v } }
+
 class El {
   tag: string
   id = ''
   children: El[] = []
   parent: El | null = null
-  style: Record<string, string> = {}
+  style: Record<string, string> = Object.create(styleProto)
   dataset: Record<string, string> = {}
   props: Record<string, unknown> = {}
   eventHandlers: Record<string, (e?: unknown) => void> = {}
@@ -142,7 +145,7 @@ rootEl('enemyCfg'); rootEl('modRows'); rootEl('addMod')
 rootEl('calcRoot')
 rootEl('cycles'); rootEl('seed'); rootEl('runMode'); rootEl('run'); rootEl('check')
 rootEl('summary'); rootEl('statPanel'); rootEl('hpPanel'); rootEl('log')
-rootEl('relicTabs'); rootEl('relicPanel'); rootEl('manualPanel')
+rootEl('manualPanel')
 rootEl('reference')
 const mainTabs = rootEl('mainTabs')
 const body = rootEl('body')
@@ -195,15 +198,16 @@ import('./main').then(async () => {
   addCharRow(); addCharRow()
   ok(store.getState().team.length === 4, 'team capped at 4')
 
-  // 3) input → store sync
+  // 3) input → store sync (stats row is the card's `.row` after head/gear/progRow/relicDetails)
   const row0 = byId.get('team')!.children[0]
-  const atkInput = row0.children[1].children[0].children[0] as El
+  const statsRow = row0.children.find(c => c.tag === 'div' && c.className === 'row')
+  const atkInput = statsRow!.children[0].children[0] as El
   atkInput.value = '3100'
   atkInput.fire('input')
   ok(store.getState().team[0].stats.atk === 3100, 'stat input syncs to store: atk=3100')
 
   // 4) delete
-  const delBtn = row0.children[0].children[1] as El
+  const delBtn = row0.children[0].children[4] as El
   delBtn.fire('click')
   ok(store.getState().team.length === 3, 'delete removes row')
 
@@ -265,13 +269,12 @@ import('./main').then(async () => {
   modeSel.value = 'manual'; modeSel.fire('change')
   ok(store.getState().run.mode === 'manual', 'runMode select → store')
 
-  // 12) relic tabs navigate
-  const { renderRelicTabs } = await import('./ui/team')
-  const st = store.getState()
-  store.dispatch({ type: 'ui/setRelic', id: st.team[1].id })
-  renderRelicTabs()
-  ok((byId.get('relicPanel') as El).children.length === 1, 'relic panel shows active row editor')
-  ok(store.getState().ui.activeRelic === st.team[1].id, 'activeRelic persisted')
+  // 12) relic editors are mounted inside each character card (§2 — no separate tab panel)
+  const card0 = byId.get('team')!.children[0]
+  const relicDetails = card0.children.find(c => c.tag === 'details' && c.children.some(x => x.tag === 'div' && x.className === 'relicGrid'))
+  const relicGrid = relicDetails?.children.find(x => x.tag === 'div' && x.className === 'relicGrid')
+  ok(!!relicGrid && relicGrid.children.length === 6, 'character card owns 6 relic slot editors')
+  ok(!byId.has('relicPanel'), 'no separate relic tab panel')
 
   console.log(`\nchecks: ${checks}, FAILURES: ${failures.length}`)
   if (failures.length) { console.log('failed: ' + failures.join(' | ')); process.exitCode = 1 }
