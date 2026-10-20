@@ -26,16 +26,18 @@
           </details>
         </section>
         <section class="panel-section">
-          <h2>2. Противники</h2>
+          <h2>2. Противники и столкновение</h2>
           <div id="enemyCfg"></div>
+          <p class="panel-pointer">Режим (MoC / PF / AS), период, стадия и комнаты настраиваются на вкладке
+            <button class="linkBtn" data-go="encounter">«Враги и волны»</button>.</p>
+          <details class="advSection">
+            <summary>Баффы / дебаффы перед боем</summary>
+            <div id="modRows"></div>
+            <button id="addMod" class="btn-secondary">+ Модификатор</button>
+          </details>
         </section>
         <section class="panel-section">
-          <h2>3. Баффы / дебаффы перед боем</h2>
-          <div id="modRows"></div>
-          <button id="addMod" class="btn-secondary">+ Модификатор</button>
-        </section>
-        <section class="panel-section">
-          <h2>4. Режим и запуск</h2>
+          <h2>3. Режим и запуск</h2>
           <label>Циклов (150 AV + 100/цикл): <input id="cycles" type="number" value="4" min="1" max="20" /></label>
           <label>Seed: <input id="seed" type="number" value="42" /></label>
           <label>Режим: <select id="runMode">

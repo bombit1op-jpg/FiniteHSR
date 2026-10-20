@@ -7,7 +7,7 @@ import { el, fillSelect, fmtStatVal, escapeHtml, STAT_LABELS } from './dom'
 import { store, techniquesForRows } from './store'
 import type { PieceState, TeamRowState } from './store'
 import { loadSettings } from './settings'
-import { charBadge, gearBadge, updateCharBadge, updateGearBadge, metaBadge, updateMetaBadges } from './icons'
+import { charBadge, gearBadge, updateCharBadge, updateGearBadge, metaBadge, updateMetaBadges, pieceBadge, updatePieceBadge, statBadge } from './icons'
 import { KIT_PATH } from '../core/kits'
 import type { DebugLevel } from '../core/battlelog'
 
@@ -17,6 +17,7 @@ interface PieceEditor {
   slot: RelicPiece['slot']
   card: HTMLElement
   setSel: HTMLSelectElement
+  pieceBadgeEl: HTMLElement
   mainSel: HTMLSelectElement
   mainVal: HTMLElement
   subs: SubEditor[]
@@ -165,13 +166,15 @@ export function addCharRow(): void {
   const stats: Record<string, HTMLInputElement> = {}
   for (const [key, label] of fields) {
     const lab = el('label')
-    lab.textContent = label
+    lab.title = label
+    const ic = statBadge(key)
     const inp = el('input')
     inp.type = 'number'
     inp.step = 'any'
+    inp.setAttribute('aria-label', label)
     applyDefault(inp, free.id, key)
     stats[key] = inp
-    lab.append(inp)
+    lab.append(ic, inp)
     row.append(lab)
   }
   // stats row is appended later (after build/gear) to follow the §2 order: gear → slots → stats
@@ -312,7 +315,7 @@ export function addCharRow(): void {
 
   for (const s of [coneSel, siSel, relic1, relic2, planarSel]) s.onchange = refresh
   for (const p of pieces) {
-    p.setSel.onchange = refresh
+    p.setSel.onchange = () => { updatePieceBadge(p.pieceBadgeEl, p.setSel.value, p.slot); refresh() }
     p.mainSel.onchange = refresh
     for (const s of p.subs) { s.statSel.onchange = refresh; s.tierSel.onchange = refresh; s.rollsInp.oninput = refresh }
   }
@@ -415,6 +418,8 @@ function buildPieceEditors(): PieceEditor[] {
   for (const [slot, title] of SLOT_TITLES) {
     const card = el('div', 'pieceCard')
     const h = el('h4'); h.textContent = title
+    const pieceBadgeEl = pieceBadge('', slot)
+    const head = el('div', 'pieceHead'); head.append(pieceBadgeEl, h)
     const setSel = el('select') as HTMLSelectElement
     const pool = (slot === 'sphere' || slot === 'rope') ? PLANAR_SETS : RELIC_SETS
     fillSelect(setSel, [['', '— сет —'], ...pool.map(s => [s.id, s.name] as [string, string])])
@@ -469,8 +474,9 @@ function buildPieceEditors(): PieceEditor[] {
       if (subs.length >= 4) return
       subs.push(mkSubRow())
     }
-    card.append(h, setSel, mainSel, mainVal, subRows, addBtn)
-    out.push({ slot, card, setSel, mainSel, mainVal, subs, subRows, addBtn })
+    setSel.onchange = () => updatePieceBadge(pieceBadgeEl, setSel.value, slot)
+    card.append(head, setSel, mainSel, mainVal, subRows, addBtn)
+    out.push({ slot, card, setSel, pieceBadgeEl, mainSel, mainVal, subs, subRows, addBtn })
   }
   return out
 }

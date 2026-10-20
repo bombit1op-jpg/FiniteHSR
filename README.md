@@ -9,6 +9,7 @@ Deterministic damage simulator for Honkai: Star Rail.
 - **Non-standard mechanics:** special Ultimate resources, charges/stacks/gauges, summons/memosprites, FUA/counters/reactions, phases, transformations
 - **Verification:** golden/spec tests, comparison, audit, deviations; deterministic with seeded RNG
 - **GUI:** Vite app for teams/builds/encounters, runs/comparisons, profiles/optimizer, verification/catalog
+- **Single-page player flow:** one screen for team → gear/sets → strategy → encounter/mode → run → results, with local game art icons (accessible fallbacks)
 
 ## Quick Start
 

@@ -36,13 +36,15 @@ export default () => {
   const ordered = headings[0]?.startsWith('1.') === true
     && headings[1]?.startsWith('2.') === true
     && headings[2]?.startsWith('3.') === true
-    && headings[3]?.startsWith('4.') === true
-    && headings[4] === 'Результаты'
+    && headings[3] === 'Результаты'
 
   return [
     raw('player panel exists and is the first route panel', panels[0]?.id === 'panel-player', panels[0]?.id ?? 'none'),
     raw('player panel is active by default', player?.classList.contains('active') === true),
-    raw('player sections follow the spec order (team→enemies→mods→run→results)', ordered, headings.join(' | ')),
+    raw('player sections follow the spec order (team→enemies→run→results)', ordered, headings.join(' | ')),
+    raw('team grid is a 4-column party layout', doc.getElementById('team')?.classList.contains('cardGrid') === true),
+    raw('encounter mode/stage/room editor lives on its own tab', !!doc.getElementById('panel-encounter')?.querySelector('#encounterEditor')),
+    raw('player panel links to the encounter tab', !!player?.querySelector('[data-go="encounter"]')),
     raw('every setup control lives inside the player panel', SINGLETONS.every(inPlayer),
       SINGLETONS.filter(id => !inPlayer(id)).join(',') || 'all present'),
     raw('each setup control id is unique in <main> (no parallel copy)', SINGLETONS.every(id => counts(id) === 1),
