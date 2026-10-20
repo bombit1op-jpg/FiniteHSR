@@ -4,6 +4,8 @@ import type { BattleSetup, ManualMod, TeamSpec } from '../core/battle'
 import { LIGHT_CONES, RELIC_SETS, PLANAR_SETS, SLOT_MAINS, SUBSTAT_TIERS, RELIC_MAIN_VALUES, SPHERE_DMG_MAIN } from '../core/gear'
 import type { GearConfig, RelicPiece } from '../core/entities/Unit'
 import { el, fillSelect, fmtStatVal, escapeHtml, STAT_LABELS } from './dom'
+import { Dropdown } from './dropdown'
+import { coneOptions, relicOptions, planarOptions, signatureCone } from '../core/gearOrder'
 import { store, techniquesForRows } from './store'
 import type { PieceState, TeamRowState } from './store'
 import { loadSettings } from './settings'
@@ -32,11 +34,11 @@ export interface CharRow {
   root: HTMLElement
   kitId: string
   stats: Record<string, HTMLInputElement>
-  coneSel: HTMLSelectElement
+  coneSel: Dropdown
   siSel: HTMLSelectElement
-  relic1: HTMLSelectElement
-  relic2: HTMLSelectElement
-  planarSel: HTMLSelectElement
+  relic1: Dropdown
+  relic2: Dropdown
+  planarSel: Dropdown
   eidSel: HTMLSelectElement
   levels: Record<'basic' | 'skill' | 'ult' | 'talent', HTMLInputElement>
   tracesChk: HTMLInputElement
@@ -187,27 +189,27 @@ export function addCharRow(): void {
     const l = el('label'); l.textContent = text; l.append(s); return l
   }
 
-  const coneSel = el('select') as HTMLSelectElement
-  fillSelect(coneSel, [['', '— Light Cone —'],
-    ...LIGHT_CONES.map(c => [c.id, `★${c.rarity} ${c.name}`] as [string, string])])
-  coneSel.value = DEFAULT_CONE[free.id] ?? ''
+  const coneSel = new Dropdown()
+  const path = KIT_PATH[free.id] ?? ''
+  coneSel.setEntries(coneOptions(free.id, path), { sig: signatureCone(free.id) })
+  coneSel.value = DEFAULT_CONE[free.id] ?? signatureCone(free.id) ?? ''
   const coneBadge = gearBadge('cone', coneSel.value)
 
   const siSel = el('select') as HTMLSelectElement
   fillSelect(siSel, [1, 2, 3, 4, 5].map(n => [String(n), `S${n}`] as [string, string]))
 
-  const relic1 = el('select') as HTMLSelectElement
-  fillSelect(relic1, [['', '— Relic A —'], ...RELIC_SETS.map(r => [r.id, r.name] as [string, string])])
+  const relic1 = new Dropdown()
+  relic1.setEntries(relicOptions(free.id, '— Relic A —'))
   const relic1Badge = gearBadge('relic', relic1.value)
-  const relic2 = el('select') as HTMLSelectElement
-  fillSelect(relic2, [['', '— Relic B —'], ...RELIC_SETS.map(r => [r.id, r.name] as [string, string])])
+  const relic2 = new Dropdown()
+  relic2.setEntries(relicOptions(free.id, '— Relic B —'))
   const relic2Badge = gearBadge('relic', relic2.value)
 
-  const planarSel = el('select') as HTMLSelectElement
-  fillSelect(planarSel, [['', '— Planar —'], ...PLANAR_SETS.map(p => [p.id, p.name] as [string, string])])
+  const planarSel = new Dropdown()
+  planarSel.setEntries(planarOptions(free.id))
   const planarBadge = gearBadge('planar', planarSel.value)
 
-  gear.append(mkGearLabel('Cone', coneBadge), mkGearLabel('Cone', coneSel), mkGearLabel('SI', siSel), mkGearLabel('Relics', relic1Badge), mkGearLabel('Relics', relic1), mkGearLabel('+', relic2Badge), mkGearLabel('+', relic2), mkGearLabel('Planar', planarBadge), mkGearLabel('Planar', planarSel))
+  gear.append(mkGearLabel('Cone', coneBadge), mkGearLabel('Cone', coneSel.root), mkGearLabel('SI', siSel), mkGearLabel('Relics', relic1Badge), mkGearLabel('Relics', relic1.root), mkGearLabel('+', relic2Badge), mkGearLabel('+', relic2.root), mkGearLabel('Planar', planarBadge), mkGearLabel('Planar', planarSel.root))
   card.append(gear)
 
   // eidolon + ability levels + traces
@@ -339,7 +341,12 @@ export function addCharRow(): void {
     updateCharBadge(badge, sel.value)
     updateMetaBadges(elemChip, pathChip, kit?.elem ?? '', KIT_PATH[sel.value] ?? '')
     for (const [k] of Object.entries(stats)) applyDefault(stats[k], sel.value, k)
-    coneSel.value = DEFAULT_CONE[sel.value] ?? ''
+    const path = KIT_PATH[sel.value] ?? ''
+    coneSel.setEntries(coneOptions(sel.value, path), { sig: signatureCone(sel.value) })
+    relic1.setEntries(relicOptions(sel.value, '— Relic A —'))
+    relic2.setEntries(relicOptions(sel.value, '— Relic B —'))
+    planarSel.setEntries(planarOptions(sel.value))
+    coneSel.value = DEFAULT_CONE[sel.value] ?? signatureCone(sel.value) ?? ''
     updateGearBadge(coneBadge, 'cone', coneSel.value)
     fillTechniqueOpts(sel.value)
     techniqueSel.value = '0'

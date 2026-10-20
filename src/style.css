@@ -118,6 +118,30 @@ body.busy { cursor: progress; }
 .row label { display: inline-flex; flex-direction: column; gap: 3px; margin: 0; font-size: 11px; color: #7b8595; text-transform: uppercase; }
 .gear { display: flex; flex-wrap: wrap; gap: 6px; }
 .gear label { flex: 1; min-width: 90px; }
+/* custom dropdown — stylable select replacement (signature cone shimmer) */
+.dd { position: relative; }
+.ddBtn {
+  width: 100%; text-align: left; background: #0d1117; border: 1px solid #2a3342; border-radius: 6px;
+  color: #e6ebf2; padding: 6px 24px 6px 8px; font: inherit; cursor: pointer; position: relative;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ddBtn::after { content: '▾'; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7b8595; font-size: 10px; }
+.ddBtn:hover { border-color: #3a4557; }
+.ddMenu { display: none; position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + 2px); max-height: 280px; overflow-y: auto;
+  background: #0d1117; border: 1px solid #2a3342; border-radius: 6px; box-shadow: 0 8px 22px rgba(0,0,0,.55); }
+.ddOpen .ddMenu { display: block; }
+.ddOpt { padding: 6px 8px; font-size: 12px; color: #cdd6e2; cursor: pointer; white-space: nowrap; }
+.ddOpt:hover { background: #161d27; }
+.ddOpt.ddSel { color: #f2c94c; }
+/* signature light cone: green shimmer sweeping right → left */
+.ddOpt.ddSig, .ddBtn.ddSig {
+  color: #eafff2; font-weight: 600;
+  background-image: linear-gradient(270deg, rgba(46,229,138,0) 0%, rgba(46,229,138,.45) 45%, rgba(180,255,215,.75) 50%, rgba(46,229,138,.45) 55%, rgba(46,229,138,0) 100%);
+  background-size: 220% 100%; background-repeat: no-repeat; background-position: 0% 0;
+  animation: ddSigSweep 2.4s linear infinite;
+}
+@keyframes ddSigSweep { from { background-position: 0% 0; } to { background-position: -220% 0; } }
+@media (prefers-reduced-motion: reduce) { .ddOpt.ddSig, .ddBtn.ddSig { animation: none; background-position: 100% 0; } }
 .stratFlagsRow { margin-top: 2px; }
 .stratFlagsRow label { flex-direction: row; align-items: center; text-transform: none; font-size: 11px; color: #aab6c5; }
 .gearPreview { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #232a35; font-size: 11px; color: #9fb3c8; min-height: 16px; }
