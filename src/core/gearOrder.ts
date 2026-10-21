@@ -39,10 +39,8 @@ export function coneOptions(slug: string, path: string): Opt[] {
     c => c.id === sig,
     c => c.path === path && c.rarity === 5,
     c => c.path === path && c.rarity === 4,
-    c => c.path === path && c.rarity === 3,
     c => c.rarity === 5,
     c => c.rarity === 4,
-    c => c.rarity === 3,
   ])
   return [['', '— Light Cone —'], ...order.map(c => [c.id, coneLabel(c)] as Opt)]
 }

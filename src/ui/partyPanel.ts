@@ -18,13 +18,17 @@ import { coneOptions, signatureCone } from '../core/gearOrder'
 import type { TeamRowState } from './store'
 import {
   metaBadge, updateMetaBadges, gearBadge, updateGearBadge, statBadge, ratingTierClass,
-  charPortrait, updateCharPortrait,
+  charPortrait, updateCharPortrait, updatePieceBadge, abilityBadge, abilityIconUrl,
 } from './icons'
 import { buildPieceEditors, pieceOf, toTeamSpec, type PieceEditor } from './team'
 import { scoreRelic } from '../core/relicScore'
 import { charFinalStats, SKILL_LABELS } from '../core/charStats'
 import { PartyStore } from './partyStore'
 import { MAX_SLOTS } from '../core/party'
+import { openCharacterPicker, openConePicker, openPartyListPicker } from './pickers'
+import { levelCaps } from '../core/battle'
+import { ABILITY_NAMES } from '../core/abilityNames'
+import { PROG } from '../core/progression'
 
 interface CardView {
   rowId: string
@@ -34,19 +38,22 @@ interface CardView {
   pathChip: HTMLElement
   nameEl: HTMLElement
   charSel: HTMLSelectElement
-  charLevelSel: HTMLSelectElement
+  charLevelInp: HTMLInputElement
   coneBadge: HTMLElement
+  coneNameEl: HTMLElement
   coneSel: Dropdown
   siSel: HTMLSelectElement
-  coneLevelSel: HTMLSelectElement
+  coneLevelInp: HTMLInputElement
   eidButtons: HTMLButtonElement[]
-  lvBtns: Record<'basic' | 'skill' | 'ult' | 'talent', { dec: HTMLButtonElement, val: HTMLElement, inc: HTMLButtonElement }>
-  tracesChk: HTMLInputElement
+  lvBtns: Record<string, { dec: HTMLButtonElement, val: HTMLElement, inc: HTMLButtonElement, inp: HTMLInputElement }>
+  tracesWrap: HTMLElement
   energySel: HTMLSelectElement
   techniqueSel: HTMLSelectElement
+  techniqueWrap: HTMLLabelElement
   pieces: PieceEditor[]
   statsBox: HTMLElement
   skillsBox: HTMLElement
+  tracesBox: HTMLElement
   refresh: () => void
 }
 
@@ -81,7 +88,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
   const root = el('div', 'partyRoot')
   host.append(root)
 
-  // top bar: eyebrow + heading (active party name) on the left, party actions on the right
+  // top bar: compact party header (name + pencil/+/-), click name to pick party
   const head = el('header', 'partyHead')
   const headText = el('div', 'partyHeadText')
   const eyebrow = el('div', 'eyebrow')
@@ -89,48 +96,71 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
   const heading = el('h1', 'partyHeading')
   heading.textContent = 'PARTY'
   headText.append(eyebrow, heading)
-  const actions = el('div', 'partyActions')
 
-  const picker = el('div', 'partyPicker')
-  const nameInput = el('input', 'partyName') as HTMLInputElement
-  nameInput.type = 'text'
-  nameInput.setAttribute('aria-label', 'Название отряда')
-  const partySel = new Dropdown('partySelect')
-  const createBtn = el('button', 'btn-secondary') as HTMLButtonElement
-  createBtn.type = 'button'
-  createBtn.textContent = '+ Создать'
-  const delBtn = el('button', 'btn-secondary') as HTMLButtonElement
-  delBtn.type = 'button'
-  delBtn.textContent = 'Удалить'
-  picker.append(partySel.root, plainLabel('Название', nameInput), createBtn, delBtn)
-  actions.append(picker)
-  head.append(headText, actions)
+  const partyHeader = el('div', 'partyHeader')
+  const partyNameBtn = el('button', 'partyNameBtn') as HTMLButtonElement
+  partyNameBtn.type = 'button'
+  const partyNameText = el('span', 'partyNameText')
+  partyNameBtn.append(partyNameText)
+  const editNameBtn = el('button', 'partyIconBtn') as HTMLButtonElement
+  editNameBtn.type = 'button'
+  editNameBtn.textContent = '✎'
+  editNameBtn.title = 'Переименовать отряд'
+  const addPartyBtn = el('button', 'partyIconBtn') as HTMLButtonElement
+  addPartyBtn.type = 'button'
+  addPartyBtn.textContent = '+'
+  addPartyBtn.title = 'Создать новый отряд'
+  const delPartyBtn = el('button', 'partyIconBtn') as HTMLButtonElement
+  delPartyBtn.type = 'button'
+  delPartyBtn.textContent = '🗑'
+  delPartyBtn.title = 'Удалить отряд'
+  partyHeader.append(partyNameBtn, editNameBtn, addPartyBtn, delPartyBtn)
+  head.append(headText, partyHeader)
   root.append(head)
 
   const cardsHost = el('div', 'partyCards')
   root.append(cardsHost)
 
+  const addSlotBtn = el('button', 'addSlotBtn') as HTMLButtonElement
+  addSlotBtn.type = 'button'
+  addSlotBtn.textContent = '+ Слот'
+  root.append(addSlotBtn)
+
   const cards = new Map<string, CardView>()
 
-  // -------------------------------------------------------------- picker actions
+  // -------------------------------------------------------------- party actions
 
-  createBtn.onclick = () => {
-    // guard against a double-fire (keyboard + click) creating two parties for one action
-    if (createBtn.disabled) return
-    createBtn.disabled = true
-    store.create()
-    render()
-    createBtn.disabled = false
+  partyNameBtn.onclick = async () => {
+    const col = store.collection
+    const id = await openPartyListPicker({ parties: col.parties, activeId: col.activeId })
+    if (id) { store.select(id); render() }
   }
-  delBtn.onclick = () => {
-    if (store.collection.parties.length <= 1) return // keep at least one party
+  editNameBtn.onclick = () => {
+    const active = store.active
+    if (!active) return
+    const name = prompt('Название отряда', active.name)
+    if (name === null) return
+    store.rename(name)
+    paintPicker()
+    render()
+  }
+  addPartyBtn.onclick = () => {
+    if (addPartyBtn.disabled) return
+    addPartyBtn.disabled = true
+    // ensure at least 1 slot
+    const p = store.create()
+    if (p && p.slots.length === 0) {
+      for (let i = 0; i < 1; i++) store.addSlot()
+    }
+    render()
+    addPartyBtn.disabled = false
+  }
+  delPartyBtn.onclick = () => {
+    if (store.collection.parties.length <= 1) return
     store.remove(store.collection.activeId ?? '')
     render()
   }
-  partySel.onchange = () => { store.select(partySel.value); render() }
-  const commitName = () => { store.rename(nameInput.value); paintPicker() }
-  nameInput.onchange = commitName
-  nameInput.onblur = commitName
+  addSlotBtn.onclick = () => { if (store.addSlot()) render() }
 
   // -------------------------------------------------------------- card
 
@@ -142,32 +172,48 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     portrait.style.cursor = 'pointer'
     portrait.title = 'Выбрать персонажа'
     const charSel = el('select', 'pcChar') as HTMLSelectElement
-    fillSelect(charSel, KITS.map(k => [k.id, `${k.name} (${k.elem})`]))
-    charSel.value = row.kitId || KITS[0].id
+    fillSelect(charSel, [['', '— персонаж —'], ...KITS.map(k => [k.id, `${k.name} (${k.elem})`] as [string, string])])
+    charSel.value = row.kitId || ''
     charSel.setAttribute('aria-label', 'Персонаж')
-    charSel.style.display = 'none'
-    portrait.onclick = () => charSel.click()
+    const pickChar = async () => {
+      const active = store.active
+      const exclude = (active?.slots.map(s => s.kitId).filter(Boolean) as string[]) ?? []
+      if (row.kitId) exclude.push(row.kitId) // allow keeping current
+      const chosen = await openCharacterPicker({ exclude: exclude.filter(id => id !== row.kitId), current: row.kitId || undefined })
+      if (chosen === null) return
+      if (chosen === '') {
+        clearSlot(row.id); render(); return
+      }
+      charSel.value = chosen
+      charSel.classList.remove('open')
+      patch({ kitId: chosen, coneId: '', relic1: '', relic2: '', planar: '', pieces: [], techniqueUses: 0 })
+      render()
+    }
+    portrait.onclick = pickChar
     const identity = el('div', 'pcIdentity')
     const nameRow = el('div', 'pcNameRow')
     const nameEl = el('div', 'pcName')
     nameEl.style.cursor = 'pointer'
     nameEl.title = 'Выбрать персонажа'
-    nameEl.onclick = () => charSel.click()
+    nameEl.onclick = pickChar
     const chips = el('div', 'pcChips')
     const elemChip = metaBadge('elem', '')
     const pathChip = metaBadge('path', '')
     chips.append(elemChip, pathChip)
-    nameRow.append(nameEl, chips)
-    const charLevelSel = el('select') as HTMLSelectElement
-    fillSelect(charLevelSel, Array.from({ length: 80 }, (_, i) => [String(i + 1), `Ур. ${i + 1}`] as [string, string]))
-    charLevelSel.value = '80'
-    charLevelSel.setAttribute('aria-label', 'Уровень персонажа')
+    nameRow.append(nameEl, charSel, chips)
+    const charLevelInp = el('input') as HTMLInputElement
+    charLevelInp.type = 'number'
+    charLevelInp.min = '1'
+    charLevelInp.max = '80'
+    charLevelInp.className = 'lvlInputNum'
+    charLevelInp.setAttribute('aria-label', 'Уровень персонажа')
+    charLevelInp.value = String(row.level ?? 80)
     const delSlot = el('button', 'pcClear') as HTMLButtonElement
     delSlot.type = 'button'
     delSlot.textContent = '✕'
     delSlot.title = 'Очистить слот'
     delSlot.onclick = () => { clearSlot(row.id); render() }
-    identity.append(nameRow, charLevelSel, delSlot)
+    identity.append(nameRow, charLevelInp, delSlot)
     root.append(portrait, identity)
 
     const body = el('div', 'pcBody')
@@ -196,6 +242,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const coneSection = section('СВЕТОВОЙ КОНУС')
     const coneWrap = el('div', 'coneRow')
     const coneBadge = gearBadge('cone', row.coneId)
+    const coneNameEl = el('div', 'coneName')
     const coneFields = el('div', 'coneFields')
     const coneSel = new Dropdown()
     const path = KIT_PATH[row.kitId] ?? ''
@@ -205,24 +252,39 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     fillSelect(siSel, [1, 2, 3, 4, 5].map(n => [String(n), `S${n}`] as [string, string]))
     siSel.value = String(row.si || 1)
     siSel.setAttribute('aria-label', 'Суперимпозиция')
-    const coneLevelSel = el('select') as HTMLSelectElement
-    fillSelect(coneLevelSel, Array.from({ length: 80 }, (_, i) => [String(i + 1), `Ур. ${i + 1}`] as [string, string]))
-    coneLevelSel.value = '80'
-    coneLevelSel.setAttribute('aria-label', 'Уровень конуса')
+    const coneLevelInp = el('input') as HTMLInputElement
+    coneLevelInp.type = 'number'
+    coneLevelInp.min = '1'
+    coneLevelInp.max = '80'
+    coneLevelInp.className = 'lvlInputNum'
+    coneLevelInp.setAttribute('aria-label', 'Уровень конуса')
+    coneLevelInp.value = String(row.coneLevel ?? 80)
     const coneSelects = el('div', 'coneSelects')
-    coneSelects.append(siSel, coneLevelSel)
+    coneSelects.append(siSel, coneLevelInp)
+    const pickCone = async () => {
+      const kitId = charSel.value
+      if (!kitId) return
+      const chosen = await openConePicker({ kitId, current: coneSel.value || undefined })
+      if (chosen === null) return
+      coneSel.value = chosen
+      patch({ coneId: chosen })
+      view.refresh()
+    }
+    coneBadge.style.cursor = 'pointer'
+    coneBadge.title = 'Выбрать световой конус'
+    coneBadge.onclick = pickCone
     coneFields.append(coneSel.root, coneSelects)
-    coneWrap.append(coneBadge, coneFields)
+    coneWrap.append(coneBadge, coneNameEl, coneFields)
     coneSection.append(coneWrap)
     body.append(coneSection)
 
     // --- stats (final, engine-resolved)
-    const statsSection = section('ХАРАКТЕРИСТИКИ', 'до реликвий*')
+    const statsSection = section('ХАРАКТЕРИСТИКИ')
     const statsBox = el('div', 'pcStats')
     statsSection.append(statsBox)
     body.append(statsSection)
 
-    // --- skills (labels + level inputs; values from the engine's level caps)
+    // --- skills (labels + level inputs)
     const skillsSection = section('УРОВНИ НАВЫКОВ')
     const skillsBox = el('div', 'pcSkills')
     skillsSection.append(skillsBox)
@@ -231,25 +293,30 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     // --- traces + energy + technique
     const miscSection = section('ТРЕЙСЫ И РЕСУРСЫ')
     const misc = el('div', 'pcMisc')
-    const tracesChk = el('input') as HTMLInputElement
-    tracesChk.type = 'checkbox'
-    tracesChk.checked = row.traces !== false
-    tracesChk.title = 'Минорные трейсы'
-    const tracesLab = lab('Трейсы', tracesChk)
+    const tracesWrap = el('div', 'tracesWrap')
     const energySel = el('select') as HTMLSelectElement
     fillSelect(energySel, [0, 25, 50, 75, 100].map(n => [String(n), `${n}%`] as [string, string]))
     energySel.value = String(Math.round((row.energyStartFrac ?? 0.5) * 100))
     energySel.setAttribute('aria-label', 'Стартовая энергия')
     const techniqueSel = el('select') as HTMLSelectElement
+    const techniqueWrap = lab('Техника', techniqueSel)
     const fillTechnique = (kitId: string) => {
       const t = KITS.find(k => k.id === kitId)?.technique
-      fillSelect(techniqueSel, [['0', '—'], ...Array.from({ length: t?.maxUses ?? 1 }, (_, i) => [String(i + 1), `${i + 1}×`] as [string, string])])
-      techniqueSel.title = t ? `Претехника: ${t.name} (${t.kind}${t.zone ? ', zone' : ''})` : 'Нет претехники'
+      const uses = t ? (t.maxUses ?? 1) : 0
+      if (uses <= 1) {
+        techniqueWrap.style.display = 'none'
+        techniqueSel.value = '0'
+        if ((liveRow().techniqueUses ?? 0) !== 0) patch({ techniqueUses: 0 })
+      } else {
+        techniqueWrap.style.display = ''
+        fillSelect(techniqueSel, [['0', '—'], ...Array.from({ length: uses }, (_, i) => [String(i + 1), `${i + 1}×`] as [string, string])])
+        techniqueSel.title = t ? `Претехника: ${t.name} (${t.kind}${t.zone ? ', zone' : ''})` : 'Нет претехники'
+      }
     }
     fillTechnique(row.kitId)
     techniqueSel.value = String(row.techniqueUses ?? 0)
     techniqueSel.setAttribute('aria-label', 'Техника')
-    misc.append(tracesLab, lab('Энергия', energySel), lab('Техника', techniqueSel))
+    misc.append(tracesWrap, lab('Энергия', energySel), techniqueWrap)
     miscSection.append(misc)
     body.append(miscSection)
 
@@ -258,13 +325,17 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     // ---------------------------------------------------------- patch helpers
 
     const patch = (p: Partial<TeamRowState>) => store.patchSlot(row.id, p)
+    /** the store replaces the row object on every patch — always read the live one, never the snapshot */
+    const liveRow = (): TeamRowState => store.active?.slots.find(s => s.id === row.id) ?? row
+    /** the kit the kit-dependent controls (cone list, Technique) were last built for */
+    let renderedKit = row.kitId
 
     const lvBtns = {} as CardView['lvBtns']
     const view: CardView = {
-      rowId: row.id, root, portrait, elemChip, pathChip, nameEl, charSel, charLevelSel,
-      coneBadge, coneSel, siSel, coneLevelSel, eidButtons,
+      rowId: row.id, root, portrait, elemChip, pathChip, nameEl, charSel, charLevelInp,
+      coneBadge, coneNameEl, coneSel, siSel, coneLevelInp, eidButtons,
       lvBtns,
-      tracesChk, energySel, techniqueSel, pieces: [] as PieceEditor[], statsBox, skillsBox, refresh: () => {},
+      tracesWrap, energySel, techniqueSel, techniqueWrap, pieces: [] as PieceEditor[], statsBox, skillsBox, tracesBox: tracesWrap, refresh: () => {},
     }
 
     // --- 6 relic/planar piece editors (SAME widget as the battle page).
@@ -299,7 +370,9 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     // ---------------------------------------------------------- wiring
 
     charSel.onchange = () => {
-      patch({ kitId: charSel.value, coneId: '', relic1: '', relic2: '', planar: '', pieces: [] })
+      charSel.classList.remove('open')
+      // the kit decides the cone order and the Technique count — both must be re-resolved
+      patch({ kitId: charSel.value, coneId: '', relic1: '', relic2: '', planar: '', pieces: [], techniqueUses: 0 })
       // full re-render: path/cone options/technique depend on the kit
       render()
     }
@@ -312,12 +385,22 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
 
     view.refresh = () => {
       const kitId = charSel.value
+      if (kitId !== renderedKit) {
+        renderedKit = kitId
+        // the cone order and the Technique count are kit-dependent — re-resolve both
+        coneSel.setEntries(coneOptions(kitId, KIT_PATH[kitId] ?? ''), { sig: signatureCone(kitId) })
+        coneSel.value = ''
+        fillTechnique(kitId)
+        techniqueSel.value = '0'
+        resetPieces(view)
+      }
       const kit = KITS.find(k => k.id === kitId)
       updateCharPortrait(portrait, kitId)
       updateMetaBadges(elemChip, pathChip, kit?.elem ?? '', KIT_PATH[kitId] ?? '')
       nameEl.textContent = kit?.name ?? '—'
       updateGearBadge(coneBadge, 'cone', coneSel.value)
-      const eid = Number(store.active?.slots.find(s => s.id === row.id)?.eidolon ?? row.eidolon ?? 0)
+      const live = liveRow()
+      const eid = Number(live.eidolon ?? 0)
       for (const b of eidButtons) {
         const n = Number(b.dataset.eidolon)
         const active = n <= eid
@@ -325,8 +408,8 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
         b.classList.toggle('e6', active && n === 6)
         b.classList.toggle('unselected', !active)
       }
-      paintSkills(view, row, kitId)
-      paintStats(view, row, kitId)
+      paintSkills(view, live, kitId)
+      paintStats(view, live, kitId)
       paintPieces(view, kitId)
     }
 
@@ -346,12 +429,11 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
 
   function paintPicker(): void {
     const col = store.collection
-    partySel.setEntries(col.parties.map(p => [p.id, p.name] as [string, string]))
-    if (col.activeId) partySel.value = col.activeId
     const active = store.active
-    nameInput.value = active?.name ?? ''
+    partyNameText.textContent = active?.name ?? 'Отряд'
     heading.textContent = active?.name ?? 'PARTY'
-    delBtn.disabled = col.parties.length <= 1
+    delPartyBtn.disabled = col.parties.length <= 1
+    addSlotBtn.disabled = (active?.slots.length ?? 0) >= MAX_SLOTS
   }
 
   function paintSkills(view: CardView, row: TeamRowState, kitId: string): void {
@@ -397,6 +479,16 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       const { rating } = scoreRelic(kitId, p.slot, p.mainSel.value, subs)
       p.ratingEl.textContent = rating
       p.ratingEl.className = 'pieceRating ' + ratingTierClass(rating)
+    }
+  }
+
+  /** a character change drops the old build — clear the piece editors (sets + substats) */
+  function resetPieces(view: CardView): void {
+    for (const p of view.pieces) {
+      p.setSel.value = ''
+      p.subs.length = 0
+      p.subRows.innerHTML = ''
+      updatePieceBadge(p.pieceBadgeEl, '', p.slot)
     }
   }
 
@@ -447,12 +539,13 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
         const v = makeCard(row)
         cards.set(row.id, v)
         cardsHost.append(v.root)
+        v.refresh()
       }
     } else {
       for (const row of party.slots) {
         const v = cards.get(row.id)
         if (!v) continue
-        v.charSel.value = row.kitId || v.charSel.value
+        v.charSel.value = row.kitId
         v.coneSel.value = row.coneId
         v.siSel.value = String(row.si || 1)
         v.tracesChk.checked = row.traces !== false

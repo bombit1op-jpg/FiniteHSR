@@ -17,7 +17,7 @@ import type { RelicPiece } from '../core/entities/Unit'
 import {
   CHARACTERS_ICONS, LIGHTCONES_ICONS, RELICSETS_ICONS, PLANARSETS_ICONS,
   ELEMENTS_ICONS, PATHS_ICONS, STATS_ICONS, ENEMIES_ICONS, RELICPIECES_ICONS,
-  CHARACTER_PORTRAITS,
+  CHARACTER_PORTRAITS, ABILITIES_ICONS,
 } from './iconManifest'
 
 type RelicSlot = RelicPiece['slot']
@@ -81,6 +81,8 @@ const STAT_ICON_KEY: Record<string, StatIconKey> = {
   atk: 'ATK', hp: 'HP', def: 'DEF', spd: 'SPD',
   critRate: 'CRIT Rate', critDmg: 'CRIT DMG', be: 'Break Effect',
   ehr: 'Effect Hit Rate', effRes: 'Effect RES',
+  err: 'Energy Regeneration Rate', outHeal: 'Outgoing Healing Boost',
+  elemDmgBoost: 'DMG Boost', energyMax: 'Energy',
 }
 
 /** small stat icon chip (real art or a neutral letter chip); `stat` is an engine stat key or display name */
@@ -92,7 +94,40 @@ export function statBadge(stat: string): HTMLElement {
   node.title = `Характеристика: ${key}`
   node.append(iconNode(url, key, {
     cls: 'statIcon', size: 18, fit: 'contain',
-    fallbackText: key.charAt(0).toUpperCase(), tint: '#7fb3ff', title: node.title,
+    // no committed art for a few keys (SPD) — a short text chip keeps the row readable
+    fallbackText: key.slice(0, 3).toUpperCase(), tint: '#7fb3ff', title: node.title,
+  }))
+  return node
+}
+
+// ---------------------------------------------------------------- ability icons
+
+/** manifest keys are display names; normalize so "Possession: Ethereal Metaflow" finds
+ *  "Possession Ethereal Metaflow" (the raw game text differs in punctuation). */
+function normIconKey(s: string): string { return s.toLowerCase().replace(/[^a-z0-9]+/g, '') }
+
+let ABILITY_ICON_INDEX: Map<string, string> | null = null
+
+/** ability art path by display name (undefined when the ability has no committed art) */
+export function abilityIconUrl(name: string): string | undefined {
+  if (!name) return undefined
+  if (!ABILITY_ICON_INDEX) {
+    ABILITY_ICON_INDEX = new Map()
+    for (const [k, v] of Object.entries(ABILITIES_ICONS)) {
+      const n = normIconKey(k)
+      if (!ABILITY_ICON_INDEX.has(n)) ABILITY_ICON_INDEX.set(n, v)
+    }
+  }
+  return ABILITY_ICON_INDEX.get(normIconKey(name))
+}
+
+/** ability icon chip (real art or a neutral text chip) */
+export function abilityBadge(name: string): HTMLElement {
+  const node = el('span', 'metaBadge abilityBadge')
+  node.title = name || 'способность'
+  node.append(iconNode(abilityIconUrl(name), name, {
+    cls: 'abilityIcon', size: 20, fit: 'contain',
+    fallbackText: (name.trim().charAt(0) || '?').toUpperCase(), tint: '#8fd694', title: node.title,
   }))
   return node
 }

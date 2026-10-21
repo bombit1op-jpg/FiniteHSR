@@ -40,6 +40,8 @@ export function blankSlot(): TeamRowState {
     eidolon: 0,
     levels: { ...DEFAULT_LEVELS },
     traces: true,
+    level: 80,
+    coneLevel: 80,
     energyStartFrac: undefined,
     techniqueUses: 0,
     skillPriority: 0, skillPattern: 'auto', skillRotation: '',

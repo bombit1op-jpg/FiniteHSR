@@ -11,7 +11,7 @@
  * for the four cards has no side effects on any real run.
  */
 import { prepareBattle, ENEMY_PRESETS, type BattleSetup, type TeamSpec } from './battle'
-import { eff } from './combat/StatResolver'
+import { buffSum, eff, effectResOf } from './combat/StatResolver'
 import type { Unit } from './entities/Unit'
 import { KITS } from './kits'
 
@@ -24,6 +24,16 @@ export interface CharFinalStats {
   critRate: number
   critDmg: number
   be: number
+  /** Effect Hit Rate (base + gear/traces) */
+  ehr: number
+  /** Effect RES (flat, on the unit) */
+  effRes: number
+  /** Energy Regeneration Rate (gear/traces) */
+  err: number
+  /** Outgoing Healing Boost */
+  outHeal: number
+  /** elemental DMG boost of the character's own element (gear) */
+  elemDmgBoost: number
   /** kit's energy maximum for the Ultimate resource (for the energy-start slider) */
   energyMax: number
 }
@@ -46,7 +56,16 @@ export function charFinalStats(spec: TeamSpec): CharFinalStats | null {
   const u: Unit | undefined = sim.roster.find(x => x.side === 'ally' && x.kind === 'char')
   if (!u) return null
   const s = eff(u)
-  return { hp: s.hp, atk: s.atk, def: s.def, spd: s.spd, critRate: s.critRate, critDmg: s.critDmg, be: s.be, energyMax: kit.energyMax }
+  return {
+    hp: s.hp, atk: s.atk, def: s.def, spd: s.spd,
+    critRate: s.critRate, critDmg: s.critDmg, be: s.be,
+    ehr: (u.base.ehr ?? 0) + buffSum(u.buffs, 'ehr'),
+    effRes: effectResOf(u),
+    err: buffSum(u.buffs, 'err'),
+    outHeal: buffSum(u.buffs, 'outHeal'),
+    elemDmgBoost: buffSum(u.buffs, `dmg:${kit.elem}`),
+    energyMax: kit.energyMax,
+  }
 }
 
 /** the four combat skills shown on a character card, with their resolved level and multiplier */

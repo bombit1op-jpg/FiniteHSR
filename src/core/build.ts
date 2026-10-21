@@ -34,7 +34,7 @@ export interface BuildSpec {
   stats?: TeamSpec['stats']
   eidolon?: number
   levels?: AbilityLevels
-  traces?: boolean
+  traces?: TeamSpec['traces']
 }
 
 export interface ResolvedBuild {
@@ -42,7 +42,7 @@ export interface ResolvedBuild {
   stats?: TeamSpec['stats']
   eidolon?: number
   levels?: AbilityLevels
-  traces?: boolean
+  traces?: TeamSpec['traces']
 }
 
 /** declarative build → runtime `GearConfig` + the non-gear build fields */

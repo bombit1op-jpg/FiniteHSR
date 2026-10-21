@@ -396,6 +396,7 @@ export function gearOfRow(tr: TeamRowState): GearConfig | undefined {
   return {
     coneId: tr.coneId || undefined,
     si: tr.si,
+    coneLevel: tr.coneLevel,
     relicSets: sets,
     planarId: tr.planar || undefined,
     pieces: pieces.length ? pieces : undefined,
@@ -414,6 +415,7 @@ export function toTeamSpec(tr: TeamRowState): TeamSpec {
     gear: gearOfRow(tr),
     eidolon: tr.eidolon,
     levels: tr.levels,
+    level: tr.level,
     traces: tr.traces,
     energyStartFrac: tr.energyStartFrac,
     skillPriority: tr.skillPriority,
@@ -528,7 +530,7 @@ export function collect(): BattleSetup {
   syncAllRows()
   const s = store.getState()
 
-  const team: TeamSpec[] = s.team.map(toTeamSpec)
+  const team: TeamSpec[] = s.team.map(toTeamSpec).filter(t => !!t.kitId)
 
   const p = ENEMY_PRESETS[s.enemy.preset]
   const manualMods: ManualMod[] = s.mods

@@ -6,6 +6,7 @@ import type { Buff } from './effects/Buff'
 import type { AbilityLevels } from './entities/Unit'
 import { DEFAULT_LEVELS, type Action } from './kit'
 import { traceMods } from './progression'
+import { charLevelRatios } from './levelStats'
 import type { LogConfig } from './battlelog'
 import { applyBuild, type BuildSpec } from './build'
 import { resolveEncounter, type EncounterSpec } from './encounter'
@@ -30,7 +31,10 @@ export interface TeamSpec {
   build?: BuildSpec
   eidolon?: number
   levels?: AbilityLevels
-  traces?: boolean
+  /** character level (1…80). Default 80. Scales the kit's base HP/ATK/DEF. */
+  level?: number
+  /** minor traces: `true` = all, `false` = none, array = per-trace flags (3 slots, raw order) */
+  traces?: boolean | boolean[]
   /** higher = used first when SP available (default 0) */
   skillPriority?: number
   /** AI pattern for skill usage */
@@ -184,6 +188,19 @@ const LEVEL_CAPS: Record<string, Partial<AbilityLevels>> = {
   // canon: data-лестницы 1402xx — basic 10 ур. (140201/140208), skill/ult/talent 15 ур.
   // (140202/140209, 140203, 140204); мемоспрайт-лестницы 1140201/1140203 — 10 ур.
   aglaea: { basic: 10, skill: 15, ult: 15, talent: 15 },
+}
+
+/** per-kit ability level ceilings (pre-eidolon input caps) — the UI reads these instead of
+ *  duplicating the ladder, so the picker can never offer a level the engine would clip. */
+export function levelCaps(kitId: string): AbilityLevels {
+  const cap = LEVEL_CAPS[kitId] ?? {}
+  return {
+    basic: cap.basic ?? 7,
+    skill: cap.skill ?? 12,
+    ult: cap.ult ?? 12,
+    talent: cap.talent ?? 12,
+    el_skill: cap.el_skill ?? 12,
+  }
 }
 
 export function resolveLevels(t: TeamSpec): AbilityLevels {
@@ -359,7 +376,13 @@ function setupSim(setup: BattleSetup): Simulator {
   for (const spec of setup.team) {
     const t = applyBuild(spec)
     const { be, ...stats } = t.stats ?? {}
-    const u = sim.addChar(t.kitId, t.name ?? kitName(t.kitId), stats, t.energyStartFrac ?? 0.5, t.hpFrac ?? 1)
+    const level = t.level ?? 80
+    const ratios = charLevelRatios(t.kitId, level)
+    const kitBase = sim.kits.get(t.kitId)?.base
+    const baseOverride = kitBase && ratios
+      ? { hp: kitBase.hp * ratios.hp, atk: kitBase.atk * ratios.atk, def: kitBase.def * ratios.def, level }
+      : { level }
+    const u = sim.addChar(t.kitId, t.name ?? kitName(t.kitId), stats, t.energyStartFrac ?? 0.5, t.hpFrac ?? 1, baseOverride)
     if (!u.base.path) u.base.path = t.path ?? KIT_PATH[t.kitId] ?? ''
     const ctx = sim.rt(u)
     ctx.levels = resolveLevels(t)
@@ -369,13 +392,16 @@ function setupSim(setup: BattleSetup): Simulator {
     ctx.skillRotation = t.skillRotation ?? ''
     ctx.strategy = t.strategy ?? {}
     // minor traces as a permanent buff (flat SPD becomes a flat buff, not base mutation)
+    // `traces` = all (default) | none | per-trace flags in the raw order of `PROG[kitId].traces`
+    const traceSel: boolean[] | null = t.traces === undefined || t.traces === true ? null : t.traces === false ? [] : t.traces
     if (t.traces !== false) {
       const mods: Buff['mods'] = []
       let flatSpd = 0
-      for (const m of traceMods(t.kitId)) {
-        if (m.stat === 'spdFlat') { flatSpd += m.value; continue }
+      traceMods(t.kitId).forEach((m, i) => {
+        if (traceSel && !traceSel[i]) return
+        if (m.stat === 'spdFlat') { flatSpd += m.value; return }
         mods.push({ stat: m.stat as Buff['mods'][number]['stat'], value: m.value })
-      }
+      })
       if (flatSpd) mods.push({ stat: 'spdFlat', value: flatSpd })
       if (mods.length) sim.addBuff(u, { id: 'traces', name: 'Traces', mods })
     }

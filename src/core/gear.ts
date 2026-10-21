@@ -2,6 +2,7 @@ import type { BaseStats, DmgType, GearConfig, RelicPiece, StatKey, Unit } from '
 import type { Buff, DoT, Mod } from './effects/Buff'
 import type { SimApi } from './kit'
 import { buffSum, eff, effectResOf, isDebuff } from './combat/StatResolver'
+import { coneLevelFactor } from './levelStats'
 
 // ---------------------------------------------------------------- relic stat tables (5-star, +15 / per-roll)
 
@@ -2793,10 +2794,12 @@ export function aggregateGear(
   const cone = LIGHT_CONES.find(l => l.id === cfg.coneId)
   if (cone) {
     // base stats always apply; the passive (mods/cond/hooks) only when the
-    // wearer's path matches the cone's path — mismatched cones give stats only
-    out.baseAdd.hp += cone.hp
-    out.baseAdd.atk += cone.atk
-    out.baseAdd.def += cone.def
+    // wearer's path matches the cone's path — mismatched cones give stats only.
+    // The cone's base stats scale with its level; its passive never does.
+    const cf = cfg.coneLevel ? coneLevelFactor(cfg.coneLevel) : 1
+    out.baseAdd.hp += cone.hp * cf
+    out.baseAdd.atk += cone.atk * cf
+    out.baseAdd.def += cone.def * cf
     if (!charStats?.path || charStats.path === cone.path) {
       out.cone = cone
       if (cone.mods) out.mods.push(...cone.mods(si, stats))

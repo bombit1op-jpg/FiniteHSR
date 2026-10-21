@@ -53,7 +53,12 @@ export interface TeamRowState {
   planar: string
   eidolon: number
   levels: AbilityLevels
-  traces: boolean
+  /** minor traces: `true` = all, `false` = none, array = per-trace flags (raw order) */
+  traces: boolean | boolean[]
+  /** character level 1..80 (engine default 80) */
+  level?: number
+  /** Light Cone level 1..80 (engine default 80) */
+  coneLevel?: number
   /** start energy as a fraction of max (engine default 0.5 when absent) */
   energyStartFrac?: number
   /** pre-fight Technique uses for this character (§84.6.1): 0/absent = not activated */

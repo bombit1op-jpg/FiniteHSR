@@ -26,13 +26,54 @@
 
 ---
 
-## UI reference / OpenCode task
+## 0.1 UI reference — текущее состояние
 
-Для изменений основного пользовательского сценария и отображения локальных иконок используй:
-- `docs/gui/PLAYER_FLOW_AND_ASSETS.md` — UX-порядок, локальные assets, manifest/fallback и acceptance criteria.
-- `docs/gui/OPENCODE_SINGLE_PAGE_UI_TASK.md` — пошаговое задание для реализации.
+UI сейчас — **одна страница**: роут `team` («Отряд»), настройка отряда. Страницы запуска боя,
+дашборда, энкаунтера, анализа, сравнения, оптимизатора, верификации, каталога и deviations
+удалены из шелла (коммит `993a3bf`). `src/ui/team.ts` сохранил только переиспользуемые виджеты
+(`buildPieceEditors`, `pieceOf`, `toTeamSpec`, `collect`), а не рабочую страницу боя.
 
-Эти документы описывают целевое поведение. Перед изменениями проверь реальное состояние текущей ветки и фактические файлы ассетов; не считай целевую спецификацию доказательством уже реализованной функциональности.
+Каркас и маршрутизация:
+- `src/main.ts` — entry: регистрирует enter-hook роута `team` и вызывает `initShell()`.
+- `src/ui/shell.ts` — nav rail, hash-routing, version bar (engine/rules/dataset), status/busy surface.
+  Список роутов — `ROUTES` (сейчас один: `team`).
+- `index.html` — контейнеры `#navRail`, `#panel-team` → `#partyRoot`, `#statusBar`, `#versionBar`.
+
+Страница «Отряд»:
+- `src/ui/partyPanel.ts` — карточки слотов: персонаж (выбор — по клику на портрет/имя,
+  select `.pcChar` монтируется и открывается классом `open`), конус + SI + уровень конуса,
+  эйдолоны, уровни навыков, реликвии/плоские/сетовые, следы, стартовая энергия, претехника,
+  превью финальных характеристик.
+- `src/ui/partyStore.ts` — `PartyStore`: коллекция отрядов в `localStorage` (`FiniteHSR.parties`),
+  зеркалится в `store.team` (`pushSlotsToStore` / `syncActiveToStore`).
+- `src/core/party.ts` — чистая модель партии: `MAX_SLOTS = 4`, create/select/rename/delete/update.
+- `src/ui/store.ts` — `TeamRowState` (состояние одного слота) и `techniquesForRows`
+  (порядок активаций претехник).
+- `src/ui/team.ts` — общие виджеты: `buildPieceEditors`, `pieceOf`, `toTeamSpec`, `collect`.
+- `src/ui/icons.ts` + `src/ui/iconManifest.ts` — портреты и иконки из `public/portraits/`,
+  `public/icons/`; манифест генерируется `src/core/gen-icon-manifest.ts`.
+- `src/ui/dropdown.ts`, `src/ui/dom.ts`, `src/ui/render.ts`, `src/ui/settings.ts`,
+  `src/ui/capabilities.ts` — инфраструктура UI.
+
+Поток данных:
+
+```text
+PartyStore → store.team (TeamRowState[]) → toTeamSpec → TeamSpec → prepareBattle/setupSim
+```
+
+Финальные характеристики в превью берутся не из UI-математики, а из движка:
+`src/core/charStats.ts:charFinalStats` (`prepareBattle` → `setupSim` → `eff(unit)`).
+
+Правила работы с UI:
+- UI не пересчитывает статы/урон сам: только читает движковые резолверы и пишет в store.
+- Введённое значение ≠ фактическое: движок добавляет бонусы эйдолона (`resolveLevels`) и режет по
+  капу (`LEVEL_CAPS`), поэтому превью и бой могут отличаться от показанных чисел.
+- Превью характеристик уже включает конус, реликвии и следы (движковый setup-путь).
+- Кнопки «запустить бой» нет и не добавляется без отдельного решения: страницы запуска удалены,
+  `collect()`/`runBattle` живут только в core/CLI.
+
+Покрытие: `tests/ui/*.ts` (`party.ts`, `store.ts`, `team-spec.ts`, `techniques.ts`).
+`docs/gui/traceability.md` — историческая карта прежнего многостраничного UI, **не** источник истины.
 
 ## 1. Source of Truth
 

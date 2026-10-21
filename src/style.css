@@ -443,6 +443,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .pcName { font-size: 17px; font-weight: 700; color: #e6ebf2; }
 .pcName:hover { color: #8bd39b; }
 .pcChar { display: none; }
+.pcChar.open { display: inline-block; max-width: 100%; }
 .pcChips { display: flex; gap: 6px; flex-wrap: wrap; }
 .pcClear { grid-row: 1; grid-column: 2; justify-self: end; align-self: start; padding: 4px 9px; line-height: 1; }
 

@@ -169,6 +169,8 @@ export interface GearConfig {
   coneId?: string
   /** superimposition rank 1-5, default 1 */
   si?: number
+  /** Light Cone level 1-80 (default 80). Only the cone's base stats scale; its passive does not. */
+  coneLevel?: number
   /** two or four-piece relic set ids (legacy simple mode) */
   relicSets?: string[]
   planarId?: string

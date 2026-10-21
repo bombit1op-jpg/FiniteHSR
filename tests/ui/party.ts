@@ -5,8 +5,10 @@ import {
   emptyCollection, createParty, selectParty, renameParty, deleteParty,
   addSlot, removeSlot, patchSlot, MAX_SLOTS, type Party,
 } from '../../src/core/party'
-import { validateCollection, loadCollection, PARTIES_KEY } from '../../src/ui/partyStore'
+import { validateCollection, loadCollection, PARTIES_KEY, PartyStore } from '../../src/ui/partyStore'
 import { initPartyPanel } from '../../src/ui/partyPanel'
+import { collect } from '../../src/ui/team'
+import { KITS } from '../../src/core/kits'
 import { store } from '../../src/ui/store'
 import type { TeamRowState } from '../../src/ui/store'
 
@@ -111,6 +113,53 @@ export default () => {
   const cardsBefore = host.querySelectorAll('.partyCard').length
   initPartyPanel(host)
   cases.push(raw('re-entering the route does not duplicate cards', host.querySelectorAll('.partyCard').length === cardsBefore))
+
+  // ---------------------------------------------------------------- panel cards: render + edits
+  // a dedicated store/host keeps this block independent of the collection state above
+  for (const r of [...store.getState().team]) store.dispatch({ type: 'team/remove', id: r.id })
+  const pCol = validateCollection({ parties: [{ id: 'p1', name: 'Тест', slots: [row('s1', 'jingyuan')] }], activeId: 'p1' })
+  const pStore = new PartyStore(pCol)
+  const pHost = doc.createElement('div')
+  doc.body.append(pHost)
+  initPartyPanel(pHost, pStore)
+  const pCards = pHost.querySelectorAll('.partyCard')
+  const card0 = pCards[0] as HTMLElement
+  const nameOf = (kitId: string) => KITS.find(k => k.id === kitId)?.name ?? '@@'
+  cases.push(raw('first paint renders the character name (not an empty card)', (card0.querySelector('.pcName') as HTMLElement).textContent === nameOf('jingyuan')))
+  const blankCard = pCards[1] as HTMLElement
+  cases.push(raw('a blank slot shows the empty state, not the first kit', (blankCard.querySelector('.pcName') as HTMLElement).textContent === '—' && (blankCard.querySelector('.pcStats') as HTMLElement).textContent?.includes('Пустой слот') === true))
+  cases.push(raw('the character select is mounted in the DOM (one per card)', pHost.querySelectorAll('.pcChar').length === MAX_SLOTS))
+
+  // switching the character: the card and the kit-dependent controls follow the new kit
+  const charSel = card0.querySelector('.pcChar') as HTMLSelectElement
+  const techSel = [...card0.querySelectorAll('select')].find(s => s.getAttribute('aria-label') === 'Техника') as HTMLSelectElement
+  const techOpts = (kitId: string) => {
+    const t = KITS.find(k => k.id === kitId)?.technique
+    return 1 + (t ? (t.maxUses ?? 1) : 0)
+  }
+  cases.push(raw('technique options follow the kit', techSel.options.length === techOpts('jingyuan')))
+  techSel.value = '1'
+  techSel.onchange?.(new Event('change') as never)
+  cases.push(raw('the technique use is stored', pStore.active?.slots.find(s => s.id === 's1')?.techniqueUses === 1))
+  charSel.value = 'pela'
+  charSel.onchange?.(new Event('change') as never)
+  cases.push(raw('switching the character repaints the card', (card0.querySelector('.pcName') as HTMLElement).textContent === nameOf('pela')))
+  cases.push(raw('the store row follows the new kit', pStore.active?.slots.find(s => s.id === 's1')?.kitId === 'pela'))
+  cases.push(raw('technique uses reset on a character change', pStore.active?.slots.find(s => s.id === 's1')?.techniqueUses === 0))
+  cases.push(raw('technique options are re-resolved for the new kit', techSel.title.includes(KITS.find(k => k.id === 'pela')?.technique?.name ?? '@@')))
+
+  // an unrelated refresh must not revert an edited skill level (the store replaces the row object)
+  const skillInput = () => [...card0.querySelectorAll('.lvlInput')][1] as HTMLInputElement
+  skillInput().value = '12'
+  skillInput().onchange?.(new Event('change') as never)
+  const tracesChk = card0.querySelector('input[type=checkbox]') as HTMLInputElement
+  tracesChk.checked = false
+  tracesChk.onchange?.(new Event('change') as never)
+  cases.push(raw('an unrelated refresh keeps the edited skill level', skillInput().value === '12'))
+
+  // collect() must not carry empty slots into the engine
+  const setup = collect()
+  cases.push(raw('collect() drops empty slots', setup.team.length === 1 && setup.team.every(t => !!t.kitId)))
 
   // the mounted panel mirrors its active party into the shared store singleton — undo that so this
   // suite cannot leak rows into team-spec/techniques (which assert on an exact team slice)

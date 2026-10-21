@@ -35,3 +35,33 @@ battlelog/
 *.tsbuildinfo
 .DS_Store
 Thumbs.db
+
+# --- keep the project content tracked -------------------------------------
+# The repo tracks src/, tests/, verification/, hsr-data/, docs/ and the root
+# manifests; the ignores above only exist to hide bulk/noise material. These
+# negations (last matching rule wins) make sure NEW files in those trees are
+# not silently dropped from `git status`. Patterns are root-anchored so they
+# cannot leak into same-named directories elsewhere (debug/verification/...).
+!/src/
+!/src/**
+!/tests/
+!/tests/**
+!/verification/
+!/verification/**
+!/hsr-data/
+!/hsr-data/**
+!/docs/
+!/docs/**
+!/.github/
+!/.github/**
+!/index.html
+!/package.json
+!/package-lock.json
+!/tsconfig.json
+!/README.md
+!/TODO.md
+!/AGENTS.md
+
+# bulk reference material stays out of git
+docs/vash/
+docs/*.txt

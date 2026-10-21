@@ -600,9 +600,9 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
   }
 
   // ---------- setup ----------
-  addChar(kitId: string, name?: string, statsPatch: Partial<BaseStats> = {}, energyStartFrac = 0.5, hpFrac = 1): Unit {
+  addChar(kitId: string, name?: string, statsPatch: Partial<BaseStats> = {}, energyStartFrac = 0.5, hpFrac = 1, baseOverride?: Partial<BaseStats>): Unit {
     const kit = this.kits.get(kitId)!
-    const base: BaseStats = { ...kit.base, ...statsPatch }
+    const base: BaseStats = { ...kit.base, ...baseOverride, ...statsPatch }
     const u: Unit = {
       id: `a${++this.uid}`, name: name ?? kit.name, side: 'ally', kind: 'char', elem: kit.elem,
       base, hp: Math.max(1, Math.round(base.hp * hpFrac)), maxHp: base.hp, startHp: hpFrac,
