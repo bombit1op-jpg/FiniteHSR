@@ -419,8 +419,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     }
     const syncPlanMode = (): void => {
       const two = planSel.value === '2+2'
-      setBLab.style.display = two ? '' : 'none'
-      plus.style.display = two ? '' : 'none'
+      row2.style.display = two ? '' : 'none'
       const first = setALab.firstChild
       if (first) first.textContent = two ? 'Сет 1' : 'Сет'
     }
@@ -441,11 +440,13 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const setBLab = planLab('Сет 2', setB.root)
     const planarLab = planLab('Планарка', planarSet.root)
     const modeLab = planLab('Сеты', planSel)
-    const planBlock = el('div', 'planBlock')
-    planBlock.append(modeLab, setALab, plus, setBLab)
+    const row1 = el('div', 'planRowLine')
+    const row2 = el('div', 'planRowLine')
+    row1.append(modeLab, setALab)
+    row2.append(setBLab)
     const planarBlock = el('div', 'planarBlock')
     planarBlock.append(planarLab)
-    planRow.append(planBlock, planarBlock)
+    planRow.append(row1, row2, planarBlock)
     syncPlanMode()
     {
       const rel = pieces.filter(p => p.slot !== 'sphere' && p.slot !== 'rope')

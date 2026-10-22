@@ -9,7 +9,7 @@ import { KITS, KIT_PATH } from '../core/kits'
 import { LIGHT_CONES } from '../core/gear'
 import { coneOptions, signatureCone } from '../core/gearOrder'
 import { el } from './dom'
-import { charIconUrl, gearIconUrl, iconNode } from './icons'
+import { charIconUrl, gearIconUrl, iconNode, elemIconUrl, pathIconUrl } from './icons'
 import type { Party } from '../core/party'
 
 interface Overlay {
@@ -98,30 +98,34 @@ export function openCharacterPicker(opts: { exclude?: string[]; current?: string
 
   const elemRow = el('div', 'pickerBtnRow')
   const elemBtns = new Map<string, HTMLButtonElement>()
-  const elemAll = el('button', 'pickerToggle active') as HTMLButtonElement
+  const elemAll = el('button', 'pickerToggle active pickerBtn') as HTMLButtonElement
   elemAll.type = 'button'
   elemAll.textContent = 'Все'
   elemBtns.set('*', elemAll)
   elemRow.append(elemAll)
   for (const e of ELEMS) {
-    const b = el('button', 'pickerToggle') as HTMLButtonElement
+    const b = el('button', 'pickerToggle pickerBtn') as HTMLButtonElement
     b.type = 'button'
-    b.textContent = e
+    const icon = iconNode(elemIconUrl ? elemIconUrl(e) : undefined, e, { cls:'miniIcon', size:16, fit:'contain', fallbackText:e.charAt(0), tint:'#7fb3ff', title:e })
+    const txt = el('span'); txt.textContent = e
+    b.append(icon, txt)
     elemBtns.set(e, b)
     elemRow.append(b)
   }
 
   const pathRow = el('div', 'pickerBtnRow')
   const pathBtns = new Map<string, HTMLButtonElement>()
-  const pathAll = el('button', 'pickerToggle active') as HTMLButtonElement
+  const pathAll = el('button', 'pickerToggle active pickerBtn') as HTMLButtonElement
   pathAll.type = 'button'
   pathAll.textContent = 'Все'
   pathBtns.set('*', pathAll)
   pathRow.append(pathAll)
   for (const p of PATHS) {
-    const b = el('button', 'pickerToggle') as HTMLButtonElement
+    const b = el('button', 'pickerToggle pickerBtn') as HTMLButtonElement
     b.type = 'button'
-    b.textContent = p
+    const icon = iconNode(pathIconUrl ? pathIconUrl(p) : undefined, p, { cls:'miniIcon', size:16, fit:'contain', fallbackText:p.charAt(0), tint:'#7fb3ff', title:p })
+    const txt = el('span'); txt.textContent = p
+    b.append(icon, txt)
     pathBtns.set(p, b)
     pathRow.append(b)
   }
@@ -190,31 +194,34 @@ export function openConePicker(opts: { kitId: string; current?: string } = {} as
 
   const pathRow = el('div', 'pickerBtnRow')
   const pathBtns = new Map<string, HTMLButtonElement>()
-  const pathAll = el('button', 'pickerToggle active') as HTMLButtonElement
+  const pathAll = el('button', 'pickerToggle active pickerBtn') as HTMLButtonElement
   pathAll.type = 'button'
   pathAll.textContent = 'Все'
   pathBtns.set('*', pathAll)
   pathRow.append(pathAll)
   const paths = [...new Set(LIGHT_CONES.map(c => c.path))].sort()
   for (const p of paths) {
-    const b = el('button', 'pickerToggle') as HTMLButtonElement
+    const b = el('button', 'pickerToggle pickerBtn') as HTMLButtonElement
     b.type = 'button'
-    b.textContent = p === path ? `${p} (свой)` : p
+    const icon = iconNode(pathIconUrl ? pathIconUrl(p) : undefined, p, { cls:'miniIcon', size:16, fit:'contain', fallbackText:p.charAt(0), tint:'#7fb3ff', title:p })
+    const txt = el('span'); txt.textContent = p === path ? `${p} (свой)` : p
+    b.append(icon, txt)
     pathBtns.set(p, b)
     pathRow.append(b)
   }
 
   const rareRow = el('div', 'pickerBtnRow')
   const rareBtns = new Map<string, HTMLButtonElement>()
-  const rareAll = el('button', 'pickerToggle active') as HTMLButtonElement
+  const rareAll = el('button', 'pickerToggle active pickerBtn') as HTMLButtonElement
   rareAll.type = 'button'
   rareAll.textContent = 'Все'
   rareBtns.set('*', rareAll)
   rareRow.append(rareAll)
   for (const r of [5, 4, 3]) {
-    const b = el('button', 'pickerToggle') as HTMLButtonElement
+    const b = el('button', 'pickerToggle pickerBtn') as HTMLButtonElement
     b.type = 'button'
-    b.textContent = `${r}★`
+    const txt = el('span'); txt.textContent = `${r}★`
+    b.append(txt)
     rareBtns.set(String(r), b)
     rareRow.append(b)
   }

@@ -565,7 +565,7 @@ export function buildPieceEditors(onChange?: () => void, kitIdOf?: () => string)
       const cand = Object.keys(SUBSTAT_TIERS).filter(s => !used.has(s))
       fillSelect(subStatSel, cand.map(s => [s, STAT_LABELS[s] ?? s] as [string, string]))
     }
-    setDrop.onchange = () => { updatePieceBadge(pieceBadgeEl, setDrop.value, slot); onChange?.(); showFixed?.(); fillSubStats() }
+    setDrop.onchange = () => { updatePieceBadge(pieceBadgeEl, setDrop.value, slot); onChange?.(); fillSubStats() }
     mainSel.onchange = () => { updateMainVal(); fillSubStats() }
     fillSubStats()
     addSubBtn.onclick = () => {
@@ -601,11 +601,30 @@ export function buildPieceEditors(onChange?: () => void, kitIdOf?: () => string)
           fillSubStats()
         }
         setDrop.onchange = () => { updatePieceBadge(pieceBadgeEl, setDrop.value, slot); onChange?.(); showFixedFn() }
-        showFixedFn()
-        card.append(head, setDrop.root, fixed, subEntry, subRows)
-      } else {
+      showFixedFn()
+      card.append(head, setDrop.root, fixed, subEntry, subRows)
+    } else {
       setDrop.onchange = () => { updatePieceBadge(pieceBadgeEl, setDrop.value, slot); onChange?.() }
       card.append(head, setDrop.root, mainSel, mainVal, subEntry, subRows)
+    }
+    // ensure 4 empty substat rows visible
+    if (subRows.childElementCount === 0) {
+      for (let i = 0; i < 4; i++) {
+        const row = el('div', 'subRow subRowEmpty')
+        const sel = el('select', 'subEmptySel') as HTMLSelectElement
+        fillSubStats()
+        const used = new Set(ed.subs.map(s=>s.stat))
+        const cand = Object.keys(SUBSTAT_TIERS).filter(s => !used.has(s) && s !== getMain())
+        fillSelect(sel, cand.map(s => [s, STAT_LABELS[s] ?? s] as [string,string]))
+        const inp = el('input','subEmptyInp') as HTMLInputElement
+        inp.type='number'
+        inp.step='0.01'
+        inp.placeholder='значение'
+        const info = el('div','subEmptyInfo')
+        info.textContent = 'качество / кол-во роллов'
+        row.append(sel, inp, info)
+        subRows.append(row)
+      }
     }
     out.push(ed)
   }

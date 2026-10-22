@@ -209,6 +209,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .pieceRating.r-chetah { color: #ff7a5c; border-color: #7a3a2a; background: #2a1410; font-style: italic; }
 .pieceMain { font-size: 13px; color: #6fd3ff; padding: 6px 8px; background: #0d1117; border-radius: 6px; border: 1px solid #1e2530; }
 .subRow { display: grid; grid-template-columns: 16px 1fr auto; gap: 4px 6px; align-items: center; font-size: 11px; }
+.subRowEmpty { grid-template-columns: minmax(0,1fr) minmax(0,0.8fr) minmax(0,1fr); align-items: center; }
+.subRowEmpty select, .subRowEmpty input { width: 100%; padding: 4px 6px; font-size: 11px; }
+.subEmptyInfo { font-size: 10px; color: #7d917f; }
 .subStatName { color: #cdd6e2; }
 .subVal { color: #aab6c5; text-align: right; font-family: monospace; }
 .subBar { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; }
@@ -549,9 +552,9 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .traceRow .statIcon { width: 16px; height: 16px; }
 .traceRow .traceVal { color: #cfe0ef; font-variant-numeric: tabular-nums; }
 
-/* relic set plan: 4pc = one picker, 2+2 = two pickers separated by a plus; planar on its own line */
-.planRow { display: flex; flex-direction: column; gap: 8px; }
-.planBlock { display: flex; align-items: flex-end; gap: 8px; flex-wrap: wrap; }
+/* relic set plan: 4pc/2+2 as requested */
+.planRow { display: flex; flex-direction: column; gap: 6px; }
+.planRowLine { display: flex; align-items: flex-end; gap: 8px; flex-wrap: wrap; }
 .planarBlock { display: flex; align-items: flex-end; }
 .planRow label { display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: #8fa295; }
 .planPlus { align-self: flex-end; padding: 0 2px 8px; color: #7fd18a; font-weight: 700; }
@@ -568,15 +571,16 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .subQuality { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: #9fb2a4; }
 
 /* anchored pickers: overlay only catches outside clicks; the panel sits next to the trigger */
-.pickerOverlay { position: fixed; inset: 0; z-index: 1000; background: rgba(4, 8, 6, .55); }
-.pickerPanel { position: fixed; display: flex; flex-direction: column; width: min(920px, calc(100vw - 24px)); max-height: min(86vh, 820px); background: #0c1410; border: 1px solid #3d5c47; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.8); overflow: hidden; }
+.pickerOverlay { position: fixed; inset: 0; z-index: 1000; background: rgba(4, 8, 6, .6); display: flex; align-items: center; justify-content: center; }
+.pickerPanel { position: fixed; display: flex; flex-direction: column; width: min(920px, calc(100vw - 24px)); max-height: min(86vh, 820px); background: #0c1410; border: 1px solid #3d5c47; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.85); overflow: hidden; margin: auto; }
 .pickerHead { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-bottom: 1px solid #223028; }
 .pickerTitle { font-size: 12px; font-weight: 800; letter-spacing: .14em; color: #8bd39b; }
 .pickerClose { width: 26px; height: 26px; border: 1px solid #2a332d; background: #141a16; color: #9aa7ba; border-radius: 6px; cursor: pointer; }
 .pickerClose:hover { border-color: #67b97b; color: #b6f0c2; }
 .pickerBody { padding: 10px 12px 14px; overflow: auto; display: flex; flex-direction: column; gap: 10px; }
 .pickerSearch { width: 100%; border: 1px solid #2a3342; background: #121a15; color: #cfe0ef; border-radius: 8px; padding: 7px 10px; }
-.pickerBtnRow { display: flex; flex-wrap: wrap; gap: 6px; }
+.pickerBtnRow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pickerBtn { display: inline-flex; align-items: center; gap: 5px; }
 .pickerToggle { border: 1px solid #2a332d; background: #141a16; color: #b9c5bf; border-radius: 999px; padding: 4px 10px; font-size: 12px; cursor: pointer; }
 .pickerToggle.active { border-color: #67b97b; color: #b6f0c2; background: #18241b; }
 .pickerToggle:hover { border-color: #67b97b; }
