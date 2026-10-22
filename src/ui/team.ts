@@ -33,6 +33,8 @@ export interface PieceEditor {
   setSet: (id: string) => void
   /** clear the piece (set + value + split) */
   reset: () => void
+  /** restore a persisted piece into the editor (no change event) */
+  restore: (p: PieceState) => void
 }
 
 export interface CharRow {
@@ -327,7 +329,7 @@ export function addCharRow(): void {
     const mainPrev = p.mainSel.onchange as (() => void) | null
     p.mainSel.onchange = () => { mainPrev?.(); refresh() }
     const valPrev = p.valueInp.oninput as (() => void) | null
-    p.valueInp.oninput = () => { valPrev?.(); refresh() }
+    if (valPrev) p.valueInp.oninput = () => { valPrev?.(); refresh() }
   }
   for (const [k] of Object.entries(stats)) stats[k].oninput = refresh
   for (const k of Object.keys(levels)) (levels[k as keyof CharRow['levels']] as HTMLInputElement).oninput = refresh
@@ -445,7 +447,7 @@ function paintPieceRatings(r: CharRow): void {
 const TIER_WORD: Record<0 | 1 | 2, string> = { 0: 'низкое', 1: 'среднее', 2: 'высокое' }
 
 /** 5 decimals — the same rounding the engine uses for substat values */
-const round5 = (n: number): number => Math.round(n * 1e5) / 1e5
+const round5 = (n: number): number => Math.round(n * 1e5) / 1e5; void round5
 
 /**
  * 6 piece editors: set picker (name + set icon), main stat, and ONE number for
@@ -468,10 +470,11 @@ export function buildPieceEditors(onChange?: () => void, kitIdOf?: () => string)
       const url = gearIconUrl(isPlanar ? 'planar' : 'relic', s.id)
       if (url) setIcons[s.id] = url
     }
-    setDrop.setEntries([['', '— сет —'], ...pool.map(s => [s.id, s.name] as [string, string])], { icons: setIcons })
+    setDrop.setEntries([['', '— не выбран —'], ...pool.map(s => [s.id, s.name] as [string, string])], { icons: setIcons })
 
     const mainSel = el('select') as HTMLSelectElement
-    fillSelect(mainSel, SLOT_MAINS[slot].map(m => [m, STAT_LABELS[m] ?? m] as [string, string]))
+    const mains = SLOT_MAINS[slot] || []
+    fillSelect(mainSel, mains.map(m => [m, STAT_LABELS[m] ?? m] as [string, string]))
     const mainVal = el('div', 'pieceMain')
     const updateMainVal = (): void => {
       const m = mainSel.value
@@ -480,70 +483,130 @@ export function buildPieceEditors(onChange?: () => void, kitIdOf?: () => string)
       mainVal.textContent = fmtStatVal(m, v)
     }
     updateMainVal()
+    // For head/hands main stat is fixed by slot
+    if (slot === 'head' || slot === 'hands') {
+      mainSel.disabled = true
+    }
 
-    // ONE number for the whole piece: the summed substat value.
-    const valueInp = el('input', 'pieceValue') as HTMLInputElement
-    valueInp.type = 'number'
-    valueInp.step = '0.01'
-    valueInp.min = '0'
-    valueInp.placeholder = 'сабы: сумма'
-    valueInp.title = 'Сумма значений сабов: < 1 — проценты, >= 1 — плоские значения. Скрипт сам подбирает статы и роллы.'
+    // Manual substat entry: pick stat + enter value, script splits into rolls/quality
+    const subStatSel = el('select') as HTMLSelectElement
+    const subValInp = el('input', 'pieceSubVal') as HTMLInputElement
+    subValInp.type = 'number'
+    subValInp.step = '0.01'
+    subValInp.min = '0'
+    subValInp.placeholder = 'значение'
+    const addSubBtn = el('button', 'addSubBtn') as HTMLButtonElement
+    addSubBtn.type = 'button'
+    addSubBtn.textContent = '+ саб'
+    const subEntry = el('div', 'subEntry')
+    subEntry.append(subStatSel, subValInp, addSubBtn)
     const subRows = el('div', 'subRows')
-    const totalEl = el('div', 'pieceTotal')
 
     const ed: PieceEditor = {
       slot, card, setDrop, pieceBadgeEl, ratingEl, mainSel, mainVal,
-      valueInp, subs: [], subRows,
+      valueInp: subValInp, subs: [], subRows,
       setSet: (id: string) => {
         setDrop.value = id
         updatePieceBadge(pieceBadgeEl, id, slot)
       },
       reset: () => {
         setDrop.value = ''
-        valueInp.value = ''
-        ed.subs = []
-        subRows.innerHTML = ''
-        updatePieceBadge(pieceBadgeEl, '', slot)
+      ed.subs = []
+      subRows.innerHTML = ''
+      subValInp.value = ''
+      addSubBtn.disabled = false
+      fillSubStats()
+      updatePieceBadge(pieceBadgeEl, '', slot)
+      },
+      restore: (p: PieceState) => {
+        setDrop.value = p.setId ?? ''
+        updatePieceBadge(pieceBadgeEl, p.setId ?? '', slot)
+        if (mains.includes(p.main)) mainSel.value = p.main
+        updateMainVal()
+        ed.subs = (p.subs ?? []).map(s => ({
+          stat: s.stat,
+          tier: s.tier,
+          rolls: s.rolls,
+          spread: s.spread ?? [],
+        }))
+        const total = ed.subs.reduce((a, s) => a + s.spread.reduce((x, t) => x + (SUBSTAT_TIERS[s.stat]?.[t] ?? 0), 0), 0)
+        subValInp.value = total ? String(Math.round(total * 100) / 100) : ''
+        paintSubs()
       },
     }
 
     const paintSubs = (): void => {
       subRows.innerHTML = ''
-      let total = 0
       for (const s of ed.subs) {
         const v = s.spread.reduce((a, t) => a + SUBSTAT_TIERS[s.stat][t], 0)
-        total += v
         const row = el('div', 'subRow')
         row.append(statBadge(s.stat))
         const name = el('span', 'subStatName'); name.textContent = STAT_LABELS[s.stat] ?? s.stat
         const val = el('span', 'subVal'); val.textContent = '+ ' + fmtStatVal(s.stat, v)
         row.append(name, val)
+        const barWrap = el('div', 'subBarWrap')
         const bar = el('div', 'subBar')
         bar.append(rollCubes(s.spread))
         const q = el('div', 'subQuality'); q.textContent = TIER_WORD[s.tier]
         bar.append(q)
-        row.append(bar)
+        barWrap.append(bar)
+        row.append(barWrap)
         subRows.append(row)
       }
-      // what the split actually reaches — the 6-roll ceiling of a 5★ piece can leave residue
-      const want = Number(valueInp.value) || 0
-      totalEl.textContent = ed.subs.length ? `итого: ${round5(total)} из ${want}` : ''
-      totalEl.classList.toggle('pieceTotalWarn', want > 0 && want - total > 1e-6)
+      if (ed.subs.length >= 4) addSubBtn.disabled = true
+      else addSubBtn.disabled = false
+      fillSubStats()
     }
 
-    const resplit = (): void => {
-      const total = Number(valueInp.value) || 0
+    const getMain = () => (slot === 'head' || slot === 'hands') ? mains[0] || '' : mainSel.value
+    const fillSubStats = () => {
+      const main = getMain()
+      const used = new Set([main].filter(Boolean))
+      const cand = Object.keys(SUBSTAT_TIERS).filter(s => !used.has(s))
+      fillSelect(subStatSel, cand.map(s => [s, STAT_LABELS[s] ?? s] as [string, string]))
+    }
+    setDrop.onchange = () => { updatePieceBadge(pieceBadgeEl, setDrop.value, slot); onChange?.(); showFixed?.(); fillSubStats() }
+    mainSel.onchange = () => { updateMainVal(); fillSubStats() }
+    fillSubStats()
+    addSubBtn.onclick = () => {
+      if (ed.subs.length >= 4) return
+      const main = getMain()
+      const stat = subStatSel.value
+      if (!stat || stat === main) return
+      const total = Number(subValInp.value) || 0
+      if (total <= 0) return
       const kitId = kitIdOf?.() ?? ''
-      ed.subs = kitId ? splitSubValues(kitId, mainSel.value, total) : []
-      paintSubs()
-      onChange?.()
+      const splits = kitId ? splitSubValues(kitId, main, total) : []
+      const pick = splits.find(s => s.stat === stat) || splits[0]
+      if (pick) {
+        ed.subs.push({ ...pick, stat })
+        paintSubs()
+        onChange?.()
+      }
+      subValInp.value = ''
+      fillSubStats()
     }
 
-    valueInp.oninput = resplit
-    mainSel.onchange = () => { updateMainVal(); resplit() }
-    setDrop.onchange = () => { updatePieceBadge(pieceBadgeEl, setDrop.value, slot); onChange?.() }
+    mainSel.onchange = () => { updateMainVal(); fillSubStats() }
 
-    card.append(head, setDrop.root, mainSel, mainVal, valueInp, totalEl, subRows)
+    // For head/hands main is fixed text, only shown after set is chosen
+      if (slot === 'head' || slot === 'hands') {
+        const fixed = el('div', 'pieceMainFixed')
+        const m = mains[0] ?? ''
+        const v = m ? (RELIC_MAIN_VALUES[m] ?? 0) : 0
+        fixed.textContent = ''
+        const showFixedFn = () => {
+          if (setDrop.value && m) fixed.textContent = `${STAT_LABELS[m] || m}: ${fmtStatVal(m, v)}`
+          else fixed.textContent = ''
+          fillSubStats()
+        }
+        setDrop.onchange = () => { updatePieceBadge(pieceBadgeEl, setDrop.value, slot); onChange?.(); showFixedFn() }
+        showFixedFn()
+        card.append(head, setDrop.root, fixed, subEntry, subRows)
+      } else {
+      setDrop.onchange = () => { updatePieceBadge(pieceBadgeEl, setDrop.value, slot); onChange?.() }
+      card.append(head, setDrop.root, mainSel, mainVal, subEntry, subRows)
+    }
     out.push(ed)
   }
   return out

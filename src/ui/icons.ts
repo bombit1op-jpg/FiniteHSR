@@ -91,13 +91,13 @@ const STAT_ICON_KEY: Record<string, StatIconKey> = {
 /** small stat icon chip (real art or a neutral letter chip); `stat` is an engine stat key or display name */
 export function statBadge(stat: string): HTMLElement {
   const key = stat.startsWith('dmg:') ? 'DMG Boost' : STAT_ICON_KEY[stat] ?? stat
-  const url = statIconUrl(key)
+  // SPD has no `stats/` art; the game keeps it under `buffs/`
+  const url = key === 'SPD' ? '/icons/buffs/SPD%20Boost.png' : statIconUrl(key)
   const node = el('span', 'metaBadge statBadge')
   node.dataset.stat = key
   node.title = `Характеристика: ${key}`
   node.append(iconNode(url, key, {
     cls: 'statIcon', size: 18, fit: 'contain',
-    // no committed art for a few keys (SPD) — a short text chip keeps the row readable
     fallbackText: key.slice(0, 3).toUpperCase(), tint: '#7fb3ff', title: node.title,
   }))
   return node
@@ -285,7 +285,7 @@ function paintPortrait(node: HTMLElement, kitId: string): void {
   node.append(iconNode(url, kit ? kit.name : '—', {
     cls: 'portraitImg',
     fit: 'contain',
-    fallbackText: kit ? (kit.name.trim().charAt(0).toUpperCase() || '?') : '＋',
+    fallbackText: kit ? (kit.name.trim().charAt(0).toUpperCase() || '?') : '+',
     tint,
     title,
   }))

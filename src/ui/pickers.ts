@@ -1,15 +1,15 @@
 /**
- * §Party Setup — modal pickers (character / Light Cone).
+ * §Party Setup — anchored pickers (character / Light Cone / party list).
  *
- * Both pickers are overlay panels built from plain DOM: they open over the page, filter live, and
- * resolve with the chosen id (or null when dismissed). They own no state — the caller passes the
- * current selection and the excluded ids, and applies the result.
+ * Every picker opens as a popover next to the control that triggered it (portrait, cone icon,
+ * party name), filters live and resolves with the chosen id (or null when dismissed). They own no
+ * state — the caller passes the current selection and the excluded ids, and applies the result.
  */
 import { KITS, KIT_PATH } from '../core/kits'
 import { LIGHT_CONES } from '../core/gear'
 import { coneOptions, signatureCone } from '../core/gearOrder'
-import { el, fillSelect } from './dom'
-import { charPortraitUrl, gearIconUrl, iconNode, elemIconUrl } from './icons'
+import { el } from './dom'
+import { charIconUrl, gearIconUrl, iconNode } from './icons'
 import type { Party } from '../core/party'
 
 interface Overlay {
@@ -19,7 +19,32 @@ interface Overlay {
   close: () => void
 }
 
-function openOverlay(title: string, onDismiss: () => void): Overlay {
+/** anchor the panel under the trigger, flipping above/clamping when it would leave the viewport */
+function placePanel(panel: HTMLElement, anchor?: HTMLElement): void {
+  const margin = 12
+  if (anchor) {
+    const a = anchor.getBoundingClientRect()
+    const w = panel.offsetWidth
+    const h = panel.offsetHeight
+    let left = Math.min(Math.max(margin, a.left), Math.max(margin, innerWidth - w - margin))
+    let top = a.bottom + 6
+    if (top + h > innerHeight - margin) {
+      const above = a.top - h - 6
+      top = above >= margin ? above : Math.max(margin, innerHeight - h - margin)
+    }
+    panel.style.left = `${Math.round(left)}px`
+    panel.style.top = `${Math.round(top)}px`
+    panel.style.transform = 'none'
+    return
+  }
+  const w = panel.offsetWidth || Math.min(880, innerWidth - 24)
+  const h = panel.offsetHeight || Math.min(innerHeight * 0.8, 760)
+  panel.style.left = `${Math.round((innerWidth - w) / 2)}px`
+  panel.style.top = `${Math.round((innerHeight - h) / 2)}px`
+  panel.style.transform = 'none'
+}
+
+function openOverlay(title: string, onDismiss: () => void, anchor?: HTMLElement): Overlay {
   const root = el('div', 'pickerOverlay')
   const panel = el('div', 'pickerPanel')
   const head = el('div', 'pickerHead')
@@ -34,16 +59,20 @@ function openOverlay(title: string, onDismiss: () => void): Overlay {
   panel.append(head, body)
   root.append(panel)
   document.body.append(root)
+  placePanel(panel, anchor)
 
   let done = false
+  const onResize = (): void => placePanel(panel, anchor)
   const close = () => {
     if (done) return
     done = true
     root.remove()
     document.removeEventListener('keydown', onKey)
+    window.removeEventListener('resize', onResize)
   }
   const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { close(); onDismiss() } }
   document.addEventListener('keydown', onKey)
+  window.addEventListener('resize', onResize)
   x.onclick = () => { close(); onDismiss() }
   root.addEventListener('click', (e) => { if (e.target === root) { close(); onDismiss() } })
   return { root, body, close }
@@ -53,8 +82,8 @@ const PATHS = [...new Set(Object.values(KIT_PATH))].filter(Boolean).sort()
 const ELEMS = [...new Set(KITS.map(k => k.elem))].sort()
 
 /**
- * Character picker: portraits of every character, filtered by path and element.
- * `exclude` holds the kit ids already taken by teammates — they are hidden from the list.
+ * Character picker: grid of cropped round icons, with search + element/path filter buttons like Fribbels.
+ * `exclude` hides already-taken characters (one per slot). Opens centered on screen.
  */
 export function openCharacterPicker(opts: { exclude?: string[]; current?: string } = {}): Promise<string | null> {
   const exclude = new Set(opts.exclude ?? [])
@@ -62,45 +91,73 @@ export function openCharacterPicker(opts: { exclude?: string[]; current?: string
   const promise = new Promise<string | null>(r => { resolve = r })
   const ov = openOverlay('ВЫБОР ПЕРСОНАЖА', () => resolve(null))
 
-  const filters = el('div', 'pickerFilters')
-  const pathSel = el('select', 'pickerFilter') as HTMLSelectElement
-  fillSelect(pathSel, [['*', 'Все пути'], ...PATHS.map(p => [p, p] as [string, string])])
-  const elemSel = el('select', 'pickerFilter') as HTMLSelectElement
-  fillSelect(elemSel, [['*', 'Все элементы'], ...ELEMS.map(e => [e, e] as [string, string])])
-  pathSel.setAttribute('aria-label', 'Фильтр по пути')
-  elemSel.setAttribute('aria-label', 'Фильтр по элементу')
-  filters.append(pathSel, elemSel)
-  const grid = el('div', 'pickerGrid')
-  ov.body.append(filters, grid)
+  const search = el('input', 'pickerSearch') as HTMLInputElement
+  search.type = 'search'
+  search.placeholder = 'Поиск'
+  search.setAttribute('aria-label', 'Поиск персонажа')
+
+  const elemRow = el('div', 'pickerBtnRow')
+  const elemBtns = new Map<string, HTMLButtonElement>()
+  const elemAll = el('button', 'pickerToggle active') as HTMLButtonElement
+  elemAll.type = 'button'
+  elemAll.textContent = 'Все'
+  elemBtns.set('*', elemAll)
+  elemRow.append(elemAll)
+  for (const e of ELEMS) {
+    const b = el('button', 'pickerToggle') as HTMLButtonElement
+    b.type = 'button'
+    b.textContent = e
+    elemBtns.set(e, b)
+    elemRow.append(b)
+  }
+
+  const pathRow = el('div', 'pickerBtnRow')
+  const pathBtns = new Map<string, HTMLButtonElement>()
+  const pathAll = el('button', 'pickerToggle active') as HTMLButtonElement
+  pathAll.type = 'button'
+  pathAll.textContent = 'Все'
+  pathBtns.set('*', pathAll)
+  pathRow.append(pathAll)
+  for (const p of PATHS) {
+    const b = el('button', 'pickerToggle') as HTMLButtonElement
+    b.type = 'button'
+    b.textContent = p
+    pathBtns.set(p, b)
+    pathRow.append(b)
+  }
+
+  const grid = el('div', 'pickerGrid icons')
+  ov.body.append(search, elemRow, pathRow, grid)
+
+  let curElem = '*'
+  let curPath = '*'
+  for (const [k, b] of elemBtns) {
+    b.onclick = () => { curElem = k; for (const [kk, bb] of elemBtns) bb.classList.toggle('active', kk === k); paint() }
+  }
+  for (const [k, b] of pathBtns) {
+    b.onclick = () => { curPath = k; for (const [kk, bb] of pathBtns) bb.classList.toggle('active', kk === k); paint() }
+  }
 
   const paint = () => {
     grid.innerHTML = ''
-    const path = pathSel.value
-    const elem = elemSel.value
+    const q = search.value.trim().toLowerCase()
     for (const k of KITS) {
       if (exclude.has(k.id)) continue
       const p = KIT_PATH[k.id] ?? ''
-      if (path !== '*' && p !== path) continue
-      if (elem !== '*' && k.elem !== elem) continue
-      const btn = el('button', 'pickerChar') as HTMLButtonElement
+      if (curPath !== '*' && p !== curPath) continue
+      if (curElem !== '*' && k.elem !== curElem) continue
+      if (q && !k.name.toLowerCase().includes(q)) continue
+      const btn = el('button', 'pickerCharIcon') as HTMLButtonElement
       btn.type = 'button'
       btn.dataset.kitId = k.id
       if (k.id === opts.current) btn.classList.add('current')
-      btn.title = `${k.name} · ${p} · ${k.elem}`
-      const art = iconNode(charPortraitUrl(k.id), k.name, {
-        cls: 'pickPortrait', size: 96, fit: 'contain',
+      btn.title = k.name
+      const art = iconNode(charIconUrl(k.id), k.name, {
+        cls: 'pickIcon', size: 56, fit: 'cover',
         fallbackText: k.name.trim().charAt(0).toUpperCase() || '?',
         tint: '#7fb3ff', title: k.name,
       })
-      const name = el('div', 'pickName')
-      name.textContent = k.name
-      const meta = el('div', 'pickMeta')
-      const elemIcon = iconNode(elemIconUrl(k.elem), k.elem, {
-        cls: 'metaIcon', size: 16, fit: 'contain',
-        fallbackText: k.elem.charAt(0), tint: '#7fb3ff', title: k.elem,
-      })
-      meta.append(document.createTextNode(`${p} · `), elemIcon)
-      btn.append(art, name, meta)
+      btn.append(art)
       btn.onclick = () => { ov.close(); resolve(k.id) }
       grid.append(btn)
     }
@@ -110,30 +167,80 @@ export function openCharacterPicker(opts: { exclude?: string[]; current?: string
       grid.append(empty)
     }
   }
-  pathSel.onchange = paint
-  elemSel.onchange = paint
+  search.oninput = paint
   paint()
   return promise
 }
 
-  /**
-   * Light Cone picker: the cone list in setup order (signature -> own path 5* -> own path 4* ->
-   * other 5* -> other 4* -> rest). Cones of another path are dimmed: their stats still apply,
-   * but the passive does not.
-   */
-  export function openConePicker(opts: { kitId: string; current?: string }): Promise<string | null> {
-    const path = KIT_PATH[opts.kitId] ?? ''
-    const sig = signatureCone(opts.kitId)
-    let resolve!: (v: string | null) => void
-    const promise = new Promise<string | null>(r => { resolve = r })
-    const ov = openOverlay('ВЫБОР СВЕТОВОГО КОНУСА', () => resolve(null))
-  
-    const list = el('div', 'pickerList')
-    ov.body.append(list)
-    for (const [id] of coneOptions(opts.kitId, path)) {
-      if (!id) continue
+/**
+ * Light Cone picker: list in setup order, centered with search + path/rarity filters.
+ * Cones of another path are dimmed.
+ */
+export function openConePicker(opts: { kitId: string; current?: string } = {} as any): Promise<string | null> {
+  const path = KIT_PATH[opts.kitId] ?? ''
+  const sig = signatureCone(opts.kitId)
+  let resolve!: (v: string | null) => void
+  const promise = new Promise<string | null>(r => { resolve = r })
+  const ov = openOverlay('ВЫБОР СВЕТОВОГО КОНУСА', () => resolve(null))
+
+  const search = el('input', 'pickerSearch') as HTMLInputElement
+  search.type = 'search'
+  search.placeholder = 'Поиск'
+  search.setAttribute('aria-label', 'Поиск конуса')
+
+  const pathRow = el('div', 'pickerBtnRow')
+  const pathBtns = new Map<string, HTMLButtonElement>()
+  const pathAll = el('button', 'pickerToggle active') as HTMLButtonElement
+  pathAll.type = 'button'
+  pathAll.textContent = 'Все'
+  pathBtns.set('*', pathAll)
+  pathRow.append(pathAll)
+  const paths = [...new Set(LIGHT_CONES.map(c => c.path))].sort()
+  for (const p of paths) {
+    const b = el('button', 'pickerToggle') as HTMLButtonElement
+    b.type = 'button'
+    b.textContent = p === path ? `${p} (свой)` : p
+    pathBtns.set(p, b)
+    pathRow.append(b)
+  }
+
+  const rareRow = el('div', 'pickerBtnRow')
+  const rareBtns = new Map<string, HTMLButtonElement>()
+  const rareAll = el('button', 'pickerToggle active') as HTMLButtonElement
+  rareAll.type = 'button'
+  rareAll.textContent = 'Все'
+  rareBtns.set('*', rareAll)
+  rareRow.append(rareAll)
+  for (const r of [5, 4, 3]) {
+    const b = el('button', 'pickerToggle') as HTMLButtonElement
+    b.type = 'button'
+    b.textContent = `${r}★`
+    rareBtns.set(String(r), b)
+    rareRow.append(b)
+  }
+
+  const list = el('div', 'pickerList')
+  ov.body.append(search, pathRow, rareRow, list)
+
+  let curPath = '*'
+  let curRare = '*'
+  for (const [k, b] of pathBtns) {
+    b.onclick = () => { curPath = k; for (const [kk, bb] of pathBtns) bb.classList.toggle('active', kk === k); paint() }
+  }
+  for (const [k, b] of rareBtns) {
+    b.onclick = () => { curRare = k; for (const [kk, bb] of rareBtns) bb.classList.toggle('active', kk === k); paint() }
+  }
+
+  const order = coneOptions(opts.kitId, path).map(([id]) => id).filter(Boolean)
+  const paint = () => {
+    list.innerHTML = ''
+    const q = search.value.trim().toLowerCase()
+    for (const id of order) {
       const cone = LIGHT_CONES.find(c => c.id === id)
       if (!cone) continue
+      if (curPath !== '*' && cone.path !== curPath) continue
+      if (curRare !== '*' && String(cone.rarity) !== curRare) continue
+      if (q && !cone.name.toLowerCase().includes(q)) continue
       const btn = el('button', 'pickerCone') as HTMLButtonElement
       btn.type = 'button'
       btn.dataset.coneId = id
@@ -141,50 +248,60 @@ export function openCharacterPicker(opts: { exclude?: string[]; current?: string
       if (id === opts.current) btn.classList.add('current')
       if (id === sig) btn.classList.add('sig')
       const art = iconNode(gearIconUrl('cone', id), cone.name, {
-        cls: 'gearIcon', size: 56, fit: 'contain',
+        cls: 'gearIcon', size: 48, fit: 'contain',
         fallbackText: cone.name.trim().charAt(0).toUpperCase() || '?',
         tint: '#7fb3ff', title: cone.name,
       })
+      const info = el('div', 'pickerConeInfo')
       const name = el('div', 'pickName')
       name.textContent = cone.name
       const meta = el('div', 'pickMeta')
       meta.textContent = `★${cone.rarity} · ${cone.path}${id === sig ? ' · сигнатура' : ''}`
-      btn.append(art, name, meta)
+      info.append(name, meta)
+      btn.append(art, info)
       btn.onclick = () => { ov.close(); resolve(id) }
       list.append(btn)
     }
-    return promise
-  }
-  
-  /** Party list picker for header: shows up to 4 small portraits + party name */
-  export function openPartyListPicker(opts: { parties: Party[]; activeId: string | null }): Promise<string | null> {
-    let resolve!: (v: string | null) => void
-    const promise = new Promise<string | null>(r => { resolve = r })
-    const ov = openOverlay('ВЫБОР ОТРЯДА', () => resolve(null))
-    const list = el('div', 'pickerList partyListPicker')
-    ov.body.append(list)
-    for (const p of opts.parties) {
-      const btn = el('button', 'pickerParty') as HTMLButtonElement
-      btn.type = 'button'
-      if (p.id === opts.activeId) btn.classList.add('current')
-      const row = el('div', 'partyPickRow')
-      const icons = el('div', 'partyPickIcons')
-      for (let i = 0; i < 4; i++) {
-        const s = p.slots[i]
-        const k = s?.kitId ? KITS.find(x => x.id === s.kitId) : null
-        const ic = iconNode(k ? charPortraitUrl(k.id) : undefined, k?.name ?? '—', {
-          cls: 'partyPickIcon', size: 26, fit: 'cover',
-          fallbackText: k ? (k.name.trim().charAt(0).toUpperCase() || '?') : '—',
-          tint: k ? '#7fb3ff' : '#55606f', title: k?.name ?? '',
-        })
-        icons.append(ic)
-      }
-      const name = el('div', 'partyPickName')
-      name.textContent = p.name
-      row.append(icons, name)
-      btn.append(row)
-      btn.onclick = () => { ov.close(); resolve(p.id) }
-      list.append(btn)
+    if (!list.childElementCount) {
+      const empty = el('em', 'dim')
+      empty.textContent = 'Нет конусов под фильтр'
+      list.append(empty)
     }
-    return promise
   }
+  search.oninput = paint
+  paint()
+  return promise
+}
+
+/** Party list picker for the header: one wide row per party — 4 small portraits, then its name. */
+export function openPartyListPicker(opts: { parties: Party[]; activeId: string | null; anchor?: HTMLElement }): Promise<string | null> {
+  let resolve!: (v: string | null) => void
+  const promise = new Promise<string | null>(r => { resolve = r })
+  const ov = openOverlay('ВЫБОР ОТРЯДА', () => resolve(null), opts.anchor)
+  const list = el('div', 'pickerList partyListPicker')
+  ov.body.append(list)
+  for (const p of opts.parties) {
+    const btn = el('button', 'pickerParty') as HTMLButtonElement
+    btn.type = 'button'
+    if (p.id === opts.activeId) btn.classList.add('current')
+    const row = el('div', 'partyPickRow')
+    const icons = el('div', 'partyPickIcons')
+    for (let i = 0; i < 4; i++) {
+      const s = p.slots[i]
+      const k = s?.kitId ? KITS.find(x => x.id === s.kitId) : null
+      const ic = iconNode(k ? charIconUrl(k.id) : undefined, k?.name ?? '—', {
+        cls: 'partyPickIcon', size: 36, fit: 'cover',
+        fallbackText: k ? (k.name.trim().charAt(0).toUpperCase() || '?') : '—',
+        tint: k ? '#7fb3ff' : '#3a4a3f', title: k?.name ?? '',
+      })
+      icons.append(ic)
+    }
+    const name = el('div', 'partyPickName')
+    name.textContent = p.name
+    row.append(icons, name)
+    btn.append(row)
+    btn.onclick = () => { ov.close(); resolve(p.id) }
+    list.append(btn)
+  }
+  return promise
+}

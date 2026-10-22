@@ -14,7 +14,8 @@ import { KITS, KIT_PATH } from '../core/kits'
 import type { TeamSpec } from '../core/battle'
 import { el, fillSelect } from './dom'
 import { Dropdown } from './dropdown'
-import { coneOptions, signatureCone, relicOptions, planarOptions } from '../core/gearOrder'
+import { relicOptions, planarOptions } from '../core/gearOrder'
+import { LIGHT_CONES } from '../core/gear'
 import type { TeamRowState } from './store'
 import {
   metaBadge, updateMetaBadges, gearBadge, updateGearBadge, statBadge, ratingTierClass,
@@ -40,7 +41,6 @@ interface CardView {
   charLevelInp: HTMLInputElement
   coneBadge: HTMLElement
   coneNameEl: HTMLElement
-  coneSel: Dropdown
   siSel: HTMLSelectElement
   coneLevelInp: HTMLInputElement
   eidButtons: HTMLButtonElement[]
@@ -95,13 +95,12 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
   const headText = el('div', 'partyHeadText')
   const eyebrow = el('div', 'eyebrow')
   eyebrow.textContent = 'FINITE HSR / PARTY SETUP'
-  const heading = el('h1', 'partyHeading')
-  heading.textContent = 'PARTY'
-  headText.append(eyebrow, heading)
 
+  const titleRow = el('div', 'partyTitleRow')
   const partyHeader = el('div', 'partyHeader')
   const partyNameBtn = el('button', 'partyNameBtn') as HTMLButtonElement
   partyNameBtn.type = 'button'
+  partyNameBtn.title = 'Открыть список отрядов'
   const partyNameText = el('span', 'partyNameText')
   partyNameBtn.append(partyNameText)
   const editNameBtn = el('button', 'partyIconBtn') as HTMLButtonElement
@@ -117,16 +116,15 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
   delPartyBtn.textContent = '🗑'
   delPartyBtn.title = 'Удалить отряд'
   partyHeader.append(partyNameBtn, editNameBtn, addPartyBtn, delPartyBtn)
-  head.append(headText, partyHeader)
+  titleRow.append(partyHeader)
+  headText.append(eyebrow, titleRow)
+  head.append(headText)
   root.append(head)
 
   const cardsHost = el('div', 'partyCards')
   root.append(cardsHost)
 
-  const addSlotBtn = el('button', 'addSlotBtn') as HTMLButtonElement
-  addSlotBtn.type = 'button'
-  addSlotBtn.textContent = '+ Слот'
-  root.append(addSlotBtn)
+  // slots are fixed to 4 by design; no add button
 
   const cards = new Map<string, CardView>()
 
@@ -134,7 +132,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
 
   partyNameBtn.onclick = async () => {
     const col = store.collection
-    const id = await openPartyListPicker({ parties: col.parties, activeId: col.activeId })
+    const id = await openPartyListPicker({ parties: col.parties, activeId: col.activeId, anchor: partyNameBtn })
     if (id) { store.select(id); render() }
   }
   editNameBtn.onclick = () => {
@@ -158,7 +156,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     store.remove(store.collection.activeId ?? '')
     render()
   }
-  addSlotBtn.onclick = () => { if (store.addSlot()) render() }
+  // fixed 4 slots (no add button)
 
   // -------------------------------------------------------------- card
 
@@ -172,6 +170,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const pickChar = async () => {
       const active = store.active
       const exclude = (active?.slots.map(s => s.kitId).filter(Boolean) as string[]) ?? []
+      // Can't select same character twice - exclude all already in team except current slot
       const chosen = await openCharacterPicker({ exclude: exclude.filter(id => id !== row.kitId), current: row.kitId || undefined })
       if (chosen === null) return
       if (chosen === '') { clearSlot(row.id); render(); return }
@@ -179,6 +178,12 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       render()
     }
     portrait.onclick = pickChar
+    const clearSlotBtn = el('button', 'pcClear') as HTMLButtonElement
+    clearSlotBtn.type = 'button'
+    clearSlotBtn.textContent = '✕'
+    clearSlotBtn.title = 'Удалить персонажа из слота'
+    clearSlotBtn.onclick = (e) => { e.stopPropagation(); clearSlot(row.id); render() }
+    clearSlotBtn.style.display = row.kitId ? '' : 'none'
     const identity = el('div', 'pcIdentity')
     const nameRow = el('div', 'pcNameRow')
     const nameEl = el('div', 'pcName')
@@ -194,13 +199,10 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     charLevelInp.className = 'lvlInputNum'
     charLevelInp.setAttribute('aria-label', 'Уровень персонажа')
     charLevelInp.value = String(row.level ?? 80)
-    const delSlot = el('button', 'pcClear') as HTMLButtonElement
-    delSlot.type = 'button'
-    delSlot.textContent = '✕'
-    delSlot.title = 'Очистить слот'
-    delSlot.onclick = () => { clearSlot(row.id); render() }
-    identity.append(nameRow, charLevelInp, delSlot)
-    root.append(portrait, identity)
+    identity.append(nameRow, charLevelInp)
+    const portraitWrap = el('div', 'pcPortraitWrap')
+    portraitWrap.append(portrait, clearSlotBtn)
+    root.append(portraitWrap, identity)
 
     const body = el('div', 'pcBody')
 
@@ -230,10 +232,6 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const coneBadge = gearBadge('cone', row.coneId)
     const coneNameEl = el('div', 'coneName')
     const coneFields = el('div', 'coneFields')
-    const coneSel = new Dropdown()
-    const path = KIT_PATH[row.kitId] ?? ''
-    coneSel.setEntries(coneOptions(row.kitId, path), { sig: signatureCone(row.kitId) })
-    coneSel.value = row.coneId
     const siSel = el('select') as HTMLSelectElement
     fillSelect(siSel, [1, 2, 3, 4, 5].map(n => [String(n), `S${n}`] as [string, string]))
     siSel.value = String(row.si || 1)
@@ -250,17 +248,18 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const pickCone = async () => {
       const kitId = liveRow().kitId
       if (!kitId) return
-      const chosen = await openConePicker({ kitId, current: coneSel.value || undefined })
+      const chosen = await openConePicker({ kitId, current: liveRow().coneId || undefined })
       if (chosen === null) return
-      coneSel.value = chosen
       patch({ coneId: chosen })
       view.refresh()
     }
     coneBadge.style.cursor = 'pointer'
     coneBadge.title = 'Выбрать световой конус'
     coneBadge.onclick = pickCone
-    coneFields.append(coneSel.root, coneSelects)
-    coneWrap.append(coneBadge, coneNameEl, coneFields)
+    coneNameEl.textContent = '— конус не выбран —'
+    coneNameEl.classList.add('dim')
+    coneFields.append(coneNameEl, coneSelects)
+    coneWrap.append(coneBadge, coneFields)
     coneSection.append(coneWrap)
     body.append(coneSection)
 
@@ -364,12 +363,12 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const lvBtns = {} as CardView['lvBtns']
     const view: CardView = {
       rowId: row.id, root, portrait, elemChip, pathChip, nameEl, charLevelInp,
-      coneBadge, coneNameEl, coneSel, siSel, coneLevelInp, eidButtons,
+      coneBadge, coneNameEl, siSel, coneLevelInp, eidButtons,
       lvBtns,
       tracesWrap, traceChecks, energySel, techniqueSel, techniqueWrap, techniqueChk, pieces: [] as PieceEditor[], statsBox, skillsBox, tracesBox: tracesWrap, refresh: () => {},
     }
 
-    // --- 6 relic/planar piece editors (SAME widget as the battle page).
+  // --- 6 relic/planar piece editors (SAME widget as the battle page).
     // `persistPieces` fires on every mutation (incl. the split) → store + live restat.
     const persistPieces = () => {
       patch({ pieces: view.pieces.map(pieceOf) })
@@ -377,19 +376,23 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     }
     const pieces = buildPieceEditors(persistPieces, () => liveRow().kitId)
     view.pieces = pieces
+    for (const p of pieces) {
+      const saved = row.pieces?.find(s => s.slot === p.slot)
+      if (saved) p.restore(saved)
+    }
     const relicSection = section('РЕЛИКВИИ', '6 слотов')
 
     // set plan: 4-piece / 2+2 relic sets + the 2-piece planar set.
     // The plan is a shortcut — it writes the per-piece set dropdowns, which stay editable.
-    const planRow = el('div', 'setPlan')
+    const planRow = el('div', 'setPlan planRow')
     const planSel = el('select') as HTMLSelectElement
-    fillSelect(planSel, [['4', '4 сет'], ['2+2', '2+2']])
-    planSel.title = 'Набор сетов реликвий: один 4-сет или два 2-сет'
+    fillSelect(planSel, [['4', '4 сета'], ['2+2', '2+2']])
+    planSel.title = 'Набор сетов реликвий: один 4-сет или два 2-сета'
     const setA = new Dropdown('setDrop')
     const setB = new Dropdown('setDrop')
     const planarSet = new Dropdown('setDrop')
     const fillPlan = (kitId: string): void => {
-      const relicEntries = relicOptions(kitId, '— сет —')
+      const relicEntries = relicOptions(kitId, '')
       const planarEntries = planarOptions(kitId)
       const relicIcons: Record<string, string> = {}
       for (const [id] of relicEntries) { const u = gearIconUrl('relic', id); if (u) relicIcons[id] = u }
@@ -404,23 +407,63 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       const mode = planSel.value
       for (const p of view.pieces) {
         const planar = p.slot === 'sphere' || p.slot === 'rope'
-        const id = planar
-          ? planarSet.value
-          : mode === '2+2'
-            ? (p.slot === 'head' || p.slot === 'hands' ? setA.value : setB.value)
-            : setA.value
-        p.setSet(id)
+        if (planar) {
+          p.setSet(planarSet.value)
+        } else if (mode === '2+2') {
+          p.setSet(p.slot === 'head' || p.slot === 'hands' ? setA.value : setB.value)
+        } else {
+          p.setSet(setA.value)
+        }
       }
       persistPieces()
     }
-    planSel.onchange = applyPlan
+    const syncPlanMode = (): void => {
+      const two = planSel.value === '2+2'
+      setBLab.style.display = two ? '' : 'none'
+      plus.style.display = two ? '' : 'none'
+      const first = setALab.firstChild
+      if (first) first.textContent = two ? 'Сет 1' : 'Сет'
+    }
+    planSel.onchange = () => { syncPlanMode(); applyPlan() }
     setA.onchange = applyPlan
     setB.onchange = applyPlan
     planarSet.onchange = applyPlan
     const planLab = (text: string, node: HTMLElement): HTMLElement => {
-      const l = el('label'); l.textContent = text; l.append(node); return l
+      const l = el('label')
+      const t = el('span', 'planLabel')
+      t.textContent = text
+      l.append(t, node)
+      return l
     }
-    planRow.append(planLab('Сеты', planSel), planLab('A', setA.root), planLab('B', setB.root), planLab('Планарка', planarSet.root))
+    const plus = el('span', 'planPlus')
+    plus.textContent = '+'
+    const setALab = planLab('Сет', setA.root)
+    const setBLab = planLab('Сет 2', setB.root)
+    const planarLab = planLab('Планарка', planarSet.root)
+    const modeLab = planLab('Сеты', planSel)
+    const planBlock = el('div', 'planBlock')
+    planBlock.append(modeLab, setALab, plus, setBLab)
+    const planarBlock = el('div', 'planarBlock')
+    planarBlock.append(planarLab)
+    planRow.append(planBlock, planarBlock)
+    syncPlanMode()
+    {
+      const rel = pieces.filter(p => p.slot !== 'sphere' && p.slot !== 'rope')
+      const ids = [...new Set(rel.map(p => p.setDrop.value).filter(Boolean))]
+      const top = rel.find(p => p.slot === 'head')?.setDrop.value ?? ''
+      const bottom = rel.find(p => p.slot === 'body')?.setDrop.value ?? ''
+      if (ids.length === 1) {
+        planSel.value = '4'
+        setA.value = ids[0]
+      } else if (ids.length === 2 && top && top !== bottom) {
+        planSel.value = '2+2'
+        setA.value = top
+        setB.value = bottom
+      }
+      syncPlanMode()
+      const ord = pieces.find(p => p.slot === 'sphere')?.setDrop.value ?? pieces.find(p => p.slot === 'rope')?.setDrop.value ?? ''
+      if (ord) planarSet.value = ord
+    }
 
     const relicRoot = el('div', 'relicGrid')
     for (const p of pieces) relicRoot.append(p.card)
@@ -444,7 +487,6 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
 
     // ---------------------------------------------------------- wiring
 
-    coneSel.onchange = () => { patch({ coneId: coneSel.value }); view.refresh() }
     siSel.onchange = () => { patch({ si: Number(siSel.value) || 1 }); view.refresh() }
 
     // tech list for conflict resolution — only kits that define a Technique
@@ -461,8 +503,16 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     for (const chk of traceChecks) {
       chk.onchange = () => { patch({ traces: traceChecks.map(c => c.checked) }); view.refresh() }
     }
-    charLevelInp.onchange = () => { patch({ level: Math.max(0, Math.min(80, Number(charLevelInp.value) || 0)) }); view.refresh() }
-    coneLevelInp.onchange = () => { patch({ coneLevel: Math.max(0, Math.min(80, Number(coneLevelInp.value) || 0)) }); view.refresh() }
+    charLevelInp.oninput = () => {
+      if (charLevelInp.value === '') return
+      patch({ level: Math.max(0, Math.min(80, Number(charLevelInp.value) || 0)) })
+      paintStats(view, liveRow(), liveRow().kitId)
+    }
+    coneLevelInp.oninput = () => {
+      if (coneLevelInp.value === '') return
+      patch({ coneLevel: Math.max(0, Math.min(80, Number(coneLevelInp.value) || 0)) })
+      paintStats(view, liveRow(), liveRow().kitId)
+    }
     energySel.onchange = () => { patch({ energyStartFrac: (Number(energySel.value) || 0) / 100 }); view.refresh() }
     techniqueSel.onchange = () => { patch({ techniqueUses: Number(techniqueSel.value) || 0 }); pruneTechniques(); view.refresh() }
     techniqueChk.onchange = () => { patch({ techniqueUses: techniqueChk.checked ? 1 : 0 }); pruneTechniques(); view.refresh() }
@@ -471,9 +521,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       const kitId = liveRow().kitId
       if (kitId !== renderedKit) {
         renderedKit = kitId
-        // the cone order, the trace set and the Technique count are kit-dependent — re-resolve all
-        coneSel.setEntries(coneOptions(kitId, KIT_PATH[kitId] ?? ''), { sig: signatureCone(kitId) })
-        coneSel.value = ''
+        // the trace set and the Technique count are kit-dependent — re-resolve them
         buildTraces(kitId)
         fillTechnique(kitId)
         fillPlan(kitId)
@@ -484,8 +532,11 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       updateCharPortrait(portrait, kitId)
       updateMetaBadges(elemChip, pathChip, kit?.elem ?? '', KIT_PATH[kitId] ?? '')
       nameEl.textContent = kit?.name ?? '—'
-      updateGearBadge(coneBadge, 'cone', coneSel.value)
       const live = liveRow()
+      updateGearBadge(coneBadge, 'cone', live.coneId)
+      const cone = live.coneId ? LIGHT_CONES.find(c => c.id === live.coneId) : null
+      coneNameEl.textContent = cone?.name ?? '— конус не выбран —'
+      coneNameEl.classList.toggle('dim', !cone)
       // reflect the live row into the trace checkboxes + Technique controls (idempotent)
       const tr = live.traces
       view.traceChecks.forEach((c, i) => { c.checked = tr === false ? false : Array.isArray(tr) ? tr[i] !== false : true })
@@ -523,47 +574,98 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const col = store.collection
     const active = store.active
     partyNameText.textContent = active?.name ?? 'Отряд'
-    heading.textContent = active?.name ?? 'PARTY'
     delPartyBtn.disabled = col.parties.length <= 1
-    addSlotBtn.disabled = (active?.slots.length ?? 0) >= MAX_SLOTS
   }
 
   function paintSkills(view: CardView, row: TeamRowState, kitId: string): void {
     view.skillsBox.innerHTML = ''
-    for (const slot of ['basic', 'skill', 'ult', 'talent'] as const) {
+    const addLine = (
+      labelText: string,
+      abilityName: string,
+      lvl: number | null,
+      cap: number,
+      onChange?: (next: number) => void,
+    ): void => {
       const line = el('div', 'skillLine')
       const label = el('span', 'skillLabel')
-      label.textContent = SKILL_LABELS[slot]
-      // per-skill art (public/icons/abilities); falls back to a neutral chip when absent
-      const abilityName = ABILITY_NAMES[kitId]?.[slot] ?? ''
+      label.textContent = labelText
       const left = el('div', 'skillLeft')
       left.append(abilityBadge(abilityName), label)
-      const cap = slotCap(kitId, slot)
-      const currentRow = { ...row }
-      const lvl = Math.max(1, Math.min(cap, currentRow.levels?.[slot] ?? (slot === 'basic' ? 6 : 10)))
-      const btns = view.lvBtns[slot]
-      btns.val.textContent = String(lvl)
-      const setLvl = (next: number) => {
-        const v = Math.max(1, Math.min(cap, next))
-        const nr = { ...row, levels: { ...row.levels, [slot]: v } }
-        btns.val.textContent = String(v)
-        store.patchSlot(row.id, { levels: nr.levels })
-        paintSkills(view, nr, kitId)
-        paintStats(view, nr, kitId)
+      if (lvl === null || !onChange) {
+        const ro = el('span', 'lvlVal')
+        ro.textContent = lvl === null ? '—' : String(lvl)
+        line.append(left, ro)
+      } else {
+        const dec = el('button') as HTMLButtonElement
+        dec.type = 'button'
+        dec.textContent = '-'
+        dec.className = 'lvlBtn'
+        const val = el('span', 'lvlVal')
+        val.textContent = String(lvl)
+        const inc = el('button') as HTMLButtonElement
+        inc.type = 'button'
+        inc.textContent = '+'
+        inc.className = 'lvlBtn'
+        const setLvl = (next: number): void => {
+          const v = Math.max(1, Math.min(cap, next))
+          val.textContent = String(v)
+          onChange(v)
+        }
+        dec.onclick = (e) => { e.preventDefault(); setLvl(lvl - 1) }
+        inc.onclick = (e) => { e.preventDefault(); setLvl(lvl + 1) }
+        const inp = el('input', 'lvlInput') as HTMLInputElement
+        inp.type = 'number'
+        inp.min = '1'
+        inp.max = String(cap)
+        inp.value = String(lvl)
+        inp.onchange = () => setLvl(Number(inp.value) || 1)
+        const ctrl = el('div', 'lvlInputWrap')
+        ctrl.append(dec, inp, inc)
+        line.append(left, ctrl)
       }
-      btns.dec.onclick = (e) => { e.preventDefault(); setLvl(lvl - 1) }
-      btns.inc.onclick = (e) => { e.preventDefault(); setLvl(lvl + 1) }
-      const ctrl = el('div', 'lvlInputWrap')
-      const inp = el('input') as HTMLInputElement
-      inp.type = 'number'
-      inp.min = '1'
-      inp.max = String(cap)
-      inp.value = String(lvl)
-      inp.className = 'lvlInput'
-      inp.onchange = () => setLvl(Number(inp.value) || 1)
-      ctrl.append(btns.dec, inp, btns.inc)
-      line.append(left, ctrl)
       view.skillsBox.append(line)
+    }
+
+    for (const slot of ['basic', 'skill', 'ult', 'talent'] as const) {
+      const cap = slotCap(kitId, slot)
+      const lvl = Math.max(1, Math.min(cap, row.levels?.[slot] ?? (slot === 'basic' ? 6 : 10)))
+      addLine(SKILL_LABELS[slot], ABILITY_NAMES[kitId]?.[slot] ?? '', lvl, cap, (v) => {
+        const levels = { ...row.levels, [slot]: v }
+        store.patchSlot(row.id, { levels })
+        paintSkills(view, { ...row, levels }, kitId)
+        paintStats(view, { ...row, levels }, kitId)
+      })
+    }
+
+    // Extra rows: Elation Skill is its own editable level; memosprite rows mirror the owner's
+    // skill/talent level (the engine reads those); el_skill2 / talent2 have no separate level.
+    const names = ABILITY_NAMES[kitId] ?? {}
+    const extras: Array<{ key: string; label: string }> = [
+      { key: 'el_skill', label: 'Доп. навык' },
+      { key: 'el_skill2', label: 'Доп. навык 2' },
+      { key: 'mem_skill', label: 'Навык духа' },
+      { key: 'mem_talent', label: 'Талант духа' },
+      { key: 'talent2', label: 'Доп. талант' },
+    ]
+    for (const { key, label } of extras) {
+      const abilityName = names[key]
+      if (!abilityName) continue
+      if (key === 'el_skill') {
+        const cap = slotCap(kitId, 'el_skill')
+        const lvl = Math.max(1, Math.min(cap, row.levels?.el_skill ?? row.levels?.skill ?? 10))
+        addLine(label, abilityName, lvl, cap, (v) => {
+          const levels = { ...row.levels, el_skill: v }
+          store.patchSlot(row.id, { levels })
+          paintSkills(view, { ...row, levels }, kitId)
+          paintStats(view, { ...row, levels }, kitId)
+        })
+      } else if (key === 'mem_skill') {
+        addLine(label, abilityName, Math.max(1, Math.min(slotCap(kitId, 'skill'), row.levels?.skill ?? 10)), 0)
+      } else if (key === 'mem_talent') {
+        addLine(label, abilityName, Math.max(1, Math.min(slotCap(kitId, 'talent'), row.levels?.talent ?? 10)), 0)
+      } else {
+        addLine(label, abilityName, null, 0)
+      }
     }
   }
 
@@ -586,41 +688,46 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
   function paintStats(view: CardView, row: TeamRowState, kitId: string): void {
     view.statsBox.innerHTML = ''
     if (!kitId) { view.statsBox.append(dim('Пустой слот — выберите персонажа')); return }
+    const lr = store.active?.slots.find(s => s.id === row.id) ?? row
     // gather the card's CURRENT control state so the preview tracks unsaved edits (cone, levels,
     // traces, pieces) — the engine resolves the real numbers from these, never UI-side math
     const live: TeamRowState = {
-      ...row, kitId,
-      coneId: view.coneSel.value,
+      ...lr, kitId,
+      coneId: lr.coneId,
       si: Number(view.siSel.value) || 1,
       level: Math.max(0, Math.min(80, Number(view.charLevelInp.value) || 0)),
       coneLevel: Math.max(0, Math.min(80, Number(view.coneLevelInp.value) || 0)),
-      eidolon: Number(store.active?.slots.find(s => s.id === row.id)?.eidolon ?? row.eidolon ?? 0),
+      eidolon: Number(lr.eidolon ?? 0),
       traces: view.traceChecks.map(c => c.checked),
       pieces: view.pieces.map(pieceOf),
+      levels: lr.levels,
     }
     const spec: TeamSpec = toTeamSpec(live)
     const s = charFinalStats(spec)
     if (!s) { view.statsBox.append(dim('нет данных')); return }
-    const rows: Array<[string, string]> = [
-      ['hp', String(Math.round(s.hp))],
-      ['atk', String(Math.round(s.atk))],
-      ['def', String(Math.round(s.def))],
-      ['spd', String(Math.round(s.spd * 10) / 10)],
-      ['critRate', pct(s.critRate)],
-      ['critDmg', pct(s.critDmg)],
-      ['be', pct(s.be)],
-      ['ehr', pct(s.ehr)],
-      ['effRes', pct(s.effRes)],
-      ['err', pct(s.err)],
-      ['outHeal', pct(s.outHeal)],
-      ['elemDmgBoost', pct(s.elemDmgBoost)],
+    const rows: Array<[string, string, string]> = [
+      ['hp', 'HP', String(Math.round(s.hp))],
+      ['atk', 'ATK', String(Math.round(s.atk))],
+      ['def', 'DEF', String(Math.round(s.def))],
+      ['spd', 'Скорость', String(Math.round(s.spd * 10) / 10)],
+      ['critRate', 'Крит. шанс', pct(s.critRate)],
+      ['critDmg', 'Крит. урон', pct(s.critDmg)],
+      ['ehr', 'Эффект. попадание', pct(s.ehr)],
+      ['effRes', 'Сопр. эффектам', pct(s.effRes)],
+      ['be', 'Эффект. пробитие', pct(s.be)],
+      ['err', 'Восст. энергии', pct(s.err)],
+      ['energyMax', 'Макс. энергия', String(Math.round(s.energyMax))],
+      ['outHeal', 'Исходящее лечение', pct(s.outHeal)],
+      ['elemDmgBoost', 'Элем. урон', pct(s.elemDmgBoost)],
     ]
     const grid = el('div', 'statGrid')
-    for (const [key, val] of rows) {
+    for (const [key, label, val] of rows) {
       const cell = el('div', 'statCell')
+      const name = el('span', 'statName')
+      name.textContent = label
       const b = el('b')
       b.textContent = val
-      cell.append(statBadge(key), b)
+      cell.append(statBadge(key), name, b)
       grid.append(cell)
     }
     view.statsBox.append(grid)
@@ -630,8 +737,13 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
 
   function render(): void {
     paintPicker()
-    // a party always shows at least one slot; the user grows it via "+ Слот" up to MAX_SLOTS
-    if ((store.active?.slots.length ?? 0) < 1) store.addSlot()
+    // party has up to MAX_SLOTS; ensure slots exist
+    const activeParty = store.active
+    if (activeParty && activeParty.slots.length < MAX_SLOTS) {
+      for (let i = activeParty.slots.length; i < MAX_SLOTS; i++) store.addSlot()
+    } else if ((activeParty?.slots.length ?? 0) < 1) {
+      store.addSlot()
+    }
     const party = store.active
     if (!party) { cardsHost.innerHTML = ''; cards.clear(); return }
 
@@ -651,7 +763,8 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       for (const row of party.slots) {
         const v = cards.get(row.id)
         if (!v) continue
-        v.coneSel.value = row.coneId
+        const clearBtn = v.root.querySelector('.pcClear') as HTMLElement | null
+        if (clearBtn) clearBtn.style.display = row.kitId ? '' : 'none'
         v.siSel.value = String(row.si || 1)
         v.charLevelInp.value = String(row.level ?? 80)
         v.coneLevelInp.value = String(row.coneLevel ?? 80)
@@ -702,14 +815,16 @@ function pct(v: number): string {
 }
 
 /** per-kit ability-level ceiling, mirroring `resolveLevels`' caps (default 7/12/12/12) */
-const CAPS: Record<string, Partial<Record<'basic' | 'skill' | 'ult' | 'talent', number>>> = {
-  silver_wolf_lv999: { basic: 10, skill: 15, ult: 15, talent: 15 },
-  robin_summeretto: { basic: 10, skill: 15, ult: 15, talent: 15 },
+type LevelSlot = 'basic' | 'skill' | 'ult' | 'talent' | 'el_skill'
+
+const CAPS: Record<string, Partial<Record<LevelSlot, number>>> = {
+  silver_wolf_lv999: { basic: 10, skill: 15, ult: 15, talent: 15, el_skill: 15 },
+  robin_summeretto: { basic: 10, skill: 15, ult: 15, talent: 15, el_skill: 15 },
   march7th_the_hunt: { basic: 10, skill: 15, ult: 15, talent: 15 },
   cyrene: { basic: 10, skill: 15, ult: 15, talent: 15 },
   aglaea: { basic: 10, skill: 15, ult: 15, talent: 15 },
 }
 
-function slotCap(kitId: string, slot: 'basic' | 'skill' | 'ult' | 'talent'): number {
+function slotCap(kitId: string, slot: LevelSlot): number {
   return CAPS[kitId]?.[slot] ?? (slot === 'basic' ? 7 : 12)
 }
