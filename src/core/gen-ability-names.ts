@@ -8,7 +8,7 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { KITS } from './kits'
+import { KITS, KIT_PATH } from './kits'
 import { PROG } from './progression'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..')
@@ -83,7 +83,7 @@ const out: Record<string, Record<string, string>> = {}
 const missing: string[] = []
 
 for (const kit of KITS) {
-  const row = rowFor(kit.id, kit.name, kit.elem, kit.path)
+  const row = rowFor(kit.id, kit.name, kit.elem, KIT_PATH[kit.id] ?? '')
   if (!row) { missing.push(`${kit.id}: no dataset row`); continue }
   const slots = Object.keys(PROG[kit.id]?.abilities ?? {})
   const entry: Record<string, string> = {}

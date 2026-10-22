@@ -13,11 +13,16 @@ import { store } from '../../src/ui/store'
 import type { TeamRowState } from '../../src/ui/store'
 
 /**
- * §Party Setup — named-party model + persistence + store bridge.
+ * §Party Setup — named-party model + persistence + store bridge + the mounted panel.
  *
  * The model is pure (`src/core/party.ts`); the persistence layer (`src/ui/partyStore.ts`) is
  * exercised against happy-dom's localStorage for round-trip, safe-read and legacy migration, and
  * for the single-writer bridge into `store.team`.
+ *
+ * The DOM block follows the CURRENT panel markup: the character is picked from the portrait (no
+ * select), a new party starts with ONE slot (§Task 9), a single-use Technique is a checkbox and a
+ * multi-use Technique is a count select, and a relic piece carries a set dropdown plus ONE number
+ * for the summed substat value (§Task 7).
  */
 
 const row = (id: string, kitId = 'seele'): TeamRowState =>
@@ -90,7 +95,12 @@ export default () => {
   cases.push(raw('a persisted collection validates with its parties intact', back.parties.length === 1 && back.parties[0]!.name === 'Тест'))
   cases.push(raw('validate drops malformed parties instead of throwing', validateCollection({ parties: [null, { id: 'ok', slots: [] }] }).parties.length === 1))
 
-  // ---------------------------------------------------------------- DOM mount smoke
+  // a fresh store starts with ONE slot (§Task 9)
+  ls.clear()
+  const fresh = new PartyStore()
+  cases.push(raw('a new party starts with ONE slot', fresh.active?.slots.length === 1, `${fresh.active?.slots.length ?? 0}`))
+
+  // ---------------------------------------------------------------- mounted panel
   const doc = win.document as unknown as Document
   g.document = doc
   g.HTMLElement = (win as unknown as { HTMLElement: unknown }).HTMLElement
@@ -98,70 +108,101 @@ export default () => {
   const host = doc.createElement('div')
   doc.body.append(host)
 
-  // start from a clean known state
-  for (const r of store.getState().team) store.dispatch({ type: 'team/remove', id: r.id })
-  const handle = initPartyPanel(host)
-  cases.push(raw('panel mounts a party picker + 4 character cards', !!host.querySelector('.partyPicker') && host.querySelectorAll('.partyCard').length === MAX_SLOTS))
-  cases.push(raw('panel mirrors the active party into the store slice', store.getState().team.length === handle.store.active?.slots.length))
+  // start from a clean shared store slice
+  for (const r of [...store.getState().team]) store.dispatch({ type: 'team/remove', id: r.id })
 
-  const before = handle.store.collection.parties.length
-  ;(host.querySelector('.partyPicker .btn-secondary') as HTMLButtonElement).click()
-  cases.push(raw('+Создать adds exactly one party', handle.store.collection.parties.length === before + 1))
-  cases.push(raw('created party is persisted to localStorage', (ls.getItem(PARTIES_KEY) ?? '').includes(handle.store.collection.activeId ?? '@@')))
+  const pCol = validateCollection({
+    parties: [{ id: 'p1', name: 'Тест', slots: [row('r1', 'jingyuan'), row('r2', 'tingyun'), { ...row('r3'), kitId: '' }] }],
+    activeId: 'p1',
+  })
+  const pStore = new PartyStore(pCol)
+  const pHandle = initPartyPanel(host, pStore)
 
-  // re-mount is idempotent (route re-enter must not duplicate cards/state)
+  const cards = host.querySelectorAll('.partyCard')
+  cases.push(raw('the panel renders one card per slot', cards.length === 3, `${cards.length}`))
+  cases.push(raw('the panel shows the party name button', !!host.querySelector('.partyNameBtn')))
+  const card0 = cards[0] as HTMLElement
+  const card2 = cards[2] as HTMLElement
+  const nameOf = (kitId: string) => KITS.find(k => k.id === kitId)?.name ?? '@@'
+  cases.push(raw('the first card shows the character name', (card0.querySelector('.pcName') as HTMLElement).textContent === nameOf('jingyuan')))
+  cases.push(raw('a blank slot shows the empty state', (card2.querySelector('.pcName') as HTMLElement).textContent === '—' && (card2.querySelector('.pcStats') as HTMLElement).textContent?.includes('Пустой слот') === true))
+  cases.push(raw('the character is picked from the portrait (no character select in the card)', card0.querySelector('.pcChar') === null))
+
+  // "+ Слот" grows the party
+  const addSlotBtn = host.querySelector('.addSlotBtn') as HTMLButtonElement
+  addSlotBtn.click()
+  cases.push(raw('+ Слот adds exactly one slot', pStore.active?.slots.length === 4, `${pStore.active?.slots.length ?? 0}`))
+  cases.push(raw('+ Слот renders the new card', host.querySelectorAll('.partyCard').length === 4))
+
+  // a new party
+  const partiesBefore = pStore.collection.parties.length
+  const addPartyBtn = [...host.querySelectorAll('.partyIconBtn')].find(b => b.getAttribute('title') === 'Создать новый отряд') as HTMLButtonElement
+  addPartyBtn.click()
+  cases.push(raw('the add-party button adds exactly one party', pStore.collection.parties.length === partiesBefore + 1))
+  cases.push(raw('the created party is persisted', (ls.getItem(PARTIES_KEY) ?? '').includes(pStore.collection.activeId ?? '@@')))
+
+  // re-entering the route re-renders instead of duplicating
   const cardsBefore = host.querySelectorAll('.partyCard').length
-  initPartyPanel(host)
+  initPartyPanel(host, pStore)
   cases.push(raw('re-entering the route does not duplicate cards', host.querySelectorAll('.partyCard').length === cardsBefore))
 
-  // ---------------------------------------------------------------- panel cards: render + edits
-  // a dedicated store/host keeps this block independent of the collection state above
-  for (const r of [...store.getState().team]) store.dispatch({ type: 'team/remove', id: r.id })
-  const pCol = validateCollection({ parties: [{ id: 'p1', name: 'Тест', slots: [row('s1', 'jingyuan')] }], activeId: 'p1' })
-  const pStore = new PartyStore(pCol)
-  const pHost = doc.createElement('div')
-  doc.body.append(pHost)
-  initPartyPanel(pHost, pStore)
-  const pCards = pHost.querySelectorAll('.partyCard')
-  const card0 = pCards[0] as HTMLElement
-  const nameOf = (kitId: string) => KITS.find(k => k.id === kitId)?.name ?? '@@'
-  cases.push(raw('first paint renders the character name (not an empty card)', (card0.querySelector('.pcName') as HTMLElement).textContent === nameOf('jingyuan')))
-  const blankCard = pCards[1] as HTMLElement
-  cases.push(raw('a blank slot shows the empty state, not the first kit', (blankCard.querySelector('.pcName') as HTMLElement).textContent === '—' && (blankCard.querySelector('.pcStats') as HTMLElement).textContent?.includes('Пустой слот') === true))
-  cases.push(raw('the character select is mounted in the DOM (one per card)', pHost.querySelectorAll('.pcChar').length === MAX_SLOTS))
+  // back to the 3-slot party for the per-card assertions
+  pStore.select('p1')
+  pHandle.render()
+  const cardA = host.querySelectorAll('.partyCard')[0] as HTMLElement
+  const cardB = host.querySelectorAll('.partyCard')[1] as HTMLElement
 
-  // switching the character: the card and the kit-dependent controls follow the new kit
-  const charSel = card0.querySelector('.pcChar') as HTMLSelectElement
-  const techSel = [...card0.querySelectorAll('select')].find(s => s.getAttribute('aria-label') === 'Техника') as HTMLSelectElement
-  const techOpts = (kitId: string) => {
-    const t = KITS.find(k => k.id === kitId)?.technique
-    return 1 + (t ? (t.maxUses ?? 1) : 0)
-  }
-  cases.push(raw('technique options follow the kit', techSel.options.length === techOpts('jingyuan')))
-  techSel.value = '1'
-  techSel.onchange?.(new Event('change') as never)
-  cases.push(raw('the technique use is stored', pStore.active?.slots.find(s => s.id === 's1')?.techniqueUses === 1))
-  charSel.value = 'pela'
-  charSel.onchange?.(new Event('change') as never)
-  cases.push(raw('switching the character repaints the card', (card0.querySelector('.pcName') as HTMLElement).textContent === nameOf('pela')))
-  cases.push(raw('the store row follows the new kit', pStore.active?.slots.find(s => s.id === 's1')?.kitId === 'pela'))
-  cases.push(raw('technique uses reset on a character change', pStore.active?.slots.find(s => s.id === 's1')?.techniqueUses === 0))
-  cases.push(raw('technique options are re-resolved for the new kit', techSel.title.includes(KITS.find(k => k.id === 'pela')?.technique?.name ?? '@@')))
+  // ---- Technique: a single-use kit gets a checkbox, a multi-use kit gets a count select
+  const techSelOf = (card: HTMLElement) => [...card.querySelectorAll('select')].find(s => s.getAttribute('aria-label') === 'Техника') as HTMLSelectElement
+  const techChkOf = (card: HTMLElement) => [...card.querySelectorAll('input[type=checkbox]')].find(s => s.getAttribute('aria-label') === 'Техника') as HTMLInputElement
+  const techSel0 = techSelOf(cardA)
+  const techChk0 = techChkOf(cardA)
+  cases.push(raw('a single-use Technique hides the count select', techSel0.style.display === 'none'))
+  cases.push(raw('a single-use Technique shows the checkbox', techChk0.style.display !== 'none'))
+  techChk0.checked = true
+  techChk0.onchange?.(new Event('change') as never)
+  cases.push(raw('the Technique activation is stored', pStore.active?.slots.find(s => s.id === 'r1')?.techniqueUses === 1))
 
-  // an unrelated refresh must not revert an edited skill level (the store replaces the row object)
-  const skillInput = () => [...card0.querySelectorAll('.lvlInput')][1] as HTMLInputElement
-  skillInput().value = '12'
-  skillInput().onchange?.(new Event('change') as never)
-  const tracesChk = card0.querySelector('input[type=checkbox]') as HTMLInputElement
-  tracesChk.checked = false
-  tracesChk.onchange?.(new Event('change') as never)
-  cases.push(raw('an unrelated refresh keeps the edited skill level', skillInput().value === '12'))
+  const techSel1 = techSelOf(cardB)
+  cases.push(raw('a multi-use Technique shows the count select', techSel1.style.display !== 'none'))
+  cases.push(raw('a multi-use Technique lists 0..maxUses', techSel1.options.length === 3, `${techSel1.options.length}`))
+  techSel1.value = '2'
+  techSel1.onchange?.(new Event('change') as never)
+  cases.push(raw('the Technique use count is stored', pStore.active?.slots.find(s => s.id === 'r2')?.techniqueUses === 2))
+
+  // ---- skill levels (number input + +/- buttons)
+  const skillInp = cardA.querySelectorAll('.lvlInput')[1] as HTMLInputElement
+  skillInp.value = '12'
+  skillInp.onchange?.(new Event('change') as never)
+  cases.push(raw('the skill level is stored', pStore.active?.slots.find(s => s.id === 'r1')?.levels.skill === 12))
+  pHandle.render()
+  cases.push(raw('an unrelated refresh keeps the edited skill level', pStore.active?.slots.find(s => s.id === 'r1')?.levels.skill === 12))
+
+  // ---- relic editor (§Task 7): 6 pieces, a set dropdown and ONE number for the substats
+  const pieceCards = cardA.querySelectorAll('.pieceCard')
+  cases.push(raw('the card mounts the 6 relic piece editors', pieceCards.length === 6, `${pieceCards.length}`))
+  const piece0 = pieceCards[0] as HTMLElement
+  cases.push(raw('a piece has no "+ саб" button (the script splits the value)', piece0.querySelector('.addSub') === null))
+  const valueInp = piece0.querySelector('.pieceValue') as HTMLInputElement
+  cases.push(raw('a piece carries one number input for the substats', !!valueInp && valueInp.type === 'number'))
+  valueInp.value = '0.3'
+  valueInp.oninput?.(new Event('input') as never)
+  const storedPiece = pStore.active!.slots.find(s => s.id === 'r1')!.pieces.find(p => p.slot === 'head')
+  cases.push(raw('the split lands in the store', !!storedPiece && storedPiece.subs.length > 0, `${storedPiece?.subs.length ?? 0}`))
+  cases.push(raw('the split never repeats the main stat', !!storedPiece && storedPiece.subs.every(s => s.stat !== storedPiece.main)))
+  cases.push(raw('the split is painted under the input', piece0.querySelectorAll('.subRow').length === (storedPiece?.subs.length ?? 0)))
+  cases.push(raw('the piece shows the achieved total', (piece0.querySelector('.pieceTotal') as HTMLElement).textContent.startsWith('итого:')))
+
+  // the set plan sits above the pieces
+  const planRow = cardA.querySelector('.setPlan') as HTMLElement
+  cases.push(raw('the set plan sits above the relic pieces', !!planRow))
+  cases.push(raw('the plan carries the relic + planar set pickers', planRow.querySelectorAll('.dd').length === 3, `${planRow.querySelectorAll('.dd').length}`))
 
   // collect() must not carry empty slots into the engine
   const setup = collect()
-  cases.push(raw('collect() drops empty slots', setup.team.length === 1 && setup.team.every(t => !!t.kitId)))
+  cases.push(raw('collect() drops empty slots', setup.team.length === 2 && setup.team.every(t => !!t.kitId), `${setup.team.length}`))
 
-  // the mounted panel mirrors its active party into the shared store singleton — undo that so this
+  // the mounted panel mirrors its active party into the shared store slice — undo that so this
   // suite cannot leak rows into team-spec/techniques (which assert on an exact team slice)
   for (const r of [...store.getState().team]) store.dispatch({ type: 'team/remove', id: r.id })
 

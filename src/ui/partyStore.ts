@@ -21,6 +21,9 @@ import {
 export const PARTIES_KEY = 'FiniteHSR.parties'
 const SCHEMA = 1
 
+/** a new/empty party starts with a single slot; the user grows it via "+ Слот" up to MAX_SLOTS */
+const DEFAULT_SLOTS = 1
+
 interface Persisted { schema: number; collection: PartyCollection }
 
 // ---------------------------------------------------------------- blank row
@@ -132,7 +135,7 @@ export class PartyStore {
 
   constructor(col: PartyCollection = loadCollection()) {
     this.col = col
-    if (!this.col.parties.length) this.col = createParty(this.col, Array.from({ length: MAX_SLOTS }, blankSlot))
+    if (!this.col.parties.length) this.col = createParty(this.col, Array.from({ length: DEFAULT_SLOTS }, blankSlot))
     this.adoptLiveTeam()
     this.commit()
   }
@@ -148,7 +151,7 @@ export class PartyStore {
     if (!p || p.slots.some(s => s.kitId)) return
     const live = store.getState().team.filter(r => r.kitId)
     if (!live.length) return
-    const padded = [...live.slice(0, MAX_SLOTS), ...Array.from({ length: MAX_SLOTS - Math.min(live.length, MAX_SLOTS) }, blankSlot)]
+    const padded = live.slice(0, MAX_SLOTS)
     this.col = { ...this.col, parties: this.col.parties.map(x => x.id === p.id ? { ...x, slots: padded } : x) }
   }
 
@@ -162,7 +165,7 @@ export class PartyStore {
 
   create(): Party {
     // guard: creating an empty party twice in one tick still yields distinct ids (nextId is monotonic)
-    this.col = createParty(this.col, Array.from({ length: MAX_SLOTS }, blankSlot))
+    this.col = createParty(this.col, Array.from({ length: DEFAULT_SLOTS }, blankSlot))
     this.commit()
     return activeParty(this.col)!
   }

@@ -9,7 +9,7 @@
 //   dd.value = 'in_the_night'
 //   dd.onchange = () => { ... }
 //   parent.append(dd.root)
-import { el, escapeHtml } from './dom'
+import { el } from './dom'
 
 let ddSeq = 0
 
@@ -19,6 +19,7 @@ export class Dropdown {
   private menu: HTMLElement
   private entries: Array<[string, string]> = []
   private sigId?: string
+  private icons: Record<string, string> = {}
   private _value = ''
   private open = false
   onchange: (() => void) | null = null
@@ -53,15 +54,26 @@ export class Dropdown {
     this.paint()
   }
 
-  setEntries(entries: Array<[string, string]>, opts: { sig?: string } = {}): void {
+  setEntries(entries: Array<[string, string]>, opts: { sig?: string; icons?: Record<string, string> } = {}): void {
     this.entries = entries
     this.sigId = opts.sig
+    this.icons = opts.icons ?? {}
     if (!entries.some(([v]) => v === this._value)) this._value = entries[0]?.[0] ?? ''
     this.menu.innerHTML = ''
     for (const [v, label] of entries) {
       const o = el('div', 'ddOpt' + (v === this.sigId ? ' ddSig' : ''))
       o.dataset.value = v
-      o.innerHTML = escapeHtml(label)
+      const icon = this.icons[v]
+      if (icon) {
+        const img = document.createElement('img')
+        img.className = 'ddOptIcon'
+        img.src = icon
+        img.alt = ''
+        o.append(img)
+      }
+      const t = el('span', 'ddOptLabel')
+      t.textContent = label
+      o.append(t)
       this.menu.append(o)
     }
     this.paint()
@@ -72,7 +84,18 @@ export class Dropdown {
   }
 
   private paint(): void {
-    this.btn.textContent = this.labelFor(this._value)
+    this.btn.textContent = ''
+    const icon = this.icons[this._value]
+    if (icon) {
+      const img = document.createElement('img')
+      img.className = 'ddOptIcon'
+      img.src = icon
+      img.alt = ''
+      this.btn.append(img)
+    }
+    const t = el('span', 'ddOptLabel')
+    t.textContent = this.labelFor(this._value)
+    this.btn.append(t)
     this.btn.classList.toggle('ddSig', this._value !== '' && this._value === this.sigId)
     for (const o of this.menu.querySelectorAll<HTMLElement>('.ddOpt')) {
       o.classList.toggle('ddSel', o.dataset.value === this._value)

@@ -1,5 +1,5 @@
 import { raw } from '../_helpers/battle'
-import { createStore, subscribeSlice, store, rootReducer, initialState, techniquesForRows, type TeamRowState } from '../../src/ui/store'
+import { createStore, subscribeSlice, store, rootReducer, initialState, techniquesForRows, survivingTechniqueUses, type TeamRowState } from '../../src/ui/store'
 
 /**
  * §84 G6 — store slice-reducer semantics. The store is the GUI's only state owner
@@ -60,6 +60,20 @@ export default () => {
     row('t4', { kitId: 'gallagher' }),
   ])
 
+  // §84.6.1: `survivingTechniqueUses` reuses the engine's own resolvePreCombat conflict rules
+  const atkDefs = [
+    { kitId: 'a', name: 'A', kind: 'attack' as const },
+    { kitId: 'b', name: 'B', kind: 'attack' as const },
+  ]
+  const twoAttacks = survivingTechniqueUses([row('a1', { kitId: 'a', techniqueUses: 1 }), row('b1', { kitId: 'b', techniqueUses: 1 })], atkDefs)
+  const zoneDefs = [
+    { kitId: 'a', name: 'A', kind: 'buff' as const, zone: true },
+    { kitId: 'b', name: 'B', kind: 'buff' as const, zone: true },
+  ]
+  const twoZones = survivingTechniqueUses([row('a1', { kitId: 'a', techniqueUses: 1 }), row('b1', { kitId: 'b', techniqueUses: 1 })], zoneDefs)
+  const capDefs = [{ kitId: 'a', name: 'A', kind: 'buff' as const, maxUses: 1 }]
+  const capped = survivingTechniqueUses([row('a1', { kitId: 'a', techniqueUses: 3 })], capDefs)
+
   return [
     raw('createStore returns the exact object it was given', probe.getState() === given),
     raw('team/add appends a row', one.team.length === 1 && one.team[0].id === 'a'),
@@ -75,5 +89,8 @@ export default () => {
     raw('history keeps the most recent records', hist[hist.length - 1].label === 'run14', hist[hist.length - 1].label),
     raw('techniquesForRows expands in row order with repeats', JSON.stringify(techOut) === JSON.stringify(['seele', 'bronya', 'bronya', 'pela']), JSON.stringify(techOut)),
     raw('techniquesForRows: absent uses -> no activations', techniquesForRows([]).length === 0 && techniquesForRows([row('t5')]).length === 0),
+    raw('survivingTechniqueUses: first attack survives, later one cancelled', JSON.stringify(twoAttacks) === JSON.stringify([1, 0]), JSON.stringify(twoAttacks)),
+    raw('survivingTechniqueUses: last zone wins, earlier replaced', JSON.stringify(twoZones) === JSON.stringify([0, 1]), JSON.stringify(twoZones)),
+    raw('survivingTechniqueUses: repeat-cap trims to maxUses', JSON.stringify(capped) === JSON.stringify([1]), JSON.stringify(capped)),
   ]
 }

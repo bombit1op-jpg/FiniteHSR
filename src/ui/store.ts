@@ -4,6 +4,7 @@ import type { ManualMod } from '../core/battle'
 import type { AbilityLevels, RelicPiece } from '../core/entities/Unit'
 import type { Simulator } from '../core/simulator'
 import type { EncounterSpec } from '../core/encounter'
+import { resolvePreCombat } from '../core/battle/PreCombat'
 
 /** redux-style store: single state tree, action dispatch, subscribe. No React bindings. */
 
@@ -39,7 +40,7 @@ export function createStore<S>(reducer: (prev: S, a: RootAction) => S, init: S):
 
 // ---------------------------------------------------------------- state shape
 
-export interface SubState { stat: string; tier: 0 | 1 | 2; rolls: number }
+export interface SubState { stat: string; tier: 0 | 1 | 2; rolls: number; spread?: number[] }
 export interface PieceState { slot: RelicPiece['slot']; setId: string; main: string; subs: SubState[] }
 
 export interface TeamRowState {
@@ -74,6 +75,22 @@ export interface TeamRowState {
  *  `techniqueUses` > 1 is an additional use of the same kit (the engine's repeat-cap still applies). */
 export function techniquesForRows(rows: readonly TeamRowState[]): string[] {
   return rows.flatMap(r => Array.from({ length: r.techniqueUses ?? 0 }, () => r.kitId))
+}
+
+/** §84.6.1 — the surviving Technique count per row after the engine's own `resolvePreCombat` rules
+ *  (repeat-cap / attack-conflict / zone-replaced / switch-cancelled). Reuses the engine resolver, so
+ *  the UI never re-implements the conflict rules: a row whose activations are all cancelled drops to
+ *  0. Returned in row order; index i pairs with `rows[i]`. */
+export function survivingTechniqueUses(rows: readonly TeamRowState[], techniques: readonly { kitId: string, name: string, kind: 'buff' | 'attack', zone?: boolean, switchSensitive?: boolean, maxUses?: number }[]): number[] {
+  const byId = new Map(techniques.map(t => [t.kitId, t]))
+  const inputs = techniquesForRows(rows)
+    .map(kitId => byId.get(kitId))
+    .filter((t): t is NonNullable<typeof t> => !!t)
+    .map(t => ({ kitId: t.kitId, name: t.name, kind: t.kind, zone: t.zone, switchSensitive: t.switchSensitive, maxUses: t.maxUses }))
+  const plan = resolvePreCombat(inputs)
+  const survivors = new Map<string, number>()
+  for (const a of plan.survivors) survivors.set(a.kitId, (survivors.get(a.kitId) ?? 0) + 1)
+  return rows.map(r => Math.min(r.techniqueUses ?? 0, survivors.get(r.kitId) ?? 0))
 }
 
 export interface EnemyState {

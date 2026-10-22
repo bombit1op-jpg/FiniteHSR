@@ -73,21 +73,24 @@ export type StatIconKey =
   | 'ATK' | 'HP' | 'DEF' | 'SPD' | 'CRIT Rate' | 'CRIT DMG' | 'Break Effect'
   | 'Effect Hit Rate' | 'Effect RES' | 'Energy Regeneration Rate' | 'DMG Boost'
   | 'Toughness' | 'Trace' | 'Eidolon' | 'Skill Point' | 'Energy' | 'Path'
+  | 'Outgoing Healing Boost'
 
 export function statIconUrl(name: StatIconKey | string): string | undefined { return STATS_ICONS[name] }
 
 /** engine stat key -> display name used by the stat icon manifest (undefined = no committed art) */
 const STAT_ICON_KEY: Record<string, StatIconKey> = {
   atk: 'ATK', hp: 'HP', def: 'DEF', spd: 'SPD',
+  atkPct: 'ATK', hpPct: 'HP', defPct: 'DEF', spdFlat: 'SPD',
   critRate: 'CRIT Rate', critDmg: 'CRIT DMG', be: 'Break Effect',
   ehr: 'Effect Hit Rate', effRes: 'Effect RES',
   err: 'Energy Regeneration Rate', outHeal: 'Outgoing Healing Boost',
   elemDmgBoost: 'DMG Boost', energyMax: 'Energy',
+  elation: 'DMG Boost',
 }
 
 /** small stat icon chip (real art or a neutral letter chip); `stat` is an engine stat key or display name */
 export function statBadge(stat: string): HTMLElement {
-  const key = STAT_ICON_KEY[stat] ?? stat
+  const key = stat.startsWith('dmg:') ? 'DMG Boost' : STAT_ICON_KEY[stat] ?? stat
   const url = statIconUrl(key)
   const node = el('span', 'metaBadge statBadge')
   node.dataset.stat = key
@@ -172,6 +175,20 @@ export function updateSubCubes(node: HTMLElement, rolls: number, tier: 0 | 1 | 2
     const cube = el('span', 'subCube' + (i < n ? ' on' : ''))
     node.append(cube)
   }
+}
+
+/** one cube per roll, each cube carrying its own tier — the color gradation marks roll quality */
+export function rollCubes(spread: readonly number[]): HTMLElement {
+  const node = el('span', 'subCubes')
+  node.textContent = ''
+  for (let i = 0; i < 6; i++) {
+    const tier = spread[i]
+    const cube = el('span', 'subCube' + (tier === undefined ? '' : ' on'))
+    if (tier !== undefined) cube.dataset.tier = String(tier)
+    node.append(cube)
+  }
+  node.title = spread.length ? `${spread.length} ${spread.length === 1 ? 'ролл' : 'роллов'}` : ''
+  return node
 }
 
 /** piece rating letter -> tier class, for coloring the badge. */

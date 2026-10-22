@@ -56,7 +56,8 @@ export function validMain(slot: RelicPiece['slot'], key: string): boolean {
   return SLOT_MAINS[slot].includes(key)
 }
 
-function subValue(sub: { stat: string; tier: 0 | 1 | 2; rolls: number; spread?: number[] }): number {
+/** the value of one substat line: per-roll tiers (when `spread` is given) or tier × rolls */
+export function substatValue(sub: { stat: string; tier: 0 | 1 | 2; rolls: number; spread?: number[] }): number {
   const tiers = SUBSTAT_TIERS[sub.stat]
   if (!tiers) return 0
   if (sub.spread) return Math.round(sub.spread.map(t => tiers[t]).reduce((a, b) => a + b, 0) * 1e5) / 1e5
@@ -75,7 +76,7 @@ export function pieceContrib(p: RelicPiece): { baseAdd: { hp: number; atk: numbe
     out.mods.push({ stat: key as Mod['stat'], value: RELIC_MAIN_VALUES[p.main] })
   }
   for (const s of p.subs ?? []) {
-    const v = subValue(s)
+    const v = substatValue(s)
     if (!v) continue
     switch (s.stat) {
       case 'hpFlat': out.mods.push({ stat: 'hpFlat', value: v }); break

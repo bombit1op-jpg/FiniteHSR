@@ -6,7 +6,7 @@
 //   rawScore           = Σ subValue * contribution(sub)
 //   percentScore       = truncate10ths(round5(rawScore / idealScore * 100))
 //   idealScore         = optimal packing of the 6 substat rolls (per part/mainstat)
-import { SUBSTAT_TIERS, SLOT_MAINS } from './gear'
+import { SUBSTAT_TIERS, SLOT_MAINS, substatValue } from './gear'
 import { RELIC_WEIGHTS, type RelicScoringMeta } from './relicWeights'
 
 /** flat HP/ATK/DEF weight is derived from the corresponding percent weight (Fribbels FLAT_STAT_SCALING). */
@@ -18,7 +18,7 @@ const POTENTIAL_UNIT = 6.48
 
 export type RelicSlot = 'head' | 'hands' | 'body' | 'feet' | 'sphere' | 'rope'
 
-export type SubRoll = { stat: string; tier: 0 | 1 | 2; rolls: number }
+export type SubRoll = { stat: string; tier: 0 | 1 | 2; rolls: number; spread?: number[] }
 
 type Meta = {
   stats: Record<string, number>
@@ -183,7 +183,7 @@ export function scoreRelic(
   const contrib = contributions(meta)
   let rawScore = 0
   for (const s of subs) {
-    const value = (SUBSTAT_TIERS[s.stat]?.[s.tier] ?? 0) * s.rolls
+    const value = substatValue(s)
     rawScore += value * (contrib[s.stat] ?? 0)
   }
   const pct = ideal === Infinity ? 0 : truncate10ths(round5((rawScore / ideal) * 100))

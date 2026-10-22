@@ -14,21 +14,21 @@ import { KITS, KIT_PATH } from '../core/kits'
 import type { TeamSpec } from '../core/battle'
 import { el, fillSelect } from './dom'
 import { Dropdown } from './dropdown'
-import { coneOptions, signatureCone } from '../core/gearOrder'
+import { coneOptions, signatureCone, relicOptions, planarOptions } from '../core/gearOrder'
 import type { TeamRowState } from './store'
 import {
   metaBadge, updateMetaBadges, gearBadge, updateGearBadge, statBadge, ratingTierClass,
-  charPortrait, updateCharPortrait, updatePieceBadge, abilityBadge, abilityIconUrl,
+  charPortrait, updateCharPortrait, abilityBadge, gearIconUrl,
 } from './icons'
+import { ABILITY_NAMES } from '../core/abilityNames'
 import { buildPieceEditors, pieceOf, toTeamSpec, type PieceEditor } from './team'
 import { scoreRelic } from '../core/relicScore'
 import { charFinalStats, SKILL_LABELS } from '../core/charStats'
+import { traceMods } from '../core/progression'
 import { PartyStore } from './partyStore'
 import { MAX_SLOTS } from '../core/party'
 import { openCharacterPicker, openConePicker, openPartyListPicker } from './pickers'
-import { levelCaps } from '../core/battle'
-import { ABILITY_NAMES } from '../core/abilityNames'
-import { PROG } from '../core/progression'
+import { survivingTechniqueUses } from './store'
 
 interface CardView {
   rowId: string
@@ -37,7 +37,6 @@ interface CardView {
   elemChip: HTMLElement
   pathChip: HTMLElement
   nameEl: HTMLElement
-  charSel: HTMLSelectElement
   charLevelInp: HTMLInputElement
   coneBadge: HTMLElement
   coneNameEl: HTMLElement
@@ -45,11 +44,14 @@ interface CardView {
   siSel: HTMLSelectElement
   coneLevelInp: HTMLInputElement
   eidButtons: HTMLButtonElement[]
-  lvBtns: Record<string, { dec: HTMLButtonElement, val: HTMLElement, inc: HTMLButtonElement, inp: HTMLInputElement }>
+  lvBtns: Record<string, { dec: HTMLButtonElement, val: HTMLElement, inc: HTMLButtonElement }>
   tracesWrap: HTMLElement
+  /** one checkbox per minor-trace stat, in `traceMods(kitId)` order */
+  traceChecks: HTMLInputElement[]
   energySel: HTMLSelectElement
   techniqueSel: HTMLSelectElement
   techniqueWrap: HTMLLabelElement
+  techniqueChk: HTMLInputElement
   pieces: PieceEditor[]
   statsBox: HTMLElement
   skillsBox: HTMLElement
@@ -147,11 +149,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
   addPartyBtn.onclick = () => {
     if (addPartyBtn.disabled) return
     addPartyBtn.disabled = true
-    // ensure at least 1 slot
-    const p = store.create()
-    if (p && p.slots.length === 0) {
-      for (let i = 0; i < 1; i++) store.addSlot()
-    }
+    store.create()
     render()
     addPartyBtn.disabled = false
   }
@@ -167,25 +165,16 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
   function makeCard(row: TeamRowState): CardView {
     const root = el('div', 'partyCard')
 
-    // --- hero art + identity (pick character by clicking portrait)
+    // --- hero art + identity (pick character by clicking the portrait ONLY — no select, no dropdown)
     const portrait = charPortrait(row.kitId || '')
     portrait.style.cursor = 'pointer'
     portrait.title = 'Выбрать персонажа'
-    const charSel = el('select', 'pcChar') as HTMLSelectElement
-    fillSelect(charSel, [['', '— персонаж —'], ...KITS.map(k => [k.id, `${k.name} (${k.elem})`] as [string, string])])
-    charSel.value = row.kitId || ''
-    charSel.setAttribute('aria-label', 'Персонаж')
     const pickChar = async () => {
       const active = store.active
       const exclude = (active?.slots.map(s => s.kitId).filter(Boolean) as string[]) ?? []
-      if (row.kitId) exclude.push(row.kitId) // allow keeping current
       const chosen = await openCharacterPicker({ exclude: exclude.filter(id => id !== row.kitId), current: row.kitId || undefined })
       if (chosen === null) return
-      if (chosen === '') {
-        clearSlot(row.id); render(); return
-      }
-      charSel.value = chosen
-      charSel.classList.remove('open')
+      if (chosen === '') { clearSlot(row.id); render(); return }
       patch({ kitId: chosen, coneId: '', relic1: '', relic2: '', planar: '', pieces: [], techniqueUses: 0 })
       render()
     }
@@ -193,17 +182,14 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const identity = el('div', 'pcIdentity')
     const nameRow = el('div', 'pcNameRow')
     const nameEl = el('div', 'pcName')
-    nameEl.style.cursor = 'pointer'
-    nameEl.title = 'Выбрать персонажа'
-    nameEl.onclick = pickChar
     const chips = el('div', 'pcChips')
     const elemChip = metaBadge('elem', '')
     const pathChip = metaBadge('path', '')
     chips.append(elemChip, pathChip)
-    nameRow.append(nameEl, charSel, chips)
+    nameRow.append(nameEl, chips)
     const charLevelInp = el('input') as HTMLInputElement
     charLevelInp.type = 'number'
-    charLevelInp.min = '1'
+    charLevelInp.min = '0'
     charLevelInp.max = '80'
     charLevelInp.className = 'lvlInputNum'
     charLevelInp.setAttribute('aria-label', 'Уровень персонажа')
@@ -254,7 +240,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     siSel.setAttribute('aria-label', 'Суперимпозиция')
     const coneLevelInp = el('input') as HTMLInputElement
     coneLevelInp.type = 'number'
-    coneLevelInp.min = '1'
+    coneLevelInp.min = '0'
     coneLevelInp.max = '80'
     coneLevelInp.className = 'lvlInputNum'
     coneLevelInp.setAttribute('aria-label', 'Уровень конуса')
@@ -262,7 +248,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const coneSelects = el('div', 'coneSelects')
     coneSelects.append(siSel, coneLevelInp)
     const pickCone = async () => {
-      const kitId = charSel.value
+      const kitId = liveRow().kitId
       if (!kitId) return
       const chosen = await openConePicker({ kitId, current: coneSel.value || undefined })
       if (chosen === null) return
@@ -290,38 +276,6 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     skillsSection.append(skillsBox)
     body.append(skillsSection)
 
-    // --- traces + energy + technique
-    const miscSection = section('ТРЕЙСЫ И РЕСУРСЫ')
-    const misc = el('div', 'pcMisc')
-    const tracesWrap = el('div', 'tracesWrap')
-    const energySel = el('select') as HTMLSelectElement
-    fillSelect(energySel, [0, 25, 50, 75, 100].map(n => [String(n), `${n}%`] as [string, string]))
-    energySel.value = String(Math.round((row.energyStartFrac ?? 0.5) * 100))
-    energySel.setAttribute('aria-label', 'Стартовая энергия')
-    const techniqueSel = el('select') as HTMLSelectElement
-    const techniqueWrap = lab('Техника', techniqueSel)
-    const fillTechnique = (kitId: string) => {
-      const t = KITS.find(k => k.id === kitId)?.technique
-      const uses = t ? (t.maxUses ?? 1) : 0
-      if (uses <= 1) {
-        techniqueWrap.style.display = 'none'
-        techniqueSel.value = '0'
-        if ((liveRow().techniqueUses ?? 0) !== 0) patch({ techniqueUses: 0 })
-      } else {
-        techniqueWrap.style.display = ''
-        fillSelect(techniqueSel, [['0', '—'], ...Array.from({ length: uses }, (_, i) => [String(i + 1), `${i + 1}×`] as [string, string])])
-        techniqueSel.title = t ? `Претехника: ${t.name} (${t.kind}${t.zone ? ', zone' : ''})` : 'Нет претехники'
-      }
-    }
-    fillTechnique(row.kitId)
-    techniqueSel.value = String(row.techniqueUses ?? 0)
-    techniqueSel.setAttribute('aria-label', 'Техника')
-    misc.append(tracesWrap, lab('Энергия', energySel), techniqueWrap)
-    miscSection.append(misc)
-    body.append(miscSection)
-
-    root.append(body)
-
     // ---------------------------------------------------------- patch helpers
 
     const patch = (p: Partial<TeamRowState>) => store.patchSlot(row.id, p)
@@ -330,26 +284,147 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     /** the kit the kit-dependent controls (cone list, Technique) were last built for */
     let renderedKit = row.kitId
 
+    // --- traces + energy + technique
+    const miscSection = section('ТРЕЙСЫ И РЕСУРСЫ')
+    const misc = el('div', 'pcMisc')
+    const tracesWrap = el('div', 'tracesWrap')
+    /** "+28% ATK" / "+5 SPD" / "+10% Fire DMG" for a trace mod (engine stat key + raw value) */
+    const traceLabel = (stat: string, value: number): string => {
+      const pct = stat.endsWith('Pct') || stat.startsWith('dmg:') || ['critRate', 'critDmg', 'be', 'ehr', 'effRes', 'elation'].includes(stat)
+      const name = stat.startsWith('dmg:') ? `${stat.slice(4)} DMG`
+        : stat.replace('Pct', '').replace('Flat', '').replace(/^(atk|hp|def|spd)$/i, m => m.toUpperCase())
+      return `+${pct ? Math.round(value * 1000) / 10 + '%' : value} ${name}`.trim()
+    }
+    /** per-trace checkbox rows, in `traceMods(kitId)` order; `tracesSel(i)` = this trace is on */
+    const traceChecks: HTMLInputElement[] = []
+    const buildTraces = (kitId: string) => {
+      tracesWrap.innerHTML = ''
+      traceChecks.length = 0
+      const mods = traceMods(kitId)
+      const cur = liveRow().traces
+      mods.forEach((m, i) => {
+        const chk = el('input') as HTMLInputElement
+        chk.type = 'checkbox'
+        chk.checked = cur === false ? false : Array.isArray(cur) ? cur[i] !== false : true
+        chk.setAttribute('aria-label', 'Трейс ' + traceLabel(m.stat, m.value))
+        traceChecks[i] = chk
+        const rowEl = el('label', 'traceRow')
+        rowEl.append(chk, statBadge(m.stat), el('span', 'traceVal'))
+        rowEl.lastElementChild!.textContent = traceLabel(m.stat, m.value)
+        tracesWrap.append(rowEl)
+      })
+      tracesWrap.style.display = mods.length ? '' : 'none'
+    }
+    buildTraces(row.kitId)
+    const energySel = el('select') as HTMLSelectElement
+    fillSelect(energySel, [0, 25, 50, 75, 100].map(n => [String(n), `${n}%`] as [string, string]))
+    energySel.value = String(Math.round((row.energyStartFrac ?? 0.5) * 100))
+    energySel.setAttribute('aria-label', 'Стартовая энергия')
+    const techniqueSel = el('select') as HTMLSelectElement
+    const techniqueChk = el('input') as HTMLInputElement
+    techniqueChk.type = 'checkbox'
+    const techniqueWrap = lab('Техника', techniqueSel)
+    const techniqueChkWrap = lab('Техника', techniqueChk)
+    /** single-activation kits get a checkbox; multi-use kits get a count select */
+    const fillTechnique = (kitId: string) => {
+      const t = KITS.find(k => k.id === kitId)?.technique
+      const uses = t ? (t.maxUses ?? 1) : 0
+      const multi = uses > 1
+      techniqueSel.style.display = multi ? '' : 'none'
+      techniqueChk.style.display = !multi && uses === 1 ? '' : 'none'
+      if (!t) {
+        techniqueWrap.style.display = 'none'
+        techniqueChkWrap.style.display = 'none'
+        if ((liveRow().techniqueUses ?? 0) !== 0) patch({ techniqueUses: 0 })
+        return
+      }
+      const title = `Претехника: ${t.name} (${t.kind}${t.zone ? ', zone' : ''})`
+      if (multi) {
+        techniqueWrap.style.display = ''
+        techniqueChkWrap.style.display = 'none'
+        techniqueSel.title = title
+        fillSelect(techniqueSel, [['0', '—'], ...Array.from({ length: uses }, (_, i) => [String(i + 1), `${i + 1}×`] as [string, string])])
+      } else {
+        techniqueWrap.style.display = 'none'
+        techniqueChkWrap.style.display = ''
+        techniqueChk.title = title
+      }
+    }
+    fillTechnique(row.kitId)
+    techniqueSel.value = String(row.techniqueUses ?? 0)
+    techniqueSel.setAttribute('aria-label', 'Техника')
+    techniqueChk.checked = (row.techniqueUses ?? 0) > 0
+    techniqueChk.setAttribute('aria-label', 'Техника')
+    misc.append(tracesWrap, lab('Энергия', energySel), techniqueWrap, techniqueChkWrap)
+    miscSection.append(misc)
+    body.append(miscSection)
+
+    root.append(body)
+
     const lvBtns = {} as CardView['lvBtns']
     const view: CardView = {
-      rowId: row.id, root, portrait, elemChip, pathChip, nameEl, charSel, charLevelInp,
+      rowId: row.id, root, portrait, elemChip, pathChip, nameEl, charLevelInp,
       coneBadge, coneNameEl, coneSel, siSel, coneLevelInp, eidButtons,
       lvBtns,
-      tracesWrap, energySel, techniqueSel, techniqueWrap, pieces: [] as PieceEditor[], statsBox, skillsBox, tracesBox: tracesWrap, refresh: () => {},
+      tracesWrap, traceChecks, energySel, techniqueSel, techniqueWrap, techniqueChk, pieces: [] as PieceEditor[], statsBox, skillsBox, tracesBox: tracesWrap, refresh: () => {},
     }
 
     // --- 6 relic/planar piece editors (SAME widget as the battle page).
-    // `persistPieces` fires on every mutation (incl. added sub rows) → store + live restat.
+    // `persistPieces` fires on every mutation (incl. the split) → store + live restat.
     const persistPieces = () => {
       patch({ pieces: view.pieces.map(pieceOf) })
       view.refresh()
     }
-    const pieces = buildPieceEditors(persistPieces)
+    const pieces = buildPieceEditors(persistPieces, () => liveRow().kitId)
     view.pieces = pieces
     const relicSection = section('РЕЛИКВИИ', '6 слотов')
+
+    // set plan: 4-piece / 2+2 relic sets + the 2-piece planar set.
+    // The plan is a shortcut — it writes the per-piece set dropdowns, which stay editable.
+    const planRow = el('div', 'setPlan')
+    const planSel = el('select') as HTMLSelectElement
+    fillSelect(planSel, [['4', '4 сет'], ['2+2', '2+2']])
+    planSel.title = 'Набор сетов реликвий: один 4-сет или два 2-сет'
+    const setA = new Dropdown('setDrop')
+    const setB = new Dropdown('setDrop')
+    const planarSet = new Dropdown('setDrop')
+    const fillPlan = (kitId: string): void => {
+      const relicEntries = relicOptions(kitId, '— сет —')
+      const planarEntries = planarOptions(kitId)
+      const relicIcons: Record<string, string> = {}
+      for (const [id] of relicEntries) { const u = gearIconUrl('relic', id); if (u) relicIcons[id] = u }
+      const planarIcons: Record<string, string> = {}
+      for (const [id] of planarEntries) { const u = gearIconUrl('planar', id); if (u) planarIcons[id] = u }
+      setA.setEntries(relicEntries, { icons: relicIcons })
+      setB.setEntries(relicEntries, { icons: relicIcons })
+      planarSet.setEntries(planarEntries, { icons: planarIcons })
+    }
+    fillPlan(row.kitId)
+    const applyPlan = (): void => {
+      const mode = planSel.value
+      for (const p of view.pieces) {
+        const planar = p.slot === 'sphere' || p.slot === 'rope'
+        const id = planar
+          ? planarSet.value
+          : mode === '2+2'
+            ? (p.slot === 'head' || p.slot === 'hands' ? setA.value : setB.value)
+            : setA.value
+        p.setSet(id)
+      }
+      persistPieces()
+    }
+    planSel.onchange = applyPlan
+    setA.onchange = applyPlan
+    setB.onchange = applyPlan
+    planarSet.onchange = applyPlan
+    const planLab = (text: string, node: HTMLElement): HTMLElement => {
+      const l = el('label'); l.textContent = text; l.append(node); return l
+    }
+    planRow.append(planLab('Сеты', planSel), planLab('A', setA.root), planLab('B', setB.root), planLab('Планарка', planarSet.root))
+
     const relicRoot = el('div', 'relicGrid')
     for (const p of pieces) relicRoot.append(p.card)
-    relicSection.append(relicRoot)
+    relicSection.append(planRow, relicRoot)
     body.append(relicSection)
 
     // skill level controls (+/-)
@@ -369,28 +444,39 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
 
     // ---------------------------------------------------------- wiring
 
-    charSel.onchange = () => {
-      charSel.classList.remove('open')
-      // the kit decides the cone order and the Technique count — both must be re-resolved
-      patch({ kitId: charSel.value, coneId: '', relic1: '', relic2: '', planar: '', pieces: [], techniqueUses: 0 })
-      // full re-render: path/cone options/technique depend on the kit
-      render()
-    }
     coneSel.onchange = () => { patch({ coneId: coneSel.value }); view.refresh() }
     siSel.onchange = () => { patch({ si: Number(siSel.value) || 1 }); view.refresh() }
 
-    tracesChk.onchange = () => { patch({ traces: tracesChk.checked }); view.refresh() }
+    // tech list for conflict resolution — only kits that define a Technique
+    const techniqueDefs = KITS.filter(k => k.technique).map(k => {
+      const t = k.technique!
+      return { kitId: k.id, name: t.name, kind: t.kind, zone: t.zone, switchSensitive: t.switchSensitive, maxUses: t.maxUses }
+    })
+    /** drop Techniques the engine's own `resolvePreCombat` rules would cancel (attack/zone/switch/repeat). */
+    const pruneTechniques = (): void => {
+      const rows = store.active?.slots ?? []
+      const live = survivingTechniqueUses(rows, techniqueDefs)
+      rows.forEach((r, i) => { if ((r.techniqueUses ?? 0) > live[i]) store.patchSlot(r.id, { techniqueUses: live[i] }) })
+    }
+    for (const chk of traceChecks) {
+      chk.onchange = () => { patch({ traces: traceChecks.map(c => c.checked) }); view.refresh() }
+    }
+    charLevelInp.onchange = () => { patch({ level: Math.max(0, Math.min(80, Number(charLevelInp.value) || 0)) }); view.refresh() }
+    coneLevelInp.onchange = () => { patch({ coneLevel: Math.max(0, Math.min(80, Number(coneLevelInp.value) || 0)) }); view.refresh() }
     energySel.onchange = () => { patch({ energyStartFrac: (Number(energySel.value) || 0) / 100 }); view.refresh() }
-    techniqueSel.onchange = () => { patch({ techniqueUses: Number(techniqueSel.value) || 0 }) }
+    techniqueSel.onchange = () => { patch({ techniqueUses: Number(techniqueSel.value) || 0 }); pruneTechniques(); view.refresh() }
+    techniqueChk.onchange = () => { patch({ techniqueUses: techniqueChk.checked ? 1 : 0 }); pruneTechniques(); view.refresh() }
 
     view.refresh = () => {
-      const kitId = charSel.value
+      const kitId = liveRow().kitId
       if (kitId !== renderedKit) {
         renderedKit = kitId
-        // the cone order and the Technique count are kit-dependent — re-resolve both
+        // the cone order, the trace set and the Technique count are kit-dependent — re-resolve all
         coneSel.setEntries(coneOptions(kitId, KIT_PATH[kitId] ?? ''), { sig: signatureCone(kitId) })
         coneSel.value = ''
+        buildTraces(kitId)
         fillTechnique(kitId)
+        fillPlan(kitId)
         techniqueSel.value = '0'
         resetPieces(view)
       }
@@ -400,6 +486,12 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       nameEl.textContent = kit?.name ?? '—'
       updateGearBadge(coneBadge, 'cone', coneSel.value)
       const live = liveRow()
+      // reflect the live row into the trace checkboxes + Technique controls (idempotent)
+      const tr = live.traces
+      view.traceChecks.forEach((c, i) => { c.checked = tr === false ? false : Array.isArray(tr) ? tr[i] !== false : true })
+      const uses = live.techniqueUses ?? 0
+      techniqueSel.value = String(uses)
+      techniqueChk.checked = uses > 0
       const eid = Number(live.eidolon ?? 0)
       for (const b of eidButtons) {
         const n = Number(b.dataset.eidolon)
@@ -442,6 +534,10 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       const line = el('div', 'skillLine')
       const label = el('span', 'skillLabel')
       label.textContent = SKILL_LABELS[slot]
+      // per-skill art (public/icons/abilities); falls back to a neutral chip when absent
+      const abilityName = ABILITY_NAMES[kitId]?.[slot] ?? ''
+      const left = el('div', 'skillLeft')
+      left.append(abilityBadge(abilityName), label)
       const cap = slotCap(kitId, slot)
       const currentRow = { ...row }
       const lvl = Math.max(1, Math.min(cap, currentRow.levels?.[slot] ?? (slot === 'basic' ? 6 : 10)))
@@ -466,7 +562,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       inp.className = 'lvlInput'
       inp.onchange = () => setLvl(Number(inp.value) || 1)
       ctrl.append(btns.dec, inp, btns.inc)
-      line.append(label, ctrl)
+      line.append(left, ctrl)
       view.skillsBox.append(line)
     }
   }
@@ -474,8 +570,8 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
   function paintPieces(view: CardView, kitId: string): void {
     for (const p of view.pieces) {
       const subs = p.subs
-        .map(s => ({ stat: s.statSel.value, tier: Number(s.tierSel.value) as 0 | 1 | 2, rolls: Number(s.rollsInp.value) || 0 }))
         .filter(s => s.stat && s.rolls > 0)
+        .map(s => ({ stat: s.stat, tier: s.tier, rolls: s.rolls, spread: s.spread }))
       const { rating } = scoreRelic(kitId, p.slot, p.mainSel.value, subs)
       p.ratingEl.textContent = rating
       p.ratingEl.className = 'pieceRating ' + ratingTierClass(rating)
@@ -484,19 +580,24 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
 
   /** a character change drops the old build — clear the piece editors (sets + substats) */
   function resetPieces(view: CardView): void {
-    for (const p of view.pieces) {
-      p.setSel.value = ''
-      p.subs.length = 0
-      p.subRows.innerHTML = ''
-      updatePieceBadge(p.pieceBadgeEl, '', p.slot)
-    }
+    for (const p of view.pieces) p.reset()
   }
 
   function paintStats(view: CardView, row: TeamRowState, kitId: string): void {
     view.statsBox.innerHTML = ''
     if (!kitId) { view.statsBox.append(dim('Пустой слот — выберите персонажа')); return }
-    // gather current piece state so the preview reflects unsaved edits (persist is debounced by ref)
-    const live: TeamRowState = { ...row, kitId, coneId: view.coneSel.value, si: Number(view.siSel.value) || 1, eidolon: Number(store.active?.slots.find(s => s.id === row.id)?.eidolon ?? row.eidolon ?? 0), traces: view.tracesChk.checked, pieces: view.pieces.map(pieceOf) }
+    // gather the card's CURRENT control state so the preview tracks unsaved edits (cone, levels,
+    // traces, pieces) — the engine resolves the real numbers from these, never UI-side math
+    const live: TeamRowState = {
+      ...row, kitId,
+      coneId: view.coneSel.value,
+      si: Number(view.siSel.value) || 1,
+      level: Math.max(0, Math.min(80, Number(view.charLevelInp.value) || 0)),
+      coneLevel: Math.max(0, Math.min(80, Number(view.coneLevelInp.value) || 0)),
+      eidolon: Number(store.active?.slots.find(s => s.id === row.id)?.eidolon ?? row.eidolon ?? 0),
+      traces: view.traceChecks.map(c => c.checked),
+      pieces: view.pieces.map(pieceOf),
+    }
     const spec: TeamSpec = toTeamSpec(live)
     const s = charFinalStats(spec)
     if (!s) { view.statsBox.append(dim('нет данных')); return }
@@ -508,6 +609,11 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       ['critRate', pct(s.critRate)],
       ['critDmg', pct(s.critDmg)],
       ['be', pct(s.be)],
+      ['ehr', pct(s.ehr)],
+      ['effRes', pct(s.effRes)],
+      ['err', pct(s.err)],
+      ['outHeal', pct(s.outHeal)],
+      ['elemDmgBoost', pct(s.elemDmgBoost)],
     ]
     const grid = el('div', 'statGrid')
     for (const [key, val] of rows) {
@@ -524,8 +630,8 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
 
   function render(): void {
     paintPicker()
-    // top up empty slots so the 4-card layout is always visible (store.addSlot persists + mirrors)
-    while ((store.active?.slots.length ?? 0) < MAX_SLOTS) store.addSlot()
+    // a party always shows at least one slot; the user grows it via "+ Слот" up to MAX_SLOTS
+    if ((store.active?.slots.length ?? 0) < 1) store.addSlot()
     const party = store.active
     if (!party) { cardsHost.innerHTML = ''; cards.clear(); return }
 
@@ -545,10 +651,10 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       for (const row of party.slots) {
         const v = cards.get(row.id)
         if (!v) continue
-        v.charSel.value = row.kitId
         v.coneSel.value = row.coneId
         v.siSel.value = String(row.si || 1)
-        v.tracesChk.checked = row.traces !== false
+        v.charLevelInp.value = String(row.level ?? 80)
+        v.coneLevelInp.value = String(row.coneLevel ?? 80)
         v.energySel.value = String(Math.round((row.energyStartFrac ?? 0.5) * 100))
         v.refresh()
       }
@@ -582,13 +688,6 @@ function lab(text: string, control: HTMLElement): HTMLLabelElement {
   const span = el('span', 'labText')
   span.textContent = text
   l.append(span, control)
-  return l
-}
-
-/** a label with the given text wrapping a control (no extra span) */
-function plainLabel(text: string, control: HTMLElement): HTMLLabelElement {
-  const l = el('label') as HTMLLabelElement
-  l.append(document.createTextNode(text), control)
   return l
 }
 
