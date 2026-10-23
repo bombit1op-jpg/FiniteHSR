@@ -12,6 +12,7 @@
 import { el } from './dom'
 
 let ddSeq = 0
+let active: Dropdown | null = null
 
 export class Dropdown {
   readonly root: HTMLElement
@@ -105,6 +106,8 @@ export class Dropdown {
   private toggle(): void { this.open ? this.close() : this.openMenu() }
 
   private openMenu(): void {
+    if (active && active !== this) active.close()
+    active = this
     this.open = true
     this.root.classList.add('ddOpen')
   }
@@ -112,5 +115,6 @@ export class Dropdown {
   private close(): void {
     this.open = false
     this.root.classList.remove('ddOpen')
+    if (active === this) active = null
   }
 }

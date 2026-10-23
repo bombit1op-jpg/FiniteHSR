@@ -132,24 +132,25 @@ body.busy { cursor: progress; }
 .ddMenu { display: none; position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% + 2px); max-height: 280px; overflow-y: auto;
   background: #0d1117; border: 1px solid #2a3342; border-radius: 6px; box-shadow: 0 8px 22px rgba(0,0,0,.55); }
 .ddOpen .ddMenu { display: block; }
-.ddOpt { padding: 6px 8px; font-size: 12px; color: #cdd6e2; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+.ddOpt { padding: 10px 12px; font-size: 12px; color: #cdd6e2; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
 .ddOpt:hover { background: #161d27; }
 .ddOpt.ddSel { color: #f2c94c; }
-/* signature light cone + E6 chip: ONE smooth green shimmer (right → left, slower) */
-.ddOpt.ddSig, .ddBtn.ddSig, .eidolon.e6.active {
+.ddOptIcon { width: 24px; height: 24px; object-fit: contain; border-radius: 4px; background: #0d1117; flex: 0 0 auto; }
+/* signature light cone + E6 chip: ONE smooth green shimmer (right в†’ left, slower) */
+.ddOpt.ddSig, .ddBtn.ddSig, .eidolon.e6.active, .coneArt.signature .gearIcon, .pickConeCard.sig .gearIcon {
   background-image: linear-gradient(110deg,
     rgba(46,229,138,0) 0%, rgba(46,229,138,.22) 35%, rgba(200,255,225,.5) 50%,
     rgba(46,229,138,.22) 65%, rgba(46,229,138,0) 100%);
   background-size: 200% 100%; background-repeat: no-repeat;
-  animation: sigShimmer 6s linear infinite;
+  animation: sigShimmer 10s linear infinite;
 }
-.ddOpt.ddSig, .ddBtn.ddSig { color: #eafff2; font-weight: 600; }
+.ddOpt.ddSig, .ddBtn.ddSig, .coneArt.signature .gearIcon, .pickConeCard.sig .gearIcon { color: #eafff2; font-weight: 600; }
 @keyframes sigShimmer {
   0% { background-position: 140% 0; }
   100% { background-position: -40% 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ddOpt.ddSig, .ddBtn.ddSig, .eidolon.e6.active { animation: none; background-position: 50% 0; }
+  .ddOpt.ddSig, .ddBtn.ddSig, .eidolon.e6.active, .coneArt.signature .gearIcon, .pickConeCard.sig .gearIcon { animation: none; background-position: 50% 0; }
 }
 .stratFlagsRow { margin-top: 2px; }
 .stratFlagsRow label { flex-direction: row; align-items: center; text-transform: none; font-size: 11px; color: #aab6c5; }
@@ -212,27 +213,39 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .subRowEmpty { grid-template-columns: minmax(0,1fr) minmax(0,0.8fr) minmax(0,1fr); align-items: center; }
 .subRowEmpty select, .subRowEmpty input { width: 100%; padding: 4px 6px; font-size: 11px; }
 .subEmptyInfo { font-size: 10px; color: #7d917f; }
+.subEditRow { grid-template-columns: minmax(0,1fr) 76px; gap: 4px 6px; }
+.subEditRow .dd { min-width: 0; width: 100%; }
+.subEditRow .ddBtn { padding: 4px 22px 4px 6px; font-size: 11px; border-radius: 5px; }
+.subEditRow .ddMenu { max-height: 220px; }
+.subEditRow .ddOpt { padding: 5px 8px; font-size: 11px; }
+.subEditRow select, .subEditRow input { width: 100%; padding: 4px 6px; font-size: 11px; background: #0d1117; color: #cdd6e2; border: 1px solid #2a3342; border-radius: 5px; }
+.subEditRow input:focus-visible, .subEditRow select:focus-visible { border-color: #3fb970; outline: none; }
+.subEditInfo { grid-column: 1 / -1; font-size: 10px; color: #7d917f; }
+.subEditRow.empty .subEditInfo { color: #55606f; }
 .subStatName { color: #cdd6e2; }
 .subVal { color: #aab6c5; text-align: right; font-family: monospace; }
 .subBar { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; }
 .subQuality { font-size: 10px; color: #7b8595; letter-spacing: .02em; }
 .subCubes { display: inline-flex; gap: 2px; align-items: center; }
-.subCube { width: 8px; height: 8px; border-radius: 2px; background: #232a35; border: 1px solid #2a3342; }
-.subCube.on { background: #3fb970; border-color: #2f8f57; box-shadow: 0 0 4px rgba(63,185,112,.5); }
-.subCube.on[data-tier="0"] { background: #5b6b7a; border-color: #46545f; box-shadow: none; }
-.subCube.on[data-tier="1"] { background: #3fb970; border-color: #2f8f57; box-shadow: 0 0 4px rgba(63,185,112,.5); }
-.subCube.on[data-tier="2"] { background: #f2c94c; border-color: #c9a13a; box-shadow: 0 0 6px rgba(242,201,76,.6); }
-.subCubes[data-tier="0"] .subCube.on { background: #5b6b7a; border-color: #46545f; box-shadow: none; }
-.subCubes[data-tier="1"] .subCube.on { background: #3fb970; border-color: #2f8f57; }
-.subCubes[data-tier="2"] .subCube.on { background: #f2c94c; border-color: #c9a13a; }
+.subCube { width: 10px; height: 10px; border-radius: 3px; background: #1a2029; border: 1px solid #3a4656; }
+.subCube[data-tier="0"] { background: #6ec66e; border-color: #a8e8a8; box-shadow: 0 0 0 1px #1c232c, 0 0 5px rgba(110,198,110,.45); }
+.subCube[data-tier="1"] { background: #3fb970; border-color: #7fd98f; box-shadow: 0 0 0 1px #1c232c, 0 0 6px rgba(63,185,112,.6); }
+.subCube[data-tier="2"] { background: #2d8f3d; border-color: #5fc56f; box-shadow: 0 0 0 1px #1c232c, 0 0 8px rgba(45,143,61,.75); }
 .pieceValue { width: 100%; font-size: 12px; padding: 6px 8px; background: #0d1117; border: 1px solid #2a3342; border-radius: 6px; color: #f2c94c; font-family: monospace; }
 .pieceValue:focus-visible { border-color: #f2c94c; }
 .pieceTotal { font-size: 10px; color: #7b8595; font-family: monospace; }
 .pieceTotalWarn { color: #e0a355; }
-.setPlan { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 8px; }
+.setPlan { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
 .setPlan label { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: #9aa7ba; }
 .setPlan select { font-size: 11px; background: #12161f; color: #cdd6e2; border: 1px solid #2a3342; border-radius: 6px; padding: 4px 6px; }
-.ddOptIcon { width: 16px; height: 16px; object-fit: contain; border-radius: 3px; background: #0d1117; flex: 0 0 auto; }
+.planRowLine { display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; align-items: center; }
+.planRowLine .planLabel { font-size: 11px; color: #8fa295; white-space: nowrap; }
+.planRowLine label { display: contents; }
+.planRowLine .dd { min-width: 0; width: 100%; }
+.planarBlock { display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; align-items: center; }
+.planarBlock .planLabel { font-size: 11px; color: #8fa295; white-space: nowrap; }
+.planarBlock label { display: contents; }
+.planarBlock .dd { min-width: 0; width: 100%; }
 
 /* Results */
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -459,7 +472,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .pcPortraitWrap:hover .pcClear { display: inline-flex; align-items: center; justify-content: center; padding: 0; }
 .pcPortraitWrap .pcClear:hover { border-color: #67b97b; color: #b6f0c2; }
 .charPortrait {
-  position: relative; height: clamp(320px, 32vw, 440px); border: 1px solid #35533d; border-radius: 8px; overflow: hidden; }
+  position: relative; height: clamp(320px, 32vw, 440px); border: 1px solid #35533d; border-radius: 8px; overflow: hidden;
   display: flex; align-items: flex-end; justify-content: center;
   background: radial-gradient(ellipse at 50% 26%, #3a5c45 0%, #1d3629 40%, #101b14 78%);
 }
@@ -484,6 +497,8 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .pcName:hover { color: #8bd39b; }
 .pcChar { display: none; }
 .pcChar.open { display: inline-block; max-width: 100%; }
+.charLevelWrap { display: inline-flex; align-items: center; gap: 4px; }
+.charLevelWrap .lvlInputNum { width: 52px; }
 .pcChips { display: flex; gap: 6px; flex-wrap: wrap; }
 .pcClear { grid-row: 1; grid-column: 2; justify-self: end; align-self: start; padding: 4px 9px; line-height: 1; }
 
@@ -506,12 +521,20 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
   color: #e4ffe9;
 }
 
-.coneRow { display: grid; grid-template-columns: auto 1fr; gap: 9px; align-items: stretch; }
-.coneFields { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.coneRow { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.coneTitle { display: flex; align-items: baseline; gap: 6px; }
 .coneName { font-size: 13px; font-weight: 600; color: #cfe0ef; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; }
 .coneName.dim { color: #71837a; font-weight: 500; }
-.coneRow .gearIcon { height: 120px; width: 120px; display: flex; align-items: center; justify-content: center; }
-.coneRow .gearIcon img { width: 100% !important; height: 100% !important; max-width: 100% !important; object-fit: contain; }
+.coneRarity { font-size: 12px; font-weight: 700; color: #f2c94c; }
+.coneArt { position: relative; width: 140px; aspect-ratio: 4 / 4; background: radial-gradient(ellipse at 50% 30%, #3a5c45 0%, #1d3629 40%, #101b14 78%); border: 1px solid #35533d; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.coneArt.empty { background: radial-gradient(ellipse at 50% 30%, #2a3a2f 0%, #16221a 40%, #0a100c 78%); border-style: dashed; border-color: #3a5c45; cursor: pointer; }
+.coneArt .gearIcon { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.coneArt .gearIcon img { width: 100% !important; height: 100% !important; object-fit: contain; }
+.coneArt .gearIcon img { width: 60% !important; height: 60% !important; object-fit: contain; }
+.coneArt.signature { box-shadow: 0 0 24px rgba(242,201,76,0.5), inset 0 0 24px rgba(242,201,76,0.1); }
+.coneControls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.coneControls .lvlInputNum { width: 56px; background: #12161f; color: #cfe0ef; border: 1px solid #3a5c45; border-radius: 4px; padding: 4px 6px; text-align: center; }
+.coneControls select { width: 72px; background: #12161f; color: #cfe0ef; border: 1px solid #3a5c45; border-radius: 4px; padding: 4px 6px; font-size: 11px; }
 .coneFields { display: flex; flex-direction: column; gap: 8px; min-width: 0; justify-content: center; }
 .coneSelects { display: flex; gap: 8px; }
 .coneSelects select { flex: 1 1 0; min-width: 0; }
@@ -551,12 +574,6 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .traceRow .statBadge { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; flex: 0 0 16px; }
 .traceRow .statIcon { width: 16px; height: 16px; }
 .traceRow .traceVal { color: #cfe0ef; font-variant-numeric: tabular-nums; }
-
-/* relic set plan: 4pc/2+2 as requested */
-.planRow { display: flex; flex-direction: column; gap: 6px; }
-.planRowLine { display: flex; align-items: flex-end; gap: 8px; flex-wrap: wrap; }
-.planarBlock { display: flex; align-items: flex-end; }
-.planRow label { display: flex; flex-direction: column; gap: 3px; font-size: 11px; color: #8fa295; }
 .planPlus { align-self: flex-end; padding: 0 2px 8px; color: #7fd18a; font-weight: 700; }
 .pieceMainFixed { font-size: 13px; color: #6fd3ff; padding: 6px 8px; background: #0d1117; border-radius: 6px; border: 1px solid #1e2530; }
 
@@ -572,7 +589,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 
 /* anchored pickers: overlay only catches outside clicks; the panel sits next to the trigger */
 .pickerOverlay { position: fixed; inset: 0; z-index: 1000; background: rgba(4, 8, 6, .6); display: flex; align-items: center; justify-content: center; }
-.pickerPanel { position: fixed; display: flex; flex-direction: column; width: min(920px, calc(100vw - 24px)); max-height: min(86vh, 820px); background: #0c1410; border: 1px solid #3d5c47; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.85); overflow: hidden; margin: auto; }
+.pickerPanel { display: flex; flex-direction: column; width: min(1100px, calc(100vw - 24px)); max-height: min(86vh, 820px); background: #0c1410; border: 1px solid #3d5c47; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.85); overflow: auto; }
 .pickerHead { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-bottom: 1px solid #223028; }
 .pickerTitle { font-size: 12px; font-weight: 800; letter-spacing: .14em; color: #8bd39b; }
 .pickerClose { width: 26px; height: 26px; border: 1px solid #2a332d; background: #141a16; color: #9aa7ba; border-radius: 6px; cursor: pointer; }
@@ -586,6 +603,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .pickerToggle:hover { border-color: #67b97b; }
 .pickerGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(68px, 1fr)); gap: 8px; }
 .pickerGrid.icons { grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); }
+.pickerGrid.cones { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
 .pickerChar { display: flex; flex-direction: column; align-items: stretch; gap: 3px; padding: 5px; background: #111a14; border: 1px solid #26352b; border-radius: 8px; cursor: pointer; color: inherit; text-align: center; }
 .pickerChar:hover { border-color: #67b97b; background: #17241b; }
 .pickerChar.current { border-color: #f2c94c; }
@@ -598,6 +616,16 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .pickerCharIcon.current { border-color: #f2c94c; }
 .pickerCharIcon .pickIcon { width: 56px; height: 56px; border-radius: 50%; overflow: hidden; }
 .pickerCharIcon .pickIcon img { width: 100% !important; height: 100% !important; object-fit: cover; }
+.pickConeCard { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px; background: #111a14; border: 1px solid #26352b; border-radius: 10px; cursor: pointer; color: inherit; text-align: center; width: 100%; }
+.pickConeCard:hover { border-color: #67b97b; background: #17241b; }
+.pickConeCard.current { border-color: #f2c94c; }
+.pickConeCard.offPath { opacity: .5; }
+.pickConeCard.offPath:hover { opacity: .85; }
+.pickConeCard.sig .pickConeName { color: #ffd257; }
+.pickConeCard .gearIcon { width: 100%; aspect-ratio: 3 / 4; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; background: #0a120d; }
+.pickConeCard .gearIcon img { width: 100% !important; height: 100% !important; object-fit: contain; }
+.pickConeName { font-size: 12px; font-weight: 600; color: #dbe8de; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
+.pickConeRarity { font-size: 11px; font-weight: 700; color: #f2c94c; }
 .pickerList { display: flex; flex-direction: column; gap: 2px; }
 .pickerCone { display: flex; align-items: center; gap: 10px; width: 100%; padding: 6px 8px; background: transparent; border: 1px solid transparent; border-radius: 7px; color: inherit; cursor: pointer; text-align: left; }
 .pickerCone:hover { background: #142018; border-color: #2c4935; }
@@ -616,7 +644,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .pickerParty.current { border-color: #f2c94c; }
 .partyPickRow { display: flex; align-items: center; gap: 10px; }
 .partyPickIcons { display: flex; gap: 4px; flex: none; }
-.partyPickIcon { width: 36px; height: 36px; overflow: hidden; border-radius: 5px; background: #0a120d; display: flex; align-items: flex-end; justify-content: center; }
+.partyPickIcon { width: 36px; height: 36px; overflow: hidden; border-radius: 50%; background: #0a120d; display: flex; align-items: flex-end; justify-content: center; }
 .partyPickIcon img { width: 100% !important; height: 100% !important; object-fit: cover; object-position: bottom center; }
 .partyPickName { font-size: 14px; font-weight: 600; color: #e6ebf2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dim { color: #71837a; }

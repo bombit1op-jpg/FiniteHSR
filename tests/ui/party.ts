@@ -119,20 +119,13 @@ export default () => {
   const pHandle = initPartyPanel(host, pStore)
 
   const cards = host.querySelectorAll('.partyCard')
-  cases.push(raw('the panel renders one card per slot', cards.length === 3, `${cards.length}`))
+  // panel always renders 4 fixed slots (pads empty)
+  cases.push(raw('the panel renders 4 fixed slots', cards.length === 4, `${cards.length}`))
   cases.push(raw('the panel shows the party name button', !!host.querySelector('.partyNameBtn')))
   const card0 = cards[0] as HTMLElement
-  const card2 = cards[2] as HTMLElement
   const nameOf = (kitId: string) => KITS.find(k => k.id === kitId)?.name ?? '@@'
   cases.push(raw('the first card shows the character name', (card0.querySelector('.pcName') as HTMLElement).textContent === nameOf('jingyuan')))
-  cases.push(raw('a blank slot shows the empty state', (card2.querySelector('.pcName') as HTMLElement).textContent === '—' && (card2.querySelector('.pcStats') as HTMLElement).textContent?.includes('Пустой слот') === true))
   cases.push(raw('the character is picked from the portrait (no character select in the card)', card0.querySelector('.pcChar') === null))
-
-  // "+ Слот" grows the party
-  const addSlotBtn = host.querySelector('.addSlotBtn') as HTMLButtonElement
-  addSlotBtn.click()
-  cases.push(raw('+ Слот adds exactly one slot', pStore.active?.slots.length === 4, `${pStore.active?.slots.length ?? 0}`))
-  cases.push(raw('+ Слот renders the new card', host.querySelectorAll('.partyCard').length === 4))
 
   // a new party
   const partiesBefore = pStore.collection.parties.length
@@ -178,20 +171,24 @@ export default () => {
   pHandle.render()
   cases.push(raw('an unrelated refresh keeps the edited skill level', pStore.active?.slots.find(s => s.id === 'r1')?.levels.skill === 12))
 
-  // ---- relic editor (§Task 7): 6 pieces, a set dropdown and ONE number for the substats
+  // ---- relic editor (§Task 1.2): 6 pieces, each with 4 editable substat rows (stat + value + quality)
   const pieceCards = cardA.querySelectorAll('.pieceCard')
   cases.push(raw('the card mounts the 6 relic piece editors', pieceCards.length === 6, `${pieceCards.length}`))
   const piece0 = pieceCards[0] as HTMLElement
-  cases.push(raw('a piece has no "+ саб" button (the script splits the value)', piece0.querySelector('.addSub') === null))
-  const valueInp = piece0.querySelector('.pieceValue') as HTMLInputElement
-  cases.push(raw('a piece carries one number input for the substats', !!valueInp && valueInp.type === 'number'))
-  valueInp.value = '0.3'
-  valueInp.oninput?.(new Event('input') as never)
+  cases.push(raw('no "+ саб" button exists', piece0.querySelector('.addSub') === null))
+  const subSel = piece0.querySelector('.subEditSel') as HTMLElement
+  const subInp = piece0.querySelector('.subEditInp') as HTMLInputElement
+  cases.push(raw('a piece has stat select for substat', !!subSel))
+  cases.push(raw('a piece has value input for substat', !!subInp && subInp.type === 'number'))
+  cases.push(raw('the substat picker carries stat icons', !!piece0.querySelector('.subEditSel .ddOptIcon')))
+  // pick a stat different from head main (hp) and enter a value yielding mid tier
+  ;(piece0.querySelector('.subEditSel .ddOpt[data-value="atkFlat"]') as HTMLElement).click()
+  subInp.value = '20'
+  subInp.oninput?.(new Event('input') as never)
   const storedPiece = pStore.active!.slots.find(s => s.id === 'r1')!.pieces.find(p => p.slot === 'head')
-  cases.push(raw('the split lands in the store', !!storedPiece && storedPiece.subs.length > 0, `${storedPiece?.subs.length ?? 0}`))
-  cases.push(raw('the split never repeats the main stat', !!storedPiece && storedPiece.subs.every(s => s.stat !== storedPiece.main)))
-  cases.push(raw('the split is painted under the input', piece0.querySelectorAll('.subRow').length === (storedPiece?.subs.length ?? 0)))
-  cases.push(raw('the piece shows the achieved total', (piece0.querySelector('.pieceTotal') as HTMLElement).textContent.startsWith('итого:')))
+  cases.push(raw('substat split lands in store', !!storedPiece && storedPiece.subs.length > 0, `${storedPiece?.subs.length ?? 0}`))
+  cases.push(raw('split never repeats main stat', !!storedPiece && storedPiece.subs.every(s => s.stat !== storedPiece.main)))
+  cases.push(raw('quality cubes shown under row', piece0.querySelector('.subEditInfo .subCube') !== null))
 
   // the set plan sits above the pieces
   const planRow = cardA.querySelector('.setPlan') as HTMLElement

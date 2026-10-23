@@ -61,7 +61,9 @@ export function charFinalStats(spec: TeamSpec): CharFinalStats | null {
     critRate: s.critRate, critDmg: s.critDmg, be: s.be,
     ehr: (u.base.ehr ?? 0) + buffSum(u.buffs, 'ehr'),
     effRes: effectResOf(u),
-    err: buffSum(u.buffs, 'err'),
+    // baseline regeneration is 100%; `err` buffs are additive bonuses on top of it (see
+    // ResourceSystem.gainEnergy: base × (1 + err))
+    err: 1 + buffSum(u.buffs, 'err'),
     outHeal: buffSum(u.buffs, 'outHeal'),
     elemDmgBoost: buffSum(u.buffs, `dmg:${kit.elem}`),
     energyMax: kit.energyMax,

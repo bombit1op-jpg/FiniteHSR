@@ -1,16 +1,16 @@
 export const STAT_LABELS: Record<string, string> = {
-  hpFlat: 'HP', atkFlat: 'АТК', defFlat: 'ЗАЩ', spd: 'СКР',
-  hpPct: 'HP %', atkPct: 'АТК %', defPct: 'ЗАЩ %',
-  be: 'ПЭ', ehr: 'ЭФФ.ПОП', effRes: 'ЭФФ.СОП', err: 'ВЭ',
-  critRate: 'КР.ШАНС', critDmg: 'КР.УРОН',
-  outHeal: 'ИСЦЛЕНИЕ',
-  'dmg:Physical': 'Физический урон',
-  'dmg:Fire': 'Огненный урон',
-  'dmg:Ice': 'Ледяной урон',
-  'dmg:Wind': 'Ветровой урон',
-  'dmg:Lightning': 'Молниевой урон',
-  'dmg:Quantum': 'Квантовый урон',
-  'dmg:Imaginary': 'Воображаемый урон',
+  hpFlat: 'HP', atkFlat: 'ATK', defFlat: 'DEF', spd: 'SPD', spdFlat: 'SPD',
+  hpPct: 'HP%', atkPct: 'ATK%', defPct: 'DEF%',
+  be: 'Break Effect', ehr: 'Effect Hit Rate', effRes: 'Effect RES', err: 'Energy Regen',
+  critRate: 'CRIT Rate', critDmg: 'CRIT DMG',
+  outHeal: 'Outgoing Healing', energyMax: 'Max Energy', elemDmgBoost: 'Elemental DMG Boost',
+  'dmg:Physical': 'Physical DMG',
+  'dmg:Fire': 'Fire DMG',
+  'dmg:Ice': 'Ice DMG',
+  'dmg:Wind': 'Wind DMG',
+  'dmg:Lightning': 'Lightning DMG',
+  'dmg:Quantum': 'Quantum DMG',
+  'dmg:Imaginary': 'Imaginary DMG',
 }
 
 const PCT_STATS = new Set([

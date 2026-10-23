@@ -375,7 +375,10 @@ function setupSim(setup: BattleSetup): Simulator {
 
   for (const spec of setup.team) {
     const t = applyBuild(spec)
-    const { be, ...stats } = t.stats ?? {}
+    const { be, ...rawStats } = t.stats ?? {}
+    // Partial stats patches may carry `undefined` keys (UI rows with untouched fields); spreading
+    // them into `BaseStats` would overwrite a real base value with undefined and yield NaN.
+    const stats = Object.fromEntries(Object.entries(rawStats).filter(([, v]) => typeof v === 'number' && Number.isFinite(v))) as typeof rawStats
     const level = t.level ?? 80
     const ratios = charLevelRatios(t.kitId, level)
     const kitBase = sim.kits.get(t.kitId)?.base

@@ -47,6 +47,27 @@ function potential(meta: Meta, tier: 0 | 1 | 2): Record<string, number> {
   return out
 }
 
+export function getRecommendedMainStat(kitId: string, slot: RelicSlot): string | undefined {
+  const meta = buildMeta(kitId)
+  if (!meta) return undefined
+  if (!hasMainStat(slot)) return undefined
+  
+  // First priority: explicit optimal mains from parts table (Fribbels data)
+  const optimal = meta.parts[slot] ?? []
+  const possible = SLOT_MAINS[slot] ?? []
+  for (const opt of optimal) {
+    if (possible.includes(opt)) return opt
+  }
+  
+  // Fallback: highest weighted stat that's a valid main for this slot
+  const entries = Object.keys(meta.stats)
+    .map((stat) => [stat, meta.stats[stat] ?? 0] as [string, number])
+    .sort((a, b) => b[1] - a[1])
+  const idx = entries.findIndex(([name]) => possible.includes(name))
+  if (idx < 0) return undefined
+  return entries[idx][0]
+}
+
 export function buildMeta(slug: string): Meta | null {
   const raw: RelicScoringMeta | undefined = RELIC_WEIGHTS[slug]
   if (!raw) return null

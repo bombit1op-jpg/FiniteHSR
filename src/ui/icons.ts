@@ -80,12 +80,19 @@ export function statIconUrl(name: StatIconKey | string): string | undefined { re
 /** engine stat key -> display name used by the stat icon manifest (undefined = no committed art) */
 const STAT_ICON_KEY: Record<string, StatIconKey> = {
   atk: 'ATK', hp: 'HP', def: 'DEF', spd: 'SPD',
+  atkFlat: 'ATK', hpFlat: 'HP', defFlat: 'DEF',
   atkPct: 'ATK', hpPct: 'HP', defPct: 'DEF', spdFlat: 'SPD',
   critRate: 'CRIT Rate', critDmg: 'CRIT DMG', be: 'Break Effect',
   ehr: 'Effect Hit Rate', effRes: 'Effect RES',
   err: 'Energy Regeneration Rate', outHeal: 'Outgoing Healing Boost',
   elemDmgBoost: 'DMG Boost', energyMax: 'Energy',
   elation: 'DMG Boost',
+}
+
+/** icon art URL for an engine stat key (undefined = no committed art) */
+export function statIconUrlForKey(stat: string): string | undefined {
+  const key = stat.startsWith('dmg:') ? 'DMG Boost' : STAT_ICON_KEY[stat] ?? stat
+  return key === 'SPD' ? '/icons/buffs/SPD%20Boost.png' : statIconUrl(key)
 }
 
 /** small stat icon chip (real art or a neutral letter chip); `stat` is an engine stat key or display name */
@@ -95,7 +102,7 @@ export function statBadge(stat: string): HTMLElement {
   const url = key === 'SPD' ? '/icons/buffs/SPD%20Boost.png' : statIconUrl(key)
   const node = el('span', 'metaBadge statBadge')
   node.dataset.stat = key
-  node.title = `Характеристика: ${key}`
+  node.title = `Stat: ${key}`
   node.append(iconNode(url, key, {
     cls: 'statIcon', size: 18, fit: 'contain',
     fallbackText: key.slice(0, 3).toUpperCase(), tint: '#7fb3ff', title: node.title,

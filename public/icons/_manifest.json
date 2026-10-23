@@ -8466,8 +8466,8 @@
     ]
   },
   "abilities": {
-    "label": "Уникальные баффы/дебаффы от способностей",
-    "count": 59,
+    "label": "Иконки навыков",
+    "count": 449,
     "icons": [
       {
         "file": "abilities/Ack! Look at This Mess!.png",
@@ -8704,6 +8704,1566 @@
       {
         "file": "abilities/With Me, This Night.png",
         "name": "With Me, This Night"
+      },
+      {
+        "file": "abilities/_Amuse Me to the Fullest_.png",
+        "name": "\"Amuse Me to the Fullest\""
+      },
+      {
+        "file": "abilities/_I Grant You Permission To Strike_.png",
+        "name": "\"I Grant You Permission To Strike\""
+      },
+      {
+        "file": "abilities/A Body Brewed by Tears.png",
+        "name": "A Body Brewed by Tears"
+      },
+      {
+        "file": "abilities/A Broken Blade Still Slays.png",
+        "name": "A Broken Blade Still Slays"
+      },
+      {
+        "file": "abilities/A Dragon's Zenith Knows No Rue.png",
+        "name": "A Dragon's Zenith Knows No Rue"
+      },
+      {
+        "file": "abilities/A Quartet_ Woo-hoo!.png",
+        "name": "A Quartet? Woo-hoo!"
+      },
+      {
+        "file": "abilities/A Rain of Blades Seals Fate.png",
+        "name": "A Rain of Blades Seals Fate"
+      },
+      {
+        "file": "abilities/A Scoop of Moon.png",
+        "name": "A Scoop of Moon"
+      },
+      {
+        "file": "abilities/A Tempered Blade Severs Souls.png",
+        "name": "A Tempered Blade Severs Souls"
+      },
+      {
+        "file": "abilities/A Warble of Wings.png",
+        "name": "A Warble of Wings"
+      },
+      {
+        "file": "abilities/Acquisition Surety.png",
+        "name": "Acquisition Surety"
+      },
+      {
+        "file": "abilities/Aegis Vitae.png",
+        "name": "Aegis Vitae"
+      },
+      {
+        "file": "abilities/Aeolian Mode_ Echoes in Still Waters.png",
+        "name": "Aeolian Mode: Echoes in Still Waters"
+      },
+      {
+        "file": "abilities/All In! To Summer's Blaze.png",
+        "name": "All In! To Summer's Blaze"
+      },
+      {
+        "file": "abilities/All Karma Comes Due.png",
+        "name": "All Karma Comes Due"
+      },
+      {
+        "file": "abilities/All-Out Footlight Parade.png",
+        "name": "All-Out Footlight Parade"
+      },
+      {
+        "file": "abilities/Allow Changes_.png",
+        "name": "Allow Changes?"
+      },
+      {
+        "file": "abilities/Almighty Companion.png",
+        "name": "Almighty Companion"
+      },
+      {
+        "file": "abilities/Amidst the Raining Bliss.png",
+        "name": "Amidst the Raining Bliss"
+      },
+      {
+        "file": "abilities/Amidst the Rejoicing Clouds.png",
+        "name": "Amidst the Rejoicing Clouds"
+      },
+      {
+        "file": "abilities/An Gal Ta Ki Gal Šè.png",
+        "name": "An Gal Ta Ki Gal Šè"
+      },
+      {
+        "file": "abilities/Ante Up, the Abyss Answers.png",
+        "name": "Ante Up, the Abyss Answers"
+      },
+      {
+        "file": "abilities/Appraise Soul's Ground.png",
+        "name": "Appraise Soul's Ground"
+      },
+      {
+        "file": "abilities/Arrowslinger.png",
+        "name": "Arrowslinger"
+      },
+      {
+        "file": "abilities/Ascend That Rhapsody in Blue.png",
+        "name": "Ascend That Rhapsody in Blue"
+      },
+      {
+        "file": "abilities/Astral Blessing.png",
+        "name": "Astral Blessing"
+      },
+      {
+        "file": "abilities/Astride Summer's Nightwind.png",
+        "name": "Astride Summer's Nightwind"
+      },
+      {
+        "file": "abilities/Astrometry.png",
+        "name": "Astrometry"
+      },
+      {
+        "file": "abilities/Atop Rainleaf Hangs Oneness.png",
+        "name": "Atop Rainleaf Hangs Oneness"
+      },
+      {
+        "file": "abilities/Ave Imperator.png",
+        "name": "Ave Imperator"
+      },
+      {
+        "file": "abilities/Awaiting System Response....png",
+        "name": "Awaiting System Response..."
+      },
+      {
+        "file": "abilities/Azure's Aqua Ablutes All.png",
+        "name": "Azure's Aqua Ablutes All"
+      },
+      {
+        "file": "abilities/Baddies! Trouble!.png",
+        "name": "Baddies! Trouble!"
+      },
+      {
+        "file": "abilities/Bajiquan.png",
+        "name": "Bajiquan"
+      },
+      {
+        "file": "abilities/Banner_ Stormcaller.png",
+        "name": "Banner: Stormcaller"
+      },
+      {
+        "file": "abilities/Banquet_ Insatiable Appetite.png",
+        "name": "Banquet: Insatiable Appetite"
+      },
+      {
+        "file": "abilities/Because We're Family.png",
+        "name": "Because We're Family"
+      },
+      {
+        "file": "abilities/Behind the Kindness.png",
+        "name": "Behind the Kindness"
+      },
+      {
+        "file": "abilities/Behold Wherever Light Unfolds.png",
+        "name": "Behold Wherever Light Unfolds"
+      },
+      {
+        "file": "abilities/Beneficent Lotus.png",
+        "name": "Beneficent Lotus"
+      },
+      {
+        "file": "abilities/Benison of Paper and Rites.png",
+        "name": "Benison of Paper and Rites"
+      },
+      {
+        "file": "abilities/Big Brain Energy.png",
+        "name": "Big Brain Energy"
+      },
+      {
+        "file": "abilities/Bladeborne Quake.png",
+        "name": "Bladeborne Quake"
+      },
+      {
+        "file": "abilities/Bleak Breeds Bliss.png",
+        "name": "Bleak Breeds Bliss"
+      },
+      {
+        "file": "abilities/Blood for Blood.png",
+        "name": "Blood for Blood"
+      },
+      {
+        "file": "abilities/Bloom! Winner Takes All.png",
+        "name": "Bloom! Winner Takes All"
+      },
+      {
+        "file": "abilities/Bloom, Elysium of Beyond.png",
+        "name": "Bloom, Elysium of Beyond"
+      },
+      {
+        "file": "abilities/Blowout_ Farewell Hit.png",
+        "name": "Blowout: Farewell Hit"
+      },
+      {
+        "file": "abilities/Blowout_ RIP Home Run.png",
+        "name": "Blowout: RIP Home Run"
+      },
+      {
+        "file": "abilities/Boltsunder.png",
+        "name": "Boltsunder"
+      },
+      {
+        "file": "abilities/Bonus Stage_ αWolf Instant.png",
+        "name": "Bonus Stage: αWolf Instant"
+      },
+      {
+        "file": "abilities/Boom! Here Comes the Fire!.png",
+        "name": "Boom! Here Comes the Fire!"
+      },
+      {
+        "file": "abilities/Boom! Sparxicle's Poppin'.png",
+        "name": "Boom! Sparxicle's Poppin'"
+      },
+      {
+        "file": "abilities/Brows Be Smitten, Heart Be Bitten.png",
+        "name": "Brows Be Smitten, Heart Be Bitten"
+      },
+      {
+        "file": "abilities/Brushstroke_ Imagenate the Starry Night.png",
+        "name": "Brushstroke: Imagenate the Starry Night"
+      },
+      {
+        "file": "abilities/Brushstroke_ Trace the Severed Stream.png",
+        "name": "Brushstroke: Trace the Severed Stream"
+      },
+      {
+        "file": "abilities/Busy as Tribbie.png",
+        "name": "Busy as Tribbie"
+      },
+      {
+        "file": "abilities/Butterfly Flurry.png",
+        "name": "Butterfly Flurry"
+      },
+      {
+        "file": "abilities/Caladbolg II_ Fake Spiral Sword.png",
+        "name": "Caladbolg II: Fake Spiral Sword"
+      },
+      {
+        "file": "abilities/Caressing Moonlight.png",
+        "name": "Caressing Moonlight"
+      },
+      {
+        "file": "abilities/Cascading Featherblade.png",
+        "name": "Cascading Featherblade"
+      },
+      {
+        "file": "abilities/Cat Got Your Flametongue_.png",
+        "name": "Cat Got Your Flametongue?"
+      },
+      {
+        "file": "abilities/Celestial Jade.png",
+        "name": "Celestial Jade"
+      },
+      {
+        "file": "abilities/Champagne Etiquette.png",
+        "name": "Champagne Etiquette"
+      },
+      {
+        "file": "abilities/Cheers! To Summer's Blaze.png",
+        "name": "Cheers! To Summer's Blaze"
+      },
+      {
+        "file": "abilities/Cherry on Top!.png",
+        "name": "Cherry on Top!"
+      },
+      {
+        "file": "abilities/Chirrup Quartet.png",
+        "name": "Chirrup Quartet"
+      },
+      {
+        "file": "abilities/Claw Splits the Veil.png",
+        "name": "Claw Splits the Veil"
+      },
+      {
+        "file": "abilities/Cloudfencer Art_ Mountainfall.png",
+        "name": "Cloudfencer Art: Mountainfall"
+      },
+      {
+        "file": "abilities/Cloudfencer Art_ Starshine.png",
+        "name": "Cloudfencer Art: Starshine"
+      },
+      {
+        "file": "abilities/Cloudlancer Art_ North Wind.png",
+        "name": "Cloudlancer Art: North Wind"
+      },
+      {
+        "file": "abilities/Cloudlancer Art_ Torrent.png",
+        "name": "Cloudlancer Art: Torrent"
+      },
+      {
+        "file": "abilities/Cogito, Ergo Sum.png",
+        "name": "Cogito, Ergo Sum"
+      },
+      {
+        "file": "abilities/Corkage Fee.png",
+        "name": "Corkage Fee"
+      },
+      {
+        "file": "abilities/Cornerstone Deluxe.png",
+        "name": "Cornerstone Deluxe"
+      },
+      {
+        "file": "abilities/Coup de Grâce.png",
+        "name": "Coup de Grâce"
+      },
+      {
+        "file": "abilities/Crescent Transmigration.png",
+        "name": "Crescent Transmigration"
+      },
+      {
+        "file": "abilities/Cycle of Life.png",
+        "name": "Cycle of Life"
+      },
+      {
+        "file": "abilities/Dancing Blade.png",
+        "name": "Dancing Blade"
+      },
+      {
+        "file": "abilities/Darting Ironthorn.png",
+        "name": "Darting Ironthorn"
+      },
+      {
+        "file": "abilities/Dash In, Gash Out.png",
+        "name": "Dash In, Gash Out"
+      },
+      {
+        "file": "abilities/Data Collecting.png",
+        "name": "Data Collecting"
+      },
+      {
+        "file": "abilities/Day Gently Slips.png",
+        "name": "Day Gently Slips"
+      },
+      {
+        "file": "abilities/Dazzling Blades.png",
+        "name": "Dazzling Blades"
+      },
+      {
+        "file": "abilities/Dead Center, the Torrent Hits.png",
+        "name": "Dead Center, the Torrent Hits"
+      },
+      {
+        "file": "abilities/Death Sentence.png",
+        "name": "Death Sentence"
+      },
+      {
+        "file": "abilities/Deaths are Legion, Regrets are None.png",
+        "name": "Deaths are Legion, Regrets are None"
+      },
+      {
+        "file": "abilities/Decadence, False Twilight.png",
+        "name": "Decadence, False Twilight"
+      },
+      {
+        "file": "abilities/Decalight Unveils All.png",
+        "name": "Decalight Unveils All"
+      },
+      {
+        "file": "abilities/Deficit....png",
+        "name": "Deficit..."
+      },
+      {
+        "file": "abilities/Desolation Across Palms.png",
+        "name": "Desolation Across Palms"
+      },
+      {
+        "file": "abilities/Diagnostic Kick.png",
+        "name": "Diagnostic Kick"
+      },
+      {
+        "file": "abilities/Did You Get It.png",
+        "name": "Did You Get It"
+      },
+      {
+        "file": "abilities/Difficulty Paying_.png",
+        "name": "Difficulty Paying?"
+      },
+      {
+        "file": "abilities/Direct Punch.png",
+        "name": "Direct Punch"
+      },
+      {
+        "file": "abilities/Discipline_ Final Verdict.png",
+        "name": "Discipline: Final Verdict"
+      },
+      {
+        "file": "abilities/Dislodged.png",
+        "name": "Dislodged"
+      },
+      {
+        "file": "abilities/Dissolve Reason into Elation.png",
+        "name": "Dissolve Reason into Elation"
+      },
+      {
+        "file": "abilities/Divine Castigation.png",
+        "name": "Divine Castigation"
+      },
+      {
+        "file": "abilities/Diving Kestrel.png",
+        "name": "Diving Kestrel"
+      },
+      {
+        "file": "abilities/Doomshriek, Dawn's Chime.png",
+        "name": "Doomshriek, Dawn's Chime"
+      },
+      {
+        "file": "abilities/Dracore Libre.png",
+        "name": "Dracore Libre"
+      },
+      {
+        "file": "abilities/Dragon Reactor Core.png",
+        "name": "Dragon Reactor Core"
+      },
+      {
+        "file": "abilities/Dream, Dissolving, as Dew.png",
+        "name": "Dream, Dissolving, as Dew"
+      },
+      {
+        "file": "abilities/Dreamdiver.png",
+        "name": "Dreamdiver"
+      },
+      {
+        "file": "abilities/Dripping Mistscape.png",
+        "name": "Dripping Mistscape"
+      },
+      {
+        "file": "abilities/Dust Devil's Sunset Rodeo.png",
+        "name": "Dust Devil's Sunset Rodeo"
+      },
+      {
+        "file": "abilities/Earthbind, Etherbreak.png",
+        "name": "Earthbind, Etherbreak"
+      },
+      {
+        "file": "abilities/Edge of the Void.png",
+        "name": "Edge of the Void"
+      },
+      {
+        "file": "abilities/Emboldening Salvo.png",
+        "name": "Emboldening Salvo"
+      },
+      {
+        "file": "abilities/Enduring Bulwark.png",
+        "name": "Enduring Bulwark"
+      },
+      {
+        "file": "abilities/Enkindle the First Lodestar.png",
+        "name": "Enkindle the First Lodestar"
+      },
+      {
+        "file": "abilities/Enuma Elish.png",
+        "name": "Enuma Elish"
+      },
+      {
+        "file": "abilities/Ethereal Dream.png",
+        "name": "Ethereal Dream"
+      },
+      {
+        "file": "abilities/Ever-Burning Amber.png",
+        "name": "Ever-Burning Amber"
+      },
+      {
+        "file": "abilities/Excalibur.png",
+        "name": "Excalibur"
+      },
+      {
+        "file": "abilities/E—Excuse Me, Please!.png",
+        "name": "E—Excuse Me, Please!"
+      },
+      {
+        "file": "abilities/Fang of Flare Flaying.png",
+        "name": "Fang of Flare Flaying"
+      },
+      {
+        "file": "abilities/Fanning the Hammer.png",
+        "name": "Fanning the Hammer"
+      },
+      {
+        "file": "abilities/Farewell Hit.png",
+        "name": "Farewell Hit"
+      },
+      {
+        "file": "abilities/Felicitous Thunderleap.png",
+        "name": "Felicitous Thunderleap"
+      },
+      {
+        "file": "abilities/Fiddle... Fissured Memory.png",
+        "name": "Fiddle... Fissured Memory"
+      },
+      {
+        "file": "abilities/Fine, I'll Do It Myself.png",
+        "name": "Fine, I'll Do It Myself"
+      },
+      {
+        "file": "abilities/First Light Heals the World.png",
+        "name": "First Light Heals the World"
+      },
+      {
+        "file": "abilities/Fist of Conviction.png",
+        "name": "Fist of Conviction"
+      },
+      {
+        "file": "abilities/Five Peas in a Pod.png",
+        "name": "Five Peas in a Pod"
+      },
+      {
+        "file": "abilities/Flashforge.png",
+        "name": "Flashforge"
+      },
+      {
+        "file": "abilities/Fleeting Fragrance.png",
+        "name": "Fleeting Fragrance"
+      },
+      {
+        "file": "abilities/Fleetwinged Raid.png",
+        "name": "Fleetwinged Raid"
+      },
+      {
+        "file": "abilities/Flog_ Smite Evil.png",
+        "name": "Flog: Smite Evil"
+      },
+      {
+        "file": "abilities/Florephemeral Dreamflux.png",
+        "name": "Florephemeral Dreamflux"
+      },
+      {
+        "file": "abilities/Flower Pick.png",
+        "name": "Flower Pick"
+      },
+      {
+        "file": "abilities/Flying Sparks.png",
+        "name": "Flying Sparks"
+      },
+      {
+        "file": "abilities/For In This Garden, Supreme Beauty Bestows.png",
+        "name": "For In This Garden, Supreme Beauty Bestows"
+      },
+      {
+        "file": "abilities/Forest of Swords.png",
+        "name": "Forest of Swords"
+      },
+      {
+        "file": "abilities/Fornax Ex Corpore.png",
+        "name": "Fornax Ex Corpore"
+      },
+      {
+        "file": "abilities/Fortune Follows Where Virtue Spreads.png",
+        "name": "Fortune Follows Where Virtue Spreads"
+      },
+      {
+        "file": "abilities/Fractal, Exiles Fallacy.png",
+        "name": "Fractal, Exiles Fallacy"
+      },
+      {
+        "file": "abilities/Freeform Tohsaka Style.png",
+        "name": "Freeform Tohsaka Style"
+      },
+      {
+        "file": "abilities/Frenzied Punishment.png",
+        "name": "Frenzied Punishment"
+      },
+      {
+        "file": "abilities/Friends! Together!.png",
+        "name": "Friends! Together!"
+      },
+      {
+        "file": "abilities/Frigid Cold Arrow.png",
+        "name": "Frigid Cold Arrow"
+      },
+      {
+        "file": "abilities/Frost Shot.png",
+        "name": "Frost Shot"
+      },
+      {
+        "file": "abilities/Frost Thorn.png",
+        "name": "Frost Thorn"
+      },
+      {
+        "file": "abilities/Full-on Aerial Dance.png",
+        "name": "Full-on Aerial Dance"
+      },
+      {
+        "file": "abilities/Fyrefly Type-IV_ Complete Combustion.png",
+        "name": "Fyrefly Type-IV: Complete Combustion"
+      },
+      {
+        "file": "abilities/Fyrefly Type-IV_ Deathstar Overload.png",
+        "name": "Fyrefly Type-IV: Deathstar Overload"
+      },
+      {
+        "file": "abilities/Fyrefly Type-IV_ Pyrogenic Decimation.png",
+        "name": "Fyrefly Type-IV: Pyrogenic Decimation"
+      },
+      {
+        "file": "abilities/Galespin Summersault.png",
+        "name": "Galespin Summersault"
+      },
+      {
+        "file": "abilities/Galvanic Chords.png",
+        "name": "Galvanic Chords"
+      },
+      {
+        "file": "abilities/Gate of Babylon.png",
+        "name": "Gate of Babylon"
+      },
+      {
+        "file": "abilities/Gem Magecraft.png",
+        "name": "Gem Magecraft"
+      },
+      {
+        "file": "abilities/Gift of Rebirth.png",
+        "name": "Gift of Rebirth"
+      },
+      {
+        "file": "abilities/Girl Power.png",
+        "name": "Girl Power"
+      },
+      {
+        "file": "abilities/Gleaming Admonition.png",
+        "name": "Gleaming Admonition"
+      },
+      {
+        "file": "abilities/Glistening Light.png",
+        "name": "Glistening Light"
+      },
+      {
+        "file": "abilities/Go, Mem, Go!.png",
+        "name": "Go, Mem, Go!"
+      },
+      {
+        "file": "abilities/God Mode_ ON!.png",
+        "name": "God Mode: ON!"
+      },
+      {
+        "file": "abilities/Gourdful of Elixir.png",
+        "name": "Gourdful of Elixir"
+      },
+      {
+        "file": "abilities/Grand Slam, Crest That High Tide.png",
+        "name": "Grand Slam, Crest That High Tide"
+      },
+      {
+        "file": "abilities/Gravity Suppression.png",
+        "name": "Gravity Suppression"
+      },
+      {
+        "file": "abilities/Grow Grace from Grit.png",
+        "name": "Grow Grace from Grit"
+      },
+      {
+        "file": "abilities/Guess Who Lives Here.png",
+        "name": "Guess Who Lives Here"
+      },
+      {
+        "file": "abilities/Ha! Oil to the Flames!.png",
+        "name": "Ha! Oil to the Flames!"
+      },
+      {
+        "file": "abilities/Halfhearted Blow.png",
+        "name": "Halfhearted Blow"
+      },
+      {
+        "file": "abilities/Halftime to Make It Rain.png",
+        "name": "Halftime to Make It Rain"
+      },
+      {
+        "file": "abilities/Hand Them Over.png",
+        "name": "Hand Them Over"
+      },
+      {
+        "file": "abilities/He Who Bears the World Must Burn.png",
+        "name": "He Who Bears the World Must Burn"
+      },
+      {
+        "file": "abilities/Hear Me Out.png",
+        "name": "Hear Me Out"
+      },
+      {
+        "file": "abilities/Heart Afire.png",
+        "name": "Heart Afire"
+      },
+      {
+        "file": "abilities/Heavenly Flare.png",
+        "name": "Heavenly Flare"
+      },
+      {
+        "file": "abilities/Hehe! Don't Get Burned!.png",
+        "name": "Hehe! Don't Get Burned!"
+      },
+      {
+        "file": "abilities/Hellscape.png",
+        "name": "Hellscape"
+      },
+      {
+        "file": "abilities/Here Comes the Mechanical Fever.png",
+        "name": "Here Comes the Mechanical Fever"
+      },
+      {
+        "file": "abilities/Hexagram of Feathered Fortune.png",
+        "name": "Hexagram of Feathered Fortune"
+      },
+      {
+        "file": "abilities/Hey! Remember Hook_.png",
+        "name": "Hey! Remember Hook?"
+      },
+      {
+        "file": "abilities/Hey, Jackpot for the Taking.png",
+        "name": "Hey, Jackpot for the Taking"
+      },
+      {
+        "file": "abilities/Horological Escapement.png",
+        "name": "Horological Escapement"
+      },
+      {
+        "file": "abilities/Hundred Rockets.png",
+        "name": "Hundred Rockets"
+      },
+      {
+        "file": "abilities/Hurlthorn.png",
+        "name": "Hurlthorn"
+      },
+      {
+        "file": "abilities/Hyperluminal Particle Beam.png",
+        "name": "Hyperluminal Particle Beam"
+      },
+      {
+        "file": "abilities/I Choose You!.png",
+        "name": "I Choose You!"
+      },
+      {
+        "file": "abilities/I Want to Help.png",
+        "name": "I Want to Help"
+      },
+      {
+        "file": "abilities/Ice Crampon Technique.png",
+        "name": "Ice Crampon Technique"
+      },
+      {
+        "file": "abilities/Ice-Breaking Light.png",
+        "name": "Ice-Breaking Light"
+      },
+      {
+        "file": "abilities/Iniquity Obliteration.png",
+        "name": "Iniquity Obliteration"
+      },
+      {
+        "file": "abilities/Innervation.png",
+        "name": "Innervation"
+      },
+      {
+        "file": "abilities/Intellectual Midwifery.png",
+        "name": "Intellectual Midwifery"
+      },
+      {
+        "file": "abilities/Invisible Air_ Barrier of the Wind King.png",
+        "name": "Invisible Air: Barrier of the Wind King"
+      },
+      {
+        "file": "abilities/It's Magic, I Added Some Magic.png",
+        "name": "It's Magic, I Added Some Magic"
+      },
+      {
+        "file": "abilities/Jeweled Sword Zelretch.png",
+        "name": "Jeweled Sword Zelretch"
+      },
+      {
+        "file": "abilities/Justice, Hereby Blooms.png",
+        "name": "Justice, Hereby Blooms"
+      },
+      {
+        "file": "abilities/Kanshou and Bakuya.png",
+        "name": "Kanshou and Bakuya"
+      },
+      {
+        "file": "abilities/Karmic Perpetuation.png",
+        "name": "Karmic Perpetuation"
+      },
+      {
+        "file": "abilities/Kill Shot, the Sands Boil.png",
+        "name": "Kill Shot, the Sands Boil"
+      },
+      {
+        "file": "abilities/King's Castling.png",
+        "name": "King's Castling"
+      },
+      {
+        "file": "abilities/Kingslayer Be King.png",
+        "name": "Kingslayer Be King"
+      },
+      {
+        "file": "abilities/Known by Stars, Shown by Hearts.png",
+        "name": "Known by Stars, Shown by Hearts"
+      },
+      {
+        "file": "abilities/Lament, Nethersea's Ripple.png",
+        "name": "Lament, Nethersea's Ripple"
+      },
+      {
+        "file": "abilities/Lash of Riches.png",
+        "name": "Lash of Riches"
+      },
+      {
+        "file": "abilities/Leading the Way.png",
+        "name": "Leading the Way"
+      },
+      {
+        "file": "abilities/Leave It to Me!.png",
+        "name": "Leave It to Me!"
+      },
+      {
+        "file": "abilities/Lemme! Help You!.png",
+        "name": "Lemme! Help You!"
+      },
+      {
+        "file": "abilities/Let There Be Light.png",
+        "name": "Let There Be Light"
+      },
+      {
+        "file": "abilities/Let Thy Fortune Burst in Flames.png",
+        "name": "Let Thy Fortune Burst in Flames"
+      },
+      {
+        "file": "abilities/Lick... Enkindled Betrayal.png",
+        "name": "Lick... Enkindled Betrayal"
+      },
+      {
+        "file": "abilities/Lightbringer.png",
+        "name": "Lightbringer"
+      },
+      {
+        "file": "abilities/Lightning Rush.png",
+        "name": "Lightning Rush"
+      },
+      {
+        "file": "abilities/Lo, Hope Takes Flight!.png",
+        "name": "Lo, Hope Takes Flight!"
+      },
+      {
+        "file": "abilities/Love Over the Rainbow.png",
+        "name": "Love Over the Rainbow"
+      },
+      {
+        "file": "abilities/Love, Heal, and Choose.png",
+        "name": "Love, Heal, and Choose"
+      },
+      {
+        "file": "abilities/Lucent Moonglow.png",
+        "name": "Lucent Moonglow"
+      },
+      {
+        "file": "abilities/Maelstrom Rhapsody.png",
+        "name": "Maelstrom Rhapsody"
+      },
+      {
+        "file": "abilities/Mara-Sunder Awl.png",
+        "name": "Mara-Sunder Awl"
+      },
+      {
+        "file": "abilities/March 7th, the Apex Heroine.png",
+        "name": "March 7th, the Apex Heroine"
+      },
+      {
+        "file": "abilities/Master, I've Ascended!.png",
+        "name": "Master, I've Ascended!"
+      },
+      {
+        "file": "abilities/Master, It's Tea Time!.png",
+        "name": "Master, It's Tea Time!"
+      },
+      {
+        "file": "abilities/Meteor Storm.png",
+        "name": "Meteor Storm"
+      },
+      {
+        "file": "abilities/Midnight Tumult.png",
+        "name": "Midnight Tumult"
+      },
+      {
+        "file": "abilities/Mind is Might.png",
+        "name": "Mind is Might"
+      },
+      {
+        "file": "abilities/Mind's Eye (True).png",
+        "name": "Mind's Eye (True)"
+      },
+      {
+        "file": "abilities/Minuet of Blooms and Plumes.png",
+        "name": "Minuet of Blooms and Plumes"
+      },
+      {
+        "file": "abilities/Molten Detonation.png",
+        "name": "Molten Detonation"
+      },
+      {
+        "file": "abilities/Monodrama.png",
+        "name": "Monodrama"
+      },
+      {
+        "file": "abilities/Moon On Glacial River.png",
+        "name": "Moon On Glacial River"
+      },
+      {
+        "file": "abilities/Mooncocoon Shrouds the Form.png",
+        "name": "Mooncocoon Shrouds the Form"
+      },
+      {
+        "file": "abilities/My Sword Zaps Demons.png",
+        "name": "My Sword Zaps Demons"
+      },
+      {
+        "file": "abilities/Near the Sea's Heartbeat.png",
+        "name": "Near the Sea's Heartbeat"
+      },
+      {
+        "file": "abilities/Nectar Blitz.png",
+        "name": "Nectar Blitz"
+      },
+      {
+        "file": "abilities/Nindō Supreme_ Aishiteru.png",
+        "name": "Nindō Supreme: Aishiteru"
+      },
+      {
+        "file": "abilities/Ningu_ Demonbane Petalblade.png",
+        "name": "Ningu: Demonbane Petalblade"
+      },
+      {
+        "file": "abilities/Ninja Strike_ Rooted Resolute.png",
+        "name": "Ninja Strike: Rooted Resolute"
+      },
+      {
+        "file": "abilities/Ninja Tech_ Endurance Gauge.png",
+        "name": "Ninja Tech: Endurance Gauge"
+      },
+      {
+        "file": "abilities/Ninjutsu_ Rise Above Tumbles.png",
+        "name": "Ninjutsu: Rise Above Tumbles"
+      },
+      {
+        "file": "abilities/No... Regrets.png",
+        "name": "No... Regrets"
+      },
+      {
+        "file": "abilities/Novaburst.png",
+        "name": "Novaburst"
+      },
+      {
+        "file": "abilities/Octobolt Flash.png",
+        "name": "Octobolt Flash"
+      },
+      {
+        "file": "abilities/Ode to Caress and Cicatrix.png",
+        "name": "Ode to Caress and Cicatrix"
+      },
+      {
+        "file": "abilities/Of Fire and Far Faring.png",
+        "name": "Of Fire and Far Faring"
+      },
+      {
+        "file": "abilities/One Punch!.png",
+        "name": "One Punch!"
+      },
+      {
+        "file": "abilities/One-Time Offer.png",
+        "name": "One-Time Offer"
+      },
+      {
+        "file": "abilities/Oops, a Missed Catch.png",
+        "name": "Oops, a Missed Catch"
+      },
+      {
+        "file": "abilities/Oracle Brush.png",
+        "name": "Oracle Brush"
+      },
+      {
+        "file": "abilities/Orbital Annihilation Pulse.png",
+        "name": "Orbital Annihilation Pulse"
+      },
+      {
+        "file": "abilities/Order_ Aerial Bombardment.png",
+        "name": "Order: Aerial Bombardment"
+      },
+      {
+        "file": "abilities/Order_ Flare Propulsion.png",
+        "name": "Order: Flare Propulsion"
+      },
+      {
+        "file": "abilities/Outdoor Survival Experience.png",
+        "name": "Outdoor Survival Experience"
+      },
+      {
+        "file": "abilities/Overtone Hum_ Chorus After Dark Tides.png",
+        "name": "Overtone Hum: Chorus After Dark Tides"
+      },
+      {
+        "file": "abilities/Pain and Anger.png",
+        "name": "Pain and Anger"
+      },
+      {
+        "file": "abilities/Pain, Brews Truth.png",
+        "name": "Pain, Brews Truth"
+      },
+      {
+        "file": "abilities/Party's Wildin' and Camera's Rollin'.png",
+        "name": "Party's Wildin' and Camera's Rollin'"
+      },
+      {
+        "file": "abilities/PatrAeon Benefits.png",
+        "name": "PatrAeon Benefits"
+      },
+      {
+        "file": "abilities/Percipience, Silent Dawn.png",
+        "name": "Percipience, Silent Dawn"
+      },
+      {
+        "file": "abilities/Perfect Pickoff.png",
+        "name": "Perfect Pickoff"
+      },
+      {
+        "file": "abilities/Petals to Stream, Repose in Dream.png",
+        "name": "Petals to Stream, Repose in Dream"
+      },
+      {
+        "file": "abilities/Pinion's Aria.png",
+        "name": "Pinion's Aria"
+      },
+      {
+        "file": "abilities/Possession_ Ethereal Metaflow.png",
+        "name": "Possession: Ethereal Metaflow"
+      },
+      {
+        "file": "abilities/Prana Extirpated.png",
+        "name": "Prana Extirpated"
+      },
+      {
+        "file": "abilities/Prayer of Abyss Flower.png",
+        "name": "Prayer of Abyss Flower"
+      },
+      {
+        "file": "abilities/Pro-Gamer Move.png",
+        "name": "Pro-Gamer Move"
+      },
+      {
+        "file": "abilities/Promise, Not Command.png",
+        "name": "Promise, Not Command"
+      },
+      {
+        "file": "abilities/Pyrograph Arcanum.png",
+        "name": "Pyrograph Arcanum"
+      },
+      {
+        "file": "abilities/RIP Home Run.png",
+        "name": "RIP Home Run"
+      },
+      {
+        "file": "abilities/Radiant Streak.png",
+        "name": "Radiant Streak"
+      },
+      {
+        "file": "abilities/Rainclouds, Time to Go!.png",
+        "name": "Rainclouds, Time to Go!"
+      },
+      {
+        "file": "abilities/Rancor_ Enmity Reprisal.png",
+        "name": "Rancor: Enmity Reprisal"
+      },
+      {
+        "file": "abilities/Red Herring.png",
+        "name": "Red Herring"
+      },
+      {
+        "file": "abilities/Release, the Golden Scepter.png",
+        "name": "Release, the Golden Scepter"
+      },
+      {
+        "file": "abilities/Relume Life's Light.png",
+        "name": "Relume Life's Light"
+      },
+      {
+        "file": "abilities/Remembrance, Whirling, Like Rain.png",
+        "name": "Remembrance, Whirling, Like Rain"
+      },
+      {
+        "file": "abilities/Resurgence.png",
+        "name": "Resurgence"
+      },
+      {
+        "file": "abilities/Reunion at First Sight.png",
+        "name": "Reunion at First Sight"
+      },
+      {
+        "file": "abilities/Ricochet Love.png",
+        "name": "Ricochet Love"
+      },
+      {
+        "file": "abilities/Rifting Zenith.png",
+        "name": "Rifting Zenith"
+      },
+      {
+        "file": "abilities/Righteous Heart.png",
+        "name": "Righteous Heart"
+      },
+      {
+        "file": "abilities/Rise, Exalted Renown.png",
+        "name": "Rise, Exalted Renown"
+      },
+      {
+        "file": "abilities/Roaring Thunderclap.png",
+        "name": "Roaring Thunderclap"
+      },
+      {
+        "file": "abilities/Rosy-Fingered.png",
+        "name": "Rosy-Fingered"
+      },
+      {
+        "file": "abilities/Roulette Shark.png",
+        "name": "Roulette Shark"
+      },
+      {
+        "file": "abilities/R—Room Service!.png",
+        "name": "R—Room Service!"
+      },
+      {
+        "file": "abilities/Salted Camping Cans.png",
+        "name": "Salted Camping Cans"
+      },
+      {
+        "file": "abilities/Samsara, Locked.png",
+        "name": "Samsara, Locked"
+      },
+      {
+        "file": "abilities/Sanction.png",
+        "name": "Sanction"
+      },
+      {
+        "file": "abilities/Sawblade Tuning.png",
+        "name": "Sawblade Tuning"
+      },
+      {
+        "file": "abilities/Scarlet_ Elation or Execution.png",
+        "name": "Scarlet: Elation or Execution"
+      },
+      {
+        "file": "abilities/Scholar's Mate.png",
+        "name": "Scholar's Mate"
+      },
+      {
+        "file": "abilities/Scorch Onslaught.png",
+        "name": "Scorch Onslaught"
+      },
+      {
+        "file": "abilities/Second Magic Experiment.png",
+        "name": "Second Magic Experiment"
+      },
+      {
+        "file": "abilities/Seven Layers, One Arrow.png",
+        "name": "Seven Layers, One Arrow"
+      },
+      {
+        "file": "abilities/Shackle Breaker.png",
+        "name": "Shackle Breaker"
+      },
+      {
+        "file": "abilities/Shape of Taixu_ Dawn Herald.png",
+        "name": "Shape of Taixu: Dawn Herald"
+      },
+      {
+        "file": "abilities/Shard Sword.png",
+        "name": "Shard Sword"
+      },
+      {
+        "file": "abilities/Sheathed Blade.png",
+        "name": "Sheathed Blade"
+      },
+      {
+        "file": "abilities/Shuhu's Gift.png",
+        "name": "Shuhu's Gift"
+      },
+      {
+        "file": "abilities/Signal Overflow_ The Great Encore!.png",
+        "name": "Signal Overflow: The Great Encore!"
+      },
+      {
+        "file": "abilities/Silence, Wraithfly's Caress.png",
+        "name": "Silence, Wraithfly's Caress"
+      },
+      {
+        "file": "abilities/Singing Among Clouds.png",
+        "name": "Singing Among Clouds"
+      },
+      {
+        "file": "abilities/Sizzlin' Tango.png",
+        "name": "Sizzlin' Tango"
+      },
+      {
+        "file": "abilities/Skullcrush Spurs.png",
+        "name": "Skullcrush Spurs"
+      },
+      {
+        "file": "abilities/Sky-Shatter Fist.png",
+        "name": "Sky-Shatter Fist"
+      },
+      {
+        "file": "abilities/Slash by a Thousandfold Kiss.png",
+        "name": "Slash by a Thousandfold Kiss"
+      },
+      {
+        "file": "abilities/Slashed Dream Cries in Red.png",
+        "name": "Slashed Dream Cries in Red"
+      },
+      {
+        "file": "abilities/Sleight of Sparx Hand.png",
+        "name": "Sleight of Sparx Hand"
+      },
+      {
+        "file": "abilities/Smoke and Splendor.png",
+        "name": "Smoke and Splendor"
+      },
+      {
+        "file": "abilities/Solar Splendor Shines Upon All.png",
+        "name": "Solar Splendor Shines Upon All"
+      },
+      {
+        "file": "abilities/Somatotypical Helix.png",
+        "name": "Somatotypical Helix"
+      },
+      {
+        "file": "abilities/Soothing Melody.png",
+        "name": "Soothing Melody"
+      },
+      {
+        "file": "abilities/Special Brew.png",
+        "name": "Special Brew"
+      },
+      {
+        "file": "abilities/Spectrum Beam.png",
+        "name": "Spectrum Beam"
+      },
+      {
+        "file": "abilities/Sprouting Life Sculpts Earth.png",
+        "name": "Sprouting Life Sculpts Earth"
+      },
+      {
+        "file": "abilities/Standing Ovation.png",
+        "name": "Standing Ovation"
+      },
+      {
+        "file": "abilities/Stardust Ace.png",
+        "name": "Stardust Ace"
+      },
+      {
+        "file": "abilities/Straight Bet.png",
+        "name": "Straight Bet"
+      },
+      {
+        "file": "abilities/Stride to Deliverance.png",
+        "name": "Stride to Deliverance"
+      },
+      {
+        "file": "abilities/Strike Air_ Hammer of the Wind King.png",
+        "name": "Strike Air: Hammer of the Wind King"
+      },
+      {
+        "file": "abilities/String Sings Slow Swirls.png",
+        "name": "String Sings Slow Swirls"
+      },
+      {
+        "file": "abilities/Sublime Object.png",
+        "name": "Sublime Object"
+      },
+      {
+        "file": "abilities/Summer Strums the Soul.png",
+        "name": "Summer Strums the Soul"
+      },
+      {
+        "file": "abilities/Superiority of Reach.png",
+        "name": "Superiority of Reach"
+      },
+      {
+        "file": "abilities/Surprise Present.png",
+        "name": "Surprise Present"
+      },
+      {
+        "file": "abilities/Svarog Watches Over You.png",
+        "name": "Svarog Watches Over You"
+      },
+      {
+        "file": "abilities/Swing Dance Etiquette.png",
+        "name": "Swing Dance Etiquette"
+      },
+      {
+        "file": "abilities/Swordsong_ Absolution Denied.png",
+        "name": "Swordsong: Absolution Denied"
+      },
+      {
+        "file": "abilities/Syllabus_ Pop Quiz.png",
+        "name": "Syllabus: Pop Quiz"
+      },
+      {
+        "file": "abilities/Syllogistic Paradox.png",
+        "name": "Syllogistic Paradox"
+      },
+      {
+        "file": "abilities/System Warning.png",
+        "name": "System Warning"
+      },
+      {
+        "file": "abilities/Tail_ Spiritual Domination.png",
+        "name": "Tail: Spiritual Domination"
+      },
+      {
+        "file": "abilities/Talisman_ Protection.png",
+        "name": "Talisman: Protection"
+      },
+      {
+        "file": "abilities/Talons_ Inculcate Decorum.png",
+        "name": "Talons: Inculcate Decorum"
+      },
+      {
+        "file": "abilities/Ten-Lords' Decree, All Shall Obey.png",
+        "name": "Ten-Lords' Decree, All Shall Obey"
+      },
+      {
+        "file": "abilities/Tenax Per Ignem.png",
+        "name": "Tenax Per Ignem"
+      },
+      {
+        "file": "abilities/Terra Omnibus.png",
+        "name": "Terra Omnibus"
+      },
+      {
+        "file": "abilities/Terrasplit.png",
+        "name": "Terrasplit"
+      },
+      {
+        "file": "abilities/Tetrad Wisdom Reigns Thrice.png",
+        "name": "Tetrad Wisdom Reigns Thrice"
+      },
+      {
+        "file": "abilities/The Belobog March.png",
+        "name": "The Belobog March"
+      },
+      {
+        "file": "abilities/The Hero with a Thousand Faces.png",
+        "name": "The Hero with a Thousand Faces"
+      },
+      {
+        "file": "abilities/The Hospitable Dolosian.png",
+        "name": "The Hospitable Dolosian"
+      },
+      {
+        "file": "abilities/The Power of Cuteness.png",
+        "name": "The Power of Cuteness"
+      },
+      {
+        "file": "abilities/The Sea Sings in My Key.png",
+        "name": "The Sea Sings in My Key"
+      },
+      {
+        "file": "abilities/The Sorrowing Body.png",
+        "name": "The Sorrowing Body"
+      },
+      {
+        "file": "abilities/Thorned Nectar.png",
+        "name": "Thorned Nectar"
+      },
+      {
+        "file": "abilities/Thorned Snare.png",
+        "name": "Thorned Snare"
+      },
+      {
+        "file": "abilities/Thorns of the Abyss.png",
+        "name": "Thorns of the Abyss"
+      },
+      {
+        "file": "abilities/Threading Fragrance.png",
+        "name": "Threading Fragrance"
+      },
+      {
+        "file": "abilities/Throne of Bones.png",
+        "name": "Throne of Bones"
+      },
+      {
+        "file": "abilities/Thunderhunt.png",
+        "name": "Thunderhunt"
+      },
+      {
+        "file": "abilities/Thwack.png",
+        "name": "Thwack"
+      },
+      {
+        "file": "abilities/Time Distortion.png",
+        "name": "Time Distortion"
+      },
+      {
+        "file": "abilities/Time Thence Blurs.png",
+        "name": "Time Thence Blurs"
+      },
+      {
+        "file": "abilities/Tipsy Tussle.png",
+        "name": "Tipsy Tussle"
+      },
+      {
+        "file": "abilities/To Love and Tomorrow ♪.png",
+        "name": "To Love and Tomorrow ♪"
+      },
+      {
+        "file": "abilities/Together, Mem!.png",
+        "name": "Together, Mem!"
+      },
+      {
+        "file": "abilities/Told Ya! Magic Happens.png",
+        "name": "Told Ya! Magic Happens"
+      },
+      {
+        "file": "abilities/Tonal Resonance.png",
+        "name": "Tonal Resonance"
+      },
+      {
+        "file": "abilities/Transcendence.png",
+        "name": "Transcendence"
+      },
+      {
+        "file": "abilities/Transcendent Flash.png",
+        "name": "Transcendent Flash"
+      },
+      {
+        "file": "abilities/Treasure of the Architects.png",
+        "name": "Treasure of the Architects"
+      },
+      {
+        "file": "abilities/Trigger Happy.png",
+        "name": "Trigger Happy"
+      },
+      {
+        "file": "abilities/Trilateral Wiltcross.png",
+        "name": "Trilateral Wiltcross"
+      },
+      {
+        "file": "abilities/Trotter Market!_.png",
+        "name": "Trotter Market!?"
+      },
+      {
+        "file": "abilities/Turn a Profit!.png",
+        "name": "Turn a Profit!"
+      },
+      {
+        "file": "abilities/Unlimited Blade Works.png",
+        "name": "Unlimited Blade Works"
+      },
+      {
+        "file": "abilities/Unyielding Will.png",
+        "name": "Unyielding Will"
+      },
+      {
+        "file": "abilities/Upraise the Vanward Cresset.png",
+        "name": "Upraise the Vanward Cresset"
+      },
+      {
+        "file": "abilities/User Banned.png",
+        "name": "User Banned"
+      },
+      {
+        "file": "abilities/Verse ◦ Vow ∞.png",
+        "name": "Verse ◦ Vow ∞"
+      },
+      {
+        "file": "abilities/Victory Rush.png",
+        "name": "Victory Rush"
+      },
+      {
+        "file": "abilities/Violet Sparknado.png",
+        "name": "Violet Sparknado"
+      },
+      {
+        "file": "abilities/Virtue Beckons Bliss.png",
+        "name": "Virtue Beckons Bliss"
+      },
+      {
+        "file": "abilities/Votive Incense.png",
+        "name": "Votive Incense"
+      },
+      {
+        "file": "abilities/Vow of Voyage.png",
+        "name": "Vow of Voyage"
+      },
+      {
+        "file": "abilities/Vow of the Deep.png",
+        "name": "Vow of the Deep"
+      },
+      {
+        "file": "abilities/Wallow... Entombed Ash.png",
+        "name": "Wallow... Entombed Ash"
+      },
+      {
+        "file": "abilities/War-Flaming Lance.png",
+        "name": "War-Flaming Lance"
+      },
+      {
+        "file": "abilities/Waraxe.png",
+        "name": "Waraxe"
+      },
+      {
+        "file": "abilities/Watch This Showstopper.png",
+        "name": "Watch This Showstopper"
+      },
+      {
+        "file": "abilities/We Who Fly Into Twilight.png",
+        "name": "We Who Fly Into Twilight"
+      },
+      {
+        "file": "abilities/We, Too, Stride the Stars.png",
+        "name": "We, Too, Stride the Stars"
+      },
+      {
+        "file": "abilities/What Are You Looking At_.png",
+        "name": "What Are You Looking At?"
+      },
+      {
+        "file": "abilities/When Breeze Kisses Cirrus.png",
+        "name": "When Breeze Kisses Cirrus"
+      },
+      {
+        "file": "abilities/Where'd the Gifts Go.png",
+        "name": "Where'd the Gifts Go"
+      },
+      {
+        "file": "abilities/Whistlebolt Sings Joy.png",
+        "name": "Whistlebolt Sings Joy"
+      },
+      {
+        "file": "abilities/Who's Afraid of Constance_.png",
+        "name": "Who's Afraid of Constance?"
+      },
+      {
+        "file": "abilities/Windrider Bullet.png",
+        "name": "Windrider Bullet"
+      },
+      {
+        "file": "abilities/Wingflip White Noise.png",
+        "name": "Wingflip White Noise"
+      },
+      {
+        "file": "abilities/Woes of Many Morphed to One.png",
+        "name": "Woes of Many Morphed to One"
+      },
+      {
+        "file": "abilities/You, Parting, Beyond Reach.png",
+        "name": "You, Parting, Beyond Reach"
+      },
+      {
+        "file": "abilities/Yours Truly, Kitty Phantom Thief!.png",
+        "name": "Yours Truly, Kitty Phantom Thief!"
+      },
+      {
+        "file": "abilities/Youth_ Halcyon Evermore.png",
+        "name": "Youth: Halcyon Evermore"
+      },
+      {
+        "file": "abilities/Zone Suppression.png",
+        "name": "Zone Suppression"
       }
     ]
   },

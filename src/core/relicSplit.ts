@@ -21,9 +21,10 @@
  * so budgets above that ceiling cannot be spent exactly — the residue is dropped.
  */
 import { SUBSTAT_TIERS } from './gear'
-import { buildMeta } from './relicScore'
+import { buildMeta, getRecommendedMainStat } from './relicScore'
 
 export type SplitSub = { stat: string; tier: 0 | 1 | 2; rolls: number; spread: number[] }
+export { getRecommendedMainStat }
 
 const MAX_SUBS = 4
 const MAX_ROLLS = 6
@@ -60,6 +61,53 @@ function candidates(slug: string, main: string, cls: 'flat' | 'pct'): string[] {
 function round5(n: number): number { return Math.round(n * 1e5) / 1e5 }
 
 function rollValue(stat: string, tier: 0 | 1 | 2): number { return SUBSTAT_TIERS[stat][tier] }
+
+/** one substat line: its stat, the entered total, and the roll tiers that sum to it. */
+export function splitSubValue(stat: string, total: number): SplitSub | null {
+  const tiers = SUBSTAT_TIERS[stat]
+  if (!tiers) return null
+  const target = round5(Math.max(0, total))
+  if (target <= 0) return null
+
+  // Dynamic programming: dp[rolls][value] = spread that achieves this value
+  // value is rounded to 5 decimal places, multiply by 100000 for integer keys
+  const SCALE = 100000
+  const targetInt = Math.round(target * SCALE)
+  const rollValues = [tiers[0] * SCALE, tiers[1] * SCALE, tiers[2] * SCALE].map(Math.round)
+
+  // best[rolls][value] = spread array
+  const best: Map<number, Map<number, number[]>> = new Map()
+  best.set(0, new Map([[0, []]]))
+
+  for (let r = 1; r <= MAX_ROLLS; r++) {
+    const map = new Map<number, number[]>()
+    const prev = best.get(r - 1)!
+    for (const [val, spread] of prev) {
+      for (let t = 0; t < 3; t++) {
+        const nv = val + rollValues[t]
+        if (nv > targetInt + Math.max(...rollValues)) continue
+        if (!map.has(nv)) map.set(nv, [...spread, t])
+      }
+    }
+    best.set(r, map)
+  }
+
+  // Find closest value across 1..6 rolls
+  let bestDiff = Infinity
+  let bestSpread: number[] = []
+  for (let r = 1; r <= MAX_ROLLS; r++) {
+    for (const [val, spread] of best.get(r)!) {
+      const diff = Math.abs(val - targetInt)
+      if (diff < bestDiff) {
+        bestDiff = diff
+        bestSpread = spread
+      }
+    }
+  }
+
+  if (!bestSpread.length) bestSpread = [0]
+  return { stat, tier: bestSpread[0] as 0 | 1 | 2, rolls: bestSpread.length, spread: bestSpread }
+}
 
 /** split a summed substat value into up to 4 lines (deterministic; ties broken by kit weight) */
 export function splitSubValues(slug: string, main: string, total: number): SplitSub[] {

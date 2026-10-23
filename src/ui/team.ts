@@ -9,10 +9,10 @@ import { coneOptions, relicOptions, planarOptions, signatureCone } from '../core
 import { store, techniquesForRows } from './store'
 import type { PieceState, TeamRowState } from './store'
 import { loadSettings } from './settings'
-import { charBadge, gearBadge, updateCharBadge, updateGearBadge, metaBadge, updateMetaBadges, pieceBadge, updatePieceBadge, statBadge, rollCubes, ratingTierClass, gearIconUrl } from './icons'
+import { charBadge, gearBadge, updateCharBadge, updateGearBadge, metaBadge, updateMetaBadges, pieceBadge, updatePieceBadge, statBadge, statIconUrlForKey, ratingTierClass, gearIconUrl } from './icons'
 import { KIT_PATH } from '../core/kits'
 import { scoreRelic } from '../core/relicScore'
-import { splitSubValues, type SplitSub } from '../core/relicSplit'
+import { splitSubValue, getRecommendedMainStat, type SplitSub } from '../core/relicSplit'
 import type { DebugLevel } from '../core/battlelog'
 
 export interface PieceEditor {
@@ -444,14 +444,12 @@ function paintPieceRatings(r: CharRow): void {
   }
 }
 
-const TIER_WORD: Record<0 | 1 | 2, string> = { 0: 'низкое', 1: 'среднее', 2: 'высокое' }
-
 /** 5 decimals — the same rounding the engine uses for substat values */
 const round5 = (n: number): number => Math.round(n * 1e5) / 1e5; void round5
 
 /**
- * 6 piece editors: set picker (name + set icon), main stat, and ONE number for
- * the summed substat value — the script splits it into the substats below.
+ * 6 piece editors: set picker (name + set icon), main stat, and 4 substat rows
+ * each with stat icon, stat select, value input, and quality cubes.
  */
 export function buildPieceEditors(onChange?: () => void, kitIdOf?: () => string): PieceEditor[] {
   const out: PieceEditor[] = []
@@ -483,149 +481,183 @@ export function buildPieceEditors(onChange?: () => void, kitIdOf?: () => string)
       mainVal.textContent = fmtStatVal(m, v)
     }
     updateMainVal()
-    // For head/hands main stat is fixed by slot
     if (slot === 'head' || slot === 'hands') {
       mainSel.disabled = true
     }
 
-    // Manual substat entry: pick stat + enter value, script splits into rolls/quality
-    const subStatSel = el('select') as HTMLSelectElement
-    const subValInp = el('input', 'pieceSubVal') as HTMLInputElement
-    subValInp.type = 'number'
-    subValInp.step = '0.01'
-    subValInp.min = '0'
-    subValInp.placeholder = 'значение'
-    const addSubBtn = el('button', 'addSubBtn') as HTMLButtonElement
-    addSubBtn.type = 'button'
-    addSubBtn.textContent = '+ саб'
-    const subEntry = el('div', 'subEntry')
-    subEntry.append(subStatSel, subValInp, addSubBtn)
     const subRows = el('div', 'subRows')
+    type SubControl = { row: HTMLElement; drop: Dropdown; inp: HTMLInputElement; info: HTMLElement }
+    const controls: SubControl[] = []
+
+    const getMain = (): string =>
+      (slot === 'head' || slot === 'hands') ? (mains[0] || '') : mainSel.value
+
+    const FLAT_STATS = ['hpFlat', 'atkFlat', 'defFlat', 'spd']
+
+    const subIcons: Record<string, string> = {}
+    for (const s of Object.keys(SUBSTAT_TIERS)) {
+      const url = statIconUrlForKey(s)
+      if (url) subIcons[s] = url
+    }
+
+    const splitOf = (c: SubControl): SplitSub | null => {
+      let total = Number(c.inp.value)
+      const stat = c.drop.value
+      if (!stat || !(total > 0)) return null
+      if (!FLAT_STATS.includes(stat)) total = total / 100
+      return splitSubValue(stat, total)
+    }
+
+    const paintInfo = (c: SubControl, s: SplitSub | null): void => {
+      c.row.classList.toggle('empty', !s)
+      c.info.innerHTML = ''
+      if (!s) {
+        c.info.textContent = 'quality / rolls'
+        return
+      }
+      const cubes = el('div', 'subCubes')
+      cubes.dataset.tier = String(s.tier)
+      for (const tier of s.spread) {
+        const cube = el('div', 'subCube')
+        cube.dataset.tier = String(tier)
+        cubes.append(cube)
+      }
+      c.info.append(cubes)
+    }
+
+    const commitSubs = (): void => {
+      const next: SplitSub[] = []
+      for (const c of controls) {
+        const s = splitOf(c)
+        paintInfo(c, s)
+        if (s) next.push(s)
+      }
+      ed.subs = next
+      onChange?.()
+    }
+
+    const syncOptions = (): void => {
+      const main = getMain()
+      for (const c of controls) {
+        const prev = c.drop.value
+        const taken = new Set(controls.filter(o => o !== c).map(o => o.drop.value).filter(Boolean))
+        const cand = Object.keys(SUBSTAT_TIERS).filter(s => s !== main && (s === prev || !taken.has(s)))
+        const entries = [['', '— stat —'], ...cand.map(s => [s, STAT_LABELS[s] ?? s] as [string, string])]
+        c.drop.setEntries(entries as Array<[string, string]>, { icons: subIcons })
+        if (cand.includes(prev)) c.drop.value = prev
+      }
+    }
+
+    const paintSaved = (subs: SplitSub[]): void => {
+      syncOptions()
+      controls.forEach((c, i) => {
+        const s = subs[i]
+        if (!s) { c.drop.value = ''; c.inp.value = ''; paintInfo(c, null); return }
+        c.drop.value = s.stat
+        const total = s.spread.reduce((a, t) => a + (SUBSTAT_TIERS[s.stat]?.[t] ?? 0), 0)
+        const displayVal = !FLAT_STATS.includes(s.stat) ? total * 100 : total
+        c.inp.value = displayVal ? String(Math.round(displayVal * 100) / 100) : ''
+        paintInfo(c, s)
+      })
+      syncOptions()
+    }
 
     const ed: PieceEditor = {
       slot, card, setDrop, pieceBadgeEl, ratingEl, mainSel, mainVal,
-      valueInp: subValInp, subs: [], subRows,
+      valueInp: undefined as unknown as HTMLInputElement,
+      subs: [], subRows,
       setSet: (id: string) => {
         setDrop.value = id
         updatePieceBadge(pieceBadgeEl, id, slot)
+        const currentKit = kitIdOf?.() ?? ''
+        if (currentKit && slot !== 'head' && slot !== 'hands') {
+          const rec = getRecommendedMainStat(currentKit, slot)
+          if (rec && mains.includes(rec) && mainSel.value !== rec) {
+            mainSel.value = rec
+            updateMainVal()
+            for (const c of controls) {
+              if (c.drop.value === rec) { c.drop.value = ''; c.inp.value = ''; paintInfo(c, null) }
+            }
+            syncOptions()
+            commitSubs()
+          }
+        }
       },
       reset: () => {
         setDrop.value = ''
-      ed.subs = []
-      subRows.innerHTML = ''
-      subValInp.value = ''
-      addSubBtn.disabled = false
-      fillSubStats()
-      updatePieceBadge(pieceBadgeEl, '', slot)
+        mainSel.selectedIndex = 0
+        updateMainVal()
+        ed.subs = []
+        for (const c of controls) { c.drop.value = ''; c.inp.value = ''; paintInfo(c, null) }
+        syncOptions()
+        updatePieceBadge(pieceBadgeEl, '', slot)
       },
       restore: (p: PieceState) => {
         setDrop.value = p.setId ?? ''
         updatePieceBadge(pieceBadgeEl, p.setId ?? '', slot)
-        if (mains.includes(p.main)) mainSel.value = p.main
+        const currentKit = kitIdOf?.() ?? ''
+        let mainValue = p.main
+        if (!mainValue && currentKit && slot !== 'head' && slot !== 'hands') {
+          mainValue = getRecommendedMainStat(currentKit, slot) ?? ''
+        }
+        if (mainValue && mains.includes(mainValue)) mainSel.value = mainValue
         updateMainVal()
-        ed.subs = (p.subs ?? []).map(s => ({
-          stat: s.stat,
-          tier: s.tier,
-          rolls: s.rolls,
-          spread: s.spread ?? [],
-        }))
-        const total = ed.subs.reduce((a, s) => a + s.spread.reduce((x, t) => x + (SUBSTAT_TIERS[s.stat]?.[t] ?? 0), 0), 0)
-        subValInp.value = total ? String(Math.round(total * 100) / 100) : ''
-        paintSubs()
+        ed.subs = (p.subs ?? []).map(s => ({ stat: s.stat, tier: s.tier, rolls: s.rolls, spread: s.spread ?? [] }))
+        paintSaved(ed.subs)
       },
     }
 
-    const paintSubs = (): void => {
-      subRows.innerHTML = ''
-      for (const s of ed.subs) {
-        const v = s.spread.reduce((a, t) => a + SUBSTAT_TIERS[s.stat][t], 0)
-        const row = el('div', 'subRow')
-        row.append(statBadge(s.stat))
-        const name = el('span', 'subStatName'); name.textContent = STAT_LABELS[s.stat] ?? s.stat
-        const val = el('span', 'subVal'); val.textContent = '+ ' + fmtStatVal(s.stat, v)
-        row.append(name, val)
-        const barWrap = el('div', 'subBarWrap')
-        const bar = el('div', 'subBar')
-        bar.append(rollCubes(s.spread))
-        const q = el('div', 'subQuality'); q.textContent = TIER_WORD[s.tier]
-        bar.append(q)
-        barWrap.append(bar)
-        row.append(barWrap)
-        subRows.append(row)
-      }
-      if (ed.subs.length >= 4) addSubBtn.disabled = true
-      else addSubBtn.disabled = false
-      fillSubStats()
+    for (let i = 0; i < 4; i++) {
+      const row = el('div', 'subRow subEditRow empty')
+      const drop = new Dropdown('subEditSel')
+      const inp = el('input', 'subEditInp') as HTMLInputElement
+      inp.type = 'number'; inp.step = '0.01'; inp.min = '0'; inp.placeholder = 'value'
+      const info = el('div', 'subEditInfo')
+      info.textContent = 'quality / rolls'
+      row.append(drop.root, inp, info)
+      subRows.append(row)
+      const c: SubControl = { row, drop, inp, info }
+      controls.push(c)
+      if (i === 0) ed.valueInp = inp
+      drop.onchange = () => { syncOptions(); commitSubs() }
+      inp.oninput = () => commitSubs()
     }
 
-    const getMain = () => (slot === 'head' || slot === 'hands') ? mains[0] || '' : mainSel.value
-    const fillSubStats = () => {
-      const main = getMain()
-      const used = new Set([main].filter(Boolean))
-      const cand = Object.keys(SUBSTAT_TIERS).filter(s => !used.has(s))
-      fillSelect(subStatSel, cand.map(s => [s, STAT_LABELS[s] ?? s] as [string, string]))
-    }
-    setDrop.onchange = () => { updatePieceBadge(pieceBadgeEl, setDrop.value, slot); onChange?.(); fillSubStats() }
-    mainSel.onchange = () => { updateMainVal(); fillSubStats() }
-    fillSubStats()
-    addSubBtn.onclick = () => {
-      if (ed.subs.length >= 4) return
-      const main = getMain()
-      const stat = subStatSel.value
-      if (!stat || stat === main) return
-      const total = Number(subValInp.value) || 0
-      if (total <= 0) return
-      const kitId = kitIdOf?.() ?? ''
-      const splits = kitId ? splitSubValues(kitId, main, total) : []
-      const pick = splits.find(s => s.stat === stat) || splits[0]
-      if (pick) {
-        ed.subs.push({ ...pick, stat })
-        paintSubs()
-        onChange?.()
-      }
-      subValInp.value = ''
-      fillSubStats()
-    }
-
-    mainSel.onchange = () => { updateMainVal(); fillSubStats() }
-
-    // For head/hands main is fixed text, only shown after set is chosen
-      if (slot === 'head' || slot === 'hands') {
-        const fixed = el('div', 'pieceMainFixed')
-        const m = mains[0] ?? ''
-        const v = m ? (RELIC_MAIN_VALUES[m] ?? 0) : 0
-        fixed.textContent = ''
-        const showFixedFn = () => {
-          if (setDrop.value && m) fixed.textContent = `${STAT_LABELS[m] || m}: ${fmtStatVal(m, v)}`
-          else fixed.textContent = ''
-          fillSubStats()
+    const setDropOnChangeCommon = () => {
+      updatePieceBadge(pieceBadgeEl, setDrop.value, slot)
+      const currentKit = kitIdOf?.() ?? ''
+      if (currentKit && slot !== 'head' && slot !== 'hands') {
+        const rec = getRecommendedMainStat(currentKit, slot)
+        if (rec && mains.includes(rec) && mainSel.value !== rec) {
+          mainSel.value = rec
+          updateMainVal()
+          for (const c of controls) {
+            if (c.drop.value === rec) { c.drop.value = ''; c.inp.value = ''; paintInfo(c, null) }
+          }
+          syncOptions()
+          commitSubs()
         }
-        setDrop.onchange = () => { updatePieceBadge(pieceBadgeEl, setDrop.value, slot); onChange?.(); showFixedFn() }
-      showFixedFn()
-      card.append(head, setDrop.root, fixed, subEntry, subRows)
-    } else {
-      setDrop.onchange = () => { updatePieceBadge(pieceBadgeEl, setDrop.value, slot); onChange?.() }
-      card.append(head, setDrop.root, mainSel, mainVal, subEntry, subRows)
-    }
-    // ensure 4 empty substat rows visible
-    if (subRows.childElementCount === 0) {
-      for (let i = 0; i < 4; i++) {
-        const row = el('div', 'subRow subRowEmpty')
-        const sel = el('select', 'subEmptySel') as HTMLSelectElement
-        fillSubStats()
-        const used = new Set(ed.subs.map(s=>s.stat))
-        const cand = Object.keys(SUBSTAT_TIERS).filter(s => !used.has(s) && s !== getMain())
-        fillSelect(sel, cand.map(s => [s, STAT_LABELS[s] ?? s] as [string,string]))
-        const inp = el('input','subEmptyInp') as HTMLInputElement
-        inp.type='number'
-        inp.step='0.01'
-        inp.placeholder='значение'
-        const info = el('div','subEmptyInfo')
-        info.textContent = 'качество / кол-во роллов'
-        row.append(sel, inp, info)
-        subRows.append(row)
       }
+      onChange?.()
     }
+
+    setDrop.onchange = setDropOnChangeCommon
+
+    mainSel.onchange = () => {
+      mainSel.title = ''
+      updateMainVal()
+      const main = getMain()
+      for (const c of controls) {
+        if (c.drop.value === main) { c.drop.value = ''; c.inp.value = ''; paintInfo(c, null) }
+      }
+      syncOptions()
+      commitSubs()
+    }
+
+    updateMainVal()
+    syncOptions()
+
+    card.append(head, setDrop.root, mainSel, mainVal, subRows)
     out.push(ed)
   }
   return out

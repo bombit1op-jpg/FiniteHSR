@@ -55,10 +55,10 @@ export function hitBreakdown(p: CalcProfile, e: CalcEnemy, mult = 1): HitBreakdo
 export const GRID_KEYS = ['atkPct', 'dmgPct', 'critRate', 'critDmg'] as const
 export type GridKey = typeof GRID_KEYS[number]
 export const GRID_KEY_LABELS: Record<GridKey, string> = {
-  atkPct: 'АТК %',
-  dmgPct: 'Урон % (DMG)',
-  critRate: 'Крит. шанс %',
-  critDmg: 'Крит. урон %',
+  atkPct: 'ATK %',
+  dmgPct: 'DMG %',
+  critRate: 'CRIT Rate %',
+  critDmg: 'CRIT DMG %',
 }
 
 function withAdd(p: CalcProfile, key: GridKey, v: number): CalcProfile {

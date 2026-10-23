@@ -12,9 +12,9 @@
  */
 import { KITS, KIT_PATH } from '../core/kits'
 import type { TeamSpec } from '../core/battle'
-import { el, fillSelect } from './dom'
+import { el, fillSelect, STAT_LABELS } from './dom'
 import { Dropdown } from './dropdown'
-import { relicOptions, planarOptions } from '../core/gearOrder'
+import { relicOptions, planarOptions, signatureCone } from '../core/gearOrder'
 import { LIGHT_CONES } from '../core/gear'
 import type { TeamRowState } from './store'
 import {
@@ -191,7 +191,6 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const elemChip = metaBadge('elem', '')
     const pathChip = metaBadge('path', '')
     chips.append(elemChip, pathChip)
-    nameRow.append(nameEl, chips)
     const charLevelInp = el('input') as HTMLInputElement
     charLevelInp.type = 'number'
     charLevelInp.min = '0'
@@ -199,7 +198,10 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     charLevelInp.className = 'lvlInputNum'
     charLevelInp.setAttribute('aria-label', 'Уровень персонажа')
     charLevelInp.value = String(row.level ?? 80)
-    identity.append(nameRow, charLevelInp)
+    const charLevelWrap = el('div', 'charLevelWrap')
+    charLevelWrap.append(charLevelInp)
+    nameRow.append(charLevelWrap, nameEl, chips)
+    identity.append(nameRow)
     const portraitWrap = el('div', 'pcPortraitWrap')
     portraitWrap.append(portrait, clearSlotBtn)
     root.append(portraitWrap, identity)
@@ -229,9 +231,12 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     // --- gear: cone + SI + level
     const coneSection = section('СВЕТОВОЙ КОНУС')
     const coneWrap = el('div', 'coneRow')
+    const coneTitle = el('div', 'coneTitle')
+    const coneNameEl = el('span', 'coneName')
+    const coneRarityEl = el('span', 'coneRarity')
+    coneTitle.append(coneNameEl, coneRarityEl)
+    const coneArt = el('div', 'coneArt')
     const coneBadge = gearBadge('cone', row.coneId)
-    const coneNameEl = el('div', 'coneName')
-    const coneFields = el('div', 'coneFields')
     const siSel = el('select') as HTMLSelectElement
     fillSelect(siSel, [1, 2, 3, 4, 5].map(n => [String(n), `S${n}`] as [string, string]))
     siSel.value = String(row.si || 1)
@@ -240,11 +245,11 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     coneLevelInp.type = 'number'
     coneLevelInp.min = '0'
     coneLevelInp.max = '80'
-    coneLevelInp.className = 'lvlInputNum'
+    coneLevelInp.className = 'lvlInputNum coneLevelInp'
     coneLevelInp.setAttribute('aria-label', 'Уровень конуса')
     coneLevelInp.value = String(row.coneLevel ?? 80)
-    const coneSelects = el('div', 'coneSelects')
-    coneSelects.append(siSel, coneLevelInp)
+    const coneControls = el('div', 'coneControls')
+    coneControls.append(coneLevelInp, siSel)
     const pickCone = async () => {
       const kitId = liveRow().kitId
       if (!kitId) return
@@ -253,13 +258,14 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       patch({ coneId: chosen })
       view.refresh()
     }
-    coneBadge.style.cursor = 'pointer'
-    coneBadge.title = 'Выбрать световой конус'
-    coneBadge.onclick = pickCone
-    coneNameEl.textContent = '— конус не выбран —'
-    coneNameEl.classList.add('dim')
-    coneFields.append(coneNameEl, coneSelects)
-    coneWrap.append(coneBadge, coneFields)
+    coneArt.append(coneBadge)
+    coneArt.style.cursor = 'pointer'
+    coneArt.title = 'Выбрать световой конус'
+    coneArt.onclick = pickCone
+    coneNameEl.textContent = ''
+    coneRarityEl.textContent = ''
+    coneArt.classList.add('empty')
+    coneWrap.append(coneTitle, coneArt, coneControls)
     coneSection.append(coneWrap)
     body.append(coneSection)
 
@@ -290,8 +296,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     /** "+28% ATK" / "+5 SPD" / "+10% Fire DMG" for a trace mod (engine stat key + raw value) */
     const traceLabel = (stat: string, value: number): string => {
       const pct = stat.endsWith('Pct') || stat.startsWith('dmg:') || ['critRate', 'critDmg', 'be', 'ehr', 'effRes', 'elation'].includes(stat)
-      const name = stat.startsWith('dmg:') ? `${stat.slice(4)} DMG`
-        : stat.replace('Pct', '').replace('Flat', '').replace(/^(atk|hp|def|spd)$/i, m => m.toUpperCase())
+      const name = STAT_LABELS[stat] ?? stat
       return `+${pct ? Math.round(value * 1000) / 10 + '%' : value} ${name}`.trim()
     }
     /** per-trace checkbox rows, in `traceMods(kitId)` order; `tracesSel(i)` = this trace is on */
@@ -434,8 +439,6 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       l.append(t, node)
       return l
     }
-    const plus = el('span', 'planPlus')
-    plus.textContent = '+'
     const setALab = planLab('Сет', setA.root)
     const setBLab = planLab('Сет 2', setB.root)
     const planarLab = planLab('Планарка', planarSet.root)
@@ -536,8 +539,13 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       const live = liveRow()
       updateGearBadge(coneBadge, 'cone', live.coneId)
       const cone = live.coneId ? LIGHT_CONES.find(c => c.id === live.coneId) : null
-      coneNameEl.textContent = cone?.name ?? '— конус не выбран —'
+      coneNameEl.textContent = cone?.name ?? ''
       coneNameEl.classList.toggle('dim', !cone)
+      coneRarityEl.textContent = cone ? `${cone.rarity}★` : ''
+      coneArt.classList.toggle('empty', !cone)
+      coneArt.classList.toggle('signature', !!cone && live.coneId === signatureCone(live.kitId))
+      siSel.value = String(live.si || 1)
+      coneLevelInp.value = String(live.coneLevel ?? 80)
       // reflect the live row into the trace checkboxes + Technique controls (idempotent)
       const tr = live.traces
       view.traceChecks.forEach((c, i) => { c.checked = tr === false ? false : Array.isArray(tr) ? tr[i] !== false : true })
@@ -706,26 +714,26 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const spec: TeamSpec = toTeamSpec(live)
     const s = charFinalStats(spec)
     if (!s) { view.statsBox.append(dim('нет данных')); return }
-    const rows: Array<[string, string, string]> = [
-      ['hp', 'HP', String(Math.round(s.hp))],
-      ['atk', 'ATK', String(Math.round(s.atk))],
-      ['def', 'DEF', String(Math.round(s.def))],
-      ['spd', 'Скорость', String(Math.round(s.spd * 10) / 10)],
-      ['critRate', 'Крит. шанс', pct(s.critRate)],
-      ['critDmg', 'Крит. урон', pct(s.critDmg)],
-      ['ehr', 'Эффект. попадание', pct(s.ehr)],
-      ['effRes', 'Сопр. эффектам', pct(s.effRes)],
-      ['be', 'Эффект. пробитие', pct(s.be)],
-      ['err', 'Восст. энергии', pct(s.err)],
-      ['energyMax', 'Макс. энергия', String(Math.round(s.energyMax))],
-      ['outHeal', 'Исходящее лечение', pct(s.outHeal)],
-      ['elemDmgBoost', 'Элем. урон', pct(s.elemDmgBoost)],
+    const rows: Array<[string, string]> = [
+      ['hp', String(Math.round(s.hp))],
+      ['atk', String(Math.round(s.atk))],
+      ['def', String(Math.round(s.def))],
+      ['spd', String(Math.round(s.spd * 10) / 10)],
+      ['critRate', pct(s.critRate)],
+      ['critDmg', pct(s.critDmg)],
+      ['ehr', pct(s.ehr)],
+      ['effRes', pct(s.effRes)],
+      ['be', pct(s.be)],
+      ['err', pct(s.err)],
+      ['energyMax', String(Math.round(s.energyMax))],
+      ['outHeal', pct(s.outHeal)],
+      ['elemDmgBoost', pct(s.elemDmgBoost)],
     ]
     const grid = el('div', 'statGrid')
-    for (const [key, label, val] of rows) {
+    for (const [key, val] of rows) {
       const cell = el('div', 'statCell')
       const name = el('span', 'statName')
-      name.textContent = label
+      name.textContent = STAT_LABELS[key] ?? key
       const b = el('b')
       b.textContent = val
       cell.append(statBadge(key), name, b)

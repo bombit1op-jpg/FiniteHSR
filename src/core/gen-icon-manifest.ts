@@ -14,7 +14,7 @@ const ROOT = join(import.meta.dirname, '..', '..')
 const SRC = join(ROOT, 'public', 'icons', '_manifest.json')
 const RELIC_DATA = join(ROOT, 'hsr-data', 'data', 'relicsets.json')
 const PORTRAIT_DIR = join(ROOT, 'public', 'portraits')
-const GAME_DATA = join(ROOT, 'reference', 'hsr-optimizer-main', 'src', 'data', 'game_data.json')
+const CHARACTERS_DATA = join(ROOT, 'hsr-data', 'characters.json')
 const OUT = join(ROOT, 'src', 'ui', 'iconManifest.ts')
 
 interface IconEntry { file: string; name: string; character?: string }
@@ -75,19 +75,35 @@ function emitRecord(map: Record<string, string>, indent: string): string {
 
 /**
  * Full-character art (`public/portraits/<id>.webp`, 376x512) keyed by the same display name the
- * rest of the manifest uses. Files are named by the game's numeric character id; the name is
- * resolved through `game_data.json` (id -> name), which matches the icon manifest's character keys
- * 1:1. Only files that actually exist on disk are emitted, so the map never points at a 404.
+ * rest of the manifest uses. Files are named by the game's numeric character id (avatar_id from
+ * hsr-data/characters.json); the name is resolved through that file.
+ * Only files that actually exist on disk are emitted, so the map never points at a 404.
  */
 function buildPortraits(names: readonly string[]): Record<string, string> {
-  const game = JSON.parse(readFileSync(GAME_DATA, 'utf8')) as { characters: Record<string, { name: string }> }
-  const idByName: Record<string, string> = {}
-  for (const [id, c] of Object.entries(game.characters)) idByName[c.name] = id
+  let idByName: Record<string, string> = {}
+  try {
+    const characters = JSON.parse(readFileSync(CHARACTERS_DATA, 'utf8')) as Array<{ name: string; relics?: { avatar_id: number } }>
+    for (const c of characters) if (c.name && c.relics?.avatar_id) idByName[c.name] = String(c.relics.avatar_id)
+  } catch {
+    // fallback: try reference data
+    try {
+      const game = JSON.parse(readFileSync(join(ROOT, 'reference', 'hsr-optimizer-main', 'src', 'data', 'game_data.json'), 'utf8')) as { characters: Record<string, { name: string }> }
+      for (const [id, c] of Object.entries(game.characters)) idByName[c.name] = id
+    } catch { /* ignore */ }
+  }
   const have = new Set(readdirSync(PORTRAIT_DIR).filter(f => f.endsWith('.webp')).map(f => f.slice(0, -5)))
   const out: Record<string, string> = {}
   for (const name of names) {
-    const id = idByName[name]
-    if (id && have.has(id)) out[name] = `/portraits/${id}.webp`
+    const baseId = idByName[name]
+    if (!baseId) continue
+    // Try exact match first, then with b1, b2, etc. suffixes
+    const candidates = [baseId, `${baseId}b1`, `${baseId}b2`, `${baseId}b3`]
+    for (const id of candidates) {
+      if (have.has(id)) {
+        out[name] = `/portraits/${id}.webp`
+        break
+      }
+    }
   }
   return out
 }

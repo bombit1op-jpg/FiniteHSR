@@ -226,8 +226,8 @@ export function openConePicker(opts: { kitId: string; current?: string } = {} as
     rareRow.append(b)
   }
 
-  const list = el('div', 'pickerList')
-  ov.body.append(search, pathRow, rareRow, list)
+  const grid = el('div', 'pickerGrid cones')
+  ov.body.append(search, pathRow, rareRow, grid)
 
   let curPath = '*'
   let curRare = '*'
@@ -240,7 +240,7 @@ export function openConePicker(opts: { kitId: string; current?: string } = {} as
 
   const order = coneOptions(opts.kitId, path).map(([id]) => id).filter(Boolean)
   const paint = () => {
-    list.innerHTML = ''
+    grid.innerHTML = ''
     const q = search.value.trim().toLowerCase()
     for (const id of order) {
       const cone = LIGHT_CONES.find(c => c.id === id)
@@ -248,31 +248,29 @@ export function openConePicker(opts: { kitId: string; current?: string } = {} as
       if (curPath !== '*' && cone.path !== curPath) continue
       if (curRare !== '*' && String(cone.rarity) !== curRare) continue
       if (q && !cone.name.toLowerCase().includes(q)) continue
-      const btn = el('button', 'pickerCone') as HTMLButtonElement
+      const btn = el('button', 'pickConeCard') as HTMLButtonElement
       btn.type = 'button'
       btn.dataset.coneId = id
       if (cone.path !== path) btn.classList.add('offPath')
       if (id === opts.current) btn.classList.add('current')
       if (id === sig) btn.classList.add('sig')
+      const name = el('div', 'pickConeName')
+      name.textContent = cone.name
+      const rarity = el('div', 'pickConeRarity')
+      rarity.textContent = `★${cone.rarity}`
       const art = iconNode(gearIconUrl('cone', id), cone.name, {
-        cls: 'gearIcon', size: 48, fit: 'contain',
+        cls: 'gearIcon', size: 120, fit: 'contain',
         fallbackText: cone.name.trim().charAt(0).toUpperCase() || '?',
         tint: '#7fb3ff', title: cone.name,
       })
-      const info = el('div', 'pickerConeInfo')
-      const name = el('div', 'pickName')
-      name.textContent = cone.name
-      const meta = el('div', 'pickMeta')
-      meta.textContent = `★${cone.rarity} · ${cone.path}${id === sig ? ' · сигнатура' : ''}`
-      info.append(name, meta)
-      btn.append(art, info)
+      btn.append(name, art, rarity)
       btn.onclick = () => { ov.close(); resolve(id) }
-      list.append(btn)
+      grid.append(btn)
     }
-    if (!list.childElementCount) {
+    if (!grid.childElementCount) {
       const empty = el('em', 'dim')
       empty.textContent = 'Нет конусов под фильтр'
-      list.append(empty)
+      grid.append(empty)
     }
   }
   search.oninput = paint
