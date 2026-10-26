@@ -5,8 +5,7 @@ import type { Elem, GearConfig, StatKey, Unit } from './entities/Unit'
 import type { Buff } from './effects/Buff'
 import type { AbilityLevels } from './entities/Unit'
 import { DEFAULT_LEVELS, type Action } from './kit'
-import { traceMods } from './progression'
-import { charLevelRatios } from './levelStats'
+import { traceMods, PROG } from './progression'
 import type { LogConfig } from './battlelog'
 import { applyBuild, type BuildSpec } from './build'
 import { resolveEncounter, type EncounterSpec } from './encounter'
@@ -380,10 +379,46 @@ function setupSim(setup: BattleSetup): Simulator {
     // them into `BaseStats` would overwrite a real base value with undefined and yield NaN.
     const stats = Object.fromEntries(Object.entries(rawStats).filter(([, v]) => typeof v === 'number' && Number.isFinite(v))) as typeof rawStats
     const level = t.level ?? 80
-    const ratios = charLevelRatios(t.kitId, level)
+    const prog = PROG[t.kitId]
+    const bounds = Object.keys(prog?.byLevel || {}).map(Number).sort((a, b) => a - b)
+    // Use relative coefficients from progression (L10..L80), then scale by kit.base L80.
+    // This matches the canonical HSR stat scaling: base stats grow with ascension boundaries,
+    // and level 80 values are the reference point for all kits.
+    const atCoeff = (stat: 'hp' | 'atk' | 'def' | 'spd', L: number): number => {
+      if (!prog || !bounds.length) return 1
+      const lv = Math.max(1, Math.min(80, Math.round(L)))
+      // Get absolute value at level L from progression
+      let absVal = prog.byLevel[80][stat] // default to L80
+      if (lv <= bounds[0]) {
+        const b0 = prog.byLevel[bounds[0]]
+        const b1 = prog.byLevel[bounds[1]]
+        const slope = (b1[stat] - b0[stat]) / (bounds[1] - bounds[0])
+        absVal = b0[stat] + slope * (lv - bounds[0])
+      } else {
+        for (let i = 0; i < bounds.length - 1; i++) {
+          const a = bounds[i], b = bounds[i + 1]
+          if (lv <= b) {
+            absVal = prog.byLevel[a][stat] + (prog.byLevel[b][stat] - prog.byLevel[a][stat]) * (lv - a) / (b - a)
+            break
+          }
+        }
+        if (!absVal && bounds.length > 0) {
+          absVal = prog.byLevel[bounds[bounds.length - 1]][stat]
+        }
+      }
+      // Return coefficient relative to L80 value from progression
+      const l80Abs = prog.byLevel[80][stat]
+      return lv >= 80 ? 1 : absVal / l80Abs
+    }
     const kitBase = sim.kits.get(t.kitId)?.base
-    const baseOverride = kitBase && ratios
-      ? { hp: kitBase.hp * ratios.hp, atk: kitBase.atk * ratios.atk, def: kitBase.def * ratios.def, level }
+    const baseOverride = kitBase
+      ? {
+          hp: kitBase.hp * atCoeff('hp', level),
+          atk: kitBase.atk * atCoeff('atk', level),
+          def: kitBase.def * atCoeff('def', level),
+          spd: kitBase.spd * atCoeff('spd', level),
+          level,
+        }
       : { level }
     const u = sim.addChar(t.kitId, t.name ?? kitName(t.kitId), stats, t.energyStartFrac ?? 0.5, t.hpFrac ?? 1, baseOverride)
     if (!u.base.path) u.base.path = t.path ?? KIT_PATH[t.kitId] ?? ''

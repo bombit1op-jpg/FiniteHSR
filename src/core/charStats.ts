@@ -28,7 +28,7 @@ export interface CharFinalStats {
   ehr: number
   /** Effect RES (flat, on the unit) */
   effRes: number
-  /** Energy Regeneration Rate (gear/traces) */
+  /** Energy Regeneration Rate total: base 100% + gear/traces bonus (engine regen is `base × (1 + bonus)`) */
   err: number
   /** Outgoing Healing Boost */
   outHeal: number
@@ -61,9 +61,8 @@ export function charFinalStats(spec: TeamSpec): CharFinalStats | null {
     critRate: s.critRate, critDmg: s.critDmg, be: s.be,
     ehr: (u.base.ehr ?? 0) + buffSum(u.buffs, 'ehr'),
     effRes: effectResOf(u),
-    // `err` buffs are additive bonuses on top of base 100% regen (ResourceSystem.gainEnergy: base × (1 + err))
-    // display shows only the bonus percentage
-    err: buffSum(u.buffs, 'err'),
+    // display the total from the 100% base (ResourceSystem.gainEnergy applies `base × (1 + bonus)`)
+    err: 1 + buffSum(u.buffs, 'err'),
     outHeal: buffSum(u.buffs, 'outHeal'),
     elemDmgBoost: buffSum(u.buffs, `dmg:${kit.elem}`),
     energyMax: kit.energyMax,

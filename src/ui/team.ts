@@ -414,11 +414,10 @@ export function gearOfRow(tr: TeamRowState): GearConfig | undefined {
 export function toTeamSpec(tr: TeamRowState): TeamSpec {
   return {
     kitId: tr.kitId,
-    stats: {
-      atk: tr.stats.atk, spd: tr.stats.spd,
-      critRate: tr.stats.critRate, critDmg: tr.stats.critDmg,
-      be: tr.stats.be,
-    },
+    // `tr.stats` is a legacy manual-override field from the removed battle page; the party panel
+    // has no stat inputs and derives every stat from kit base + level + gear + traces. Forwarding
+    // stale saved values here overrode ATK/SPD/CRIT/CD/BE, so the preview showed numbers that did
+    // not match the build (HP/DEF/EHR were never forwarded and stayed correct).
     gear: gearOfRow(tr),
     eidolon: tr.eidolon,
     levels: tr.levels,
