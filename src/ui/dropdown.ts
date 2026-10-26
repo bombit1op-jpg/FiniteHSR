@@ -81,6 +81,7 @@ export class Dropdown {
   }
 
   private labelFor(v: string): string {
+    if (!v) return '-None-'
     return this.entries.find(([x]) => x === v)?.[1] ?? ''
   }
 

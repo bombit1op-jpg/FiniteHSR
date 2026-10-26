@@ -146,8 +146,8 @@ export default () => {
   const cardB = host.querySelectorAll('.partyCard')[1] as HTMLElement
 
   // ---- Technique: a single-use kit gets a checkbox, a multi-use kit gets a count select
-  const techSelOf = (card: HTMLElement) => [...card.querySelectorAll('select')].find(s => s.getAttribute('aria-label') === 'Техника') as HTMLSelectElement
-  const techChkOf = (card: HTMLElement) => [...card.querySelectorAll('input[type=checkbox]')].find(s => s.getAttribute('aria-label') === 'Техника') as HTMLInputElement
+  const techSelOf = (card: HTMLElement) => [...card.querySelectorAll('select')].find(s => s.getAttribute('aria-label') === 'Technique') as HTMLSelectElement
+  const techChkOf = (card: HTMLElement) => [...card.querySelectorAll('input[type=checkbox]')].find(s => s.getAttribute('aria-label') === 'Technique') as HTMLInputElement
   const techSel0 = techSelOf(cardA)
   const techChk0 = techChkOf(cardA)
   cases.push(raw('a single-use Technique hides the count select', techSel0.style.display === 'none'))

@@ -319,15 +319,11 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       tracesWrap.style.display = mods.length ? '' : 'none'
     }
     buildTraces(row.kitId)
-    const energySel = el('select') as HTMLSelectElement
-    fillSelect(energySel, [0, 25, 50, 75, 100].map(n => [String(n), `${n}%`] as [string, string]))
-    energySel.value = String(Math.round((row.energyStartFrac ?? 0.5) * 100))
-    energySel.setAttribute('aria-label', 'Стартовая энергия')
     const techniqueSel = el('select') as HTMLSelectElement
     const techniqueChk = el('input') as HTMLInputElement
     techniqueChk.type = 'checkbox'
-    const techniqueWrap = lab('Техника', techniqueSel)
-    const techniqueChkWrap = lab('Техника', techniqueChk)
+    const techniqueWrap = lab('Technique', techniqueSel)
+    const techniqueChkWrap = lab('Technique', techniqueChk)
     /** single-activation kits get a checkbox; multi-use kits get a count select */
     const fillTechnique = (kitId: string) => {
       const t = KITS.find(k => k.id === kitId)?.technique
@@ -341,7 +337,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
         if ((liveRow().techniqueUses ?? 0) !== 0) patch({ techniqueUses: 0 })
         return
       }
-      const title = `Претехника: ${t.name} (${t.kind}${t.zone ? ', zone' : ''})`
+      const title = `Technique: ${t.name} (${t.kind}${t.zone ? ', zone' : ''})`
       if (multi) {
         techniqueWrap.style.display = ''
         techniqueChkWrap.style.display = 'none'
@@ -355,10 +351,17 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     }
     fillTechnique(row.kitId)
     techniqueSel.value = String(row.techniqueUses ?? 0)
-    techniqueSel.setAttribute('aria-label', 'Техника')
+    techniqueSel.setAttribute('aria-label', 'Technique')
     techniqueChk.checked = (row.techniqueUses ?? 0) > 0
-    techniqueChk.setAttribute('aria-label', 'Техника')
-    misc.append(tracesWrap, lab('Энергия', energySel), techniqueWrap, techniqueChkWrap)
+    techniqueChk.setAttribute('aria-label', 'Technique')
+
+    const energySel = el('select') as HTMLSelectElement
+    fillSelect(energySel, [0, 25, 50, 75, 100].map(n => [String(n), `${n}%`] as [string, string]))
+    energySel.value = String(Math.round((row.energyStartFrac ?? 0.5) * 100))
+    energySel.setAttribute('aria-label', 'Starting Energy')
+    const energyWrap = lab('Energy', energySel)
+
+    misc.append(tracesWrap, techniqueWrap, techniqueChkWrap, energyWrap)
     miscSection.append(misc)
     body.append(miscSection)
 
