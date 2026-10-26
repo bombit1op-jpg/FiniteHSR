@@ -208,6 +208,18 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
 
     const body = el('div', 'pcBody')
 
+    // ---------------------------------------------------------- patch helpers
+
+    const patch = (p: Partial<TeamRowState>) => store.patchSlot(row.id, p)
+    /** the store replaces the row object on every patch — always read the live one, never the snapshot */
+    const liveRow = (): TeamRowState => store.active?.slots.find(s => s.id === row.id) ?? row
+    /** the kit the kit-dependent controls (cone list, Technique) were last built for */
+    let renderedKit = row.kitId
+
+    // Two-column layout: left = cone + traces/resources + skills, right = stats
+    const leftCol = el('div', 'pcLeftCol')
+    const rightCol = el('div', 'pcRightCol')
+
     // --- eidolons: E1..E6 toggle buttons (unselected grey, E6 gets shimmer when active)
     const eidSection = section('ЭЙДОЛОНЫ')
     const eidRow = el('div', 'eidolons')
@@ -226,7 +238,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       eidRow.append(b)
     }
     eidSection.append(eidRow)
-    body.append(eidSection)
+    leftCol.append(eidSection)
 
     // --- gear: cone + SI + level
     const coneSection = section('СВЕТОВОЙ КОНУС')
@@ -267,29 +279,9 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     coneArt.classList.add('empty')
     coneWrap.append(coneTitle, coneArt, coneControls)
     coneSection.append(coneWrap)
-    body.append(coneSection)
+    leftCol.append(coneSection)
 
-    // --- stats (final, engine-resolved)
-    const statsSection = section('ХАРАКТЕРИСТИКИ')
-    const statsBox = el('div', 'pcStats')
-    statsSection.append(statsBox)
-    body.append(statsSection)
-
-    // --- skills (labels + level inputs)
-    const skillsSection = section('УРОВНИ НАВЫКОВ')
-    const skillsBox = el('div', 'pcSkills')
-    skillsSection.append(skillsBox)
-    body.append(skillsSection)
-
-    // ---------------------------------------------------------- patch helpers
-
-    const patch = (p: Partial<TeamRowState>) => store.patchSlot(row.id, p)
-    /** the store replaces the row object on every patch — always read the live one, never the snapshot */
-    const liveRow = (): TeamRowState => store.active?.slots.find(s => s.id === row.id) ?? row
-    /** the kit the kit-dependent controls (cone list, Technique) were last built for */
-    let renderedKit = row.kitId
-
-    // --- traces + energy + technique
+    // --- traces + technique + energy
     const miscSection = section('ТРЕЙСЫ И РЕСУРСЫ')
     const misc = el('div', 'pcMisc')
     const tracesWrap = el('div', 'tracesWrap')
@@ -361,9 +353,26 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     energySel.setAttribute('aria-label', 'Starting Energy')
     const energyWrap = lab('Energy', energySel)
 
-    misc.append(tracesWrap, techniqueWrap, techniqueChkWrap, energyWrap)
+    // technique + energy side by side at bottom
+    const techEnergyRow = el('div', 'techEnergyRow')
+    techEnergyRow.append(techniqueWrap, techniqueChkWrap, energyWrap)
+    misc.append(tracesWrap, techEnergyRow)
     miscSection.append(misc)
-    body.append(miscSection)
+    leftCol.append(miscSection)
+
+    // --- skills (labels + level inputs)
+    const skillsSection = section('УРОВНИ НАВЫКОВ')
+    const skillsBox = el('div', 'pcSkills')
+    skillsSection.append(skillsBox)
+    leftCol.append(skillsSection)
+
+    // Right column: Stats (full height)
+    const statsSection = section('ХАРАКТЕРИСТИКИ')
+    const statsBox = el('div', 'pcStats')
+    statsSection.append(statsBox)
+    rightCol.append(statsSection)
+
+    body.append(leftCol, rightCol)
 
     root.append(body)
 
