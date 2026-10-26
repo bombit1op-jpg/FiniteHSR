@@ -206,19 +206,11 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     portraitWrap.append(portrait, clearSlotBtn)
     root.append(portraitWrap, identity)
 
-    const body = el('div', 'pcBody')
-
-    // ---------------------------------------------------------- patch helpers
-
-    const patch = (p: Partial<TeamRowState>) => store.patchSlot(row.id, p)
-    /** the store replaces the row object on every patch — always read the live one, never the snapshot */
-    const liveRow = (): TeamRowState => store.active?.slots.find(s => s.id === row.id) ?? row
-    /** the kit the kit-dependent controls (cone list, Technique) were last built for */
-    let renderedKit = row.kitId
-
-    // Two-column layout: left = cone + traces/resources + skills, right = stats
+    // two-column layout: left = Light Cone + Traces/Resources, right = Stats/Skills/Relics
+    const columns = el('div', 'pcColumns')
     const leftCol = el('div', 'pcLeftCol')
     const rightCol = el('div', 'pcRightCol')
+    columns.append(leftCol, rightCol)
 
     // --- eidolons: E1..E6 toggle buttons (unselected grey, E6 gets shimmer when active)
     const eidSection = section('ЭЙДОЛОНЫ')
@@ -240,7 +232,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     eidSection.append(eidRow)
     leftCol.append(eidSection)
 
-    // --- gear: cone + SI + level
+    // --- gear: cone + SI + level (big visual at top of left column)
     const coneSection = section('СВЕТОВОЙ КОНУС')
     const coneWrap = el('div', 'coneRow')
     const coneTitle = el('div', 'coneTitle')
@@ -281,7 +273,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     coneSection.append(coneWrap)
     leftCol.append(coneSection)
 
-    // --- traces + technique + energy
+    // --- traces + technique + energy (bottom of left column)
     const miscSection = section('ТРЕЙСЫ И РЕСУРСЫ')
     const misc = el('div', 'pcMisc')
     const tracesWrap = el('div', 'tracesWrap')
@@ -310,7 +302,17 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       })
       tracesWrap.style.display = mods.length ? '' : 'none'
     }
+
+    // ---------------------------------------------------------- patch helpers (must be before buildTraces)
+
+    const patch = (p: Partial<TeamRowState>) => store.patchSlot(row.id, p)
+    /** the store replaces the row object on every patch — always read the live one, never the snapshot */
+    const liveRow = (): TeamRowState => store.active?.slots.find(s => s.id === row.id) ?? row
+    /** the kit the kit-dependent controls (cone list, Technique) were last built for */
+    let renderedKit = row.kitId
+
     buildTraces(row.kitId)
+
     const techniqueSel = el('select') as HTMLSelectElement
     const techniqueChk = el('input') as HTMLInputElement
     techniqueChk.type = 'checkbox'
@@ -353,28 +355,29 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     energySel.setAttribute('aria-label', 'Starting Energy')
     const energyWrap = lab('Energy', energySel)
 
-    // technique + energy side by side at bottom
+    // tech + energy horizontal row
     const techEnergyRow = el('div', 'techEnergyRow')
     techEnergyRow.append(techniqueWrap, techniqueChkWrap, energyWrap)
+
     misc.append(tracesWrap, techEnergyRow)
     miscSection.append(misc)
     leftCol.append(miscSection)
 
-    // --- skills (labels + level inputs)
-    const skillsSection = section('УРОВНИ НАВЫКОВ')
-    const skillsBox = el('div', 'pcSkills')
-    skillsSection.append(skillsBox)
-    leftCol.append(skillsSection)
-
-    // Right column: Stats (full height)
+    // --- stats (final, engine-resolved) - RIGHT COLUMN
     const statsSection = section('ХАРАКТЕРИСТИКИ')
     const statsBox = el('div', 'pcStats')
     statsSection.append(statsBox)
     rightCol.append(statsSection)
 
-    body.append(leftCol, rightCol)
+    // --- skills (labels + level inputs) - RIGHT COLUMN
+    const skillsSection = section('УРОВНИ НАВЫКОВ')
+    const skillsBox = el('div', 'pcSkills')
+    skillsSection.append(skillsBox)
+    rightCol.append(skillsSection)
 
-    root.append(body)
+    // ---------------------------------------------------------- patch helpers
+
+    root.append(columns)
 
     const lvBtns = {} as CardView['lvBtns']
     const view: CardView = {
@@ -483,7 +486,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const relicRoot = el('div', 'relicGrid')
     for (const p of pieces) relicRoot.append(p.card)
     relicSection.append(planRow, relicRoot)
-    body.append(relicSection)
+    rightCol.append(relicSection)
 
     // skill level controls (+/-)
     for (const slot of ['basic', 'skill', 'ult', 'talent'] as const) {

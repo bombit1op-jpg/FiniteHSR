@@ -243,11 +243,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .planRowLine label { display: contents; }
 .planRowLine .dd { min-width: 180px; width: 100%; }
 .planRowLine .ddBtn { min-width: 180px; padding: 8px 28px 8px 10px; font-size: 12px; width: 100%; }
+.planarBlock .dd { min-width: 180px; width: 100%; }
+.planarBlock .ddBtn { min-width: 180px; padding: 8px 28px 8px 10px; font-size: 12px; width: 100%; }
 .planarBlock { display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; align-items: center; }
 .planarBlock .planLabel { font-size: 11px; color: #8fa295; white-space: nowrap; }
 .planarBlock label { display: contents; }
-.planarBlock .dd { min-width: 180px; width: 100%; }
-.planarBlock .ddBtn { min-width: 180px; padding: 8px 28px 8px 10px; font-size: 12px; width: 100%; }
+.planarBlock .dd { min-width: 0; width: 100%; }
 
 /* Results */
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -504,10 +505,14 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .pcChips { display: flex; gap: 6px; flex-wrap: wrap; }
 .pcClear { grid-row: 1; grid-column: 2; justify-self: end; align-self: start; padding: 4px 9px; line-height: 1; }
 
-.pcBody { display: flex; flex-direction: row; gap: 16px; align-items: flex-start; }
-.pcLeftCol { display: flex; flex-direction: column; gap: 11px; flex: 1; min-width: 0; }
-.pcRightCol { display: flex; flex-direction: column; gap: 11px; flex: 1; min-width: 0; }
+.pcBody { display: flex; flex-direction: column; gap: 11px; }
+
+.pcColumns { display: flex; gap: 16px; margin-top: 8px; }
+.pcLeftCol { flex: 0 0 320px; display: flex; flex-direction: column; gap: 12px; }
+.pcRightCol { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+
 .techEnergyRow { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.techEnergyRow > label { flex: 1; min-width: 0; }
 
 .pcSection { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #22303f; padding-top: 10px; }
 .sectionTitle { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
