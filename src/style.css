@@ -569,7 +569,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .lvlBtn:hover { background: #1c281f; color: #b6f0c2; }
 
 .pcMisc { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-.tracesWrap { display: flex; flex-direction: column; gap: 4px; flex-basis: 100%; }
+.tracesWrap { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .traceRow { display: inline-flex; gap: 6px; align-items: center; font-size: 11px; color: #9aa7ba; cursor: pointer; }
 .traceRow .statBadge { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; flex: 0 0 16px; }
 .traceRow .statIcon { width: 16px; height: 16px; }

@@ -293,11 +293,10 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const miscSection = section('ТРЕЙСЫ И РЕСУРСЫ')
     const misc = el('div', 'pcMisc')
     const tracesWrap = el('div', 'tracesWrap')
-    /** "+28% ATK" / "+5 SPD" / "+10% Fire DMG" for a trace mod (engine stat key + raw value) */
-    const traceLabel = (stat: string, value: number): string => {
+    /** value string for a trace mod (engine stat key + raw value) */
+    const traceVal = (stat: string, value: number): string => {
       const pct = stat.endsWith('Pct') || stat.startsWith('dmg:') || ['critRate', 'critDmg', 'be', 'ehr', 'effRes', 'elation'].includes(stat)
-      const name = STAT_LABELS[stat] ?? stat
-      return `+${pct ? Math.round(value * 1000) / 10 + '%' : value} ${name}`.trim()
+      return `+${pct ? Math.round(value * 1000) / 10 + '%' : value}`
     }
     /** per-trace checkbox rows, in `traceMods(kitId)` order; `tracesSel(i)` = this trace is on */
     const traceChecks: HTMLInputElement[] = []
@@ -310,11 +309,11 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
         const chk = el('input') as HTMLInputElement
         chk.type = 'checkbox'
         chk.checked = cur === false ? false : Array.isArray(cur) ? cur[i] !== false : true
-        chk.setAttribute('aria-label', 'Трейс ' + traceLabel(m.stat, m.value))
+        chk.setAttribute('aria-label', 'Trace ' + traceVal(m.stat, m.value))
         traceChecks[i] = chk
         const rowEl = el('label', 'traceRow')
         rowEl.append(chk, statBadge(m.stat), el('span', 'traceVal'))
-        rowEl.lastElementChild!.textContent = traceLabel(m.stat, m.value)
+        rowEl.lastElementChild!.textContent = traceVal(m.stat, m.value)
         tracesWrap.append(rowEl)
       })
       tracesWrap.style.display = mods.length ? '' : 'none'
