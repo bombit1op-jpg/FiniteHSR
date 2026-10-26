@@ -241,8 +241,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .planRowLine { display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; align-items: center; }
 .planRowLine .planLabel { font-size: 11px; color: #8fa295; white-space: nowrap; }
 .planRowLine label { display: contents; }
-.planRowLine .dd { min-width: 0; width: 100%; }
-.planRowLine .ddBtn { min-width: 180px; padding: 8px 28px 8px 10px; font-size: 12px; }
+.planRowLine .dd { min-width: 180px; width: 100%; }
+.planRowLine .ddBtn { min-width: 180px; padding: 8px 28px 8px 10px; font-size: 12px; width: 100%; }
 .planarBlock { display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; align-items: center; }
 .planarBlock .planLabel { font-size: 11px; color: #8fa295; white-space: nowrap; }
 .planarBlock label { display: contents; }
