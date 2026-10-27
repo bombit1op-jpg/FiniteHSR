@@ -56,7 +56,7 @@
         "assert": "present",
         "of": {
           "type": "TECHNIQUE_APPLIED",
-          "source": "{NICKNAME}"
+          "source": "Trailblazer (Destruction)"
         }
       }
     }

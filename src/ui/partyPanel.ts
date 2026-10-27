@@ -12,10 +12,77 @@
  */
 import { KITS, KIT_PATH } from '../core/kits'
 import type { TeamSpec } from '../core/battle'
+import { resolveLevels, EIDOLON_LV, LEVEL_CAPS } from '../core/battle'
+import type { AbilityLevels } from '../core/entities/Unit'
 import { el, fillSelect, STAT_LABELS } from './dom'
 import { Dropdown } from './dropdown'
 import { relicOptions, planarOptions, signatureCone } from '../core/gearOrder'
 import { LIGHT_CONES } from '../core/gear'
+import type { TeamRowState } from './store'
+import {
+  metaBadge, updateMetaBadges, gearBadge, updateGearBadge, statBadge, ratingTierClass,
+  charPortrait, updateCharPortrait, abilityBadge, gearIconUrl,
+} from './icons'
+import { ABILITY_NAMES } from '../core/abilityNames'
+import { buildPieceEditors, pieceOf, toTeamSpec, type PieceEditor } from './team'
+import { scoreRelic } from '../core/relicScore'
+import { charFinalStats, SKILL_LABELS } from '../core/charStats'
+import { traceMods } from '../core/progression'
+import { PartyStore } from './partyStore'
+import { MAX_SLOTS } from '../core/party'
+import { openCharacterPicker, openConePicker, openPartyListPicker } from './pickers'
+import { survivingTechniqueUses } from './store'
+
+// Compute current level caps based on eidolon (base cap + eidolon bonuses up to current eidolon)
+function currentLevelCaps(kitId: string, eidolon: number): AbilityLevels {
+  const base = { basic: 6, skill: 10, ult: 10, talent: 10, el_skill: 10 }
+  const per = EIDOLON_LV[kitId] ?? {}
+  const add = { basic: 0, skill: 0, ult: 0, talent: 0, el_skill: 0 }
+  for (const [threshold, d] of Object.entries(per)) {
+    if (eidolon < Number(threshold)) continue
+    add.basic += d.basic ?? 0
+    add.skill += d.skill ?? 0
+    add.ult += d.ult ?? 0
+    add.talent += d.talent ?? 0
+    add.el_skill += d.el_skill ?? 0
+  }
+  const absCap = LEVEL_CAPS[kitId] ?? {}
+  return {
+    basic: Math.min(base.basic + add.basic, absCap.basic ?? 7),
+    skill: Math.min(base.skill + add.skill, absCap.skill ?? 12),
+    ult: Math.min(base.ult + add.ult, absCap.ult ?? 12),
+    talent: Math.min(base.talent + add.talent, absCap.talent ?? 12),
+    el_skill: Math.min(base.el_skill + add.el_skill, absCap.el_skill ?? 12),
+  }
+}
+
+// Compute eidolon bonus for a specific slot at given eidolon level
+function eidolonBonusForSlot(kitId: string, eidolon: number, slot: 'basic' | 'skill' | 'ult' | 'talent' | 'el_skill'): number {
+  const per = EIDOLON_LV[kitId] ?? {}
+  let bonus = 0
+  for (const [threshold, d] of Object.entries(per)) {
+    if (eidolon < Number(threshold)) continue
+    bonus += d[slot] ?? 0
+  }
+  return bonus
+}
+import { el, fillSelect, STAT_LABELS } from './dom'
+import { Dropdown } from './dropdown'
+import { relicOptions, planarOptions, signatureCone } from '../core/gearOrder'
+import { LIGHT_CONES } from '../core/gear'
+
+// Characters whose memosprite levels use the shared memLevels logic (E3: mem_talent+1, E5: mem_skill+1)
+const MEMOSPRITE_EIDOLON_BONUS: ReadonlySet<string> = new Set([
+  'robin_summeretto',
+  'aglaea',
+  'cyrene',
+  'evernight',
+  'hyacine',
+  'robin',
+  'castorice',
+  'tribbie',
+  'sunday',
+])
 import type { TeamRowState } from './store'
 import {
   metaBadge, updateMetaBadges, gearBadge, updateGearBadge, statBadge, ratingTierClass,
@@ -174,11 +241,17 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const portrait = charPortrait(row.kitId || '')
     portrait.style.cursor = 'pointer'
     portrait.title = 'Выбрать персонажа'
+    const isTrailblazer = (kitId: string) => kitId.startsWith('trailblazer_')
     const pickChar = async () => {
       const active = store.active
       const exclude = (active?.slots.map(s => s.kitId).filter(Boolean) as string[]) ?? []
       // Can't select same character twice - exclude all already in team except current slot
-      const chosen = await openCharacterPicker({ exclude: exclude.filter(id => id !== row.kitId), current: row.kitId || undefined })
+      // Also enforce single Trailblazer per team (any path)
+      const hasTrailblazer = exclude.some(isTrailblazer)
+      const filteredExclude = hasTrailblazer
+        ? exclude.filter(id => id !== row.kitId && !isTrailblazer(id))
+        : exclude.filter(id => id !== row.kitId)
+      const chosen = await openCharacterPicker({ exclude: filteredExclude, current: row.kitId || undefined })
       if (chosen === null) return
       if (chosen === '') { clearSlot(row.id); render(); return }
       patch({ kitId: chosen, coneId: '', relic1: '', relic2: '', planar: '', pieces: [], techniqueUses: 0 })
@@ -215,10 +288,13 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
 
     const body = el('div', 'pcBody')
 
-    // --- two-column layout: left (cone + traces/resources), right (stats)
+    // --- character details: cone + traces/resources on the left, final stats on the right.
+    // Keep the existing portrait, identity, eidolons, skills and relic sections in their original flow.
+    const detailsGrid = el('div', 'pcDetailsGrid')
+    detailsGrid.classList.add('pcBody-details')
     const leftColumn = el('div', 'pcLeftColumn')
     const rightColumn = el('div', 'pcRightColumn')
-    body.append(leftColumn, rightColumn)
+    detailsGrid.append(leftColumn, rightColumn)
 
     // --- eidolons: E1..E6 toggle buttons (unselected grey, E6 gets shimmer when active)
     const eidSection = section('ЭЙДОЛОНЫ')
@@ -230,7 +306,10 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       b.dataset.eidolon = String(e)
       b.textContent = `E${e}`
       b.onclick = () => {
-        const next = (Number(store.active?.slots.find(s => s.id === row.id)?.eidolon ?? 0) === e) ? e - 1 : e
+        const current = Number(store.active?.slots.find(s => s.id === row.id)?.eidolon ?? 0)
+        // Clicking the highest active eidolon: disable all (set to 0)
+        // Clicking any other eidolon: set to that level (enable it and all below)
+        const next = (current === e) ? 0 : e
         patch({ eidolon: next })
         view.refresh()
       }
@@ -238,7 +317,9 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       eidRow.append(b)
     }
     eidSection.append(eidRow)
-    leftColumn.append(eidSection)
+    eidSection.classList.add('pcBody-eidolons')
+    // Keep eidolons in their existing full-width position above the three detail areas.
+    body.append(eidSection, detailsGrid)
 
     // --- gear: cone + SI + level (LEFT COLUMN - top)
     const coneSection = section('СВЕТОВОЙ КОНУС')
@@ -249,6 +330,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     coneTitle.append(coneNameEl, coneRarityEl)
     const coneArt = el('div', 'coneArt')
     const coneBadge = gearBadge('cone', row.coneId)
+    coneBadge.style.display = row.coneId ? '' : 'none'
     const siSel = el('select') as HTMLSelectElement
     fillSelect(siSel, [1, 2, 3, 4, 5].map(n => [String(n), `S${n}`] as [string, string]))
     siSel.value = String(row.si || 1)
@@ -265,9 +347,11 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const pickCone = async () => {
       const kitId = liveRow().kitId
       if (!kitId) return
-      const chosen = await openConePicker({ kitId, current: liveRow().coneId || undefined })
+      const current = liveRow().coneId
+      const chosen = await openConePicker({ kitId, current: current || undefined })
       if (chosen === null) return
-      patch({ coneId: chosen })
+      // Toggle: selecting the same cone clears it
+      patch({ coneId: chosen === current ? '' : chosen })
       view.refresh()
     }
     coneArt.append(coneBadge)
@@ -284,6 +368,10 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     // --- traces + energy + technique (LEFT COLUMN - bottom)
     const miscSection = section('ТРЕЙСЫ И РЕСУРСЫ')
     const misc = el('div', 'pcMisc')
+    misc.style.display = 'flex'
+    misc.style.flexDirection = 'column'
+    misc.style.gap = '11px'
+    misc.style.flex = '1'
     const tracesWrap = el('div', 'tracesWrap')
     /** value string for a trace mod (engine stat key + raw value) */
     const traceVal = (stat: string, value: number): string => {
@@ -297,18 +385,42 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       traceChecks.length = 0
       const mods = traceMods(kitId)
       const cur = liveRow().traces
+      const empty = !kitId
       mods.forEach((m, i) => {
         const chk = el('input') as HTMLInputElement
         chk.type = 'checkbox'
         chk.checked = cur === false ? false : Array.isArray(cur) ? cur[i] !== false : true
-        chk.setAttribute('aria-label', 'Trace ' + traceVal(m.stat, m.value))
+        chk.disabled = empty
+        chk.setAttribute('aria-label', 'Trace ' + (empty ? '—' : traceVal(m.stat, m.value)))
         traceChecks[i] = chk
         const rowEl = el('label', 'traceRow')
         rowEl.append(chk, statBadge(m.stat), el('span', 'traceVal'))
-        rowEl.lastElementChild!.textContent = traceVal(m.stat, m.value)
+        rowEl.lastElementChild!.textContent = empty ? '—' : traceVal(m.stat, m.value)
         tracesWrap.append(rowEl)
       })
-      tracesWrap.style.display = mods.length ? '' : 'none'
+      // If no character selected, show 3 placeholder trace rows with dashes (empty circle, no icon)
+      if (empty) {
+        for (let i = 0; i < 3; i++) {
+          const chk = el('input') as HTMLInputElement
+          chk.type = 'checkbox'
+          chk.disabled = true
+          traceChecks[i] = chk
+          const rowEl = el('label', 'traceRow')
+          const emptyBadge = el('span', 'statBadge')
+          emptyBadge.style.width = '16px'
+          emptyBadge.style.height = '16px'
+          emptyBadge.style.borderRadius = '50%'
+          emptyBadge.style.border = '1px solid #3a4656'
+          emptyBadge.style.background = '#1a2029'
+          emptyBadge.style.display = 'inline-flex'
+          emptyBadge.style.alignItems = 'center'
+          emptyBadge.style.justifyContent = 'center'
+          rowEl.append(chk, emptyBadge, el('span', 'traceVal'))
+          rowEl.lastElementChild!.textContent = '—'
+          tracesWrap.append(rowEl)
+        }
+      }
+      tracesWrap.style.display = ''
     }
     buildTraces(row.kitId)
     const techniqueSel = el('select') as HTMLSelectElement
@@ -318,27 +430,39 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const techniqueChkWrap = lab('Technique', techniqueChk)
     /** single-activation kits get a checkbox; multi-use kits get a count select */
     const fillTechnique = (kitId: string) => {
-      const t = KITS.find(k => k.id === kitId)?.technique
+      const empty = !kitId
+      const t = empty ? null : KITS.find(k => k.id === kitId)?.technique
       const uses = t ? (t.maxUses ?? 1) : 0
       const multi = uses > 1
-      techniqueSel.style.display = multi ? '' : 'none'
-      techniqueChk.style.display = !multi && uses === 1 ? '' : 'none'
-      if (!t) {
+      techniqueSel.disabled = empty
+      techniqueChk.disabled = empty
+      if (empty) {
+        techniqueSel.style.display = ''
+        techniqueChk.style.display = 'none'
+        techniqueWrap.style.display = ''
+        techniqueChkWrap.style.display = 'none'
+        techniqueSel.innerHTML = '<option value="0">—</option>'
+        techniqueSel.value = '0'
+      } else if (!t) {
+        techniqueSel.style.display = 'none'
+        techniqueChk.style.display = 'none'
         techniqueWrap.style.display = 'none'
         techniqueChkWrap.style.display = 'none'
         if ((liveRow().techniqueUses ?? 0) !== 0) patch({ techniqueUses: 0 })
         return
-      }
-      const title = `Technique: ${t.name} (${t.kind}${t.zone ? ', zone' : ''})`
-      if (multi) {
+      } else if (multi) {
+        techniqueSel.style.display = ''
+        techniqueChk.style.display = 'none'
         techniqueWrap.style.display = ''
         techniqueChkWrap.style.display = 'none'
-        techniqueSel.title = title
+        techniqueSel.title = `Technique: ${t.name} (${t.kind}${t.zone ? ', zone' : ''})`
         fillSelect(techniqueSel, [['0', '—'], ...Array.from({ length: uses }, (_, i) => [String(i + 1), `${i + 1}×`] as [string, string])])
       } else {
+        techniqueSel.style.display = 'none'
+        techniqueChk.style.display = ''
         techniqueWrap.style.display = 'none'
         techniqueChkWrap.style.display = ''
-        techniqueChk.title = title
+        techniqueChk.title = `Technique: ${t.name} (${t.kind}${t.zone ? ', zone' : ''})`
       }
     }
     fillTechnique(row.kitId)
@@ -348,13 +472,21 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     techniqueChk.setAttribute('aria-label', 'Technique')
 
     const energySel = el('select') as HTMLSelectElement
-    fillSelect(energySel, [0, 25, 50, 75, 100].map(n => [String(n), `${n}%`] as [string, string]))
-    energySel.value = String(Math.round((row.energyStartFrac ?? 0.5) * 100))
+    const empty = !row.kitId
+    energySel.disabled = empty
+    if (empty) {
+      energySel.innerHTML = '<option value="50">—</option>'
+      energySel.value = '50'
+    } else {
+      fillSelect(energySel, [0, 25, 50, 75, 100].map(n => [String(n), `${n}%`] as [string, string]))
+      energySel.value = String(Math.round((row.energyStartFrac ?? 0.5) * 100))
+    }
     energySel.setAttribute('aria-label', 'Starting Energy')
     const energyWrap = lab('Energy', energySel)
 
-    // technique + energy horizontal row
+    // technique + energy horizontal row — Technique left, Energy right
     const techEnergyRow = el('div', 'techEnergyRow')
+    techEnergyRow.style.marginTop = 'auto'
     techEnergyRow.append(techniqueWrap, techniqueChkWrap, energyWrap)
     misc.append(tracesWrap, techEnergyRow)
     miscSection.append(misc)
@@ -368,6 +500,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
 
     // --- skills (labels + level inputs) - stays full width
     const skillsSection = section('УРОВНИ НАВЫКОВ')
+    skillsSection.classList.add('pcBody-skills')
     const skillsBox = el('div', 'pcSkills')
     skillsSection.append(skillsBox)
     body.append(skillsSection)
@@ -395,6 +528,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       if (saved) p.restore(saved)
     }
     const relicSection = section('РЕЛИКВИИ', '6 слотов')
+    relicSection.classList.add('pcBody-relics')
 
     // set plan: 4-piece / 2+2 relic sets + the 2-piece planar set.
     // The plan is a shortcut — it writes the per-piece set dropdowns, which stay editable.
@@ -500,7 +634,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
 
     // ---------------------------------------------------------- wiring
 
-    siSel.onchange = () => { patch({ si: Number(siSel.value) || 1 }); view.refresh() }
+    siSel.onchange = () => { patch({ si: Number(siSel.value) || 1 }); view.refresh(); syncSectionHeights() }
 
     // tech list for conflict resolution — only kits that define a Technique
     const techniqueDefs = KITS.filter(k => k.technique).map(k => {
@@ -514,7 +648,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       rows.forEach((r, i) => { if ((r.techniqueUses ?? 0) > live[i]) store.patchSlot(r.id, { techniqueUses: live[i] }) })
     }
     for (const chk of traceChecks) {
-      chk.onchange = () => { patch({ traces: traceChecks.map(c => c.checked) }); view.refresh() }
+      chk.onchange = () => { patch({ traces: traceChecks.map(c => c.checked) }); view.refresh(); syncSectionHeights() }
     }
     charLevelInp.oninput = () => {
       if (charLevelInp.value === '') return
@@ -526,9 +660,9 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       patch({ coneLevel: Math.max(0, Math.min(80, Number(coneLevelInp.value) || 0)) })
       paintStats(view, liveRow(), liveRow().kitId)
     }
-    energySel.onchange = () => { patch({ energyStartFrac: (Number(energySel.value) || 0) / 100 }); view.refresh() }
-    techniqueSel.onchange = () => { patch({ techniqueUses: Number(techniqueSel.value) || 0 }); pruneTechniques(); view.refresh() }
-    techniqueChk.onchange = () => { patch({ techniqueUses: techniqueChk.checked ? 1 : 0 }); pruneTechniques(); view.refresh() }
+    energySel.onchange = () => { patch({ energyStartFrac: (Number(energySel.value) || 0) / 100 }); view.refresh(); syncSectionHeights() }
+    techniqueSel.onchange = () => { patch({ techniqueUses: Number(techniqueSel.value) || 0 }); pruneTechniques(); view.refresh(); syncSectionHeights() }
+    techniqueChk.onchange = () => { patch({ techniqueUses: techniqueChk.checked ? 1 : 0 }); pruneTechniques(); view.refresh(); syncSectionHeights() }
 
     view.refresh = () => {
       const kitId = liveRow().kitId
@@ -547,8 +681,9 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       nameEl.textContent = kit?.name ?? '—'
       const live = liveRow()
       updateGearBadge(coneBadge, 'cone', live.coneId)
+      coneBadge.style.display = live.coneId ? '' : 'none'
       const cone = live.coneId ? LIGHT_CONES.find(c => c.id === live.coneId) : null
-      coneNameEl.textContent = cone?.name ?? ''
+      coneNameEl.textContent = cone?.name ?? '-None-'
       coneNameEl.classList.toggle('dim', !cone)
       coneRarityEl.textContent = cone ? `${cone.rarity}★` : ''
       coneArt.classList.toggle('empty', !cone)
@@ -586,6 +721,23 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     })
   }
 
+  // Compute effective memosprite levels (base + eidolon bonuses) mirroring engine's memLevels()
+  function effMemoLevels(kitId: string, eidolon: number, baseLevels: AbilityLevels): { mem_skill: number; mem_talent: number } {
+    if (!MEMOSPRITE_EIDOLON_BONUS.has(kitId)) {
+      // No memosprite eidolon bonuses for this character
+      const ext = baseLevels as AbilityLevels & { mem_skill?: number; mem_talent?: number }
+      return { mem_skill: ext.mem_skill ?? 6, mem_talent: ext.mem_talent ?? 6 }
+    }
+    const eid = eidolon
+    const baseSkill = (baseLevels as AbilityLevels & { mem_skill?: number }).mem_skill ?? 6
+    const baseTalent = (baseLevels as AbilityLevels & { mem_talent?: number }).mem_talent ?? 6
+    // Mirror engine's memLevels: E3 -> mem_talent +1, E5 -> mem_skill +1
+    return {
+      mem_skill: Math.min(10, baseSkill + (eid >= 5 ? 1 : 0)),
+      mem_talent: Math.min(10, baseTalent + (eid >= 3 ? 1 : 0)),
+    }
+  }
+
   // -------------------------------------------------------------- painting
 
   function paintPicker(): void {
@@ -595,31 +747,43 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     delPartyBtn.disabled = col.parties.length <= 1
   }
 
-  function paintSkills(view: CardView, row: TeamRowState, kitId: string): void {
+function paintSkills(view: CardView, row: TeamRowState, kitId: string): void {
     view.skillsBox.innerHTML = ''
+
+    // Compute effective levels (base + eidolon bonuses) for display using engine's resolveLevels
+    const effLevels = resolveLevels({ kitId, eidolon: row.eidolon ?? 0, levels: row.levels })
+    const caps = currentLevelCaps(kitId, row.eidolon ?? 0)
+
+    type ExtraType = 'elation' | 'memosprite' | 'none'
     const addLine = (
       labelText: string,
       abilityName: string,
-      lvl: number | null,
+      slot: 'basic' | 'skill' | 'ult' | 'talent' | 'el_skill' | 'mem_skill' | 'mem_talent',
+      displayLvl: number | null,
       cap: number,
       onChange?: (next: number) => void,
+      type?: ExtraType,
     ): void => {
       const line = el('div', 'skillLine')
+      if (type === 'elation') { line.style.borderLeft = '3px solid #B12020'; line.classList.add('elation') }
+      if (type === 'memosprite') { line.style.borderLeft = '3px solid #4663E0'; line.classList.add('memosprite') }
       const label = el('span', 'skillLabel')
       label.textContent = labelText
       const left = el('div', 'skillLeft')
-      left.append(abilityBadge(abilityName), label)
-      if (lvl === null || !onChange) {
+      left.append(abilityBadge(abilityName))
+      const content = el('div', 'skillContent')
+      if (displayLvl === null || !onChange) {
         const ro = el('span', 'lvlVal')
-        ro.textContent = lvl === null ? '—' : String(lvl)
-        line.append(left, ro)
+        ro.textContent = displayLvl === null ? '—' : String(displayLvl)
+        content.append(left, ro)
+        line.append(label, content)
       } else {
         const dec = el('button') as HTMLButtonElement
         dec.type = 'button'
         dec.textContent = '-'
         dec.className = 'lvlBtn'
         const val = el('span', 'lvlVal')
-        val.textContent = String(lvl)
+        val.textContent = String(displayLvl)
         const inc = el('button') as HTMLButtonElement
         inc.type = 'button'
         inc.textContent = '+'
@@ -629,60 +793,78 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
           val.textContent = String(v)
           onChange(v)
         }
-        dec.onclick = (e) => { e.preventDefault(); setLvl(lvl - 1) }
-        inc.onclick = (e) => { e.preventDefault(); setLvl(lvl + 1) }
+        dec.onclick = (e) => { e.preventDefault(); setLvl(displayLvl - 1) }
+        inc.onclick = (e) => { e.preventDefault(); setLvl(displayLvl + 1) }
         const inp = el('input', 'lvlInput') as HTMLInputElement
         inp.type = 'number'
         inp.min = '1'
         inp.max = String(cap)
-        inp.value = String(lvl)
+        inp.value = String(displayLvl)
         inp.onchange = () => setLvl(Number(inp.value) || 1)
         const ctrl = el('div', 'lvlInputWrap')
         ctrl.append(dec, inp, inc)
-        line.append(left, ctrl)
+        content.append(left, ctrl)
+        line.append(label, content)
       }
       view.skillsBox.append(line)
     }
 
     for (const slot of ['basic', 'skill', 'ult', 'talent'] as const) {
-      const cap = slotCap(kitId, slot)
-      const lvl = Math.max(1, Math.min(cap, row.levels?.[slot] ?? (slot === 'basic' ? 6 : 10)))
-      addLine(SKILL_LABELS[slot], ABILITY_NAMES[kitId]?.[slot] ?? '', lvl, cap, (v) => {
-        const levels = { ...row.levels, [slot]: v }
+      const baseLvl = row.levels?.[slot] ?? (slot === 'basic' ? 6 : 10)
+      const effLvl = effLevels[slot] ?? baseLvl
+      const cap = caps[slot] ?? (slot === 'basic' ? 7 : 12)
+      const bonus = eidolonBonusForSlot(kitId, row.eidolon ?? 0, slot)
+      addLine(SKILL_LABELS[slot], ABILITY_NAMES[kitId]?.[slot] ?? '', slot, effLvl, cap, (v) => {
+        const baseV = Math.max(1, Math.min(cap, v - bonus))
+        const levels = { ...row.levels, [slot]: baseV }
         store.patchSlot(row.id, { levels })
         paintSkills(view, { ...row, levels }, kitId)
         paintStats(view, { ...row, levels }, kitId)
       })
     }
 
-    // Extra rows: Elation Skill is its own editable level; memosprite rows mirror the owner's
-    // skill/talent level (the engine reads those); el_skill2 / talent2 have no separate level.
+    // Extra rows: Elation Skill is its own editable level; memosprite skills have their own
+    // independent levels (up to 10); el_skill2 / talent2 have no separate level.
     const names = ABILITY_NAMES[kitId] ?? {}
-    const extras: Array<{ key: string; label: string }> = [
-      { key: 'el_skill', label: 'Доп. навык' },
-      { key: 'el_skill2', label: 'Доп. навык 2' },
-      { key: 'mem_skill', label: 'Навык духа' },
-      { key: 'mem_talent', label: 'Талант духа' },
-      { key: 'talent2', label: 'Доп. талант' },
+    const isAventurineWaveflair = kitId === 'aventurine_waveflair'
+    const extras: Array<{ key: string; label: string; slot: 'el_skill' | 'mem_skill' | 'mem_talent' | 'talent'; cap: number | 'memo'; type: ExtraType }> = [
+      { key: 'el_skill', label: 'Elation Skill', slot: 'el_skill', cap: (caps.el_skill ?? 12) - Math.max(0, (row.eidolon ?? 0) >= 3 ? 1 : 0), type: 'elation' },
+      { key: 'el_skill2', label: 'Elation Skill 2', slot: 'el_skill', cap: 0, type: 'elation' },
+      { key: 'mem_skill', label: 'Memosprite Skill', slot: 'mem_skill', cap: 'memo', type: 'memosprite' },
+      { key: 'mem_talent', label: 'Memosprite Talent', slot: 'mem_talent', cap: 'memo', type: 'memosprite' },
+      { key: 'talent2', label: 'Extra Talent', slot: 'talent', cap: 0, type: 'none' },
     ]
-    for (const { key, label } of extras) {
+    for (const { key, label, slot, cap, type } of extras) {
       const abilityName = names[key]
       if (!abilityName) continue
+      // Aventurine Waveflair: el_skill2 is just an enhanced version of el_skill with linked levels — hide it
+      if (isAventurineWaveflair && key === 'el_skill2') continue
       if (key === 'el_skill') {
-        const cap = slotCap(kitId, 'el_skill')
-        const lvl = Math.max(1, Math.min(cap, row.levels?.el_skill ?? row.levels?.skill ?? 10))
-        addLine(label, abilityName, lvl, cap, (v) => {
-          const levels = { ...row.levels, el_skill: v }
+        const baseLvl = row.levels?.el_skill ?? row.levels?.skill ?? 10
+        const effLvl = effLevels.el_skill ?? baseLvl
+        const bonus = eidolonBonusForSlot(kitId, row.eidolon ?? 0, 'el_skill')
+        addLine(label, abilityName, slot, effLvl, cap as number, (v) => {
+          const baseV = Math.max(1, Math.min(cap as number, v - bonus))
+          const levels = { ...row.levels, el_skill: baseV }
           store.patchSlot(row.id, { levels })
           paintSkills(view, { ...row, levels }, kitId)
           paintStats(view, { ...row, levels }, kitId)
-        })
-      } else if (key === 'mem_skill') {
-        addLine(label, abilityName, Math.max(1, Math.min(slotCap(kitId, 'skill'), row.levels?.skill ?? 10)), 0)
-      } else if (key === 'mem_talent') {
-        addLine(label, abilityName, Math.max(1, Math.min(slotCap(kitId, 'talent'), row.levels?.talent ?? 10)), 0)
+        }, type)
+      } else if (key === 'mem_skill' || key === 'mem_talent') {
+        const memoCap = 6
+        // Compute effective memosprite levels with eidolon bonuses (mirroring engine's memLevels)
+        const memoEff = effMemoLevels(kitId, row.eidolon ?? 0, row.levels)
+        const effLvl = key === 'mem_skill' ? memoEff.mem_skill : memoEff.mem_talent
+        const bonus = eidolonBonusForSlot(kitId, row.eidolon ?? 0, key)
+        addLine(label, abilityName, slot, effLvl, memoCap, (v) => {
+          const baseV = Math.max(1, Math.min(memoCap, v - bonus))
+          const levels = { ...row.levels, [key]: baseV }
+          store.patchSlot(row.id, { levels })
+          paintSkills(view, { ...row, levels }, kitId)
+          paintStats(view, { ...row, levels }, kitId)
+        }, type)
       } else {
-        addLine(label, abilityName, null, 0)
+        addLine(label, abilityName, slot, null, 0, undefined, type)
       }
     }
   }
@@ -705,7 +887,22 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
 
   function paintStats(view: CardView, row: TeamRowState, kitId: string): void {
     view.statsBox.innerHTML = ''
-    if (!kitId) { view.statsBox.append(dim('Пустой слот — выберите персонажа')); return }
+    if (!kitId) {
+      // Show dashes for all stats when no character selected
+      const statKeys = ['hp', 'atk', 'def', 'spd', 'critRate', 'critDmg', 'ehr', 'effRes', 'be', 'err', 'energyMax', 'outHeal', 'elemDmgBoost', 'elation']
+      const grid = el('div', 'statGrid')
+      for (const key of statKeys) {
+        const cell = el('div', 'statCell')
+        const name = el('span', 'statName')
+        name.textContent = STAT_LABELS[key] ?? key
+        const b = el('b')
+        b.textContent = '—'
+        cell.append(statBadge(key), name, b)
+        grid.append(cell)
+      }
+      view.statsBox.append(grid)
+      return
+    }
     const lr = store.active?.slots.find(s => s.id === row.id) ?? row
     // gather the card's CURRENT control state so the preview tracks unsaved edits (cone, levels,
     // traces, pieces) — the engine resolves the real numbers from these, never UI-side math
@@ -737,6 +934,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       ['energyMax', String(Math.round(s.energyMax))],
       ['outHeal', pct(s.outHeal)],
       ['elemDmgBoost', pct(s.elemDmgBoost)],
+      ['elation', pct(s.elation)],
     ]
     const grid = el('div', 'statGrid')
     for (const [key, val] of rows) {
@@ -790,6 +988,28 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
         v.refresh()
       }
     }
+    syncSectionHeights()
+  }
+
+  /** Synchronize section heights across all 4 cards by measuring each section type and applying the max */
+  function syncSectionHeights(): void {
+    if (cards.size === 0) return
+    const sectionClasses = ['pcBody-eidolons', 'pcBody-details', 'pcBody-skills', 'pcBody-relics']
+    const maxHeights = new Map<string, number>()
+    for (const cls of sectionClasses) {
+      let maxH = 0
+      for (const v of cards.values()) {
+        const el = v.root.querySelector('.' + cls) as HTMLElement | null
+        if (el) maxH = Math.max(maxH, el.offsetHeight)
+      }
+      if (maxH > 0) maxHeights.set(cls, maxH)
+    }
+    for (const [cls, h] of maxHeights) {
+      for (const v of cards.values()) {
+        const el = v.root.querySelector('.' + cls) as HTMLElement | null
+        if (el) el.style.minHeight = h + 'px'
+      }
+    }
   }
 
   render()
@@ -833,16 +1053,3 @@ function pct(v: number): string {
 }
 
 /** per-kit ability-level ceiling, mirroring `resolveLevels`' caps (default 7/12/12/12) */
-type LevelSlot = 'basic' | 'skill' | 'ult' | 'talent' | 'el_skill'
-
-const CAPS: Record<string, Partial<Record<LevelSlot, number>>> = {
-  silver_wolf_lv999: { basic: 10, skill: 15, ult: 15, talent: 15, el_skill: 15 },
-  robin_summeretto: { basic: 10, skill: 15, ult: 15, talent: 15, el_skill: 15 },
-  march7th_the_hunt: { basic: 10, skill: 15, ult: 15, talent: 15 },
-  cyrene: { basic: 10, skill: 15, ult: 15, talent: 15 },
-  aglaea: { basic: 10, skill: 15, ult: 15, talent: 15 },
-}
-
-function slotCap(kitId: string, slot: LevelSlot): number {
-  return CAPS[kitId]?.[slot] ?? (slot === 'basic' ? 7 : 12)
-}

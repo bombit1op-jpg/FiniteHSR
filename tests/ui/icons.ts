@@ -66,7 +66,7 @@ export default () => {
   const pieceImg = pb.querySelector('img')?.getAttribute('src') ?? ''
   const pieceHasIcon = pieceImg === slotUrl && pieceImg.startsWith('/icons/relicpieces/')
   updatePieceBadge(pb, '', 'head')
-  const pieceEmptyFallback = pb.querySelector('img') === null && (pb.textContent ?? '').includes('—')
+  const pieceEmptyFallback = pb.querySelector('img') === null && (pb.textContent ?? '').includes('?')
   const pieceNoInvented = pieceImg === '' || pieceImg.startsWith('/icons/relicpieces/')
 
   return [

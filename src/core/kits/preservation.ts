@@ -907,7 +907,7 @@ function addMagmaWill(sim: SimApi, u: Unit, n: number) {
 
 export const trailblazerPreservationKit: KitDef = {
   id: 'trailblazer_preservation',
-  name: '{NICKNAME}',
+  name: 'Trailblazer (Preservation)',
   elem: 'Fire',
   energyMax: 120,
   base: { ...PROG.trailblazer_preservation.base, level: 80, critRate: 0.05, critDmg: 0.5, path: 'Preservation' },

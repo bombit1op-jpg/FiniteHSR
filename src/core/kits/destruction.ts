@@ -2601,10 +2601,10 @@ export const gilgameshKit: KitDef = {
 const TID = 'trailblazer_destruction'
 
 // {NICKNAME} — The Destruction path
-// docs/combat_mechanics/Stat calc.md: break-based ATK stacking bruiser.
-export const trailblazerDestructionKit: KitDef = {
-  id: TID,
-  name: '{NICKNAME}',
+  // docs/combat_mechanics/Stat calc.md: break-based ATK stacking bruiser.
+  export const trailblazerDestructionKit: KitDef = {
+    id: TID,
+    name: 'Trailblazer (Destruction)',
   elem: 'Physical',
   energyMax: 120,
   base: { ...PROG.trailblazer_destruction.base, level: 80, critRate: 0.05, critDmg: 0.5, path: 'Destruction' },

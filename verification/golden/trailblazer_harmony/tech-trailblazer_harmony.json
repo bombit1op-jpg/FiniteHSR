@@ -7,10 +7,10 @@
   "cycles": 1
  },
  "expectedKeys": [
-  "BUFF_APPLIED|-|{NICKNAME}|-|- [1]",
+  "BUFF_APPLIED|-|Trailblazer (Harmony)|-|- [1]",
   "BATTLE_START|-|-|-|- [1,1,7]",
-  "TECHNIQUE_APPLIED|{NICKNAME}|-|-|-",
-  "BUFF_APPLIED|-|{NICKNAME}|-|- [1,2]",
+  "TECHNIQUE_APPLIED|Trailblazer (Harmony)|-|-|-",
+  "BUFF_APPLIED|-|Trailblazer (Harmony)|-|- [1,2]",
   "WAVE_START|-|-|-|- [1,1]",
   "CYCLE_START|-|-|-|- [0,1]"
  ]

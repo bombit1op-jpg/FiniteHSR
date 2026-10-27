@@ -4,6 +4,7 @@ export const STAT_LABELS: Record<string, string> = {
   be: 'Break Effect', ehr: 'Effect Hit Rate', effRes: 'Effect RES', err: 'Energy Regen',
   critRate: 'CRIT Rate', critDmg: 'CRIT DMG',
   outHeal: 'Outgoing Healing', energyMax: 'Max Energy', elemDmgBoost: 'Elemental DMG Boost',
+  elation: 'Elation DMG Boost',
   'dmg:Physical': 'Physical DMG',
   'dmg:Fire': 'Fire DMG',
   'dmg:Ice': 'Ice DMG',
@@ -15,7 +16,7 @@ export const STAT_LABELS: Record<string, string> = {
 
 const PCT_STATS = new Set([
   'hpPct', 'atkPct', 'defPct', 'be', 'ehr', 'effRes', 'err',
-  'critRate', 'critDmg', 'outHeal',
+  'critRate', 'critDmg', 'outHeal', 'elation',
   'dmg:Physical', 'dmg:Fire', 'dmg:Ice', 'dmg:Wind', 'dmg:Lightning', 'dmg:Quantum', 'dmg:Imaginary',
 ])
 

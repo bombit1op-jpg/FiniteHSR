@@ -394,7 +394,7 @@ function elationSkill(sim: SimApi, u: Unit, ctx: KitRuntime, pm?: number): void 
 // {NICKNAME} — The Elation path
 export const trailblazerElationKit: KitDef = {
   id: TID,
-  name: '{NICKNAME}',
+  name: 'Trailblazer (Elation)',
   elem: 'Lightning',
   energyMax: 160,
   base: { ...PROG.trailblazer_elation.base, level: 80, critRate: 0.05, critDmg: 0.5, path: 'Elation' },

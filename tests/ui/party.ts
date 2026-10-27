@@ -165,11 +165,11 @@ export default () => {
 
   // ---- skill levels (number input + +/- buttons)
   const skillInp = cardA.querySelectorAll('.lvlInput')[1] as HTMLInputElement
-  skillInp.value = '12'
+  skillInp.value = '10'
   skillInp.onchange?.(new Event('change') as never)
-  cases.push(raw('the skill level is stored', pStore.active?.slots.find(s => s.id === 'r1')?.levels.skill === 12))
+  cases.push(raw('the skill level is stored', pStore.active?.slots.find(s => s.id === 'r1')?.levels.skill === 10))
   pHandle.render()
-  cases.push(raw('an unrelated refresh keeps the edited skill level', pStore.active?.slots.find(s => s.id === 'r1')?.levels.skill === 12))
+  cases.push(raw('an unrelated refresh keeps the edited skill level', pStore.active?.slots.find(s => s.id === 'r1')?.levels.skill === 10))
 
   // ---- relic editor (§Task 1.2): 6 pieces, each with 4 editable substat rows (stat + value + quality)
   const pieceCards = cardA.querySelectorAll('.pieceCard')

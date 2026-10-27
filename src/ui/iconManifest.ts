@@ -2876,4 +2876,9 @@ export const CHARACTER_PORTRAITS: Record<string, string> = {
   'Yao Guang': '/portraits/1502.webp',
   'Yukong': '/portraits/1207.webp',
   'Yunli': '/portraits/1221.webp',
+  'Trailblazer (Preservation)': '/portraits/1001b1.webp',
+  'Trailblazer (Harmony)': '/portraits/1001b2.webp',
+  'Trailblazer (Remembrance)': '/portraits/1001b3.webp',
+  'Trailblazer (Destruction)': '/portraits/1001b4.webp',
+  'Trailblazer (Elation)': '/portraits/1001b5.webp',
 }

@@ -1832,7 +1832,7 @@ function danceMult(sim: SimApi): number {
 
 export const trailblazerHarmonyKit: KitDef = {
   id: 'trailblazer_harmony',
-  name: '{NICKNAME}',
+  name: 'Trailblazer (Harmony)',
   elem: 'Imaginary',
   energyMax: 140,
   base: { ...PROG.trailblazer_harmony.base, level: 80, critRate: 0.05, critDmg: 0.5, path: 'Harmony' },

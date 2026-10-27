@@ -74,6 +74,7 @@ export type StatIconKey =
   | 'Effect Hit Rate' | 'Effect RES' | 'Energy Regeneration Rate' | 'DMG Boost'
   | 'Toughness' | 'Trace' | 'Eidolon' | 'Skill Point' | 'Energy' | 'Path'
   | 'Outgoing Healing Boost'
+  | 'Elation (Stat)'
 
 export function statIconUrl(name: StatIconKey | string): string | undefined { return STATS_ICONS[name] }
 
@@ -86,7 +87,7 @@ const STAT_ICON_KEY: Record<string, StatIconKey> = {
   ehr: 'Effect Hit Rate', effRes: 'Effect RES',
   err: 'Energy Regeneration Rate', outHeal: 'Outgoing Healing Boost',
   elemDmgBoost: 'DMG Boost', energyMax: 'Energy',
-  elation: 'DMG Boost',
+  elation: 'Elation (Stat)',
 }
 
 /** icon art URL for an engine stat key (undefined = no committed art) */
@@ -225,7 +226,9 @@ export function iconNode(url: string | undefined, alt: string, opts: {
   tint?: string
   title: string
 }): HTMLElement {
+  const isPiece = opts.cls?.includes('pieceIcon')
   const wrap = el('span', 'gameIcon' + (opts.cls ? ' ' + opts.cls : ''))
+  if (isPiece) wrap.classList.add('pieceIconWrap')
   wrap.title = opts.title
   const chip = el('span', 'iconChip')
   chip.textContent = opts.fallbackText
@@ -240,6 +243,7 @@ export function iconNode(url: string | undefined, alt: string, opts: {
     img.decoding = 'async'
     img.style.objectFit = opts.fit ?? 'contain'
     img.onerror = () => { img.style.display = 'none'; chip.style.display = '' }
+    img.onload = () => { chip.style.display = 'none' }
     wrap.append(img)
   } else {
     chip.style.display = ''
@@ -336,7 +340,7 @@ function paintGear(node: HTMLElement, kind: GearKind, id: string): void {
     cls: 'gearIcon',
     size: 40,
     fit: 'contain',
-    fallbackText: !id ? '—' : (name?.trim().charAt(0).toUpperCase() || '?'),
+    fallbackText: !id && kind === 'cone' ? '+' : !id ? '—' : (name?.trim().charAt(0).toUpperCase() || '?'),
     tint,
     title,
   }))
@@ -366,7 +370,7 @@ function paintPiece(node: HTMLElement, setId: string, slot: RelicSlot): void {
     cls: 'pieceIcon',
     size: 34,
     fit: 'contain',
-    fallbackText: !setId ? '—' : (setName_?.trim().charAt(0).toUpperCase() || '?'),
+    fallbackText: !setId ? '?' : (setName_?.trim().charAt(0).toUpperCase() || '?'),
     tint: setId ? tintOf(setId) : '#55606f',
     title,
   }))

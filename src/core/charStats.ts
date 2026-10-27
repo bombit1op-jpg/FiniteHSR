@@ -34,6 +34,8 @@ export interface CharFinalStats {
   outHeal: number
   /** elemental DMG boost of the character's own element (gear) */
   elemDmgBoost: number
+  /** Elation DMG Boost (separate from regular DMG Boost) */
+  elation: number
   /** kit's energy maximum for the Ultimate resource (for the energy-start slider) */
   energyMax: number
 }
@@ -65,6 +67,7 @@ export function charFinalStats(spec: TeamSpec): CharFinalStats | null {
     err: 1 + buffSum(u.buffs, 'err'),
     outHeal: buffSum(u.buffs, 'outHeal'),
     elemDmgBoost: buffSum(u.buffs, `dmg:${kit.elem}`),
+    elation: s.elation,
     energyMax: kit.energyMax,
   }
 }

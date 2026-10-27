@@ -33,7 +33,14 @@ interface Row { name: string; byLevel?: Record<string, LevelStat> }
 
 const norm = (s: unknown): string => String(s).replace(/<[^>]*>/g, '').toLowerCase().replace(/[^a-z0-9]/g, '')
 /** kit id -> dataset name, only where the two differ */
-const ALIAS: Record<string, string> = { march7th_the_hunt: 'March 7th' }
+const ALIAS: Record<string, string> = {
+  march7th_the_hunt: 'March 7th',
+  trailblazer_preservation: '{NICKNAME}',
+  trailblazer_harmony: '{NICKNAME}',
+  trailblazer_remembrance: '{NICKNAME}',
+  trailblazer_destruction: '{NICKNAME}',
+  trailblazer_elation: '{NICKNAME}',
+}
 
 export function baseFidelity(): BaseCheck[] {
   const chars = JSON.parse(readFileSync(join(ROOT, 'hsr-data', 'characters.json'), 'utf8')) as Row[]

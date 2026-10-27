@@ -2300,7 +2300,7 @@ function memSupportTrue(sim: SimApi, attacker: Unit, target: Unit, dmg: number):
 
 export const trailblazerRemembranceKit: KitDef = {
   id: 'trailblazer_remembrance',
-  name: '{NICKNAME}',
+  name: 'Trailblazer (Remembrance)',
   elem: 'Ice',
   energyMax: 160,
   base: { ...PROG.trailblazer_remembrance.base, level: 80, critRate: 0.05, critDmg: 0.5, path: 'Remembrance' },

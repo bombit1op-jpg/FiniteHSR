@@ -175,9 +175,8 @@ export const EIDOLON_LV: Record<string, Record<number, { basic?: number; skill?:
   robin: { 3: { skill: 2, ult: 2 }, 5: { basic: 1, talent: 2 } },
 }
 
-/** Per-kit level ceilings. Default 7/12/12/12/12; kits whose data/eidolons cap
- *  higher (silver_wolf_lv999 E3 = Basic 10 / everything else 15) raise them here. */
-const LEVEL_CAPS: Record<string, Partial<AbilityLevels>> = {
+/** Per-kit level ceilings (absolute max including eidolons). Default 7/12/12/12/12. */
+export const LEVEL_CAPS: Record<string, Partial<AbilityLevels>> = {
   silver_wolf_lv999: { basic: 10, skill: 15, ult: 15, talent: 15, el_skill: 15 },
   robin_summeretto: { basic: 10, skill: 15, ult: 15, talent: 15 },
   // canon: data-лестницы 1224xx — basic 10 ур., skill/ult/talent 15 ур.
