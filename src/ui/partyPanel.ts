@@ -57,7 +57,9 @@ function currentLevelCaps(kitId: string, eidolon: number): AbilityLevels {
 }
 
 // Compute eidolon bonus for a specific slot at given eidolon level
-function eidolonBonusForSlot(kitId: string, eidolon: number, slot: 'basic' | 'skill' | 'ult' | 'talent' | 'el_skill'): number {
+function eidolonBonusForSlot(kitId: string, eidolon: number, slot: 'basic' | 'skill' | 'ult' | 'talent' | 'el_skill' | 'mem_skill' | 'mem_talent'): number {
+  // mem_skill and mem_talent are not in EIDOLON_LV (handled in kit-specific effMemoLevels)
+  if (slot === 'mem_skill' || slot === 'mem_talent') return 0
   const per = EIDOLON_LV[kitId] ?? {}
   let bonus = 0
   for (const [threshold, d] of Object.entries(per)) {
@@ -66,10 +68,6 @@ function eidolonBonusForSlot(kitId: string, eidolon: number, slot: 'basic' | 'sk
   }
   return bonus
 }
-import { el, fillSelect, STAT_LABELS } from './dom'
-import { Dropdown } from './dropdown'
-import { relicOptions, planarOptions, signatureCone } from '../core/gearOrder'
-import { LIGHT_CONES } from '../core/gear'
 
 // Characters whose memosprite levels use the shared memLevels logic (E3: mem_talent+1, E5: mem_skill+1)
 const MEMOSPRITE_EIDOLON_BONUS: ReadonlySet<string> = new Set([
@@ -83,20 +81,6 @@ const MEMOSPRITE_EIDOLON_BONUS: ReadonlySet<string> = new Set([
   'tribbie',
   'sunday',
 ])
-import type { TeamRowState } from './store'
-import {
-  metaBadge, updateMetaBadges, gearBadge, updateGearBadge, statBadge, ratingTierClass,
-  charPortrait, updateCharPortrait, abilityBadge, gearIconUrl,
-} from './icons'
-import { ABILITY_NAMES } from '../core/abilityNames'
-import { buildPieceEditors, pieceOf, toTeamSpec, type PieceEditor } from './team'
-import { scoreRelic } from '../core/relicScore'
-import { charFinalStats, SKILL_LABELS } from '../core/charStats'
-import { traceMods } from '../core/progression'
-import { PartyStore } from './partyStore'
-import { MAX_SLOTS } from '../core/party'
-import { openCharacterPicker, openConePicker, openPartyListPicker } from './pickers'
-import { survivingTechniqueUses } from './store'
 
 interface CardView {
   rowId: string
@@ -245,12 +229,19 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const pickChar = async () => {
       const active = store.active
       const exclude = (active?.slots.map(s => s.kitId).filter(Boolean) as string[]) ?? []
-      // Can't select same character twice - exclude all already in team except current slot
-      // Also enforce single Trailblazer per team (any path)
-      const hasTrailblazer = exclude.some(isTrailblazer)
-      const filteredExclude = hasTrailblazer
-        ? exclude.filter(id => id !== row.kitId && !isTrailblazer(id))
-        : exclude.filter(id => id !== row.kitId)
+      // Can't select same character twice - exclude all already in team including current slot
+      // But for Trailblazers: if current slot has a Trailblazer, allow switching to other Trailblazer paths
+      const currentKitId = row.kitId
+      const hasOtherTrailblazer = exclude.some(id => id !== currentKitId && isTrailblazer(id))
+      
+      let filteredExclude = exclude.filter(id => id !== currentKitId)
+      if (hasOtherTrailblazer) {
+        // Another Trailblazer exists in a different slot - exclude all Trailblazers
+        const allTrailblazers = KITS.filter(k => isTrailblazer(k.id)).map(k => k.id)
+        filteredExclude = [...new Set([...filteredExclude, ...allTrailblazers])]
+      }
+      // If current slot has a Trailblazer and no other Trailblazer in team, allow switching to other Trailblazer paths
+      // (only current Trailblazer is excluded via the filter above)
       const chosen = await openCharacterPicker({ exclude: filteredExclude, current: row.kitId || undefined })
       if (chosen === null) return
       if (chosen === '') { clearSlot(row.id); render(); return }
@@ -686,6 +677,12 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       coneNameEl.textContent = cone?.name ?? '-None-'
       coneNameEl.classList.toggle('dim', !cone)
       coneRarityEl.textContent = cone ? `${cone.rarity}★` : ''
+      coneRarityEl.classList.remove('r5', 'r4', 'r3')
+      if (cone) {
+        if (cone.rarity === 5) coneRarityEl.classList.add('r5')
+        else if (cone.rarity === 4) coneRarityEl.classList.add('r4')
+        else if (cone.rarity === 3) coneRarityEl.classList.add('r3')
+      }
       coneArt.classList.toggle('empty', !cone)
       coneArt.classList.toggle('signature', !!cone && live.coneId === signatureCone(live.kitId))
       siSel.value = String(live.si || 1)
@@ -828,10 +825,10 @@ function paintSkills(view: CardView, row: TeamRowState, kitId: string): void {
     const names = ABILITY_NAMES[kitId] ?? {}
     const isAventurineWaveflair = kitId === 'aventurine_waveflair'
     const extras: Array<{ key: string; label: string; slot: 'el_skill' | 'mem_skill' | 'mem_talent' | 'talent'; cap: number | 'memo'; type: ExtraType }> = [
-      { key: 'el_skill', label: 'Elation Skill', slot: 'el_skill', cap: (caps.el_skill ?? 12) - Math.max(0, (row.eidolon ?? 0) >= 3 ? 1 : 0), type: 'elation' },
+      { key: 'el_skill', label: 'Elation Skill', slot: 'el_skill', cap: caps.el_skill ?? 12, type: 'elation' },
       { key: 'el_skill2', label: 'Elation Skill 2', slot: 'el_skill', cap: 0, type: 'elation' },
-      { key: 'mem_skill', label: 'Memosprite Skill', slot: 'mem_skill', cap: 'memo', type: 'memosprite' },
-      { key: 'mem_talent', label: 'Memosprite Talent', slot: 'mem_talent', cap: 'memo', type: 'memosprite' },
+      { key: 'mem_skill', label: 'Memosprite Skill', slot: 'mem_skill', cap: 7, type: 'memosprite' },
+      { key: 'mem_talent', label: 'Memosprite Talent', slot: 'mem_talent', cap: 7, type: 'memosprite' },
       { key: 'talent2', label: 'Extra Talent', slot: 'talent', cap: 0, type: 'none' },
     ]
     for (const { key, label, slot, cap, type } of extras) {
@@ -851,13 +848,14 @@ function paintSkills(view: CardView, row: TeamRowState, kitId: string): void {
           paintStats(view, { ...row, levels }, kitId)
         }, type)
       } else if (key === 'mem_skill' || key === 'mem_talent') {
-        const memoCap = 6
         // Compute effective memosprite levels with eidolon bonuses (mirroring engine's memLevels)
         const memoEff = effMemoLevels(kitId, row.eidolon ?? 0, row.levels)
         const effLvl = key === 'mem_skill' ? memoEff.mem_skill : memoEff.mem_talent
-        const bonus = eidolonBonusForSlot(kitId, row.eidolon ?? 0, key)
-        addLine(label, abilityName, slot, effLvl, memoCap, (v) => {
-          const baseV = Math.max(1, Math.min(memoCap, v - bonus))
+        // Eidolon bonus for memosprite skills (from effMemoLevels): E3 -> mem_talent+1, E5 -> mem_skill+1
+        const eidolon = row.eidolon ?? 0
+        const memoBonus = key === 'mem_skill' ? (eidolon >= 5 ? 1 : 0) : (eidolon >= 3 ? 1 : 0)
+        addLine(label, abilityName, slot, effLvl, cap as number, (v) => {
+          const baseV = Math.max(1, Math.min(cap as number, v - memoBonus))
           const levels = { ...row.levels, [key]: baseV }
           store.patchSlot(row.id, { levels })
           paintSkills(view, { ...row, levels }, kitId)

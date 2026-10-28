@@ -363,7 +363,7 @@
           "label": "Honkai-DMG Demo"
         },
         "field": "mult",
-        "value": 16818.3579312,
+        "value": 17496.5175252,
         "tol": 0.5,
         "pick": "first"
       }
@@ -404,7 +404,7 @@
           "label": "Top Loot Box"
         },
         "field": "mult",
-        "value": 16818.3579312,
+        "value": 17496.5175252,
         "tol": 0.5,
         "pick": "first"
       }

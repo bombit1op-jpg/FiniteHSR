@@ -1,355 +1,419 @@
 {
   "characters": {
     "label": "Персонажи",
-    "count": 87,
+    "count": 103,
     "icons": [
       {
-        "file": "characters/Acheron.png",
-        "name": "Acheron"
+        "file": "characters/Character Acheron Icon.png",
+        "name": "Character Acheron Icon"
       },
       {
-        "file": "characters/Aglaea.png",
-        "name": "Aglaea"
+        "file": "characters/Character Aeon ★ Aha Icon.png",
+        "name": "Character Aeon ★ Aha Icon"
       },
       {
-        "file": "characters/Anaxa.png",
-        "name": "Anaxa"
+        "file": "characters/Character Aglaea Icon.png",
+        "name": "Character Aglaea Icon"
       },
       {
-        "file": "characters/Archer.png",
-        "name": "Archer"
+        "file": "characters/Character Anaxa Icon.png",
+        "name": "Character Anaxa Icon"
       },
       {
-        "file": "characters/Argenti.png",
-        "name": "Argenti"
+        "file": "characters/Character Archer Icon.png",
+        "name": "Character Archer Icon"
       },
       {
-        "file": "characters/Arlan.png",
-        "name": "Arlan"
+        "file": "characters/Character Argenti Icon.png",
+        "name": "Character Argenti Icon"
       },
       {
-        "file": "characters/Ashveil.png",
-        "name": "Ashveil"
+        "file": "characters/Character Arlan Icon.png",
+        "name": "Character Arlan Icon"
       },
       {
-        "file": "characters/Asta.png",
-        "name": "Asta"
+        "file": "characters/Character Ashveil Icon.png",
+        "name": "Character Ashveil Icon"
       },
       {
-        "file": "characters/Aventurine • Waveflair.png",
-        "name": "Aventurine • Waveflair"
+        "file": "characters/Character Asta Icon.png",
+        "name": "Character Asta Icon"
       },
       {
-        "file": "characters/Aventurine.png",
-        "name": "Aventurine"
+        "file": "characters/Character Aventurine Icon.png",
+        "name": "Character Aventurine Icon"
       },
       {
-        "file": "characters/Bailu.png",
-        "name": "Bailu"
+        "file": "characters/Character Aventurine • Waveflair Icon.png",
+        "name": "Character Aventurine • Waveflair Icon"
       },
       {
-        "file": "characters/Black Swan.png",
-        "name": "Black Swan"
+        "file": "characters/Character Bailu Icon.png",
+        "name": "Character Bailu Icon"
       },
       {
-        "file": "characters/Blade.png",
-        "name": "Blade"
+        "file": "characters/Character Black Swan Icon.png",
+        "name": "Character Black Swan Icon"
       },
       {
-        "file": "characters/Boothill.png",
-        "name": "Boothill"
+        "file": "characters/Character Blade Icon.png",
+        "name": "Character Blade Icon"
       },
       {
-        "file": "characters/Bronya.png",
-        "name": "Bronya"
+        "file": "characters/Character Boothill Icon.png",
+        "name": "Character Boothill Icon"
       },
       {
-        "file": "characters/Castorice.png",
-        "name": "Castorice"
+        "file": "characters/Character Bronya Icon.png",
+        "name": "Character Bronya Icon"
       },
       {
-        "file": "characters/Cerydra.png",
-        "name": "Cerydra"
+        "file": "characters/Character Caelus (Destruction) Icon.png",
+        "name": "Character Caelus (Destruction) Icon"
       },
       {
-        "file": "characters/Cipher.png",
-        "name": "Cipher"
+        "file": "characters/Character Caelus (Harmony) Icon.png",
+        "name": "Character Caelus (Harmony) Icon"
       },
       {
-        "file": "characters/Clara.png",
-        "name": "Clara"
+        "file": "characters/Character Caelus (Preservation) Icon.png",
+        "name": "Character Caelus (Preservation) Icon"
       },
       {
-        "file": "characters/Cyrene.png",
-        "name": "Cyrene"
+        "file": "characters/Character Caelus (Remembrance) Icon.png",
+        "name": "Character Caelus (Remembrance) Icon"
       },
       {
-        "file": "characters/Dan Heng • Imbibitor Lunae.png",
-        "name": "Dan Heng • Imbibitor Lunae"
+        "file": "characters/Character Castorice Icon.png",
+        "name": "Character Castorice Icon"
       },
       {
-        "file": "characters/Dan Heng • Permansor Terrae.png",
-        "name": "Dan Heng • Permansor Terrae"
+        "file": "characters/Character Cerydra Icon.png",
+        "name": "Character Cerydra Icon"
       },
       {
-        "file": "characters/Dan Heng.png",
-        "name": "Dan Heng"
+        "file": "characters/Character Cipher Icon.png",
+        "name": "Character Cipher Icon"
       },
       {
-        "file": "characters/Dr. Ratio.png",
-        "name": "Dr. Ratio"
+        "file": "characters/Character Clara Icon.png",
+        "name": "Character Clara Icon"
       },
       {
-        "file": "characters/Evanescia.png",
-        "name": "Evanescia"
+        "file": "characters/Character Cyrene Icon.png",
+        "name": "Character Cyrene Icon"
       },
       {
-        "file": "characters/Evernight.png",
-        "name": "Evernight"
+        "file": "characters/Character Dan Heng Icon.png",
+        "name": "Character Dan Heng Icon"
       },
       {
-        "file": "characters/Feixiao.png",
-        "name": "Feixiao"
+        "file": "characters/Character Dan Heng • Imbibitor Lunae Icon.png",
+        "name": "Character Dan Heng • Imbibitor Lunae Icon"
       },
       {
-        "file": "characters/Firefly.png",
-        "name": "Firefly"
+        "file": "characters/Character Dan Heng • Permansor Terrae Icon.png",
+        "name": "Character Dan Heng • Permansor Terrae Icon"
       },
       {
-        "file": "characters/Fu Xuan.png",
-        "name": "Fu Xuan"
+        "file": "characters/Character Dr. Ratio Icon.png",
+        "name": "Character Dr. Ratio Icon"
       },
       {
-        "file": "characters/Fugue.png",
-        "name": "Fugue"
+        "file": "characters/Character Ellen Icon.png",
+        "name": "Character Ellen Icon"
       },
       {
-        "file": "characters/Gallagher.png",
-        "name": "Gallagher"
+        "file": "characters/Character Evanescia Icon.png",
+        "name": "Character Evanescia Icon"
       },
       {
-        "file": "characters/Gepard.png",
-        "name": "Gepard"
+        "file": "characters/Character Evernight Icon.png",
+        "name": "Character Evernight Icon"
       },
       {
-        "file": "characters/Gilgamesh.png",
-        "name": "Gilgamesh"
+        "file": "characters/Character Feixiao Icon.png",
+        "name": "Character Feixiao Icon"
       },
       {
-        "file": "characters/Guinaifen.png",
-        "name": "Guinaifen"
+        "file": "characters/Character Firefly Icon.png",
+        "name": "Character Firefly Icon"
       },
       {
-        "file": "characters/Hanya.png",
-        "name": "Hanya"
+        "file": "characters/Character Fu Xuan Icon.png",
+        "name": "Character Fu Xuan Icon"
       },
       {
-        "file": "characters/Herta.png",
-        "name": "Herta"
+        "file": "characters/Character Fugue Icon.png",
+        "name": "Character Fugue Icon"
       },
       {
-        "file": "characters/Himeko • Nova.png",
-        "name": "Himeko • Nova"
+        "file": "characters/Character Gallagher Icon.png",
+        "name": "Character Gallagher Icon"
       },
       {
-        "file": "characters/Himeko.png",
-        "name": "Himeko"
+        "file": "characters/Character Gepard Icon.png",
+        "name": "Character Gepard Icon"
       },
       {
-        "file": "characters/Hook.png",
-        "name": "Hook"
+        "file": "characters/Character Gilgamesh Icon.png",
+        "name": "Character Gilgamesh Icon"
       },
       {
-        "file": "characters/Huohuo.png",
-        "name": "Huohuo"
+        "file": "characters/Character Guinaifen Icon.png",
+        "name": "Character Guinaifen Icon"
       },
       {
-        "file": "characters/Hyacine.png",
-        "name": "Hyacine"
+        "file": "characters/Character Hanya Icon.png",
+        "name": "Character Hanya Icon"
       },
       {
-        "file": "characters/Hysilens.png",
-        "name": "Hysilens"
+        "file": "characters/Character Herta Icon.png",
+        "name": "Character Herta Icon"
       },
       {
-        "file": "characters/Jade.png",
-        "name": "Jade"
+        "file": "characters/Character Himeko Icon.png",
+        "name": "Character Himeko Icon"
       },
       {
-        "file": "characters/Jiaoqiu.png",
-        "name": "Jiaoqiu"
+        "file": "characters/Character Himeko • Nova Icon.png",
+        "name": "Character Himeko • Nova Icon"
       },
       {
-        "file": "characters/Jing Yuan.png",
-        "name": "Jing Yuan"
+        "file": "characters/Character Hook Icon.png",
+        "name": "Character Hook Icon"
       },
       {
-        "file": "characters/Jingliu.png",
-        "name": "Jingliu"
+        "file": "characters/Character Huohuo Icon.png",
+        "name": "Character Huohuo Icon"
       },
       {
-        "file": "characters/Kafka.png",
-        "name": "Kafka"
+        "file": "characters/Character Hyacine Icon.png",
+        "name": "Character Hyacine Icon"
       },
       {
-        "file": "characters/Lingsha.png",
-        "name": "Lingsha"
+        "file": "characters/Character Hysilens Icon.png",
+        "name": "Character Hysilens Icon"
       },
       {
-        "file": "characters/Luka.png",
-        "name": "Luka"
+        "file": "characters/Character Jade Icon.png",
+        "name": "Character Jade Icon"
       },
       {
-        "file": "characters/Luocha.png",
-        "name": "Luocha"
+        "file": "characters/Character Jiaoqiu Icon.png",
+        "name": "Character Jiaoqiu Icon"
       },
       {
-        "file": "characters/Lynx.png",
-        "name": "Lynx"
+        "file": "characters/Character Jing Yuan Icon.png",
+        "name": "Character Jing Yuan Icon"
       },
       {
-        "file": "characters/March 7th.png",
-        "name": "March 7th"
+        "file": "characters/Character Jingliu Icon.png",
+        "name": "Character Jingliu Icon"
       },
       {
-        "file": "characters/Misha.png",
-        "name": "Misha"
+        "file": "characters/Character Kafka Icon.png",
+        "name": "Character Kafka Icon"
       },
       {
-        "file": "characters/Mortenax Blade.png",
-        "name": "Mortenax Blade"
+        "file": "characters/Character Lingsha Icon.png",
+        "name": "Character Lingsha Icon"
       },
       {
-        "file": "characters/Moze.png",
-        "name": "Moze"
+        "file": "characters/Character Luka Icon.png",
+        "name": "Character Luka Icon"
       },
       {
-        "file": "characters/Mydei.png",
-        "name": "Mydei"
+        "file": "characters/Character Luocha Icon.png",
+        "name": "Character Luocha Icon"
       },
       {
-        "file": "characters/Natasha.png",
-        "name": "Natasha"
+        "file": "characters/Character Lynx Icon.png",
+        "name": "Character Lynx Icon"
       },
       {
-        "file": "characters/Pearl.png",
-        "name": "Pearl"
+        "file": "characters/Character March 7th (The Hunt) Icon.png",
+        "name": "Character March 7th (The Hunt) Icon"
       },
       {
-        "file": "characters/Pela.png",
-        "name": "Pela"
+        "file": "characters/Character March 7th Icon.png",
+        "name": "Character March 7th Icon"
       },
       {
-        "file": "characters/Phainon.png",
-        "name": "Phainon"
+        "file": "characters/Character Misha Icon.png",
+        "name": "Character Misha Icon"
       },
       {
-        "file": "characters/Qingque.png",
-        "name": "Qingque"
+        "file": "characters/Character Mortenax Blade Icon.png",
+        "name": "Character Mortenax Blade Icon"
       },
       {
-        "file": "characters/Rappa.png",
-        "name": "Rappa"
+        "file": "characters/Character Moze Icon.png",
+        "name": "Character Moze Icon"
       },
       {
-        "file": "characters/Rin Tohsaka.png",
-        "name": "Rin Tohsaka"
+        "file": "characters/Character Mydei Icon.png",
+        "name": "Character Mydei Icon"
       },
       {
-        "file": "characters/Robin • Summeretto.png",
-        "name": "Robin • Summeretto"
+        "file": "characters/Character Natasha Icon.png",
+        "name": "Character Natasha Icon"
       },
       {
-        "file": "characters/Robin.png",
-        "name": "Robin"
+        "file": "characters/Character Pearl Icon.png",
+        "name": "Character Pearl Icon"
       },
       {
-        "file": "characters/Ruan Mei.png",
-        "name": "Ruan Mei"
+        "file": "characters/Character Pela Icon.png",
+        "name": "Character Pela Icon"
       },
       {
-        "file": "characters/Saber.png",
-        "name": "Saber"
+        "file": "characters/Character Phainon Icon.png",
+        "name": "Character Phainon Icon"
       },
       {
-        "file": "characters/Sampo.png",
-        "name": "Sampo"
+        "file": "characters/Character Qingque Icon.png",
+        "name": "Character Qingque Icon"
       },
       {
-        "file": "characters/Seele.png",
-        "name": "Seele"
+        "file": "characters/Character Rappa Icon.png",
+        "name": "Character Rappa Icon"
       },
       {
-        "file": "characters/Serval.png",
-        "name": "Serval"
+        "file": "characters/Character Rin Tohsaka Icon.png",
+        "name": "Character Rin Tohsaka Icon"
       },
       {
-        "file": "characters/Silver Wolf LV.999.png",
-        "name": "Silver Wolf LV.999"
+        "file": "characters/Character Robin Icon.png",
+        "name": "Character Robin Icon"
       },
       {
-        "file": "characters/Silver Wolf.png",
-        "name": "Silver Wolf"
+        "file": "characters/Character Robin • Summeretto Icon.png",
+        "name": "Character Robin • Summeretto Icon"
       },
       {
-        "file": "characters/Sparkle.png",
-        "name": "Sparkle"
+        "file": "characters/Character Ruan Mei Icon.png",
+        "name": "Character Ruan Mei Icon"
       },
       {
-        "file": "characters/Sparxie.png",
-        "name": "Sparxie"
+        "file": "characters/Character Saber Icon.png",
+        "name": "Character Saber Icon"
       },
       {
-        "file": "characters/Sunday.png",
-        "name": "Sunday"
+        "file": "characters/Character Sampo Icon.png",
+        "name": "Character Sampo Icon"
       },
       {
-        "file": "characters/Sushang.png",
-        "name": "Sushang"
+        "file": "characters/Character Seele Icon.png",
+        "name": "Character Seele Icon"
       },
       {
-        "file": "characters/The Dahlia.png",
-        "name": "The Dahlia"
+        "file": "characters/Character Serval Icon.png",
+        "name": "Character Serval Icon"
       },
       {
-        "file": "characters/The Herta.png",
-        "name": "The Herta"
+        "file": "characters/Character Silver Wolf Icon.png",
+        "name": "Character Silver Wolf Icon"
       },
       {
-        "file": "characters/Tingyun.png",
-        "name": "Tingyun"
+        "file": "characters/Character Silver Wolf LV.999 Icon.png",
+        "name": "Character Silver Wolf LV.999 Icon"
       },
       {
-        "file": "characters/Topaz & Numby.png",
-        "name": "Topaz & Numby"
+        "file": "characters/Character Sparkle Icon.png",
+        "name": "Character Sparkle Icon"
       },
       {
-        "file": "characters/Tribbie.png",
-        "name": "Tribbie"
+        "file": "characters/Character Sparxie Icon.png",
+        "name": "Character Sparxie Icon"
       },
       {
-        "file": "characters/Welt.png",
-        "name": "Welt"
+        "file": "characters/Character Stelle (Destruction) Icon.png",
+        "name": "Character Stelle (Destruction) Icon"
       },
       {
-        "file": "characters/Xueyi.png",
-        "name": "Xueyi"
+        "file": "characters/Character Stelle (Harmony) Icon.png",
+        "name": "Character Stelle (Harmony) Icon"
       },
       {
-        "file": "characters/Yanqing.png",
-        "name": "Yanqing"
+        "file": "characters/Character Stelle (Preservation) Icon.png",
+        "name": "Character Stelle (Preservation) Icon"
       },
       {
-        "file": "characters/Yao Guang.png",
-        "name": "Yao Guang"
+        "file": "characters/Character Stelle (Remembrance) Icon.png",
+        "name": "Character Stelle (Remembrance) Icon"
       },
       {
-        "file": "characters/Yukong.png",
-        "name": "Yukong"
+        "file": "characters/Character Sunday Icon.png",
+        "name": "Character Sunday Icon"
       },
       {
-        "file": "characters/Yunli.png",
-        "name": "Yunli"
+        "file": "characters/Character Sushang Icon.png",
+        "name": "Character Sushang Icon"
+      },
+      {
+        "file": "characters/Character The Dahlia Icon.png",
+        "name": "Character The Dahlia Icon"
+      },
+      {
+        "file": "characters/Character The Herta Icon.png",
+        "name": "Character The Herta Icon"
+      },
+      {
+        "file": "characters/Character Tingyun Icon.png",
+        "name": "Character Tingyun Icon"
+      },
+      {
+        "file": "characters/Character Topaz & Numby Icon.png",
+        "name": "Character Topaz & Numby Icon"
+      },
+      {
+        "file": "characters/Character Trailblazer (Destruction) Icon.png",
+        "name": "Character Trailblazer (Destruction) Icon"
+      },
+      {
+        "file": "characters/Character Trailblazer (Elation) Icon.png",
+        "name": "Character Trailblazer (Elation) Icon"
+      },
+      {
+        "file": "characters/Character Trailblazer (Harmony) Icon.png",
+        "name": "Character Trailblazer (Harmony) Icon"
+      },
+      {
+        "file": "characters/Character Trailblazer (Preservation) Icon.png",
+        "name": "Character Trailblazer (Preservation) Icon"
+      },
+      {
+        "file": "characters/Character Trailblazer (Remembrance) Icon.png",
+        "name": "Character Trailblazer (Remembrance) Icon"
+      },
+      {
+        "file": "characters/Character Tribbie Icon.png",
+        "name": "Character Tribbie Icon"
+      },
+      {
+        "file": "characters/Character Welt Icon.png",
+        "name": "Character Welt Icon"
+      },
+      {
+        "file": "characters/Character Xueyi Icon.png",
+        "name": "Character Xueyi Icon"
+      },
+      {
+        "file": "characters/Character Yanqing Icon.png",
+        "name": "Character Yanqing Icon"
+      },
+      {
+        "file": "characters/Character Yao Guang Icon.png",
+        "name": "Character Yao Guang Icon"
+      },
+      {
+        "file": "characters/Character Yukong Icon.png",
+        "name": "Character Yukong Icon"
+      },
+      {
+        "file": "characters/Character Yunli Icon.png",
+        "name": "Character Yunli Icon"
       }
     ]
   },

@@ -23,17 +23,107 @@ type RawManifest = Record<string, Category>
 interface RelicSet { name: string; parts: Record<string, { name: string }> }
 
 const SIMPLE = [
-  'characters', 'enemies', 'lightcones', 'relicsets', 'planarsets',
+  'enemies', 'lightcones', 'relicsets', 'planarsets',
   'stats', 'buffs', 'debuffs', 'states', 'abilities', 'types', 'paths', 'elements',
 ] as const
 
 const toAppPath = (file: string): string => '/icons/' + file.replace(/\\/g, '/')
 const quote = (s: string): string => `'${s.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`
 
+function normalizeName(s: string): string {
+  return s
+    .replace(/<unbreak>/gi, '')
+    .replace(/<\/unbreak>/gi, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '')
+}
+
 function buildSimple(cat: Category): Record<string, string> {
   const map: Record<string, string> = {}
   for (const it of cat.icons) map[it.name] = toAppPath(it.file)
   return map
+}
+
+/** Build character icon map keyed by clean character name (matching KITS/characters.json) */
+function buildCharacters(cat: Category, charactersData: any[]): Record<string, string> {
+  // Build a map from normalized clean name -> manifest entry
+  const byNorm: Record<string, string> = {}
+  for (const it of cat.icons) {
+    // Extract clean name from "Character X Icon" format
+    let clean = it.name
+      .replace(/^Character\s+/i, '')
+      .replace(/\s+Icon$/i, '')
+      .replace(/^\s*\(Icon\)\s*$/i, '')
+      .trim()
+    // Handle special cases - prioritize "Trailblazer" format over "Caelus"/"Stelle"
+    if (clean.startsWith('Caelus (') || clean.startsWith('Stelle (')) {
+      clean = clean.replace(/^Caelus\s*\(/, 'Trailblazer (')
+      clean = clean.replace(/^Stelle\s*\(/, 'Trailblazer (')
+    }
+    // Map Fandom path names to game path names
+    clean = clean
+      .replace(/^Trailblazer\s*\(\s*Destruction\s*\)/, 'Trailblazer (Physical)')
+      .replace(/^Trailblazer\s*\(\s*Preservation\s*\)/, 'Trailblazer (Fire)')
+      .replace(/^Trailblazer\s*\(\s*Harmony\s*\)/, 'Trailblazer (Harmony)')
+      .replace(/^Trailblazer\s*\(\s*Remembrance\s*\)/, 'Trailblazer (Remembrance)')
+      .replace(/^Trailblazer\s*\(\s*Elation\s*\)/, 'Trailblazer (Elation)')
+    const norm = normalizeName(clean)
+    // Prefer Trailblazer format: only add if not already present, or if it's the Trailblazer version
+    const existing = byNorm[norm]
+    const isTrailblazer = clean.startsWith('Trailblazer (')
+    const existingIsTrailblazer = existing && existing.includes('Trailblazer')
+    if (!existing || (isTrailblazer && !existingIsTrailblazer)) {
+      byNorm[norm] = toAppPath(it.file)
+    }
+  }
+  
+  // Add direct mappings for actual kit names to their icon files
+  // These ensure the correct lookup even when Fandom name differs from kit name
+  const kitNameToFile: Record<string, string> = {
+    'Trailblazer (Destruction)': 'Character Trailblazer (Destruction) Icon.png',
+    'Trailblazer (Preservation)': 'Character Trailblazer (Preservation) Icon.png',
+    'Trailblazer (Harmony)': 'Character Trailblazer (Harmony) Icon.png',
+    'Trailblazer (Remembrance)': 'Character Trailblazer (Remembrance) Icon.png',
+    'Trailblazer (Elation)': 'Character Trailblazer (Elation) Icon.png',
+    'Silver Wolf LV.999': 'Character Silver Wolf LV.999 Icon.png',
+    // Kit name uses bullet (• U+2022), not parentheses
+    'March 7th • The Hunt': 'Character March 7th (The Hunt) Icon.png',
+  }
+  for (const [kitName, fileName] of Object.entries(kitNameToFile)) {
+    const norm = normalizeName(kitName)
+    if (!byNorm[norm]) {
+      byNorm[norm] = toAppPath(`characters/${fileName}`)
+    }
+  }
+  
+  // Now map from known character names (from characters.json + Trailblazer paths)
+  const out: Record<string, string> = {}
+  const knownNames = new Set<string>()
+  
+  for (const c of charactersData) {
+    if (c.name && c.name !== '{NICKNAME}') {
+      // Use kit name format (without <unbreak> tags) for Silver Wolf LV.999
+      const name = c.name === 'Silver Wolf LV.<unbreak>999</unbreak>' ? 'Silver Wolf LV.999' : c.name
+      knownNames.add(name)
+    }
+  }
+  // Use actual kit names for Trailblazer paths (these are what the UI looks up by)
+  const trailblazerNames = [
+    'Trailblazer (Destruction)', 'Trailblazer (Preservation)', 'Trailblazer (Harmony)',
+    'Trailblazer (Remembrance)', 'Trailblazer (Elation)'
+  ]
+  for (const n of trailblazerNames) knownNames.add(n)
+  // Add March 7th • The Hunt - uses bullet (• U+2022) per kit definition
+  knownNames.add('March 7th • The Hunt')
+  
+  for (const name of knownNames) {
+    const norm = normalizeName(name)
+    if (byNorm[norm]) {
+      out[name] = byNorm[norm]
+    }
+  }
+  
+  return out
 }
 
 function buildEidolons(cat: Category): Record<string, Record<string, string>> {
@@ -83,7 +173,13 @@ function buildPortraits(names: readonly string[]): Record<string, string> {
   let idByName: Record<string, string> = {}
   try {
     const characters = JSON.parse(readFileSync(CHARACTERS_DATA, 'utf8')) as Array<{ name: string; relics?: { avatar_id: number } }>
-    for (const c of characters) if (c.name && c.relics?.avatar_id) idByName[c.name] = String(c.relics.avatar_id)
+    for (const c of characters) {
+      if (c.name && c.relics?.avatar_id) {
+        // Use kit name format (without <unbreak> tags) for Silver Wolf LV.999
+        const name = c.name === 'Silver Wolf LV.<unbreak>999</unbreak>' ? 'Silver Wolf LV.999' : c.name
+        idByName[name] = String(c.relics.avatar_id)
+      }
+    }
   } catch {
     // fallback: try reference data
     try {
@@ -91,6 +187,24 @@ function buildPortraits(names: readonly string[]): Record<string, string> {
       for (const [id, c] of Object.entries(game.characters)) idByName[c.name] = id
     } catch { /* ignore */ }
   }
+
+  // Trailblazer paths: raw data uses '{NICKNAME}' for all 10 entries; map display names to primary avatar_id
+  // Use actual kit names for lookup keys
+  const TRAILBLAZER_AVATAR_ID: Record<string, string> = {
+    'Trailblazer (Destruction)': '8001',
+    'Trailblazer (Preservation)': '8003',
+    'Trailblazer (Harmony)': '8005',
+    'Trailblazer (Remembrance)': '8007',
+    'Trailblazer (Elation)': '8009',
+  }
+  for (const [displayName, avatarId] of Object.entries(TRAILBLAZER_AVATAR_ID)) {
+    idByName[displayName] = avatarId
+  }
+  // Also add March 7th • The Hunt portrait (uses bullet • U+2022 per kit definition)
+  idByName['March 7th • The Hunt'] = '1224'
+  // Add Silver Wolf LV.999 portrait (kit name is without <unbreak> tags)
+  idByName['Silver Wolf LV.999'] = '1506'
+
   const have = new Set(readdirSync(PORTRAIT_DIR).filter(f => f.endsWith('.webp')).map(f => f.slice(0, -5)))
   const out: Record<string, string> = {}
   for (const name of names) {
@@ -110,6 +224,7 @@ function buildPortraits(names: readonly string[]): Record<string, string> {
 
 function main(): void {
   const manifest = JSON.parse(readFileSync(SRC, 'utf8')) as RawManifest
+  const charactersData = JSON.parse(readFileSync(CHARACTERS_DATA, 'utf8'))
   const parts: string[] = []
   parts.push(`/**`)
   parts.push(` * GENERATED by src/core/gen-icon-manifest.ts — do not edit by hand.`)
@@ -118,6 +233,13 @@ function main(): void {
   parts.push(` * the UI call sites do the id -> name lookup through the existing gear/kit tables.`)
   parts.push(` * Source: public/icons/_manifest.json (${Object.values(manifest).reduce((n, c) => n + c.icons.length, 0)} files).`)
   parts.push(` */`)
+  parts.push('')
+
+  // Characters: special handling to map clean names
+  const charMap = buildCharacters(manifest.characters, charactersData)
+  parts.push(`export const CHARACTERS_ICONS: Record<string, string> = {`)
+  parts.push(emitRecord(charMap, '  '))
+  parts.push('}')
   parts.push('')
 
   for (const cat of SIMPLE) {
@@ -148,7 +270,7 @@ function main(): void {
   parts.push('}')
   parts.push('')
 
-  const portraits = buildPortraits(manifest.characters.icons.map(i => i.name))
+  const portraits = buildPortraits(Object.keys(charMap))
   parts.push('export const CHARACTER_PORTRAITS: Record<string, string> = {')
   parts.push(emitRecord(portraits, '  '))
   parts.push('}')

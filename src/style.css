@@ -539,6 +539,9 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .coneName { font-size: 13px; font-weight: 600; color: #cfe0ef; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .coneName.dim { color: #71837a; font-weight: 500; }
 .coneRarity { font-size: 12px; font-weight: 700; color: #f2c94c; }
+.coneRarity.r5 { color: #f2c94c; }
+.coneRarity.r4 { color: #a78bfa; }
+.coneRarity.r3 { color: #5ea9d6; }
 .coneArt { position: relative; width: 140px; aspect-ratio: 4 / 4; background: radial-gradient(ellipse at 50% 30%, #3a5c45 0%, #1d3629 40%, #101b14 78%); border: 1px solid #35533d; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .coneArt.empty { background: radial-gradient(ellipse at 50% 30%, #2a3a2f 0%, #16221a 40%, #0a100c 78%); border-style: solid; border-color: #3a5c45; cursor: pointer; }
 .coneArt.empty::after { content: '+'; position: absolute; font-size: 36px; font-weight: 300; color: rgba(127, 209, 138, .6); line-height: 1; pointer-events: none; }
@@ -610,7 +613,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .pickerTitle { font-size: 12px; font-weight: 800; letter-spacing: .14em; color: #8bd39b; }
 .pickerClose { width: 26px; height: 26px; border: 1px solid #2a332d; background: #141a16; color: #9aa7ba; border-radius: 6px; cursor: pointer; }
 .pickerClose:hover { border-color: #67b97b; color: #b6f0c2; }
-.pickerBody { padding: 10px 12px 14px; overflow: auto; display: flex; flex-direction: column; gap: 10px; }
+.pickerBody { padding: 10px 12px 14px; overflow: auto; display: flex; flex-direction: column; gap: 10px; scrollbar-gutter: stable; }
 .pickerSearch { width: 100%; border: 1px solid #2a3342; background: #121a15; color: #cfe0ef; border-radius: 8px; padding: 7px 10px; }
 .pickerBtnRow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .pickerBtn { display: inline-flex; align-items: center; gap: 5px; }
@@ -642,6 +645,9 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .pickConeCard .gearIcon img { width: 100% !important; height: 100% !important; object-fit: contain; }
 .pickConeName { font-size: 12px; font-weight: 600; color: #dbe8de; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
 .pickConeRarity { font-size: 11px; font-weight: 700; color: #f2c94c; }
+.pickConeRarity.r5 { color: #f2c94c; }
+.pickConeRarity.r4 { color: #a78bfa; }
+.pickConeRarity.r3 { color: #5ea9d6; }
 .pickerList { display: flex; flex-direction: column; gap: 2px; }
 .pickerCone { display: flex; align-items: center; gap: 10px; width: 100%; padding: 6px 8px; background: transparent; border: 1px solid transparent; border-radius: 7px; color: inherit; cursor: pointer; text-align: left; }
 .pickerCone:hover { background: #142018; border-color: #2c4935; }

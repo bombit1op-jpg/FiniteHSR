@@ -47,7 +47,13 @@ function placePanel(panel: HTMLElement, anchor?: HTMLElement): void {
 function openOverlay(title: string, onDismiss: () => void, anchor?: HTMLElement): Overlay {
   const root = el('div', 'pickerOverlay')
   const panel = el('div', 'pickerPanel')
+  panel.style.height = '600px'
+  panel.style.maxHeight = '90vh'
+  panel.style.overflow = 'hidden'
+  panel.style.display = 'flex'
+  panel.style.flexDirection = 'column'
   const head = el('div', 'pickerHead')
+  head.style.flexShrink = '0'
   const t = el('div', 'pickerTitle')
   t.textContent = title
   const x = el('button', 'pickerClose') as HTMLButtonElement
@@ -56,6 +62,9 @@ function openOverlay(title: string, onDismiss: () => void, anchor?: HTMLElement)
   x.title = 'Закрыть'
   head.append(t, x)
   const body = el('div', 'pickerBody')
+  body.style.flex = '1'
+  body.style.overflow = 'auto'
+  body.style.minHeight = '0'
   panel.append(head, body)
   root.append(panel)
   document.body.append(root)
@@ -130,8 +139,8 @@ export function openCharacterPicker(opts: { exclude?: string[]; current?: string
     pathRow.append(b)
   }
 
-  const grid = el('div', 'pickerGrid icons')
-  ov.body.append(search, elemRow, pathRow, grid)
+const grid = el('div', 'pickerGrid icons')
+ov.body.append(search, elemRow, pathRow, grid)
 
   let curElem = '*'
   let curPath = '*'
@@ -142,38 +151,38 @@ export function openCharacterPicker(opts: { exclude?: string[]; current?: string
     b.onclick = () => { curPath = k; for (const [kk, bb] of pathBtns) bb.classList.toggle('active', kk === k); paint() }
   }
 
-  const paint = () => {
-    grid.innerHTML = ''
-    const q = search.value.trim().toLowerCase()
-    for (const k of KITS) {
-      if (exclude.has(k.id)) continue
-      const p = KIT_PATH[k.id] ?? ''
-      if (curPath !== '*' && p !== curPath) continue
-      if (curElem !== '*' && k.elem !== curElem) continue
-      if (q && !k.name.toLowerCase().includes(q)) continue
-      const btn = el('button', 'pickerCharIcon') as HTMLButtonElement
-      btn.type = 'button'
-      btn.dataset.kitId = k.id
-      if (k.id === opts.current) btn.classList.add('current')
-      btn.title = k.name
-      const art = iconNode(charIconUrl(k.id), k.name, {
-        cls: 'pickIcon', size: 56, fit: 'cover',
-        fallbackText: k.name.trim().charAt(0).toUpperCase() || '?',
-        tint: '#7fb3ff', title: k.name,
-      })
-      btn.append(art)
-      btn.onclick = () => { ov.close(); resolve(k.id) }
-      grid.append(btn)
-    }
-    if (!grid.childElementCount) {
-      const empty = el('em', 'dim')
-      empty.textContent = 'Нет персонажей под фильтр'
-      grid.append(empty)
-    }
+const paint = () => {
+  grid.innerHTML = ''
+  const q = search.value.trim().toLowerCase()
+  for (const k of KITS) {
+    if (exclude.has(k.id)) continue
+    const p = KIT_PATH[k.id] ?? ''
+    if (curPath !== '*' && p !== curPath) continue
+    if (curElem !== '*' && k.elem !== curElem) continue
+    if (q && !k.name.toLowerCase().includes(q)) continue
+    const btn = el('button', 'pickerCharIcon') as HTMLButtonElement
+    btn.type = 'button'
+    btn.dataset.kitId = k.id
+    if (k.id === opts.current) btn.classList.add('current')
+    btn.title = k.name
+    const art = iconNode(charIconUrl(k.id), k.name, {
+      cls: 'pickIcon', size: 56, fit: 'cover',
+      fallbackText: k.name.trim().charAt(0).toUpperCase() || '?',
+      tint: '#7fb3ff', title: k.name,
+    })
+    btn.append(art)
+    btn.onclick = () => { ov.close(); resolve(k.id) }
+    grid.append(btn)
   }
-  search.oninput = paint
-  paint()
-  return promise
+  if (!grid.childElementCount) {
+    const empty = el('em', 'dim')
+    empty.textContent = 'Нет персонажей под фильтр'
+    grid.append(empty)
+  }
+}
+search.oninput = paint
+paint()
+return promise
 }
 
 /**
@@ -226,8 +235,8 @@ export function openConePicker(opts: { kitId: string; current?: string } = {} as
     rareRow.append(b)
   }
 
-  const grid = el('div', 'pickerGrid cones')
-  ov.body.append(search, pathRow, rareRow, grid)
+const grid = el('div', 'pickerGrid cones')
+ov.body.append(search, pathRow, rareRow, grid)
 
   let curPath = '*'
   let curRare = '*'
@@ -258,6 +267,9 @@ export function openConePicker(opts: { kitId: string; current?: string } = {} as
       name.textContent = cone.name
       const rarity = el('div', 'pickConeRarity')
       rarity.textContent = `★${cone.rarity}`
+      if (cone.rarity === 5) rarity.classList.add('r5')
+      else if (cone.rarity === 4) rarity.classList.add('r4')
+      else if (cone.rarity === 3) rarity.classList.add('r3')
       const art = iconNode(gearIconUrl('cone', id), cone.name, {
         cls: 'gearIcon', size: 120, fit: 'contain',
         fallbackText: cone.name.trim().charAt(0).toUpperCase() || '?',
@@ -266,16 +278,16 @@ export function openConePicker(opts: { kitId: string; current?: string } = {} as
       btn.append(name, art, rarity)
       btn.onclick = () => { ov.close(); resolve(id) }
       grid.append(btn)
-    }
-    if (!grid.childElementCount) {
-      const empty = el('em', 'dim')
-      empty.textContent = 'Нет конусов под фильтр'
-      grid.append(empty)
-    }
+}
+  if (!grid.childElementCount) {
+    const empty = el('em', 'dim')
+    empty.textContent = 'Нет конусов под фильтр'
+    grid.append(empty)
   }
-  search.oninput = paint
-  paint()
-  return promise
+}
+search.oninput = paint
+paint()
+return promise
 }
 
 /** Party list picker for the header: one wide row per party — 4 small portraits, then its name. */

@@ -3863,10 +3863,11 @@ const SILVER_WOLF_LV999: CharProg = {
     "E5: Basic ATK Is the New Ultimate — Ultimate Lv. +2, up to a maximum of Lv. 15. Talent Lv. +2, up to a maximum of Lv. 15. Elation Skill Lv. +1, up to a maximum of Lv. 15.",
     "E6: Solo Maxxing! — Elation DMG dealt during Enhanced Basic ATK merrymakes by 50%. When enemy targets enter combat, they are implanted with Absolute Weakness : Has All-Ty"
   ],
-  traces: [
-    { stat: "critRate", value: 0.187 },
-    { stat: "spdFlat", value: 9 }
-  ],
+traces: [
+  { stat: "critRate", value: 0.187 },
+  { stat: "spdFlat", value: 9 },
+  { stat: "elation", value: 0.1 },
+],
 }
 
 
