@@ -218,15 +218,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .subRowEmpty { grid-template-columns: minmax(0,1fr) minmax(0,0.8fr) minmax(0,1fr); align-items: center; }
 .subRowEmpty select, .subRowEmpty input { width: 100%; padding: 4px 6px; font-size: 11px; }
 .subEmptyInfo { font-size: 10px; color: #7d917f; }
-.subEditRow { grid-template-columns: minmax(0,1fr) auto 76px; gap: 4px 6px; align-items: center; }
+.subEditRow { grid-template-columns: 1fr 140px 50px 76px; gap: 4px 6px; align-items: center; }
 .subEditRow .dd { min-width: 0; width: 100%; }
 .subEditRow .ddBtn { padding: 4px 22px 4px 6px; font-size: 11px; border-radius: 5px; min-width: 120px; line-height: 1.2; height: 28px; box-sizing: border-box; }
 .subEditRow .ddMenu { max-height: 220px; }
 .subEditRow .ddOpt { padding: 5px 8px; font-size: 11px; }
-.subEditRow select, .subEditRow input { width: 100%; padding: 4px 6px; font-size: 11px; background: #0d1117; color: #cdd6e2; border: 1px solid #2a3342; border-radius: 5px; line-height: 1.2; height: 28px; box-sizing: border-box; }
+.subEditRow select, .subEditRow input { width: 76px; padding: 4px 6px; font-size: 11px; background: #0d1117; color: #cdd6e2; border: 1px solid #2a3342; border-radius: 5px; line-height: 1.2; height: 28px; box-sizing: border-box; justify-self: end; }
 .subEditRow input:focus-visible, .subEditRow select:focus-visible { border-color: #3fb970; outline: none; }
 .subCubes { display: inline-flex; gap: 2px; align-items: center; justify-self: center; }
-.subEditRow.empty .subCubes { display: none; }
+.subEditRow.empty .subCubes { visibility: hidden; }
 .subStatName { color: #cdd6e2; }
 .subVal { color: #aab6c5; text-align: right; font-family: monospace; }
 .subBar { grid-column: 1 / -1; display: flex; align-items: center; gap: 6px; }
