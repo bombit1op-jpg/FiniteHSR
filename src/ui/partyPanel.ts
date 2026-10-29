@@ -144,9 +144,6 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
   // top bar: compact party header (name + pencil/+/-), click name to pick party
   const head = el('header', 'partyHead')
   const headText = el('div', 'partyHeadText')
-  const eyebrow = el('div', 'eyebrow')
-  eyebrow.textContent = 'FINITE HSR / PARTY SETUP'
-
   const titleRow = el('div', 'partyTitleRow')
   const partyHeader = el('div', 'partyHeader')
   const partyNameBtn = el('button', 'partyNameBtn') as HTMLButtonElement
@@ -168,7 +165,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
   delPartyBtn.title = 'Удалить отряд'
   partyHeader.append(partyNameBtn, editNameBtn, addPartyBtn, delPartyBtn)
   titleRow.append(partyHeader)
-  headText.append(eyebrow, titleRow)
+  headText.append(titleRow)
   head.append(headText)
   root.append(head)
 
