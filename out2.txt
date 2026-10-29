@@ -1,0 +1,103 @@
+function buildPieceEditors(onChange?: () => void, kitIdOf?: () => string): PieceEditor[] {
+  const out: PieceEditor[] = []
+  for (const [slot, title] of SLOT_TITLES) {
+    const card = el('div', 'pieceCard')
+    const h = el('h4'); h.textContent = title
+    const pieceBadgeEl = pieceBadge('', slot)
+    const ratingEl = el('span', 'pieceRating'); ratingEl.textContent = '?'
+    const head = el('div', 'pieceHead'); head.append(pieceBadgeEl, h, ratingEl)
+
+    const isPlanar = slot === 'sphere' || slot === 'rope'
+    const pool = isPlanar ? PLANAR_SETS : RELIC_SETS
+    const setDrop = new Dropdown('setDrop')
+    const setIcons: Record<string, string> = {}
+    for (const s of pool) {
+      const url = gearIconUrl(isPlanar ? 'planar' : 'relic', s.id)
+      if (url) setIcons[s.id] = url
+    }
+    setDrop.setEntries([['', '— не выбран —'], ...pool.map(s => [s.id, s.name] as [string, string])], { icons: setIcons })
+
+    const mainSel = el('select') as HTMLSelectElement
+    const mains = SLOT_MAINS[slot] || []
+    fillSelect(mainSel, mains.map(m => [m, STAT_LABELS[m] ?? m] as [string, string]))
+    const mainVal = el('div', 'pieceMain')
+    const updateMainVal = (): void => {
+      const m = mainSel.value
+      if (!m) { mainVal.textContent = ''; return }
+      const v = m.startsWith('dmg:') ? SPHERE_DMG_MAIN : (RELIC_MAIN_VALUES[m] ?? 0)
+      mainVal.textContent = fmtStatVal(m, v)
+    }
+    updateMainVal()
+    if (slot === 'head' || slot === 'hands') {
+      mainSel.disabled = true
+    }
+
+    const subRows = el('div', 'subRows')
+    type SubControl = { row: HTMLElement; drop: Dropdown; inp: HTMLInputElement; info: HTMLElement }
+    const controls: SubControl[] = []
+
+    const getMain = (): string =>
+      (slot === 'head' || slot === 'hands') ? (mains[0] || '') : mainSel.value
+
+    const FLAT_STATS = ['hpFlat', 'atkFlat', 'defFlat', 'spd']
+
+    const subIcons: Record<string, string> = {}
+    for (const s of Object.keys(SUBSTAT_TIERS)) {
+      const url = statIconUrlForKey(s)
+      if (url) subIcons[s] = url
+    }
+
+    const splitOf = (c: SubControl): SplitSub | null => {
+      let total = Number(c.inp.value)
+      const stat = c.drop.value
+      if (!stat || !(total > 0)) return null
+      if (!FLAT_STATS.includes(stat)) total = total / 100
+      return splitSubValue(stat, total)
+    }
+
+    const paintInfo = (c: SubControl, s: SplitSub | null): void => {
+      c.row.classList.toggle('empty', !s)
+      c.info.innerHTML = ''
+      if (!s) {
+        c.info.textContent = 'quality / rolls'
+        return
+      }
+      const cubes = el('div', 'subCubes')
+      cubes.dataset.tier = String(s.tier)
+      for (const tier of s.spread) {
+        const cube = el('div', 'subCube')
+        cube.dataset.tier = String(tier)
+        cubes.append(cube)
+      }
+      c.info.append(cubes)
+    }
+
+    const commitSubs = (): void => {
+      const next: SplitSub[] = []
+      for (const c of controls) {
+        const s = splitOf(c)
+        paintInfo(c, s)
+        if (s) next.push(s)
+      }
+      ed.subs = next
+      onChange?.()
+    }
+
+    const syncOptions = (): void => {
+      const main = getMain()
+      for (const c of controls) {
+        const prev = c.drop.value
+        const taken = new Set(controls.filter(o => o !== c).map(o => o.drop.value).filter(Boolean))
+        const cand = Object.keys(SUBSTAT_TIERS).filter(s => s !== main && (s === prev || !taken.has(s)))
+        const entries = [['', '— stat —'], ...cand.map(s => [s, STAT_LABELS[s] ?? s] as [string, string])]
+        c.drop.setEntries(entries as Array<[string, string]>, { icons: subIcons })
+        if (cand.includes(prev)) c.drop.value = prev
+      }
+    }
+
+    const paintSaved = (subs: SplitSub[]): void => {
+      syncOptions()
+      controls.forEach((c, i) => {
+        const s = subs[i]
+        if (!s) { c.drop.value = ''; c.inp.value = ''; paintInfo(c, null); return }
+        c.drop.value = s

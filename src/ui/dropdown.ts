@@ -71,6 +71,9 @@ export class Dropdown {
         img.src = icon
         img.alt = ''
         o.append(img)
+      } else {
+        const ph = el('span', 'ddOptIcon ddOptIcon-placeholder')
+        o.append(ph)
       }
       const t = el('span', 'ddOptLabel')
       t.textContent = label
@@ -94,6 +97,9 @@ export class Dropdown {
       img.src = icon
       img.alt = ''
       this.btn.append(img)
+    } else {
+      const ph = el('span', 'ddOptIcon ddOptIcon-placeholder')
+      this.btn.append(ph)
     }
     const t = el('span', 'ddOptLabel')
     t.textContent = this.labelFor(this._value)

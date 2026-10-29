@@ -140,6 +140,7 @@ body.busy { cursor: progress; }
 .ddOpt:hover { background: #161d27; }
 .ddOpt.ddSel { color: #f2c94c; }
 .ddOptIcon { width: 24px; height: 24px; object-fit: contain; border-radius: 4px; background: #0d1117; flex: 0 0 auto; }
+.ddOptIcon-placeholder { background: transparent; }
 /* signature light cone + E6 chip: ONE smooth green shimmer (right в†’ left, slower) */
 .ddOpt.ddSig, .ddBtn.ddSig, .eidolon.e6.active, .coneArt.signature .gearIcon, .pickConeCard.sig .gearIcon {
   background-image: linear-gradient(110deg,
