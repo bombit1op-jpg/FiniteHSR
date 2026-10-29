@@ -33,6 +33,16 @@ import { MAX_SLOTS } from '../core/party'
 import { openCharacterPicker, openConePicker, openPartyListPicker } from './pickers'
 import { survivingTechniqueUses } from './store'
 
+const ELEMENT_COLORS: Record<string, string> = {
+  Fire: '#ef4444',
+  Ice: '#22d3ee',
+  Wind: '#22c55e',
+  Lightning: '#facc15',
+  Quantum: '#a855f7',
+  Imaginary: '#f97316',
+  Physical: '#a3a3a3',
+}
+
 // Compute current level caps based on eidolon (base cap + eidolon bonuses up to current eidolon)
 function currentLevelCaps(kitId: string, eidolon: number): AbilityLevels {
   const base = { basic: 6, skill: 10, ult: 10, talent: 10, el_skill: 10 }
@@ -288,11 +298,19 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const eidSection = section('ЭЙДОЛОНЫ')
     const eidRow = el('div', 'eidolons')
     const eidButtons: HTMLButtonElement[] = []
+    const kit = KITS.find(k => k.id === row.kitId)
+    const elemColor = kit ? ELEMENT_COLORS[kit.elem] ?? '#5c6b61' : '#5c6b61'
     for (let e = 1; e <= 6; e++) {
       const b = el('button', 'eidolon') as HTMLButtonElement
       b.type = 'button'
       b.dataset.eidolon = String(e)
-      b.textContent = `E${e}`
+      const iconWrap = el('div', 'eidolonIcon')
+      const dot = el('div', 'eidolonDot')
+      dot.style.background = elemColor
+      iconWrap.append(dot)
+      const textWrap = el('span', 'eidolonText')
+      textWrap.textContent = `E${e}`
+      b.append(iconWrap, textWrap)
       b.onclick = () => {
         const current = Number(store.active?.slots.find(s => s.id === row.id)?.eidolon ?? 0)
         // Clicking the highest active eidolon: disable all (set to 0)

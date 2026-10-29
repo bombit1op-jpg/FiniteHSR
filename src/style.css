@@ -525,10 +525,13 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .sectionValue { font-size: 11px; color: #7b8595; }
 
 .eidolons { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
-.eidolon { padding: 7px 1px; font-size: 11px; background: #141a16; border: 1px solid #2a332d; border-radius: 6px; color: #5c6b61; cursor: pointer; transition: color .15s, border-color .15s, background .15s; }
+.eidolon { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 1px 7px; font-size: 11px; background: #141a16; border: 1px solid #2a332d; border-radius: 6px; color: #5c6b61; cursor: pointer; transition: color .15s, border-color .15s, background .15s; gap: 2px; }
 .eidolon:hover { border-color: #67b97b; color: #9dc9a8; }
 .eidolon.active { background: #285d39; border-color: #67b97b; color: #e4ffe9; }
 .eidolon.unselected { filter: grayscale(1); opacity: .65; }
+.eidolonIcon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
+.eidolonDot { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 4px currentColor; }
+.eidolonText { text-align: center; }
 /* E6 keeps the shared green shimmer (same sweep as the signature cone), only the frame/colour change here */
 .eidolon.e6.active {
   border-color: #a0edab;
