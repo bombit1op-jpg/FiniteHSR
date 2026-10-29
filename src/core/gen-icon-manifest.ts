@@ -126,7 +126,7 @@ function buildCharacters(cat: Category, charactersData: any[]): Record<string, s
   return out
 }
 
-function buildEidolons(cat: Category): { byChar: Record<string, Record<string, string>>; ordered: Record<string, string[]> } {
+function buildEidolons(cat: Category, charactersData: any[]): { byChar: Record<string, Record<string, string>>; ordered: Record<string, string[]> } {
   const byChar: Record<string, Record<string, string>> = {}
   const ordered: Record<string, string[]> = {}
   for (const it of cat.icons) {
@@ -135,6 +135,26 @@ function buildEidolons(cat: Category): { byChar: Record<string, Record<string, s
     byChar[c][it.name] = toAppPath(it.file)
     ordered[c].push(it.name)
   }
+  
+  // Reorder using game data ranks (E1-E6 order)
+  for (const char of charactersData) {
+    if (!char.ranks) continue
+    const charName = char.name === 'Silver Wolf LV.<unbreak>999</unbreak>' ? 'Silver Wolf LV.999' : char.name
+    const rankNames = Object.values(char.ranks).map((r: any) => r.name)
+    if (rankNames.length >= 6 && ordered[charName]) {
+      // Match manifest names to rank names
+      const manifestNames = ordered[charName]
+      const matched: string[] = []
+      for (const rankName of rankNames) {
+        const found = manifestNames.find(m => m === rankName)
+        if (found) matched.push(found)
+      }
+      if (matched.length === 6) {
+        ordered[charName] = matched
+      }
+    }
+  }
+  
   return { byChar, ordered }
 }
 
@@ -253,7 +273,7 @@ function main(): void {
     parts.push('')
   }
 
-  const eid = buildEidolons(manifest.eidolons)
+  const eid = buildEidolons(manifest.eidolons, charactersData)
   parts.push('export const EIDOLON_ICONS: Record<string, Record<string, string>> = {')
   for (const c of Object.keys(eid.byChar).sort()) {
     parts.push(`  ${quote(c)}: {`)
