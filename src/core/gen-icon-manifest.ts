@@ -143,6 +143,8 @@ function buildEidolons(cat: Category, charactersData: any[]): { byChar: Record<s
       .replace(/<\/unbreak>/gi, '')
       // Replace colons with dashes first (for "Aether Editing: Eidolon +1" -> "Aether Editing- Eidolon +1")
       .replace(/:/g, '-')
+      // Replace underscores with spaces (for "Aether Editing_ Eidolon +1")
+      .replace(/_/g, ' ')
       // Remove all punctuation except alphanumeric, spaces, dashes, plus, and exclamation
       .replace(/[^\w\s\-+!]/g, '')
       // Remove dashes that are after numbers followed by space/letter/end
@@ -153,6 +155,35 @@ function buildEidolons(cat: Category, charactersData: any[]): { byChar: Record<s
       .replace(/\s+/g, ' ')
       .trim()
       .toLowerCase()
+  }
+
+  // Manual mapping for characters where manifest names differ from JSON rank names
+  // Maps JSON rank name -> manifest display name (key in EIDOLON_ICONS)
+  const MANUAL_EIDOLON_MAPPING: Record<string, Record<string, string>> = {
+    'Aventurine': {
+      "Prisoner's Dilemma": "Chatoyant Éclat",
+      "Bounded Rationality": "Languid Barrette",
+      "Droprate Maxing": "Neuronic Embroidery",
+      "Unexpected Hanging Paradox": "Reedside Promenade",
+      "Ambiguity Aversion": "Sash Cascade",
+      "Stag Hunt Game": "Viridescent Pirouette",
+    },
+    'Silver Wolf LV.999': {
+      "Aether Editing: Eidolon +1": "Aether Editing_ Eidolon +1",
+      "It's a Feature, Not a Bug": "It's a Feature, Not a Bug",
+      "Max Lv. <unbreak>15</unbreak>? Says who?": "Max Lv. _unbreak_15__unbreak__ Says who_",
+      "I Came. I Saw. I One-Shot.": "I Came. I Saw. I One-Shot.",
+      "Basic ATK Is the New Ultimate": "Basic ATK Is the New Ultimate",
+      "Solo Maxxing!": "Solo Maxxing!",
+    },
+    'Argenti': {
+      "A Lacuna in Kingdom of Aesthetics": "A Lacuna in Kingdom of Aesthetics",
+      "Agate's Humility": "Agate's Humility",
+      "Thorny Road's Glory": "Thorny Road's Glory",
+      "Trumpet's Dedication": "Trumpet's Dedication",
+      "Snow, From Somewhere in Cosmos": "Snow, From Somewhere in Cosmos",
+      '"Your" Resplendence': "Your_ Resplendence",
+    },
   }
   
   // Reorder using game data ranks (E1-E6 order)
