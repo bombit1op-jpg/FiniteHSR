@@ -3621,7 +3621,7 @@
   },
   "eidolons": {
     "label": "Эйдолоны (скиллы персонажей)",
-    "count": 534,
+    "count": 589,
     "icons": [
       {
         "file": "eidolons/Acheron/Apocalypse, the Emancipator.png",
@@ -3744,23 +3744,33 @@
         "character": "Archer"
       },
       {
-        "file": "eidolons/Argenti/A Lacuna in Kingdom of Aesthetics.png",
+        "file": "eidolons/Argenti/Eidolon A Lacuna in Kingdom of Aesthetics.png",
         "name": "A Lacuna in Kingdom of Aesthetics",
         "character": "Argenti"
       },
       {
-        "file": "eidolons/Argenti/Agate's Humility.png",
+        "file": "eidolons/Argenti/Eidolon Agate's Humility.png",
         "name": "Agate's Humility",
         "character": "Argenti"
       },
       {
-        "file": "eidolons/Argenti/Snow, From Somewhere in Cosmos.png",
+        "file": "eidolons/Argenti/Eidolon Snow, From Somewhere in Cosmos.png",
         "name": "Snow, From Somewhere in Cosmos",
         "character": "Argenti"
       },
       {
-        "file": "eidolons/Argenti/Trumpet's Dedication.png",
+        "file": "eidolons/Argenti/Eidolon Thorny Road's Glory.png",
+        "name": "Thorny Road's Glory",
+        "character": "Argenti"
+      },
+      {
+        "file": "eidolons/Argenti/Eidolon Trumpet's Dedication.png",
         "name": "Trumpet's Dedication",
+        "character": "Argenti"
+      },
+      {
+        "file": "eidolons/Argenti/Eidolon _Your_ Resplendence.png",
+        "name": "_Your_ Resplendence",
         "character": "Argenti"
       },
       {
@@ -3871,6 +3881,36 @@
       {
         "file": "eidolons/Aventurine/Droprate Maxing.png",
         "name": "Droprate Maxing",
+        "character": "Aventurine"
+      },
+      {
+        "file": "eidolons/Aventurine/Eidolon Chatoyant Éclat.png",
+        "name": "Chatoyant Éclat",
+        "character": "Aventurine"
+      },
+      {
+        "file": "eidolons/Aventurine/Eidolon Languid Barrette.png",
+        "name": "Languid Barrette",
+        "character": "Aventurine"
+      },
+      {
+        "file": "eidolons/Aventurine/Eidolon Neuronic Embroidery.png",
+        "name": "Neuronic Embroidery",
+        "character": "Aventurine"
+      },
+      {
+        "file": "eidolons/Aventurine/Eidolon Reedside Promenade.png",
+        "name": "Reedside Promenade",
+        "character": "Aventurine"
+      },
+      {
+        "file": "eidolons/Aventurine/Eidolon Sash Cascade.png",
+        "name": "Sash Cascade",
+        "character": "Aventurine"
+      },
+      {
+        "file": "eidolons/Aventurine/Eidolon Viridescent Pirouette.png",
+        "name": "Viridescent Pirouette",
         "character": "Aventurine"
       },
       {
@@ -4184,27 +4224,32 @@
         "character": "Clara"
       },
       {
-        "file": "eidolons/Cyrene/A Tomorrow in Thirteen Shades.png",
+        "file": "eidolons/Cyrene/Eidolon A Tomorrow in Thirteen Shades.png",
         "name": "A Tomorrow in Thirteen Shades",
         "character": "Cyrene"
       },
       {
-        "file": "eidolons/Cyrene/By Thy Being, As I've Written.png",
+        "file": "eidolons/Cyrene/Eidolon By Thy Being, As I've Written.png",
         "name": "By Thy Being, As I've Written",
         "character": "Cyrene"
       },
       {
-        "file": "eidolons/Cyrene/Epics, Born on a Blank Slate.png",
+        "file": "eidolons/Cyrene/Eidolon Epics, Born on a Blank Slate.png",
         "name": "Epics, Born on a Blank Slate",
         "character": "Cyrene"
       },
       {
-        "file": "eidolons/Cyrene/Please Write On, With a Smile.png",
+        "file": "eidolons/Cyrene/Eidolon Gaze, Steeped in Yesterbloom.png",
+        "name": "Gaze, Steeped in Yesterbloom",
+        "character": "Cyrene"
+      },
+      {
+        "file": "eidolons/Cyrene/Eidolon Please Write On, With a Smile.png",
         "name": "Please Write On, With a Smile",
         "character": "Cyrene"
       },
       {
-        "file": "eidolons/Cyrene/Remembrance, Sung in Ripples ♪.png",
+        "file": "eidolons/Cyrene/Eidolon Remembrance, Sung in Ripples ♪.png",
         "name": "Remembrance, Sung in Ripples ♪",
         "character": "Cyrene"
       },
@@ -4304,6 +4349,36 @@
         "character": "Evanescia"
       },
       {
+        "file": "eidolons/Evanescia/Eidolon Arcadia_ A Glimpse of Fates.png",
+        "name": "Arcadia_ A Glimpse of Fates",
+        "character": "Evanescia"
+      },
+      {
+        "file": "eidolons/Evanescia/Eidolon Blade_ A Feast on Evils.png",
+        "name": "Blade_ A Feast on Evils",
+        "character": "Evanescia"
+      },
+      {
+        "file": "eidolons/Evanescia/Eidolon Home_ A Prayer in Dance.png",
+        "name": "Home_ A Prayer in Dance",
+        "character": "Evanescia"
+      },
+      {
+        "file": "eidolons/Evanescia/Eidolon Maiden_ A Step into Dreams.png",
+        "name": "Maiden_ A Step into Dreams",
+        "character": "Evanescia"
+      },
+      {
+        "file": "eidolons/Evanescia/Eidolon Meadow_ A Ruin by Vice.png",
+        "name": "Meadow_ A Ruin by Vice",
+        "character": "Evanescia"
+      },
+      {
+        "file": "eidolons/Evanescia/Eidolon Voyage_ A Wish for Everbloom.png",
+        "name": "Voyage_ A Wish for Everbloom",
+        "character": "Evanescia"
+      },
+      {
         "file": "eidolons/Evanescia/Home A Prayer in Dance.png",
         "name": "Home A Prayer in Dance",
         "character": "Evanescia"
@@ -4354,22 +4429,32 @@
         "character": "Evernight"
       },
       {
-        "file": "eidolons/Feixiao/Homeward I Near.png",
+        "file": "eidolons/Feixiao/Eidolon Heavenward I Leap.png",
+        "name": "Heavenward I Leap",
+        "character": "Feixiao"
+      },
+      {
+        "file": "eidolons/Feixiao/Eidolon Homeward I Near.png",
         "name": "Homeward I Near",
         "character": "Feixiao"
       },
       {
-        "file": "eidolons/Feixiao/Moonward I Wish.png",
+        "file": "eidolons/Feixiao/Eidolon Moonward I Wish.png",
         "name": "Moonward I Wish",
         "character": "Feixiao"
       },
       {
-        "file": "eidolons/Feixiao/Skyward I Quell.png",
+        "file": "eidolons/Feixiao/Eidolon Skyward I Quell.png",
         "name": "Skyward I Quell",
         "character": "Feixiao"
       },
       {
-        "file": "eidolons/Feixiao/Stormward I Hear.png",
+        "file": "eidolons/Feixiao/Eidolon Starward I Bode.png",
+        "name": "Starward I Bode",
+        "character": "Feixiao"
+      },
+      {
+        "file": "eidolons/Feixiao/Eidolon Stormward I Hear.png",
         "name": "Stormward I Hear",
         "character": "Feixiao"
       },
@@ -4404,37 +4489,32 @@
         "character": "Firefly"
       },
       {
-        "file": "eidolons/Fu Xuan/Apex Nexus.png",
+        "file": "eidolons/Fu Xuan/Eidolon Apex Nexus.png",
         "name": "Apex Nexus",
         "character": "Fu Xuan"
       },
       {
-        "file": "eidolons/Fu Xuan/Arbiter Primus.png",
+        "file": "eidolons/Fu Xuan/Eidolon Arbiter Primus.png",
         "name": "Arbiter Primus",
         "character": "Fu Xuan"
       },
       {
-        "file": "eidolons/Fu Xuan/Dominus Pacis.png",
+        "file": "eidolons/Fu Xuan/Eidolon Dominus Pacis.png",
         "name": "Dominus Pacis",
         "character": "Fu Xuan"
       },
       {
-        "file": "eidolons/Fu Xuan/File_Trace Optimus Felix.png",
-        "name": "File_Trace Optimus Felix",
-        "character": "Fu Xuan"
-      },
-      {
-        "file": "eidolons/Fu Xuan/Fortuna Stellaris.png",
+        "file": "eidolons/Fu Xuan/Eidolon Fortuna Stellaris.png",
         "name": "Fortuna Stellaris",
         "character": "Fu Xuan"
       },
       {
-        "file": "eidolons/Fu Xuan/Omnia Vita.png",
+        "file": "eidolons/Fu Xuan/Eidolon Omnia Vita.png",
         "name": "Omnia Vita",
         "character": "Fu Xuan"
       },
       {
-        "file": "eidolons/Fu Xuan/Optimus Felix.png",
+        "file": "eidolons/Fu Xuan/Eidolon Optimus Felix.png",
         "name": "Optimus Felix",
         "character": "Fu Xuan"
       },
@@ -4529,27 +4609,32 @@
         "character": "Gepard"
       },
       {
-        "file": "eidolons/Gilgamesh/He Who Saw the Deep.png",
+        "file": "eidolons/Gilgamesh/Eidolon He Who Saw the Deep.png",
         "name": "He Who Saw the Deep",
         "character": "Gilgamesh"
       },
       {
-        "file": "eidolons/Gilgamesh/King Who Bowed to None.png",
+        "file": "eidolons/Gilgamesh/Eidolon Journey That Spanned Far.png",
+        "name": "Journey That Spanned Far",
+        "character": "Gilgamesh"
+      },
+      {
+        "file": "eidolons/Gilgamesh/Eidolon King Who Bowed to None.png",
         "name": "King Who Bowed to None",
         "character": "Gilgamesh"
       },
       {
-        "file": "eidolons/Gilgamesh/Soul That Bore Friendship.png",
+        "file": "eidolons/Gilgamesh/Eidolon Soul That Bore Friendship.png",
         "name": "Soul That Bore Friendship",
         "character": "Gilgamesh"
       },
       {
-        "file": "eidolons/Gilgamesh/Sword That Parted Gods from Man.png",
+        "file": "eidolons/Gilgamesh/Eidolon Sword That Parted Gods from Man.png",
         "name": "Sword That Parted Gods from Man",
         "character": "Gilgamesh"
       },
       {
-        "file": "eidolons/Gilgamesh/Wisdom That Encompassed All.png",
+        "file": "eidolons/Gilgamesh/Eidolon Wisdom That Encompassed All.png",
         "name": "Wisdom That Encompassed All",
         "character": "Gilgamesh"
       },
@@ -4672,6 +4757,36 @@
         "file": "eidolons/Himeko/Trailblaze!.png",
         "name": "Trailblaze!",
         "character": "Himeko"
+      },
+      {
+        "file": "eidolons/Himeko Nova/Eidolon Let No Skyward Hand Stay Unheld.png",
+        "name": "Let No Skyward Hand Stay Unheld",
+        "character": "Himeko Nova"
+      },
+      {
+        "file": "eidolons/Himeko Nova/Eidolon Ours Is the Oath to Sail Starward.png",
+        "name": "Ours Is the Oath to Sail Starward",
+        "character": "Himeko Nova"
+      },
+      {
+        "file": "eidolons/Himeko Nova/Eidolon That Which We Stride Is the Trailblaze.png",
+        "name": "That Which We Stride Is the Trailblaze",
+        "character": "Himeko Nova"
+      },
+      {
+        "file": "eidolons/Himeko Nova/Eidolon The Colors We Never Strike.png",
+        "name": "The Colors We Never Strike",
+        "character": "Himeko Nova"
+      },
+      {
+        "file": "eidolons/Himeko Nova/Eidolon To Cross the Cosmos and Beyond.png",
+        "name": "To Cross the Cosmos and Beyond",
+        "character": "Himeko Nova"
+      },
+      {
+        "file": "eidolons/Himeko Nova/Eidolon We Who Are Starborn Muse Starward.png",
+        "name": "We Who Are Starborn Muse Starward",
+        "character": "Himeko Nova"
       },
       {
         "file": "eidolons/Himeko • Nova/Let No Skyward Hand Stay Unheld.png",
@@ -4824,6 +4939,36 @@
         "character": "Jade"
       },
       {
+        "file": "eidolons/Jade/Eidolon Altruism_ Nevertheless Tradable.png",
+        "name": "Altruism_ Nevertheless Tradable",
+        "character": "Jade"
+      },
+      {
+        "file": "eidolons/Jade/Eidolon Equity_ Pending Sponsorship.png",
+        "name": "Equity_ Pending Sponsorship",
+        "character": "Jade"
+      },
+      {
+        "file": "eidolons/Jade/Eidolon Honesty_ Soon Mortgaged.png",
+        "name": "Honesty_ Soon Mortgaged",
+        "character": "Jade"
+      },
+      {
+        "file": "eidolons/Jade/Eidolon Hope_ Hitherto Forfeited.png",
+        "name": "Hope_ Hitherto Forfeited",
+        "character": "Jade"
+      },
+      {
+        "file": "eidolons/Jade/Eidolon Morality_ Herein Authenticated.png",
+        "name": "Morality_ Herein Authenticated",
+        "character": "Jade"
+      },
+      {
+        "file": "eidolons/Jade/Eidolon Sincerity_ Put Option Only.png",
+        "name": "Sincerity_ Put Option Only",
+        "character": "Jade"
+      },
+      {
         "file": "eidolons/Jade/Equity Pending Sponsorship.png",
         "name": "Equity Pending Sponsorship",
         "character": "Jade"
@@ -4964,27 +5109,32 @@
         "character": "Kafka"
       },
       {
-        "file": "eidolons/Lingsha/Arcadia Under Deep Seclusion.png",
+        "file": "eidolons/Lingsha/Eidolon Arcadia Under Deep Seclusion.png",
         "name": "Arcadia Under Deep Seclusion",
         "character": "Lingsha"
       },
       {
-        "file": "eidolons/Lingsha/Bloom on Vileward Bouquet.png",
+        "file": "eidolons/Lingsha/Eidolon Bloom on Vileward Bouquet.png",
         "name": "Bloom on Vileward Bouquet",
         "character": "Lingsha"
       },
       {
-        "file": "eidolons/Lingsha/Leisure in Carmine Smokeveil.png",
+        "file": "eidolons/Lingsha/Eidolon Leisure in Carmine Smokeveil.png",
         "name": "Leisure in Carmine Smokeveil",
         "character": "Lingsha"
       },
       {
-        "file": "eidolons/Lingsha/Redolence from Canopied Banquet.png",
+        "file": "eidolons/Lingsha/Eidolon Poise Atop Twists and Turns.png",
+        "name": "Poise Atop Twists and Turns",
+        "character": "Lingsha"
+      },
+      {
+        "file": "eidolons/Lingsha/Eidolon Redolence from Canopied Banquet.png",
         "name": "Redolence from Canopied Banquet",
         "character": "Lingsha"
       },
       {
-        "file": "eidolons/Lingsha/Shine of Floral Wick.png",
+        "file": "eidolons/Lingsha/Eidolon Shine of Floral Wick.png",
         "name": "Shine of Floral Wick",
         "character": "Lingsha"
       },
@@ -5169,6 +5319,36 @@
         "character": "Misha"
       },
       {
+        "file": "eidolons/Mortenax/Eidolon Across the Shore, Wrath Laid Bare.png",
+        "name": "Across the Shore, Wrath Laid Bare",
+        "character": "Mortenax"
+      },
+      {
+        "file": "eidolons/Mortenax/Eidolon Ash Was My Heart, Yet the Flame Stayed.png",
+        "name": "Ash Was My Heart, Yet the Flame Stayed",
+        "character": "Mortenax"
+      },
+      {
+        "file": "eidolons/Mortenax/Eidolon Ere My Death, I Stood Unmade.png",
+        "name": "Ere My Death, I Stood Unmade",
+        "character": "Mortenax"
+      },
+      {
+        "file": "eidolons/Mortenax/Eidolon I Severed My Woes, Knowing Death Begets Life.png",
+        "name": "I Severed My Woes, Knowing Death Begets Life",
+        "character": "Mortenax"
+      },
+      {
+        "file": "eidolons/Mortenax/Eidolon If Immortality Could Die, I Swore THEM Slain.png",
+        "name": "If Immortality Could Die, I Swore THEM Slain",
+        "character": "Mortenax"
+      },
+      {
+        "file": "eidolons/Mortenax/Eidolon Odium I've Smitten, Thence Came the Blade.png",
+        "name": "Odium I've Smitten, Thence Came the Blade",
+        "character": "Mortenax"
+      },
+      {
         "file": "eidolons/Mortenax Blade/Across the Shore, Wrath Laid Bare.png",
         "name": "Across the Shore, Wrath Laid Bare",
         "character": "Mortenax Blade"
@@ -5194,22 +5374,32 @@
         "character": "Mortenax Blade"
       },
       {
-        "file": "eidolons/Moze/Faithbinder.png",
+        "file": "eidolons/Moze/Eidolon Deathchaser.png",
+        "name": "Deathchaser",
+        "character": "Moze"
+      },
+      {
+        "file": "eidolons/Moze/Eidolon Faithbinder.png",
         "name": "Faithbinder",
         "character": "Moze"
       },
       {
-        "file": "eidolons/Moze/Heathprowler.png",
+        "file": "eidolons/Moze/Eidolon Heathprowler.png",
         "name": "Heathprowler",
         "character": "Moze"
       },
       {
-        "file": "eidolons/Moze/Oathkeeper.png",
+        "file": "eidolons/Moze/Eidolon Oathkeeper.png",
         "name": "Oathkeeper",
         "character": "Moze"
       },
       {
-        "file": "eidolons/Moze/Wrathbearer.png",
+        "file": "eidolons/Moze/Eidolon Truthbender.png",
+        "name": "Truthbender",
+        "character": "Moze"
+      },
+      {
+        "file": "eidolons/Moze/Eidolon Wrathbearer.png",
         "name": "Wrathbearer",
         "character": "Moze"
       },
@@ -5274,27 +5464,32 @@
         "character": "Natasha"
       },
       {
-        "file": "eidolons/Pearl/Compute Life From One Shell.png",
+        "file": "eidolons/Pearl/Eidolon Compute Life From One Shell.png",
         "name": "Compute Life From One Shell",
         "character": "Pearl"
       },
       {
-        "file": "eidolons/Pearl/Crop That Dappled Dawn.png",
+        "file": "eidolons/Pearl/Eidolon Crop That Dappled Dawn.png",
         "name": "Crop That Dappled Dawn",
         "character": "Pearl"
       },
       {
-        "file": "eidolons/Pearl/Nestle That Pearl in Uninked Tides.png",
+        "file": "eidolons/Pearl/Eidolon Nestle That Pearl in Uninked Tides.png",
         "name": "Nestle That Pearl in Uninked Tides",
         "character": "Pearl"
       },
       {
-        "file": "eidolons/Pearl/Sketch That Suspended Wave.png",
+        "file": "eidolons/Pearl/Eidolon Render Those Starlit Swirls.png",
+        "name": "Render Those Starlit Swirls",
+        "character": "Pearl"
+      },
+      {
+        "file": "eidolons/Pearl/Eidolon Sketch That Suspended Wave.png",
         "name": "Sketch That Suspended Wave",
         "character": "Pearl"
       },
       {
-        "file": "eidolons/Pearl/Study That Veiled Smile.png",
+        "file": "eidolons/Pearl/Eidolon Study That Veiled Smile.png",
         "name": "Study That Veiled Smile",
         "character": "Pearl"
       },
@@ -5417,6 +5612,36 @@
         "file": "eidolons/Rappa/Steady Is The Ranger With Unerring Arrows.png",
         "name": "Steady Is The Ranger With Unerring Arrows",
         "character": "Rappa"
+      },
+      {
+        "file": "eidolons/Rin/Eidolon Dimensional Traveler.png",
+        "name": "Dimensional Traveler",
+        "character": "Rin"
+      },
+      {
+        "file": "eidolons/Rin/Eidolon Goddess of Venus's Favor.png",
+        "name": "Goddess of Venus's Favor",
+        "character": "Rin"
+      },
+      {
+        "file": "eidolons/Rin/Eidolon Holy Grail War_ Victory Memorial.png",
+        "name": "Holy Grail War_ Victory Memorial",
+        "character": "Rin"
+      },
+      {
+        "file": "eidolons/Rin/Eidolon Nailed It This Time!.png",
+        "name": "Nailed It This Time!",
+        "character": "Rin"
+      },
+      {
+        "file": "eidolons/Rin/Eidolon Red Devil_ Triple Speed.png",
+        "name": "Red Devil_ Triple Speed",
+        "character": "Rin"
+      },
+      {
+        "file": "eidolons/Rin/Eidolon Zelretch's Apprentice.png",
+        "name": "Zelretch's Apprentice",
+        "character": "Rin"
       },
       {
         "file": "eidolons/Rin Tohsaka/Dimensional Traveler.png",
@@ -5689,22 +5914,32 @@
         "character": "Silver Wolf LV.999"
       },
       {
-        "file": "eidolons/Silver Wolf LV.999/Basic ATK Is the New Ultimate.png",
+        "file": "eidolons/Silver Wolf LV.999/Eidolon Aether Editing_ Eidolon +1.png",
+        "name": "Aether Editing_ Eidolon +1",
+        "character": "Silver Wolf LV.999"
+      },
+      {
+        "file": "eidolons/Silver Wolf LV.999/Eidolon Basic ATK Is the New Ultimate.png",
         "name": "Basic ATK Is the New Ultimate",
         "character": "Silver Wolf LV.999"
       },
       {
-        "file": "eidolons/Silver Wolf LV.999/I Came. I Saw. I One-Shot..png",
+        "file": "eidolons/Silver Wolf LV.999/Eidolon I Came. I Saw. I One-Shot..png",
         "name": "I Came. I Saw. I One-Shot.",
         "character": "Silver Wolf LV.999"
       },
       {
-        "file": "eidolons/Silver Wolf LV.999/It's a Feature, Not a Bug.png",
+        "file": "eidolons/Silver Wolf LV.999/Eidolon It's a Feature, Not a Bug.png",
         "name": "It's a Feature, Not a Bug",
         "character": "Silver Wolf LV.999"
       },
       {
-        "file": "eidolons/Silver Wolf LV.999/Solo Maxxing!.png",
+        "file": "eidolons/Silver Wolf LV.999/Eidolon Max Lv. _unbreak_15__unbreak__ Says who_.png",
+        "name": "Max Lv. _unbreak_15__unbreak__ Says who_",
+        "character": "Silver Wolf LV.999"
+      },
+      {
+        "file": "eidolons/Silver Wolf LV.999/Eidolon Solo Maxxing!.png",
         "name": "Solo Maxxing!",
         "character": "Silver Wolf LV.999"
       },
@@ -5746,6 +5981,36 @@
       {
         "file": "eidolons/Sparxie/BuiltDifferent GoingExtinct.png",
         "name": "BuiltDifferent GoingExtinct",
+        "character": "Sparxie"
+      },
+      {
+        "file": "eidolons/Sparxie/Eidolon #AudienceKnows.png",
+        "name": "#AudienceKnows",
+        "character": "Sparxie"
+      },
+      {
+        "file": "eidolons/Sparxie/Eidolon #BuiltDifferent #GoingExtinct.png",
+        "name": "#BuiltDifferent #GoingExtinct",
+        "character": "Sparxie"
+      },
+      {
+        "file": "eidolons/Sparxie/Eidolon #GoingViral #WhoIsShe.png",
+        "name": "#GoingViral #WhoIsShe",
+        "character": "Sparxie"
+      },
+      {
+        "file": "eidolons/Sparxie/Eidolon #HealingTheWorld #GoodVibesOnly.png",
+        "name": "#HealingTheWorld #GoodVibesOnly",
+        "character": "Sparxie"
+      },
+      {
+        "file": "eidolons/Sparxie/Eidolon #LinkUp #HeartSkip.png",
+        "name": "#LinkUp #HeartSkip",
+        "character": "Sparxie"
+      },
+      {
+        "file": "eidolons/Sparxie/Eidolon #LockedIn #FaceCard.png",
+        "name": "#LockedIn #FaceCard",
         "character": "Sparxie"
       },
       {
@@ -6214,22 +6479,32 @@
         "character": "Yanqing"
       },
       {
-        "file": "eidolons/Yao Guang/Blind Arrows Guided by Feathers.png",
+        "file": "eidolons/Yao Guang/Eidolon Auspices Mirrored In Decalight.png",
+        "name": "Auspices Mirrored In Decalight",
+        "character": "Yao Guang"
+      },
+      {
+        "file": "eidolons/Yao Guang/Eidolon Bejeweled in Radiant Grace.png",
+        "name": "Bejeweled in Radiant Grace",
+        "character": "Yao Guang"
+      },
+      {
+        "file": "eidolons/Yao Guang/Eidolon Blind Arrows Guided by Feathers.png",
         "name": "Blind Arrows Guided by Feathers",
         "character": "Yao Guang"
       },
       {
-        "file": "eidolons/Yao Guang/Chuckle Chimes Where Jade Falls.png",
+        "file": "eidolons/Yao Guang/Eidolon Chuckle Chimes Where Jade Falls.png",
         "name": "Chuckle Chimes Where Jade Falls",
         "character": "Yao Guang"
       },
       {
-        "file": "eidolons/Yao Guang/Ferried Along the Astral Arc.png",
+        "file": "eidolons/Yao Guang/Eidolon Ferried Along the Astral Arc.png",
         "name": "Ferried Along the Astral Arc",
         "character": "Yao Guang"
       },
       {
-        "file": "eidolons/Yao Guang/Threads of Fate Colored by Plumes.png",
+        "file": "eidolons/Yao Guang/Eidolon Threads of Fate Colored by Plumes.png",
         "name": "Threads of Fate Colored by Plumes",
         "character": "Yao Guang"
       },
