@@ -709,12 +709,15 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       techniqueSel.value = String(uses)
       techniqueChk.checked = uses > 0
       const eid = Number(live.eidolon ?? 0)
+      const elemColor = kit ? ELEMENT_COLORS[kit.elem] ?? '#5c6b61' : '#5c6b61'
       for (const b of eidButtons) {
         const n = Number(b.dataset.eidolon)
         const active = n <= eid
         b.classList.toggle('active', active)
         b.classList.toggle('e6', active && n === 6)
         b.classList.toggle('unselected', !active)
+        const dot = b.querySelector('.eidolonDot')
+        if (dot) (dot as HTMLElement).style.background = elemColor
       }
       paintSkills(view, live, kitId)
       paintStats(view, live, kitId)
