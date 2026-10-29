@@ -485,7 +485,7 @@ export function buildPieceEditors(onChange?: () => void, kitIdOf?: () => string)
     }
 
     const subRows = el('div', 'subRows')
-    type SubControl = { row: HTMLElement; drop: Dropdown; inp: HTMLInputElement; info: HTMLElement }
+    type SubControl = { row: HTMLElement; drop: Dropdown; inp: HTMLInputElement; cubes: HTMLElement }
     const controls: SubControl[] = []
 
     const getMain = (): string =>
@@ -509,19 +509,18 @@ export function buildPieceEditors(onChange?: () => void, kitIdOf?: () => string)
 
     const paintInfo = (c: SubControl, s: SplitSub | null): void => {
       c.row.classList.toggle('empty', !s)
-      c.info.innerHTML = ''
+      c.cubes.innerHTML = ''
       if (!s) {
-        c.info.textContent = 'quality / rolls'
+        c.cubes.style.display = 'none'
         return
       }
-      const cubes = el('div', 'subCubes')
-      cubes.dataset.tier = String(s.tier)
+      c.cubes.style.display = 'inline-flex'
+      c.cubes.dataset.tier = String(s.tier)
       for (const tier of s.spread) {
         const cube = el('div', 'subCube')
         cube.dataset.tier = String(tier)
-        cubes.append(cube)
+        c.cubes.append(cube)
       }
-      c.info.append(cubes)
     }
 
     const commitSubs = (): void => {
@@ -611,11 +610,10 @@ export function buildPieceEditors(onChange?: () => void, kitIdOf?: () => string)
       const drop = new Dropdown('subEditSel')
       const inp = el('input', 'subEditInp') as HTMLInputElement
       inp.type = 'number'; inp.step = '0.01'; inp.min = '0'; inp.placeholder = 'value'
-      const info = el('div', 'subEditInfo')
-      info.textContent = 'quality / rolls'
-      row.append(drop.root, inp, info)
+      const cubes = el('div', 'subCubes')
+      row.append(drop.root, inp, cubes)
       subRows.append(row)
-      const c: SubControl = { row, drop, inp, info }
+      const c: SubControl = { row, drop, inp, cubes }
       controls.push(c)
       if (i === 0) ed.valueInp = inp
       drop.onchange = () => { syncOptions(); commitSubs() }

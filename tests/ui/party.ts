@@ -188,7 +188,7 @@ export default () => {
   const storedPiece = pStore.active!.slots.find(s => s.id === 'r1')!.pieces.find(p => p.slot === 'head')
   cases.push(raw('substat split lands in store', !!storedPiece && storedPiece.subs.length > 0, `${storedPiece?.subs.length ?? 0}`))
   cases.push(raw('split never repeats main stat', !!storedPiece && storedPiece.subs.every(s => s.stat !== storedPiece.main)))
-  cases.push(raw('quality cubes shown under row', piece0.querySelector('.subEditInfo .subCube') !== null))
+  cases.push(raw('quality cubes shown in row', piece0.querySelector('.subCubes .subCube') !== null))
 
   // the set plan sits above the pieces
   const planRow = cardA.querySelector('.setPlan') as HTMLElement
