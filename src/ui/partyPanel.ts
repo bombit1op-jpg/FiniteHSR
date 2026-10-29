@@ -14,6 +14,7 @@ import { KITS, KIT_PATH } from '../core/kits'
 import type { TeamSpec } from '../core/battle'
 import { resolveLevels, EIDOLON_LV, LEVEL_CAPS } from '../core/battle'
 import type { AbilityLevels } from '../core/entities/Unit'
+import { EIDOLON_ICONS } from './iconManifest'
 import { el, fillSelect, STAT_LABELS } from './dom'
 import { Dropdown } from './dropdown'
 import { relicOptions, planarOptions, signatureCone } from '../core/gearOrder'
@@ -33,14 +34,26 @@ import { MAX_SLOTS } from '../core/party'
 import { openCharacterPicker, openConePicker, openPartyListPicker } from './pickers'
 import { survivingTechniqueUses } from './store'
 
-const ELEMENT_COLORS: Record<string, string> = {
-  Fire: '#ef4444',
-  Ice: '#22d3ee',
-  Wind: '#22c55e',
-  Lightning: '#facc15',
-  Quantum: '#a855f7',
-  Imaginary: '#f97316',
-  Physical: '#a3a3a3',
+const KIT_TO_EIDOLON_NAME: Record<string, string> = {
+  'trailblazer_destruction': 'Trailblazer (Physical)',
+  'trailblazer_preservation': 'Trailblazer (Fire)',
+  'trailblazer_harmony': 'Trailblazer (Harmony)',
+  'trailblazer_remembrance': 'Trailblazer (Remembrance)',
+  'trailblazer_elation': 'Trailblazer (Elation)',
+  'silver_wolf_lv999': 'Silver Wolf LV.999',
+  'march7th_the_hunt': 'March 7th • The Hunt',
+}
+
+function getEidolonIcon(kitId: string, eidolonNum: number): string | undefined {
+  const charName = KIT_TO_EIDOLON_NAME[kitId] ?? KITS.find(k => k.id === kitId)?.name ?? ''
+  if (!charName) return undefined
+  const icons = EIDOLON_ICONS[charName]
+  if (!icons) return undefined
+  const names = Object.keys(icons)
+  if (eidolonNum >= 1 && eidolonNum <= names.length) {
+    return icons[names[eidolonNum - 1]]
+  }
+  return undefined
 }
 
 // Compute current level caps based on eidolon (base cap + eidolon bonuses up to current eidolon)
@@ -298,16 +311,17 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const eidSection = section('ЭЙДОЛОНЫ')
     const eidRow = el('div', 'eidolons')
     const eidButtons: HTMLButtonElement[] = []
-    const kit = KITS.find(k => k.id === row.kitId)
-    const elemColor = kit ? ELEMENT_COLORS[kit.elem] ?? '#5c6b61' : '#5c6b61'
     for (let e = 1; e <= 6; e++) {
       const b = el('button', 'eidolon') as HTMLButtonElement
       b.type = 'button'
       b.dataset.eidolon = String(e)
       const iconWrap = el('div', 'eidolonIcon')
-      const dot = el('div', 'eidolonDot')
-      dot.style.background = elemColor
-      iconWrap.append(dot)
+      const img = document.createElement('img')
+      img.className = 'eidolonImg'
+      img.alt = ''
+      const iconUrl = getEidolonIcon(row.kitId ?? '', e)
+      if (iconUrl) img.src = iconUrl
+      iconWrap.append(img)
       const textWrap = el('span', 'eidolonText')
       textWrap.textContent = `E${e}`
       b.append(iconWrap, textWrap)
@@ -709,15 +723,17 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       techniqueSel.value = String(uses)
       techniqueChk.checked = uses > 0
       const eid = Number(live.eidolon ?? 0)
-      const elemColor = kit ? ELEMENT_COLORS[kit.elem] ?? '#5c6b61' : '#5c6b61'
       for (const b of eidButtons) {
         const n = Number(b.dataset.eidolon)
         const active = n <= eid
         b.classList.toggle('active', active)
         b.classList.toggle('e6', active && n === 6)
         b.classList.toggle('unselected', !active)
-        const dot = b.querySelector('.eidolonDot')
-        if (dot) (dot as HTMLElement).style.background = elemColor
+        const img = b.querySelector('.eidolonImg') as HTMLImageElement | null
+        if (img) {
+          const iconUrl = getEidolonIcon(kitId, n)
+          if (iconUrl) img.src = iconUrl
+        }
       }
       paintSkills(view, live, kitId)
       paintStats(view, live, kitId)
