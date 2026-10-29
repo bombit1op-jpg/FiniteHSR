@@ -3621,7 +3621,7 @@
   },
   "eidolons": {
     "label": "Эйдолоны (скиллы персонажей)",
-    "count": 540,
+    "count": 534,
     "icons": [
       {
         "file": "eidolons/Acheron/Apocalypse, the Emancipator.png",
@@ -4134,18 +4134,8 @@
         "character": "Cipher"
       },
       {
-        "file": "eidolons/Cipher/In the Fray, Nab On a Spree.png",
-        "name": "In the Fray, Nab On a Spree",
-        "character": "Cipher"
-      },
-      {
         "file": "eidolons/Cipher/Read the Room, Seek the Glee 3.3.png",
         "name": "Read the Room, Seek the Glee 3.3",
-        "character": "Cipher"
-      },
-      {
-        "file": "eidolons/Cipher/Read the Room, Seek the Glee.png",
-        "name": "Read the Room, Seek the Glee",
         "character": "Cipher"
       },
       {
@@ -4954,11 +4944,6 @@
         "character": "Kafka"
       },
       {
-        "file": "eidolons/Kafka/Da Capo.png",
-        "name": "Da Capo",
-        "character": "Kafka"
-      },
-      {
         "file": "eidolons/Kafka/Doloroso.png",
         "name": "Doloroso",
         "character": "Kafka"
@@ -4969,28 +4954,13 @@
         "character": "Kafka"
       },
       {
-        "file": "eidolons/Kafka/Fortississimo.png",
-        "name": "Fortississimo",
-        "character": "Kafka"
-      },
-      {
         "file": "eidolons/Kafka/Leggiero 0.70.png",
         "name": "Leggiero 0.70",
         "character": "Kafka"
       },
       {
-        "file": "eidolons/Kafka/Leggiero.png",
-        "name": "Leggiero",
-        "character": "Kafka"
-      },
-      {
         "file": "eidolons/Kafka/Recitativo 0.70.png",
         "name": "Recitativo 0.70",
-        "character": "Kafka"
-      },
-      {
-        "file": "eidolons/Kafka/Recitativo.png",
-        "name": "Recitativo",
         "character": "Kafka"
       },
       {
@@ -6034,36 +6004,6 @@
         "character": "Trailblazer (Elation)"
       },
       {
-        "file": "eidolons/Trailblazer (Preservation)/City-Forging Bulwarks.png",
-        "name": "City-Forging Bulwarks",
-        "character": "Trailblazer (Preservation)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Preservation)/Earth-Shaking Resonance.png",
-        "name": "Earth-Shaking Resonance",
-        "character": "Trailblazer (Preservation)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Preservation)/Nation-Building Oath.png",
-        "name": "Nation-Building Oath",
-        "character": "Trailblazer (Preservation)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Preservation)/Spirit-Warming Flame.png",
-        "name": "Spirit-Warming Flame",
-        "character": "Trailblazer (Preservation)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Preservation)/Time-Defying Tenacity.png",
-        "name": "Time-Defying Tenacity",
-        "character": "Trailblazer (Preservation)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Preservation)/Trail-Blazing Blueprint.png",
-        "name": "Trail-Blazing Blueprint",
-        "character": "Trailblazer (Preservation)"
-      },
-      {
         "file": "eidolons/Trailblazer (Harmony)/Best Seat in the House.png",
         "name": "Best Seat in the House",
         "character": "Trailblazer (Harmony)"
@@ -6092,6 +6032,36 @@
         "file": "eidolons/Trailblazer (Harmony)/Tomorrow, Rest in Spotlight.png",
         "name": "Tomorrow, Rest in Spotlight",
         "character": "Trailblazer (Harmony)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Preservation)/City-Forging Bulwarks.png",
+        "name": "City-Forging Bulwarks",
+        "character": "Trailblazer (Preservation)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Preservation)/Earth-Shaking Resonance.png",
+        "name": "Earth-Shaking Resonance",
+        "character": "Trailblazer (Preservation)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Preservation)/Nation-Building Oath.png",
+        "name": "Nation-Building Oath",
+        "character": "Trailblazer (Preservation)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Preservation)/Spirit-Warming Flame.png",
+        "name": "Spirit-Warming Flame",
+        "character": "Trailblazer (Preservation)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Preservation)/Time-Defying Tenacity.png",
+        "name": "Time-Defying Tenacity",
+        "character": "Trailblazer (Preservation)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Preservation)/Trail-Blazing Blueprint.png",
+        "name": "Trail-Blazing Blueprint",
+        "character": "Trailblazer (Preservation)"
       },
       {
         "file": "eidolons/Trailblazer (Remembrance)/Bearer of the Revelation.png",
