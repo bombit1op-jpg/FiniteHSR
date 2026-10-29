@@ -136,19 +136,71 @@ function buildEidolons(cat: Category, charactersData: any[]): { byChar: Record<s
     ordered[c].push(it.name)
   }
   
+  // Normalize name for fuzzy matching
+  function normalizeForMatch(s: string): string {
+    return s
+      .replace(/<unbreak>/gi, '')
+      .replace(/<\/unbreak>/gi, '')
+      // Replace colons with dashes first (for "Aether Editing: Eidolon +1" -> "Aether Editing- Eidolon +1")
+      .replace(/:/g, '-')
+      // Remove all punctuation except alphanumeric, spaces, dashes, plus, and exclamation
+      .replace(/[^\w\s\-+!]/g, '')
+      // Remove dashes that are after numbers followed by space/letter/end
+      .replace(/(\d)-(\s|[a-zA-Z]|$)/g, '$1$2')
+      // Remove trailing dashes
+      .replace(/-(?=\s|$)/g, '')
+      // Normalize spaces
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase()
+  }
+  
   // Reorder using game data ranks (E1-E6 order)
   for (const char of charactersData) {
     if (!char.ranks) continue
     const charName = char.name === 'Silver Wolf LV.<unbreak>999</unbreak>' ? 'Silver Wolf LV.999' : char.name
     const rankNames = Object.values(char.ranks).map((r: any) => r.name)
     if (rankNames.length >= 6 && ordered[charName]) {
-      // Match manifest names to rank names
+      // Match manifest names to rank names using normalized comparison
       const manifestNames = ordered[charName]
       const matched: string[] = []
+      const used = new Set<string>()
+      
       for (const rankName of rankNames) {
-        const found = manifestNames.find(m => m === rankName)
-        if (found) matched.push(found)
+        const normRank = normalizeForMatch(rankName)
+        let found: string | undefined
+        for (const m of manifestNames) {
+          if (used.has(m)) continue
+          const normManifest = normalizeForMatch(m)
+          if (normManifest === normRank) {
+            found = m
+            break
+          }
+        }
+        if (found) {
+          matched.push(found)
+          used.add(found)
+        }
       }
+      
+      // Fallback: if exact normalized match failed, try substring matching
+      if (matched.length < 6) {
+        for (const rankName of rankNames) {
+          if (matched.some(m => normalizeForMatch(m) === normalizeForMatch(rankName))) continue
+          const normRank = normalizeForMatch(rankName)
+          for (const m of manifestNames) {
+            if (used.has(m)) continue
+            const normManifest = normalizeForMatch(m)
+            // Check if one contains the other (for partial matches)
+            if (normManifest.includes(normRank) || normRank.includes(normManifest)) {
+              matched.push(m)
+              used.add(m)
+              break
+            }
+          }
+        }
+      }
+      
       if (matched.length === 6) {
         ordered[charName] = matched
       }
