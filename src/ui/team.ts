@@ -611,7 +611,7 @@ export function buildPieceEditors(onChange?: () => void, kitIdOf?: () => string)
       const inp = el('input', 'subEditInp') as HTMLInputElement
       inp.type = 'number'; inp.step = '0.01'; inp.min = '0'; inp.placeholder = 'value'
       const cubes = el('div', 'subCubes')
-      row.append(drop.root, inp, cubes)
+      row.append(drop.root, cubes, inp)
       subRows.append(row)
       const c: SubControl = { row, drop, inp, cubes }
       controls.push(c)
