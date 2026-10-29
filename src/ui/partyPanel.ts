@@ -251,7 +251,8 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       const exclude = (active?.slots.map(s => s.kitId).filter(Boolean) as string[]) ?? []
       // Can't select same character twice - exclude all already in team including current slot
       // But for Trailblazers: if current slot has a Trailblazer, allow switching to other Trailblazer paths
-      const currentKitId = row.kitId
+      // Use liveRow() to get current kitId from store (important for in-place Trailblazer path switching)
+      const currentKitId = liveRow().kitId
       const hasOtherTrailblazer = exclude.some(id => id !== currentKitId && isTrailblazer(id))
       
       let filteredExclude = exclude.filter(id => id !== currentKitId)

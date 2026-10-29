@@ -48,10 +48,26 @@ const SLOT_SPEC: Record<string, { type: string; occ: number }> = {
   mem_talent_en2: { type: 'Memosprite Talent', occ: 2 },
 }
 
+/** Trailblazer kit id -> possible avatar_ids (from relics.avatar_id) */
+const TRAILBLAZER_AVATAR_IDS: Record<string, number[]> = {
+  trailblazer_destruction: [8001, 8002],
+  trailblazer_preservation: [8003, 8004],
+  trailblazer_harmony: [8005, 8006],
+  trailblazer_remembrance: [8007, 8008],
+  trailblazer_elation: [8009, 8010],
+}
+
 const norm = (s: unknown): string =>
   String(s).replace(/<[^>]*>/g, '').toLowerCase().replace(/[^a-z0-9]/g, '')
 /** kit id -> dataset name, only where the two differ */
-const ALIAS: Record<string, string> = { march7th_the_hunt: 'March 7th' }
+const ALIAS: Record<string, string> = {
+  march7th_the_hunt: 'March 7th',
+  trailblazer_destruction: '{NICKNAME}',
+  trailblazer_preservation: '{NICKNAME}',
+  trailblazer_harmony: '{NICKNAME}',
+  trailblazer_remembrance: '{NICKNAME}',
+  trailblazer_elation: '{NICKNAME}',
+}
 
 const chars = JSON.parse(readFileSync(join(ROOT, 'hsr-data', 'characters.json'), 'utf8')) as RawChar[]
 
@@ -63,11 +79,20 @@ for (const c of chars) {
   byName.set(k, arr)
 }
 
-/** dataset row for a kit: same-name rows are split by element, then by path */
+/** dataset row for a kit: same-name rows are split by element, then by path.
+ * For Trailblazer kits, also filter by avatar_id from relics. */
 function rowFor(kitId: string, name: string, elem: string, path: string): RawChar | undefined {
   const rows = byName.get(norm(ALIAS[kitId] ?? name)) ?? []
   if (!rows.length) return undefined
   if (rows.length === 1) return rows[0]
+  
+  // For Trailblazer kits, filter by avatar_id from relics
+  const trailblazerAvatarIds = TRAILBLAZER_AVATAR_IDS[kitId]
+  if (trailblazerAvatarIds) {
+    const byAvatar = rows.filter(r => r.relics?.avatar_id && trailblazerAvatarIds.includes(r.relics.avatar_id))
+    if (byAvatar.length) return byAvatar[0]
+  }
+  
   const byElem = rows.filter(r => r.damage_type === elem)
   if (byElem.length === 1) return byElem[0]
   const byPath = byElem.filter(r => r.base_type === path)

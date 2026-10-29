@@ -278,11 +278,11 @@ async function main(): Promise<void> {
     try {
       await downloadCharacterEidolons(displayName, data);
       downloaded++;
-    } catch (e) {
+} catch (e) {
       console.error(`Failed ${displayName}: ${e instanceof Error ? e.message : e}`);
       failed++;
     }
-  });
+  }
   if (result.status !== 0) {
     console.error('gen-icon-manifest.ts failed');
     process.exit(result.status ?? 1);

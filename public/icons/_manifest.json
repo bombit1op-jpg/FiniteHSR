@@ -8685,7 +8685,7 @@
   },
   "abilities": {
     "label": "Иконки навыков",
-    "count": 449,
+    "count": 453,
     "icons": [
       {
         "file": "abilities/Ack! Look at This Mess!.png",
@@ -10482,6 +10482,22 @@
       {
         "file": "abilities/Zone Suppression.png",
         "name": "Zone Suppression"
+      },
+      {
+        "file": "abilities/I Said _Elation,_ Did I Stutter_.png",
+        "name": "I Said \"Elation,\" Did I Stutter?"
+      },
+      {
+        "file": "abilities/Let the Storm Rage On.png",
+        "name": "Let the Storm Rage On"
+      },
+      {
+        "file": "abilities/Make Some Noise.png",
+        "name": "Make Some Noise"
+      },
+      {
+        "file": "abilities/That Smile Hits Different.png",
+        "name": "That Smile Hits Different"
       }
     ]
   },

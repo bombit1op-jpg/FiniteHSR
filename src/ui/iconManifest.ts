@@ -3,7 +3,7 @@
  * Maps stable display keys (character/Light Cone/set/stat/... names) to committed icon paths.
  * Keys are display names because that is the identity the raw game data and the manifest share;
  * the UI call sites do the id -> name lookup through the existing gear/kit tables.
- * Source: public/icons/_manifest.json (2495 files).
+ * Source: public/icons/_manifest.json (2499 files).
  */
 
 export const CHARACTERS_ICONS: Record<string, string> = {
@@ -1503,6 +1503,7 @@ export const ABILITIES_ICONS: Record<string, string> = {
   'Hyperluminal Particle Beam': '/icons/abilities/Hyperluminal Particle Beam.png',
   'I Carry, We Win': '/icons/abilities/I Carry, We Win.png',
   'I Choose You!': '/icons/abilities/I Choose You!.png',
+  'I Said "Elation," Did I Stutter?': '/icons/abilities/I Said _Elation,_ Did I Stutter_.png',
   'I Want to Help': '/icons/abilities/I Want to Help.png',
   'Ice Crampon Technique': '/icons/abilities/Ice Crampon Technique.png',
   'Ice-Breaking Light': '/icons/abilities/Ice-Breaking Light.png',
@@ -1527,6 +1528,7 @@ export const ABILITIES_ICONS: Record<string, string> = {
   'Lemme! Help You!': '/icons/abilities/Lemme! Help You!.png',
   'Let There Be Light': '/icons/abilities/Let There Be Light.png',
   'Let Thy Fortune Burst in Flames': '/icons/abilities/Let Thy Fortune Burst in Flames.png',
+  'Let the Storm Rage On': '/icons/abilities/Let the Storm Rage On.png',
   'Lick... Enkindled Betrayal': '/icons/abilities/Lick... Enkindled Betrayal.png',
   'Lightbringer': '/icons/abilities/Lightbringer.png',
   'Lightning Flash': '/icons/abilities/Lightning Flash.png',
@@ -1537,6 +1539,7 @@ export const ABILITIES_ICONS: Record<string, string> = {
   'Love, Heal, and Choose': '/icons/abilities/Love, Heal, and Choose.png',
   'Lucent Moonglow': '/icons/abilities/Lucent Moonglow.png',
   'Maelstrom Rhapsody': '/icons/abilities/Maelstrom Rhapsody.png',
+  'Make Some Noise': '/icons/abilities/Make Some Noise.png',
   'Mara-Sunder Awl': '/icons/abilities/Mara-Sunder Awl.png',
   'March 7th, the Apex Heroine': '/icons/abilities/March 7th, the Apex Heroine.png',
   'Master, I\'ve Ascended!': '/icons/abilities/Master, I\'ve Ascended!.png',
@@ -1681,6 +1684,7 @@ export const ABILITIES_ICONS: Record<string, string> = {
   'Terra Omnibus': '/icons/abilities/Terra Omnibus.png',
   'Terrasplit': '/icons/abilities/Terrasplit.png',
   'Tetrad Wisdom Reigns Thrice': '/icons/abilities/Tetrad Wisdom Reigns Thrice.png',
+  'That Smile Hits Different': '/icons/abilities/That Smile Hits Different.png',
   'The Belobog March': '/icons/abilities/The Belobog March.png',
   'The Hero with a Thousand Faces': '/icons/abilities/The Hero with a Thousand Faces.png',
   'The Hospitable Dolosian': '/icons/abilities/The Hospitable Dolosian.png',

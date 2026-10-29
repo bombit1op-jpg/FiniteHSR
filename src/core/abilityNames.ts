@@ -545,10 +545,11 @@ export const ABILITY_NAMES: Record<string, KitAbilityNames> = {
     "ult_en2": "Blowout: RIP Home Run"
   },
   "trailblazer_elation": {
-    "basic": "Farewell Hit",
-    "skill": "RIP Home Run",
-    "ult": "Stardust Ace",
-    "talent": "Perfect Pickoff"
+    "basic": "Make Some Noise",
+    "skill": "Let the Storm Rage On",
+    "ult": "May the Trailblaze Fly You Starward",
+    "talent": "That Smile Hits Different",
+    "el_skill": "I Said \"Elation,\" Did I Stutter?"
   },
   "pearl": {
     "basic": "Brushstroke: Trace the Severed Stream",
