@@ -370,7 +370,7 @@ function paintPiece(node: HTMLElement, setId: string, slot: RelicSlot): void {
     cls: 'pieceIcon',
     size: 34,
     fit: 'contain',
-    fallbackText: !setId ? '?' : (setName_?.trim().charAt(0).toUpperCase() || '?'),
+    fallbackText: '?',
     tint: setId ? tintOf(setId) : '#55606f',
     title,
   }))
