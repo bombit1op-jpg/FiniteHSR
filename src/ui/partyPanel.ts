@@ -35,13 +35,18 @@ import { openCharacterPicker, openConePicker, openPartyListPicker } from './pick
 import { survivingTechniqueUses } from './store'
 
 const KIT_TO_EIDOLON_NAME: Record<string, string> = {
-  'trailblazer_destruction': 'Trailblazer (Physical)',
-  'trailblazer_preservation': 'Trailblazer (Fire)',
+  'tb_dest_fw': 'Trailblazer (Destruction)',
+  'trailblazer_preservation': 'Trailblazer (Preservation)',
   'trailblazer_harmony': 'Trailblazer (Harmony)',
   'trailblazer_remembrance': 'Trailblazer (Remembrance)',
-  'trailblazer_elation': 'Trailblazer (Elation)',
-  'silver_wolf_lv999': 'Silver Wolf LV.999',
-  'march7th_the_hunt': 'March 7th • The Hunt',
+  'tb_el_tech': 'Trailblazer (Elation)',
+  'sw_e6': 'Silver Wolf LV.999',
+  'm7h_e2_shield': 'March 7th • The Hunt',
+  'mortenax_blade': 'Mortenax',
+  'rin': 'Rin',
+  'hn_respen': 'Himeko Nova',
+  'aw_e1': 'Aventurine • Waveflair',
+  'rsu_tech_dmg': 'Robin • Summeretto',
 }
 
 function getEidolonIcon(kitId: string, eidolonNum: number): string | undefined {

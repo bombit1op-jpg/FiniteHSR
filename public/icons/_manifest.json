@@ -3621,7 +3621,7 @@
   },
   "eidolons": {
     "label": "Эйдолоны (скиллы персонажей)",
-    "count": 589,
+    "count": 550,
     "icons": [
       {
         "file": "eidolons/Acheron/Apocalypse, the Emancipator.png",
@@ -3770,12 +3770,7 @@
       },
       {
         "file": "eidolons/Argenti/Eidolon _Your_ Resplendence.png",
-        "name": "_Your_ Resplendence",
-        "character": "Argenti"
-      },
-      {
-        "file": "eidolons/Argenti/Your Resplendence.png",
-        "name": "Your Resplendence",
+        "name": "Your_ Resplendence",
         "character": "Argenti"
       },
       {
@@ -3869,21 +3864,6 @@
         "character": "Asta"
       },
       {
-        "file": "eidolons/Aventurine/Ambiguity Aversion.png",
-        "name": "Ambiguity Aversion",
-        "character": "Aventurine"
-      },
-      {
-        "file": "eidolons/Aventurine/Bounded Rationality.png",
-        "name": "Bounded Rationality",
-        "character": "Aventurine"
-      },
-      {
-        "file": "eidolons/Aventurine/Droprate Maxing.png",
-        "name": "Droprate Maxing",
-        "character": "Aventurine"
-      },
-      {
         "file": "eidolons/Aventurine/Eidolon Chatoyant Éclat.png",
         "name": "Chatoyant Éclat",
         "character": "Aventurine"
@@ -3911,21 +3891,6 @@
       {
         "file": "eidolons/Aventurine/Eidolon Viridescent Pirouette.png",
         "name": "Viridescent Pirouette",
-        "character": "Aventurine"
-      },
-      {
-        "file": "eidolons/Aventurine/Prisoner's Dilemma.png",
-        "name": "Prisoner's Dilemma",
-        "character": "Aventurine"
-      },
-      {
-        "file": "eidolons/Aventurine/Stag Hunt Game.png",
-        "name": "Stag Hunt Game",
-        "character": "Aventurine"
-      },
-      {
-        "file": "eidolons/Aventurine/Unexpected Hanging Paradox.png",
-        "name": "Unexpected Hanging Paradox",
         "character": "Aventurine"
       },
       {
@@ -4344,11 +4309,6 @@
         "character": "Dr. Ratio"
       },
       {
-        "file": "eidolons/Evanescia/Blade A Feast on Evils.png",
-        "name": "Blade A Feast on Evils",
-        "character": "Evanescia"
-      },
-      {
         "file": "eidolons/Evanescia/Eidolon Arcadia_ A Glimpse of Fates.png",
         "name": "Arcadia_ A Glimpse of Fates",
         "character": "Evanescia"
@@ -4376,26 +4336,6 @@
       {
         "file": "eidolons/Evanescia/Eidolon Voyage_ A Wish for Everbloom.png",
         "name": "Voyage_ A Wish for Everbloom",
-        "character": "Evanescia"
-      },
-      {
-        "file": "eidolons/Evanescia/Home A Prayer in Dance.png",
-        "name": "Home A Prayer in Dance",
-        "character": "Evanescia"
-      },
-      {
-        "file": "eidolons/Evanescia/Maiden A Step into Dreams.png",
-        "name": "Maiden A Step into Dreams",
-        "character": "Evanescia"
-      },
-      {
-        "file": "eidolons/Evanescia/Meadow A Ruin by Vice.png",
-        "name": "Meadow A Ruin by Vice",
-        "character": "Evanescia"
-      },
-      {
-        "file": "eidolons/Evanescia/Voyage A Wish for Everbloom.png",
-        "name": "Voyage A Wish for Everbloom",
         "character": "Evanescia"
       },
       {
@@ -4789,31 +4729,6 @@
         "character": "Himeko Nova"
       },
       {
-        "file": "eidolons/Himeko • Nova/Let No Skyward Hand Stay Unheld.png",
-        "name": "Let No Skyward Hand Stay Unheld",
-        "character": "Himeko • Nova"
-      },
-      {
-        "file": "eidolons/Himeko • Nova/Ours Is the Oath to Sail Starward.png",
-        "name": "Ours Is the Oath to Sail Starward",
-        "character": "Himeko • Nova"
-      },
-      {
-        "file": "eidolons/Himeko • Nova/That Which We Stride Is the Trailblaze.png",
-        "name": "That Which We Stride Is the Trailblaze",
-        "character": "Himeko • Nova"
-      },
-      {
-        "file": "eidolons/Himeko • Nova/The Colors We Never Strike.png",
-        "name": "The Colors We Never Strike",
-        "character": "Himeko • Nova"
-      },
-      {
-        "file": "eidolons/Himeko • Nova/We Who Are Starborn Muse Starward.png",
-        "name": "We Who Are Starborn Muse Starward",
-        "character": "Himeko • Nova"
-      },
-      {
         "file": "eidolons/Hook/Always Ready to Punch and Kick.png",
         "name": "Always Ready to Punch and Kick",
         "character": "Hook"
@@ -4934,11 +4849,6 @@
         "character": "Hysilens"
       },
       {
-        "file": "eidolons/Jade/Altruism Nevertheless Tradable.png",
-        "name": "Altruism Nevertheless Tradable",
-        "character": "Jade"
-      },
-      {
         "file": "eidolons/Jade/Eidolon Altruism_ Nevertheless Tradable.png",
         "name": "Altruism_ Nevertheless Tradable",
         "character": "Jade"
@@ -4966,26 +4876,6 @@
       {
         "file": "eidolons/Jade/Eidolon Sincerity_ Put Option Only.png",
         "name": "Sincerity_ Put Option Only",
-        "character": "Jade"
-      },
-      {
-        "file": "eidolons/Jade/Equity Pending Sponsorship.png",
-        "name": "Equity Pending Sponsorship",
-        "character": "Jade"
-      },
-      {
-        "file": "eidolons/Jade/Hope Hitherto Forfeited.png",
-        "name": "Hope Hitherto Forfeited",
-        "character": "Jade"
-      },
-      {
-        "file": "eidolons/Jade/Morality Herein Authenticated.png",
-        "name": "Morality Herein Authenticated",
-        "character": "Jade"
-      },
-      {
-        "file": "eidolons/Jade/Sincerity Put Option Only.png",
-        "name": "Sincerity Put Option Only",
         "character": "Jade"
       },
       {
@@ -5347,31 +5237,6 @@
         "file": "eidolons/Mortenax/Eidolon Odium I've Smitten, Thence Came the Blade.png",
         "name": "Odium I've Smitten, Thence Came the Blade",
         "character": "Mortenax"
-      },
-      {
-        "file": "eidolons/Mortenax Blade/Across the Shore, Wrath Laid Bare.png",
-        "name": "Across the Shore, Wrath Laid Bare",
-        "character": "Mortenax Blade"
-      },
-      {
-        "file": "eidolons/Mortenax Blade/Ash Was My Heart, Yet the Flame Stayed.png",
-        "name": "Ash Was My Heart, Yet the Flame Stayed",
-        "character": "Mortenax Blade"
-      },
-      {
-        "file": "eidolons/Mortenax Blade/Ere My Death, I Stood Unmade.png",
-        "name": "Ere My Death, I Stood Unmade",
-        "character": "Mortenax Blade"
-      },
-      {
-        "file": "eidolons/Mortenax Blade/If Immortality Could Die, I Swore THEM Slain.png",
-        "name": "If Immortality Could Die, I Swore THEM Slain",
-        "character": "Mortenax Blade"
-      },
-      {
-        "file": "eidolons/Mortenax Blade/Odium I've Smitten, Thence Came the Blade.png",
-        "name": "Odium I've Smitten, Thence Came the Blade",
-        "character": "Mortenax Blade"
       },
       {
         "file": "eidolons/Moze/Eidolon Deathchaser.png",
@@ -5879,41 +5744,6 @@
         "character": "Serval"
       },
       {
-        "file": "eidolons/Silver Wolf/Bounce Attack.png",
-        "name": "Bounce Attack",
-        "character": "Silver Wolf"
-      },
-      {
-        "file": "eidolons/Silver Wolf/Brute Force Attack.png",
-        "name": "Brute Force Attack",
-        "character": "Silver Wolf"
-      },
-      {
-        "file": "eidolons/Silver Wolf/Overlay Network.png",
-        "name": "Overlay Network",
-        "character": "Silver Wolf"
-      },
-      {
-        "file": "eidolons/Silver Wolf/Payload.png",
-        "name": "Payload",
-        "character": "Silver Wolf"
-      },
-      {
-        "file": "eidolons/Silver Wolf/Social Engineering.png",
-        "name": "Social Engineering",
-        "character": "Silver Wolf"
-      },
-      {
-        "file": "eidolons/Silver Wolf/Zombie Network.png",
-        "name": "Zombie Network",
-        "character": "Silver Wolf"
-      },
-      {
-        "file": "eidolons/Silver Wolf LV.999/Aether Editing Eidolon +1.png",
-        "name": "Aether Editing Eidolon +1",
-        "character": "Silver Wolf LV.999"
-      },
-      {
         "file": "eidolons/Silver Wolf LV.999/Eidolon Aether Editing_ Eidolon +1.png",
         "name": "Aether Editing_ Eidolon +1",
         "character": "Silver Wolf LV.999"
@@ -5974,16 +5804,6 @@
         "character": "Sparkle"
       },
       {
-        "file": "eidolons/Sparxie/AudienceKnows.png",
-        "name": "AudienceKnows",
-        "character": "Sparxie"
-      },
-      {
-        "file": "eidolons/Sparxie/BuiltDifferent GoingExtinct.png",
-        "name": "BuiltDifferent GoingExtinct",
-        "character": "Sparxie"
-      },
-      {
         "file": "eidolons/Sparxie/Eidolon #AudienceKnows.png",
         "name": "#AudienceKnows",
         "character": "Sparxie"
@@ -6011,21 +5831,6 @@
       {
         "file": "eidolons/Sparxie/Eidolon #LockedIn #FaceCard.png",
         "name": "#LockedIn #FaceCard",
-        "character": "Sparxie"
-      },
-      {
-        "file": "eidolons/Sparxie/GoingViral WhoIsShe.png",
-        "name": "GoingViral WhoIsShe",
-        "character": "Sparxie"
-      },
-      {
-        "file": "eidolons/Sparxie/HealingTheWorld GoodVibesOnly.png",
-        "name": "HealingTheWorld GoodVibesOnly",
-        "character": "Sparxie"
-      },
-      {
-        "file": "eidolons/Sparxie/LockedIn FaceCard.png",
-        "name": "LockedIn FaceCard",
         "character": "Sparxie"
       },
       {
