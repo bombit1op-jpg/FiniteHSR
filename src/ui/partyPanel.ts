@@ -14,7 +14,7 @@ import { KITS, KIT_PATH } from '../core/kits'
 import type { TeamSpec } from '../core/battle'
 import { resolveLevels, EIDOLON_LV, LEVEL_CAPS } from '../core/battle'
 import type { AbilityLevels } from '../core/entities/Unit'
-import { EIDOLON_ICONS } from './iconManifest'
+import { EIDOLON_ICONS, EIDOLON_NAMES_ORDERED } from './iconManifest'
 import { el, fillSelect, STAT_LABELS } from './dom'
 import { Dropdown } from './dropdown'
 import { relicOptions, planarOptions, signatureCone } from '../core/gearOrder'
@@ -49,7 +49,7 @@ function getEidolonIcon(kitId: string, eidolonNum: number): string | undefined {
   if (!charName) return undefined
   const icons = EIDOLON_ICONS[charName]
   if (!icons) return undefined
-  const names = Object.keys(icons)
+  const names = EIDOLON_NAMES_ORDERED[charName] ?? Object.keys(icons)
   if (eidolonNum >= 1 && eidolonNum <= names.length) {
     return icons[names[eidolonNum - 1]]
   }

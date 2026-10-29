@@ -126,13 +126,16 @@ function buildCharacters(cat: Category, charactersData: any[]): Record<string, s
   return out
 }
 
-function buildEidolons(cat: Category): Record<string, Record<string, string>> {
+function buildEidolons(cat: Category): { byChar: Record<string, Record<string, string>>; ordered: Record<string, string[]> } {
   const byChar: Record<string, Record<string, string>> = {}
+  const ordered: Record<string, string[]> = {}
   for (const it of cat.icons) {
     const c = it.character ?? '?'
-    ;(byChar[c] ??= {})[it.name] = toAppPath(it.file)
+    if (!byChar[c]) { byChar[c] = {}; ordered[c] = [] }
+    byChar[c][it.name] = toAppPath(it.file)
+    ordered[c].push(it.name)
   }
-  return byChar
+  return { byChar, ordered }
 }
 
 /**
@@ -252,10 +255,17 @@ function main(): void {
 
   const eid = buildEidolons(manifest.eidolons)
   parts.push('export const EIDOLON_ICONS: Record<string, Record<string, string>> = {')
-  for (const c of Object.keys(eid).sort()) {
+  for (const c of Object.keys(eid.byChar).sort()) {
     parts.push(`  ${quote(c)}: {`)
-    parts.push(emitRecord(eid[c], '    '))
+    parts.push(emitRecord(eid.byChar[c], '    '))
     parts.push('  },')
+  }
+  parts.push('}')
+  parts.push('')
+
+  parts.push('export const EIDOLON_NAMES_ORDERED: Record<string, string[]> = {')
+  for (const c of Object.keys(eid.ordered).sort()) {
+    parts.push(`  ${quote(c)}: [${eid.ordered[c].map(quote).join(', ')}],`)
   }
   parts.push('}')
   parts.push('')
