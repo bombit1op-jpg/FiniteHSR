@@ -225,7 +225,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .subEditRow .ddOpt { padding: 5px 8px; font-size: 11px; }
 .subEditRow input { width: 76px; padding: 4px 6px; font-size: 11px; background: #0d1117; color: #cdd6e2; border: 1px solid #2a3342; border-radius: 5px; line-height: 1.2; height: 28px; box-sizing: border-box; margin-left: auto; }
 .subEditRow input:focus-visible { border-color: #3fb970; outline: none; }
-.subCubes { display: inline-flex; gap: 2px; align-items: center; width: 50px; justify-content: center; flex-shrink: 0; }
+.subCubes { display: inline-flex; gap: 2px; align-items: center; width: 50px; justify-content: flex-start; flex-shrink: 0; }
 .subEditRow.empty .subCubes { visibility: hidden; }
 .subStatName { color: #cdd6e2; }
 .subVal { color: #aab6c5; text-align: right; font-family: monospace; }
@@ -234,8 +234,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .subCubes { display: inline-flex; gap: 2px; align-items: center; }
 .subCube { width: 10px; height: 10px; border-radius: 3px; background: #1a2029; border: 1px solid #3a4656; }
 .subCube[data-tier="0"] { background: #6ec66e; border-color: #a8e8a8; box-shadow: 0 0 0 1px #1c232c, 0 0 5px rgba(110,198,110,.45); }
-.subCube[data-tier="1"] { background: #3fb970; border-color: #7fd98f; box-shadow: 0 0 0 1px #1c232c, 0 0 6px rgba(63,185,112,.6); }
-.subCube[data-tier="2"] { background: #2d8f3d; border-color: #5fc56f; box-shadow: 0 0 0 1px #1c232c, 0 0 8px rgba(45,143,61,.75); }
+.subCube[data-tier="1"] { background: #2e9658; border-color: #5fc56f; box-shadow: 0 0 0 1px #1c232c, 0 0 6px rgba(46,150,88,.6); }
+.subCube[data-tier="2"] { background: #1e6b32; border-color: #3d8f4d; box-shadow: 0 0 0 1px #1c232c, 0 0 8px rgba(30,107,50,.75); }
 .pieceValue { width: 100%; font-size: 12px; padding: 6px 8px; background: #0d1117; border: 1px solid #2a3342; border-radius: 6px; color: #f2c94c; font-family: monospace; }
 .pieceValue:focus-visible { border-color: #f2c94c; }
 .pieceTotal { font-size: 10px; color: #7b8595; font-family: monospace; }
