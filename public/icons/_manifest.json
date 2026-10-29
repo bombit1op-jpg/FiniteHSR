@@ -1,7 +1,7 @@
 {
   "characters": {
     "label": "Персонажи",
-    "count": 103,
+    "count": 104,
     "icons": [
       {
         "file": "characters/Character Acheron Icon.png",
@@ -38,6 +38,10 @@
       {
         "file": "characters/Character Asta Icon.png",
         "name": "Character Asta Icon"
+      },
+      {
+        "file": "characters/Character Astra Yao Icon.png",
+        "name": "Character Astra Yao Icon"
       },
       {
         "file": "characters/Character Aventurine Icon.png",
@@ -3617,7 +3621,7 @@
   },
   "eidolons": {
     "label": "Эйдолоны (скиллы персонажей)",
-    "count": 528,
+    "count": 558,
     "icons": [
       {
         "file": "eidolons/Acheron/Apocalypse, the Emancipator.png",
@@ -6258,6 +6262,156 @@
         "file": "eidolons/Yunli/Weathered Blade Does Not Sully.png",
         "name": "Weathered Blade Does Not Sully",
         "character": "Yunli"
+      },
+      {
+        "file": "eidolons/Trailblazer (Physical)/Eidolon A Falling Star.png",
+        "name": "A Falling Star",
+        "character": "Trailblazer (Physical)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Physical)/Eidolon An Unwilling Host.png",
+        "name": "An Unwilling Host",
+        "character": "Trailblazer (Physical)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Physical)/Eidolon A Leading Whisper.png",
+        "name": "A Leading Whisper",
+        "character": "Trailblazer (Physical)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Physical)/Eidolon A Destructing Glance.png",
+        "name": "A Destructing Glance",
+        "character": "Trailblazer (Physical)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Physical)/Eidolon A Surviving Hope.png",
+        "name": "A Surviving Hope",
+        "character": "Trailblazer (Physical)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Physical)/Eidolon A Trailblazing Will.png",
+        "name": "A Trailblazing Will",
+        "character": "Trailblazer (Physical)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Fire)/Eidolon Earth-Shaking Resonance.png",
+        "name": "Earth-Shaking Resonance",
+        "character": "Trailblazer (Fire)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Fire)/Eidolon Time-Defying Tenacity.png",
+        "name": "Time-Defying Tenacity",
+        "character": "Trailblazer (Fire)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Fire)/Eidolon Trail-Blazing Blueprint.png",
+        "name": "Trail-Blazing Blueprint",
+        "character": "Trailblazer (Fire)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Fire)/Eidolon Nation-Building Oath.png",
+        "name": "Nation-Building Oath",
+        "character": "Trailblazer (Fire)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Fire)/Eidolon Spirit-Warming Flame.png",
+        "name": "Spirit-Warming Flame",
+        "character": "Trailblazer (Fire)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Fire)/Eidolon City-Forging Bulwarks.png",
+        "name": "City-Forging Bulwarks",
+        "character": "Trailblazer (Fire)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Harmony)/Eidolon Best Seat in the House.png",
+        "name": "Best Seat in the House",
+        "character": "Trailblazer (Harmony)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Harmony)/Eidolon Jailbreaking Rainbowwalk.png",
+        "name": "Jailbreaking Rainbowwalk",
+        "character": "Trailblazer (Harmony)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Harmony)/Eidolon Sanatorium for Rest Notes.png",
+        "name": "Sanatorium for Rest Notes",
+        "character": "Trailblazer (Harmony)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Harmony)/Eidolon Dove in Tophat.png",
+        "name": "Dove in Tophat",
+        "character": "Trailblazer (Harmony)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Harmony)/Eidolon Poem Favors Rhythms of Old.png",
+        "name": "Poem Favors Rhythms of Old",
+        "character": "Trailblazer (Harmony)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Harmony)/Eidolon Tomorrow, Rest in Spotlight.png",
+        "name": "Tomorrow, Rest in Spotlight",
+        "character": "Trailblazer (Harmony)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Remembrance)/Eidolon Narrator of the Present.png",
+        "name": "Narrator of the Present",
+        "character": "Trailblazer (Remembrance)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Remembrance)/Eidolon Gleaner of the Past.png",
+        "name": "Gleaner of the Past",
+        "character": "Trailblazer (Remembrance)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Remembrance)/Eidolon Chanter of the Future.png",
+        "name": "Chanter of the Future",
+        "character": "Trailblazer (Remembrance)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Remembrance)/Eidolon Dancer of the Muse.png",
+        "name": "Dancer of the Muse",
+        "character": "Trailblazer (Remembrance)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Remembrance)/Eidolon Seamster of the Ode.png",
+        "name": "Seamster of the Ode",
+        "character": "Trailblazer (Remembrance)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Remembrance)/Eidolon Bearer of the Revelation.png",
+        "name": "Bearer of the Revelation",
+        "character": "Trailblazer (Remembrance)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Elation)/Eidolon Believe In the Light.png",
+        "name": "Believe In the Light",
+        "character": "Trailblazer (Elation)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Elation)/Eidolon History in the Making....png",
+        "name": "History in the Making...",
+        "character": "Trailblazer (Elation)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Elation)/Eidolon Into the Spotlight.png",
+        "name": "Into the Spotlight",
+        "character": "Trailblazer (Elation)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Elation)/Eidolon Save the World. Just Because..png",
+        "name": "Save the World. Just Because.",
+        "character": "Trailblazer (Elation)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Elation)/Eidolon Love & Courage: Always in Style.png",
+        "name": "Love & Courage: Always in Style",
+        "character": "Trailblazer (Elation)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Elation)/Eidolon The Cosmic Legend Cometh!.png",
+        "name": "The Cosmic Legend Cometh!",
+        "character": "Trailblazer (Elation)"
       }
     ]
   },

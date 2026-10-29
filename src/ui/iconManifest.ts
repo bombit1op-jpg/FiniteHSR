@@ -3,7 +3,7 @@
  * Maps stable display keys (character/Light Cone/set/stat/... names) to committed icon paths.
  * Keys are display names because that is the identity the raw game data and the manifest share;
  * the UI call sites do the id -> name lookup through the existing gear/kit tables.
- * Source: public/icons/_manifest.json (2464 files).
+ * Source: public/icons/_manifest.json (2495 files).
  */
 
 export const CHARACTERS_ICONS: Record<string, string> = {
@@ -2434,6 +2434,46 @@ export const EIDOLON_ICONS: Record<string, Record<string, string>> = {
     'Inflationary Demand': '/icons/eidolons/Topaz & Numby/Inflationary Demand.png',
     'Seize the Big and Free the Small': '/icons/eidolons/Topaz & Numby/Seize the Big and Free the Small.png',
   },
+  'Trailblazer (Elation)': {
+    'Believe In the Light': '/icons/eidolons/Trailblazer (Elation)/Eidolon Believe In the Light.png',
+    'History in the Making...': '/icons/eidolons/Trailblazer (Elation)/Eidolon History in the Making....png',
+    'Into the Spotlight': '/icons/eidolons/Trailblazer (Elation)/Eidolon Into the Spotlight.png',
+    'Love & Courage: Always in Style': '/icons/eidolons/Trailblazer (Elation)/Eidolon Love & Courage: Always in Style.png',
+    'Save the World. Just Because.': '/icons/eidolons/Trailblazer (Elation)/Eidolon Save the World. Just Because..png',
+    'The Cosmic Legend Cometh!': '/icons/eidolons/Trailblazer (Elation)/Eidolon The Cosmic Legend Cometh!.png',
+  },
+  'Trailblazer (Fire)': {
+    'City-Forging Bulwarks': '/icons/eidolons/Trailblazer (Fire)/Eidolon City-Forging Bulwarks.png',
+    'Earth-Shaking Resonance': '/icons/eidolons/Trailblazer (Fire)/Eidolon Earth-Shaking Resonance.png',
+    'Nation-Building Oath': '/icons/eidolons/Trailblazer (Fire)/Eidolon Nation-Building Oath.png',
+    'Spirit-Warming Flame': '/icons/eidolons/Trailblazer (Fire)/Eidolon Spirit-Warming Flame.png',
+    'Time-Defying Tenacity': '/icons/eidolons/Trailblazer (Fire)/Eidolon Time-Defying Tenacity.png',
+    'Trail-Blazing Blueprint': '/icons/eidolons/Trailblazer (Fire)/Eidolon Trail-Blazing Blueprint.png',
+  },
+  'Trailblazer (Harmony)': {
+    'Best Seat in the House': '/icons/eidolons/Trailblazer (Harmony)/Eidolon Best Seat in the House.png',
+    'Dove in Tophat': '/icons/eidolons/Trailblazer (Harmony)/Eidolon Dove in Tophat.png',
+    'Jailbreaking Rainbowwalk': '/icons/eidolons/Trailblazer (Harmony)/Eidolon Jailbreaking Rainbowwalk.png',
+    'Poem Favors Rhythms of Old': '/icons/eidolons/Trailblazer (Harmony)/Eidolon Poem Favors Rhythms of Old.png',
+    'Sanatorium for Rest Notes': '/icons/eidolons/Trailblazer (Harmony)/Eidolon Sanatorium for Rest Notes.png',
+    'Tomorrow, Rest in Spotlight': '/icons/eidolons/Trailblazer (Harmony)/Eidolon Tomorrow, Rest in Spotlight.png',
+  },
+  'Trailblazer (Physical)': {
+    'A Destructing Glance': '/icons/eidolons/Trailblazer (Physical)/Eidolon A Destructing Glance.png',
+    'A Falling Star': '/icons/eidolons/Trailblazer (Physical)/Eidolon A Falling Star.png',
+    'A Leading Whisper': '/icons/eidolons/Trailblazer (Physical)/Eidolon A Leading Whisper.png',
+    'A Surviving Hope': '/icons/eidolons/Trailblazer (Physical)/Eidolon A Surviving Hope.png',
+    'A Trailblazing Will': '/icons/eidolons/Trailblazer (Physical)/Eidolon A Trailblazing Will.png',
+    'An Unwilling Host': '/icons/eidolons/Trailblazer (Physical)/Eidolon An Unwilling Host.png',
+  },
+  'Trailblazer (Remembrance)': {
+    'Bearer of the Revelation': '/icons/eidolons/Trailblazer (Remembrance)/Eidolon Bearer of the Revelation.png',
+    'Chanter of the Future': '/icons/eidolons/Trailblazer (Remembrance)/Eidolon Chanter of the Future.png',
+    'Dancer of the Muse': '/icons/eidolons/Trailblazer (Remembrance)/Eidolon Dancer of the Muse.png',
+    'Gleaner of the Past': '/icons/eidolons/Trailblazer (Remembrance)/Eidolon Gleaner of the Past.png',
+    'Narrator of the Present': '/icons/eidolons/Trailblazer (Remembrance)/Eidolon Narrator of the Present.png',
+    'Seamster of the Ode': '/icons/eidolons/Trailblazer (Remembrance)/Eidolon Seamster of the Ode.png',
+  },
   'Tribbie': {
     'Clock of Wonder Origin': '/icons/eidolons/Tribbie/Clock of Wonder Origin.png',
     'Guide of Dream Tour': '/icons/eidolons/Tribbie/Guide of Dream Tour.png',
@@ -2573,6 +2613,11 @@ export const EIDOLON_NAMES_ORDERED: Record<string, string[]> = {
   'The Herta': ['Night at Shorefall', 'Wind Through Keyhole', 'Door into Summer', 'The Sixteenth Key', 'Bitter Pill of Truth', 'Sweet Lure of Answer'],
   'Tingyun': ['Windfall of Lucky Springs', 'Gainfully Gives, Givingly Gains', 'Halcyon Bequest', 'Jovial Versatility', 'Sauntering Coquette', 'Peace Brings Wealth to All'],
   'Topaz & Numby': ['Future Market', 'Bona Fide Acquisition', 'Seize the Big and Free the Small', 'Agile Operation', 'Inflationary Demand', 'Incentive Mechanism'],
+  'Trailblazer (Elation)': ['Believe In the Light', 'History in the Making...', 'Into the Spotlight', 'Save the World. Just Because.', 'Love & Courage: Always in Style', 'The Cosmic Legend Cometh!'],
+  'Trailblazer (Fire)': ['Earth-Shaking Resonance', 'Time-Defying Tenacity', 'Trail-Blazing Blueprint', 'Nation-Building Oath', 'Spirit-Warming Flame', 'City-Forging Bulwarks'],
+  'Trailblazer (Harmony)': ['Best Seat in the House', 'Jailbreaking Rainbowwalk', 'Sanatorium for Rest Notes', 'Dove in Tophat', 'Poem Favors Rhythms of Old', 'Tomorrow, Rest in Spotlight'],
+  'Trailblazer (Physical)': ['A Falling Star', 'An Unwilling Host', 'A Leading Whisper', 'A Destructing Glance', 'A Surviving Hope', 'A Trailblazing Will'],
+  'Trailblazer (Remembrance)': ['Narrator of the Present', 'Gleaner of the Past', 'Chanter of the Future', 'Dancer of the Muse', 'Seamster of the Ode', 'Bearer of the Revelation'],
   'Tribbie': ['Rite of Sugar Scoop', 'Guide of Dream Tour', 'Trove of Morning Glow', 'Peace of Empathy Bond', 'Clock of Wonder Origin', 'Morrow of Star Shine'],
   'Welt': ['Legacy of Honor', 'Conflux of Stars', 'Prayer of Peace', 'Appellation of Justice', 'Power of Kindness', 'Prospect of Glory'],
   'Xueyi': ['Dvesha, Inhibited', 'Klesha, Breached', 'Duḥkha, Ceased', 'Karma, Severed', 'Deva, Enthralled', 'Saṃsāra, Mastered'],
