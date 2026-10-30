@@ -254,8 +254,12 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       const currentKitId = liveRow().kitId
       const isCurrentTrailblazer = currentKitId && isTrailblazer(currentKitId)
       
-      // For Trailblazer: allow switching to other Trailblazer paths (don't exclude them)
-      // For non-Trailblazer: exclude all team characters (including current)
+      // Check if there's a Trailblazer in OTHER slots
+      const hasOtherTrailblazer = allTeamCharacters.some(id => id !== currentKitId && isTrailblazer(id))
+      
+      // For Trailblazer in current slot: allow switching to other Trailblazer paths
+      // For non-Trailblazer with other Trailblazer in team: exclude ALL Trailblazers
+      // For no Trailblazer in team: normal exclusion (only team chars)
       let filteredExclude = [...allTeamCharacters]
       if (isCurrentTrailblazer) {
         // Allow other Trailblazer paths by removing them from exclude
@@ -264,6 +268,10 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
           .filter(k => isTrailblazer(k.id) && k.id !== currentKitId)
           .map(k => k.id)
         filteredExclude = filteredExclude.filter(id => !otherTrailblazers.includes(id))
+      } else if (hasOtherTrailblazer) {
+        // Another slot has a Trailblazer - exclude ALL Trailblazers
+        const allTrailblazers = KITS.filter(k => isTrailblazer(k.id)).map(k => k.id)
+        filteredExclude = [...new Set([...filteredExclude, ...allTrailblazers])]
       }
       const chosen = await openCharacterPicker({ exclude: filteredExclude, current: row.kitId || undefined })
       if (chosen === null) return
