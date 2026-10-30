@@ -101,6 +101,7 @@ const MEMOSPRITE_EIDOLON_BONUS: ReadonlySet<string> = new Set([
   'castorice',
   'tribbie',
   'sunday',
+  'trailblazer_remembrance',
 ])
 
 interface CardView {

@@ -2219,15 +2219,24 @@ export const cyreneKit: KitDef = {
 // ===== trailblazer_remembrance  (was trailblazer_remembrance.ts) =====
 function memOf(sim: SimApi, u: Unit): Unit | undefined { return sim.find(`mem_${u.id}`) }
 
+/** Memosprite ladders top out at Lv.10; E3 grants Memosprite Talent +1, E5 Memosprite Skill +1.
+ *  (mult() clamps to the ladder length). */
+function tbRemMemLevels(ctx: KitRuntime): { skill: number; talent: number } {
+  const lv = levelsOf(ctx)
+  const eid = (ctx.eidolon as number) ?? 0
+  return { skill: lv.skill + (eid >= 5 ? 1 : 0), talent: lv.talent + (eid >= 3 ? 1 : 0) }
+}
+
 function refreshMem(sim: SimApi, u: Unit, mem: Unit, ctx: KitRuntime) {
   const lv = levelsOf(ctx)
+  const mlv = tbRemMemLevels(ctx)
   const eu = eff(u)
   const ratio = mem.maxHp > 0 ? mem.hp / mem.maxHp : 1
   const mhp = Math.max(1, Math.round(eu.hp * mult('trailblazer_remembrance', 'talent_a2', lv.talent) + mult('trailblazer_remembrance', 'talent_a4', lv.talent)))
   mem.base.hp = mhp; mem.maxHp = mhp; mem.hp = Math.max(1, Math.round(mhp * ratio))
   mem.base.atk = eu.atk; mem.base.critRate = eu.critRate; mem.base.critDmg = eu.critDmg; mem.base.level = u.base.level
   // Friends! Together! passive aura
-  const cdBonus = eff(mem).critDmg * mult('trailblazer_remembrance', 'mem_talent', lv.talent) + mult('trailblazer_remembrance', 'mem_talent_a2', lv.talent)
+  const cdBonus = eff(mem).critDmg * mult('trailblazer_remembrance', 'mem_talent', mlv.talent) + mult('trailblazer_remembrance', 'mem_talent_a2', mlv.talent)
   for (const a of sim.allies('ally')) {
     if (a.kind !== 'char' || a.dead) continue
     sim.addBuff(a, { id: 'tb_rem_friends', name: 'Friends! Together!', mods: [{ stat: 'critDmg', value: cdBonus }], turns: Infinity })
@@ -2237,10 +2246,10 @@ function refreshMem(sim: SimApi, u: Unit, mem: Unit, ctx: KitRuntime) {
 function summonMem(sim: SimApi, u: Unit, ctx: KitRuntime): Unit {
   const existing = memOf(sim, u)
   if (existing) return existing
-  const lv = levelsOf(ctx)
+  const mlv = tbRemMemLevels(ctx)
   const mem: Unit = {
     id: `mem_${u.id}`, name: 'Mem', side: 'ally', kind: 'summon', elem: 'Ice',
-    base: { level: 80, hp: 1, atk: 1, def: 0, spd: mult('trailblazer_remembrance', 'talent', lv.talent) },
+    base: { level: 80, hp: 1, atk: 1, def: 0, spd: mult('trailblazer_remembrance', 'talent', mlv.talent) },
     hp: 1, maxHp: 1, energy: 0, maxEnergy: 0, av: 0,
     buffs: [], dots: [], toughness: 0, maxToughness: 0, broken: false,
     weaknesses: [], res: {}, kitId: u.kitId,
@@ -2250,7 +2259,7 @@ function summonMem(sim: SimApi, u: Unit, ctx: KitRuntime): Unit {
   sim.registerUnit(mem)
   sim.fireMemospriteSummon(u)
   const rt = sim.rt(u)
-  rt.memCharge = Math.min(100, ((rt.memCharge as number) ?? 0) + mult('trailblazer_remembrance', 'mem_talent_en', lv.talent) * 100)
+  rt.memCharge = Math.min(100, ((rt.memCharge as number) ?? 0) + mult('trailblazer_remembrance', 'mem_talent_en', mlv.talent) * 100)
   if (!(rt.tbRemFirstSummon as boolean)) {
     rt.tbRemFirstSummon = true
     rt.memCharge = Math.min(100, (rt.memCharge as number) + 40)
@@ -2260,32 +2269,32 @@ function summonMem(sim: SimApi, u: Unit, ctx: KitRuntime): Unit {
 }
 
 function memBaddies(sim: SimApi, mem: Unit, u: Unit, ctx: KitRuntime) {
-  const lv = levelsOf(ctx)
-  const n = mult('trailblazer_remembrance', 'mem_skill_a2', lv.skill)
+  const mlv = tbRemMemLevels(ctx)
+  const n = mult('trailblazer_remembrance', 'mem_skill_a2', mlv.skill)
   const pool = [...sim.livingEnemiesOf(mem)]
   for (let i = 0; i < n; i++) {
     if (!pool.length) break
     const e = pool[Math.floor(sim.rng() * pool.length)]
-    if (!e.dead) sim.hit(mem, e, { type: 'skill', elem: 'Ice', mult: mult('trailblazer_remembrance', 'mem_skill', lv.skill), toughDmg: 10, label: 'Baddies!' })
+    if (!e.dead) sim.hit(mem, e, { type: 'skill', elem: 'Ice', mult: mult('trailblazer_remembrance', 'mem_skill', mlv.skill), toughDmg: 10, label: 'Baddies!' })
   }
   for (const e of [...sim.livingEnemiesOf(mem)])
-    sim.hit(mem, e, { type: 'skill', elem: 'Ice', mult: mult('trailblazer_remembrance', 'mem_skill_a3', lv.skill), toughDmg: 10, label: 'Baddies AoE' })
+    sim.hit(mem, e, { type: 'skill', elem: 'Ice', mult: mult('trailblazer_remembrance', 'mem_skill_a3', mlv.skill), toughDmg: 10, label: 'Baddies AoE' })
   const rt = sim.rt(u)
   rt.memCharge = Math.min(100, ((rt.memCharge as number) ?? 0) + 5) // Petite Parable
 }
 
 function memLemme(sim: SimApi, mem: Unit, u: Unit, ctx: KitRuntime) {
-  const lv = levelsOf(ctx)
+  const mlv = tbRemMemLevels(ctx)
   const eid = (ctx.eidolon as number) ?? 0
   const allies = sim.allies('ally').filter(a => a.kind === 'char' && !a.dead && a.id !== mem.id)
   const target = allies.reduce((best, a) => (sim.effAtk(a) > sim.effAtk(best) ? a : best), allies[0] ?? u)
   sim.markAlliedTarget(target)
-  sim.advance(target, mult('trailblazer_remembrance', 'mem_skill_en_a3', lv.skill))
+  sim.advance(target, mult('trailblazer_remembrance', 'mem_skill_en_a3', mlv.skill))
   const excess = Math.max(0, target.maxEnergy - 100)
   const magnetBonus = Math.min(0.20, Math.floor(excess / 10) * 0.02)
-  const payload = mult('trailblazer_remembrance', 'mem_skill_en', lv.skill) + magnetBonus
-  sim.addBuff(target, { id: 'tb_rem_support', name: "Mem's Support", mods: [], turns: mult('trailblazer_remembrance', 'mem_skill_en_a2', lv.skill), payload, sourceId: u.id })
-  if (eid >= 1) sim.addBuff(target, { id: 'tb_rem_e1', name: 'Narrator CR+', mods: [{ stat: 'critRate', value: 0.10 }], turns: mult('trailblazer_remembrance', 'mem_skill_en_a2', lv.skill) })
+  const payload = mult('trailblazer_remembrance', 'mem_skill_en', mlv.skill) + magnetBonus
+  sim.addBuff(target, { id: 'tb_rem_support', name: "Mem's Support", mods: [], turns: mult('trailblazer_remembrance', 'mem_skill_en_a2', mlv.skill), payload, sourceId: u.id })
+  if (eid >= 1) sim.addBuff(target, { id: 'tb_rem_e1', name: 'Narrator CR+', mods: [{ stat: 'critRate', value: 0.10 }], turns: mult('trailblazer_remembrance', 'mem_skill_en_a2', mlv.skill) })
   sim.log(`${mem.name} Lemme: ${target.name} (true ${(payload * 100).toFixed(1)}%)`)
 }
 
