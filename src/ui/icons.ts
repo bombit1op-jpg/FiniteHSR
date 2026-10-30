@@ -36,6 +36,14 @@ const ELEM_COLOR: Record<string, string> = {
 
 function kitName(kitId: string): string | undefined { return KITS.find(k => k.id === kitId)?.name }
 function coneName(id: string): string | undefined { return LIGHT_CONES.find(c => c.id === id)?.name }
+
+/** Normalize light cone name to match manifest keys (dashes instead of colons/question marks) */
+function normalizeConeName(name: string): string {
+  return name
+    .replace(/: /g, '- ')
+    .replace(/\?$/g, '-')
+    .replace(/’/g, "'")
+}
 function setName(id: string): string | undefined {
   return (RELIC_SETS.find(s => s.id === id) ?? PLANAR_SETS.find(s => s.id === id))?.name
 }
@@ -58,7 +66,7 @@ export function charPortraitUrl(kitId: string): string | undefined {
 /** Light Cone / relic set / planar set icon path (undefined when unknown / none selected) */
 export function gearIconUrl(kind: GearKind, id: string): string | undefined {
   if (!id) return undefined
-  const name = kind === 'cone' ? coneName(id) : setName(id)
+  const name = kind === 'cone' ? normalizeConeName(coneName(id) ?? '') : setName(id)
   if (!name) return undefined
   const table = kind === 'cone' ? LIGHTCONES_ICONS : kind === 'relic' ? RELICSETS_ICONS : PLANARSETS_ICONS
   return table[name]
