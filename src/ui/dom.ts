@@ -1,5 +1,6 @@
 export const STAT_LABELS: Record<string, string> = {
-  hpFlat: 'HP', atkFlat: 'ATK', defFlat: 'DEF', spd: 'SPD', spdFlat: 'SPD',
+  hp: 'HP', atk: 'ATK', def: 'DEF', spd: 'SPD',
+  hpFlat: 'HP', atkFlat: 'ATK', defFlat: 'DEF', spdFlat: 'SPD',
   hpPct: 'HP%', atkPct: 'ATK%', defPct: 'DEF%',
   be: 'Break Effect', ehr: 'Effect Hit Rate', effRes: 'Effect RES', err: 'Energy Regen',
   critRate: 'CRIT Rate', critDmg: 'CRIT DMG',

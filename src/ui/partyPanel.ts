@@ -571,7 +571,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const setB = new Dropdown('setDrop')
     const planarSet = new Dropdown('setDrop')
     const fillPlan = (kitId: string): void => {
-      const relicEntries = relicOptions(kitId, '')
+      const relicEntries = relicOptions(kitId)
       const planarEntries = planarOptions(kitId)
       const relicIcons: Record<string, string> = {}
       for (const [id] of relicEntries) { const u = gearIconUrl('relic', id); if (u) relicIcons[id] = u }

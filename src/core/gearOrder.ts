@@ -47,7 +47,7 @@ export function coneOptions(slug: string, path: string): Opt[] {
 }
 
 /** Ordered relic-set options: recommended first, rest alphabetical. */
-export function relicOptions(slug: string, blank = '— Relic A —'): Opt[] {
+export function relicOptions(slug: string, blank = '— None —'): Opt[] {
   const rec = GEAR_PREFS[slug]?.relics ?? []
   const rank = new Map(rec.map((id, i) => [id, i]))
   const order = [...RELIC_SETS].sort((a, b) => {
@@ -67,7 +67,7 @@ export function planarOptions(slug: string): Opt[] {
     const rb = rank.get(b.id) ?? Infinity
     return ra !== rb ? ra - rb : byName(a, b)
   })
-  return [['', '— Planar —'], ...order.map(s => [s.id, s.name] as Opt)]
+  return [['', '— None —'], ...order.map(s => [s.id, s.name] as Opt)]
 }
 
 /** The signature cone id for a kit, if any. */
