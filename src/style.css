@@ -679,7 +679,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .coneRarity.r3 { color: #5ea9d6; }
 .coneArt { position: relative; width: 140px; aspect-ratio: 4 / 4; background: radial-gradient(ellipse at 50% 30%, #3a5c45 0%, #1d3629 40%, #101b14 78%); border: 1px solid #35533d; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .coneArt.empty { background: radial-gradient(ellipse at 50% 30%, #2a3a2f 0%, #16221a 40%, #0a100c 78%); border-style: solid; border-color: #3a5c45; cursor: pointer; }
-.coneArt.empty::after { content: '+'; position: absolute; font-size: 36px; font-weight: 300; color: rgba(127, 209, 138, .6); line-height: 1; pointer-events: none; }
+.coneArt.empty::after { content: 'Выбрать конус'; position: absolute; font-size: 12px; font-weight: 500; color: rgba(127, 209, 138, .8); line-height: 1; pointer-events: none; white-space: nowrap; }
 .coneArt .gearIcon { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 .coneArt .gearIcon img { width: 60% !important; height: 60% !important; object-fit: contain; }
 .coneArt.signature { box-shadow: 0 0 24px rgba(242,201,76,0.5), inset 0 0 24px rgba(242,201,76,0.1); }
