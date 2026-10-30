@@ -768,8 +768,8 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .partyListPicker { gap: 4px; }
 .pickerParty { width: 100%; padding: 5px 8px; background: #111a14; border: 1px solid #26352b; border-radius: 8px; color: inherit; cursor: pointer; text-align: left; }
 .pickerParty:hover { border-color: #67b97b; }
-.pickerParty.current { border-color: #f2c94c; }
-.partyPickRow { display: flex; align-items: center; gap: 10px; }
+.pickerParty.current { border-color: #f2c94c; box-shadow: 0 0 16px rgba(242, 201, 76, 0.25); }
+.partyPickRow { display: flex; align-items: flex-start; gap: 16px; }
 .partyPickIcons { display: flex; gap: 4px; flex: none; }
 .partyPickIcon { width: 36px; height: 36px; overflow: hidden; border-radius: 50%; background: #0a120d; display: flex; align-items: flex-end; justify-content: center; }
 .partyPickIcon img { width: 100% !important; height: 100% !important; object-fit: cover; object-position: bottom center; }
@@ -777,7 +777,115 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .partyPickName { font-size: 14px; font-weight: 600; color: #e6ebf2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dim { color: #71837a; }
 
-@media (max-width: 720px) { .partyCards { grid-template-columns: 1fr; } }
+/* New detailed party picker styles */
+.partyPickerOverlay .pickerPanel {
+  width: min(1600px, 96vw);
+  max-width: 1600px;
+}
+.partyPickerList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.partyPickSummary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 180px;
+  flex: 0 0 180px;
+}
+.partyPickName { font-size: 15px; font-weight: 600; color: #e6ebf2; }
+.partyPickMembers {
+  display: flex;
+  flex: 1;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.partyPickMember {
+  flex: 1;
+  min-width: 280px;
+  max-width: 360px;
+  background: #131820;
+  border: 1px solid #2a3342;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.partyPickMember.empty {
+  background: #0f151c;
+  border-color: #1e2a3a;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #5a6a60;
+}
+.partyPickMemberPlaceholder { font-size: 13px; color: #5a6a60; }
+.partyPickMemberHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.partyPickMemberIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.partyPickMemberName { font-size: 14px; font-weight: 600; color: #e6ebf2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.partyPickMemberMeta { display: flex; gap: 4px; }
+.partyPickMemberEidolons { display: flex; flex-direction: column; gap: 4px; }
+.partyPickMemberEidolonLabel { font-size: 12px; font-weight: 600; color: #8bd39b; }
+.partyPickMemberEidolonIndicators { display: flex; gap: 3px; }
+.partyPickMemberEidolonIndicator {
+  width: 20px; height: 20px; border-radius: 4px;
+  background: #1a241f; border: 1px solid #2a3a2f;
+  color: #5a6a60; font-size: 10px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+}
+.partyPickMemberEidolonIndicator.active {
+  background: #1e3a2a; border-color: #4a8f5a; color: #8bd39b;
+}
+.partyPickMemberEidolonIndicator.e6.active {
+  background: linear-gradient(135deg, #2a4a35, #1e3a2a);
+  border-color: #f2c94c; color: #f2c94c;
+  box-shadow: 0 0 8px rgba(242, 201, 76, 0.4);
+}
+.partyPickMemberRelics { display: flex; flex-direction: column; gap: 4px; }
+.partyPickMemberRelicSet {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: #cdd6e2;
+}
+.partyPickMemberRelicSet img { flex: 0 0 20px; }
+.partyPickMemberRelicSet.planar { opacity: 0.85; }
+.partyPickMemberCone {
+  display: flex; align-items: center; gap: 10px;
+  padding-top: 4px; border-top: 1px solid #232a35;
+  margin-top: 4px;
+}
+.partyPickMemberCone img { flex: 0 0 32px; }
+.partyPickMemberConeInfo { flex: 1; min-width: 0; }
+.partyPickMemberConeName { font-size: 12px; font-weight: 600; color: #e6ebf2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.partyPickMemberConeDetails { font-size: 11px; color: #7d917f; }
+.partyPickMemberConeRarity { font-size: 12px; color: #f2c94c; }
+.partyPickMemberConeEmpty { font-size: 12px; color: #5a6a60; }
+
+@media (max-width: 1200px) {
+  .partyPickMembers { flex-direction: column; }
+  .partyPickMember { min-width: 0; max-width: none; }
+  .partyPickSummary { flex-direction: row; align-items: center; min-width: 0; flex: 1; }
+  .partyPickIcons { order: -1; }
+}
+@media (max-width: 720px) {
+  .partyCards { grid-template-columns: 1fr; }
+  .partyPickMembers { flex-direction: column; }
+  .partyPickMember { min-width: 0; max-width: none; }
+  .partyPickSummary { flex-direction: row; align-items: center; min-width: 0; flex: 1; }
+  .partyPickIcons { order: -1; }
+}
 
 
 /* FiniteHSR Party Setup — targeted character-card layout adjustments.

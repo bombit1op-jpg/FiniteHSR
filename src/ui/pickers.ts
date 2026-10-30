@@ -6,11 +6,12 @@
  * state — the caller passes the current selection and the excluded ids, and applies the result.
  */
 import { KITS, KIT_PATH } from '../core/kits'
-import { LIGHT_CONES } from '../core/gear'
+import { LIGHT_CONES, RELIC_SETS, PLANAR_SETS } from '../core/gear'
 import { coneOptions, signatureCone } from '../core/gearOrder'
 import { el } from './dom'
-import { charIconUrl, gearIconUrl, iconNode, elemIconUrl, pathIconUrl } from './icons'
+import { charIconUrl, charPortrait, gearIconUrl, iconNode, elemIconUrl, pathIconUrl } from './icons'
 import type { Party } from '../core/party'
+import type { TeamRowState } from './store'
 
 interface Overlay {
   root: HTMLElement
@@ -299,21 +300,24 @@ paint()
 return promise
 }
 
-/** Party list picker for the header: one wide row per party — 4 small portraits, then its name. */
+/** Party list picker for the header: detailed view with 4 character cards per party. */
 export function openPartyListPicker(opts: { parties: Party[]; activeId: string | null; anchor?: HTMLElement }): Promise<string | null> {
   let resolve!: (v: string | null) => void
   const promise = new Promise<string | null>(r => { resolve = r })
-  const ov = openOverlay('ВЫБОР ОТРЯДА', () => resolve(null), opts.anchor)
-  const list = el('div', 'pickerList partyListPicker')
+  // Use a wider panel for the party picker without anchor positioning
+  const ov = openOverlay('ВЫБОР ОТРЯДА', () => resolve(null))
+  ov.root.classList.add('partyPickerOverlay')
+  const list = el('div', 'pickerList partyListPicker partyPickerList')
   ov.body.append(list)
-  let index = 0
+
   for (const p of opts.parties) {
     const btn = el('button', 'pickerParty animate__animated animate__fadeInUp') as HTMLButtonElement
-    btn.style.animationDelay = `${index * 20}ms`
-    btn.style.animationDuration = '150ms'
     btn.type = 'button'
     if (p.id === opts.activeId) btn.classList.add('current')
-    const row = el('div', 'partyPickRow')
+    btn.onclick = () => { ov.close(); resolve(p.id) }
+
+    // Party summary (left side)
+    const summary = el('div', 'partyPickSummary')
     const icons = el('div', 'partyPickIcons')
     for (let i = 0; i < 4; i++) {
       const s = p.slots[i]
@@ -327,11 +331,172 @@ export function openPartyListPicker(opts: { parties: Party[]; activeId: string |
     }
     const name = el('div', 'partyPickName')
     name.textContent = p.name
-    row.append(icons, name)
+    summary.append(icons, name)
+
+    // Character cards (right side)
+    const members = el('div', 'partyPickMembers')
+    for (let i = 0; i < 4; i++) {
+      const s = p.slots[i]
+      members.append(buildMemberCard(s, i))
+    }
+
+    const row = el('div', 'partyPickRow')
+    row.append(summary, members)
     btn.append(row)
-    btn.onclick = () => { ov.close(); resolve(p.id) }
     list.append(btn)
-    index++
   }
   return promise
+}
+
+/** Build a single character card for the party picker. */
+function buildMemberCard(slot: TeamRowState | undefined, index: number): HTMLElement {
+  const card = el('div', 'partyPickMember')
+  if (!slot || !slot.kitId) {
+    card.classList.add('empty')
+    const placeholder = el('div', 'partyPickMemberPlaceholder')
+    placeholder.textContent = `Слот ${index + 1}`
+    card.append(placeholder)
+    return card
+  }
+
+  const kit = KITS.find(k => k.id === slot.kitId)
+  if (!kit) {
+    card.classList.add('empty')
+    return card
+  }
+
+  // Header: portrait, name, element, path
+  const header = el('div', 'partyPickMemberHeader')
+  const portrait = charPortrait(slot.kitId)
+  portrait.style.width = '64px'
+  portrait.style.height = '64px'
+  portrait.style.borderRadius = '8px'
+  header.append(portrait)
+
+  const identity = el('div', 'partyPickMemberIdentity')
+  const nameEl = el('div', 'partyPickMemberName')
+  nameEl.textContent = kit.name
+  identity.append(nameEl)
+
+  const meta = el('div', 'partyPickMemberMeta')
+  const elemIcon = iconNode(elemIconUrl(kit.elem), kit.elem, { cls: 'miniIcon', size: 16, fit: 'contain', fallbackText: kit.elem.charAt(0), tint: '#7fb3ff', title: kit.elem })
+  const pathIcon = iconNode(pathIconUrl(KIT_PATH[kit.id] ?? ''), KIT_PATH[kit.id] ?? '', { cls: 'miniIcon', size: 16, fit: 'contain', fallbackText: (KIT_PATH[kit.id] ?? '').charAt(0), tint: '#7fb3ff', title: KIT_PATH[kit.id] ?? '' })
+  meta.append(elemIcon, pathIcon)
+  identity.append(meta)
+  header.append(identity)
+
+  // Eidolons
+  const eidolonSection = el('div', 'partyPickMemberEidolons')
+  const eidolonLabel = el('span', 'partyPickMemberEidolonLabel')
+  eidolonLabel.textContent = `E${slot.eidolon ?? 0}`
+  eidolonSection.append(eidolonLabel)
+  const eidolonIndicators = el('div', 'partyPickMemberEidolonIndicators')
+  for (let e = 1; e <= 6; e++) {
+    const ind = el('span', 'partyPickMemberEidolonIndicator')
+    if (e <= (slot.eidolon ?? 0)) ind.classList.add('active')
+    if (e === 6 && (slot.eidolon ?? 0) === 6) ind.classList.add('e6')
+    ind.textContent = `E${e}`
+    eidolonIndicators.append(ind)
+  }
+  eidolonSection.append(eidolonIndicators)
+
+  // Relic sets
+  const relicSection = el('div', 'partyPickMemberRelics')
+  const relicSets = computeRelicSets(slot)
+  for (const rs of relicSets) {
+    const rsEl = el('div', 'partyPickMemberRelicSet')
+    const icon = gearIconUrl('relic', rs.id)
+    if (icon) {
+      const img = el('img')
+      img.src = icon
+      img.alt = ''
+      img.style.width = '20px'
+      img.style.height = '20px'
+      img.style.borderRadius = '4px'
+      rsEl.append(img)
+    }
+    const label = el('span')
+    label.textContent = `${rs.name} · ${rs.count}pc`
+    rsEl.append(label)
+    relicSection.append(rsEl)
+  }
+  // Planar set
+  const planarId = slot.planar
+  if (planarId) {
+    const planarSet = PLANAR_SETS.find(s => s.id === planarId)
+    if (planarSet) {
+      const rsEl = el('div', 'partyPickMemberRelicSet planar')
+      const icon = gearIconUrl('planar', planarId)
+      if (icon) {
+        const img = el('img')
+        img.src = icon
+        img.alt = ''
+        img.style.width = '20px'
+        img.style.height = '20px'
+        img.style.borderRadius = '4px'
+        rsEl.append(img)
+      }
+      const label = el('span')
+      label.textContent = `${planarSet.name} · 2pc`
+      rsEl.append(label)
+      relicSection.append(rsEl)
+    }
+  }
+
+  // Light Cone
+  const coneSection = el('div', 'partyPickMemberCone')
+  if (slot.coneId) {
+    const cone = LIGHT_CONES.find(c => c.id === slot.coneId)
+    if (cone) {
+      const icon = gearIconUrl('cone', cone.id)
+      if (icon) {
+        const img = el('img')
+        img.src = icon
+        img.alt = ''
+        img.style.width = '32px'
+        img.style.height = '32px'
+        img.style.borderRadius = '4px'
+        coneSection.append(img)
+      }
+      const info = el('div', 'partyPickMemberConeInfo')
+      const nameEl2 = el('div', 'partyPickMemberConeName')
+      nameEl2.textContent = cone.name
+      info.append(nameEl2)
+      const details = el('div', 'partyPickMemberConeDetails')
+      details.textContent = `Lv.${slot.coneLevel ?? 80} · S${slot.si ?? 1}`
+      info.append(details)
+      const rarity = el('div', 'partyPickMemberConeRarity')
+      rarity.textContent = '★'.repeat(cone.rarity)
+      info.append(rarity)
+      coneSection.append(info)
+    }
+  } else {
+    const empty = el('div', 'partyPickMemberConeEmpty')
+    empty.textContent = '—'
+    coneSection.append(empty)
+  }
+
+  card.append(header, eidolonSection, relicSection, coneSection)
+  return card
+}
+
+/** Compute relic set configuration from pieces (4+2, 2+2+2, etc.). */
+function computeRelicSets(slot: TeamRowState): Array<{ id: string; name: string; count: number }> {
+  const counts = new Map<string, number>()
+  for (const p of slot.pieces) {
+    if (!p.setId) continue
+    // Only count non-planar pieces (sphere and rope are planar)
+    if (p.slot === 'sphere' || p.slot === 'rope') continue
+    counts.set(p.setId, (counts.get(p.setId) ?? 0) + 1)
+  }
+
+  // Sort by count descending
+  const sorted = Array.from(counts.entries())
+    .filter(([, count]) => count >= 2)
+    .sort((a, b) => b[1] - a[1])
+
+  return sorted.map(([id, count]) => {
+    const set = RELIC_SETS.find(s => s.id === id)
+    return { id, name: set?.name ?? id, count }
+  })
 }
