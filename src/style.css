@@ -87,16 +87,7 @@ body.busy { cursor: progress; }
 /* real local art: badge grows to the icon, chip stays the element-tinted circle */
 .charBadge:has(.gameIcon img) { width: auto; height: auto; border-radius: 8px; background: #0d1117; }
 .pieceBadge { width: 34px; height: 34px; border-radius: 8px; background: #0d1117; }
-.gearBadge {
-  flex: none; display: inline-flex; align-items: center; justify-content: center;
-  width: 30px; height: 30px; border-radius: 50%;
-  background: #1a1f26;
-  border: 1px solid #2a3342;
-  color: #7a8b9e;
-  font-size: 12px; font-weight: 600; cursor: default;
-}
-/* real local art: badge grows to the icon */
-.gearBadge:has(.gameIcon img) { width: auto; height: auto; border-radius: 6px; background: #0d1117; border-color: transparent; }
+.gearBadge:has(.gameIcon img) { width: auto; height: auto; border-radius: 6px; }
 .gameIcon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
 .gameIcon img { display: block; border-radius: inherit; }
 
@@ -641,27 +632,6 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .eidolonIcon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
 .eidolonImg { width: 36px; height: 36px; object-fit: contain; border-radius: 4px; }
 .eidolonText { text-align: center; }
-/* Eidolon level display in portrait area */
-.eidolonDisplay {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 36px;
-  height: 28px;
-  padding: 2px 8px;
-  border-radius: 6px;
-  background: linear-gradient(135deg, #1a2e24 0%, #141d17 100%);
-  border: 1px solid #2a3d31;
-  border-radius: 14px;
-  font-size: 12px;
-  font-weight: 700;
-  color: #8bd39b;
-  text-shadow: 0 0 8px rgba(139, 211, 155, 0.4);
-  box-shadow: 
-    inset 0 1px 0 rgba(255,255,255,0.1),
-    0 2px 8px rgba(0,0,0,0.3);
-  margin-left: 8px;
-}
 /* E6 keeps the shared green shimmer (same sweep as the signature cone), only the frame/colour change here */
 .eidolon.e6.active {
   border-color: #a0edab;
@@ -679,7 +649,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .coneRarity.r3 { color: #5ea9d6; }
 .coneArt { position: relative; width: 140px; aspect-ratio: 4 / 4; background: radial-gradient(ellipse at 50% 30%, #3a5c45 0%, #1d3629 40%, #101b14 78%); border: 1px solid #35533d; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .coneArt.empty { background: radial-gradient(ellipse at 50% 30%, #2a3a2f 0%, #16221a 40%, #0a100c 78%); border-style: solid; border-color: #3a5c45; cursor: pointer; }
-.coneArt.empty::after { content: 'Выбрать конус'; position: absolute; font-size: 12px; font-weight: 500; color: rgba(127, 209, 138, .8); line-height: 1; pointer-events: none; white-space: nowrap; }
+.coneArt.empty::after { content: '+'; position: absolute; font-size: 36px; font-weight: 300; color: rgba(127, 209, 138, .6); line-height: 1; pointer-events: none; }
 .coneArt .gearIcon { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 .coneArt .gearIcon img { width: 60% !important; height: 60% !important; object-fit: contain; }
 .coneArt.signature { box-shadow: 0 0 24px rgba(242,201,76,0.5), inset 0 0 24px rgba(242,201,76,0.1); }
@@ -803,6 +773,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .partyPickIcons { display: flex; gap: 4px; flex: none; }
 .partyPickIcon { width: 36px; height: 36px; overflow: hidden; border-radius: 50%; background: #0a120d; display: flex; align-items: flex-end; justify-content: center; }
 .partyPickIcon img { width: 100% !important; height: 100% !important; object-fit: cover; object-position: bottom center; }
+.partyPickIcon .iconChip { display: none; }
 .partyPickName { font-size: 14px; font-weight: 600; color: #e6ebf2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dim { color: #71837a; }
 
