@@ -565,6 +565,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     // The plan is a shortcut — it writes the per-piece set dropdowns, which stay editable.
     const planRow = el('div', 'setPlan planRow')
     const planSel = el('select') as HTMLSelectElement
+    planSel.style.width = '110px'
     fillSelect(planSel, [['4', '4 сета'], ['2+2', '2+2']])
     planSel.title = 'Набор сетов реликвий: один 4-сет или два 2-сета'
     const setA = new Dropdown('setDrop')
