@@ -13,6 +13,14 @@ import { charIconUrl, charPortrait, gearIconUrl, iconNode, elemIconUrl, pathIcon
 import type { Party } from '../core/party'
 import type { TeamRowState } from './store'
 
+// Shared rank labels used by pickers
+export const RANK_LABELS: Record<string, string> = {
+  all: 'Все',
+  mob: 'Обычный',
+  elite: 'Элитный',
+  boss: 'Босс',
+}
+
 interface Overlay {
   root: HTMLElement
   body: HTMLElement
@@ -45,7 +53,7 @@ function placePanel(panel: HTMLElement, anchor?: HTMLElement): void {
   panel.style.transform = 'none'
 }
 
-function openOverlay(title: string, onDismiss: () => void, anchor?: HTMLElement): Overlay {
+export function openOverlay(title: string, onDismiss: () => void, anchor?: HTMLElement): Overlay {
   const root = el('div', 'pickerOverlay')
   const panel = el('div', 'pickerPanel animate__animated animate__fadeInUp')
   panel.style.height = '600px'
