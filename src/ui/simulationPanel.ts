@@ -7,13 +7,13 @@
 import { PartyStore } from './partyStore'
 import { KITS } from '../core/kits'
 import { runBattle, ENCOUNTER_PRESETS } from '../core/battle'
-import { resolveEncounter } from '../core/encounter'
+import { resolveEncounter, type EncounterSpec } from '../core/encounter'
 import { toTeamSpec } from './team'
 import { techniquesForRows } from './store'
-import { charIconUrl, elemIconUrl, pathIconUrl, iconNode, metaBadge } from './icons'
 import { el } from './dom'
 import { charFinalStats } from '../core/charStats'
 import { withBusy, showStatus } from './shell'
+import { openEnemyPicker } from './enemyPicker'
 import type { DebugLevel } from '../core/battlelog'
 
 interface SimPanelHandle {
@@ -81,6 +81,192 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
   encounterSel.value = 'moc12'
   encounterLabel.append(encounterSel)
   paramsSection.append(encounterLabel)
+
+  // --- Custom Encounter Builder ---
+  const builderSection = section('Конструктор энкаунтера')
+  builderSection.style.display = 'none'
+  const builderContainer = el('div', 'encounterBuilder')
+  builderSection.append(builderContainer)
+  paramsSection.append(builderSection)
+
+  // Toggle between preset and custom
+  const modeRow = el('div', 'encounterModeRow')
+  const presetRadio = el('input') as HTMLInputElement
+  presetRadio.type = 'radio'
+  presetRadio.name = 'encounterMode'
+  presetRadio.value = 'preset'
+  presetRadio.checked = true
+  const presetLabel = el('label')
+  presetLabel.textContent = 'Готовый энкаунтер'
+  presetLabel.prepend(presetRadio)
+
+  const customRadio = el('input') as HTMLInputElement
+  customRadio.type = 'radio'
+  customRadio.name = 'encounterMode'
+  customRadio.value = 'custom'
+  const customLabel = el('label')
+  customLabel.textContent = 'Свой энкаунтер'
+  customLabel.prepend(customRadio)
+
+  modeRow.append(presetLabel, customLabel)
+  paramsSection.insertBefore(modeRow, paramsSection.firstChild!)
+
+  // State for custom encounter
+  let customEncounter: EncounterSpec = {
+    id: 'custom',
+    mode: 'Custom',
+    waves: [[{ name: '', count: 1, hp: 25000, spd: 132, level: 80, toughness: 30, weaknesses: ['Fire', 'Lightning'] }]],
+    cycles: 6,
+  }
+
+  function renderBuilder() {
+    builderContainer.innerHTML = ''
+    for (let wi = 0; wi < customEncounter.waves.length; wi++) {
+      const wave = customEncounter.waves[wi]
+      const waveDiv = el('div', 'encounterWave')
+      const waveHeader = el('div', 'encounterWaveHeader')
+      const waveTitle = el('span')
+      waveTitle.textContent = `Волна ${wi + 1}`
+      const removeWaveBtn = el('button', 'iconBtn danger small')
+      removeWaveBtn.textContent = '×'
+      removeWaveBtn.title = 'Удалить волну'
+      removeWaveBtn.disabled = customEncounter.waves.length === 1
+      removeWaveBtn.onclick = () => {
+        customEncounter.waves.splice(wi, 1)
+        renderBuilder()
+      }
+      waveHeader.append(waveTitle, removeWaveBtn)
+      waveDiv.append(waveHeader)
+
+      for (let gi = 0; gi < wave.length; gi++) {
+        const group = wave[gi]
+        const groupDiv = el('div', 'encounterGroup')
+        const pickBtn = el('button', 'encounterPickBtn')
+        pickBtn.textContent = group.name || 'Выбрать врага...'
+        pickBtn.onclick = () => {
+          openEnemyPicker({
+            onSelect: (variant, definition) => {
+              group.name = variant.name
+              group.hp = variant.baseHP ?? variant.hp ?? 25000
+              group.spd = variant.baseSPD ?? variant.spd ?? 132
+              group.level = variant.level ?? 80
+              group.toughness = variant.toughness ?? 30
+              group.weaknesses = variant.weaknesses ?? ['Fire', 'Lightning']
+              group.res = variant.res
+              group.effectRes = variant.effectRes
+              group.atk = variant.atk
+              group.debuffRes = variant.debuffRes
+              group.rank = variant.rank
+              pickBtn.textContent = group.name
+              renderBuilder()
+            },
+          })
+        }
+        groupDiv.append(pickBtn)
+
+        // Count
+        const countInp = el('input') as HTMLInputElement
+        countInp.type = 'number'
+        countInp.min = '1'
+        countInp.max = '10'
+        countInp.value = String(group.count)
+        countInp.style.width = '60px'
+        countInp.onchange = () => { group.count = Math.max(1, parseInt(countInp.value) || 1) }
+        const countLabel = el('label')
+        countLabel.textContent = ' Кол-во'
+        countLabel.prepend(countInp)
+        groupDiv.append(countLabel)
+
+        // HP
+        const hpInp = el('input') as HTMLInputElement
+        hpInp.type = 'number'
+        hpInp.min = '1'
+        hpInp.value = String(group.hp)
+        hpInp.style.width = '80px'
+        hpInp.onchange = () => { group.hp = Math.max(1, parseInt(hpInp.value) || 1) }
+        const hpLabel = el('label')
+        hpLabel.textContent = ' HP'
+        hpLabel.prepend(hpInp)
+        groupDiv.append(hpLabel)
+
+        // Level
+        const lvlInp = el('input') as HTMLInputElement
+        lvlInp.type = 'number'
+        lvlInp.min = '1'
+        lvlInp.max = '95'
+        lvlInp.value = String(group.level)
+        lvlInp.style.width = '60px'
+        lvlInp.onchange = () => { group.level = Math.max(1, Math.min(95, parseInt(lvlInp.value) || 1)) }
+        const lvlLabel = el('label')
+        lvlLabel.textContent = ' Ур'
+        lvlLabel.prepend(lvlInp)
+        groupDiv.append(lvlLabel)
+
+        // Toughness
+        const touInp = el('input') as HTMLInputElement
+        touInp.type = 'number'
+        touInp.min = '0'
+        touInp.value = String(group.toughness)
+        touInp.style.width = '60px'
+        touInp.onchange = () => { group.toughness = Math.max(0, parseInt(touInp.value) || 0) }
+        const touLabel = el('label')
+        touLabel.textContent = ' Жест'
+        touLabel.prepend(touInp)
+        groupDiv.append(touLabel)
+
+        const removeGroupBtn = el('button', 'iconBtn danger small')
+        removeGroupBtn.textContent = '×'
+        removeGroupBtn.title = 'Удалить группу'
+        removeGroupBtn.disabled = wave.length === 1
+        removeGroupBtn.onclick = () => { wave.splice(gi, 1); renderBuilder() }
+        groupDiv.append(removeGroupBtn)
+
+        waveDiv.append(groupDiv)
+      }
+
+      const addGroupBtn = el('button', 'addGroupBtn')
+      addGroupBtn.textContent = '+ Добавить группу'
+      addGroupBtn.onclick = () => {
+        wave.push({ name: '', count: 1, hp: 25000, spd: 132, level: 80, toughness: 30, weaknesses: ['Fire', 'Lightning'] })
+        renderBuilder()
+      }
+      waveDiv.append(addGroupBtn)
+      builderContainer.append(waveDiv)
+    }
+
+    const addWaveBtn = el('button', 'addWaveBtn')
+    addWaveBtn.textContent = '+ Добавить волну'
+    addWaveBtn.onclick = () => {
+      customEncounter.waves.push([{ name: '', count: 1, hp: 25000, spd: 132, level: 80, toughness: 30, weaknesses: ['Fire', 'Lightning'] }])
+      renderBuilder()
+    }
+    builderContainer.append(addWaveBtn)
+
+    // Cycles input for custom
+    const cyclesRow = el('div', 'builderCyclesRow')
+    const cyclesLabel2 = el('label')
+    cyclesLabel2.textContent = 'Циклы'
+    const cyclesInp2 = el('input') as HTMLInputElement
+    cyclesInp2.type = 'number'
+    cyclesInp2.min = '1'
+    cyclesInp2.max = '20'
+    cyclesInp2.value = String(customEncounter.cycles ?? 6)
+    cyclesInp2.onchange = () => { customEncounter.cycles = Math.max(1, Math.min(20, parseInt(cyclesInp2.value) || 6)) }
+    cyclesLabel2.append(cyclesInp2)
+    cyclesRow.append(cyclesLabel2)
+    builderContainer.append(cyclesRow)
+  }
+
+  // Toggle handler
+  function toggleBuilder() {
+    const isCustom = customRadio.checked
+    encounterLabel.style.display = isCustom ? 'none' : ''
+    builderSection.style.display = isCustom ? '' : 'none'
+  }
+  presetRadio.onchange = customRadio.onchange = toggleBuilder
+
+  // Initial render
+  renderBuilder()
 
   // Cycles
   const cyclesLabel = el('label')
@@ -165,6 +351,24 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     // This is a simplified version for now
   }
 
+  // Validate custom encounter
+  function validateCustomEncounter(enc: EncounterSpec): string[] {
+    const errs: string[] = []
+    if (!enc.waves.length) errs.push('Нет волн')
+    enc.waves.forEach((wave, wi) => {
+      if (!wave.length) errs.push(`Волна ${wi + 1}: нет групп врагов`)
+      wave.forEach((group, gi) => {
+        if (!group.name) errs.push(`Волна ${wi + 1}, группа ${gi + 1}: не выбран враг`)
+        if (!(group.count >= 1)) errs.push(`Волна ${wi + 1}, группа ${gi + 1}: неверное кол-во`)
+        if (!(group.hp > 0)) errs.push(`Волна ${wi + 1}, группа ${gi + 1}: HP должен быть > 0`)
+        if (!(group.level > 0)) errs.push(`Волна ${wi + 1}, группа ${gi + 1}: Уровень должен быть > 0`)
+        if (!(group.weaknesses?.length)) errs.push(`Волна ${wi + 1}, группа ${gi + 1}: нет слабостей`)
+      })
+    })
+    if (enc.cycles !== undefined && !(enc.cycles > 0)) errs.push('Циклы должны быть > 0')
+    return errs
+  }
+
   // --- Run Battle ---
   runBtn.onclick = async () => {
     const party = store.active
@@ -173,33 +377,46 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     const rows = party.slots.filter(s => s.kitId)
     const team = rows.map(r => toTeamSpec(r))
 
-    const encounterKey = encounterSel.value
-    const encounterPreset = ENCOUNTER_PRESETS[encounterKey]
-    if (!encounterPreset) {
-      showStatus('Выбранный энкаунтер не найден', 'error')
-      return
+    const techniques = techniquesForRows(rows)
+
+    // Build encounter spec based on mode
+    let encounterSpec: ReturnType<typeof resolveEncounter>
+    let encounterId: string
+    if (customRadio.checked) {
+      // Validate custom encounter
+      const errs = validateCustomEncounter(customEncounter)
+      if (errs.length > 0) {
+        showStatus('Ошибка в энкаунтере: ' + errs.join('; '), 'error')
+        return
+      }
+      encounterSpec = resolveEncounter(customEncounter)
+      encounterId = 'custom'
+    } else {
+      const encounterKey = encounterSel.value
+      const encounterPreset = ENCOUNTER_PRESETS[encounterKey]
+      if (!encounterPreset) {
+        showStatus('Выбранный энкаунтер не найден', 'error')
+        return
+      }
+      encounterSpec = resolveEncounter(encounterPreset)
+      encounterId = encounterKey
     }
-
-    const cycles = Math.max(1, Math.min(20, parseInt(cyclesInp.value) || 4))
-    const debugLevel = parseInt(debugSel.value) as DebugLevel
-
-    // Build encounter spec
-    const encounterSpec = resolveEncounter(encounterPreset)
     if (!encounterSpec) {
       showStatus('Не удалось построить энкаунтер', 'error')
       return
     }
 
-    // Override cycles if user changed it
-    if (cycles !== (encounterPreset.cycles ?? 4)) {
+    // Override cycles if user changed it (for preset mode)
+    const cycles = Math.max(1, Math.min(20, parseInt(cyclesInp.value) || 4))
+    if (!customRadio.checked && cycles !== (ENCOUNTER_PRESETS[encounterSel.value]?.cycles ?? 4)) {
       encounterSpec.cycles = cycles
     }
 
-    const techniques = techniquesForRows(rows)
+    const debugLevel = parseInt(debugSel.value) as DebugLevel
 
     const setup = {
       team,
-      encounter: encounterKey,
+      encounter: encounterId,
       enemy: encounterSpec.enemy,
       enemyWaves: encounterSpec.enemyWaves,
       cycles: encounterSpec.cycles ?? cycles,

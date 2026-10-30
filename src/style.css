@@ -1087,3 +1087,30 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 @media (max-width: 460px) {
   .pcSkills { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Encounter Builder */
+.encounterModeRow { display: flex; gap: 16px; margin-bottom: 12px; padding: 8px; background: #12251a; border: 1px solid #2a4a35; border-radius: 6px; }
+.encounterModeRow label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; }
+.encounterModeRow input[type="radio"] { accent-color: #4ade80; }
+
+.encounterBuilder { display: flex; flex-direction: column; gap: 12px; }
+.encounterWave { background: #0e1e14; border: 1px solid #2a4a35; border-radius: 8px; padding: 12px; }
+.encounterWaveHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.encounterWaveHeader span { font-weight: 600; color: #4ade80; font-size: 14px; }
+
+.encounterGroup { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 8px; background: #142a1c; border: 1px solid #254030; border-radius: 6px; margin-bottom: 8px; }
+.encounterGroup:last-child { margin-bottom: 0; }
+.encounterPickBtn { flex: 1; min-width: 160px; text-align: left; background: #1a3324; border: 1px solid #3a5a45; color: #b8e5c8; padding: 6px 10px; border-radius: 4px; font-size: 13px; cursor: pointer; }
+.encounterPickBtn:hover { background: #20402d; border-color: #4ade80; }
+.encounterGroup label { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #8fc8a8; white-space: nowrap; }
+.encounterGroup input[type="number"] { background: #102016; border: 1px solid #304a38; color: #c8e8d8; padding: 4px 6px; border-radius: 3px; font-size: 12px; width: auto; }
+.encounterGroup input[type="number"]:focus { outline: none; border-color: #4ade80; }
+
+.addGroupBtn, .addWaveBtn { width: 100%; margin-top: 8px; padding: 8px; background: #163020; border: 1px dashed #3a5a45; color: #8fc8a8; border-radius: 4px; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+.addGroupBtn:hover, .addWaveBtn:hover { background: #1c4028; border-color: #4ade80; color: #c8f0d8; }
+.addWaveBtn { background: #102818; border-color: #2a4a35; color: #4ade80; font-weight: 600; }
+.addWaveBtn:hover { background: #163820; border-color: #4ade80; }
+
+.builderCyclesRow { display: flex; align-items: center; gap: 12px; padding-top: 8px; border-top: 1px solid #254030; }
+.builderCyclesRow label { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.builderCyclesRow input[type="number"] { width: 70px; background: #102016; border: 1px solid #304a38; color: #c8e8d8; padding: 4px 8px; border-radius: 3px; }
