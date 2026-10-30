@@ -468,7 +468,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .partyPicker .dd { min-width: 160px; }
 
 /* fill the page width: as many equal columns as the screen fits, never a fixed narrow strip on the right */
-.partyCards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; align-items: start; }
+.partyCards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; align-items: stretch; }
 
 .partyCard { min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 10px; background: #131820; border: 1px solid #2a3342; border-radius: 12px; }
 
