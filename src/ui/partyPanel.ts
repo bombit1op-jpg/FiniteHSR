@@ -247,27 +247,24 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const isTrailblazer = (kitId: string) => kitId.startsWith('trailblazer_')
     const pickChar = async () => {
       const active = store.active
-      // Exclude characters in OTHER slots (not current slot)
-      const otherSlotsExclude = (active?.slots
-        .filter(s => s.id !== row.id)
-        .map(s => s.kitId)
-        .filter(Boolean) as string[]) ?? []
+      // Start with all characters in the team (including current slot)
+      const allTeamCharacters = (active?.slots.map(s => s.kitId).filter(Boolean) as string[]) ?? []
       
       // Use liveRow() to get current kitId from store (important for in-place Trailblazer path switching)
       const currentKitId = liveRow().kitId
       const isCurrentTrailblazer = currentKitId && isTrailblazer(currentKitId)
       
       // For Trailblazer: allow switching to other Trailblazer paths (don't exclude them)
-      // For non-Trailblazer: just exclude other slots' characters
-      let filteredExclude = [...otherSlotsExclude]
+      // For non-Trailblazer: exclude all team characters (including current)
+      let filteredExclude = [...allTeamCharacters]
       if (isCurrentTrailblazer) {
         // Allow other Trailblazer paths by removing them from exclude
+        // But keep current Trailblazer path excluded
         const otherTrailblazers = KITS
           .filter(k => isTrailblazer(k.id) && k.id !== currentKitId)
           .map(k => k.id)
         filteredExclude = filteredExclude.filter(id => !otherTrailblazers.includes(id))
       }
-      // Current character is never in the picker (excluded by using otherSlotsExclude)
       const chosen = await openCharacterPicker({ exclude: filteredExclude, current: row.kitId || undefined })
       if (chosen === null) return
       if (chosen === '') { clearSlot(row.id); render(); return }
