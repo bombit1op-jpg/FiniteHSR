@@ -395,7 +395,7 @@ function buildMemberCard(slot: TeamRowState | undefined, index: number): HTMLEle
       tile.append(iconNode(
         gearIconUrl('cone', cone.id),
         cone.name,
-        { cls: 'partyPickGearIcon', size: 88, fit: 'contain', fallbackText: cone.name.charAt(0).toUpperCase(), tint: '#7fb3ff', title: cone.name }
+        { cls: 'partyPickGearIcon', size: 62, fit: 'contain', fallbackText: cone.name.charAt(0).toUpperCase(), tint: '#7fb3ff', title: cone.name }
       ))
       tile.title = cone.name
       coneCol.append(tile)
