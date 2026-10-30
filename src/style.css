@@ -142,21 +142,79 @@ body.busy { cursor: progress; }
 .ddOpt.ddSel { color: #f2c94c; }
 .ddOptIcon { width: 24px; height: 24px; object-fit: contain; border-radius: 4px; background: #0d1117; flex: 0 0 auto; }
 .ddOptIcon-placeholder { background: transparent; }
-/* signature light cone + E6 chip: ONE smooth green shimmer (right в†’ left, slower) */
-.ddOpt.ddSig, .ddBtn.ddSig, .eidolon.e6.active, .coneArt.signature .gearIcon, .pickConeCard.sig .gearIcon {
-  background-image: linear-gradient(110deg,
-    rgba(46,229,138,0) 0%, rgba(46,229,138,.22) 35%, rgba(200,255,225,.5) 50%,
-    rgba(46,229,138,.22) 65%, rgba(46,229,138,0) 100%);
-  background-size: 200% 100%; background-repeat: no-repeat;
+/* signature light cone + E6 chip: smooth green shimmer sweep (right → left, 8s loop) */
+.ddOpt.ddSig,
+.ddBtn.ddSig,
+.eidolon.e6.active,
+.coneArt.signature .gearIcon,
+.pickConeCard.sig .gearIcon {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Moving highlight using ::before pseudo-element */
+.ddOpt.ddSig::before,
+.ddBtn.ddSig::before,
+.eidolon.e6.active::before,
+.coneArt.signature .gearIcon::before,
+.pickConeCard.sig .gearIcon::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: -60%;
+  bottom: -60%;
+  left: 0;
+  width: 42%;
+
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(46, 229, 138, 0.12) 30%,
+    rgba(200, 255, 225, 0.48) 50%,
+    rgba(46, 229, 138, 0.12) 70%,
+    transparent 100%
+  );
+
+  transform: translateX(-250%) skewX(-18deg);
   animation: sigShimmer 8s linear infinite;
+  pointer-events: none;
 }
-.ddOpt.ddSig, .ddBtn.ddSig, .coneArt.signature .gearIcon, .pickConeCard.sig .gearIcon { color: #eafff2; font-weight: 600; }
+
+/* Dropdown arrow stays above the shimmer */
+.ddBtn.ddSig::after {
+  z-index: 2;
+}
+
+/* Full sweep of shimmer across and beyond element bounds */
 @keyframes sigShimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: 0% 0; }
+  from {
+    transform: translateX(-250%) skewX(-18deg);
+  }
+
+  to {
+    transform: translateX(350%) skewX(-18deg);
+  }
 }
+
+/* Disable animation when prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-  .ddOpt.ddSig, .ddBtn.ddSig, .eidolon.e6.active, .coneArt.signature .gearIcon, .pickConeCard.sig .gearIcon { animation: none; background-position: 50% 0; }
+  .ddOpt.ddSig::before,
+  .ddBtn.ddSig::before,
+  .eidolon.e6.active::before,
+  .coneArt.signature .gearIcon::before,
+  .pickConeCard.sig .gearIcon::before {
+    animation: none;
+  }
+}
+
+/* Text color for signature items (kept on the element itself, not the shimmer) */
+.ddOpt.ddSig,
+.ddBtn.ddSig,
+.coneArt.signature .gearIcon,
+.pickConeCard.sig .gearIcon {
+  color: #eafff2;
+  font-weight: 600;
 }
 .stratFlagsRow { margin-top: 2px; }
 .stratFlagsRow label { flex-direction: row; align-items: center; text-transform: none; font-size: 11px; color: #aab6c5; }
