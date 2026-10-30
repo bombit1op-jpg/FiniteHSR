@@ -46,7 +46,7 @@ function placePanel(panel: HTMLElement, anchor?: HTMLElement): void {
 
 function openOverlay(title: string, onDismiss: () => void, anchor?: HTMLElement): Overlay {
   const root = el('div', 'pickerOverlay')
-  const panel = el('div', 'pickerPanel')
+  const panel = el('div', 'pickerPanel animate__animated animate__fadeInUp animate__faster')
   panel.style.height = '600px'
   panel.style.maxHeight = '90vh'
   panel.style.overflow = 'hidden'
@@ -154,13 +154,15 @@ ov.body.append(search, elemRow, pathRow, grid)
 const paint = () => {
   grid.innerHTML = ''
   const q = search.value.trim().toLowerCase()
+  let index = 0
   for (const k of KITS) {
     if (exclude.has(k.id)) continue
     const p = KIT_PATH[k.id] ?? ''
     if (curPath !== '*' && p !== curPath) continue
     if (curElem !== '*' && k.elem !== curElem) continue
     if (q && !k.name.toLowerCase().includes(q)) continue
-    const btn = el('button', 'pickerCharIcon') as HTMLButtonElement
+    const btn = el('button', 'pickerCharIcon animate__animated animate__fadeInUp animate__faster') as HTMLButtonElement
+    btn.style.animationDelay = `${index * 10}ms`
     btn.type = 'button'
     btn.dataset.kitId = k.id
     if (k.id === opts.current) btn.classList.add('current')
@@ -173,6 +175,7 @@ const paint = () => {
     btn.append(art)
     btn.onclick = () => { ov.close(); resolve(k.id) }
     grid.append(btn)
+    index++
   }
   if (!grid.childElementCount) {
     const empty = el('em', 'dim')
@@ -251,13 +254,15 @@ ov.body.append(search, pathRow, rareRow, grid)
   const paint = () => {
     grid.innerHTML = ''
     const q = search.value.trim().toLowerCase()
+    let index = 0
     for (const id of order) {
       const cone = LIGHT_CONES.find(c => c.id === id)
       if (!cone) continue
       if (curPath !== '*' && cone.path !== curPath) continue
       if (curRare !== '*' && String(cone.rarity) !== curRare) continue
       if (q && !cone.name.toLowerCase().includes(q)) continue
-      const btn = el('button', 'pickConeCard') as HTMLButtonElement
+      const btn = el('button', 'pickConeCard animate__animated animate__fadeInUp animate__faster') as HTMLButtonElement
+      btn.style.animationDelay = `${index * 10}ms`
       btn.type = 'button'
       btn.dataset.coneId = id
       if (cone.path !== path) btn.classList.add('offPath')
@@ -278,7 +283,8 @@ ov.body.append(search, pathRow, rareRow, grid)
       btn.append(name, art, rarity)
       btn.onclick = () => { ov.close(); resolve(id) }
       grid.append(btn)
-}
+      index++
+    }
   if (!grid.childElementCount) {
     const empty = el('em', 'dim')
     empty.textContent = 'Нет конусов под фильтр'
@@ -297,8 +303,10 @@ export function openPartyListPicker(opts: { parties: Party[]; activeId: string |
   const ov = openOverlay('ВЫБОР ОТРЯДА', () => resolve(null), opts.anchor)
   const list = el('div', 'pickerList partyListPicker')
   ov.body.append(list)
+  let index = 0
   for (const p of opts.parties) {
-    const btn = el('button', 'pickerParty') as HTMLButtonElement
+    const btn = el('button', 'pickerParty animate__animated animate__fadeInUp animate__faster') as HTMLButtonElement
+    btn.style.animationDelay = `${index * 20}ms`
     btn.type = 'button'
     if (p.id === opts.activeId) btn.classList.add('current')
     const row = el('div', 'partyPickRow')
@@ -319,6 +327,7 @@ export function openPartyListPicker(opts: { parties: Party[]; activeId: string |
     btn.append(row)
     btn.onclick = () => { ov.close(); resolve(p.id) }
     list.append(btn)
+    index++
   }
   return promise
 }
