@@ -6,11 +6,16 @@
  */
 import { el } from './dom'
 import { iconNode } from './icons'
-import { DEFINITIONS as ENEMY_DEFINITIONS, enemyBehavior, ELEMS } from '../core/enemy'
+import { DEFINITIONS as ENEMY_DEFINITIONS, enemyBehavior, ELEMS, getEnemyStatRow } from '../core/enemy'
 import { enemyIconUrl, elemIconUrl } from './icons'
 import { openOverlay, RANK_LABELS } from './pickers'
 
-export function openEnemyPicker(opts: { current?: string; onSelect: (variant: any, definition: any) => void }): { close: () => void } {
+interface EnemyPickerOptions {
+  current?: string
+  onSelect: (variant: any, definition: any) => void
+}
+
+export function openEnemyPicker(opts: EnemyPickerOptions): { close: () => void } {
   const filter = {
     search: '',
     rank: 'all' as 'all' | 'mob' | 'elite' | 'boss',
@@ -22,6 +27,7 @@ export function openEnemyPicker(opts: { current?: string; onSelect: (variant: an
   let resolve!: (v: null) => void
   const ov = openOverlay('ВЫБОР ПРОТИВНИКА', () => resolve(null))
   ov.root.classList.add('enemyPickerOverlay')
+  ov.root.style.maxWidth = '1200px'
 
   // --- Header: search + filters ---
   const search = el('input', 'pickerSearch') as HTMLInputElement
@@ -77,13 +83,23 @@ export function openEnemyPicker(opts: { current?: string; onSelect: (variant: an
     aiRow.append(b)
   }
 
+  // Main content area with grid + preview panel
+  const contentRow = el('div', 'enemyPickerContent')
   const grid = el('div', 'enemyPickerGrid')
-  ov.body.append(search, rankRow, factionRow, elemRow, aiRow, grid)
+  const previewPanel = el('div', 'enemyPickerPreview')
+  previewPanel.style.display = 'none'
+  contentRow.append(grid, previewPanel)
+  ov.body.append(search, rankRow, factionRow, elemRow, aiRow, contentRow)
 
   let curRank = 'all'
   let curFaction = 'all'
   let curElement = 'all'
   let curAI = 'all'
+  let selectedVariant: any = null
+  let selectedDefinition: any = null
+  // Suppress unused - written in click handlers
+  void selectedVariant
+  void selectedDefinition
 
   for (const [k, b] of rankBtns) b.onclick = () => { curRank = k; for (const [kk, bb] of rankBtns) bb.classList.toggle('active', kk === k); paint() }
   for (const [k, b] of factionBtns) b.onclick = () => { curFaction = k; for (const [kk, bb] of factionBtns) bb.classList.toggle('active', kk === k); paint() }
@@ -149,7 +165,20 @@ export function openEnemyPicker(opts: { current?: string; onSelect: (variant: an
       preview.append(rankText, factionText)
 
       btn.append(art, info, preview)
-      btn.onclick = () => { ov.close(); resolve(variant); opts.onSelect(variant, definition) }
+
+      // Click to select
+      btn.onclick = () => {
+        selectedVariant = variant
+        selectedDefinition = definition
+        ov.close()
+        resolve(variant)
+        opts.onSelect(variant, definition)
+      }
+
+      // Hover to show preview
+      btn.onmouseenter = () => showPreview(variant, definition)
+      btn.onmouseleave = () => hidePreview()
+
       grid.append(btn)
       index++
     }
@@ -159,6 +188,214 @@ export function openEnemyPicker(opts: { current?: string; onSelect: (variant: an
       empty.textContent = 'Нет противников под фильтр'
       grid.append(empty)
     }
+  }
+
+  function showPreview(variant: any, definition: any): void {
+    previewPanel.innerHTML = ''
+    previewPanel.style.display = ''
+
+    // Get stats at level 80 (or default level)
+    const level = variant.level ?? 80
+    const statRow = getEnemyStatRow(variant, level)
+
+    // Header with large icon
+    const header = el('div', 'enemyPreviewHeader')
+    const iconUrl = enemyIconUrl(variant.title)
+    header.append(iconNode(iconUrl, variant.title, {
+      cls: 'enemyPreviewIcon', size: 96, fit: 'cover',
+      fallbackText: variant.title.trim().charAt(0).toUpperCase() || '?',
+      tint: '#7fb3ff', title: variant.title,
+    }))
+
+    const nameWrap = el('div', 'enemyPreviewNameWrap')
+    const name = el('h3', 'enemyPreviewName')
+    name.textContent = variant.title
+    nameWrap.append(name)
+
+    const meta = el('div', 'enemyPreviewMeta')
+    const rankBadge = el('span', `enemyRankBadge rank-${variant.rank}`)
+    rankBadge.textContent = RANK_LABELS[variant.rank]
+    const factionText = el('span', 'enemyFactionText')
+    factionText.textContent = definition.faction.join(', ')
+    meta.append(rankBadge, factionText)
+    nameWrap.append(meta)
+    header.append(nameWrap)
+    previewPanel.append(header)
+
+    // Stats grid
+    if (statRow) {
+      const statsSection = el('div', 'enemyPreviewSection')
+      const statsTitle = el('h4', 'enemyPreviewSectionTitle')
+      statsTitle.textContent = `Характеристики (ур. ${level})`
+      statsSection.append(statsTitle)
+
+      const statsGrid = el('div', 'enemyPreviewStatsGrid')
+      const stats = [
+        ['HP', statRow.hp.toLocaleString()],
+        ['ATK', statRow.atk.toLocaleString()],
+        ['DEF', statRow.def.toLocaleString()],
+        ['SPD', statRow.spd.toFixed(1)],
+        ['EHR', (statRow.effectHitRate * 100).toFixed(1) + '%'],
+        ['Eff RES', (statRow.effectRes * 100).toFixed(1) + '%'],
+      ]
+      for (const [label, value] of stats) {
+        const row = el('div', 'enemyPreviewStatRow')
+        const labelEl = el('span', 'enemyPreviewStatLabel')
+        labelEl.textContent = label
+        const valueEl = el('span', 'enemyPreviewStatValue')
+        valueEl.textContent = value
+        row.append(labelEl, valueEl)
+        statsGrid.append(row)
+      }
+      statsSection.append(statsGrid)
+      previewPanel.append(statsSection)
+    }
+
+    // Toughness
+    const toughnessSection = el('div', 'enemyPreviewSection')
+    const toughnessTitle = el('h4', 'enemyPreviewSectionTitle')
+    toughnessTitle.textContent = 'Жесткость'
+    toughnessSection.append(toughnessTitle)
+
+    const toughnessGrid = el('div', 'enemyPreviewStatsGrid')
+    const toughness = variant.toughnessModel
+    if (toughness) {
+      const rows: [string, string][] = [
+        ['Основная', toughness.primary.toLocaleString()],
+        ['Мульти-бар', toughness.segments.map((s: any) => `${s.max}×${s.count}`).join(', ') || '—'],
+        ['Неизвестно', toughness.unknown ? 'Да' : 'Нет'],
+      ]
+      if (toughness.phases?.length) {
+        rows.push(['Фазы', toughness.phases.map((p: any) => `${p.phase}: ${p.segments.map((s: any) => `${s.max}×${s.count}`).join(', ')}`).join('; ')])
+      }
+      for (const [label, value] of rows) {
+        const row = el('div', 'enemyPreviewStatRow')
+        const labelEl = el('span', 'enemyPreviewStatLabel')
+        labelEl.textContent = label
+        const valueEl = el('span', 'enemyPreviewStatValue')
+        valueEl.textContent = value
+        row.append(labelEl, valueEl)
+        toughnessGrid.append(row)
+      }
+    }
+    toughnessSection.append(toughnessGrid)
+    previewPanel.append(toughnessSection)
+
+    // Weaknesses
+    const weakSection = el('div', 'enemyPreviewSection')
+    const weakTitle = el('h4', 'enemyPreviewSectionTitle')
+    weakTitle.textContent = 'Слабости'
+    weakSection.append(weakTitle)
+
+    const weakGrid = el('div', 'enemyPreviewWeaknesses')
+    for (const elem of variant.weaknesses) {
+      weakGrid.append(iconNode(elemIconUrl(elem), elem, {
+        cls: 'enemyPreviewWeaknessIcon', size: 32, fit: 'contain',
+        fallbackText: elem.charAt(0), tint: '#7fb3ff', title: elem,
+      }))
+    }
+    weakSection.append(weakGrid)
+    previewPanel.append(weakSection)
+
+    // Resistances
+    if (variant.resistanceProfile && Object.keys(variant.resistanceProfile).length > 0) {
+      const resSection = el('div', 'enemyPreviewSection')
+      const resTitle = el('h4', 'enemyPreviewSectionTitle')
+      resTitle.textContent = 'Сопротивления'
+      resSection.append(resTitle)
+
+      const resGrid = el('div', 'enemyPreviewStatsGrid')
+      for (const [elem, value] of Object.entries(variant.resistanceProfile) as [string, number][]) {
+        const row = el('div', 'enemyPreviewStatRow')
+        const labelEl = el('span', 'enemyPreviewStatLabel')
+        labelEl.append(iconNode(elemIconUrl(elem), elem, { cls: 'miniIcon', size: 14, fit: 'contain', fallbackText: elem.charAt(0), tint: '#7fb3ff', title: elem }))
+        labelEl.append(' ' + elem)
+        const valueEl = el('span', 'enemyPreviewStatValue')
+        valueEl.textContent = (value >= 0 ? '+' : '') + (value * 100).toFixed(0) + '%'
+        valueEl.style.color = value >= 0 ? '#e08a8a' : '#7fd18a'
+        row.append(labelEl, valueEl)
+        resGrid.append(row)
+      }
+      resSection.append(resGrid)
+      previewPanel.append(resSection)
+    }
+
+    // Debuff RES
+    if (variant.effectResistanceProfile?.values?.length) {
+      const debuffSection = el('div', 'enemyPreviewSection')
+      const debuffTitle = el('h4', 'enemyPreviewSectionTitle')
+      debuffTitle.textContent = 'Debuff RES'
+      debuffSection.append(debuffTitle)
+
+      const debuffGrid = el('div', 'enemyPreviewStatsGrid')
+      const headers = variant.effectResistanceProfile.headers
+      for (let i = 0; i < variant.effectResistanceProfile.values.length; i++) {
+        const row = el('div', 'enemyPreviewStatRow')
+        const labelEl = el('span', 'enemyPreviewStatLabel')
+        labelEl.textContent = headers[i] ?? `Debuff ${i + 1}`
+        const valueEl = el('span', 'enemyPreviewStatValue')
+        valueEl.textContent = (variant.effectResistanceProfile.values[i] * 100).toFixed(0) + '%'
+        row.append(labelEl, valueEl)
+        debuffGrid.append(row)
+      }
+      debuffSection.append(debuffGrid)
+      previewPanel.append(debuffSection)
+    }
+
+    // Skills
+    if (variant.skills?.length) {
+      const skillsSection = el('div', 'enemyPreviewSection')
+      const skillsTitle = el('h4', 'enemyPreviewSectionTitle')
+      skillsTitle.textContent = 'Способности'
+      skillsSection.append(skillsTitle)
+
+      const skillsList = el('div', 'enemyPreviewSkills')
+      for (const skill of variant.skills) {
+        const skillEl = el('div', 'enemyPreviewSkill')
+        const skillName = el('span', 'enemyPreviewSkillName')
+        skillName.textContent = skill.name
+        const skillTag = el('span', 'enemyPreviewSkillTag')
+        skillTag.textContent = skill.tag
+        skillEl.append(skillName, skillTag)
+        if (skill.description) {
+          const skillDesc = el('span', 'enemyPreviewSkillDesc')
+          skillDesc.textContent = skill.description
+          skillEl.append(skillDesc)
+        }
+        skillsList.append(skillEl)
+      }
+      skillsSection.append(skillsList)
+      previewPanel.append(skillsSection)
+    }
+
+    // Gameplay notes
+    if (variant.gameplayNotes) {
+      const notesSection = el('div', 'enemyPreviewSection')
+      const notesTitle = el('h4', 'enemyPreviewSectionTitle')
+      notesTitle.textContent = 'Заметки'
+      notesSection.append(notesTitle)
+
+      const notesText = el('div', 'enemyPreviewNotes')
+      notesText.textContent = variant.gameplayNotes
+      notesSection.append(notesText)
+      previewPanel.append(notesSection)
+    }
+
+    // Select button
+    const selectBtn = el('button', 'enemyPreviewSelectBtn btn-primary')
+    selectBtn.textContent = 'Выбрать'
+    selectBtn.onclick = () => {
+      selectedVariant = variant
+      selectedDefinition = definition
+      ov.close()
+      resolve(variant)
+      opts.onSelect(variant, definition)
+    }
+    previewPanel.append(selectBtn)
+  }
+
+  function hidePreview(): void {
+    previewPanel.style.display = 'none'
   }
 
   search.oninput = () => { filter.search = search.value; paint() }

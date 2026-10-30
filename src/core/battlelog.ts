@@ -17,6 +17,7 @@
 import { traceDamage, type DmgTrace } from './combat/DamageCalculator'
 import { auditSummary, verifyInvariants, InvariantWatcher } from './battle/Invariants'
 import type { Simulator } from './simulator'
+import { eff, effectResOf, buffSum } from './combat/StatResolver'
 
 /** DEBUG levels (§32). 0 = OFF, 1 = SUMMARY, 2 = ACTIONS, 3 = EFFECTS, 4 = DAMAGE,
  *  5 = FULL EVENT TRACE, 6 = STATE SNAPSHOT + DIFF, 7 = RNG + EVERYTHING. */
@@ -173,8 +174,19 @@ export interface BattleEvent {
   type: EventType
   source?: string
   target?: string
+  sourceId?: string
+  targetId?: string
   attackType?: string
   element?: string
+  /** Provenance information for effects and abilities */
+  provenance?: {
+    sourceKind: 'ability' | 'technique' | 'talent' | 'passive' | 'trace' | 'lightCone' | 'relic' | 'enemyAbility' | 'manual' | 'preCombat' | 'environment' | 'unknown'
+    abilityId?: string
+    abilityName?: string
+    abilitySlot?: 'basic' | 'skill' | 'ult' | 'talent' | 'technique' | 'memo'
+    triggeredByUnitId?: string
+    triggeredByUnitName?: string
+  }
   payload: Record<string, unknown>
   raw?: string
 }
@@ -186,9 +198,34 @@ export interface StateSnapshot {
   sp: number
   maxSp: number
   units: Record<string, {
-    side: string; kind: string; hp: number; maxHp: number; energy: number; maxEnergy: number
-    av: number; toughness: number; maxToughness: number; broken: boolean; dead: boolean
-    buffs: string[]; dots: string[]
+    id: string
+    name: string
+    side: string
+    kind: string
+    level: number
+    hp: number
+    maxHp: number
+    shield: number
+    energy: number
+    maxEnergy: number
+    av: number
+    toughness: number
+    maxToughness: number
+    broken: boolean
+    dead: boolean
+    buffs: Array<{ id: string; name: string; stacks: number; turns: number; mods: any[]; sourceId?: string }>
+    debuffs: Array<{ id: string; name: string; stacks: number; turns: number; mods: any[]; sourceId?: string }>
+    dots: Array<{ id: string; name: string; element: string; damage: number; turns: number; sourceId?: string }>
+    controls: Array<{ id: string; name: string; turns: number; sourceId?: string }>
+    atk: number
+    def: number
+    spd: number
+    critRate: number
+    critDmg: number
+    be: number
+    ehr: number
+    effRes: number
+    wave: number
   }>
 }
 
@@ -458,15 +495,73 @@ export class BattleLogger {
   snapshot(): StateSnapshot {
     const units: StateSnapshot['units'] = {}
     for (const u of this.sim.units()) {
-      units[u.name] = {
-        side: u.side, kind: u.kind,
-        hp: Math.round(u.hp * 100) / 100, maxHp: u.maxHp,
-        energy: Math.round(u.energy * 100) / 100, maxEnergy: u.maxEnergy,
+      // Build detailed buff/debuff/dot info
+      const buffs = u.buffs.filter(b => !b.debuff).map(b => ({
+        id: b.id,
+        name: b.name,
+        stacks: b.stacks ?? 1,
+        turns: b.turns ?? Infinity,
+        mods: b.mods ?? [],
+        sourceId: b.sourceId,
+        shield: b.shield,
+      }))
+      const debuffs = u.buffs.filter(b => b.debuff).map(b => ({
+        id: b.id,
+        name: b.name,
+        stacks: b.stacks ?? 1,
+        turns: b.turns ?? Infinity,
+        mods: b.mods ?? [],
+        sourceId: b.sourceId,
+      }))
+      const dots = u.dots.map(d => ({
+        id: d.kind,
+        name: d.kind,
+        element: d.elem,
+        damage: d.baseDmg,
+        turns: d.turns,
+        stacks: d.stacks,
+        sourceBe: d.sourceBe,
+        defIgnore: d.defIgnore,
+      }))
+      const controls = u.buffs.filter(b => b.debuff && (b.id.includes('control') || b.id.includes('imprison') || b.id.includes('freeze') || b.id.includes('shock') || b.id.includes('entangle') || b.id.includes('wind'))).map(b => ({
+        id: b.id,
+        name: b.name,
+        turns: b.turns ?? 0,
+        sourceId: b.sourceId,
+      }))
+
+      // Get final stats using the sim's eff function
+      const stats = eff(u)
+
+      units[u.id] = {
+        id: u.id,
+        name: u.name,
+        side: u.side,
+        kind: u.kind,
+        level: u.base.level,
+        hp: Math.round(u.hp * 100) / 100,
+        maxHp: u.maxHp,
+        shield: u.buffs.reduce((sum, b) => sum + (b.shield ?? 0), 0),
+        energy: Math.round(u.energy * 100) / 100,
+        maxEnergy: u.maxEnergy,
         av: Math.round(u.av * 1000) / 1000,
-        toughness: Math.round(u.toughness * 100) / 100, maxToughness: u.maxToughness,
-        broken: !!u.broken, dead: !!u.dead,
-        buffs: u.buffs.map(b => `${b.id}x${b.stacks ?? 1}@${b.turns ?? 'perm'}`).sort(),
-        dots: u.dots.map(d => `${d.kind}x${d.stacks ?? 1}@${d.turns}`).sort(),
+        toughness: Math.round(u.toughness * 100) / 100,
+        maxToughness: u.maxToughness,
+        broken: !!u.broken,
+        dead: !!u.dead,
+        buffs,
+        debuffs,
+        dots,
+        controls,
+        atk: Math.round(stats.atk ?? u.base.atk ?? 0),
+        def: Math.round(stats.def ?? u.base.def ?? 0),
+        spd: Math.round((stats.spd ?? u.base.spd ?? 0) * 10) / 10,
+        critRate: stats.critRate ?? 0,
+        critDmg: stats.critDmg ?? 0,
+        be: stats.be ?? 0,
+        ehr: (u.base.ehr ?? 0) + buffSum(u.buffs, 'ehr'),
+        effRes: effectResOf(u),
+        wave: u.wave ?? 1,
       }
     }
     const s: StateSnapshot = {

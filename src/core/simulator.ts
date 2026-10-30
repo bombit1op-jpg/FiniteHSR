@@ -619,10 +619,11 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
     weaknesses: Elem[], res?: Partial<Record<Elem, number>>, atk?: number,
     effectRes?: number, debuffRes?: number[], wave?: number, rank?: 'mob' | 'elite' | 'boss',
     toughnessBars?: number[],
+    def?: number,
   }): Unit {
     const u: Unit = {
       id: `e${++this.uid}`, name: o.name, side: 'enemy', kind: 'enemy', elem: 'Physical',
-      base: { level: o.level, hp: o.hp, atk: o.atk ?? 800, def: 200 + 10 * o.level, spd: o.spd },
+      base: { level: o.level, hp: o.hp, atk: o.atk ?? 800, def: o.def ?? (200 + 10 * o.level), spd: o.spd },
       hp: o.hp, maxHp: o.hp, energy: 0, maxEnergy: 0, av: 0, buffs: [], dots: [],
       toughness: o.toughness, maxToughness: o.toughness, broken: false,
       toughnessBars: o.toughnessBars, toughBarIndex: o.toughnessBars?.length ? 0 : undefined,

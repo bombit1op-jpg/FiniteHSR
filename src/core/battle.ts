@@ -252,6 +252,8 @@ export interface EnemySpec {
   weaknesses: Elem[]
   res?: Partial<Record<Elem, number>>
   atk?: number
+  /** base DEF; if omitted, engine falls back to 200 + 10 * level */
+  def?: number
   effectRes?: number
   /** Debuff RES profile (raw 8-col order); usually engine-filled from raw enemy data */
   debuffRes?: number[]
@@ -485,6 +487,7 @@ function setupSim(setup: BattleSetup): Simulator {
           hp: e.hp, spd: e.spd, level: e.level, toughness: e.toughness,
           weaknesses: e.weaknesses, res: e.res, atk: e.atk, effectRes: e.effectRes, debuffRes: e.debuffRes,
           rank: e.rank, wave, toughnessBars: e.toughnessBars,
+          def: e.def,
         })
         groupFirst ??= spawned
         // §57 enemy passive opening state (War Armor arming): the behavior is authored keyed by the

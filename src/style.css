@@ -1114,3 +1114,199 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .builderCyclesRow { display: flex; align-items: center; gap: 12px; padding-top: 8px; border-top: 1px solid #254030; }
 .builderCyclesRow label { display: flex; align-items: center; gap: 8px; font-size: 13px; }
 .builderCyclesRow input[type="number"] { width: 70px; background: #102016; border: 1px solid #304a38; color: #c8e8d8; padding: 4px 8px; border-radius: 3px; }
+
+/* ---------------------------------------------------------------- §Simulation Panel */
+
+.simulationRoot { display: flex; flex-direction: column; gap: 16px; min-height: 600px; }
+
+.simHeader { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #0c1410; border: 1px solid #2a4a35; border-radius: 8px; }
+.simTitle { margin: 0; font-size: 18px; font-weight: 700; color: #8bd39b; }
+
+.simMain { display: flex; gap: 24px; flex: 1; min-height: 500px; }
+.simLeft { flex: 0 0 380px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.simRight { flex: 1; display: flex; flex-direction: column; gap: 16px; min-width: 0; overflow-y: auto; }
+
+.simSection { background: #0c1410; border: 1px solid #2a4a35; border-radius: 8px; padding: 12px; }
+.simSection h2 { margin: 0 0 12px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #8bd39b; border-bottom: 1px solid #2a4a35; padding-bottom: 8px; }
+
+.simPartySummary { display: flex; flex-direction: column; gap: 10px; }
+.simPartyName { font-size: 16px; font-weight: 700; color: #e6ebf2; }
+.simPartySlotsInfo { font-size: 12px; color: #7b8595; }
+.simPartySlotsGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+@media (max-width: 600px) { .simPartySlotsGrid { grid-template-columns: 1fr; } }
+.simPartySlot { background: #101812; border: 1px solid #2a4a35; border-radius: 6px; padding: 8px; display: flex; flex-direction: column; gap: 6px; align-items: center; text-align: center; }
+.simPartySlot.empty { color: #55606f; font-style: italic; padding: 20px; }
+.simSlotPortraitWrap { width: 64px; height: 88px; }
+.simSlotPortrait { width: 100%; height: 100%; }
+.simSlotName { font-size: 12px; font-weight: 600; color: #e6ebf2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.simSlotChips { display: flex; gap: 4px; }
+.simSlotEidolon { font-size: 11px; color: #f2c94c; font-weight: 600; }
+.simSlotCone { opacity: 0.8; }
+.simSlotRelics { display: flex; gap: 2px; }
+
+.simParams { display: flex; flex-direction: column; gap: 10px; }
+.simParams label { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: #9aa7ba; }
+.simParams input, .simParams select { background: #0d1117; border: 1px solid #2a3342; border-radius: 6px; color: #e6ebf2; padding: 6px 8px; font: inherit; }
+.simParams input:focus, .simParams select:focus { outline: none; border-color: #4ade80; }
+
+.encounterSelectLabel { display: flex; flex-direction: column; gap: 4px; }
+
+.encounterBuilder { display: flex; flex-direction: column; gap: 12px; }
+.encounterWave { background: #0e1e14; border: 1px solid #2a4a35; border-radius: 8px; padding: 12px; }
+.encounterWaveHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.encounterWaveHeader span { font-weight: 600; color: #4ade80; font-size: 14px; }
+.encounterGroup { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 8px; background: #142a1c; border: 1px solid #254030; border-radius: 6px; margin-bottom: 8px; }
+.encounterGroup:last-child { margin-bottom: 0; }
+.encounterPickBtn { flex: 1; min-width: 160px; text-align: left; background: #1a3324; border: 1px solid #3a5a45; color: #b8e5c8; padding: 6px 10px; border-radius: 4px; font-size: 13px; cursor: pointer; }
+.encounterPickBtn:hover { background: #20402d; border-color: #4ade80; }
+.encounterGroup label { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #8fc8a8; white-space: nowrap; }
+.encounterGroup input[type="number"] { background: #102016; border: 1px solid #304a38; color: #c8e8d8; padding: 4px 6px; border-radius: 3px; font-size: 12px; width: auto; }
+.encounterGroup input[type="number"]:focus { outline: none; border-color: #4ade80; }
+.addGroupBtn, .addWaveBtn { width: 100%; margin-top: 8px; padding: 8px; background: #163020; border: 1px dashed #3a5a45; color: #8fc8a8; border-radius: 4px; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+.addGroupBtn:hover, .addWaveBtn:hover { background: #1c4028; border-color: #4ade80; color: #c8f0d8; }
+.addWaveBtn { background: #102818; border-color: #2a4a35; color: #4ade80; font-weight: 600; }
+.addWaveBtn:hover { background: #163820; border-color: #4ade80; }
+.builderCyclesRow { display: flex; align-items: center; gap: 12px; padding-top: 8px; border-top: 1px solid #254030; }
+.builderCyclesRow label { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.builderCyclesRow input[type="number"] { width: 70px; background: #102016; border: 1px solid #304a38; color: #c8e8d8; padding: 4px 8px; border-radius: 3px; }
+
+.simRunBtn { margin-top: 8px; }
+
+.simResults { display: flex; flex-direction: column; gap: 16px; }
+
+.simSummary { background: #0c1410; border: 1px solid #2a4a35; border-radius: 8px; padding: 12px; }
+.simResultBadge { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; margin-bottom: 10px; }
+.simResultBadge.win { background: rgba(127,209,138,0.14); color: #7fd18a; border: 1px solid #7fd18a44; }
+.simResultBadge.lose { background: rgba(224,138,138,0.14); color: #e08a8a; border: 1px solid #e08a8a44; }
+.simResultBadge.timeout { background: rgba(242,201,76,0.12); color: #e6c977; border: 1px solid #e6c97744; }
+.simResultBadge.unknown { background: #1b2230; color: #9aa7ba; border: 1px solid #2a3342; }
+.simStats { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+.simStatRow { display: flex; justify-content: space-between; gap: 8px; padding: 6px 8px; background: #101812; border: 1px solid #2a4a35; border-radius: 4px; }
+.simStatLabel { color: #9aa7ba; font-size: 12px; }
+.simStatValue { color: #e6ebf2; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.simDmgTable { width: 100%; border-collapse: collapse; font-size: 13px; }
+.simDmgTable th, .simDmgTable td { text-align: left; padding: 6px 10px; border-bottom: 1px solid #1e2530; }
+.simDmgTable th { color: #9aa7ba; font-weight: 500; text-transform: uppercase; font-size: 11px; letter-spacing: .04em; }
+.simDmgTable td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.simStatsGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.simCharStatsCard { background: #101812; border: 1px solid #2a4a35; border-radius: 6px; padding: 10px; }
+.simCharStatsName { font-size: 13px; font-weight: 600; color: #e6ebf2; margin-bottom: 8px; }
+.simCharStatsInner { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; }
+.simCharStatRow { display: contents; }
+.simCharStatLabel { color: #9aa7ba; font-size: 12px; }
+.simCharStatValue { color: #e6ebf2; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+
+.simLogContainer { max-height: 400px; overflow: auto; background: #0d1117; border: 1px solid #1e2530; border-radius: 6px; padding: 8px; font: 12px/1.5 Consolas, monospace; white-space: pre-wrap; }
+.simLogLine { white-space: pre-wrap; font-family: Consolas, monospace; padding: 2px 4px; border-radius: 3px; }
+.simLogLine:hover { background: rgba(255,255,255,0.02); }
+
+.simDmgBreakList { display: flex; flex-direction: column; gap: 8px; }
+.simDmgBreakItem { background: #101812; border: 1px solid #2a4a35; border-radius: 6px; padding: 10px; }
+.simDmgBreakHeader { font-weight: 600; color: #f2c94c; margin-bottom: 6px; font-size: 13px; }
+.simDmgBreakDetails { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 4px 12px; font-size: 12px; }
+.simDmgBreakRow { display: contents; }
+.simDmgBreakRow span:first-child { color: #9aa7ba; }
+.simDmgBreakRow span:last-child { color: #e6ebf2; font-weight: 500; text-align: right; }
+
+.simTraceContainer { max-height: 300px; overflow: auto; background: #0d1117; border: 1px solid #1e2530; border-radius: 6px; }
+.simTrace { margin: 0; padding: 10px; font: 11px/1.5 Consolas, monospace; color: #aab6c5; white-space: pre-wrap; }
+
+.simBattlefield { display: flex; flex-direction: column; gap: 16px; }
+.simBattlefieldSide { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.simBattlefieldTitle { margin: 0; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #8bd39b; }
+.simBattlefieldGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+@media (max-width: 700px) { .simBattlefieldGrid { grid-template-columns: 1fr; } }
+
+.simUnitCard { background: #101812; border: 1px solid #2a4a35; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.simUnitCard.ally { border-color: #2a5a3a; }
+.simUnitCard.enemy { border-color: #5a3a2a; }
+.simUnitCard.dead { opacity: 0.5; border-color: #4a2a2a; background: #1a1010; }
+.simUnitCard.broken { border-color: #ff8a5c; box-shadow: 0 0 8px rgba(255,138,92,0.3); }
+
+.simUnitHeader { display: flex; align-items: center; gap: 8px; }
+.simUnitIcon { flex-shrink: 0; }
+.simUnitName { font-size: 13px; font-weight: 600; color: #e6ebf2; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.simUnitEidolon { font-size: 11px; color: #f2c94c; font-weight: 600; background: rgba(242,201,76,0.1); padding: 2px 6px; border-radius: 999px; }
+
+.simStatBarWrap { display: flex; align-items: center; gap: 8px; }
+.simStatBarLabel { width: 60px; font-size: 11px; color: #9aa7ba; text-transform: uppercase; }
+.simStatBar { flex: 1; height: 18px; background: #0a100d; border: 1px solid #2a4a35; border-radius: 9px; overflow: hidden; position: relative; }
+.simStatBarFill { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: #0a100d; white-space: nowrap; padding: 0 6px; transition: width 0.3s ease; }
+.simStatBar.hp .simStatBarFill { background: linear-gradient(90deg, #e08a8a, #ff6b6b); }
+.simStatBar.shield .simStatBarFill { background: linear-gradient(90deg, #7ec8ff, #a8d8ff); }
+.simStatBar.energy .simStatBarFill { background: linear-gradient(90deg, #f5d76e, #ffe89a); }
+.simStatBar.toughness .simStatBarFill { background: linear-gradient(90deg, #c9a7ff, #e8d8ff); }
+.simStatBarValue { width: 60px; text-align: right; font-size: 11px; color: #cfe0ef; font-variant-numeric: tabular-nums; }
+
+.simUltReady { text-align: center; padding: 4px; background: rgba(245,215,110,0.15); border: 1px solid #f5d76e55; border-radius: 4px; color: #f5d76e; font-size: 11px; font-weight: 700; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+.simUnitWeaknesses { display: flex; gap: 4px; flex-wrap: wrap; }
+.simWeaknessIcon { flex-shrink: 0; }
+
+.simUnitEffects { display: flex; flex-direction: column; gap: 4px; }
+.simEffectsTitle { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: #7b8595; }
+.simEffectsGrid { display: flex; flex-wrap: wrap; gap: 4px; }
+.simEffectIcon { position: relative; width: 28px; height: 28px; border-radius: 4px; display: flex; align-items: center; justify-content: center; background: #1a2a1e; border: 1px solid #3a5a45; cursor: help; }
+.simEffectIcon.debuff { background: #2a1a1a; border-color: #5a3a3a; }
+.simEffectIconImg { width: 24px; height: 24px; }
+.simEffectStack { position: absolute; bottom: -2px; right: -2px; font-size: 9px; font-weight: 700; color: #f2c94c; background: #0a100d; border-radius: 999px; padding: 0 3px; min-width: 14px; text-align: center; }
+.simEffectTurns { position: absolute; top: -2px; right: -2px; font-size: 9px; font-weight: 600; color: #7ec8ff; background: #0a100d; border-radius: 999px; padding: 0 3px; min-width: 14px; text-align: center; }
+
+.simResourceBar { display: flex; flex-wrap: wrap; gap: 12px; padding: 10px; background: #0e1e14; border: 1px solid #2a4a35; border-radius: 8px; }
+.simResourceItem { display: flex; flex-direction: column; gap: 4px; min-width: 100px; }
+.simResourceLabel { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: #7b8595; }
+.simResourceValue { font-size: 14px; font-weight: 700; color: #f2c94c; font-variant-numeric: tabular-nums; }
+.simResourceBarFill { height: 4px; background: #1a3a2a; border-radius: 2px; background: linear-gradient(90deg, #4ade80, #8bd39b); }
+
+.simLoading { text-align: center; padding: 40px; color: #9aa7ba; font-size: 14px; }
+.simError { color: #e08a8a; padding: 12px; background: #2a1d1d; border: 1px solid #e08a8a44; border-radius: 6px; margin-top: 12px; }
+
+/* ---------------------------------------------------------------- §Enemy Picker Enhanced */
+
+.enemyPickerOverlay .pickerPanel { width: min(1200px, calc(100vw - 24px)); }
+.enemyPickerContent { display: flex; gap: 16px; }
+.enemyPickerGrid { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; min-width: 0; }
+.enemyPickerPreview { width: 360px; flex-shrink: 0; background: #0e1e14; border: 1px solid #2a4a35; border-radius: 8px; padding: 12px; overflow-y: auto; max-height: 70vh; }
+
+.enemyPickerCard { display: flex; flex-direction: column; gap: 8px; padding: 8px; background: #142a1c; border: 1px solid #2a4a35; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+.enemyPickerCard:hover { border-color: #4ade80; background: #1a3a2a; }
+.enemyPickerCard.current { border-color: #f2c94c; box-shadow: 0 0 12px rgba(242,201,76,0.3); }
+.enemyPickIcon { width: 56px; height: 56px; border-radius: 6px; overflow: hidden; margin: 0 auto; }
+.enemyPickInfo { display: flex; flex-direction: column; gap: 4px; text-align: center; }
+.enemyPickName { font-size: 12px; font-weight: 600; color: #e6ebf2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.enemyPickMeta { display: flex; justify-content: center; gap: 4px; }
+.enemyPickPreview { font-size: 10px; color: #7b8595; display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+.enemyRankBadge { font-size: 9px; padding: 1px 5px; border-radius: 999px; font-weight: 600; }
+.enemyRankBadge.rank-mob { background: rgba(127,209,138,0.14); color: #7fd18a; border: 1px solid #7fd18a44; }
+.enemyRankBadge.rank-elite { background: rgba(190,160,255,0.14); color: #bea0ff; border: 1px solid #bea0ff44; }
+.enemyRankBadge.rank-boss { background: rgba(255,138,92,0.14); color: #ff8a5c; border: 1px solid #ff8a5c44; }
+
+.enemyPreviewHeader { display: flex; gap: 12px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #2a4a35; }
+.enemyPreviewIcon { width: 96px; height: 96px; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+.enemyPreviewNameWrap { flex: 1; min-width: 0; }
+.enemyPreviewName { margin: 0 0 4px; font-size: 16px; font-weight: 700; color: #e6ebf2; }
+.enemyPreviewMeta { display: flex; gap: 6px; flex-wrap: wrap; }
+.enemyFactionText { font-size: 11px; color: #7b8595; }
+
+.enemyPreviewSection { margin-bottom: 12px; }
+.enemyPreviewSectionTitle { margin: 0 0 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #8bd39b; }
+.enemyPreviewStatsGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 8px; font-size: 12px; }
+.enemyPreviewStatRow { display: contents; }
+.enemyPreviewStatLabel { color: #9aa7ba; }
+.enemyPreviewStatValue { color: #e6ebf2; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+
+.enemyPreviewWeaknesses { display: flex; flex-wrap: wrap; gap: 6px; }
+.enemyPreviewWeaknessIcon { width: 32px; height: 32px; border-radius: 4px; background: #1a3a2a; border: 1px solid #3a5a45; }
+
+.enemyPreviewSkills { display: flex; flex-direction: column; gap: 6px; }
+.enemyPreviewSkill { padding: 6px 8px; background: #142a1c; border: 1px solid #2a4a35; border-radius: 4px; }
+.enemyPreviewSkillName { font-size: 12px; font-weight: 600; color: #f2c94c; }
+.enemyPreviewSkillTag { font-size: 10px; color: #7b8595; text-transform: uppercase; margin-left: 8px; }
+.enemyPreviewSkillDesc { font-size: 11px; color: #9aa7ba; margin-top: 4px; display: block; }
+
+.enemyPreviewNotes { font-size: 11px; color: #9aa7ba; line-height: 1.5; padding: 8px; background: #142a1c; border: 1px solid #2a4a35; border-radius: 4px; }
+
+.enemyPreviewSelectBtn { width: 100%; margin-top: 12px; padding: 10px; font-size: 13px; font-weight: 600; }
