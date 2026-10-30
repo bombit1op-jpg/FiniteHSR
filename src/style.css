@@ -754,17 +754,17 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .pickConeRarity.r4 { color: #a78bfa; }
 .pickConeRarity.r3 { color: #5ea9d6; }
 .pickerList { display: flex; flex-direction: column; gap: 2px; }
-.pickerCone { display: flex; align-items: center; gap: 10px; width: 100%; padding: 6px 8px; background: transparent; border: 1px solid transparent; border-radius: 7px; color: inherit; cursor: pointer; text-align: left; }
-.pickerCone:hover { background: #142018; border-color: #2c4935; }
-.pickerCone.current { border-color: #f2c94c; background: #1a2219; }
-.pickerCone.offPath { opacity: .5; }
-.pickerCone.offPath:hover { opacity: .85; }
-.pickerCone.sig .pickName { color: #ffd257; }
-.pickerCone .gearIcon { width: 48px; height: 48px; flex: none; display: flex; align-items: center; justify-content: center; }
-.pickerCone .gearIcon img { max-width: 48px; max-height: 48px; object-fit: contain; }
-.pickerConeInfo { min-width: 0; }
-.pickerConeInfo .pickName { font-size: 13px; }
-.pickerConeInfo .pickMeta { font-size: 11px; color: #7d917f; }
+.pickConeCard { display: flex; align-items: center; gap: 10px; width: 100%; padding: 6px 8px; background: transparent; border: 1px solid transparent; border-radius: 7px; color: inherit; cursor: pointer; text-align: left; }
+.pickConeCard:hover { background: #142018; border-color: #2c4935; }
+.pickConeCard.current { border-color: #f2c94c; background: #1a2219; }
+.pickConeCard.offPath { opacity: .5; }
+.pickConeCard.offPath:hover { opacity: .85; }
+.pickConeCard.sig .pickConeName { color: #ffd257; }
+.pickConeCard .gearIcon { width: 48px; height: 48px; flex: none; display: flex; align-items: center; justify-content: center; }
+.pickConeCard .gearIcon img { max-width: 48px; max-height: 48px; object-fit: contain; }
+.pickConeCardInfo { min-width: 0; }
+.pickConeCardInfo .pickConeName { font-size: 13px; }
+.pickConeCardInfo .pickConeMeta { font-size: 11px; color: #7d917f; }
 .partyListPicker { gap: 4px; }
 .pickerParty { width: 100%; padding: 5px 8px; background: #111a14; border: 1px solid #26352b; border-radius: 8px; color: inherit; cursor: pointer; text-align: left; }
 .pickerParty:hover { border-color: #67b97b; }
