@@ -116,13 +116,15 @@ export class Dropdown {
     if (active && active !== this) active.close()
     active = this
     this.open = true
-    this.menu.classList.add('animate__animated', 'animate__fadeIn', 'animate__faster')
+    this.menu.classList.add('animate__animated', 'animate__fadeIn')
+    this.menu.style.animationDuration = '150ms'
     this.root.classList.add('ddOpen')
   }
 
   private close(): void {
     this.open = false
-    this.menu.classList.remove('animate__animated', 'animate__fadeIn', 'animate__faster')
+    this.menu.classList.remove('animate__animated', 'animate__fadeIn')
+    this.menu.style.animationDuration = ''
     this.root.classList.remove('ddOpen')
     if (active === this) active = null
   }

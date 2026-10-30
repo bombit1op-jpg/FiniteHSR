@@ -46,12 +46,13 @@ function placePanel(panel: HTMLElement, anchor?: HTMLElement): void {
 
 function openOverlay(title: string, onDismiss: () => void, anchor?: HTMLElement): Overlay {
   const root = el('div', 'pickerOverlay')
-  const panel = el('div', 'pickerPanel animate__animated animate__fadeInUp animate__faster')
+  const panel = el('div', 'pickerPanel animate__animated animate__fadeInUp')
   panel.style.height = '600px'
   panel.style.maxHeight = '90vh'
   panel.style.overflow = 'hidden'
   panel.style.display = 'flex'
   panel.style.flexDirection = 'column'
+  panel.style.animationDuration = '150ms'
   const head = el('div', 'pickerHead')
   head.style.flexShrink = '0'
   const t = el('div', 'pickerTitle')
@@ -161,8 +162,9 @@ const paint = () => {
     if (curPath !== '*' && p !== curPath) continue
     if (curElem !== '*' && k.elem !== curElem) continue
     if (q && !k.name.toLowerCase().includes(q)) continue
-    const btn = el('button', 'pickerCharIcon animate__animated animate__fadeInUp animate__faster') as HTMLButtonElement
+    const btn = el('button', 'pickerCharIcon animate__animated animate__fadeInUp') as HTMLButtonElement
     btn.style.animationDelay = `${index * 10}ms`
+    btn.style.animationDuration = '150ms'
     btn.type = 'button'
     btn.dataset.kitId = k.id
     if (k.id === opts.current) btn.classList.add('current')
@@ -261,8 +263,9 @@ ov.body.append(search, pathRow, rareRow, grid)
       if (curPath !== '*' && cone.path !== curPath) continue
       if (curRare !== '*' && String(cone.rarity) !== curRare) continue
       if (q && !cone.name.toLowerCase().includes(q)) continue
-      const btn = el('button', 'pickConeCard animate__animated animate__fadeInUp animate__faster') as HTMLButtonElement
+      const btn = el('button', 'pickConeCard animate__animated animate__fadeInUp') as HTMLButtonElement
       btn.style.animationDelay = `${index * 10}ms`
+      btn.style.animationDuration = '150ms'
       btn.type = 'button'
       btn.dataset.coneId = id
       if (cone.path !== path) btn.classList.add('offPath')
@@ -305,8 +308,9 @@ export function openPartyListPicker(opts: { parties: Party[]; activeId: string |
   ov.body.append(list)
   let index = 0
   for (const p of opts.parties) {
-    const btn = el('button', 'pickerParty animate__animated animate__fadeInUp animate__faster') as HTMLButtonElement
+    const btn = el('button', 'pickerParty animate__animated animate__fadeInUp') as HTMLButtonElement
     btn.style.animationDelay = `${index * 20}ms`
+    btn.style.animationDuration = '150ms'
     btn.type = 'button'
     if (p.id === opts.activeId) btn.classList.add('current')
     const row = el('div', 'partyPickRow')
