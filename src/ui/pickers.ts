@@ -365,118 +365,120 @@ function buildMemberCard(slot: TeamRowState | undefined, index: number): HTMLEle
     return card
   }
 
-  // Header: portrait, name, element, path
-  const header = el('div', 'partyPickMemberHeader')
-  const portrait = charPortrait(slot.kitId)
-  portrait.style.width = '64px'
-  portrait.style.height = '64px'
-  portrait.style.borderRadius = '8px'
-  header.append(portrait)
+  // Three-column layout: Character | Light Cone | Relics
+  const grid = el('div', 'partyPickMemberGrid')
 
-  const identity = el('div', 'partyPickMemberIdentity')
-  const nameEl = el('div', 'partyPickMemberName')
+  // Column 1: Character (portrait, name, element, path, eidolon)
+  const charCol = el('div', 'partyPickCharacter')
+  const portrait = charPortrait(slot.kitId)
+  portrait.style.width = '56px'
+  portrait.style.height = '56px'
+  portrait.style.borderRadius = '8px'
+  charCol.append(portrait)
+
+  const identity = el('div', 'partyPickCharacterIdentity')
+  const nameEl = el('div', 'partyPickCharacterName')
   nameEl.textContent = kit.name
   identity.append(nameEl)
 
-  const meta = el('div', 'partyPickMemberMeta')
-  const elemIcon = iconNode(elemIconUrl(kit.elem), kit.elem, { cls: 'miniIcon', size: 16, fit: 'contain', fallbackText: kit.elem.charAt(0), tint: '#7fb3ff', title: kit.elem })
-  const pathIcon = iconNode(pathIconUrl(KIT_PATH[kit.id] ?? ''), KIT_PATH[kit.id] ?? '', { cls: 'miniIcon', size: 16, fit: 'contain', fallbackText: (KIT_PATH[kit.id] ?? '').charAt(0), tint: '#7fb3ff', title: KIT_PATH[kit.id] ?? '' })
+  const meta = el('div', 'partyPickCharacterMeta')
+  const elemIcon = iconNode(elemIconUrl(kit.elem), kit.elem, { cls: 'miniIcon', size: 14, fit: 'contain', fallbackText: kit.elem.charAt(0), tint: '#7fb3ff', title: kit.elem })
+  const pathIcon = iconNode(pathIconUrl(KIT_PATH[kit.id] ?? ''), KIT_PATH[kit.id] ?? '', { cls: 'miniIcon', size: 14, fit: 'contain', fallbackText: (KIT_PATH[kit.id] ?? '').charAt(0), tint: '#7fb3ff', title: KIT_PATH[kit.id] ?? '' })
   meta.append(elemIcon, pathIcon)
   identity.append(meta)
-  header.append(identity)
 
-  // Eidolons
-  const eidolonSection = el('div', 'partyPickMemberEidolons')
-  const eidolonLabel = el('span', 'partyPickMemberEidolonLabel')
-  eidolonLabel.textContent = `E${slot.eidolon ?? 0}`
-  eidolonSection.append(eidolonLabel)
-  const eidolonIndicators = el('div', 'partyPickMemberEidolonIndicators')
-  for (let e = 1; e <= 6; e++) {
-    const ind = el('span', 'partyPickMemberEidolonIndicator')
-    if (e <= (slot.eidolon ?? 0)) ind.classList.add('active')
-    if (e === 6 && (slot.eidolon ?? 0) === 6) ind.classList.add('e6')
-    ind.textContent = `E${e}`
-    eidolonIndicators.append(ind)
+  const eidolonEl = el('div', 'partyPickCharacterEidolon')
+  eidolonEl.textContent = `E${slot.eidolon ?? 0}`
+  identity.append(eidolonEl)
+
+  charCol.append(identity)
+  grid.append(charCol)
+
+  // Column 2: Light Cone (centered tile with level/SI)
+  const coneCol = el('div', 'partyPickLightCone')
+  if (slot.coneId) {
+    const cone = LIGHT_CONES.find(c => c.id === slot.coneId)
+    if (cone) {
+      const icon = gearIconUrl('cone', cone.id)
+      const tile = el('div', 'partyPickLightConeTile')
+      if (icon) {
+        const img = el('img')
+        img.src = icon
+        img.alt = ''
+        img.style.width = '56px'
+        img.style.height = '56px'
+        img.style.borderRadius = '6px'
+        img.style.objectFit = 'cover'
+        tile.append(img)
+      }
+      tile.title = cone.name
+      coneCol.append(tile)
+
+      const details = el('div', 'partyPickLightConeDetails')
+      details.textContent = `Lv.${slot.coneLevel ?? 80} · S${slot.si ?? 1}`
+      coneCol.append(details)
+    }
+  } else {
+    const empty = el('div', 'partyPickLightConeEmpty')
+    empty.textContent = '—'
+    coneCol.append(empty)
   }
-  eidolonSection.append(eidolonIndicators)
+  grid.append(coneCol)
 
-  // Relic sets
-  const relicSection = el('div', 'partyPickMemberRelics')
+  // Column 3: Relic sets (vertical stack)
+  const relicCol = el('div', 'partyPickRelics')
   const relicSets = computeRelicSets(slot)
   for (const rs of relicSets) {
-    const rsEl = el('div', 'partyPickMemberRelicSet')
+    const rsEl = el('div', 'partyPickRelicItem')
     const icon = gearIconUrl('relic', rs.id)
     if (icon) {
       const img = el('img')
       img.src = icon
       img.alt = ''
-      img.style.width = '20px'
-      img.style.height = '20px'
-      img.style.borderRadius = '4px'
+      img.style.width = '32px'
+      img.style.height = '32px'
+      img.style.borderRadius = '6px'
+      img.style.objectFit = 'cover'
       rsEl.append(img)
     }
-    const label = el('span')
-    label.textContent = `${rs.name} · ${rs.count}pc`
-    rsEl.append(label)
-    relicSection.append(rsEl)
+    const badge = el('span', 'partyPickRelicBadge')
+    badge.textContent = `${rs.count}pc`
+    rsEl.append(badge)
+    rsEl.title = rs.name
+    relicCol.append(rsEl)
   }
   // Planar set
   const planarId = slot.planar
   if (planarId) {
     const planarSet = PLANAR_SETS.find(s => s.id === planarId)
     if (planarSet) {
-      const rsEl = el('div', 'partyPickMemberRelicSet planar')
+      const rsEl = el('div', 'partyPickRelicItem planar')
       const icon = gearIconUrl('planar', planarId)
-      if (icon) {
-        const img = el('img')
-        img.src = icon
-        img.alt = ''
-        img.style.width = '20px'
-        img.style.height = '20px'
-        img.style.borderRadius = '4px'
-        rsEl.append(img)
-      }
-      const label = el('span')
-      label.textContent = `${planarSet.name} · 2pc`
-      rsEl.append(label)
-      relicSection.append(rsEl)
-    }
-  }
-
-  // Light Cone
-  const coneSection = el('div', 'partyPickMemberCone')
-  if (slot.coneId) {
-    const cone = LIGHT_CONES.find(c => c.id === slot.coneId)
-    if (cone) {
-      const icon = gearIconUrl('cone', cone.id)
       if (icon) {
         const img = el('img')
         img.src = icon
         img.alt = ''
         img.style.width = '32px'
         img.style.height = '32px'
-        img.style.borderRadius = '4px'
-        coneSection.append(img)
+        img.style.borderRadius = '6px'
+        img.style.objectFit = 'cover'
+        rsEl.append(img)
       }
-      const info = el('div', 'partyPickMemberConeInfo')
-      const nameEl2 = el('div', 'partyPickMemberConeName')
-      nameEl2.textContent = cone.name
-      info.append(nameEl2)
-      const details = el('div', 'partyPickMemberConeDetails')
-      details.textContent = `Lv.${slot.coneLevel ?? 80} · S${slot.si ?? 1}`
-      info.append(details)
-      const rarity = el('div', 'partyPickMemberConeRarity')
-      rarity.textContent = '★'.repeat(cone.rarity)
-      info.append(rarity)
-      coneSection.append(info)
+      const badge = el('span', 'partyPickRelicBadge')
+      badge.textContent = `2pc`
+      rsEl.append(badge)
+      rsEl.title = `${planarSet.name} (Планарный)`
+      relicCol.append(rsEl)
     }
-  } else {
-    const empty = el('div', 'partyPickMemberConeEmpty')
-    empty.textContent = '—'
-    coneSection.append(empty)
   }
+  if (!relicSets.length && !planarId) {
+    const empty = el('div', 'partyPickRelicsEmpty')
+    empty.textContent = '—'
+    relicCol.append(empty)
+  }
+  grid.append(relicCol)
 
-  card.append(header, eidolonSection, relicSection, coneSection)
+  card.append(grid)
   return card
 }
 
