@@ -247,21 +247,27 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const isTrailblazer = (kitId: string) => kitId.startsWith('trailblazer_')
     const pickChar = async () => {
       const active = store.active
-      const exclude = (active?.slots.map(s => s.kitId).filter(Boolean) as string[]) ?? []
-      // Can't select same character twice - exclude all already in team including current slot
-      // But for Trailblazers: if current slot has a Trailblazer, allow switching to other Trailblazer paths
+      // Exclude characters in OTHER slots (not current slot)
+      const otherSlotsExclude = (active?.slots
+        .filter(s => s.id !== row.id)
+        .map(s => s.kitId)
+        .filter(Boolean) as string[]) ?? []
+      
       // Use liveRow() to get current kitId from store (important for in-place Trailblazer path switching)
       const currentKitId = liveRow().kitId
-      const hasOtherTrailblazer = exclude.some(id => id !== currentKitId && isTrailblazer(id))
+      const isCurrentTrailblazer = currentKitId && isTrailblazer(currentKitId)
       
-      let filteredExclude = exclude.filter(id => id !== currentKitId)
-      if (hasOtherTrailblazer) {
-        // Another Trailblazer exists in a different slot - exclude all Trailblazers
-        const allTrailblazers = KITS.filter(k => isTrailblazer(k.id)).map(k => k.id)
-        filteredExclude = [...new Set([...filteredExclude, ...allTrailblazers])]
+      // For Trailblazer: allow switching to other Trailblazer paths (don't exclude them)
+      // For non-Trailblazer: just exclude other slots' characters
+      let filteredExclude = [...otherSlotsExclude]
+      if (isCurrentTrailblazer) {
+        // Allow other Trailblazer paths by removing them from exclude
+        const otherTrailblazers = KITS
+          .filter(k => isTrailblazer(k.id) && k.id !== currentKitId)
+          .map(k => k.id)
+        filteredExclude = filteredExclude.filter(id => !otherTrailblazers.includes(id))
       }
-      // If current slot has a Trailblazer and no other Trailblazer in team, allow switching to other Trailblazer paths
-      // (only current Trailblazer is excluded via the filter above)
+      // Current character is never in the picker (excluded by using otherSlotsExclude)
       const chosen = await openCharacterPicker({ exclude: filteredExclude, current: row.kitId || undefined })
       if (chosen === null) return
       if (chosen === '') { clearSlot(row.id); render(); return }
