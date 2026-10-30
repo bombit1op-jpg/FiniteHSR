@@ -560,7 +560,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .partyHeader { display: inline-flex; align-items: center; gap: 3px; }
 .partyNameBtn { background: transparent; border: 0; padding: 0 2px; color: #e6ebf2; font: inherit; font-size: 30px; font-weight: 800; letter-spacing: .06em; line-height: 1; cursor: pointer; max-width: min(52vw, 640px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .partyNameBtn:hover { color: #8bd39b; }
-.partyIconBtn { width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1; font-size: 13px; color: #9aa7ba; background: #141a16; border: 1px solid #2a332d; border-radius: 6px; cursor: pointer; }
+.partyIconBtn { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; padding: 0; line-height: 1; font-size: 20px; color: #9aa7ba; background: #141a16; border: 1px solid #2a332d; border-radius: 6px; cursor: pointer; }
 .partyIconBtn:hover:not(:disabled) { border-color: #67b97b; color: #b6f0c2; }
 .partyIconBtn:disabled { opacity: .35; cursor: not-allowed; }
 .partyActions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
