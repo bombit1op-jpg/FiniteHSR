@@ -316,22 +316,14 @@ export function openPartyListPicker(opts: { parties: Party[]; activeId: string |
     if (p.id === opts.activeId) btn.classList.add('current')
     btn.onclick = () => { ov.close(); resolve(p.id) }
 
-    // Party summary (left side)
+    // Party summary (left side) - only name and slot count
     const summary = el('div', 'partyPickSummary')
-    const icons = el('div', 'partyPickIcons')
-    for (let i = 0; i < 4; i++) {
-      const s = p.slots[i]
-      const k = s?.kitId ? KITS.find(x => x.id === s.kitId) : null
-      const ic = iconNode(k ? charIconUrl(k.id) : undefined, k?.name ?? '—', {
-        cls: 'partyPickIcon', size: 36, fit: 'cover',
-        fallbackText: k ? (k.name.trim().charAt(0).toUpperCase() || '?') : '—',
-        tint: k ? '#7fb3ff' : '#3a4a3f', title: k?.name ?? '',
-      })
-      icons.append(ic)
-    }
     const name = el('div', 'partyPickName')
     name.textContent = p.name
-    summary.append(icons, name)
+    const slotCount = p.slots.filter(s => s.kitId).length
+    const slotCountEl = el('div', 'partyPickSlotCount')
+    slotCountEl.textContent = `${slotCount}/4`
+    summary.append(name, slotCountEl)
 
     // Character cards (right side)
     const members = el('div', 'partyPickMembers')
@@ -371,8 +363,8 @@ function buildMemberCard(slot: TeamRowState | undefined, index: number): HTMLEle
   // Column 1: Character (portrait, name, element, path, eidolon)
   const charCol = el('div', 'partyPickCharacter')
   const portrait = charPortrait(slot.kitId)
-  portrait.style.width = '56px'
-  portrait.style.height = '56px'
+  portrait.style.width = '60px'
+  portrait.style.height = '76px'
   portrait.style.borderRadius = '8px'
   charCol.append(portrait)
 
@@ -399,18 +391,12 @@ function buildMemberCard(slot: TeamRowState | undefined, index: number): HTMLEle
   if (slot.coneId) {
     const cone = LIGHT_CONES.find(c => c.id === slot.coneId)
     if (cone) {
-      const icon = gearIconUrl('cone', cone.id)
       const tile = el('div', 'partyPickLightConeTile')
-      if (icon) {
-        const img = el('img')
-        img.src = icon
-        img.alt = ''
-        img.style.width = '56px'
-        img.style.height = '56px'
-        img.style.borderRadius = '6px'
-        img.style.objectFit = 'cover'
-        tile.append(img)
-      }
+      tile.append(iconNode(
+        gearIconUrl('cone', cone.id),
+        cone.name,
+        { cls: 'partyPickGearIcon', size: 62, fit: 'contain', fallbackText: cone.name.charAt(0).toUpperCase(), tint: '#7fb3ff', title: cone.name }
+      ))
       tile.title = cone.name
       coneCol.append(tile)
 
@@ -427,51 +413,39 @@ function buildMemberCard(slot: TeamRowState | undefined, index: number): HTMLEle
 
   // Column 3: Relic sets (vertical stack)
   const relicCol = el('div', 'partyPickRelics')
-  const relicSets = computeRelicSets(slot)
+  const { relicSets, planarSets } = computeRelicAndPlanarSets(slot)
+
+  // Regular relic sets
   for (const rs of relicSets) {
     const rsEl = el('div', 'partyPickRelicItem')
-    const icon = gearIconUrl('relic', rs.id)
-    if (icon) {
-      const img = el('img')
-      img.src = icon
-      img.alt = ''
-      img.style.width = '32px'
-      img.style.height = '32px'
-      img.style.borderRadius = '6px'
-      img.style.objectFit = 'cover'
-      rsEl.append(img)
-    }
+    rsEl.append(iconNode(
+      gearIconUrl('relic', rs.id),
+      rs.name,
+      { cls: 'partyPickGearIcon', size: 32, fit: 'contain', fallbackText: rs.name.charAt(0).toUpperCase(), tint: '#7fb3ff', title: rs.name }
+    ))
     const badge = el('span', 'partyPickRelicBadge')
     badge.textContent = `${rs.count}pc`
     rsEl.append(badge)
     rsEl.title = rs.name
     relicCol.append(rsEl)
   }
-  // Planar set
-  const planarId = slot.planar
-  if (planarId) {
-    const planarSet = PLANAR_SETS.find(s => s.id === planarId)
-    if (planarSet) {
-      const rsEl = el('div', 'partyPickRelicItem planar')
-      const icon = gearIconUrl('planar', planarId)
-      if (icon) {
-        const img = el('img')
-        img.src = icon
-        img.alt = ''
-        img.style.width = '32px'
-        img.style.height = '32px'
-        img.style.borderRadius = '6px'
-        img.style.objectFit = 'cover'
-        rsEl.append(img)
-      }
-      const badge = el('span', 'partyPickRelicBadge')
-      badge.textContent = `2pc`
-      rsEl.append(badge)
-      rsEl.title = `${planarSet.name} (Планарный)`
-      relicCol.append(rsEl)
-    }
+
+  // Planar sets (from pieces, not just slot.planar)
+  for (const ps of planarSets) {
+    const rsEl = el('div', 'partyPickRelicItem planar')
+    rsEl.append(iconNode(
+      gearIconUrl('planar', ps.id),
+      ps.name,
+      { cls: 'partyPickGearIcon', size: 32, fit: 'contain', fallbackText: ps.name.charAt(0).toUpperCase(), tint: '#7fb3ff', title: ps.name }
+    ))
+    const badge = el('span', 'partyPickRelicBadge')
+    badge.textContent = `${ps.count}pc`
+    rsEl.append(badge)
+    rsEl.title = `${ps.name} (Планарный)`
+    relicCol.append(rsEl)
   }
-  if (!relicSets.length && !planarId) {
+
+  if (!relicSets.length && !planarSets.length) {
     const empty = el('div', 'partyPickRelicsEmpty')
     empty.textContent = '—'
     relicCol.append(empty)
@@ -482,23 +456,47 @@ function buildMemberCard(slot: TeamRowState | undefined, index: number): HTMLEle
   return card
 }
 
-/** Compute relic set configuration from pieces (4+2, 2+2+2, etc.). */
-function computeRelicSets(slot: TeamRowState): Array<{ id: string; name: string; count: number }> {
-  const counts = new Map<string, number>()
+/** Compute relic and planar set configuration from pieces. */
+function computeRelicAndPlanarSets(slot: TeamRowState): {
+  relicSets: Array<{ id: string; name: string; count: number }>
+  planarSets: Array<{ id: string; name: string; count: number }>
+} {
+  const relicCounts = new Map<string, number>()
+  const planarCounts = new Map<string, number>()
+
   for (const p of slot.pieces) {
     if (!p.setId) continue
-    // Only count non-planar pieces (sphere and rope are planar)
-    if (p.slot === 'sphere' || p.slot === 'rope') continue
-    counts.set(p.setId, (counts.get(p.setId) ?? 0) + 1)
+    // Planar pieces (sphere and rope) go to planar counts
+    if (p.slot === 'sphere' || p.slot === 'rope') {
+      planarCounts.set(p.setId, (planarCounts.get(p.setId) ?? 0) + 1)
+    } else {
+      relicCounts.set(p.setId, (relicCounts.get(p.setId) ?? 0) + 1)
+    }
   }
 
-  // Sort by count descending
-  const sorted = Array.from(counts.entries())
+  // Legacy fallback: if no pieces but slot.planar exists
+  if (!planarCounts.size && slot.planar) {
+    planarCounts.set(slot.planar, 2) // assume 2pc for legacy
+  }
+
+  // Regular relic sets: only show if >= 2 pieces (2pc or 4pc)
+  const sortedRelics = Array.from(relicCounts.entries())
     .filter(([, count]) => count >= 2)
     .sort((a, b) => b[1] - a[1])
 
-  return sorted.map(([id, count]) => {
+  const relicSets = sortedRelics.map(([id, count]) => {
     const set = RELIC_SETS.find(s => s.id === id)
     return { id, name: set?.name ?? id, count }
   })
+
+  // Planar sets: show even 1pc
+  const sortedPlanar = Array.from(planarCounts.entries())
+    .sort((a, b) => b[1] - a[1])
+
+  const planarSets = sortedPlanar.map(([id, count]) => {
+    const set = PLANAR_SETS.find(s => s.id === id)
+    return { id, name: set?.name ?? id, count }
+  })
+
+  return { relicSets, planarSets }
 }
