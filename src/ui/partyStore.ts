@@ -158,11 +158,6 @@ export class PartyStore {
   get collection(): PartyCollection { return this.col }
   get active(): Party | undefined { return activeParty(this.col) }
 
-  private commit(): void {
-    saveCollection(this.col)
-    syncActiveToStore(this.col)
-  }
-
   create(): Party {
     // guard: creating an empty party twice in one tick still yields distinct ids (nextId is monotonic)
     this.col = createParty(this.col, Array.from({ length: DEFAULT_SLOTS }, blankSlot))
@@ -197,6 +192,22 @@ export class PartyStore {
   putSlot(row: TeamRowState): void { this.patchSlot(row.id, row) }
 
   byId(id: string): Party | undefined { return partyById(this.col, id) }
+
+  /** subscribe to changes in the active party or its slots */
+  private listeners: Array<(party: Party | undefined) => void> = []
+  subscribe(fn: (party: Party | undefined) => void): () => void {
+    this.listeners.push(fn)
+    return () => { this.listeners = this.listeners.filter(l => l !== fn) }
+  }
+  private notify(): void {
+    for (const fn of this.listeners) fn(this.active)
+  }
+
+  private commit(): void {
+    saveCollection(this.col)
+    syncActiveToStore(this.col)
+    this.notify()
+  }
 }
 
 /** test/init helper: read the persisted collection without constructing a controller */

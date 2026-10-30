@@ -12,7 +12,7 @@ import { ENGINE_VERSION, RULES_VERSION, DATASET_VERSION } from '../verification/
 export interface Route {
   id: string
   label: string
-  group: 'PARTY'
+  group: 'PARTY' | 'BATTLE'
   /** capability id this route is backed by; when its status !== 'available' the panel shows why */
   capability?: string
   /** refreshed every time the route becomes active (pages render their own empty/loading states) */
@@ -24,11 +24,13 @@ export function panelOf(r: Route): string { return `panel-${r.id}` }
 
 export const ROUTES: Route[] = [
   { id: 'team', label: 'Отряд', group: 'PARTY' },
+  { id: 'simulation', label: 'Симуляция', group: 'BATTLE', capability: 'battle.run' },
 ]
 
 /** nav section titles */
 export const GROUP_LABELS: Record<Route['group'], string> = {
   PARTY: 'Отряд',
+  BATTLE: 'Бой',
 }
 /** rarely-used technical section starts collapsed; activating one of its routes expands it */
 const DEFAULT_COLLAPSED: Record<string, boolean> = {}
