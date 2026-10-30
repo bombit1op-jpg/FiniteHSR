@@ -117,6 +117,7 @@ interface CardView {
   siSel: HTMLSelectElement
   coneLevelInp: HTMLInputElement
   eidButtons: HTMLButtonElement[]
+  eidolonDisplay: HTMLElement
   lvBtns: Record<string, { dec: HTMLButtonElement, val: HTMLElement, inc: HTMLButtonElement }>
   tracesWrap: HTMLElement
   /** one checkbox per minor-trace stat, in `traceMods(kitId)` order */
@@ -243,7 +244,12 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     // --- hero art + identity (pick character by clicking the portrait ONLY — no select, no dropdown)
     const portrait = charPortrait(row.kitId || '')
     portrait.style.cursor = 'pointer'
-    portrait.title = 'Выбрать персонажа'
+    portrait.title = row.kitId ? 'Изменить персонажа' : 'Выбрать персонажа'
+
+    // Show current Eidolon level when character selected
+    const eidolonLevelEl = el('div', 'eidolonLevel')
+    eidolonLevelEl.style.display = row.kitId ? 'flex' : 'none'
+    eidolonLevelEl.setAttribute('aria-label', 'Эйдолоны')
     const isTrailblazer = (kitId: string) => kitId.startsWith('trailblazer_')
     const pickChar = async () => {
       const active = store.active
@@ -293,6 +299,8 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const elemChip = metaBadge('elem', '')
     const pathChip = metaBadge('path', '')
     chips.append(elemChip, pathChip)
+    const eidolonDisplay = el('div', 'eidolonDisplay')
+    eidolonDisplay.style.display = row.kitId ? 'inline-flex' : 'none'
     const charLevelInp = el('input') as HTMLInputElement
     charLevelInp.type = 'number'
     charLevelInp.min = '0'
@@ -302,7 +310,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     charLevelInp.value = String(row.level ?? 80)
     const charLevelWrap = el('div', 'charLevelWrap')
     charLevelWrap.append(charLevelInp)
-    nameRow.append(charLevelWrap, nameEl, chips)
+    nameRow.append(charLevelWrap, nameEl, chips, eidolonDisplay)
     identity.append(nameRow)
     const portraitWrap = el('div', 'pcPortraitWrap')
     portraitWrap.append(portrait, clearSlotBtn)
@@ -542,6 +550,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const view: CardView = {
       rowId: row.id, root, portrait, elemChip, pathChip, nameEl, charLevelInp,
       coneBadge, coneNameEl, siSel, coneLevelInp, eidButtons,
+      eidolonDisplay,
       lvBtns,
       tracesWrap, traceChecks, energySel, techniqueSel, techniqueWrap, techniqueChk, pieces: [] as PieceEditor[], statsBox, skillsBox, tracesBox: tracesWrap, refresh: () => {},
     }
@@ -746,6 +755,11 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
           const iconUrl = getEidolonIcon(kitId, n)
           if (iconUrl) img.src = iconUrl
         }
+      }
+      // Update eidolon level display (E0-E6)
+      if (eidolonDisplay) {
+        eidolonDisplay.textContent = `E${eid}`
+        eidolonDisplay.style.display = kitId ? 'inline-flex' : 'none'
       }
       paintSkills(view, live, kitId)
       paintStats(view, live, kitId)
