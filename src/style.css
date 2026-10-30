@@ -863,11 +863,11 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 /* Light Cone column */
 .partyPickLightCone { align-items: center; justify-content: center; }
 .partyPickLightConeTile {
-  width: 72px; height: 96px;
+  width: 88px; height: 112px;
   display: flex; align-items: center; justify-content: center;
 }
 .partyPickLightConeTile .partyPickGearIcon {
-  width: 64px; height: 88px;
+  width: 80px; height: 104px;
   display: inline-flex; align-items: center; justify-content: center;
 }
 .partyPickLightConeTile img { width: 100%; height: 100%; object-fit: contain; }
