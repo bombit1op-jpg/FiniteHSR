@@ -3624,2754 +3624,2734 @@
     "count": 550,
     "icons": [
       {
-        "file": "eidolons/Acheron/Apocalypse, the Emancipator.png",
-        "name": "Apocalypse, the Emancipator",
-        "character": "Acheron"
-      },
-      {
-        "file": "eidolons/Acheron/Frost Bites in Death.png",
-        "name": "Frost Bites in Death",
-        "character": "Acheron"
-      },
-      {
-        "file": "eidolons/Acheron/Mute Thunder in Still Tempest.png",
-        "name": "Mute Thunder in Still Tempest",
-        "character": "Acheron"
-      },
-      {
-        "file": "eidolons/Acheron/Shrined Fire for Mirrored Soul.png",
-        "name": "Shrined Fire for Mirrored Soul",
-        "character": "Acheron"
-      },
-      {
-        "file": "eidolons/Acheron/Silenced Sky Spake Sooth.png",
+        "file": "eidolons/Acheron/E1_Silenced Sky Spake Sooth.png",
         "name": "Silenced Sky Spake Sooth",
         "character": "Acheron"
       },
       {
-        "file": "eidolons/Acheron/Strewn Souls on Erased Earths.png",
+        "file": "eidolons/Acheron/E2_Mute Thunder in Still Tempest.png",
+        "name": "Mute Thunder in Still Tempest",
+        "character": "Acheron"
+      },
+      {
+        "file": "eidolons/Acheron/E3_Frost Bites in Death.png",
+        "name": "Frost Bites in Death",
+        "character": "Acheron"
+      },
+      {
+        "file": "eidolons/Acheron/E4_Shrined Fire for Mirrored Soul.png",
+        "name": "Shrined Fire for Mirrored Soul",
+        "character": "Acheron"
+      },
+      {
+        "file": "eidolons/Acheron/E5_Strewn Souls on Erased Earths.png",
         "name": "Strewn Souls on Erased Earths",
         "character": "Acheron"
       },
       {
-        "file": "eidolons/Aglaea/Bequeath in the Coalescence of Dew.png",
-        "name": "Bequeath in the Coalescence of Dew",
-        "character": "Aglaea"
+        "file": "eidolons/Acheron/E6_Apocalypse, the Emancipator.png",
+        "name": "Apocalypse, the Emancipator",
+        "character": "Acheron"
       },
       {
-        "file": "eidolons/Aglaea/Drift at the Whim of Venus.png",
+        "file": "eidolons/Aglaea/E1_Drift at the Whim of Venus.png",
         "name": "Drift at the Whim of Venus",
         "character": "Aglaea"
       },
       {
-        "file": "eidolons/Aglaea/Flicker Below the Surface of Marble.png",
-        "name": "Flicker Below the Surface of Marble",
-        "character": "Aglaea"
-      },
-      {
-        "file": "eidolons/Aglaea/Fluctuate in the Tapestry of Fates.png",
-        "name": "Fluctuate in the Tapestry of Fates",
-        "character": "Aglaea"
-      },
-      {
-        "file": "eidolons/Aglaea/Sail on the Raft of Eyelids.png",
+        "file": "eidolons/Aglaea/E2_Sail on the Raft of Eyelids.png",
         "name": "Sail on the Raft of Eyelids",
         "character": "Aglaea"
       },
       {
-        "file": "eidolons/Aglaea/Weave Under the Shroud of Woe.png",
+        "file": "eidolons/Aglaea/E3_Bequeath in the Coalescence of Dew.png",
+        "name": "Bequeath in the Coalescence of Dew",
+        "character": "Aglaea"
+      },
+      {
+        "file": "eidolons/Aglaea/E4_Flicker Below the Surface of Marble.png",
+        "name": "Flicker Below the Surface of Marble",
+        "character": "Aglaea"
+      },
+      {
+        "file": "eidolons/Aglaea/E5_Weave Under the Shroud of Woe.png",
         "name": "Weave Under the Shroud of Woe",
         "character": "Aglaea"
       },
       {
-        "file": "eidolons/Anaxa/Blaze, Plunged to Canyon.png",
-        "name": "Blaze, Plunged to Canyon",
-        "character": "Anaxa"
+        "file": "eidolons/Aglaea/E6_Fluctuate in the Tapestry of Fates.png",
+        "name": "Fluctuate in the Tapestry of Fates",
+        "character": "Aglaea"
       },
       {
-        "file": "eidolons/Anaxa/Embryo, Set Beyond Vortex.png",
-        "name": "Embryo, Set Beyond Vortex",
-        "character": "Anaxa"
-      },
-      {
-        "file": "eidolons/Anaxa/Everything Is in Everything.png",
-        "name": "Everything Is in Everything",
-        "character": "Anaxa"
-      },
-      {
-        "file": "eidolons/Anaxa/Magician, Isolated by Stars.png",
+        "file": "eidolons/Anaxa/E1_Magician, Isolated by Stars.png",
         "name": "Magician, Isolated by Stars",
         "character": "Anaxa"
       },
       {
-        "file": "eidolons/Anaxa/Pupil, Etched into Cosmos.png",
-        "name": "Pupil, Etched into Cosmos",
-        "character": "Anaxa"
-      },
-      {
-        "file": "eidolons/Anaxa/Soul, True to History.png",
+        "file": "eidolons/Anaxa/E2_Soul, True to History.png",
         "name": "Soul, True to History",
         "character": "Anaxa"
       },
       {
-        "file": "eidolons/Archer/The Endless Pilgrimage.png",
-        "name": "The Endless Pilgrimage",
-        "character": "Archer"
+        "file": "eidolons/Anaxa/E3_Pupil, Etched into Cosmos.png",
+        "name": "Pupil, Etched into Cosmos",
+        "character": "Anaxa"
       },
       {
-        "file": "eidolons/Archer/The Nameless Watch.png",
-        "name": "The Nameless Watch",
-        "character": "Archer"
+        "file": "eidolons/Anaxa/E4_Blaze, Plunged to Canyon.png",
+        "name": "Blaze, Plunged to Canyon",
+        "character": "Anaxa"
       },
       {
-        "file": "eidolons/Archer/The Unfulfilled Happiness.png",
-        "name": "The Unfulfilled Happiness",
-        "character": "Archer"
+        "file": "eidolons/Anaxa/E5_Embryo, Set Beyond Vortex.png",
+        "name": "Embryo, Set Beyond Vortex",
+        "character": "Anaxa"
       },
       {
-        "file": "eidolons/Archer/The Unreached Dream.png",
+        "file": "eidolons/Anaxa/E6_Everything Is in Everything.png",
+        "name": "Everything Is in Everything",
+        "character": "Anaxa"
+      },
+      {
+        "file": "eidolons/Archer/E1_The Unreached Dream.png",
         "name": "The Unreached Dream",
         "character": "Archer"
       },
       {
-        "file": "eidolons/Archer/The Unsung Life.png",
-        "name": "The Unsung Life",
+        "file": "eidolons/Archer/E2_The Unfulfilled Happiness.png",
+        "name": "The Unfulfilled Happiness",
         "character": "Archer"
       },
       {
-        "file": "eidolons/Archer/The Untamed Will.png",
+        "file": "eidolons/Archer/E3_The Untamed Will.png",
         "name": "The Untamed Will",
         "character": "Archer"
       },
       {
-        "file": "eidolons/Argenti/Eidolon A Lacuna in Kingdom of Aesthetics.png",
+        "file": "eidolons/Archer/E4_The Unsung Life.png",
+        "name": "The Unsung Life",
+        "character": "Archer"
+      },
+      {
+        "file": "eidolons/Archer/E5_The Nameless Watch.png",
+        "name": "The Nameless Watch",
+        "character": "Archer"
+      },
+      {
+        "file": "eidolons/Archer/E6_The Endless Pilgrimage.png",
+        "name": "The Endless Pilgrimage",
+        "character": "Archer"
+      },
+      {
+        "file": "eidolons/Argenti/E1_A Lacuna in Kingdom of Aesthetics.png",
         "name": "A Lacuna in Kingdom of Aesthetics",
         "character": "Argenti"
       },
       {
-        "file": "eidolons/Argenti/Eidolon Agate's Humility.png",
+        "file": "eidolons/Argenti/E2_Agate's Humility.png",
         "name": "Agate's Humility",
         "character": "Argenti"
       },
       {
-        "file": "eidolons/Argenti/Eidolon Snow, From Somewhere in Cosmos.png",
-        "name": "Snow, From Somewhere in Cosmos",
-        "character": "Argenti"
-      },
-      {
-        "file": "eidolons/Argenti/Eidolon Thorny Road's Glory.png",
+        "file": "eidolons/Argenti/E3_Thorny Road's Glory.png",
         "name": "Thorny Road's Glory",
         "character": "Argenti"
       },
       {
-        "file": "eidolons/Argenti/Eidolon Trumpet's Dedication.png",
+        "file": "eidolons/Argenti/E4_Trumpet's Dedication.png",
         "name": "Trumpet's Dedication",
         "character": "Argenti"
       },
       {
-        "file": "eidolons/Argenti/Eidolon _Your_ Resplendence.png",
-        "name": "Your_ Resplendence",
+        "file": "eidolons/Argenti/E5_Snow, From Somewhere in Cosmos.png",
+        "name": "Snow, From Somewhere in Cosmos",
         "character": "Argenti"
       },
       {
-        "file": "eidolons/Arlan/Breaking Free.png",
-        "name": "Breaking Free",
-        "character": "Arlan"
+        "file": "eidolons/Argenti/E6__Your_ Resplendence.png",
+        "name": "\"Your\" Resplendence",
+        "character": "Argenti"
       },
       {
-        "file": "eidolons/Arlan/Hammer and Tongs.png",
-        "name": "Hammer and Tongs",
-        "character": "Arlan"
-      },
-      {
-        "file": "eidolons/Arlan/Power Through.png",
-        "name": "Power Through",
-        "character": "Arlan"
-      },
-      {
-        "file": "eidolons/Arlan/Self-Sacrifice.png",
-        "name": "Self-Sacrifice",
-        "character": "Arlan"
-      },
-      {
-        "file": "eidolons/Arlan/To the Bitter End.png",
+        "file": "eidolons/Arlan/E1_To the Bitter End.png",
         "name": "To the Bitter End",
         "character": "Arlan"
       },
       {
-        "file": "eidolons/Arlan/Turn the Tables.png",
+        "file": "eidolons/Arlan/E2_Breaking Free.png",
+        "name": "Breaking Free",
+        "character": "Arlan"
+      },
+      {
+        "file": "eidolons/Arlan/E3_Power Through.png",
+        "name": "Power Through",
+        "character": "Arlan"
+      },
+      {
+        "file": "eidolons/Arlan/E4_Turn the Tables.png",
         "name": "Turn the Tables",
         "character": "Arlan"
       },
       {
-        "file": "eidolons/Ashveil/Beware Venture Not at Full Moon.png",
-        "name": "Beware Venture Not at Full Moon",
+        "file": "eidolons/Arlan/E5_Hammer and Tongs.png",
+        "name": "Hammer and Tongs",
+        "character": "Arlan"
+      },
+      {
+        "file": "eidolons/Arlan/E6_Self-Sacrifice.png",
+        "name": "Self-Sacrifice",
+        "character": "Arlan"
+      },
+      {
+        "file": "eidolons/Ashveil/E1_Beware_ Venture Not at Full Moon.png",
+        "name": "Beware: Venture Not at Full Moon",
         "character": "Ashveil"
       },
       {
-        "file": "eidolons/Ashveil/Caution Sleuth Turns Slayer.png",
-        "name": "Caution Sleuth Turns Slayer",
+        "file": "eidolons/Ashveil/E2_Knock_ Where Snickers Echo.png",
+        "name": "Knock: Where Snickers Echo",
         "character": "Ashveil"
       },
       {
-        "file": "eidolons/Ashveil/Finale And Then There Were None.png",
-        "name": "Finale And Then There Were None",
+        "file": "eidolons/Ashveil/E3_Hush_ Unsaid Between Friends.png",
+        "name": "Hush: Unsaid Between Friends",
         "character": "Ashveil"
       },
       {
-        "file": "eidolons/Ashveil/Heed Swallow Truth Whole.png",
-        "name": "Heed Swallow Truth Whole",
+        "file": "eidolons/Ashveil/E4_Heed_ Swallow Truth Whole.png",
+        "name": "Heed: Swallow Truth Whole",
         "character": "Ashveil"
       },
       {
-        "file": "eidolons/Ashveil/Hush Unsaid Between Friends.png",
-        "name": "Hush Unsaid Between Friends",
+        "file": "eidolons/Ashveil/E5_Caution_ Sleuth Turns Slayer.png",
+        "name": "Caution: Sleuth Turns Slayer",
         "character": "Ashveil"
       },
       {
-        "file": "eidolons/Ashveil/Knock Where Snickers Echo.png",
-        "name": "Knock Where Snickers Echo",
+        "file": "eidolons/Ashveil/E6_Finale_ And Then There Were None.png",
+        "name": "Finale: And Then There Were None",
         "character": "Ashveil"
       },
       {
-        "file": "eidolons/Asta/Aurora Basks in Beauty and Bliss.png",
-        "name": "Aurora Basks in Beauty and Bliss",
-        "character": "Asta"
-      },
-      {
-        "file": "eidolons/Asta/Cosmos Dreams in Calm and Comfort.png",
-        "name": "Cosmos Dreams in Calm and Comfort",
-        "character": "Asta"
-      },
-      {
-        "file": "eidolons/Asta/Meteor Showers for Wish and Want.png",
-        "name": "Meteor Showers for Wish and Want",
-        "character": "Asta"
-      },
-      {
-        "file": "eidolons/Asta/Moon Speaks in Wax and Wane.png",
-        "name": "Moon Speaks in Wax and Wane",
-        "character": "Asta"
-      },
-      {
-        "file": "eidolons/Asta/Nebula Secludes in Runes and Riddles.png",
-        "name": "Nebula Secludes in Runes and Riddles",
-        "character": "Asta"
-      },
-      {
-        "file": "eidolons/Asta/Star Sings Sans Verses or Vocals.png",
+        "file": "eidolons/Asta/E1_Star Sings Sans Verses or Vocals.png",
         "name": "Star Sings Sans Verses or Vocals",
         "character": "Asta"
       },
       {
-        "file": "eidolons/Aventurine/Eidolon Chatoyant Éclat.png",
-        "name": "Chatoyant Éclat",
+        "file": "eidolons/Asta/E2_Moon Speaks in Wax and Wane.png",
+        "name": "Moon Speaks in Wax and Wane",
+        "character": "Asta"
+      },
+      {
+        "file": "eidolons/Asta/E3_Meteor Showers for Wish and Want.png",
+        "name": "Meteor Showers for Wish and Want",
+        "character": "Asta"
+      },
+      {
+        "file": "eidolons/Asta/E4_Aurora Basks in Beauty and Bliss.png",
+        "name": "Aurora Basks in Beauty and Bliss",
+        "character": "Asta"
+      },
+      {
+        "file": "eidolons/Asta/E5_Nebula Secludes in Runes and Riddles.png",
+        "name": "Nebula Secludes in Runes and Riddles",
+        "character": "Asta"
+      },
+      {
+        "file": "eidolons/Asta/E6_Cosmos Dreams in Calm and Comfort.png",
+        "name": "Cosmos Dreams in Calm and Comfort",
+        "character": "Asta"
+      },
+      {
+        "file": "eidolons/Aventurine/E1_Prisoner's Dilemma.png",
+        "name": "Prisoner's Dilemma",
         "character": "Aventurine"
       },
       {
-        "file": "eidolons/Aventurine/Eidolon Languid Barrette.png",
-        "name": "Languid Barrette",
+        "file": "eidolons/Aventurine/E2_Bounded Rationality.png",
+        "name": "Bounded Rationality",
         "character": "Aventurine"
       },
       {
-        "file": "eidolons/Aventurine/Eidolon Neuronic Embroidery.png",
-        "name": "Neuronic Embroidery",
+        "file": "eidolons/Aventurine/E3_Droprate Maxing.png",
+        "name": "Droprate Maxing",
         "character": "Aventurine"
       },
       {
-        "file": "eidolons/Aventurine/Eidolon Reedside Promenade.png",
-        "name": "Reedside Promenade",
+        "file": "eidolons/Aventurine/E4_Unexpected Hanging Paradox.png",
+        "name": "Unexpected Hanging Paradox",
         "character": "Aventurine"
       },
       {
-        "file": "eidolons/Aventurine/Eidolon Sash Cascade.png",
-        "name": "Sash Cascade",
+        "file": "eidolons/Aventurine/E5_Ambiguity Aversion.png",
+        "name": "Ambiguity Aversion",
         "character": "Aventurine"
       },
       {
-        "file": "eidolons/Aventurine/Eidolon Viridescent Pirouette.png",
-        "name": "Viridescent Pirouette",
+        "file": "eidolons/Aventurine/E6_Stag Hunt Game.png",
+        "name": "Stag Hunt Game",
         "character": "Aventurine"
       },
       {
-        "file": "eidolons/Aventurine • Waveflair/A Holiday on the Line.png",
+        "file": "eidolons/Aventurine • Waveflair/E1_A Holiday on the Line.png",
         "name": "A Holiday on the Line",
         "character": "Aventurine • Waveflair"
       },
       {
-        "file": "eidolons/Aventurine • Waveflair/Idle as the Turning Tide.png",
+        "file": "eidolons/Aventurine • Waveflair/E2_Idle as the Turning Tide.png",
         "name": "Idle as the Turning Tide",
         "character": "Aventurine • Waveflair"
       },
       {
-        "file": "eidolons/Aventurine • Waveflair/Into the Eye of the Jackpot.png",
-        "name": "Into the Eye of the Jackpot",
+        "file": "eidolons/Aventurine • Waveflair/E3_A Rendezvous Served Chilled.png",
+        "name": "A Rendezvous Served Chilled",
         "character": "Aventurine • Waveflair"
       },
       {
-        "file": "eidolons/Aventurine • Waveflair/Sunlight Runs No Tab.png",
+        "file": "eidolons/Aventurine • Waveflair/E4_Sunlight Runs No Tab.png",
         "name": "Sunlight Runs No Tab",
         "character": "Aventurine • Waveflair"
       },
       {
-        "file": "eidolons/Aventurine • Waveflair/The Past in Fast Lane.png",
+        "file": "eidolons/Aventurine • Waveflair/E5_Into the Eye of the Jackpot.png",
+        "name": "Into the Eye of the Jackpot",
+        "character": "Aventurine • Waveflair"
+      },
+      {
+        "file": "eidolons/Aventurine • Waveflair/E6_The Past in Fast Lane.png",
         "name": "The Past in Fast Lane",
         "character": "Aventurine • Waveflair"
       },
       {
-        "file": "eidolons/Bailu/Ambrosial Aqua.png",
+        "file": "eidolons/Bailu/E1_Ambrosial Aqua.png",
         "name": "Ambrosial Aqua",
         "character": "Bailu"
       },
       {
-        "file": "eidolons/Bailu/Drooling Drop of Draconic Divinity.png",
-        "name": "Drooling Drop of Draconic Divinity",
-        "character": "Bailu"
-      },
-      {
-        "file": "eidolons/Bailu/Evil Excision.png",
-        "name": "Evil Excision",
-        "character": "Bailu"
-      },
-      {
-        "file": "eidolons/Bailu/Omniscient Opulence.png",
-        "name": "Omniscient Opulence",
-        "character": "Bailu"
-      },
-      {
-        "file": "eidolons/Bailu/Sylphic Slumber.png",
+        "file": "eidolons/Bailu/E2_Sylphic Slumber.png",
         "name": "Sylphic Slumber",
         "character": "Bailu"
       },
       {
-        "file": "eidolons/Bailu/Waning Worries.png",
+        "file": "eidolons/Bailu/E3_Omniscient Opulence.png",
+        "name": "Omniscient Opulence",
+        "character": "Bailu"
+      },
+      {
+        "file": "eidolons/Bailu/E4_Evil Excision.png",
+        "name": "Evil Excision",
+        "character": "Bailu"
+      },
+      {
+        "file": "eidolons/Bailu/E5_Waning Worries.png",
         "name": "Waning Worries",
         "character": "Bailu"
       },
       {
-        "file": "eidolons/Black Swan/As Above, So Below.png",
-        "name": "As Above, So Below",
-        "character": "Black Swan"
+        "file": "eidolons/Bailu/E6_Drooling Drop of Draconic Divinity.png",
+        "name": "Drooling Drop of Draconic Divinity",
+        "character": "Bailu"
       },
       {
-        "file": "eidolons/Black Swan/In Tears We Gift.png",
-        "name": "In Tears We Gift",
-        "character": "Black Swan"
-      },
-      {
-        "file": "eidolons/Black Swan/Linnutee Flyway.png",
-        "name": "Linnutee Flyway",
-        "character": "Black Swan"
-      },
-      {
-        "file": "eidolons/Black Swan/Pantheon Merciful, Masses Pitiful.png",
-        "name": "Pantheon Merciful, Masses Pitiful",
-        "character": "Black Swan"
-      },
-      {
-        "file": "eidolons/Black Swan/Seven Pillars of Wisdom.png",
+        "file": "eidolons/Black Swan/E1_Seven Pillars of Wisdom.png",
         "name": "Seven Pillars of Wisdom",
         "character": "Black Swan"
       },
       {
-        "file": "eidolons/Black Swan/Weep Not For Me, My Lamb.png",
+        "file": "eidolons/Black Swan/E2_Weep Not For Me, My Lamb.png",
         "name": "Weep Not For Me, My Lamb",
         "character": "Black Swan"
       },
       {
-        "file": "eidolons/Blade/Blade Cuts the Deepest in Hell.png",
+        "file": "eidolons/Black Swan/E3_As Above, So Below.png",
+        "name": "As Above, So Below",
+        "character": "Black Swan"
+      },
+      {
+        "file": "eidolons/Black Swan/E4_In Tears We Gift.png",
+        "name": "In Tears We Gift",
+        "character": "Black Swan"
+      },
+      {
+        "file": "eidolons/Black Swan/E5_Linnutee Flyway.png",
+        "name": "Linnutee Flyway",
+        "character": "Black Swan"
+      },
+      {
+        "file": "eidolons/Black Swan/E6_Pantheon Merciful, Masses Pitiful.png",
+        "name": "Pantheon Merciful, Masses Pitiful",
+        "character": "Black Swan"
+      },
+      {
+        "file": "eidolons/Blade/E1_Blade Cuts the Deepest in Hell.png",
         "name": "Blade Cuts the Deepest in Hell",
         "character": "Blade"
       },
       {
-        "file": "eidolons/Blade/Death By Ten Lords' Gaze.png",
-        "name": "Death By Ten Lords' Gaze",
-        "character": "Blade"
-      },
-      {
-        "file": "eidolons/Blade/Hardened Blade Bleeds Coldest Shade.png",
-        "name": "Hardened Blade Bleeds Coldest Shade",
-        "character": "Blade"
-      },
-      {
-        "file": "eidolons/Blade/Reborn Into an Empty Husk.png",
-        "name": "Reborn Into an Empty Husk",
-        "character": "Blade"
-      },
-      {
-        "file": "eidolons/Blade/Rejected by Death, Infected With Life.png",
-        "name": "Rejected by Death, Infected With Life",
-        "character": "Blade"
-      },
-      {
-        "file": "eidolons/Blade/Ten Thousand Sorrows From One Broken Dream.png",
+        "file": "eidolons/Blade/E2_Ten Thousand Sorrows From One Broken Dream.png",
         "name": "Ten Thousand Sorrows From One Broken Dream",
         "character": "Blade"
       },
       {
-        "file": "eidolons/Boothill/Cold Cuts Chef.png",
-        "name": "Cold Cuts Chef",
-        "character": "Boothill"
+        "file": "eidolons/Blade/E3_Hardened Blade Bleeds Coldest Shade.png",
+        "name": "Hardened Blade Bleeds Coldest Shade",
+        "character": "Blade"
       },
       {
-        "file": "eidolons/Boothill/Crowbar Hotel's Raccoon.png",
-        "name": "Crowbar Hotel's Raccoon",
-        "character": "Boothill"
+        "file": "eidolons/Blade/E4_Rejected by Death, Infected With Life.png",
+        "name": "Rejected by Death, Infected With Life",
+        "character": "Blade"
       },
       {
-        "file": "eidolons/Boothill/Dusty Trail's Lone Star.png",
+        "file": "eidolons/Blade/E5_Death By Ten Lords' Gaze.png",
+        "name": "Death By Ten Lords' Gaze",
+        "character": "Blade"
+      },
+      {
+        "file": "eidolons/Blade/E6_Reborn Into an Empty Husk.png",
+        "name": "Reborn Into an Empty Husk",
+        "character": "Blade"
+      },
+      {
+        "file": "eidolons/Boothill/E1_Dusty Trail's Lone Star.png",
         "name": "Dusty Trail's Lone Star",
         "character": "Boothill"
       },
       {
-        "file": "eidolons/Boothill/Marble Orchard's Guard.png",
-        "name": "Marble Orchard's Guard",
-        "character": "Boothill"
-      },
-      {
-        "file": "eidolons/Boothill/Milestonemonger.png",
+        "file": "eidolons/Boothill/E2_Milestonemonger.png",
         "name": "Milestonemonger",
         "character": "Boothill"
       },
       {
-        "file": "eidolons/Boothill/Stump Speech.png",
+        "file": "eidolons/Boothill/E3_Marble Orchard's Guard.png",
+        "name": "Marble Orchard's Guard",
+        "character": "Boothill"
+      },
+      {
+        "file": "eidolons/Boothill/E4_Cold Cuts Chef.png",
+        "name": "Cold Cuts Chef",
+        "character": "Boothill"
+      },
+      {
+        "file": "eidolons/Boothill/E5_Stump Speech.png",
         "name": "Stump Speech",
         "character": "Boothill"
       },
       {
-        "file": "eidolons/Bronya/Bombardment.png",
-        "name": "Bombardment",
-        "character": "Bronya"
+        "file": "eidolons/Boothill/E6_Crowbar Hotel's Raccoon.png",
+        "name": "Crowbar Hotel's Raccoon",
+        "character": "Boothill"
       },
       {
-        "file": "eidolons/Bronya/Hone Your Strength.png",
+        "file": "eidolons/Bronya/E1_Hone Your Strength.png",
         "name": "Hone Your Strength",
         "character": "Bronya"
       },
       {
-        "file": "eidolons/Bronya/Piercing Rainbow.png",
-        "name": "Piercing Rainbow",
-        "character": "Bronya"
-      },
-      {
-        "file": "eidolons/Bronya/Quick March.png",
+        "file": "eidolons/Bronya/E2_Quick March.png",
         "name": "Quick March",
         "character": "Bronya"
       },
       {
-        "file": "eidolons/Bronya/Take by Surprise.png",
+        "file": "eidolons/Bronya/E3_Bombardment.png",
+        "name": "Bombardment",
+        "character": "Bronya"
+      },
+      {
+        "file": "eidolons/Bronya/E4_Take by Surprise.png",
         "name": "Take by Surprise",
         "character": "Bronya"
       },
       {
-        "file": "eidolons/Bronya/Unstoppable.png",
+        "file": "eidolons/Bronya/E5_Unstoppable.png",
         "name": "Unstoppable",
         "character": "Bronya"
       },
       {
-        "file": "eidolons/Castorice/Await for Years to Loom.png",
-        "name": "Await for Years to Loom",
-        "character": "Castorice"
+        "file": "eidolons/Bronya/E6_Piercing Rainbow.png",
+        "name": "Piercing Rainbow",
+        "character": "Bronya"
       },
       {
-        "file": "eidolons/Castorice/Crown on Wings of Bloom.png",
-        "name": "Crown on Wings of Bloom",
-        "character": "Castorice"
-      },
-      {
-        "file": "eidolons/Castorice/Pious Pilgrim, Dance in Doom.png",
-        "name": "Pious Pilgrim, Dance in Doom",
-        "character": "Castorice"
-      },
-      {
-        "file": "eidolons/Castorice/Pristine Pages, Prophecy as Plume.png",
-        "name": "Pristine Pages, Prophecy as Plume",
-        "character": "Castorice"
-      },
-      {
-        "file": "eidolons/Castorice/Rest in Songs of Gloom.png",
-        "name": "Rest in Songs of Gloom",
-        "character": "Castorice"
-      },
-      {
-        "file": "eidolons/Castorice/Snowbound Maiden, Memory to Tomb.png",
+        "file": "eidolons/Castorice/E1_Snowbound Maiden, Memory to Tomb.png",
         "name": "Snowbound Maiden, Memory to Tomb",
         "character": "Castorice"
       },
       {
-        "file": "eidolons/Cerydra/A Journey Set Starward.png",
-        "name": "A Journey Set Starward",
-        "character": "Cerydra"
+        "file": "eidolons/Castorice/E2_Crown on Wings of Bloom.png",
+        "name": "Crown on Wings of Bloom",
+        "character": "Castorice"
       },
       {
-        "file": "eidolons/Cerydra/Forge the Dreams of Many.png",
-        "name": "Forge the Dreams of Many",
-        "character": "Cerydra"
+        "file": "eidolons/Castorice/E3_Pious Pilgrim, Dance in Doom.png",
+        "name": "Pious Pilgrim, Dance in Doom",
+        "character": "Castorice"
       },
       {
-        "file": "eidolons/Cerydra/Help and Hurt Repaid in Full.png",
-        "name": "Help and Hurt Repaid in Full",
-        "character": "Cerydra"
+        "file": "eidolons/Castorice/E4_Rest in Songs of Gloom.png",
+        "name": "Rest in Songs of Gloom",
+        "character": "Castorice"
       },
       {
-        "file": "eidolons/Cerydra/Remake the Realms of Men.png",
-        "name": "Remake the Realms of Men",
-        "character": "Cerydra"
+        "file": "eidolons/Castorice/E5_Pristine Pages, Prophecy as Plume.png",
+        "name": "Pristine Pages, Prophecy as Plume",
+        "character": "Castorice"
       },
       {
-        "file": "eidolons/Cerydra/Seize the Crowns of All.png",
+        "file": "eidolons/Castorice/E6_Await for Years to Loom.png",
+        "name": "Await for Years to Loom",
+        "character": "Castorice"
+      },
+      {
+        "file": "eidolons/Cerydra/E1_Seize the Crowns of All.png",
         "name": "Seize the Crowns of All",
         "character": "Cerydra"
       },
       {
-        "file": "eidolons/Cerydra/Torch the Laws of Old.png",
+        "file": "eidolons/Cerydra/E2_Forge the Dreams of Many.png",
+        "name": "Forge the Dreams of Many",
+        "character": "Cerydra"
+      },
+      {
+        "file": "eidolons/Cerydra/E3_Torch the Laws of Old.png",
         "name": "Torch the Laws of Old",
         "character": "Cerydra"
       },
       {
-        "file": "eidolons/Cipher/From Thin Air, Hard to Foresee.png",
+        "file": "eidolons/Cerydra/E4_Remake the Realms of Men.png",
+        "name": "Remake the Realms of Men",
+        "character": "Cerydra"
+      },
+      {
+        "file": "eidolons/Cerydra/E5_Help and Hurt Repaid in Full.png",
+        "name": "Help and Hurt Repaid in Full",
+        "character": "Cerydra"
+      },
+      {
+        "file": "eidolons/Cerydra/E6_A Journey Set Starward.png",
+        "name": "A Journey Set Starward",
+        "character": "Cerydra"
+      },
+      {
+        "file": "eidolons/Cipher/E1_Read the Room, Seek the Glee.png",
+        "name": "Read the Room, Seek the Glee",
+        "character": "Cipher"
+      },
+      {
+        "file": "eidolons/Cipher/E2_In the Fray, Nab On a Spree.png",
+        "name": "In the Fray, Nab On a Spree",
+        "character": "Cipher"
+      },
+      {
+        "file": "eidolons/Cipher/E3_From Thin Air, Hard to Foresee.png",
         "name": "From Thin Air, Hard to Foresee",
         "character": "Cipher"
       },
       {
-        "file": "eidolons/Cipher/In the Fray, Nab On a Spree 3.3.png",
-        "name": "In the Fray, Nab On a Spree 3.3",
-        "character": "Cipher"
-      },
-      {
-        "file": "eidolons/Cipher/Read the Room, Seek the Glee 3.3.png",
-        "name": "Read the Room, Seek the Glee 3.3",
-        "character": "Cipher"
-      },
-      {
-        "file": "eidolons/Cipher/Safe in Numbers, Light as a Bee.png",
-        "name": "Safe in Numbers, Light as a Bee",
-        "character": "Cipher"
-      },
-      {
-        "file": "eidolons/Cipher/The Jig Is Up, Quick to Flee.png",
+        "file": "eidolons/Cipher/E4_The Jig Is Up, Quick to Flee.png",
         "name": "The Jig Is Up, Quick to Flee",
         "character": "Cipher"
       },
       {
-        "file": "eidolons/Cipher/The Thief's Game, Unsung and Free.png",
+        "file": "eidolons/Cipher/E5_Safe in Numbers, Light as a Bee.png",
+        "name": "Safe in Numbers, Light as a Bee",
+        "character": "Cipher"
+      },
+      {
+        "file": "eidolons/Cipher/E6_The Thief's Game, Unsung and Free.png",
         "name": "The Thief's Game, Unsung and Free",
         "character": "Cipher"
       },
       {
-        "file": "eidolons/Clara/A Small Promise.png",
-        "name": "A Small Promise",
-        "character": "Clara"
-      },
-      {
-        "file": "eidolons/Clara/A Tall Figure.png",
+        "file": "eidolons/Clara/E1_A Tall Figure.png",
         "name": "A Tall Figure",
         "character": "Clara"
       },
       {
-        "file": "eidolons/Clara/A Tight Embrace.png",
+        "file": "eidolons/Clara/E2_A Tight Embrace.png",
         "name": "A Tight Embrace",
         "character": "Clara"
       },
       {
-        "file": "eidolons/Clara/Cold Steel Armor.png",
+        "file": "eidolons/Clara/E3_Cold Steel Armor.png",
         "name": "Cold Steel Armor",
         "character": "Clara"
       },
       {
-        "file": "eidolons/Clara/Family's Warmth.png",
+        "file": "eidolons/Clara/E4_Family's Warmth.png",
         "name": "Family's Warmth",
         "character": "Clara"
       },
       {
-        "file": "eidolons/Clara/Long Company.png",
+        "file": "eidolons/Clara/E5_A Small Promise.png",
+        "name": "A Small Promise",
+        "character": "Clara"
+      },
+      {
+        "file": "eidolons/Clara/E6_Long Company.png",
         "name": "Long Company",
         "character": "Clara"
       },
       {
-        "file": "eidolons/Cyrene/Eidolon A Tomorrow in Thirteen Shades.png",
-        "name": "A Tomorrow in Thirteen Shades",
-        "character": "Cyrene"
-      },
-      {
-        "file": "eidolons/Cyrene/Eidolon By Thy Being, As I've Written.png",
-        "name": "By Thy Being, As I've Written",
-        "character": "Cyrene"
-      },
-      {
-        "file": "eidolons/Cyrene/Eidolon Epics, Born on a Blank Slate.png",
+        "file": "eidolons/Cyrene/E1_Epics, Born on a Blank Slate.png",
         "name": "Epics, Born on a Blank Slate",
         "character": "Cyrene"
       },
       {
-        "file": "eidolons/Cyrene/Eidolon Gaze, Steeped in Yesterbloom.png",
-        "name": "Gaze, Steeped in Yesterbloom",
+        "file": "eidolons/Cyrene/E2_A Tomorrow in Thirteen Shades.png",
+        "name": "A Tomorrow in Thirteen Shades",
         "character": "Cyrene"
       },
       {
-        "file": "eidolons/Cyrene/Eidolon Please Write On, With a Smile.png",
+        "file": "eidolons/Cyrene/E3_By Thy Being, As I've Written.png",
+        "name": "By Thy Being, As I've Written",
+        "character": "Cyrene"
+      },
+      {
+        "file": "eidolons/Cyrene/E4_Please Write On, With a Smile.png",
         "name": "Please Write On, With a Smile",
         "character": "Cyrene"
       },
       {
-        "file": "eidolons/Cyrene/Eidolon Remembrance, Sung in Ripples ♪.png",
+        "file": "eidolons/Cyrene/E5_Gaze, Steeped in Yesterbloom.png",
+        "name": "Gaze, Steeped in Yesterbloom",
+        "character": "Cyrene"
+      },
+      {
+        "file": "eidolons/Cyrene/E6_Remembrance, Sung in Ripples ♪.png",
         "name": "Remembrance, Sung in Ripples ♪",
         "character": "Cyrene"
       },
       {
-        "file": "eidolons/Dan Heng/A Drop of Rain Feeds a Torrent.png",
-        "name": "A Drop of Rain Feeds a Torrent",
-        "character": "Dan Heng"
-      },
-      {
-        "file": "eidolons/Dan Heng/Quell the Venom Octet, Quench the Vice O'Flame.png",
-        "name": "Quell the Venom Octet, Quench the Vice O'Flame",
-        "character": "Dan Heng"
-      },
-      {
-        "file": "eidolons/Dan Heng/Roaring Dragon and Soaring Sun.png",
-        "name": "Roaring Dragon and Soaring Sun",
-        "character": "Dan Heng"
-      },
-      {
-        "file": "eidolons/Dan Heng/Seen and Unseen.png",
-        "name": "Seen and Unseen",
-        "character": "Dan Heng"
-      },
-      {
-        "file": "eidolons/Dan Heng/The Higher You Fly, the Harder You Fall.png",
+        "file": "eidolons/Dan Heng/E1_The Higher You Fly, the Harder You Fall.png",
         "name": "The Higher You Fly, the Harder You Fall",
         "character": "Dan Heng"
       },
       {
-        "file": "eidolons/Dan Heng/The Troubled Soul Lies in Wait.png",
+        "file": "eidolons/Dan Heng/E2_Quell the Venom Octet, Quench the Vice O'Flame.png",
+        "name": "Quell the Venom Octet, Quench the Vice O'Flame",
+        "character": "Dan Heng"
+      },
+      {
+        "file": "eidolons/Dan Heng/E3_Seen and Unseen.png",
+        "name": "Seen and Unseen",
+        "character": "Dan Heng"
+      },
+      {
+        "file": "eidolons/Dan Heng/E4_Roaring Dragon and Soaring Sun.png",
+        "name": "Roaring Dragon and Soaring Sun",
+        "character": "Dan Heng"
+      },
+      {
+        "file": "eidolons/Dan Heng/E5_A Drop of Rain Feeds a Torrent.png",
+        "name": "A Drop of Rain Feeds a Torrent",
+        "character": "Dan Heng"
+      },
+      {
+        "file": "eidolons/Dan Heng/E6_The Troubled Soul Lies in Wait.png",
         "name": "The Troubled Soul Lies in Wait",
         "character": "Dan Heng"
       },
       {
-        "file": "eidolons/Dan Heng • Permansor Terrae/Bear Weight of Worlds.png",
-        "name": "Bear Weight of Worlds",
-        "character": "Dan Heng • Permansor Terrae"
-      },
-      {
-        "file": "eidolons/Dan Heng • Permansor Terrae/By Oath, This Vessel Is I.png",
-        "name": "By Oath, This Vessel Is I",
-        "character": "Dan Heng • Permansor Terrae"
-      },
-      {
-        "file": "eidolons/Dan Heng • Permansor Terrae/One Dream to Enfold All Wilds.png",
-        "name": "One Dream to Enfold All Wilds",
-        "character": "Dan Heng • Permansor Terrae"
-      },
-      {
-        "file": "eidolons/Dan Heng • Permansor Terrae/Shed Scales of Old.png",
+        "file": "eidolons/Dan Heng • Permansor Terrae/E1_Shed Scales of Old.png",
         "name": "Shed Scales of Old",
         "character": "Dan Heng • Permansor Terrae"
       },
       {
-        "file": "eidolons/Dan Heng • Permansor Terrae/The Path of Permanence Sweeps Far.png",
-        "name": "The Path of Permanence Sweeps Far",
-        "character": "Dan Heng • Permansor Terrae"
-      },
-      {
-        "file": "eidolons/Dan Heng • Permansor Terrae/Watch Trails to Blaze.png",
+        "file": "eidolons/Dan Heng • Permansor Terrae/E2_Watch Trails to Blaze.png",
         "name": "Watch Trails to Blaze",
         "character": "Dan Heng • Permansor Terrae"
       },
       {
-        "file": "eidolons/Dr. Ratio/Ignorance Is Blight.png",
-        "name": "Ignorance Is Blight",
-        "character": "Dr. Ratio"
+        "file": "eidolons/Dan Heng • Permansor Terrae/E3_Bear Weight of Worlds.png",
+        "name": "Bear Weight of Worlds",
+        "character": "Dan Heng • Permansor Terrae"
       },
       {
-        "file": "eidolons/Dr. Ratio/Know Thyself.png",
-        "name": "Know Thyself",
-        "character": "Dr. Ratio"
+        "file": "eidolons/Dan Heng • Permansor Terrae/E4_By Oath, This Vessel Is I.png",
+        "name": "By Oath, This Vessel Is I",
+        "character": "Dan Heng • Permansor Terrae"
       },
       {
-        "file": "eidolons/Dr. Ratio/Pride Comes Before a Fall.png",
+        "file": "eidolons/Dan Heng • Permansor Terrae/E5_The Path of Permanence Sweeps Far.png",
+        "name": "The Path of Permanence Sweeps Far",
+        "character": "Dan Heng • Permansor Terrae"
+      },
+      {
+        "file": "eidolons/Dan Heng • Permansor Terrae/E6_One Dream to Enfold All Wilds.png",
+        "name": "One Dream to Enfold All Wilds",
+        "character": "Dan Heng • Permansor Terrae"
+      },
+      {
+        "file": "eidolons/Dr. Ratio/E1_Pride Comes Before a Fall.png",
         "name": "Pride Comes Before a Fall",
         "character": "Dr. Ratio"
       },
       {
-        "file": "eidolons/Dr. Ratio/Sic Itur Ad Astra.png",
-        "name": "Sic Itur Ad Astra",
-        "character": "Dr. Ratio"
-      },
-      {
-        "file": "eidolons/Dr. Ratio/The Divine Is in the Details.png",
+        "file": "eidolons/Dr. Ratio/E2_The Divine Is in the Details.png",
         "name": "The Divine Is in the Details",
         "character": "Dr. Ratio"
       },
       {
-        "file": "eidolons/Dr. Ratio/Vincit Omnia Veritas.png",
+        "file": "eidolons/Dr. Ratio/E3_Know Thyself.png",
+        "name": "Know Thyself",
+        "character": "Dr. Ratio"
+      },
+      {
+        "file": "eidolons/Dr. Ratio/E4_Ignorance Is Blight.png",
+        "name": "Ignorance Is Blight",
+        "character": "Dr. Ratio"
+      },
+      {
+        "file": "eidolons/Dr. Ratio/E5_Sic Itur Ad Astra.png",
+        "name": "Sic Itur Ad Astra",
+        "character": "Dr. Ratio"
+      },
+      {
+        "file": "eidolons/Dr. Ratio/E6_Vincit Omnia Veritas.png",
         "name": "Vincit Omnia Veritas",
         "character": "Dr. Ratio"
       },
       {
-        "file": "eidolons/Evanescia/Eidolon Arcadia_ A Glimpse of Fates.png",
-        "name": "Arcadia_ A Glimpse of Fates",
+        "file": "eidolons/Evanescia/E1_Home_ A Prayer in Dance.png",
+        "name": "Home: A Prayer in Dance",
         "character": "Evanescia"
       },
       {
-        "file": "eidolons/Evanescia/Eidolon Blade_ A Feast on Evils.png",
-        "name": "Blade_ A Feast on Evils",
+        "file": "eidolons/Evanescia/E2_Voyage_ A Wish for Everbloom.png",
+        "name": "Voyage: A Wish for Everbloom",
         "character": "Evanescia"
       },
       {
-        "file": "eidolons/Evanescia/Eidolon Home_ A Prayer in Dance.png",
-        "name": "Home_ A Prayer in Dance",
+        "file": "eidolons/Evanescia/E3_Blade_ A Feast on Evils.png",
+        "name": "Blade: A Feast on Evils",
         "character": "Evanescia"
       },
       {
-        "file": "eidolons/Evanescia/Eidolon Maiden_ A Step into Dreams.png",
-        "name": "Maiden_ A Step into Dreams",
+        "file": "eidolons/Evanescia/E4_Meadow_ A Ruin by Vice.png",
+        "name": "Meadow: A Ruin by Vice",
         "character": "Evanescia"
       },
       {
-        "file": "eidolons/Evanescia/Eidolon Meadow_ A Ruin by Vice.png",
-        "name": "Meadow_ A Ruin by Vice",
+        "file": "eidolons/Evanescia/E5_Arcadia_ A Glimpse of Fates.png",
+        "name": "Arcadia: A Glimpse of Fates",
         "character": "Evanescia"
       },
       {
-        "file": "eidolons/Evanescia/Eidolon Voyage_ A Wish for Everbloom.png",
-        "name": "Voyage_ A Wish for Everbloom",
+        "file": "eidolons/Evanescia/E6_Maiden_ A Step into Dreams.png",
+        "name": "Maiden: A Step into Dreams",
         "character": "Evanescia"
       },
       {
-        "file": "eidolons/Evernight/Fear Not, the Nightmare Lies Past.png",
-        "name": "Fear Not, the Nightmare Lies Past",
-        "character": "Evernight"
-      },
-      {
-        "file": "eidolons/Evernight/Let Go, the Me in Memories.png",
-        "name": "Let Go, the Me in Memories",
-        "character": "Evernight"
-      },
-      {
-        "file": "eidolons/Evernight/Like This, Always.png",
-        "name": "Like This, Always",
-        "character": "Evernight"
-      },
-      {
-        "file": "eidolons/Evernight/Listen Up, the Slumber Speaks Soft.png",
-        "name": "Listen Up, the Slumber Speaks Soft",
-        "character": "Evernight"
-      },
-      {
-        "file": "eidolons/Evernight/Sleep Tight, the Night Dreams Long.png",
+        "file": "eidolons/Evernight/E1_Sleep Tight, the Night Dreams Long.png",
         "name": "Sleep Tight, the Night Dreams Long",
         "character": "Evernight"
       },
       {
-        "file": "eidolons/Evernight/Wake Up, the Tomorrow is Yours.png",
+        "file": "eidolons/Evernight/E2_Listen Up, the Slumber Speaks Soft.png",
+        "name": "Listen Up, the Slumber Speaks Soft",
+        "character": "Evernight"
+      },
+      {
+        "file": "eidolons/Evernight/E3_Fear Not, the Nightmare Lies Past.png",
+        "name": "Fear Not, the Nightmare Lies Past",
+        "character": "Evernight"
+      },
+      {
+        "file": "eidolons/Evernight/E4_Wake Up, the Tomorrow is Yours.png",
         "name": "Wake Up, the Tomorrow is Yours",
         "character": "Evernight"
       },
       {
-        "file": "eidolons/Feixiao/Eidolon Heavenward I Leap.png",
-        "name": "Heavenward I Leap",
-        "character": "Feixiao"
+        "file": "eidolons/Evernight/E5_Let Go, the _Me_ in Memories.png",
+        "name": "Let Go, the \"Me\" in Memories",
+        "character": "Evernight"
       },
       {
-        "file": "eidolons/Feixiao/Eidolon Homeward I Near.png",
-        "name": "Homeward I Near",
-        "character": "Feixiao"
+        "file": "eidolons/Evernight/E6_Like This, Always.png",
+        "name": "Like This, Always",
+        "character": "Evernight"
       },
       {
-        "file": "eidolons/Feixiao/Eidolon Moonward I Wish.png",
-        "name": "Moonward I Wish",
-        "character": "Feixiao"
-      },
-      {
-        "file": "eidolons/Feixiao/Eidolon Skyward I Quell.png",
+        "file": "eidolons/Feixiao/E1_Skyward I Quell.png",
         "name": "Skyward I Quell",
         "character": "Feixiao"
       },
       {
-        "file": "eidolons/Feixiao/Eidolon Starward I Bode.png",
+        "file": "eidolons/Feixiao/E2_Moonward I Wish.png",
+        "name": "Moonward I Wish",
+        "character": "Feixiao"
+      },
+      {
+        "file": "eidolons/Feixiao/E3_Starward I Bode.png",
         "name": "Starward I Bode",
         "character": "Feixiao"
       },
       {
-        "file": "eidolons/Feixiao/Eidolon Stormward I Hear.png",
+        "file": "eidolons/Feixiao/E4_Stormward I Hear.png",
         "name": "Stormward I Hear",
         "character": "Feixiao"
       },
       {
-        "file": "eidolons/Firefly/Amidst Silenced Stars, I Deep Sleep.png",
-        "name": "Amidst Silenced Stars, I Deep Sleep",
-        "character": "Firefly"
+        "file": "eidolons/Feixiao/E5_Heavenward I Leap.png",
+        "name": "Heavenward I Leap",
+        "character": "Feixiao"
       },
       {
-        "file": "eidolons/Firefly/From Shattered Sky, I Free Fall.png",
-        "name": "From Shattered Sky, I Free Fall",
-        "character": "Firefly"
+        "file": "eidolons/Feixiao/E6_Homeward I Near.png",
+        "name": "Homeward I Near",
+        "character": "Feixiao"
       },
       {
-        "file": "eidolons/Firefly/From Undreamt Night, I Thence Shine.png",
-        "name": "From Undreamt Night, I Thence Shine",
-        "character": "Firefly"
-      },
-      {
-        "file": "eidolons/Firefly/In Finalized Morrow, I Full Bloom.png",
-        "name": "In Finalized Morrow, I Full Bloom",
-        "character": "Firefly"
-      },
-      {
-        "file": "eidolons/Firefly/In Reddened Chrysalis, I Once Rest.png",
+        "file": "eidolons/Firefly/E1_In Reddened Chrysalis, I Once Rest.png",
         "name": "In Reddened Chrysalis, I Once Rest",
         "character": "Firefly"
       },
       {
-        "file": "eidolons/Firefly/Upon Lighted Fyrefly, I Soon Gaze.png",
+        "file": "eidolons/Firefly/E2_From Shattered Sky, I Free Fall.png",
+        "name": "From Shattered Sky, I Free Fall",
+        "character": "Firefly"
+      },
+      {
+        "file": "eidolons/Firefly/E3_Amidst Silenced Stars, I Deep Sleep.png",
+        "name": "Amidst Silenced Stars, I Deep Sleep",
+        "character": "Firefly"
+      },
+      {
+        "file": "eidolons/Firefly/E4_Upon Lighted Fyrefly, I Soon Gaze.png",
         "name": "Upon Lighted Fyrefly, I Soon Gaze",
         "character": "Firefly"
       },
       {
-        "file": "eidolons/Fu Xuan/Eidolon Apex Nexus.png",
-        "name": "Apex Nexus",
-        "character": "Fu Xuan"
+        "file": "eidolons/Firefly/E5_From Undreamt Night, I Thence Shine.png",
+        "name": "From Undreamt Night, I Thence Shine",
+        "character": "Firefly"
       },
       {
-        "file": "eidolons/Fu Xuan/Eidolon Arbiter Primus.png",
-        "name": "Arbiter Primus",
-        "character": "Fu Xuan"
+        "file": "eidolons/Firefly/E6_In Finalized Morrow, I Full Bloom.png",
+        "name": "In Finalized Morrow, I Full Bloom",
+        "character": "Firefly"
       },
       {
-        "file": "eidolons/Fu Xuan/Eidolon Dominus Pacis.png",
+        "file": "eidolons/Fu Xuan/E1_Dominus Pacis.png",
         "name": "Dominus Pacis",
         "character": "Fu Xuan"
       },
       {
-        "file": "eidolons/Fu Xuan/Eidolon Fortuna Stellaris.png",
-        "name": "Fortuna Stellaris",
-        "character": "Fu Xuan"
-      },
-      {
-        "file": "eidolons/Fu Xuan/Eidolon Omnia Vita.png",
-        "name": "Omnia Vita",
-        "character": "Fu Xuan"
-      },
-      {
-        "file": "eidolons/Fu Xuan/Eidolon Optimus Felix.png",
+        "file": "eidolons/Fu Xuan/E2_Optimus Felix.png",
         "name": "Optimus Felix",
         "character": "Fu Xuan"
       },
       {
-        "file": "eidolons/Fugue/Beatitude Dawns for the Worthy.png",
-        "name": "Beatitude Dawns for the Worthy",
-        "character": "Fugue"
+        "file": "eidolons/Fu Xuan/E3_Apex Nexus.png",
+        "name": "Apex Nexus",
+        "character": "Fu Xuan"
       },
       {
-        "file": "eidolons/Fugue/Bereft of Form, Which Name to Bear.png",
-        "name": "Bereft of Form, Which Name to Bear",
-        "character": "Fugue"
+        "file": "eidolons/Fu Xuan/E4_Fortuna Stellaris.png",
+        "name": "Fortuna Stellaris",
+        "character": "Fu Xuan"
       },
       {
-        "file": "eidolons/Fugue/Clairvoyance of Boom and Doom.png",
-        "name": "Clairvoyance of Boom and Doom",
-        "character": "Fugue"
+        "file": "eidolons/Fu Xuan/E5_Arbiter Primus.png",
+        "name": "Arbiter Primus",
+        "character": "Fu Xuan"
       },
       {
-        "file": "eidolons/Fugue/Colored Cloud Rains Fortune.png",
-        "name": "Colored Cloud Rains Fortune",
-        "character": "Fugue"
+        "file": "eidolons/Fu Xuan/E6_Omnia Vita.png",
+        "name": "Omnia Vita",
+        "character": "Fu Xuan"
       },
       {
-        "file": "eidolons/Fugue/Earthbound I Was, Cloudward I Be.png",
+        "file": "eidolons/Fugue/E1_Earthbound I Was, Cloudward I Be.png",
         "name": "Earthbound I Was, Cloudward I Be",
         "character": "Fugue"
       },
       {
-        "file": "eidolons/Fugue/Verity Weaves Thoughts to Blade.png",
+        "file": "eidolons/Fugue/E2_Beatitude Dawns for the Worthy.png",
+        "name": "Beatitude Dawns for the Worthy",
+        "character": "Fugue"
+      },
+      {
+        "file": "eidolons/Fugue/E3_Verity Weaves Thoughts to Blade.png",
         "name": "Verity Weaves Thoughts to Blade",
         "character": "Fugue"
       },
       {
-        "file": "eidolons/Gallagher/Blood and Sand.png",
-        "name": "Blood and Sand",
-        "character": "Gallagher"
+        "file": "eidolons/Fugue/E4_Bereft of Form, Which Name to Bear.png",
+        "name": "Bereft of Form, Which Name to Bear",
+        "character": "Fugue"
       },
       {
-        "file": "eidolons/Gallagher/Corpse Reviver.png",
-        "name": "Corpse Reviver",
-        "character": "Gallagher"
+        "file": "eidolons/Fugue/E5_Colored Cloud Rains Fortune.png",
+        "name": "Colored Cloud Rains Fortune",
+        "character": "Fugue"
       },
       {
-        "file": "eidolons/Gallagher/Death in the Afternoon.png",
-        "name": "Death in the Afternoon",
-        "character": "Gallagher"
+        "file": "eidolons/Fugue/E6_Clairvoyance of Boom and Doom.png",
+        "name": "Clairvoyance of Boom and Doom",
+        "character": "Fugue"
       },
       {
-        "file": "eidolons/Gallagher/Last Word.png",
-        "name": "Last Word",
-        "character": "Gallagher"
-      },
-      {
-        "file": "eidolons/Gallagher/Lion's Tail.png",
-        "name": "Lion's Tail",
-        "character": "Gallagher"
-      },
-      {
-        "file": "eidolons/Gallagher/Salty Dog.png",
+        "file": "eidolons/Gallagher/E1_Salty Dog.png",
         "name": "Salty Dog",
         "character": "Gallagher"
       },
       {
-        "file": "eidolons/Gepard/Cold Iron Fist.png",
-        "name": "Cold Iron Fist",
-        "character": "Gepard"
+        "file": "eidolons/Gallagher/E2_Lion's Tail.png",
+        "name": "Lion's Tail",
+        "character": "Gallagher"
       },
       {
-        "file": "eidolons/Gepard/Due Diligence.png",
+        "file": "eidolons/Gallagher/E3_Corpse Reviver.png",
+        "name": "Corpse Reviver",
+        "character": "Gallagher"
+      },
+      {
+        "file": "eidolons/Gallagher/E4_Last Word.png",
+        "name": "Last Word",
+        "character": "Gallagher"
+      },
+      {
+        "file": "eidolons/Gallagher/E5_Death in the Afternoon.png",
+        "name": "Death in the Afternoon",
+        "character": "Gallagher"
+      },
+      {
+        "file": "eidolons/Gallagher/E6_Blood and Sand.png",
+        "name": "Blood and Sand",
+        "character": "Gallagher"
+      },
+      {
+        "file": "eidolons/Gepard/E1_Due Diligence.png",
         "name": "Due Diligence",
         "character": "Gepard"
       },
       {
-        "file": "eidolons/Gepard/Faith Moves Mountains.png",
-        "name": "Faith Moves Mountains",
-        "character": "Gepard"
-      },
-      {
-        "file": "eidolons/Gepard/Lingering Cold.png",
+        "file": "eidolons/Gepard/E2_Lingering Cold.png",
         "name": "Lingering Cold",
         "character": "Gepard"
       },
       {
-        "file": "eidolons/Gepard/Never Surrender.png",
+        "file": "eidolons/Gepard/E3_Never Surrender.png",
         "name": "Never Surrender",
         "character": "Gepard"
       },
       {
-        "file": "eidolons/Gepard/Unyielding Resolve.png",
+        "file": "eidolons/Gepard/E4_Faith Moves Mountains.png",
+        "name": "Faith Moves Mountains",
+        "character": "Gepard"
+      },
+      {
+        "file": "eidolons/Gepard/E5_Cold Iron Fist.png",
+        "name": "Cold Iron Fist",
+        "character": "Gepard"
+      },
+      {
+        "file": "eidolons/Gepard/E6_Unyielding Resolve.png",
         "name": "Unyielding Resolve",
         "character": "Gepard"
       },
       {
-        "file": "eidolons/Gilgamesh/Eidolon He Who Saw the Deep.png",
+        "file": "eidolons/Gilgamesh/E1_He Who Saw the Deep.png",
         "name": "He Who Saw the Deep",
         "character": "Gilgamesh"
       },
       {
-        "file": "eidolons/Gilgamesh/Eidolon Journey That Spanned Far.png",
-        "name": "Journey That Spanned Far",
-        "character": "Gilgamesh"
-      },
-      {
-        "file": "eidolons/Gilgamesh/Eidolon King Who Bowed to None.png",
-        "name": "King Who Bowed to None",
-        "character": "Gilgamesh"
-      },
-      {
-        "file": "eidolons/Gilgamesh/Eidolon Soul That Bore Friendship.png",
-        "name": "Soul That Bore Friendship",
-        "character": "Gilgamesh"
-      },
-      {
-        "file": "eidolons/Gilgamesh/Eidolon Sword That Parted Gods from Man.png",
-        "name": "Sword That Parted Gods from Man",
-        "character": "Gilgamesh"
-      },
-      {
-        "file": "eidolons/Gilgamesh/Eidolon Wisdom That Encompassed All.png",
+        "file": "eidolons/Gilgamesh/E2_Wisdom That Encompassed All.png",
         "name": "Wisdom That Encompassed All",
         "character": "Gilgamesh"
       },
       {
-        "file": "eidolons/Guinaifen/Blocking Pike with Neck.png",
-        "name": "Blocking Pike with Neck",
-        "character": "Guinaifen"
+        "file": "eidolons/Gilgamesh/E3_Journey That Spanned Far.png",
+        "name": "Journey That Spanned Far",
+        "character": "Gilgamesh"
       },
       {
-        "file": "eidolons/Guinaifen/Brushing Teeth While Whistling.png",
-        "name": "Brushing Teeth While Whistling",
-        "character": "Guinaifen"
+        "file": "eidolons/Gilgamesh/E4_King Who Bowed to None.png",
+        "name": "King Who Bowed to None",
+        "character": "Gilgamesh"
       },
       {
-        "file": "eidolons/Guinaifen/Catching Bullet with Hands.png",
-        "name": "Catching Bullet with Hands",
-        "character": "Guinaifen"
+        "file": "eidolons/Gilgamesh/E5_Sword That Parted Gods from Man.png",
+        "name": "Sword That Parted Gods from Man",
+        "character": "Gilgamesh"
       },
       {
-        "file": "eidolons/Guinaifen/Slurping Noodles During Handstand.png",
+        "file": "eidolons/Gilgamesh/E6_Soul That Bore Friendship.png",
+        "name": "Soul That Bore Friendship",
+        "character": "Gilgamesh"
+      },
+      {
+        "file": "eidolons/Guinaifen/E1_Slurping Noodles During Handstand.png",
         "name": "Slurping Noodles During Handstand",
         "character": "Guinaifen"
       },
       {
-        "file": "eidolons/Guinaifen/Smashing Boulder on Chest.png",
+        "file": "eidolons/Guinaifen/E2_Brushing Teeth While Whistling.png",
+        "name": "Brushing Teeth While Whistling",
+        "character": "Guinaifen"
+      },
+      {
+        "file": "eidolons/Guinaifen/E3_Smashing Boulder on Chest.png",
         "name": "Smashing Boulder on Chest",
         "character": "Guinaifen"
       },
       {
-        "file": "eidolons/Guinaifen/Swallowing Sword to Stomach.png",
+        "file": "eidolons/Guinaifen/E4_Blocking Pike with Neck.png",
+        "name": "Blocking Pike with Neck",
+        "character": "Guinaifen"
+      },
+      {
+        "file": "eidolons/Guinaifen/E5_Swallowing Sword to Stomach.png",
         "name": "Swallowing Sword to Stomach",
         "character": "Guinaifen"
       },
       {
-        "file": "eidolons/Hanya/Five Skandhas.png",
-        "name": "Five Skandhas",
-        "character": "Hanya"
+        "file": "eidolons/Guinaifen/E6_Catching Bullet with Hands.png",
+        "name": "Catching Bullet with Hands",
+        "character": "Guinaifen"
       },
       {
-        "file": "eidolons/Hanya/Four Truths.png",
-        "name": "Four Truths",
-        "character": "Hanya"
-      },
-      {
-        "file": "eidolons/Hanya/One Heart.png",
+        "file": "eidolons/Hanya/E1_One Heart.png",
         "name": "One Heart",
         "character": "Hanya"
       },
       {
-        "file": "eidolons/Hanya/Six Reverences.png",
-        "name": "Six Reverences",
-        "character": "Hanya"
-      },
-      {
-        "file": "eidolons/Hanya/Three Temptations.png",
-        "name": "Three Temptations",
-        "character": "Hanya"
-      },
-      {
-        "file": "eidolons/Hanya/Two Views.png",
+        "file": "eidolons/Hanya/E2_Two Views.png",
         "name": "Two Views",
         "character": "Hanya"
       },
       {
-        "file": "eidolons/Herta/Cuss Big or Cuss Nothing.png",
-        "name": "Cuss Big or Cuss Nothing",
-        "character": "Herta"
+        "file": "eidolons/Hanya/E3_Three Temptations.png",
+        "name": "Three Temptations",
+        "character": "Hanya"
       },
       {
-        "file": "eidolons/Herta/Hit Where It Hurts.png",
-        "name": "Hit Where It Hurts",
-        "character": "Herta"
+        "file": "eidolons/Hanya/E4_Four Truths.png",
+        "name": "Four Truths",
+        "character": "Hanya"
       },
       {
-        "file": "eidolons/Herta/Keep the Ball Rolling.png",
-        "name": "Keep the Ball Rolling",
-        "character": "Herta"
+        "file": "eidolons/Hanya/E5_Five Skandhas.png",
+        "name": "Five Skandhas",
+        "character": "Hanya"
       },
       {
-        "file": "eidolons/Herta/Kick You When You're Down.png",
+        "file": "eidolons/Hanya/E6_Six Reverences.png",
+        "name": "Six Reverences",
+        "character": "Hanya"
+      },
+      {
+        "file": "eidolons/Herta/E1_Kick You When You're Down.png",
         "name": "Kick You When You're Down",
         "character": "Herta"
       },
       {
-        "file": "eidolons/Herta/No One Can Betray Me.png",
-        "name": "No One Can Betray Me",
+        "file": "eidolons/Herta/E2_Keep the Ball Rolling.png",
+        "name": "Keep the Ball Rolling",
         "character": "Herta"
       },
       {
-        "file": "eidolons/Herta/That's the Kind of Girl I Am.png",
+        "file": "eidolons/Herta/E3_That's the Kind of Girl I Am.png",
         "name": "That's the Kind of Girl I Am",
         "character": "Herta"
       },
       {
-        "file": "eidolons/Himeko/Aspiration.png",
-        "name": "Aspiration",
-        "character": "Himeko"
+        "file": "eidolons/Herta/E4_Hit Where It Hurts.png",
+        "name": "Hit Where It Hurts",
+        "character": "Herta"
       },
       {
-        "file": "eidolons/Himeko/Childhood.png",
+        "file": "eidolons/Herta/E5_Cuss Big or Cuss Nothing.png",
+        "name": "Cuss Big or Cuss Nothing",
+        "character": "Herta"
+      },
+      {
+        "file": "eidolons/Herta/E6_No One Can Betray Me.png",
+        "name": "No One Can Betray Me",
+        "character": "Herta"
+      },
+      {
+        "file": "eidolons/Himeko/E1_Childhood.png",
         "name": "Childhood",
         "character": "Himeko"
       },
       {
-        "file": "eidolons/Himeko/Convergence.png",
+        "file": "eidolons/Himeko/E2_Convergence.png",
         "name": "Convergence",
         "character": "Himeko"
       },
       {
-        "file": "eidolons/Himeko/Dedication.png",
-        "name": "Dedication",
-        "character": "Himeko"
-      },
-      {
-        "file": "eidolons/Himeko/Poised.png",
+        "file": "eidolons/Himeko/E3_Poised.png",
         "name": "Poised",
         "character": "Himeko"
       },
       {
-        "file": "eidolons/Himeko/Trailblaze!.png",
+        "file": "eidolons/Himeko/E4_Dedication.png",
+        "name": "Dedication",
+        "character": "Himeko"
+      },
+      {
+        "file": "eidolons/Himeko/E5_Aspiration.png",
+        "name": "Aspiration",
+        "character": "Himeko"
+      },
+      {
+        "file": "eidolons/Himeko/E6_Trailblaze!.png",
         "name": "Trailblaze!",
         "character": "Himeko"
       },
       {
-        "file": "eidolons/Himeko Nova/Eidolon Let No Skyward Hand Stay Unheld.png",
-        "name": "Let No Skyward Hand Stay Unheld",
-        "character": "Himeko Nova"
-      },
-      {
-        "file": "eidolons/Himeko Nova/Eidolon Ours Is the Oath to Sail Starward.png",
-        "name": "Ours Is the Oath to Sail Starward",
-        "character": "Himeko Nova"
-      },
-      {
-        "file": "eidolons/Himeko Nova/Eidolon That Which We Stride Is the Trailblaze.png",
+        "file": "eidolons/Himeko Nova/E1_That Which We Stride Is the Trailblaze.png",
         "name": "That Which We Stride Is the Trailblaze",
         "character": "Himeko Nova"
       },
       {
-        "file": "eidolons/Himeko Nova/Eidolon The Colors We Never Strike.png",
+        "file": "eidolons/Himeko Nova/E2_The Colors We Never Strike.png",
         "name": "The Colors We Never Strike",
         "character": "Himeko Nova"
       },
       {
-        "file": "eidolons/Himeko Nova/Eidolon To Cross the Cosmos and Beyond.png",
-        "name": "To Cross the Cosmos and Beyond",
-        "character": "Himeko Nova"
-      },
-      {
-        "file": "eidolons/Himeko Nova/Eidolon We Who Are Starborn Muse Starward.png",
+        "file": "eidolons/Himeko Nova/E3_We Who Are Starborn Muse Starward.png",
         "name": "We Who Are Starborn Muse Starward",
         "character": "Himeko Nova"
       },
       {
-        "file": "eidolons/Hook/Always Ready to Punch and Kick.png",
-        "name": "Always Ready to Punch and Kick",
-        "character": "Hook"
+        "file": "eidolons/Himeko Nova/E4_Let No Skyward Hand Stay Unheld.png",
+        "name": "Let No Skyward Hand Stay Unheld",
+        "character": "Himeko Nova"
       },
       {
-        "file": "eidolons/Hook/Don't Be Picky, Nothing's Icky.png",
-        "name": "Don't Be Picky, Nothing's Icky",
-        "character": "Hook"
+        "file": "eidolons/Himeko Nova/E5_To Cross the Cosmos and Beyond.png",
+        "name": "To Cross the Cosmos and Beyond",
+        "character": "Himeko Nova"
       },
       {
-        "file": "eidolons/Hook/Early to Bed, Early to Rise.png",
+        "file": "eidolons/Himeko Nova/E6_Ours Is the Oath to Sail Starward.png",
+        "name": "Ours Is the Oath to Sail Starward",
+        "character": "Himeko Nova"
+      },
+      {
+        "file": "eidolons/Hook/E1_Early to Bed, Early to Rise.png",
         "name": "Early to Bed, Early to Rise",
         "character": "Hook"
       },
       {
-        "file": "eidolons/Hook/Happy Tummy, Happy Body.png",
+        "file": "eidolons/Hook/E2_Happy Tummy, Happy Body.png",
         "name": "Happy Tummy, Happy Body",
         "character": "Hook"
       },
       {
-        "file": "eidolons/Hook/It's Okay to Not Know.png",
+        "file": "eidolons/Hook/E3_Don't Be Picky, Nothing's Icky.png",
+        "name": "Don't Be Picky, Nothing's Icky",
+        "character": "Hook"
+      },
+      {
+        "file": "eidolons/Hook/E4_It's Okay to Not Know.png",
         "name": "It's Okay to Not Know",
         "character": "Hook"
       },
       {
-        "file": "eidolons/Hook/Let the Moles' Deeds Be Known.png",
+        "file": "eidolons/Hook/E5_Let the Moles' Deeds Be Known.png",
         "name": "Let the Moles' Deeds Be Known",
         "character": "Hook"
       },
       {
-        "file": "eidolons/Huohuo/Anchored to Vessel, Specters Nestled.png",
+        "file": "eidolons/Hook/E6_Always Ready to Punch and Kick.png",
+        "name": "Always Ready to Punch and Kick",
+        "character": "Hook"
+      },
+      {
+        "file": "eidolons/Huohuo/E1_Anchored to Vessel, Specters Nestled.png",
         "name": "Anchored to Vessel, Specters Nestled",
         "character": "Huohuo"
       },
       {
-        "file": "eidolons/Huohuo/Cursed by Fate, Moths to Flame.png",
-        "name": "Cursed by Fate, Moths to Flame",
-        "character": "Huohuo"
-      },
-      {
-        "file": "eidolons/Huohuo/Mandated by Edict, Evils Evicted.png",
-        "name": "Mandated by Edict, Evils Evicted",
-        "character": "Huohuo"
-      },
-      {
-        "file": "eidolons/Huohuo/Sealed in Tail, Wraith Subdued.png",
+        "file": "eidolons/Huohuo/E2_Sealed in Tail, Wraith Subdued.png",
         "name": "Sealed in Tail, Wraith Subdued",
         "character": "Huohuo"
       },
       {
-        "file": "eidolons/Huohuo/Tied in Life, Bound to Strife.png",
+        "file": "eidolons/Huohuo/E3_Cursed by Fate, Moths to Flame.png",
+        "name": "Cursed by Fate, Moths to Flame",
+        "character": "Huohuo"
+      },
+      {
+        "file": "eidolons/Huohuo/E4_Tied in Life, Bound to Strife.png",
         "name": "Tied in Life, Bound to Strife",
         "character": "Huohuo"
       },
       {
-        "file": "eidolons/Huohuo/Woven Together, Cohere Forever.png",
+        "file": "eidolons/Huohuo/E5_Mandated by Edict, Evils Evicted.png",
+        "name": "Mandated by Edict, Evils Evicted",
+        "character": "Huohuo"
+      },
+      {
+        "file": "eidolons/Huohuo/E6_Woven Together, Cohere Forever.png",
         "name": "Woven Together, Cohere Forever",
         "character": "Huohuo"
       },
       {
-        "file": "eidolons/Hyacine/Come Sit in My Courtyard.png",
-        "name": "Come Sit in My Courtyard",
-        "character": "Hyacine"
-      },
-      {
-        "file": "eidolons/Hyacine/Cradle the Candle of Night.png",
+        "file": "eidolons/Hyacine/E1_Cradle the Candle of Night.png",
         "name": "Cradle the Candle of Night",
         "character": "Hyacine"
       },
       {
-        "file": "eidolons/Hyacine/Depart, Unto the Sun!.png",
+        "file": "eidolons/Hyacine/E2_Come Sit in My Courtyard.png",
+        "name": "Come Sit in My Courtyard",
+        "character": "Hyacine"
+      },
+      {
+        "file": "eidolons/Hyacine/E3_Depart, Unto the Sun!.png",
         "name": "Depart, Unto the Sun!",
         "character": "Hyacine"
       },
       {
-        "file": "eidolons/Hyacine/O Sky, Heed My Plea.png",
-        "name": "O Sky, Heed My Plea",
-        "character": "Hyacine"
-      },
-      {
-        "file": "eidolons/Hyacine/Sunlit Amber, Yours to Keep.png",
+        "file": "eidolons/Hyacine/E4_Sunlit Amber, Yours to Keep.png",
         "name": "Sunlit Amber, Yours to Keep",
         "character": "Hyacine"
       },
       {
-        "file": "eidolons/Hyacine/Twilight Drapes the Tide.png",
+        "file": "eidolons/Hyacine/E5_Twilight Drapes the Tide.png",
         "name": "Twilight Drapes the Tide",
         "character": "Hyacine"
       },
       {
-        "file": "eidolons/Hysilens/In Ablution, I Hum and Sigh.png",
-        "name": "In Ablution, I Hum and Sigh",
-        "character": "Hysilens"
+        "file": "eidolons/Hyacine/E6_O Sky, Heed My Plea.png",
+        "name": "O Sky, Heed My Plea",
+        "character": "Hyacine"
       },
       {
-        "file": "eidolons/Hysilens/Lo, How Time Flows By.png",
-        "name": "Lo, How Time Flows By",
-        "character": "Hysilens"
-      },
-      {
-        "file": "eidolons/Hysilens/Tell Me Why Waves Roar High.png",
-        "name": "Tell Me Why Waves Roar High",
-        "character": "Hysilens"
-      },
-      {
-        "file": "eidolons/Hysilens/When to Return From Where You Lie.png",
-        "name": "When to Return From Where You Lie",
-        "character": "Hysilens"
-      },
-      {
-        "file": "eidolons/Hysilens/Why Do Lights Bid Goodbye.png",
-        "name": "Why Do Lights Bid Goodbye",
-        "character": "Hysilens"
-      },
-      {
-        "file": "eidolons/Hysilens/You Ask Why Hearts Cry.png",
+        "file": "eidolons/Hysilens/E1_You Ask Why Hearts Cry.png",
         "name": "You Ask Why Hearts Cry",
         "character": "Hysilens"
       },
       {
-        "file": "eidolons/Jade/Eidolon Altruism_ Nevertheless Tradable.png",
-        "name": "Altruism_ Nevertheless Tradable",
+        "file": "eidolons/Hysilens/E2_Tell Me Why Waves Roar High.png",
+        "name": "Tell Me Why Waves Roar High",
+        "character": "Hysilens"
+      },
+      {
+        "file": "eidolons/Hysilens/E3_Why Do Lights Bid Goodbye.png",
+        "name": "Why Do Lights Bid Goodbye",
+        "character": "Hysilens"
+      },
+      {
+        "file": "eidolons/Hysilens/E4_Lo, How Time Flows By.png",
+        "name": "Lo, How Time Flows By",
+        "character": "Hysilens"
+      },
+      {
+        "file": "eidolons/Hysilens/E5_In Ablution, I Hum and Sigh.png",
+        "name": "In Ablution, I Hum and Sigh",
+        "character": "Hysilens"
+      },
+      {
+        "file": "eidolons/Hysilens/E6_When to Return From Where You Lie.png",
+        "name": "When to Return From Where You Lie",
+        "character": "Hysilens"
+      },
+      {
+        "file": "eidolons/Jade/E1_Altruism_ Nevertheless Tradable.png",
+        "name": "Altruism? Nevertheless Tradable",
         "character": "Jade"
       },
       {
-        "file": "eidolons/Jade/Eidolon Equity_ Pending Sponsorship.png",
-        "name": "Equity_ Pending Sponsorship",
+        "file": "eidolons/Jade/E2_Morality_ Herein Authenticated.png",
+        "name": "Morality? Herein Authenticated",
         "character": "Jade"
       },
       {
-        "file": "eidolons/Jade/Eidolon Honesty_ Soon Mortgaged.png",
-        "name": "Honesty_ Soon Mortgaged",
+        "file": "eidolons/Jade/E3_Honesty_ Soon Mortgaged.png",
+        "name": "Honesty? Soon Mortgaged",
         "character": "Jade"
       },
       {
-        "file": "eidolons/Jade/Eidolon Hope_ Hitherto Forfeited.png",
-        "name": "Hope_ Hitherto Forfeited",
+        "file": "eidolons/Jade/E4_Sincerity_ Put Option Only.png",
+        "name": "Sincerity? Put Option Only",
         "character": "Jade"
       },
       {
-        "file": "eidolons/Jade/Eidolon Morality_ Herein Authenticated.png",
-        "name": "Morality_ Herein Authenticated",
+        "file": "eidolons/Jade/E5_Hope_ Hitherto Forfeited.png",
+        "name": "Hope? Hitherto Forfeited",
         "character": "Jade"
       },
       {
-        "file": "eidolons/Jade/Eidolon Sincerity_ Put Option Only.png",
-        "name": "Sincerity_ Put Option Only",
+        "file": "eidolons/Jade/E6_Equity_ Pending Sponsorship.png",
+        "name": "Equity? Pending Sponsorship",
         "character": "Jade"
       },
       {
-        "file": "eidolons/Jiaoqiu/Duel in Dawn, Dash in Dusk.png",
-        "name": "Duel in Dawn, Dash in Dusk",
-        "character": "Jiaoqiu"
-      },
-      {
-        "file": "eidolons/Jiaoqiu/Flavored Euphony Reigns Supreme.png",
-        "name": "Flavored Euphony Reigns Supreme",
-        "character": "Jiaoqiu"
-      },
-      {
-        "file": "eidolons/Jiaoqiu/From Savor Comes Suffer.png",
-        "name": "From Savor Comes Suffer",
-        "character": "Jiaoqiu"
-      },
-      {
-        "file": "eidolons/Jiaoqiu/Leisure In, Luster Out.png",
-        "name": "Leisure In, Luster Out",
-        "character": "Jiaoqiu"
-      },
-      {
-        "file": "eidolons/Jiaoqiu/Nonamorphic Pyrobind.png",
-        "name": "Nonamorphic Pyrobind",
-        "character": "Jiaoqiu"
-      },
-      {
-        "file": "eidolons/Jiaoqiu/Pentapathic Transference.png",
+        "file": "eidolons/Jiaoqiu/E1_Pentapathic Transference.png",
         "name": "Pentapathic Transference",
         "character": "Jiaoqiu"
       },
       {
-        "file": "eidolons/Jing Yuan/Slash, Seas Split.png",
+        "file": "eidolons/Jiaoqiu/E2_From Savor Comes Suffer.png",
+        "name": "From Savor Comes Suffer",
+        "character": "Jiaoqiu"
+      },
+      {
+        "file": "eidolons/Jiaoqiu/E3_Flavored Euphony Reigns Supreme.png",
+        "name": "Flavored Euphony Reigns Supreme",
+        "character": "Jiaoqiu"
+      },
+      {
+        "file": "eidolons/Jiaoqiu/E4_Leisure In, Luster Out.png",
+        "name": "Leisure In, Luster Out",
+        "character": "Jiaoqiu"
+      },
+      {
+        "file": "eidolons/Jiaoqiu/E5_Duel in Dawn, Dash in Dusk.png",
+        "name": "Duel in Dawn, Dash in Dusk",
+        "character": "Jiaoqiu"
+      },
+      {
+        "file": "eidolons/Jiaoqiu/E6_Nonamorphic Pyrobind.png",
+        "name": "Nonamorphic Pyrobind",
+        "character": "Jiaoqiu"
+      },
+      {
+        "file": "eidolons/Jing Yuan/E1_Slash, Seas Split.png",
         "name": "Slash, Seas Split",
         "character": "Jing Yuan"
       },
       {
-        "file": "eidolons/Jing Yuan/Spin, Stars Sieged.png",
-        "name": "Spin, Stars Sieged",
-        "character": "Jing Yuan"
-      },
-      {
-        "file": "eidolons/Jing Yuan/Stride, Spoils Seized.png",
-        "name": "Stride, Spoils Seized",
-        "character": "Jing Yuan"
-      },
-      {
-        "file": "eidolons/Jing Yuan/Strike, Suns Subdued.png",
-        "name": "Strike, Suns Subdued",
-        "character": "Jing Yuan"
-      },
-      {
-        "file": "eidolons/Jing Yuan/Sweep, Souls Slain.png",
-        "name": "Sweep, Souls Slain",
-        "character": "Jing Yuan"
-      },
-      {
-        "file": "eidolons/Jing Yuan/Swing, Skies Squashed.png",
+        "file": "eidolons/Jing Yuan/E2_Swing, Skies Squashed.png",
         "name": "Swing, Skies Squashed",
         "character": "Jing Yuan"
       },
       {
-        "file": "eidolons/Jingliu/Crescent Shadows Qixing Dipper.png",
-        "name": "Crescent Shadows Qixing Dipper",
-        "character": "Jingliu"
+        "file": "eidolons/Jing Yuan/E3_Strike, Suns Subdued.png",
+        "name": "Strike, Suns Subdued",
+        "character": "Jing Yuan"
       },
       {
-        "file": "eidolons/Jingliu/Eclipse Hollows Corporeal Husk.png",
-        "name": "Eclipse Hollows Corporeal Husk",
-        "character": "Jingliu"
+        "file": "eidolons/Jing Yuan/E4_Spin, Stars Sieged.png",
+        "name": "Spin, Stars Sieged",
+        "character": "Jing Yuan"
       },
       {
-        "file": "eidolons/Jingliu/Halfmoon Gapes Mercurial Haze.png",
-        "name": "Halfmoon Gapes Mercurial Haze",
-        "character": "Jingliu"
+        "file": "eidolons/Jing Yuan/E5_Stride, Spoils Seized.png",
+        "name": "Stride, Spoils Seized",
+        "character": "Jing Yuan"
       },
       {
-        "file": "eidolons/Jingliu/Lunarlance Shines Skyward Dome.png",
-        "name": "Lunarlance Shines Skyward Dome",
-        "character": "Jingliu"
+        "file": "eidolons/Jing Yuan/E6_Sweep, Souls Slain.png",
+        "name": "Sweep, Souls Slain",
+        "character": "Jing Yuan"
       },
       {
-        "file": "eidolons/Jingliu/Moon Crashes Tianguan Gate.png",
+        "file": "eidolons/Jingliu/E1_Moon Crashes Tianguan Gate.png",
         "name": "Moon Crashes Tianguan Gate",
         "character": "Jingliu"
       },
       {
-        "file": "eidolons/Jingliu/Night Shades Astral Radiance.png",
+        "file": "eidolons/Jingliu/E2_Crescent Shadows Qixing Dipper.png",
+        "name": "Crescent Shadows Qixing Dipper",
+        "character": "Jingliu"
+      },
+      {
+        "file": "eidolons/Jingliu/E3_Halfmoon Gapes Mercurial Haze.png",
+        "name": "Halfmoon Gapes Mercurial Haze",
+        "character": "Jingliu"
+      },
+      {
+        "file": "eidolons/Jingliu/E4_Lunarlance Shines Skyward Dome.png",
+        "name": "Lunarlance Shines Skyward Dome",
+        "character": "Jingliu"
+      },
+      {
+        "file": "eidolons/Jingliu/E5_Night Shades Astral Radiance.png",
         "name": "Night Shades Astral Radiance",
         "character": "Jingliu"
       },
       {
-        "file": "eidolons/Kafka/Capriccio.png",
+        "file": "eidolons/Jingliu/E6_Eclipse Hollows Corporeal Husk.png",
+        "name": "Eclipse Hollows Corporeal Husk",
+        "character": "Jingliu"
+      },
+      {
+        "file": "eidolons/Kafka/E1_Da Capo.png",
+        "name": "Da Capo",
+        "character": "Kafka"
+      },
+      {
+        "file": "eidolons/Kafka/E2_Fortississimo.png",
+        "name": "Fortississimo",
+        "character": "Kafka"
+      },
+      {
+        "file": "eidolons/Kafka/E3_Capriccio.png",
         "name": "Capriccio",
         "character": "Kafka"
       },
       {
-        "file": "eidolons/Kafka/Da Capo 0.70.png",
-        "name": "Da Capo 0.70",
+        "file": "eidolons/Kafka/E4_Recitativo.png",
+        "name": "Recitativo",
         "character": "Kafka"
       },
       {
-        "file": "eidolons/Kafka/Doloroso.png",
+        "file": "eidolons/Kafka/E5_Doloroso.png",
         "name": "Doloroso",
         "character": "Kafka"
       },
       {
-        "file": "eidolons/Kafka/Fortississimo 0.70.png",
-        "name": "Fortississimo 0.70",
+        "file": "eidolons/Kafka/E6_Leggiero.png",
+        "name": "Leggiero",
         "character": "Kafka"
       },
       {
-        "file": "eidolons/Kafka/Leggiero 0.70.png",
-        "name": "Leggiero 0.70",
-        "character": "Kafka"
-      },
-      {
-        "file": "eidolons/Kafka/Recitativo 0.70.png",
-        "name": "Recitativo 0.70",
-        "character": "Kafka"
-      },
-      {
-        "file": "eidolons/Lingsha/Eidolon Arcadia Under Deep Seclusion.png",
-        "name": "Arcadia Under Deep Seclusion",
-        "character": "Lingsha"
-      },
-      {
-        "file": "eidolons/Lingsha/Eidolon Bloom on Vileward Bouquet.png",
+        "file": "eidolons/Lingsha/E1_Bloom on Vileward Bouquet.png",
         "name": "Bloom on Vileward Bouquet",
         "character": "Lingsha"
       },
       {
-        "file": "eidolons/Lingsha/Eidolon Leisure in Carmine Smokeveil.png",
+        "file": "eidolons/Lingsha/E2_Leisure in Carmine Smokeveil.png",
         "name": "Leisure in Carmine Smokeveil",
         "character": "Lingsha"
       },
       {
-        "file": "eidolons/Lingsha/Eidolon Poise Atop Twists and Turns.png",
-        "name": "Poise Atop Twists and Turns",
-        "character": "Lingsha"
-      },
-      {
-        "file": "eidolons/Lingsha/Eidolon Redolence from Canopied Banquet.png",
-        "name": "Redolence from Canopied Banquet",
-        "character": "Lingsha"
-      },
-      {
-        "file": "eidolons/Lingsha/Eidolon Shine of Floral Wick.png",
+        "file": "eidolons/Lingsha/E3_Shine of Floral Wick.png",
         "name": "Shine of Floral Wick",
         "character": "Lingsha"
       },
       {
-        "file": "eidolons/Luka/A Champion's Applause.png",
-        "name": "A Champion's Applause",
-        "character": "Luka"
+        "file": "eidolons/Lingsha/E4_Redolence from Canopied Banquet.png",
+        "name": "Redolence from Canopied Banquet",
+        "character": "Lingsha"
       },
       {
-        "file": "eidolons/Luka/Born for the Ring.png",
-        "name": "Born for the Ring",
-        "character": "Luka"
+        "file": "eidolons/Lingsha/E5_Poise Atop Twists and Turns.png",
+        "name": "Poise Atop Twists and Turns",
+        "character": "Lingsha"
       },
       {
-        "file": "eidolons/Luka/Fighting Endlessly.png",
+        "file": "eidolons/Lingsha/E6_Arcadia Under Deep Seclusion.png",
+        "name": "Arcadia Under Deep Seclusion",
+        "character": "Lingsha"
+      },
+      {
+        "file": "eidolons/Luka/E1_Fighting Endlessly.png",
         "name": "Fighting Endlessly",
         "character": "Luka"
       },
       {
-        "file": "eidolons/Luka/Never Turning Back.png",
-        "name": "Never Turning Back",
-        "character": "Luka"
-      },
-      {
-        "file": "eidolons/Luka/The Enemy is Weak, I am Strong.png",
+        "file": "eidolons/Luka/E2_The Enemy is Weak, I am Strong.png",
         "name": "The Enemy is Weak, I am Strong",
         "character": "Luka"
       },
       {
-        "file": "eidolons/Luka/The Spirit of Wildfire.png",
+        "file": "eidolons/Luka/E3_Born for the Ring.png",
+        "name": "Born for the Ring",
+        "character": "Luka"
+      },
+      {
+        "file": "eidolons/Luka/E4_Never Turning Back.png",
+        "name": "Never Turning Back",
+        "character": "Luka"
+      },
+      {
+        "file": "eidolons/Luka/E5_The Spirit of Wildfire.png",
         "name": "The Spirit of Wildfire",
         "character": "Luka"
       },
       {
-        "file": "eidolons/Luocha/Ablution of the Quick.png",
+        "file": "eidolons/Luka/E6_A Champion's Applause.png",
+        "name": "A Champion's Applause",
+        "character": "Luka"
+      },
+      {
+        "file": "eidolons/Luocha/E1_Ablution of the Quick.png",
         "name": "Ablution of the Quick",
         "character": "Luocha"
       },
       {
-        "file": "eidolons/Luocha/Bestowal From the Pure.png",
+        "file": "eidolons/Luocha/E2_Bestowal From the Pure.png",
         "name": "Bestowal From the Pure",
         "character": "Luocha"
       },
       {
-        "file": "eidolons/Luocha/Cicatrix 'Neath the Pain.png",
-        "name": "Cicatrix 'Neath the Pain",
-        "character": "Luocha"
-      },
-      {
-        "file": "eidolons/Luocha/Heavy Lies the Crown.png",
-        "name": "Heavy Lies the Crown",
-        "character": "Luocha"
-      },
-      {
-        "file": "eidolons/Luocha/Reunion With the Dust.png",
-        "name": "Reunion With the Dust",
-        "character": "Luocha"
-      },
-      {
-        "file": "eidolons/Luocha/Surveyal by the Fool.png",
+        "file": "eidolons/Luocha/E3_Surveyal by the Fool.png",
         "name": "Surveyal by the Fool",
         "character": "Luocha"
       },
       {
-        "file": "eidolons/Lynx/Afternoon of Avalanche Beacon.png",
-        "name": "Afternoon of Avalanche Beacon",
-        "character": "Lynx"
+        "file": "eidolons/Luocha/E4_Heavy Lies the Crown.png",
+        "name": "Heavy Lies the Crown",
+        "character": "Luocha"
       },
       {
-        "file": "eidolons/Lynx/Dawn of Explorers' Chart.png",
-        "name": "Dawn of Explorers' Chart",
-        "character": "Lynx"
+        "file": "eidolons/Luocha/E5_Cicatrix 'Neath the Pain.png",
+        "name": "Cicatrix 'Neath the Pain",
+        "character": "Luocha"
       },
       {
-        "file": "eidolons/Lynx/Dusk of Warm Campfire.png",
-        "name": "Dusk of Warm Campfire",
-        "character": "Lynx"
+        "file": "eidolons/Luocha/E6_Reunion With the Dust.png",
+        "name": "Reunion With the Dust",
+        "character": "Luocha"
       },
       {
-        "file": "eidolons/Lynx/Morning of Snow Hike.png",
+        "file": "eidolons/Lynx/E1_Morning of Snow Hike.png",
         "name": "Morning of Snow Hike",
         "character": "Lynx"
       },
       {
-        "file": "eidolons/Lynx/Night of Aurora Tea.png",
-        "name": "Night of Aurora Tea",
-        "character": "Lynx"
-      },
-      {
-        "file": "eidolons/Lynx/Noon of Portable Furnace.png",
+        "file": "eidolons/Lynx/E2_Noon of Portable Furnace.png",
         "name": "Noon of Portable Furnace",
         "character": "Lynx"
       },
       {
-        "file": "eidolons/March 7th/Just Like This, Always....png",
-        "name": "Just Like This, Always...",
-        "character": "March 7th"
+        "file": "eidolons/Lynx/E3_Afternoon of Avalanche Beacon.png",
+        "name": "Afternoon of Avalanche Beacon",
+        "character": "Lynx"
       },
       {
-        "file": "eidolons/March 7th/Memory of Everything.png",
-        "name": "Memory of Everything",
-        "character": "March 7th"
+        "file": "eidolons/Lynx/E4_Dusk of Warm Campfire.png",
+        "name": "Dusk of Warm Campfire",
+        "character": "Lynx"
       },
       {
-        "file": "eidolons/March 7th/Memory of It.png",
-        "name": "Memory of It",
-        "character": "March 7th"
+        "file": "eidolons/Lynx/E5_Night of Aurora Tea.png",
+        "name": "Night of Aurora Tea",
+        "character": "Lynx"
       },
       {
-        "file": "eidolons/March 7th/Memory of You.png",
-        "name": "Memory of You",
-        "character": "March 7th"
+        "file": "eidolons/Lynx/E6_Dawn of Explorers' Chart.png",
+        "name": "Dawn of Explorers' Chart",
+        "character": "Lynx"
       },
       {
-        "file": "eidolons/March 7th/Never Forfeit Again.png",
-        "name": "Never Forfeit Again",
-        "character": "March 7th"
-      },
-      {
-        "file": "eidolons/March 7th/Never Forget Again.png",
-        "name": "Never Forget Again",
-        "character": "March 7th"
-      },
-      {
-        "file": "eidolons/March 7th • The Hunt/Being Fabulous Never Frights.png",
-        "name": "Being Fabulous Never Frights",
-        "character": "March 7th • The Hunt"
-      },
-      {
-        "file": "eidolons/March 7th • The Hunt/Blade Dances on Waves' Fight.png",
-        "name": "Blade Dances on Waves' Fight",
-        "character": "March 7th • The Hunt"
-      },
-      {
-        "file": "eidolons/March 7th • The Hunt/Me, the Best Girl in Sight.png",
-        "name": "Me, the Best Girl in Sight",
-        "character": "March 7th • The Hunt"
-      },
-      {
-        "file": "eidolons/March 7th • The Hunt/My Sword Stirs Starlight.png",
-        "name": "My Sword Stirs Starlight",
-        "character": "March 7th • The Hunt"
-      },
-      {
-        "file": "eidolons/March 7th • The Hunt/Sharp Wit in Martial Might.png",
-        "name": "Sharp Wit in Martial Might",
-        "character": "March 7th • The Hunt"
-      },
-      {
-        "file": "eidolons/March 7th • The Hunt/Sword Delights, Sugar Blights.png",
-        "name": "Sword Delights, Sugar Blights",
-        "character": "March 7th • The Hunt"
-      },
-      {
-        "file": "eidolons/Misha/Estrangement of Dream.png",
-        "name": "Estrangement of Dream",
-        "character": "Misha"
-      },
-      {
-        "file": "eidolons/Misha/Genesis of First Love.png",
-        "name": "Genesis of First Love",
-        "character": "Misha"
-      },
-      {
-        "file": "eidolons/Misha/Vestige of Happiness.png",
-        "name": "Vestige of Happiness",
-        "character": "Misha"
-      },
-      {
-        "file": "eidolons/Misha/Visage of Kinship.png",
-        "name": "Visage of Kinship",
-        "character": "Misha"
-      },
-      {
-        "file": "eidolons/Misha/Whimsicality of Fancy.png",
+        "file": "eidolons/Misha/E1_Whimsicality of Fancy.png",
         "name": "Whimsicality of Fancy",
         "character": "Misha"
       },
       {
-        "file": "eidolons/Misha/Yearning of Youth.png",
+        "file": "eidolons/Misha/E2_Yearning of Youth.png",
         "name": "Yearning of Youth",
         "character": "Misha"
       },
       {
-        "file": "eidolons/Mortenax/Eidolon Across the Shore, Wrath Laid Bare.png",
-        "name": "Across the Shore, Wrath Laid Bare",
-        "character": "Mortenax"
+        "file": "eidolons/Misha/E3_Vestige of Happiness.png",
+        "name": "Vestige of Happiness",
+        "character": "Misha"
       },
       {
-        "file": "eidolons/Mortenax/Eidolon Ash Was My Heart, Yet the Flame Stayed.png",
-        "name": "Ash Was My Heart, Yet the Flame Stayed",
-        "character": "Mortenax"
+        "file": "eidolons/Misha/E4_Visage of Kinship.png",
+        "name": "Visage of Kinship",
+        "character": "Misha"
       },
       {
-        "file": "eidolons/Mortenax/Eidolon Ere My Death, I Stood Unmade.png",
+        "file": "eidolons/Misha/E5_Genesis of First Love.png",
+        "name": "Genesis of First Love",
+        "character": "Misha"
+      },
+      {
+        "file": "eidolons/Misha/E6_Estrangement of Dream.png",
+        "name": "Estrangement of Dream",
+        "character": "Misha"
+      },
+      {
+        "file": "eidolons/Mortenax/E1_Ere My Death, I Stood Unmade.png",
         "name": "Ere My Death, I Stood Unmade",
         "character": "Mortenax"
       },
       {
-        "file": "eidolons/Mortenax/Eidolon I Severed My Woes, Knowing Death Begets Life.png",
-        "name": "I Severed My Woes, Knowing Death Begets Life",
+        "file": "eidolons/Mortenax/E2_Ash Was My Heart, Yet the Flame Stayed.png",
+        "name": "Ash Was My Heart, Yet the Flame Stayed",
         "character": "Mortenax"
       },
       {
-        "file": "eidolons/Mortenax/Eidolon If Immortality Could Die, I Swore THEM Slain.png",
-        "name": "If Immortality Could Die, I Swore THEM Slain",
+        "file": "eidolons/Mortenax/E3_Across the Shore, Wrath Laid Bare.png",
+        "name": "Across the Shore, Wrath Laid Bare",
         "character": "Mortenax"
       },
       {
-        "file": "eidolons/Mortenax/Eidolon Odium I've Smitten, Thence Came the Blade.png",
+        "file": "eidolons/Mortenax/E4_Odium I've Smitten, Thence Came the Blade.png",
         "name": "Odium I've Smitten, Thence Came the Blade",
         "character": "Mortenax"
       },
       {
-        "file": "eidolons/Moze/Eidolon Deathchaser.png",
-        "name": "Deathchaser",
-        "character": "Moze"
+        "file": "eidolons/Mortenax/E5_I Severed My Woes, Knowing Death Begets Life.png",
+        "name": "I Severed My Woes, Knowing Death Begets Life",
+        "character": "Mortenax"
       },
       {
-        "file": "eidolons/Moze/Eidolon Faithbinder.png",
-        "name": "Faithbinder",
-        "character": "Moze"
+        "file": "eidolons/Mortenax/E6_If Immortality Could Die, I Swore THEM Slain.png",
+        "name": "If Immortality Could Die, I Swore THEM Slain",
+        "character": "Mortenax"
       },
       {
-        "file": "eidolons/Moze/Eidolon Heathprowler.png",
-        "name": "Heathprowler",
-        "character": "Moze"
-      },
-      {
-        "file": "eidolons/Moze/Eidolon Oathkeeper.png",
+        "file": "eidolons/Moze/E1_Oathkeeper.png",
         "name": "Oathkeeper",
         "character": "Moze"
       },
       {
-        "file": "eidolons/Moze/Eidolon Truthbender.png",
-        "name": "Truthbender",
-        "character": "Moze"
-      },
-      {
-        "file": "eidolons/Moze/Eidolon Wrathbearer.png",
+        "file": "eidolons/Moze/E2_Wrathbearer.png",
         "name": "Wrathbearer",
         "character": "Moze"
       },
       {
-        "file": "eidolons/Mydei/Frost Hones Spine of Steel.png",
+        "file": "eidolons/Moze/E3_Deathchaser.png",
+        "name": "Deathchaser",
+        "character": "Moze"
+      },
+      {
+        "file": "eidolons/Moze/E4_Heathprowler.png",
+        "name": "Heathprowler",
+        "character": "Moze"
+      },
+      {
+        "file": "eidolons/Moze/E5_Truthbender.png",
+        "name": "Truthbender",
+        "character": "Moze"
+      },
+      {
+        "file": "eidolons/Moze/E6_Faithbinder.png",
+        "name": "Faithbinder",
+        "character": "Moze"
+      },
+      {
+        "file": "eidolons/Mydei/E1_Frost Hones Spine of Steel.png",
         "name": "Frost Hones Spine of Steel",
         "character": "Mydei"
       },
       {
-        "file": "eidolons/Mydei/Honor Exalts Feast of Faith.png",
-        "name": "Honor Exalts Feast of Faith",
-        "character": "Mydei"
-      },
-      {
-        "file": "eidolons/Mydei/Legacy Scales Mound of Blood.png",
-        "name": "Legacy Scales Mound of Blood",
-        "character": "Mydei"
-      },
-      {
-        "file": "eidolons/Mydei/Siren Jolts the Laconic Lion.png",
-        "name": "Siren Jolts the Laconic Lion",
-        "character": "Mydei"
-      },
-      {
-        "file": "eidolons/Mydei/Strife Beholds Cry of Dead.png",
+        "file": "eidolons/Mydei/E2_Strife Beholds Cry of Dead.png",
         "name": "Strife Beholds Cry of Dead",
         "character": "Mydei"
       },
       {
-        "file": "eidolons/Mydei/War Chisels Flesh of Flame.png",
+        "file": "eidolons/Mydei/E3_Honor Exalts Feast of Faith.png",
+        "name": "Honor Exalts Feast of Faith",
+        "character": "Mydei"
+      },
+      {
+        "file": "eidolons/Mydei/E4_Siren Jolts the Laconic Lion.png",
+        "name": "Siren Jolts the Laconic Lion",
+        "character": "Mydei"
+      },
+      {
+        "file": "eidolons/Mydei/E5_War Chisels Flesh of Flame.png",
         "name": "War Chisels Flesh of Flame",
         "character": "Mydei"
       },
       {
-        "file": "eidolons/Natasha/Clinical Research.png",
-        "name": "Clinical Research",
-        "character": "Natasha"
+        "file": "eidolons/Mydei/E6_Legacy Scales Mound of Blood.png",
+        "name": "Legacy Scales Mound of Blood",
+        "character": "Mydei"
       },
       {
-        "file": "eidolons/Natasha/Doctor's Grace.png",
-        "name": "Doctor's Grace",
-        "character": "Natasha"
-      },
-      {
-        "file": "eidolons/Natasha/Miracle Cure.png",
-        "name": "Miracle Cure",
-        "character": "Natasha"
-      },
-      {
-        "file": "eidolons/Natasha/Pharmacology Expertise.png",
+        "file": "eidolons/Natasha/E1_Pharmacology Expertise.png",
         "name": "Pharmacology Expertise",
         "character": "Natasha"
       },
       {
-        "file": "eidolons/Natasha/Preventive Treatment.png",
-        "name": "Preventive Treatment",
+        "file": "eidolons/Natasha/E2_Clinical Research.png",
+        "name": "Clinical Research",
         "character": "Natasha"
       },
       {
-        "file": "eidolons/Natasha/The Right Cure.png",
+        "file": "eidolons/Natasha/E3_The Right Cure.png",
         "name": "The Right Cure",
         "character": "Natasha"
       },
       {
-        "file": "eidolons/Pearl/Eidolon Compute Life From One Shell.png",
-        "name": "Compute Life From One Shell",
-        "character": "Pearl"
+        "file": "eidolons/Natasha/E4_Miracle Cure.png",
+        "name": "Miracle Cure",
+        "character": "Natasha"
       },
       {
-        "file": "eidolons/Pearl/Eidolon Crop That Dappled Dawn.png",
-        "name": "Crop That Dappled Dawn",
-        "character": "Pearl"
+        "file": "eidolons/Natasha/E5_Preventive Treatment.png",
+        "name": "Preventive Treatment",
+        "character": "Natasha"
       },
       {
-        "file": "eidolons/Pearl/Eidolon Nestle That Pearl in Uninked Tides.png",
+        "file": "eidolons/Natasha/E6_Doctor's Grace.png",
+        "name": "Doctor's Grace",
+        "character": "Natasha"
+      },
+      {
+        "file": "eidolons/Pearl/E1_Nestle That Pearl in Uninked Tides.png",
         "name": "Nestle That Pearl in Uninked Tides",
         "character": "Pearl"
       },
       {
-        "file": "eidolons/Pearl/Eidolon Render Those Starlit Swirls.png",
-        "name": "Render Those Starlit Swirls",
+        "file": "eidolons/Pearl/E2_Crop That Dappled Dawn.png",
+        "name": "Crop That Dappled Dawn",
         "character": "Pearl"
       },
       {
-        "file": "eidolons/Pearl/Eidolon Sketch That Suspended Wave.png",
+        "file": "eidolons/Pearl/E3_Sketch That Suspended Wave.png",
         "name": "Sketch That Suspended Wave",
         "character": "Pearl"
       },
       {
-        "file": "eidolons/Pearl/Eidolon Study That Veiled Smile.png",
+        "file": "eidolons/Pearl/E4_Study That Veiled Smile.png",
         "name": "Study That Veiled Smile",
         "character": "Pearl"
       },
       {
-        "file": "eidolons/Pela/Absolute Jeopardy.png",
-        "name": "Absolute Jeopardy",
-        "character": "Pela"
+        "file": "eidolons/Pearl/E5_Render Those Starlit Swirls.png",
+        "name": "Render Those Starlit Swirls",
+        "character": "Pearl"
       },
       {
-        "file": "eidolons/Pela/Adamant Charge.png",
-        "name": "Adamant Charge",
-        "character": "Pela"
+        "file": "eidolons/Pearl/E6_Compute Life From One Shell.png",
+        "name": "Compute Life From One Shell",
+        "character": "Pearl"
       },
       {
-        "file": "eidolons/Pela/Feeble Pursuit.png",
-        "name": "Feeble Pursuit",
-        "character": "Pela"
-      },
-      {
-        "file": "eidolons/Pela/Full Analysis.png",
-        "name": "Full Analysis",
-        "character": "Pela"
-      },
-      {
-        "file": "eidolons/Pela/Suppressive Force.png",
-        "name": "Suppressive Force",
-        "character": "Pela"
-      },
-      {
-        "file": "eidolons/Pela/Victory Report.png",
+        "file": "eidolons/Pela/E1_Victory Report.png",
         "name": "Victory Report",
         "character": "Pela"
       },
       {
-        "file": "eidolons/Phainon/Depths of Quiet, Entombed in Ruin.png",
-        "name": "Depths of Quiet, Entombed in Ruin",
-        "character": "Phainon"
+        "file": "eidolons/Pela/E2_Adamant Charge.png",
+        "name": "Adamant Charge",
+        "character": "Pela"
       },
       {
-        "file": "eidolons/Phainon/Embers of Old Rise Still.png",
-        "name": "Embers of Old Rise Still",
-        "character": "Phainon"
+        "file": "eidolons/Pela/E3_Suppressive Force.png",
+        "name": "Suppressive Force",
+        "character": "Pela"
       },
       {
-        "file": "eidolons/Phainon/Faces of Titans, Blurred by Time.png",
-        "name": "Faces of Titans, Blurred by Time",
-        "character": "Phainon"
+        "file": "eidolons/Pela/E4_Full Analysis.png",
+        "name": "Full Analysis",
+        "character": "Pela"
       },
       {
-        "file": "eidolons/Phainon/Fire and Light Bind Virtue and Vice.png",
+        "file": "eidolons/Pela/E5_Absolute Jeopardy.png",
+        "name": "Absolute Jeopardy",
+        "character": "Pela"
+      },
+      {
+        "file": "eidolons/Pela/E6_Feeble Pursuit.png",
+        "name": "Feeble Pursuit",
+        "character": "Pela"
+      },
+      {
+        "file": "eidolons/Phainon/E1_Fire and Light Bind Virtue and Vice.png",
         "name": "Fire and Light Bind Virtue and Vice",
         "character": "Phainon"
       },
       {
-        "file": "eidolons/Phainon/Sky and Earth Churn Mortal Froth.png",
+        "file": "eidolons/Phainon/E2_Sky and Earth Churn Mortal Froth.png",
         "name": "Sky and Earth Churn Mortal Froth",
         "character": "Phainon"
       },
       {
-        "file": "eidolons/Phainon/The Wheel Spins Forevermore.png",
+        "file": "eidolons/Phainon/E3_Depths of Quiet, Entombed in Ruin.png",
+        "name": "Depths of Quiet, Entombed in Ruin",
+        "character": "Phainon"
+      },
+      {
+        "file": "eidolons/Phainon/E4_Faces of Titans, Blurred by Time.png",
+        "name": "Faces of Titans, Blurred by Time",
+        "character": "Phainon"
+      },
+      {
+        "file": "eidolons/Phainon/E5_The Wheel Spins Forevermore.png",
         "name": "The Wheel Spins Forevermore",
         "character": "Phainon"
       },
       {
-        "file": "eidolons/Qingque/Gambit for the Tiles.png",
-        "name": "Gambit for the Tiles",
-        "character": "Qingque"
+        "file": "eidolons/Phainon/E6_Embers of Old Rise Still.png",
+        "name": "Embers of Old Rise Still",
+        "character": "Phainon"
       },
       {
-        "file": "eidolons/Qingque/Prevail Beyond the Tiles.png",
-        "name": "Prevail Beyond the Tiles",
-        "character": "Qingque"
-      },
-      {
-        "file": "eidolons/Qingque/Read Between the Tiles.png",
-        "name": "Read Between the Tiles",
-        "character": "Qingque"
-      },
-      {
-        "file": "eidolons/Qingque/Right on the Tiles.png",
-        "name": "Right on the Tiles",
-        "character": "Qingque"
-      },
-      {
-        "file": "eidolons/Qingque/Rise Through the Tiles.png",
+        "file": "eidolons/Qingque/E1_Rise Through the Tiles.png",
         "name": "Rise Through the Tiles",
         "character": "Qingque"
       },
       {
-        "file": "eidolons/Qingque/Sleep on the Tiles.png",
+        "file": "eidolons/Qingque/E2_Sleep on the Tiles.png",
         "name": "Sleep on the Tiles",
         "character": "Qingque"
       },
       {
-        "file": "eidolons/Rappa/Free Is the Mind Enlightened by Haikus.png",
-        "name": "Free Is the Mind Enlightened by Haikus",
-        "character": "Rappa"
+        "file": "eidolons/Qingque/E3_Read Between the Tiles.png",
+        "name": "Read Between the Tiles",
+        "character": "Qingque"
       },
       {
-        "file": "eidolons/Rappa/Lost Is the Nindō Devoured by Time.png",
-        "name": "Lost Is the Nindō Devoured by Time",
-        "character": "Rappa"
+        "file": "eidolons/Qingque/E4_Right on the Tiles.png",
+        "name": "Right on the Tiles",
+        "character": "Qingque"
       },
       {
-        "file": "eidolons/Rappa/Many Are the Shrines That Repel No Hell.png",
-        "name": "Many Are the Shrines That Repel No Hell",
-        "character": "Rappa"
+        "file": "eidolons/Qingque/E5_Gambit for the Tiles.png",
+        "name": "Gambit for the Tiles",
+        "character": "Qingque"
       },
       {
-        "file": "eidolons/Rappa/Returned Is the Revenant With No Ferry Toll.png",
+        "file": "eidolons/Qingque/E6_Prevail Beyond the Tiles.png",
+        "name": "Prevail Beyond the Tiles",
+        "character": "Qingque"
+      },
+      {
+        "file": "eidolons/Rappa/E1_Returned Is the Revenant With No Ferry Toll.png",
         "name": "Returned Is the Revenant With No Ferry Toll",
         "character": "Rappa"
       },
       {
-        "file": "eidolons/Rappa/Righteous Is the Wrath That Spares No Evil.png",
-        "name": "Righteous Is the Wrath That Spares No Evil",
+        "file": "eidolons/Rappa/E2_Free Is the Mind Enlightened by Haikus.png",
+        "name": "Free Is the Mind Enlightened by Haikus",
         "character": "Rappa"
       },
       {
-        "file": "eidolons/Rappa/Steady Is The Ranger With Unerring Arrows.png",
+        "file": "eidolons/Rappa/E3_Many Are the Shrines That Repel No Hell.png",
+        "name": "Many Are the Shrines That Repel No Hell",
+        "character": "Rappa"
+      },
+      {
+        "file": "eidolons/Rappa/E4_Lost Is the Nindō Devoured by Time.png",
+        "name": "Lost Is the Nindō Devoured by Time",
+        "character": "Rappa"
+      },
+      {
+        "file": "eidolons/Rappa/E5_Steady Is The Ranger With Unerring Arrows.png",
         "name": "Steady Is The Ranger With Unerring Arrows",
         "character": "Rappa"
       },
       {
-        "file": "eidolons/Rin/Eidolon Dimensional Traveler.png",
-        "name": "Dimensional Traveler",
-        "character": "Rin"
+        "file": "eidolons/Rappa/E6_Righteous Is the Wrath That Spares No Evil.png",
+        "name": "Righteous Is the Wrath That Spares No Evil",
+        "character": "Rappa"
       },
       {
-        "file": "eidolons/Rin/Eidolon Goddess of Venus's Favor.png",
-        "name": "Goddess of Venus's Favor",
-        "character": "Rin"
-      },
-      {
-        "file": "eidolons/Rin/Eidolon Holy Grail War_ Victory Memorial.png",
-        "name": "Holy Grail War_ Victory Memorial",
-        "character": "Rin"
-      },
-      {
-        "file": "eidolons/Rin/Eidolon Nailed It This Time!.png",
-        "name": "Nailed It This Time!",
-        "character": "Rin"
-      },
-      {
-        "file": "eidolons/Rin/Eidolon Red Devil_ Triple Speed.png",
-        "name": "Red Devil_ Triple Speed",
-        "character": "Rin"
-      },
-      {
-        "file": "eidolons/Rin/Eidolon Zelretch's Apprentice.png",
-        "name": "Zelretch's Apprentice",
-        "character": "Rin"
-      },
-      {
-        "file": "eidolons/Rin Tohsaka/Dimensional Traveler.png",
-        "name": "Dimensional Traveler",
-        "character": "Rin Tohsaka"
-      },
-      {
-        "file": "eidolons/Rin Tohsaka/Goddess of Venus's Favor.png",
-        "name": "Goddess of Venus's Favor",
-        "character": "Rin Tohsaka"
-      },
-      {
-        "file": "eidolons/Rin Tohsaka/Nailed It This Time!.png",
-        "name": "Nailed It This Time!",
-        "character": "Rin Tohsaka"
-      },
-      {
-        "file": "eidolons/Rin Tohsaka/Red Devil Triple Speed.png",
-        "name": "Red Devil Triple Speed",
-        "character": "Rin Tohsaka"
-      },
-      {
-        "file": "eidolons/Rin Tohsaka/Zelretch's Apprentice.png",
+        "file": "eidolons/Rin Tohsaka/E1_Zelretch's Apprentice.png",
         "name": "Zelretch's Apprentice",
         "character": "Rin Tohsaka"
       },
       {
-        "file": "eidolons/Robin/Afternoon Tea For Two.png",
-        "name": "Afternoon Tea For Two",
-        "character": "Robin"
+        "file": "eidolons/Rin Tohsaka/E2_Dimensional Traveler.png",
+        "name": "Dimensional Traveler",
+        "character": "Rin Tohsaka"
       },
       {
-        "file": "eidolons/Robin/Inverted Tuning.png",
-        "name": "Inverted Tuning",
-        "character": "Robin"
+        "file": "eidolons/Rin Tohsaka/E3_Holy Grail War_ Victory Memorial.png",
+        "name": "Holy Grail War: Victory Memorial",
+        "character": "Rin Tohsaka"
       },
       {
-        "file": "eidolons/Robin/Land of Smiles.png",
+        "file": "eidolons/Rin Tohsaka/E4_Red Devil_ Triple Speed.png",
+        "name": "Red Devil: Triple Speed",
+        "character": "Rin Tohsaka"
+      },
+      {
+        "file": "eidolons/Rin Tohsaka/E5_Goddess of Venus's Favor.png",
+        "name": "Goddess of Venus's Favor",
+        "character": "Rin Tohsaka"
+      },
+      {
+        "file": "eidolons/Rin Tohsaka/E6_Nailed It This Time!.png",
+        "name": "Nailed It This Time!",
+        "character": "Rin Tohsaka"
+      },
+      {
+        "file": "eidolons/Robin/E1_Land of Smiles.png",
         "name": "Land of Smiles",
         "character": "Robin"
       },
       {
-        "file": "eidolons/Robin/Lonestar's Lament.png",
-        "name": "Lonestar's Lament",
+        "file": "eidolons/Robin/E2_Afternoon Tea For Two.png",
+        "name": "Afternoon Tea For Two",
         "character": "Robin"
       },
       {
-        "file": "eidolons/Robin/Moonless Midnight.png",
-        "name": "Moonless Midnight",
+        "file": "eidolons/Robin/E3_Inverted Tuning.png",
+        "name": "Inverted Tuning",
         "character": "Robin"
       },
       {
-        "file": "eidolons/Robin/Raindrop Key.png",
+        "file": "eidolons/Robin/E4_Raindrop Key.png",
         "name": "Raindrop Key",
         "character": "Robin"
       },
       {
-        "file": "eidolons/Robin • Summeretto/A Heart of Still Water.png",
-        "name": "A Heart of Still Water",
-        "character": "Robin • Summeretto"
+        "file": "eidolons/Robin/E5_Lonestar's Lament.png",
+        "name": "Lonestar's Lament",
+        "character": "Robin"
       },
       {
-        "file": "eidolons/Robin • Summeretto/A Song Yet Unnamed.png",
-        "name": "A Song Yet Unnamed",
-        "character": "Robin • Summeretto"
+        "file": "eidolons/Robin/E6_Moonless Midnight.png",
+        "name": "Moonless Midnight",
+        "character": "Robin"
       },
       {
-        "file": "eidolons/Robin • Summeretto/Echoes Left Along the Way.png",
-        "name": "Echoes Left Along the Way",
-        "character": "Robin • Summeretto"
-      },
-      {
-        "file": "eidolons/Robin • Summeretto/Her Variation on the Theme.png",
-        "name": "Her Variation on the Theme",
-        "character": "Robin • Summeretto"
-      },
-      {
-        "file": "eidolons/Robin • Summeretto/Stray Bird of Summer.png",
+        "file": "eidolons/Robin • Summeretto/E1_Stray Bird of Summer.png",
         "name": "Stray Bird of Summer",
         "character": "Robin • Summeretto"
       },
       {
-        "file": "eidolons/Robin • Summeretto/To Chase the Dawn Anew.png",
+        "file": "eidolons/Robin • Summeretto/E2_A Heart of Still Water.png",
+        "name": "A Heart of Still Water",
+        "character": "Robin • Summeretto"
+      },
+      {
+        "file": "eidolons/Robin • Summeretto/E3_Echoes Left Along the Way.png",
+        "name": "Echoes Left Along the Way",
+        "character": "Robin • Summeretto"
+      },
+      {
+        "file": "eidolons/Robin • Summeretto/E4_Her Variation on the Theme.png",
+        "name": "Her Variation on the Theme",
+        "character": "Robin • Summeretto"
+      },
+      {
+        "file": "eidolons/Robin • Summeretto/E5_To Chase the Dawn Anew.png",
         "name": "To Chase the Dawn Anew",
         "character": "Robin • Summeretto"
       },
       {
-        "file": "eidolons/Ruan Mei/Chatoyant Éclat.png",
-        "name": "Chatoyant Éclat",
-        "character": "Ruan Mei"
+        "file": "eidolons/Robin • Summeretto/E6_A Song Yet Unnamed.png",
+        "name": "A Song Yet Unnamed",
+        "character": "Robin • Summeretto"
       },
       {
-        "file": "eidolons/Ruan Mei/Languid Barrette.png",
-        "name": "Languid Barrette",
-        "character": "Ruan Mei"
-      },
-      {
-        "file": "eidolons/Ruan Mei/Neuronic Embroidery.png",
+        "file": "eidolons/Ruan Mei/E1_Neuronic Embroidery.png",
         "name": "Neuronic Embroidery",
         "character": "Ruan Mei"
       },
       {
-        "file": "eidolons/Ruan Mei/Reedside Promenade.png",
+        "file": "eidolons/Ruan Mei/E2_Reedside Promenade.png",
         "name": "Reedside Promenade",
         "character": "Ruan Mei"
       },
       {
-        "file": "eidolons/Ruan Mei/Sash Cascade.png",
-        "name": "Sash Cascade",
-        "character": "Ruan Mei"
-      },
-      {
-        "file": "eidolons/Ruan Mei/Viridescent Pirouette.png",
+        "file": "eidolons/Ruan Mei/E3_Viridescent Pirouette.png",
         "name": "Viridescent Pirouette",
         "character": "Ruan Mei"
       },
       {
-        "file": "eidolons/Saber/A Wish Across Fifteen Centuries.png",
-        "name": "A Wish Across Fifteen Centuries",
-        "character": "Saber"
+        "file": "eidolons/Ruan Mei/E4_Chatoyant Éclat.png",
+        "name": "Chatoyant Éclat",
+        "character": "Ruan Mei"
       },
       {
-        "file": "eidolons/Saber/The Dreamed Utopian Dawn.png",
-        "name": "The Dreamed Utopian Dawn",
-        "character": "Saber"
+        "file": "eidolons/Ruan Mei/E5_Languid Barrette.png",
+        "name": "Languid Barrette",
+        "character": "Ruan Mei"
       },
       {
-        "file": "eidolons/Saber/The Long Fated Night.png",
-        "name": "The Long Fated Night",
-        "character": "Saber"
+        "file": "eidolons/Ruan Mei/E6_Sash Cascade.png",
+        "name": "Sash Cascade",
+        "character": "Ruan Mei"
       },
       {
-        "file": "eidolons/Saber/The Lost Oath of the Round Table.png",
-        "name": "The Lost Oath of the Round Table",
-        "character": "Saber"
-      },
-      {
-        "file": "eidolons/Saber/The Lost White Walls.png",
+        "file": "eidolons/Saber/E1_The Lost White Walls.png",
         "name": "The Lost White Walls",
         "character": "Saber"
       },
       {
-        "file": "eidolons/Saber/The Saga of Sixteen Winter Days.png",
+        "file": "eidolons/Saber/E2_The Lost Oath of the Round Table.png",
+        "name": "The Lost Oath of the Round Table",
+        "character": "Saber"
+      },
+      {
+        "file": "eidolons/Saber/E3_A Wish Across Fifteen Centuries.png",
+        "name": "A Wish Across Fifteen Centuries",
+        "character": "Saber"
+      },
+      {
+        "file": "eidolons/Saber/E4_The Saga of Sixteen Winter Days.png",
         "name": "The Saga of Sixteen Winter Days",
         "character": "Saber"
       },
       {
-        "file": "eidolons/Sampo/Big Money!.png",
-        "name": "Big Money!",
-        "character": "Sampo"
+        "file": "eidolons/Saber/E5_The Dreamed Utopian Dawn.png",
+        "name": "The Dreamed Utopian Dawn",
+        "character": "Saber"
       },
       {
-        "file": "eidolons/Sampo/Huuuuge Money!.png",
-        "name": "Huuuuge Money!",
-        "character": "Sampo"
+        "file": "eidolons/Saber/E6_The Long Fated Night.png",
+        "name": "The Long Fated Night",
+        "character": "Saber"
       },
       {
-        "file": "eidolons/Sampo/Increased Spending.png",
-        "name": "Increased Spending",
-        "character": "Sampo"
-      },
-      {
-        "file": "eidolons/Sampo/Infectious Enthusiasm.png",
-        "name": "Infectious Enthusiasm",
-        "character": "Sampo"
-      },
-      {
-        "file": "eidolons/Sampo/Rising Love.png",
+        "file": "eidolons/Sampo/E1_Rising Love.png",
         "name": "Rising Love",
         "character": "Sampo"
       },
       {
-        "file": "eidolons/Sampo/The Deeper the Love, the Stronger the Hate.png",
+        "file": "eidolons/Sampo/E2_Infectious Enthusiasm.png",
+        "name": "Infectious Enthusiasm",
+        "character": "Sampo"
+      },
+      {
+        "file": "eidolons/Sampo/E3_Big Money!.png",
+        "name": "Big Money!",
+        "character": "Sampo"
+      },
+      {
+        "file": "eidolons/Sampo/E4_The Deeper the Love, the Stronger the Hate.png",
         "name": "The Deeper the Love, the Stronger the Hate",
         "character": "Sampo"
       },
       {
-        "file": "eidolons/Seele/Dancing Butterfly.png",
-        "name": "Dancing Butterfly",
-        "character": "Seele"
+        "file": "eidolons/Sampo/E5_Huuuuge Money!.png",
+        "name": "Huuuuge Money!",
+        "character": "Sampo"
       },
       {
-        "file": "eidolons/Seele/Dazzling Tumult.png",
-        "name": "Dazzling Tumult",
-        "character": "Seele"
+        "file": "eidolons/Sampo/E6_Increased Spending.png",
+        "name": "Increased Spending",
+        "character": "Sampo"
       },
       {
-        "file": "eidolons/Seele/Extirpating Slash.png",
+        "file": "eidolons/Seele/E1_Extirpating Slash.png",
         "name": "Extirpating Slash",
         "character": "Seele"
       },
       {
-        "file": "eidolons/Seele/Flitting Phantasm.png",
+        "file": "eidolons/Seele/E2_Dancing Butterfly.png",
+        "name": "Dancing Butterfly",
+        "character": "Seele"
+      },
+      {
+        "file": "eidolons/Seele/E3_Dazzling Tumult.png",
+        "name": "Dazzling Tumult",
+        "character": "Seele"
+      },
+      {
+        "file": "eidolons/Seele/E4_Flitting Phantasm.png",
         "name": "Flitting Phantasm",
         "character": "Seele"
       },
       {
-        "file": "eidolons/Seele/Piercing Shards.png",
+        "file": "eidolons/Seele/E5_Piercing Shards.png",
         "name": "Piercing Shards",
         "character": "Seele"
       },
       {
-        "file": "eidolons/Seele/Shattering Shambles.png",
+        "file": "eidolons/Seele/E6_Shattering Shambles.png",
         "name": "Shattering Shambles",
         "character": "Seele"
       },
       {
-        "file": "eidolons/Serval/Belobog's Loudest Roar!.png",
-        "name": "Belobog's Loudest Roar!",
-        "character": "Serval"
-      },
-      {
-        "file": "eidolons/Serval/Echo Chamber.png",
+        "file": "eidolons/Serval/E1_Echo Chamber.png",
         "name": "Echo Chamber",
         "character": "Serval"
       },
       {
-        "file": "eidolons/Serval/Encore!.png",
+        "file": "eidolons/Serval/E2_Encore!.png",
         "name": "Encore!",
         "character": "Serval"
       },
       {
-        "file": "eidolons/Serval/Listen, the Heartbeat of the Gears.png",
+        "file": "eidolons/Serval/E3_Listen, the Heartbeat of the Gears.png",
         "name": "Listen, the Heartbeat of the Gears",
         "character": "Serval"
       },
       {
-        "file": "eidolons/Serval/Make Some Noise!.png",
+        "file": "eidolons/Serval/E4_Make Some Noise!.png",
         "name": "Make Some Noise!",
         "character": "Serval"
       },
       {
-        "file": "eidolons/Serval/This Song Rocks to Heaven!.png",
+        "file": "eidolons/Serval/E5_Belobog's Loudest Roar!.png",
+        "name": "Belobog's Loudest Roar!",
+        "character": "Serval"
+      },
+      {
+        "file": "eidolons/Serval/E6_This Song Rocks to Heaven!.png",
         "name": "This Song Rocks to Heaven!",
         "character": "Serval"
       },
       {
-        "file": "eidolons/Silver Wolf LV.999/Eidolon Aether Editing_ Eidolon +1.png",
-        "name": "Aether Editing_ Eidolon +1",
+        "file": "eidolons/Silver Wolf LV.999/E1_Aether Editing_ Eidolon +1.png",
+        "name": "Aether Editing: Eidolon +1",
         "character": "Silver Wolf LV.999"
       },
       {
-        "file": "eidolons/Silver Wolf LV.999/Eidolon Basic ATK Is the New Ultimate.png",
-        "name": "Basic ATK Is the New Ultimate",
-        "character": "Silver Wolf LV.999"
-      },
-      {
-        "file": "eidolons/Silver Wolf LV.999/Eidolon I Came. I Saw. I One-Shot..png",
-        "name": "I Came. I Saw. I One-Shot.",
-        "character": "Silver Wolf LV.999"
-      },
-      {
-        "file": "eidolons/Silver Wolf LV.999/Eidolon It's a Feature, Not a Bug.png",
+        "file": "eidolons/Silver Wolf LV.999/E2_It's a Feature, Not a Bug.png",
         "name": "It's a Feature, Not a Bug",
         "character": "Silver Wolf LV.999"
       },
       {
-        "file": "eidolons/Silver Wolf LV.999/Eidolon Max Lv. _unbreak_15__unbreak__ Says who_.png",
-        "name": "Max Lv. _unbreak_15__unbreak__ Says who_",
+        "file": "eidolons/Silver Wolf LV.999/E3_Max Lv. 15_ Says who_.png",
+        "name": "Max Lv. <unbreak>15</unbreak>? Says who?",
         "character": "Silver Wolf LV.999"
       },
       {
-        "file": "eidolons/Silver Wolf LV.999/Eidolon Solo Maxxing!.png",
+        "file": "eidolons/Silver Wolf LV.999/E4_I Came. I Saw. I One-Shot..png",
+        "name": "I Came. I Saw. I One-Shot.",
+        "character": "Silver Wolf LV.999"
+      },
+      {
+        "file": "eidolons/Silver Wolf LV.999/E5_Basic ATK Is the New Ultimate.png",
+        "name": "Basic ATK Is the New Ultimate",
+        "character": "Silver Wolf LV.999"
+      },
+      {
+        "file": "eidolons/Silver Wolf LV.999/E6_Solo Maxxing!.png",
         "name": "Solo Maxxing!",
         "character": "Silver Wolf LV.999"
       },
       {
-        "file": "eidolons/Sparkle/Life Is a Gamble.png",
-        "name": "Life Is a Gamble",
-        "character": "Sparkle"
-      },
-      {
-        "file": "eidolons/Sparkle/Narrative Polysemy.png",
-        "name": "Narrative Polysemy",
-        "character": "Sparkle"
-      },
-      {
-        "file": "eidolons/Sparkle/Parallax Truth.png",
-        "name": "Parallax Truth",
-        "character": "Sparkle"
-      },
-      {
-        "file": "eidolons/Sparkle/Pipedream.png",
-        "name": "Pipedream",
-        "character": "Sparkle"
-      },
-      {
-        "file": "eidolons/Sparkle/Purely Fictitious.png",
-        "name": "Purely Fictitious",
-        "character": "Sparkle"
-      },
-      {
-        "file": "eidolons/Sparkle/Suspension of Disbelief.png",
+        "file": "eidolons/Sparkle/E1_Suspension of Disbelief.png",
         "name": "Suspension of Disbelief",
         "character": "Sparkle"
       },
       {
-        "file": "eidolons/Sparxie/Eidolon #AudienceKnows.png",
-        "name": "#AudienceKnows",
-        "character": "Sparxie"
+        "file": "eidolons/Sparkle/E2_Purely Fictitious.png",
+        "name": "Purely Fictitious",
+        "character": "Sparkle"
       },
       {
-        "file": "eidolons/Sparxie/Eidolon #BuiltDifferent #GoingExtinct.png",
-        "name": "#BuiltDifferent #GoingExtinct",
-        "character": "Sparxie"
+        "file": "eidolons/Sparkle/E3_Pipedream.png",
+        "name": "Pipedream",
+        "character": "Sparkle"
       },
       {
-        "file": "eidolons/Sparxie/Eidolon #GoingViral #WhoIsShe.png",
+        "file": "eidolons/Sparkle/E4_Life Is a Gamble.png",
+        "name": "Life Is a Gamble",
+        "character": "Sparkle"
+      },
+      {
+        "file": "eidolons/Sparkle/E5_Parallax Truth.png",
+        "name": "Parallax Truth",
+        "character": "Sparkle"
+      },
+      {
+        "file": "eidolons/Sparkle/E6_Narrative Polysemy.png",
+        "name": "Narrative Polysemy",
+        "character": "Sparkle"
+      },
+      {
+        "file": "eidolons/Sparxie/E1_#GoingViral #WhoIsShe.png",
         "name": "#GoingViral #WhoIsShe",
         "character": "Sparxie"
       },
       {
-        "file": "eidolons/Sparxie/Eidolon #HealingTheWorld #GoodVibesOnly.png",
-        "name": "#HealingTheWorld #GoodVibesOnly",
+        "file": "eidolons/Sparxie/E2_#AudienceKnows.png",
+        "name": "#AudienceKnows",
         "character": "Sparxie"
       },
       {
-        "file": "eidolons/Sparxie/Eidolon #LinkUp #HeartSkip.png",
+        "file": "eidolons/Sparxie/E3_#LinkUp #HeartSkip.png",
         "name": "#LinkUp #HeartSkip",
         "character": "Sparxie"
       },
       {
-        "file": "eidolons/Sparxie/Eidolon #LockedIn #FaceCard.png",
+        "file": "eidolons/Sparxie/E4_#LockedIn #FaceCard.png",
         "name": "#LockedIn #FaceCard",
         "character": "Sparxie"
       },
       {
-        "file": "eidolons/Sunday/Dawn of Sidereal Cacophony.png",
-        "name": "Dawn of Sidereal Cacophony",
-        "character": "Sunday"
+        "file": "eidolons/Sparxie/E5_#HealingTheWorld #GoodVibesOnly.png",
+        "name": "#HealingTheWorld #GoodVibesOnly",
+        "character": "Sparxie"
       },
       {
-        "file": "eidolons/Sunday/Faith Outstrips Frailty.png",
-        "name": "Faith Outstrips Frailty",
-        "character": "Sunday"
+        "file": "eidolons/Sparxie/E6_#BuiltDifferent #GoingExtinct.png",
+        "name": "#BuiltDifferent #GoingExtinct",
+        "character": "Sparxie"
       },
       {
-        "file": "eidolons/Sunday/Hermitage of Thorns.png",
-        "name": "Hermitage of Thorns",
-        "character": "Sunday"
-      },
-      {
-        "file": "eidolons/Sunday/Millennium's Quietus.png",
+        "file": "eidolons/Sunday/E1_Millennium's Quietus.png",
         "name": "Millennium's Quietus",
         "character": "Sunday"
       },
       {
-        "file": "eidolons/Sunday/Paper Raft in Silver Bay.png",
-        "name": "Paper Raft in Silver Bay",
+        "file": "eidolons/Sunday/E2_Faith Outstrips Frailty.png",
+        "name": "Faith Outstrips Frailty",
         "character": "Sunday"
       },
       {
-        "file": "eidolons/Sunday/Sculpture's Preamble.png",
+        "file": "eidolons/Sunday/E3_Hermitage of Thorns.png",
+        "name": "Hermitage of Thorns",
+        "character": "Sunday"
+      },
+      {
+        "file": "eidolons/Sunday/E4_Sculpture's Preamble.png",
         "name": "Sculpture's Preamble",
         "character": "Sunday"
       },
       {
-        "file": "eidolons/Sushang/Cleave With Heart.png",
-        "name": "Cleave With Heart",
-        "character": "Sushang"
+        "file": "eidolons/Sunday/E5_Paper Raft in Silver Bay.png",
+        "name": "Paper Raft in Silver Bay",
+        "character": "Sunday"
       },
       {
-        "file": "eidolons/Sushang/Cut With Ease.png",
+        "file": "eidolons/Sunday/E6_Dawn of Sidereal Cacophony.png",
+        "name": "Dawn of Sidereal Cacophony",
+        "character": "Sunday"
+      },
+      {
+        "file": "eidolons/Sushang/E1_Cut With Ease.png",
         "name": "Cut With Ease",
         "character": "Sushang"
       },
       {
-        "file": "eidolons/Sushang/Dwell Like Water.png",
-        "name": "Dwell Like Water",
-        "character": "Sushang"
-      },
-      {
-        "file": "eidolons/Sushang/Prevail via Taixu.png",
-        "name": "Prevail via Taixu",
-        "character": "Sushang"
-      },
-      {
-        "file": "eidolons/Sushang/Refine in Toil.png",
+        "file": "eidolons/Sushang/E2_Refine in Toil.png",
         "name": "Refine in Toil",
         "character": "Sushang"
       },
       {
-        "file": "eidolons/Sushang/Rise From Fame.png",
+        "file": "eidolons/Sushang/E3_Rise From Fame.png",
         "name": "Rise From Fame",
         "character": "Sushang"
       },
       {
-        "file": "eidolons/The Dahlia/And Yet, Always, Deathly Beautiful.png",
-        "name": "And Yet, Always, Deathly Beautiful",
-        "character": "The Dahlia"
+        "file": "eidolons/Sushang/E4_Cleave With Heart.png",
+        "name": "Cleave With Heart",
+        "character": "Sushang"
       },
       {
-        "file": "eidolons/The Dahlia/Fallen, Decayed, and Despised.png",
-        "name": "Fallen, Decayed, and Despised",
-        "character": "The Dahlia"
+        "file": "eidolons/Sushang/E5_Prevail via Taixu.png",
+        "name": "Prevail via Taixu",
+        "character": "Sushang"
       },
       {
-        "file": "eidolons/The Dahlia/Fresh, Ethereal, and Beloved.png",
-        "name": "Fresh, Ethereal, and Beloved",
-        "character": "The Dahlia"
+        "file": "eidolons/Sushang/E6_Dwell Like Water.png",
+        "name": "Dwell Like Water",
+        "character": "Sushang"
       },
       {
-        "file": "eidolons/The Dahlia/Pity Its Heart Gnawed by Worms.png",
-        "name": "Pity Its Heart Gnawed by Worms",
-        "character": "The Dahlia"
-      },
-      {
-        "file": "eidolons/The Dahlia/Pity Its Petals Thin as Mist.png",
-        "name": "Pity Its Petals Thin as Mist",
-        "character": "The Dahlia"
-      },
-      {
-        "file": "eidolons/The Dahlia/When a Bud Readies to Bloom.png",
+        "file": "eidolons/The Dahlia/E1_When a Bud Readies to Bloom.png",
         "name": "When a Bud Readies to Bloom",
         "character": "The Dahlia"
       },
       {
-        "file": "eidolons/The Herta/Bitter Pill of Truth.png",
-        "name": "Bitter Pill of Truth",
-        "character": "The Herta"
+        "file": "eidolons/The Dahlia/E2_Fresh, Ethereal, and Beloved.png",
+        "name": "Fresh, Ethereal, and Beloved",
+        "character": "The Dahlia"
       },
       {
-        "file": "eidolons/The Herta/Door into Summer.png",
-        "name": "Door into Summer",
-        "character": "The Herta"
+        "file": "eidolons/The Dahlia/E3_Pity Its Petals Thin as Mist.png",
+        "name": "Pity Its Petals Thin as Mist",
+        "character": "The Dahlia"
       },
       {
-        "file": "eidolons/The Herta/Night at Shorefall.png",
+        "file": "eidolons/The Dahlia/E4_Pity Its Heart Gnawed by Worms.png",
+        "name": "Pity Its Heart Gnawed by Worms",
+        "character": "The Dahlia"
+      },
+      {
+        "file": "eidolons/The Dahlia/E5_Fallen, Decayed, and Despised.png",
+        "name": "Fallen, Decayed, and Despised",
+        "character": "The Dahlia"
+      },
+      {
+        "file": "eidolons/The Dahlia/E6_And Yet, Always, Deathly Beautiful.png",
+        "name": "And Yet, Always, Deathly Beautiful",
+        "character": "The Dahlia"
+      },
+      {
+        "file": "eidolons/The Herta/E1_Night at Shorefall.png",
         "name": "Night at Shorefall",
         "character": "The Herta"
       },
       {
-        "file": "eidolons/The Herta/Sweet Lure of Answer.png",
-        "name": "Sweet Lure of Answer",
-        "character": "The Herta"
-      },
-      {
-        "file": "eidolons/The Herta/The Sixteenth Key.png",
-        "name": "The Sixteenth Key",
-        "character": "The Herta"
-      },
-      {
-        "file": "eidolons/The Herta/Wind Through Keyhole.png",
+        "file": "eidolons/The Herta/E2_Wind Through Keyhole.png",
         "name": "Wind Through Keyhole",
         "character": "The Herta"
       },
       {
-        "file": "eidolons/Tingyun/Gainfully Gives, Givingly Gains.png",
-        "name": "Gainfully Gives, Givingly Gains",
-        "character": "Tingyun"
+        "file": "eidolons/The Herta/E3_Door into Summer.png",
+        "name": "Door into Summer",
+        "character": "The Herta"
       },
       {
-        "file": "eidolons/Tingyun/Halcyon Bequest.png",
-        "name": "Halcyon Bequest",
-        "character": "Tingyun"
+        "file": "eidolons/The Herta/E4_The Sixteenth Key.png",
+        "name": "The Sixteenth Key",
+        "character": "The Herta"
       },
       {
-        "file": "eidolons/Tingyun/Jovial Versatility.png",
-        "name": "Jovial Versatility",
-        "character": "Tingyun"
+        "file": "eidolons/The Herta/E5_Bitter Pill of Truth.png",
+        "name": "Bitter Pill of Truth",
+        "character": "The Herta"
       },
       {
-        "file": "eidolons/Tingyun/Peace Brings Wealth to All.png",
-        "name": "Peace Brings Wealth to All",
-        "character": "Tingyun"
+        "file": "eidolons/The Herta/E6_Sweet Lure of Answer.png",
+        "name": "Sweet Lure of Answer",
+        "character": "The Herta"
       },
       {
-        "file": "eidolons/Tingyun/Sauntering Coquette.png",
-        "name": "Sauntering Coquette",
-        "character": "Tingyun"
-      },
-      {
-        "file": "eidolons/Tingyun/Windfall of Lucky Springs.png",
+        "file": "eidolons/Tingyun/E1_Windfall of Lucky Springs.png",
         "name": "Windfall of Lucky Springs",
         "character": "Tingyun"
       },
       {
-        "file": "eidolons/Topaz & Numby/Agile Operation.png",
-        "name": "Agile Operation",
-        "character": "Topaz & Numby"
+        "file": "eidolons/Tingyun/E2_Gainfully Gives, Givingly Gains.png",
+        "name": "Gainfully Gives, Givingly Gains",
+        "character": "Tingyun"
       },
       {
-        "file": "eidolons/Topaz & Numby/Bona Fide Acquisition.png",
-        "name": "Bona Fide Acquisition",
-        "character": "Topaz & Numby"
+        "file": "eidolons/Tingyun/E3_Halcyon Bequest.png",
+        "name": "Halcyon Bequest",
+        "character": "Tingyun"
       },
       {
-        "file": "eidolons/Topaz & Numby/Future Market.png",
+        "file": "eidolons/Tingyun/E4_Jovial Versatility.png",
+        "name": "Jovial Versatility",
+        "character": "Tingyun"
+      },
+      {
+        "file": "eidolons/Tingyun/E5_Sauntering Coquette.png",
+        "name": "Sauntering Coquette",
+        "character": "Tingyun"
+      },
+      {
+        "file": "eidolons/Tingyun/E6_Peace Brings Wealth to All.png",
+        "name": "Peace Brings Wealth to All",
+        "character": "Tingyun"
+      },
+      {
+        "file": "eidolons/Topaz & Numby/E1_Future Market.png",
         "name": "Future Market",
         "character": "Topaz & Numby"
       },
       {
-        "file": "eidolons/Topaz & Numby/Incentive Mechanism.png",
-        "name": "Incentive Mechanism",
+        "file": "eidolons/Topaz & Numby/E2_Bona Fide Acquisition.png",
+        "name": "Bona Fide Acquisition",
         "character": "Topaz & Numby"
       },
       {
-        "file": "eidolons/Topaz & Numby/Inflationary Demand.png",
-        "name": "Inflationary Demand",
-        "character": "Topaz & Numby"
-      },
-      {
-        "file": "eidolons/Topaz & Numby/Seize the Big and Free the Small.png",
+        "file": "eidolons/Topaz & Numby/E3_Seize the Big and Free the Small.png",
         "name": "Seize the Big and Free the Small",
         "character": "Topaz & Numby"
       },
       {
-        "file": "eidolons/Trailblazer (Destruction)/A Destructing Glance.png",
-        "name": "A Destructing Glance",
-        "character": "Trailblazer (Destruction)"
+        "file": "eidolons/Topaz & Numby/E4_Agile Operation.png",
+        "name": "Agile Operation",
+        "character": "Topaz & Numby"
       },
       {
-        "file": "eidolons/Trailblazer (Destruction)/A Falling Star.png",
+        "file": "eidolons/Topaz & Numby/E5_Inflationary Demand.png",
+        "name": "Inflationary Demand",
+        "character": "Topaz & Numby"
+      },
+      {
+        "file": "eidolons/Topaz & Numby/E6_Incentive Mechanism.png",
+        "name": "Incentive Mechanism",
+        "character": "Topaz & Numby"
+      },
+      {
+        "file": "eidolons/Trailblazer (Destruction)/E1_A Falling Star.png",
         "name": "A Falling Star",
         "character": "Trailblazer (Destruction)"
       },
       {
-        "file": "eidolons/Trailblazer (Destruction)/A Leading Whisper.png",
-        "name": "A Leading Whisper",
-        "character": "Trailblazer (Destruction)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Destruction)/A Surviving Hope.png",
-        "name": "A Surviving Hope",
-        "character": "Trailblazer (Destruction)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Destruction)/A Trailblazing Will.png",
-        "name": "A Trailblazing Will",
-        "character": "Trailblazer (Destruction)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Destruction)/An Unwilling Host.png",
+        "file": "eidolons/Trailblazer (Destruction)/E2_An Unwilling Host.png",
         "name": "An Unwilling Host",
         "character": "Trailblazer (Destruction)"
       },
       {
-        "file": "eidolons/Trailblazer (Elation)/Believe In the Light.png",
+        "file": "eidolons/Trailblazer (Destruction)/E3_A Leading Whisper.png",
+        "name": "A Leading Whisper",
+        "character": "Trailblazer (Destruction)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Destruction)/E4_A Destructing Glance.png",
+        "name": "A Destructing Glance",
+        "character": "Trailblazer (Destruction)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Destruction)/E5_A Surviving Hope.png",
+        "name": "A Surviving Hope",
+        "character": "Trailblazer (Destruction)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Destruction)/E6_A Trailblazing Will.png",
+        "name": "A Trailblazing Will",
+        "character": "Trailblazer (Destruction)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Elation)/E1_Believe In the Light.png",
         "name": "Believe In the Light",
         "character": "Trailblazer (Elation)"
       },
       {
-        "file": "eidolons/Trailblazer (Elation)/History in the Making....png",
+        "file": "eidolons/Trailblazer (Elation)/E2_History in the Making....png",
         "name": "History in the Making...",
         "character": "Trailblazer (Elation)"
       },
       {
-        "file": "eidolons/Trailblazer (Elation)/Into the Spotlight.png",
+        "file": "eidolons/Trailblazer (Elation)/E3_Into the Spotlight.png",
         "name": "Into the Spotlight",
         "character": "Trailblazer (Elation)"
       },
       {
-        "file": "eidolons/Trailblazer (Elation)/Love & Courage Always in Style.png",
-        "name": "Love & Courage Always in Style",
-        "character": "Trailblazer (Elation)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Elation)/Save the World. Just Because..png",
+        "file": "eidolons/Trailblazer (Elation)/E4_Save the World. Just Because..png",
         "name": "Save the World. Just Because.",
         "character": "Trailblazer (Elation)"
       },
       {
-        "file": "eidolons/Trailblazer (Elation)/The Cosmic Legend Cometh!.png",
+        "file": "eidolons/Trailblazer (Elation)/E5_Love & Courage_ Always in Style.png",
+        "name": "Love & Courage: Always in Style",
+        "character": "Trailblazer (Elation)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Elation)/E6_The Cosmic Legend Cometh!.png",
         "name": "The Cosmic Legend Cometh!",
         "character": "Trailblazer (Elation)"
       },
       {
-        "file": "eidolons/Trailblazer (Harmony)/Best Seat in the House.png",
+        "file": "eidolons/Trailblazer (Harmony)/E1_Best Seat in the House.png",
         "name": "Best Seat in the House",
         "character": "Trailblazer (Harmony)"
       },
       {
-        "file": "eidolons/Trailblazer (Harmony)/Dove in Tophat.png",
-        "name": "Dove in Tophat",
-        "character": "Trailblazer (Harmony)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Harmony)/Jailbreaking Rainbowwalk.png",
+        "file": "eidolons/Trailblazer (Harmony)/E2_Jailbreaking Rainbowwalk.png",
         "name": "Jailbreaking Rainbowwalk",
         "character": "Trailblazer (Harmony)"
       },
       {
-        "file": "eidolons/Trailblazer (Harmony)/Poem Favors Rhythms of Old.png",
-        "name": "Poem Favors Rhythms of Old",
-        "character": "Trailblazer (Harmony)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Harmony)/Sanatorium for Rest Notes.png",
+        "file": "eidolons/Trailblazer (Harmony)/E3_Sanatorium for Rest Notes.png",
         "name": "Sanatorium for Rest Notes",
         "character": "Trailblazer (Harmony)"
       },
       {
-        "file": "eidolons/Trailblazer (Harmony)/Tomorrow, Rest in Spotlight.png",
+        "file": "eidolons/Trailblazer (Harmony)/E4_Dove in Tophat.png",
+        "name": "Dove in Tophat",
+        "character": "Trailblazer (Harmony)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Harmony)/E5_Poem Favors Rhythms of Old.png",
+        "name": "Poem Favors Rhythms of Old",
+        "character": "Trailblazer (Harmony)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Harmony)/E6_Tomorrow, Rest in Spotlight.png",
         "name": "Tomorrow, Rest in Spotlight",
         "character": "Trailblazer (Harmony)"
       },
       {
-        "file": "eidolons/Trailblazer (Preservation)/City-Forging Bulwarks.png",
-        "name": "City-Forging Bulwarks",
-        "character": "Trailblazer (Preservation)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Preservation)/Earth-Shaking Resonance.png",
+        "file": "eidolons/Trailblazer (Preservation)/E1_Earth-Shaking Resonance.png",
         "name": "Earth-Shaking Resonance",
         "character": "Trailblazer (Preservation)"
       },
       {
-        "file": "eidolons/Trailblazer (Preservation)/Nation-Building Oath.png",
-        "name": "Nation-Building Oath",
-        "character": "Trailblazer (Preservation)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Preservation)/Spirit-Warming Flame.png",
-        "name": "Spirit-Warming Flame",
-        "character": "Trailblazer (Preservation)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Preservation)/Time-Defying Tenacity.png",
+        "file": "eidolons/Trailblazer (Preservation)/E2_Time-Defying Tenacity.png",
         "name": "Time-Defying Tenacity",
         "character": "Trailblazer (Preservation)"
       },
       {
-        "file": "eidolons/Trailblazer (Preservation)/Trail-Blazing Blueprint.png",
+        "file": "eidolons/Trailblazer (Preservation)/E3_Trail-Blazing Blueprint.png",
         "name": "Trail-Blazing Blueprint",
         "character": "Trailblazer (Preservation)"
       },
       {
-        "file": "eidolons/Trailblazer (Remembrance)/Bearer of the Revelation.png",
-        "name": "Bearer of the Revelation",
-        "character": "Trailblazer (Remembrance)"
+        "file": "eidolons/Trailblazer (Preservation)/E4_Nation-Building Oath.png",
+        "name": "Nation-Building Oath",
+        "character": "Trailblazer (Preservation)"
       },
       {
-        "file": "eidolons/Trailblazer (Remembrance)/Chanter of the Future.png",
-        "name": "Chanter of the Future",
-        "character": "Trailblazer (Remembrance)"
+        "file": "eidolons/Trailblazer (Preservation)/E5_Spirit-Warming Flame.png",
+        "name": "Spirit-Warming Flame",
+        "character": "Trailblazer (Preservation)"
       },
       {
-        "file": "eidolons/Trailblazer (Remembrance)/Dancer of the Muse.png",
-        "name": "Dancer of the Muse",
-        "character": "Trailblazer (Remembrance)"
+        "file": "eidolons/Trailblazer (Preservation)/E6_City-Forging Bulwarks.png",
+        "name": "City-Forging Bulwarks",
+        "character": "Trailblazer (Preservation)"
       },
       {
-        "file": "eidolons/Trailblazer (Remembrance)/Gleaner of the Past.png",
-        "name": "Gleaner of the Past",
-        "character": "Trailblazer (Remembrance)"
-      },
-      {
-        "file": "eidolons/Trailblazer (Remembrance)/Narrator of the Present.png",
+        "file": "eidolons/Trailblazer (Remembrance)/E1_Narrator of the Present.png",
         "name": "Narrator of the Present",
         "character": "Trailblazer (Remembrance)"
       },
       {
-        "file": "eidolons/Trailblazer (Remembrance)/Seamster of the Ode.png",
+        "file": "eidolons/Trailblazer (Remembrance)/E2_Gleaner of the Past.png",
+        "name": "Gleaner of the Past",
+        "character": "Trailblazer (Remembrance)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Remembrance)/E3_Chanter of the Future.png",
+        "name": "Chanter of the Future",
+        "character": "Trailblazer (Remembrance)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Remembrance)/E4_Dancer of the Muse.png",
+        "name": "Dancer of the Muse",
+        "character": "Trailblazer (Remembrance)"
+      },
+      {
+        "file": "eidolons/Trailblazer (Remembrance)/E5_Seamster of the Ode.png",
         "name": "Seamster of the Ode",
         "character": "Trailblazer (Remembrance)"
       },
       {
-        "file": "eidolons/Tribbie/Clock of Wonder Origin.png",
-        "name": "Clock of Wonder Origin",
-        "character": "Tribbie"
+        "file": "eidolons/Trailblazer (Remembrance)/E6_Bearer of the Revelation.png",
+        "name": "Bearer of the Revelation",
+        "character": "Trailblazer (Remembrance)"
       },
       {
-        "file": "eidolons/Tribbie/Guide of Dream Tour.png",
-        "name": "Guide of Dream Tour",
-        "character": "Tribbie"
-      },
-      {
-        "file": "eidolons/Tribbie/Morrow of Star Shine.png",
-        "name": "Morrow of Star Shine",
-        "character": "Tribbie"
-      },
-      {
-        "file": "eidolons/Tribbie/Peace of Empathy Bond.png",
-        "name": "Peace of Empathy Bond",
-        "character": "Tribbie"
-      },
-      {
-        "file": "eidolons/Tribbie/Rite of Sugar Scoop.png",
+        "file": "eidolons/Tribbie/E1_Rite of Sugar Scoop.png",
         "name": "Rite of Sugar Scoop",
         "character": "Tribbie"
       },
       {
-        "file": "eidolons/Tribbie/Trove of Morning Glow.png",
+        "file": "eidolons/Tribbie/E2_Guide of Dream Tour.png",
+        "name": "Guide of Dream Tour",
+        "character": "Tribbie"
+      },
+      {
+        "file": "eidolons/Tribbie/E3_Trove of Morning Glow.png",
         "name": "Trove of Morning Glow",
         "character": "Tribbie"
       },
       {
-        "file": "eidolons/Welt/Appellation of Justice.png",
-        "name": "Appellation of Justice",
-        "character": "Welt"
+        "file": "eidolons/Tribbie/E4_Peace of Empathy Bond.png",
+        "name": "Peace of Empathy Bond",
+        "character": "Tribbie"
       },
       {
-        "file": "eidolons/Welt/Conflux of Stars.png",
-        "name": "Conflux of Stars",
-        "character": "Welt"
+        "file": "eidolons/Tribbie/E5_Clock of Wonder Origin.png",
+        "name": "Clock of Wonder Origin",
+        "character": "Tribbie"
       },
       {
-        "file": "eidolons/Welt/Legacy of Honor.png",
+        "file": "eidolons/Tribbie/E6_Morrow of Star Shine.png",
+        "name": "Morrow of Star Shine",
+        "character": "Tribbie"
+      },
+      {
+        "file": "eidolons/Welt/E1_Legacy of Honor.png",
         "name": "Legacy of Honor",
         "character": "Welt"
       },
       {
-        "file": "eidolons/Welt/Power of Kindness.png",
-        "name": "Power of Kindness",
+        "file": "eidolons/Welt/E2_Conflux of Stars.png",
+        "name": "Conflux of Stars",
         "character": "Welt"
       },
       {
-        "file": "eidolons/Welt/Prayer of Peace.png",
+        "file": "eidolons/Welt/E3_Prayer of Peace.png",
         "name": "Prayer of Peace",
         "character": "Welt"
       },
       {
-        "file": "eidolons/Welt/Prospect of Glory.png",
+        "file": "eidolons/Welt/E4_Appellation of Justice.png",
+        "name": "Appellation of Justice",
+        "character": "Welt"
+      },
+      {
+        "file": "eidolons/Welt/E5_Power of Kindness.png",
+        "name": "Power of Kindness",
+        "character": "Welt"
+      },
+      {
+        "file": "eidolons/Welt/E6_Prospect of Glory.png",
         "name": "Prospect of Glory",
         "character": "Welt"
       },
       {
-        "file": "eidolons/Xueyi/Deva, Enthralled.png",
-        "name": "Deva, Enthralled",
-        "character": "Xueyi"
-      },
-      {
-        "file": "eidolons/Xueyi/Duḥkha, Ceased.png",
-        "name": "Duḥkha, Ceased",
-        "character": "Xueyi"
-      },
-      {
-        "file": "eidolons/Xueyi/Dvesha, Inhibited.png",
+        "file": "eidolons/Xueyi/E1_Dvesha, Inhibited.png",
         "name": "Dvesha, Inhibited",
         "character": "Xueyi"
       },
       {
-        "file": "eidolons/Xueyi/Karma, Severed.png",
-        "name": "Karma, Severed",
-        "character": "Xueyi"
-      },
-      {
-        "file": "eidolons/Xueyi/Klesha, Breached.png",
+        "file": "eidolons/Xueyi/E2_Klesha, Breached.png",
         "name": "Klesha, Breached",
         "character": "Xueyi"
       },
       {
-        "file": "eidolons/Xueyi/Saṃsāra, Mastered.png",
+        "file": "eidolons/Xueyi/E3_Duḥkha, Ceased.png",
+        "name": "Duḥkha, Ceased",
+        "character": "Xueyi"
+      },
+      {
+        "file": "eidolons/Xueyi/E4_Karma, Severed.png",
+        "name": "Karma, Severed",
+        "character": "Xueyi"
+      },
+      {
+        "file": "eidolons/Xueyi/E5_Deva, Enthralled.png",
+        "name": "Deva, Enthralled",
+        "character": "Xueyi"
+      },
+      {
+        "file": "eidolons/Xueyi/E6_Saṃsāra, Mastered.png",
         "name": "Saṃsāra, Mastered",
         "character": "Xueyi"
       },
       {
-        "file": "eidolons/Yanqing/Searing Sting.png",
-        "name": "Searing Sting",
-        "character": "Yanqing"
-      },
-      {
-        "file": "eidolons/Yanqing/Supine Serenade.png",
-        "name": "Supine Serenade",
-        "character": "Yanqing"
-      },
-      {
-        "file": "eidolons/Yanqing/Surging Strife.png",
-        "name": "Surging Strife",
-        "character": "Yanqing"
-      },
-      {
-        "file": "eidolons/Yanqing/Svelte Saber.png",
+        "file": "eidolons/Yanqing/E1_Svelte Saber.png",
         "name": "Svelte Saber",
         "character": "Yanqing"
       },
       {
-        "file": "eidolons/Yanqing/Swift Swoop.png",
-        "name": "Swift Swoop",
+        "file": "eidolons/Yanqing/E2_Supine Serenade.png",
+        "name": "Supine Serenade",
         "character": "Yanqing"
       },
       {
-        "file": "eidolons/Yanqing/Sword Savant.png",
+        "file": "eidolons/Yanqing/E3_Sword Savant.png",
         "name": "Sword Savant",
         "character": "Yanqing"
       },
       {
-        "file": "eidolons/Yao Guang/Eidolon Auspices Mirrored In Decalight.png",
-        "name": "Auspices Mirrored In Decalight",
-        "character": "Yao Guang"
+        "file": "eidolons/Yanqing/E4_Searing Sting.png",
+        "name": "Searing Sting",
+        "character": "Yanqing"
       },
       {
-        "file": "eidolons/Yao Guang/Eidolon Bejeweled in Radiant Grace.png",
-        "name": "Bejeweled in Radiant Grace",
-        "character": "Yao Guang"
+        "file": "eidolons/Yanqing/E5_Surging Strife.png",
+        "name": "Surging Strife",
+        "character": "Yanqing"
       },
       {
-        "file": "eidolons/Yao Guang/Eidolon Blind Arrows Guided by Feathers.png",
-        "name": "Blind Arrows Guided by Feathers",
-        "character": "Yao Guang"
+        "file": "eidolons/Yanqing/E6_Swift Swoop.png",
+        "name": "Swift Swoop",
+        "character": "Yanqing"
       },
       {
-        "file": "eidolons/Yao Guang/Eidolon Chuckle Chimes Where Jade Falls.png",
+        "file": "eidolons/Yao Guang/E1_Chuckle Chimes Where Jade Falls.png",
         "name": "Chuckle Chimes Where Jade Falls",
         "character": "Yao Guang"
       },
       {
-        "file": "eidolons/Yao Guang/Eidolon Ferried Along the Astral Arc.png",
-        "name": "Ferried Along the Astral Arc",
+        "file": "eidolons/Yao Guang/E2_Blind Arrows Guided by Feathers.png",
+        "name": "Blind Arrows Guided by Feathers",
         "character": "Yao Guang"
       },
       {
-        "file": "eidolons/Yao Guang/Eidolon Threads of Fate Colored by Plumes.png",
+        "file": "eidolons/Yao Guang/E3_Auspices Mirrored In Decalight.png",
+        "name": "Auspices Mirrored In Decalight",
+        "character": "Yao Guang"
+      },
+      {
+        "file": "eidolons/Yao Guang/E4_Threads of Fate Colored by Plumes.png",
         "name": "Threads of Fate Colored by Plumes",
         "character": "Yao Guang"
       },
       {
-        "file": "eidolons/Yukong/Aerial Marshal.png",
+        "file": "eidolons/Yao Guang/E5_Bejeweled in Radiant Grace.png",
+        "name": "Bejeweled in Radiant Grace",
+        "character": "Yao Guang"
+      },
+      {
+        "file": "eidolons/Yao Guang/E6_Ferried Along the Astral Arc.png",
+        "name": "Ferried Along the Astral Arc",
+        "character": "Yao Guang"
+      },
+      {
+        "file": "eidolons/Yukong/E1_Aerial Marshal.png",
         "name": "Aerial Marshal",
         "character": "Yukong"
       },
       {
-        "file": "eidolons/Yukong/August Deadshot.png",
-        "name": "August Deadshot",
-        "character": "Yukong"
-      },
-      {
-        "file": "eidolons/Yukong/Bowstring Thunderclap.png",
-        "name": "Bowstring Thunderclap",
-        "character": "Yukong"
-      },
-      {
-        "file": "eidolons/Yukong/Skyward Command.png",
+        "file": "eidolons/Yukong/E2_Skyward Command.png",
         "name": "Skyward Command",
         "character": "Yukong"
       },
       {
-        "file": "eidolons/Yukong/Torrential Fusillade.png",
+        "file": "eidolons/Yukong/E3_Torrential Fusillade.png",
         "name": "Torrential Fusillade",
         "character": "Yukong"
       },
       {
-        "file": "eidolons/Yukong/Zephyrean Echoes.png",
+        "file": "eidolons/Yukong/E4_Zephyrean Echoes.png",
         "name": "Zephyrean Echoes",
         "character": "Yukong"
       },
       {
-        "file": "eidolons/Yunli/Artisan's Ironsong.png",
-        "name": "Artisan's Ironsong",
+        "file": "eidolons/Yukong/E5_August Deadshot.png",
+        "name": "August Deadshot",
+        "character": "Yukong"
+      },
+      {
+        "file": "eidolons/Yukong/E6_Bowstring Thunderclap.png",
+        "name": "Bowstring Thunderclap",
+        "character": "Yukong"
+      },
+      {
+        "file": "eidolons/Yunli/E1_Weathered Blade Does Not Sully.png",
+        "name": "Weathered Blade Does Not Sully",
         "character": "Yunli"
       },
       {
-        "file": "eidolons/Yunli/Blade of Old Outlasts All.png",
-        "name": "Blade of Old Outlasts All",
-        "character": "Yunli"
-      },
-      {
-        "file": "eidolons/Yunli/First Luster Breaks Dawn.png",
+        "file": "eidolons/Yunli/E2_First Luster Breaks Dawn.png",
         "name": "First Luster Breaks Dawn",
         "character": "Yunli"
       },
       {
-        "file": "eidolons/Yunli/Mastlength Twirls Mountweight.png",
+        "file": "eidolons/Yunli/E3_Mastlength Twirls Mountweight.png",
         "name": "Mastlength Twirls Mountweight",
         "character": "Yunli"
       },
       {
-        "file": "eidolons/Yunli/Walk in Blade, Talk in Zither.png",
+        "file": "eidolons/Yunli/E4_Artisan's Ironsong.png",
+        "name": "Artisan's Ironsong",
+        "character": "Yunli"
+      },
+      {
+        "file": "eidolons/Yunli/E5_Blade of Old Outlasts All.png",
+        "name": "Blade of Old Outlasts All",
+        "character": "Yunli"
+      },
+      {
+        "file": "eidolons/Yunli/E6_Walk in Blade, Talk in Zither.png",
         "name": "Walk in Blade, Talk in Zither",
         "character": "Yunli"
       },
       {
-        "file": "eidolons/Yunli/Weathered Blade Does Not Sully.png",
-        "name": "Weathered Blade Does Not Sully",
-        "character": "Yunli"
+        "file": "eidolons/March 7th/E1_Memory of You.png",
+        "name": "Memory of You",
+        "character": "March 7th"
+      },
+      {
+        "file": "eidolons/March 7th/E2_Memory of It.png",
+        "name": "Memory of It",
+        "character": "March 7th"
+      },
+      {
+        "file": "eidolons/March 7th/E3_Memory of Everything.png",
+        "name": "Memory of Everything",
+        "character": "March 7th"
+      },
+      {
+        "file": "eidolons/March 7th/E4_Never Forfeit Again.png",
+        "name": "Never Forfeit Again",
+        "character": "March 7th"
+      },
+      {
+        "file": "eidolons/March 7th/E5_Never Forget Again.png",
+        "name": "Never Forget Again",
+        "character": "March 7th"
+      },
+      {
+        "file": "eidolons/March 7th/E6_Just Like This, Always....png",
+        "name": "Just Like This, Always...",
+        "character": "March 7th"
+      },
+      {
+        "file": "eidolons/March 7th • The Hunt/E1_My Sword Stirs Starlight.png",
+        "name": "My Sword Stirs Starlight",
+        "character": "March 7th • The Hunt"
+      },
+      {
+        "file": "eidolons/March 7th • The Hunt/E2_Blade Dances on Waves' Fight.png",
+        "name": "Blade Dances on Waves' Fight",
+        "character": "March 7th • The Hunt"
+      },
+      {
+        "file": "eidolons/March 7th • The Hunt/E3_Sharp Wit in Martial Might.png",
+        "name": "Sharp Wit in Martial Might",
+        "character": "March 7th • The Hunt"
+      },
+      {
+        "file": "eidolons/March 7th • The Hunt/E4_Being Fabulous Never Frights.png",
+        "name": "Being Fabulous Never Frights",
+        "character": "March 7th • The Hunt"
+      },
+      {
+        "file": "eidolons/March 7th • The Hunt/E5_Sword Delights, Sugar Blights.png",
+        "name": "Sword Delights, Sugar Blights",
+        "character": "March 7th • The Hunt"
+      },
+      {
+        "file": "eidolons/March 7th • The Hunt/E6_Me, the Best Girl in Sight.png",
+        "name": "Me, the Best Girl in Sight",
+        "character": "March 7th • The Hunt"
       }
     ]
   },

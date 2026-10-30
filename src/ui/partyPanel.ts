@@ -14,7 +14,7 @@ import { KITS, KIT_PATH } from '../core/kits'
 import type { TeamSpec } from '../core/battle'
 import { resolveLevels, EIDOLON_LV, LEVEL_CAPS } from '../core/battle'
 import type { AbilityLevels } from '../core/entities/Unit'
-import { EIDOLON_ICONS, EIDOLON_NAMES_ORDERED } from './iconManifest'
+import { EIDOLON_ICONS } from './iconManifest'
 import { el, fillSelect, STAT_LABELS } from './dom'
 import { Dropdown } from './dropdown'
 import { relicOptions, planarOptions, signatureCone } from '../core/gearOrder'
@@ -43,7 +43,7 @@ const KIT_TO_EIDOLON_NAME: Record<string, string> = {
   'sw_e6': 'Silver Wolf LV.999',
   'm7h_e2_shield': 'March 7th • The Hunt',
   'mortenax_blade': 'Mortenax',
-  'rin': 'Rin',
+  'rin': 'Rin Tohsaka',
   'hn_respen': 'Himeko Nova',
   'aw_e1': 'Aventurine • Waveflair',
   'rsu_tech_dmg': 'Robin • Summeretto',
@@ -51,14 +51,7 @@ const KIT_TO_EIDOLON_NAME: Record<string, string> = {
 
 function getEidolonIcon(kitId: string, eidolonNum: number): string | undefined {
   const charName = KIT_TO_EIDOLON_NAME[kitId] ?? KITS.find(k => k.id === kitId)?.name ?? ''
-  if (!charName) return undefined
-  const icons = EIDOLON_ICONS[charName]
-  if (!icons) return undefined
-  const names = EIDOLON_NAMES_ORDERED[charName] ?? Object.keys(icons)
-  if (eidolonNum >= 1 && eidolonNum <= names.length) {
-    return icons[names[eidolonNum - 1]]
-  }
-  return undefined
+  return charName ? EIDOLON_ICONS[charName]?.[eidolonNum - 1] : undefined
 }
 
 // Compute current level caps based on eidolon (base cap + eidolon bonuses up to current eidolon)

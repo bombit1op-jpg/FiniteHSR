@@ -126,119 +126,16 @@ function buildCharacters(cat: Category, charactersData: any[]): Record<string, s
   return out
 }
 
-function buildEidolons(cat: Category, charactersData: any[]): { byChar: Record<string, Record<string, string>>; ordered: Record<string, string[]> } {
-  const byChar: Record<string, Record<string, string>> = {}
-  const ordered: Record<string, string[]> = {}
+function buildEidolons(cat: Category): Record<string, string[]> {
+  const byChar: Record<string, string[]> = {}
   for (const it of cat.icons) {
-    const c = it.character ?? '?'
-    if (!byChar[c]) { byChar[c] = {}; ordered[c] = [] }
-    byChar[c][it.name] = toAppPath(it.file)
-    ordered[c].push(it.name)
+    const m = it.file.match(/\/E(\d+)_/)
+    if (!m) continue
+    const n = Number(m[1])
+    if (n < 1 || n > 6) continue
+    ;(byChar[it.character ?? '?'] ??= [])[n - 1] = toAppPath(it.file)
   }
-  
-  // Normalize name for fuzzy matching
-  function normalizeForMatch(s: string): string {
-    return s
-      .replace(/<unbreak>/gi, '')
-      .replace(/<\/unbreak>/gi, '')
-      // Replace colons with dashes first (for "Aether Editing: Eidolon +1" -> "Aether Editing- Eidolon +1")
-      .replace(/:/g, '-')
-      // Replace underscores with spaces (for "Aether Editing_ Eidolon +1")
-      .replace(/_/g, ' ')
-      // Remove all punctuation except alphanumeric, spaces, dashes, plus, and exclamation
-      .replace(/[^\w\s\-+!]/g, '')
-      // Remove dashes that are after numbers followed by space/letter/end
-      .replace(/(\d)-(\s|[a-zA-Z]|$)/g, '$1$2')
-      // Remove trailing dashes
-      .replace(/-(?=\s|$)/g, '')
-      // Normalize spaces
-      .replace(/\s+/g, ' ')
-      .trim()
-      .toLowerCase()
-  }
-
-  // Manual mapping for characters where manifest names differ from JSON rank names
-  // Maps JSON rank name -> manifest display name (key in EIDOLON_ICONS)
-  const MANUAL_EIDOLON_MAPPING: Record<string, Record<string, string>> = {
-    'Aventurine': {
-      "Prisoner's Dilemma": "Chatoyant Éclat",
-      "Bounded Rationality": "Languid Barrette",
-      "Droprate Maxing": "Neuronic Embroidery",
-      "Unexpected Hanging Paradox": "Reedside Promenade",
-      "Ambiguity Aversion": "Sash Cascade",
-      "Stag Hunt Game": "Viridescent Pirouette",
-    },
-    'Silver Wolf LV.999': {
-      "Aether Editing: Eidolon +1": "Aether Editing_ Eidolon +1",
-      "It's a Feature, Not a Bug": "It's a Feature, Not a Bug",
-      "Max Lv. <unbreak>15</unbreak>? Says who?": "Max Lv. _unbreak_15__unbreak__ Says who_",
-      "I Came. I Saw. I One-Shot.": "I Came. I Saw. I One-Shot.",
-      "Basic ATK Is the New Ultimate": "Basic ATK Is the New Ultimate",
-      "Solo Maxxing!": "Solo Maxxing!",
-    },
-    'Argenti': {
-      "A Lacuna in Kingdom of Aesthetics": "A Lacuna in Kingdom of Aesthetics",
-      "Agate's Humility": "Agate's Humility",
-      "Thorny Road's Glory": "Thorny Road's Glory",
-      "Trumpet's Dedication": "Trumpet's Dedication",
-      "Snow, From Somewhere in Cosmos": "Snow, From Somewhere in Cosmos",
-      '"Your" Resplendence': "Your_ Resplendence",
-    },
-  }
-  
-  // Reorder using game data ranks (E1-E6 order)
-  for (const char of charactersData) {
-    if (!char.ranks) continue
-    const charName = char.name === 'Silver Wolf LV.<unbreak>999</unbreak>' ? 'Silver Wolf LV.999' : char.name
-    const rankNames = Object.values(char.ranks).map((r: any) => r.name)
-    if (rankNames.length >= 6 && ordered[charName]) {
-      // Match manifest names to rank names using normalized comparison
-      const manifestNames = ordered[charName]
-      const matched: string[] = []
-      const used = new Set<string>()
-      
-      for (const rankName of rankNames) {
-        const normRank = normalizeForMatch(rankName)
-        let found: string | undefined
-        for (const m of manifestNames) {
-          if (used.has(m)) continue
-          const normManifest = normalizeForMatch(m)
-          if (normManifest === normRank) {
-            found = m
-            break
-          }
-        }
-        if (found) {
-          matched.push(found)
-          used.add(found)
-        }
-      }
-      
-      // Fallback: if exact normalized match failed, try substring matching
-      if (matched.length < 6) {
-        for (const rankName of rankNames) {
-          if (matched.some(m => normalizeForMatch(m) === normalizeForMatch(rankName))) continue
-          const normRank = normalizeForMatch(rankName)
-          for (const m of manifestNames) {
-            if (used.has(m)) continue
-            const normManifest = normalizeForMatch(m)
-            // Check if one contains the other (for partial matches)
-            if (normManifest.includes(normRank) || normRank.includes(normManifest)) {
-              matched.push(m)
-              used.add(m)
-              break
-            }
-          }
-        }
-      }
-      
-      if (matched.length === 6) {
-        ordered[charName] = matched
-      }
-    }
-  }
-  
-  return { byChar, ordered }
+  return byChar
 }
 
 /**
@@ -283,7 +180,9 @@ function buildPortraits(names: readonly string[]): Record<string, string> {
       if (c.name && c.relics?.avatar_id) {
         // Use kit name format (without <unbreak> tags) for Silver Wolf LV.999
         const name = c.name === 'Silver Wolf LV.<unbreak>999</unbreak>' ? 'Silver Wolf LV.999' : c.name
-        idByName[name] = String(c.relics.avatar_id)
+        // first entry wins: characters.json has two "March 7th" rows (1001, 1224);
+        // the Hunt variant gets its own explicit key below
+        if (!idByName[name]) idByName[name] = String(c.relics.avatar_id)
       }
     }
   } catch {
@@ -356,19 +255,10 @@ function main(): void {
     parts.push('')
   }
 
-  const eid = buildEidolons(manifest.eidolons, charactersData)
-  parts.push('export const EIDOLON_ICONS: Record<string, Record<string, string>> = {')
-  for (const c of Object.keys(eid.byChar).sort()) {
-    parts.push(`  ${quote(c)}: {`)
-    parts.push(emitRecord(eid.byChar[c], '    '))
-    parts.push('  },')
-  }
-  parts.push('}')
-  parts.push('')
-
-  parts.push('export const EIDOLON_NAMES_ORDERED: Record<string, string[]> = {')
-  for (const c of Object.keys(eid.ordered).sort()) {
-    parts.push(`  ${quote(c)}: [${eid.ordered[c].map(quote).join(', ')}],`)
+  const eid = buildEidolons(manifest.eidolons)
+  parts.push('export const EIDOLON_ICONS: Record<string, string[]> = {')
+  for (const c of Object.keys(eid).sort()) {
+    parts.push(`  ${quote(c)}: [${Array.from({ length: 6 }, (_, i) => quote(eid[c][i] ?? '')).join(', ')}],`)
   }
   parts.push('}')
   parts.push('')
