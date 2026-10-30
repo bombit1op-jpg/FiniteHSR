@@ -87,7 +87,16 @@ body.busy { cursor: progress; }
 /* real local art: badge grows to the icon, chip stays the element-tinted circle */
 .charBadge:has(.gameIcon img) { width: auto; height: auto; border-radius: 8px; background: #0d1117; }
 .pieceBadge { width: 34px; height: 34px; border-radius: 8px; background: #0d1117; }
-.gearBadge:has(.gameIcon img) { width: auto; height: auto; border-radius: 6px; }
+.gearBadge {
+  flex: none; display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: #1a1f26;
+  border: 1px solid #2a3342;
+  color: #7a8b9e;
+  font-size: 12px; font-weight: 600; cursor: default;
+}
+/* real local art: badge grows to the icon */
+.gearBadge:has(.gameIcon img) { width: auto; height: auto; border-radius: 6px; background: #0d1117; border-color: transparent; }
 .gameIcon { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
 .gameIcon img { display: block; border-radius: inherit; }
 

@@ -348,7 +348,7 @@ function paintGear(node: HTMLElement, kind: GearKind, id: string): void {
 
 /** icon for a Light Cone / relic set / planar set; empty id renders a neutral dash chip */
 export function gearBadge(kind: GearKind, id: string): HTMLElement {
-  const b = el('span', 'charBadge gearBadge')
+  const b = el('span', 'gearBadge')
   paintGear(b, kind, id)
   return b
 }
