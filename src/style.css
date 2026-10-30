@@ -142,7 +142,7 @@ body.busy { cursor: progress; }
 .ddOpt.ddSel { color: #f2c94c; }
 .ddOptIcon { width: 24px; height: 24px; object-fit: contain; border-radius: 4px; background: #0d1117; flex: 0 0 auto; }
 .ddOptIcon-placeholder { background: transparent; }
-/* signature light cone + E6 chip: smooth green shimmer sweep (right → left, 8s loop) */
+/* signature light cone + E6 chip: soft green shimmer sweep (right → left, 9s loop) */
 .ddOpt.ddSig,
 .ddBtn.ddSig,
 .eidolon.e6.active,
@@ -153,7 +153,17 @@ body.busy { cursor: progress; }
   overflow: hidden;
 }
 
-/* Moving highlight using ::before pseudo-element */
+/* Content stays above the light layer */
+.ddOpt.ddSig > *,
+.ddBtn.ddSig > *,
+.eidolon.e6.active > *,
+.coneArt.signature .gearIcon > *,
+.pickConeCard.sig .gearIcon > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Soft moving light highlight */
 .ddOpt.ddSig::before,
 .ddBtn.ddSig::before,
 .eidolon.e6.active::before,
@@ -161,24 +171,39 @@ body.busy { cursor: progress; }
 .pickConeCard.sig .gearIcon::before {
   content: "";
   position: absolute;
-  z-index: 1;
-  top: -60%;
-  bottom: -60%;
-  left: 0;
-  width: 42%;
-
-  background: linear-gradient(
-    110deg,
-    transparent 0%,
-    rgba(46, 229, 138, 0.12) 30%,
-    rgba(200, 255, 225, 0.48) 50%,
-    rgba(46, 229, 138, 0.12) 70%,
-    transparent 100%
-  );
-
-  transform: translateX(-250%) skewX(-18deg);
-  animation: sigShimmer 8s linear infinite;
+  z-index: 0;
   pointer-events: none;
+
+  top: -90%;
+  left: -60%;
+  width: 56%;
+  height: 280%;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(46, 229, 138, 0.04) 22%,
+      rgba(190, 255, 220, 0.22) 48%,
+      rgba(46, 229, 138, 0.07) 72%,
+      transparent 100%
+    ),
+    radial-gradient(
+      ellipse at center,
+      rgba(200, 255, 225, 0.24) 0%,
+      rgba(46, 229, 138, 0.12) 38%,
+      transparent 72%
+    );
+
+  filter: blur(12px);
+  opacity: 0;
+
+  transform: translate3d(-220%, 0, 0) rotate(18deg);
+
+  animation: sigShimmerSoft 9s linear infinite;
+  mix-blend-mode: screen;
 }
 
 /* Dropdown arrow stays above the shimmer */
@@ -186,18 +211,33 @@ body.busy { cursor: progress; }
   z-index: 2;
 }
 
-/* Full sweep of shimmer across and beyond element bounds */
-@keyframes sigShimmer {
-  from {
-    transform: translateX(-250%) skewX(-18deg);
+/* Smooth sweep across the whole surface with fade-in/out */
+@keyframes sigShimmerSoft {
+  0% {
+    transform: translate3d(-220%, 0, 0) rotate(18deg);
+    opacity: 0;
   }
 
-  to {
-    transform: translateX(350%) skewX(-18deg);
+  12% {
+    opacity: 0.9;
+  }
+
+  72% {
+    opacity: 0.75;
+  }
+
+  88% {
+    transform: translate3d(500%, 0, 0) rotate(18deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate3d(500%, 0, 0) rotate(18deg);
+    opacity: 0;
   }
 }
 
-/* Disable animation when prefers-reduced-motion */
+/* Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   .ddOpt.ddSig::before,
   .ddBtn.ddSig::before,
@@ -205,10 +245,12 @@ body.busy { cursor: progress; }
   .coneArt.signature .gearIcon::before,
   .pickConeCard.sig .gearIcon::before {
     animation: none;
+    opacity: 0.15;
+    transform: none;
   }
 }
 
-/* Text color for signature items (kept on the element itself, not the shimmer) */
+/* Text color for signature items (on the element itself) */
 .ddOpt.ddSig,
 .ddBtn.ddSig,
 .coneArt.signature .gearIcon,
