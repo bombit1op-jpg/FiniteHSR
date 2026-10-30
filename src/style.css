@@ -142,21 +142,32 @@ body.busy { cursor: progress; }
 .ddOpt.ddSel { color: #f2c94c; }
 .ddOptIcon { width: 24px; height: 24px; object-fit: contain; border-radius: 4px; background: #0d1117; flex: 0 0 auto; }
 .ddOptIcon-placeholder { background: transparent; }
-/* signature light cone + E6 chip: ONE smooth green shimmer (right в†’ left, slower) */
+/* signature light cone + E6: white gradient shine sweep (slower) */
 .ddOpt.ddSig, .ddBtn.ddSig, .eidolon.e6.active, .coneArt.signature .gearIcon, .pickConeCard.sig .gearIcon {
-  background-image: linear-gradient(110deg,
-    rgba(46,229,138,0) 0%, rgba(46,229,138,.22) 35%, rgba(200,255,225,.5) 50%,
-    rgba(46,229,138,.22) 65%, rgba(46,229,138,0) 100%);
-  background-size: 200% 100%; background-repeat: no-repeat;
-  animation: sigShimmer 10s linear infinite;
+  position: relative;
+  overflow: hidden;
+}
+.ddOpt.ddSig::after, .ddBtn.ddSig::after, .eidolon.e6.active::after, .coneArt.signature .gearIcon::after, .pickConeCard.sig .gearIcon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.6) 40%,
+    rgba(255,255,255,0.9) 50%,
+    rgba(255,255,255,0.6) 60%,
+    rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: shineSweep 3.5s ease-in-out infinite;
+  pointer-events: none;
 }
 .ddOpt.ddSig, .ddBtn.ddSig, .coneArt.signature .gearIcon, .pickConeCard.sig .gearIcon { color: #eafff2; font-weight: 600; }
-@keyframes sigShimmer {
-  0% { background-position: 140% 0; }
-  100% { background-position: -40% 0; }
+@keyframes shineSweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ddOpt.ddSig, .ddBtn.ddSig, .eidolon.e6.active, .coneArt.signature .gearIcon, .pickConeCard.sig .gearIcon { animation: none; background-position: 50% 0; }
+  .ddOpt.ddSig::after, .ddBtn.ddSig::after, .eidolon.e6.active::after, .coneArt.signature .gearIcon::after, .pickConeCard.sig .gearIcon::after { animation: none; transform: translateX(0); }
 }
 .stratFlagsRow { margin-top: 2px; }
 .stratFlagsRow label { flex-direction: row; align-items: center; text-transform: none; font-size: 11px; color: #aab6c5; }
