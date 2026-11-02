@@ -21,6 +21,16 @@ export const RANK_LABELS: Record<string, string> = {
   boss: 'Босс',
 }
 
+/**
+ * Safe helper to get first character of a string for fallback icons.
+ * Handles undefined, null, empty strings, and non-string values.
+ */
+function safeInitial(value: string | null | undefined, fallback = '?'): string {
+  if (!value) return fallback
+  const trimmed = value.trim()
+  return trimmed.charAt(0).toUpperCase() || fallback
+}
+
 interface Overlay {
   root: HTMLElement
   body: HTMLElement
@@ -125,7 +135,7 @@ export function openCharacterPicker(opts: { exclude?: string[]; current?: string
   for (const e of ELEMS) {
     const b = el('button', 'pickerToggle pickerBtn') as HTMLButtonElement
     b.type = 'button'
-    const icon = iconNode(elemIconUrl ? elemIconUrl(e) : undefined, e, { cls:'miniIcon', size:16, fit:'contain', fallbackText:e.charAt(0), tint:'#7fb3ff', title:e })
+    const icon = iconNode(elemIconUrl ? elemIconUrl(e) : undefined, e, { cls:'miniIcon', size:16, fit:'contain', fallbackText:safeInitial(e), tint:'#7fb3ff', title:e })
     const txt = el('span'); txt.textContent = e
     b.append(icon, txt)
     elemBtns.set(e, b)
@@ -142,7 +152,7 @@ export function openCharacterPicker(opts: { exclude?: string[]; current?: string
   for (const p of PATHS) {
     const b = el('button', 'pickerToggle pickerBtn') as HTMLButtonElement
     b.type = 'button'
-    const icon = iconNode(pathIconUrl ? pathIconUrl(p) : undefined, p, { cls:'miniIcon', size:16, fit:'contain', fallbackText:p.charAt(0), tint:'#7fb3ff', title:p })
+    const icon = iconNode(pathIconUrl ? pathIconUrl(p) : undefined, p, { cls:'miniIcon', size:16, fit:'contain', fallbackText:safeInitial(p), tint:'#7fb3ff', title:p })
     const txt = el('span'); txt.textContent = p
     b.append(icon, txt)
     pathBtns.set(p, b)
@@ -179,10 +189,9 @@ const paint = () => {
     if (k.id === opts.current) btn.classList.add('current')
     btn.title = k.name
     const art = iconNode(charIconUrl(k.id), k.name, {
-      cls: 'pickIcon', size: 56, fit: 'cover',
-      fallbackText: k.name.trim().charAt(0).toUpperCase() || '?',
-      tint: '#7fb3ff', title: k.name,
-    })
+        cls: 'pickIcon', size: 56, fit: 'cover',
+        fallbackText: safeInitial(k.name), tint: '#7fb3ff', title: k.name,
+      })
     btn.append(art)
     btn.onclick = () => { ov.close(); resolve(k.id) }
     grid.append(btn)
@@ -223,11 +232,11 @@ export function openConePicker(opts: { kitId: string; current?: string } = {} as
   pathBtns.set('*', pathAll)
   pathRow.append(pathAll)
   const paths = [...new Set(LIGHT_CONES.map(c => c.path))].sort()
-  for (const p of paths) {
+for (const p of paths) {
     const b = el('button', 'pickerToggle pickerBtn') as HTMLButtonElement
     b.type = 'button'
-    const icon = iconNode(pathIconUrl ? pathIconUrl(p) : undefined, p, { cls:'miniIcon', size:16, fit:'contain', fallbackText:p.charAt(0), tint:'#7fb3ff', title:p })
-    const txt = el('span'); txt.textContent = p === path ? `${p} (свой)` : p
+    const icon = iconNode(pathIconUrl ? pathIconUrl(p) : undefined, p, { cls:'miniIcon', size:16, fit:'contain', fallbackText:safeInitial(p), tint:'#7fb3ff', title:p })
+    const txt = el('span'); txt.textContent = p
     b.append(icon, txt)
     pathBtns.set(p, b)
     pathRow.append(b)
@@ -289,8 +298,7 @@ ov.body.append(search, pathRow, rareRow, grid)
       else if (cone.rarity === 3) rarity.classList.add('r3')
       const art = iconNode(gearIconUrl('cone', id), cone.name, {
         cls: 'gearIcon', size: 120, fit: 'contain',
-        fallbackText: cone.name.trim().charAt(0).toUpperCase() || '?',
-        tint: '#7fb3ff', title: cone.name,
+        fallbackText: safeInitial(cone.name), tint: '#7fb3ff', title: cone.name,
       })
       btn.append(name, art, rarity)
       btn.onclick = () => { ov.close(); resolve(id) }
@@ -382,8 +390,8 @@ function buildMemberCard(slot: TeamRowState | undefined, index: number): HTMLEle
   identity.append(nameEl)
 
   const meta = el('div', 'partyPickCharacterMeta')
-  const elemIcon = iconNode(elemIconUrl(kit.elem), kit.elem, { cls: 'miniIcon', size: 14, fit: 'contain', fallbackText: kit.elem.charAt(0), tint: '#7fb3ff', title: kit.elem })
-  const pathIcon = iconNode(pathIconUrl(KIT_PATH[kit.id] ?? ''), KIT_PATH[kit.id] ?? '', { cls: 'miniIcon', size: 14, fit: 'contain', fallbackText: (KIT_PATH[kit.id] ?? '').charAt(0), tint: '#7fb3ff', title: KIT_PATH[kit.id] ?? '' })
+  const elemIcon = iconNode(elemIconUrl(kit.elem), kit.elem, { cls: 'miniIcon', size: 14, fit: 'contain', fallbackText: safeInitial(kit.elem), tint: '#7fb3ff', title: kit.elem })
+  const pathIcon = iconNode(pathIconUrl(KIT_PATH[kit.id] ?? ''), KIT_PATH[kit.id] ?? '', { cls: 'miniIcon', size: 14, fit: 'contain', fallbackText: safeInitial(KIT_PATH[kit.id]), tint: '#7fb3ff', title: KIT_PATH[kit.id] ?? '' })
   meta.append(elemIcon, pathIcon)
   identity.append(meta)
 
@@ -403,7 +411,7 @@ function buildMemberCard(slot: TeamRowState | undefined, index: number): HTMLEle
       tile.append(iconNode(
         gearIconUrl('cone', cone.id),
         cone.name,
-        { cls: 'partyPickGearIcon', size: 62, fit: 'contain', fallbackText: cone.name.charAt(0).toUpperCase(), tint: '#7fb3ff', title: cone.name }
+        { cls: 'partyPickGearIcon', size: 62, fit: 'contain', fallbackText: safeInitial(cone.name), tint: '#7fb3ff', title: cone.name }
       ))
       tile.title = cone.name
       coneCol.append(tile)
@@ -429,7 +437,7 @@ function buildMemberCard(slot: TeamRowState | undefined, index: number): HTMLEle
     rsEl.append(iconNode(
       gearIconUrl('relic', rs.id),
       rs.name,
-      { cls: 'partyPickGearIcon', size: 32, fit: 'contain', fallbackText: rs.name.charAt(0).toUpperCase(), tint: '#7fb3ff', title: rs.name }
+      { cls: 'partyPickGearIcon', size: 32, fit: 'contain', fallbackText: safeInitial(rs.name), tint: '#7fb3ff', title: rs.name }
     ))
     const badge = el('span', 'partyPickRelicBadge')
     badge.textContent = `${rs.count}pc`
@@ -444,7 +452,7 @@ function buildMemberCard(slot: TeamRowState | undefined, index: number): HTMLEle
     rsEl.append(iconNode(
       gearIconUrl('planar', ps.id),
       ps.name,
-      { cls: 'partyPickGearIcon', size: 32, fit: 'contain', fallbackText: ps.name.charAt(0).toUpperCase(), tint: '#7fb3ff', title: ps.name }
+      { cls: 'partyPickGearIcon', size: 32, fit: 'contain', fallbackText: safeInitial(ps.name), tint: '#7fb3ff', title: ps.name }
     ))
     const badge = el('span', 'partyPickRelicBadge')
     badge.textContent = `${ps.count}pc`

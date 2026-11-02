@@ -189,6 +189,11 @@ export interface BattleEvent {
   }
   payload: Record<string, unknown>
   raw?: string
+  /** §Combat Action View — links events to gameplay actions */
+  combatActionId?: string
+  attackId?: string
+  parentActionId?: string
+  actionCategory?: 'attack' | 'bonusAttack' | 'extraTurn' | 'ultimate' | 'system'
 }
 
 export interface StateSnapshot {
@@ -318,6 +323,15 @@ export class BattleLogger {
   private ownTrace = false
   private detachTrace: () => void = () => {}
 
+  /** §Combat Action View — context stack for tracking current gameplay action */
+  private actionContextStack: Array<{
+    combatActionId: string
+    attackId: string
+    actionCategory: BattleEvent['actionCategory']
+    parentActionId?: string
+    provenance?: BattleEvent['provenance']
+  }> = []
+
   private counts: Record<string, number> = {}
   private spSpent = 0
   private spGained = 0
@@ -327,6 +341,27 @@ export class BattleLogger {
     this.spStart = sim.sp()
     if (this.cfg.verifyPerEvent) this.watcher = new InvariantWatcher(() => sim.units(), () => ({ sp: sim.sp(), maxSp: sim.maxSp }))
     if (this.on && this.cfg.debug! >= 4) this.attachDamageTrace()
+  }
+
+  /** §Combat Action View — push a new gameplay action context */
+  pushActionContext(ctx: {
+    combatActionId: string
+    attackId: string
+    actionCategory: BattleEvent['actionCategory']
+    parentActionId?: string
+    provenance?: BattleEvent['provenance']
+  }): void {
+    this.actionContextStack.push(ctx)
+  }
+
+  /** §Combat Action View — pop the current gameplay action context */
+  popActionContext(): void {
+    this.actionContextStack.pop()
+  }
+
+  /** §Combat Action View — get the current gameplay action context */
+  getActionContext(): BattleLogger['actionContextStack'][0] | undefined {
+    return this.actionContextStack[this.actionContextStack.length - 1]
   }
 
   /** §32: 0 = OFF. Everything else returns early before allocating an event. */
@@ -368,12 +403,30 @@ export class BattleLogger {
     this.turnNo++
     this.beginAction()
     this.atkNo = 0; this.hitNo = 0; this.dmgNo = 0; this.trgNo = 0
-    this.emit({ type: 'ACTION_START', source, sourceId, trace: 'ACT', payload: { action, ...payload } })
-    this.emit({ type: 'ABILITY_USED', source, sourceId, trace: 'ACT', payload: { action } })
+
+    // Determine action category
+    const isExtra = payload?.extra === true
+    const actionKind = payload?.actionKind ?? action
+    const isUlt = actionKind === 'ult' || actionKind === 'ultimate'
+    const category = isUlt ? 'ultimate' : isExtra ? 'extraTurn' : 'attack'
+
+    const combatActionId = `${this.actNo}`
+    const attackId = `${this.actNo}.1`
+
+    this.pushActionContext({
+      combatActionId,
+      attackId,
+      actionCategory: category,
+      provenance: payload?.provenance as BattleEvent['provenance'],
+    })
+
+    this.emit({ type: 'ACTION_START', source, sourceId, trace: 'ACT', payload: { action, actionKind, extra: isExtra, ...payload } })
+    this.emit({ type: 'ABILITY_USED', source, sourceId, trace: 'ACT', payload: { action, actionKind, extra: isExtra } })
   }
   /** A unit's action ends (all effects resolved). */
   turnEnd(source: string, action: string, sourceId?: string): void {
     this.emit({ type: 'ACTION_END', source, sourceId, payload: { action } })
+    this.popActionContext()
   }
   beginAttack(): number { this.atkNo++; this.hitNo = 0; return this.atkNo }
   beginHit(): number { return ++this.hitNo }
@@ -415,10 +468,25 @@ export class BattleLogger {
     minDebug?: DebugLevel
     /** §6 chain level, when the emitter knows it (see `BattleEvent.traceId`). */
     trace?: 'ACT' | 'ATK' | 'HIT' | 'DMG'
+    /** §Combat Action View — provenance and action categorization */
+    provenance?: BattleEvent['provenance']
+    combatActionId?: string
+    attackId?: string
+    parentActionId?: string
+    actionCategory?: BattleEvent['actionCategory']
   }): BattleEvent | undefined {
     if (!this.on) return undefined
     const gate = e.minDebug ?? MIN_DEBUG[e.type] ?? 2
     if (this.debug < gate) return undefined
+
+    // Auto-attach action context for events that don't explicitly provide it
+    const ctx = this.getActionContext()
+    const combatActionId = e.combatActionId ?? ctx?.combatActionId
+    const attackId = e.attackId ?? ctx?.attackId
+    const parentActionId = e.parentActionId ?? ctx?.parentActionId
+    const actionCategory = e.actionCategory ?? ctx?.actionCategory
+    const provenance = e.provenance ?? ctx?.provenance
+
     // filter before the id is burned, so a filtered run's EVT sequence has no gaps
     const ids: Record<string, unknown> = {}
     if (e.sourceId !== undefined) ids.sourceId = e.sourceId
@@ -433,6 +501,11 @@ export class BattleLogger {
       type: e.type,
       source: e.source, target: e.target,
       attackType: e.attackType, element: e.element,
+      provenance,
+      combatActionId,
+      attackId,
+      parentActionId,
+      actionCategory,
       payload: (e.sourceId !== undefined || e.targetId !== undefined || e.ownerId !== undefined)
         ? { ...ids, ...(e.payload ?? {}) }
         : (e.payload ?? {}),

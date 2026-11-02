@@ -395,8 +395,23 @@ private castUlt(kit: KitDef, u: Unit, ctx: KitRuntime, outOfTurn: boolean): void
     const before = u.energy
     this.s.lastUltOutOfTurn = outOfTurn
     this.s.lastAbilityTarget = undefined
+
+    if (outOfTurn) {
+      this.s.logger.pushActionContext({
+        combatActionId: `ult-oot-${this.s.logger.actionId + 1}`,
+        attackId: `${this.s.logger.actionId + 1}.1`,
+        actionCategory: 'ultimate',
+        provenance: { sourceKind: 'ability', abilityName: kit.name, abilitySlot: 'ult', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
+      })
+    }
+
     this.s.performAbility(kit, u, { kind: 'ult' }, ctx)
     this.s.lastUltOutOfTurn = false
+
+    if (outOfTurn) {
+      this.s.logger.popActionContext()
+    }
+
     // fired = kit paid Energy, OR a non-Energy kit flipped its own readiness gate (Newbud /
     // Coreflame / Slashed Dream → 0). ENERGY_LOSS + the sp_base +5 refund follow Energy payment
     // only (`ultConsumption: 'none'` = no refund, canon: the 6 non-Energy kits per Energy.md);

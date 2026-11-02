@@ -346,8 +346,6 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       b.append(iconWrap, textWrap)
       b.onclick = () => {
         const current = Number(store.active?.slots.find(s => s.id === row.id)?.eidolon ?? 0)
-        // Clicking the highest active eidolon: disable all (set to 0)
-        // Clicking any other eidolon: set to that level (enable it and all below)
         const next = (current === e) ? 0 : e
         patch({ eidolon: next })
         view.refresh()
@@ -357,7 +355,6 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     }
     eidSection.append(eidRow)
     eidSection.classList.add('pcBody-eidolons')
-    // Keep eidolons in their existing full-width position above the three detail areas.
     body.append(eidSection, detailsGrid)
 
     // --- gear: cone + SI + level (LEFT COLUMN - top)

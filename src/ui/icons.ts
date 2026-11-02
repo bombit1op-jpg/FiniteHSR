@@ -18,6 +18,7 @@ import {
   CHARACTERS_ICONS, LIGHTCONES_ICONS, RELICSETS_ICONS, PLANARSETS_ICONS,
   ELEMENTS_ICONS, PATHS_ICONS, STATS_ICONS, ENEMIES_ICONS, RELICPIECES_ICONS,
   CHARACTER_PORTRAITS, ABILITIES_ICONS,
+  BUFFS_ICONS, DEBUFFS_ICONS, STATES_ICONS,
 } from './iconManifest'
 
 type RelicSlot = RelicPiece['slot']
@@ -146,7 +147,36 @@ export function abilityBadge(name: string): HTMLElement {
   node.title = name || 'способность'
   node.append(iconNode(abilityIconUrl(name), name, {
     cls: 'abilityIcon', size: 20, fit: 'contain',
-    fallbackText: (name.trim().charAt(0) || '?').toUpperCase(), tint: '#8fd694', title: node.title,
+    fallbackText: safeInitial(name), tint: '#8fd694', title: node.title,
+  }))
+  return node
+}
+
+/**
+ * Resolve effect icon URL using the proper catalogs.
+ * Checks BUFFS_ICONS, DEBUFFS_ICONS, STATES_ICONS, then falls back to ability icons.
+ */
+export function effectIconUrl(name: string): string | undefined {
+  if (!name) return undefined
+  // Check buffs first
+  if (BUFFS_ICONS[name]) return BUFFS_ICONS[name]
+  // Check debuffs
+  if (DEBUFFS_ICONS[name]) return DEBUFFS_ICONS[name]
+  // Check states
+  if (STATES_ICONS[name]) return STATES_ICONS[name]
+  // Fall back to ability icons
+  return abilityIconUrl(name)
+}
+
+/**
+ * Effect icon chip (real art or a neutral text chip) using proper catalogs.
+ */
+export function effectBadge(name: string): HTMLElement {
+  const node = el('span', 'metaBadge effectBadge')
+  node.title = name || 'эффект'
+  node.append(iconNode(effectIconUrl(name), name, {
+    cls: 'abilityIcon', size: 20, fit: 'contain',
+    fallbackText: safeInitial(name), tint: '#8fd694', title: node.title,
   }))
   return node
 }
@@ -274,10 +304,15 @@ function paintChar(node: HTMLElement, kitId: string): void {
     cls: 'charIcon',
     size: 64,
     fit: 'cover',
-    fallbackText: kit ? (kit.name.trim().charAt(0).toUpperCase() || '?') : '?',
-    tint,
-    title,
+    fallbackText: safeInitial(kit?.name), tint, title,
   }))
+}
+
+/** Safely get the first character of a string, with fallback */
+function safeInitial(value: string | null | undefined, fallback = '?'): string {
+  if (!value) return fallback
+  const trimmed = value.trim()
+  return trimmed.charAt(0).toUpperCase() || fallback
 }
 
 /** character portrait with a letter chip (coloured by the kit's element) as fallback */
@@ -304,9 +339,7 @@ function paintPortrait(node: HTMLElement, kitId: string): void {
   node.append(iconNode(url, kit ? kit.name : '—', {
     cls: 'portraitImg',
     fit: 'contain',
-    fallbackText: kit ? (kit.name.trim().charAt(0).toUpperCase() || '?') : '+',
-    tint,
-    title,
+    fallbackText: safeInitial(kit?.name, '+'), tint, title,
   }))
 }
 
@@ -348,7 +381,7 @@ function paintGear(node: HTMLElement, kind: GearKind, id: string): void {
     cls: 'gearIcon',
     size: 40,
     fit: 'contain',
-    fallbackText: !id && kind === 'cone' ? '+' : !id ? '—' : (name?.trim().charAt(0).toUpperCase() || '?'),
+    fallbackText: !id && kind === 'cone' ? '+' : !id ? '—' : safeInitial(name, '?'),
     tint,
     title,
   }))
@@ -407,7 +440,7 @@ function paintMeta(node: HTMLElement, kind: 'elem' | 'path', key: string): void 
     cls: 'metaIcon',
     size: 18,
     fit: 'contain',
-    fallbackText: text.charAt(0).toUpperCase(),
+    fallbackText: safeInitial(text),
     tint: ELEM_COLOR[key] ?? '#55606f',
     title,
   }))

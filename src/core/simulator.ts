@@ -542,9 +542,21 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
     this.currentActor = u
     u.av = 0
     this.log(`>> ${u.name} gains an Extra Turn!`, { type: 'EXTRA_TURN', target: u.name })
+
+    // Push action context for extra turn
+    this.logger.pushActionContext({
+      combatActionId: `extra-${this.logger.actionId + 1}`,
+      attackId: `${this.logger.actionId + 1}.1`,
+      actionCategory: 'extraTurn',
+      provenance: { sourceKind: 'ability', abilityName: 'Extra Turn', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
+    })
+
     const kit = this.kits.get(u.kitId!)!
     const action = kit.decide(this, u, ctx)
     this.performAbility(kit, u, action, ctx)
+
+    this.logger.popActionContext()
+
     // memosprites acting inline (Demiurge, Garmentmaker, Evey) never reach endTick — fire here too
     this.fireAllyMemospriteAct(u)
     ctx.inExtraTurn = false

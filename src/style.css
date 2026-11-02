@@ -570,7 +570,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 /* fill the page width: as many equal columns as the screen fits, never a fixed narrow strip on the right */
 .partyCards { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; align-items: stretch; }
 
-.partyCard { min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 10px; background: #131820; border: 1px solid #2a3342; border-radius: 12px; flex: 1; }
+.partyCard { min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 10px; background: #131820; border: 1px solid #2a3342; border-radius: 12px; flex: 1; container-type: inline-size; container-name: party-card; }
 
 /* big full-character art: element-tinted backdrop, art anchored to the bottom */
 .pcPortraitWrap { position: relative; }
@@ -615,7 +615,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 
 /* Grid row assignment for direct children */
 .pcBody > .pcBody-eidolons { grid-row: 1; }    /* Eidolons */
-.pcBody > .pcBody-details { grid-row: 2; }     /* Cone + Traces + Stats */
+.pcBody > .pcBody-details { grid-row: 2; height: 100%; min-height: 0; display: flex; flex-direction: column; }     /* Cone + Traces + Stats */
 .pcBody > .pcBody-skills { grid-row: 3; }      /* Skills */
 .pcBody > .pcBody-relics { grid-row: 4; }      /* Relics */
 
@@ -994,11 +994,17 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
    The portrait/identity, eidolons, skill section and relic editor stay in their existing flow. */
 .pcDetailsGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-areas: "left stats";
+  grid-template-columns: minmax(128px, 0.9fr) minmax(165px, 1.1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas:
+    "left stats"
+    "left stats";
   gap: 12px;
   align-items: stretch;
   min-width: 0;
+  container-type: inline-size;
+  height: 100%;
+  min-height: 0;
 }
 .pcDetailsGrid > .pcLeftColumn {
   grid-area: left;
@@ -1006,16 +1012,37 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
   grid-template-rows: auto minmax(0, 1fr);
   gap: 12px;
   min-width: 0;
+  min-height: 0;
 }
 .pcDetailsGrid > .pcRightColumn {
   grid-area: stats;
+  display: flex;
+  flex-direction: column;
   min-width: 0;
+  min-height: 0;
+  flex: 1;
 }
 .pcDetailsGrid .pcSection { min-width: 0; }
 .pcDetailsGrid .coneRow { align-items: stretch; }
 .pcDetailsGrid .coneArt { width: min(100%, 140px); }
-.pcDetailsGrid .pcStats { height: 100%; }
-.pcDetailsGrid .statGrid { grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); }
+.pcDetailsGrid > .pcRightColumn > .pcSection {
+  flex: 1;
+  min-height: 0;
+}
+.pcDetailsGrid > .pcLeftColumn > .pcSection {
+  min-height: 0;
+}
+.pcDetailsGrid .pcStats {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+}
+.pcDetailsGrid .statGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px 8px;
+}
 
 /* Skill levels: two abilities per row with larger ability icons. */
 .pcSkills {
@@ -1079,9 +1106,10 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .skillContent > .lvlVal { justify-self: center; }
 .skillContent .lvlInputWrap { min-width: 0; width: 100%; }
 .skillContent .lvlInput { min-width: 0; width: 100%; }
-@media (max-width: 650px) {
+@container party-card (max-width: 359px) {
   .pcDetailsGrid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "left" "stats"; }
   .pcDetailsGrid > .pcLeftColumn { grid-template-rows: auto auto; }
+  .pcDetailsGrid > .pcRightColumn > .pcSection { flex: 1; min-height: 0; }
   .pcDetailsGrid .pcStats { height: auto; }
 }
 @media (max-width: 460px) {
@@ -1310,3 +1338,380 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .enemyPreviewNotes { font-size: 11px; color: #9aa7ba; line-height: 1.5; padding: 8px; background: #142a1c; border: 1px solid #2a4a35; border-radius: 4px; }
 
 .enemyPreviewSelectBtn { width: 100%; margin-top: 12px; padding: 10px; font-size: 13px; font-weight: 600; }
+
+/* ============================================================================
+   §Combat Action Log Styles
+   ============================================================================ */
+
+.simLogContainer { display: flex; flex-direction: column; height: 100%; min-height: 500px; }
+
+.simLogFilterBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px;
+  background: #0c1410;
+  border: 1px solid #2a4a35;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+.simLogFilterBar select,
+.simLogFilterBar input[type="search"],
+.simLogFilterBar input[type="number"] {
+  background: #0d1117;
+  border: 1px solid #2a3342;
+  border-radius: 6px;
+  color: #e6ebf2;
+  padding: 6px 10px;
+  font: inherit;
+  min-width: 140px;
+}
+.simLogFilterBar input[type="search"] { flex: 1; min-width: 200px; }
+.simLogFilterBar input[type="number"] { width: 100px; }
+.simLogClearBtn { padding: 6px 12px; font-size: 12px; }
+
+.simLogWorkspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(320px, 1fr);
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+}
+
+.simLogTimelinePane {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.simLogTimeline {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding: 4px;
+}
+
+.simLogInspectorPane {
+  position: sticky;
+  top: 8px;
+  align-self: start;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+.simLogCategoryHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin: 8px 4px 4px;
+  background: #0e1e14;
+  border: 1px solid #2a4a35;
+  border-radius: 6px;
+  border-left-width: 4px;
+}
+.simLogCategoryBadge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: #0a100d;
+}
+.simLogCategoryCount {
+  font-size: 12px;
+  color: #7b8595;
+  margin-left: auto;
+}
+
+.simCombatActionCard {
+  background: #0e1e14;
+  border: 1px solid #2a4a35;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 4px;
+  border-left-width: 4px;
+  transition: all 0.15s;
+}
+.simCombatActionCard:hover {
+  border-color: #3a5a45;
+  background: #142a1c;
+}
+.simCombatActionCard.selected {
+  border-color: #4ade80;
+  background: #142a1c;
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.15);
+}
+.simCombatActionCard.attack { border-left-color: #3b82f6; }
+.simCombatActionCard.bonusAttack { border-left-color: #f59e0b; }
+.simCombatActionCard.extraTurn { border-left-color: #22c55e; }
+.simCombatActionCard.ultimate { border-left-color: #a855f7; }
+.simCombatActionCard.system { border-left-color: #6b7280; }
+
+.simActionHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.simActionCategory {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  color: #0a100d;
+}
+.simActionMeta {
+  font-size: 11px;
+  color: #7b8595;
+  margin-left: auto;
+}
+
+.simActionBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.simActionSource {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.simActionSourceIcon { flex-shrink: 0; }
+.simActionIcon { width: 32px; height: 32px; border-radius: 4px; }
+.simActionAbilityIconImg { width: 20px; height: 20px; }
+.simActionSourceInfo { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.simActionSourceName { font-size: 13px; font-weight: 600; color: #e6ebf2; }
+.simActionAbility { display: flex; align-items: center; gap: 4px; }
+.simActionAbilityIcon { width: 20px; height: 20px; border-radius: 4px; }
+.simActionAbilityName { font-size: 12px; color: #f2c94c; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.simActionTargets {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.simActionTargetIcon { width: 24px; height: 24px; border-radius: 4px; }
+
+.simActionSummary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  color: #9aa7ba;
+}
+.simActionDamage { font-weight: 700; color: #f2c94c; font-variant-numeric: tabular-nums; }
+.simActionHits { color: #7fd18a; }
+.simActionEffects { color: #7fb3ff; }
+.simActionDamage .crit { color: #ffd76a; font-weight: 700; }
+
+/* Inspector */
+.simLogInspector {
+  background: #0c1410;
+  border: 1px solid #2a4a35;
+  border-radius: 8px;
+  padding: 12px;
+  min-height: 300px;
+}
+
+.simLogInspectorHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #2a4a35;
+}
+.simLogInspectorHeader h4 { margin: 0; font-size: 13px; font-weight: 700; color: #8bd39b; }
+.simLogInspectorId { font-size: 11px; color: #7b8595; font-family: Consolas, monospace; }
+
+.simInspectorTabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #2a4a35;
+  padding-bottom: 4px;
+}
+.simInspectorTab {
+  background: transparent;
+  border: none;
+  color: #7b8595;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px 4px 0 0;
+  transition: all 0.15s;
+}
+.simInspectorTab:hover { color: #b8e5c8; background: #142a1c; }
+.simInspectorTab.active { color: #4ade80; background: #142a1c; border-bottom: 2px solid #4ade80; }
+
+.simInspectorContent { min-height: 200px; }
+
+.simLogInspectorGrid {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 6px 12px;
+  font-size: 12px;
+}
+.simLogInspectorRow { display: contents; }
+.simLogInspectorLabel { color: #9aa7ba; font-size: 11px; }
+.simLogInspectorValue { color: #e6ebf2; font-weight: 500; font-variant-numeric: tabular-nums; word-break: break-word; }
+.simLogInspectorPayload { margin: 0; font-size: 11px; color: #aab6c5; background: #0d1117; padding: 8px; border-radius: 4px; max-height: 200px; overflow: auto; }
+.simLogInspectorSnapshot { font-size: 11px; color: #aab6c5; line-height: 1.6; }
+
+.simInspectorHits { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.simInspectorHit {
+  background: #101812;
+  border: 1px solid #2a4a35;
+  border-radius: 6px;
+  padding: 10px;
+}
+.simInspectorHitHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.simInspectorHitTarget { font-weight: 600; color: #e6ebf2; }
+.simInspectorHitDamage { font-weight: 700; color: #f2c94c; font-variant-numeric: tabular-nums; }
+.simInspectorHitDamage .crit { color: #ffd76a; }
+.simInspectorHitBreakdown {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 12px;
+  font-size: 11px;
+  padding-top: 8px;
+  border-top: 1px solid #2a4a35;
+}
+.simInspectorBreakdownRow { display: contents; }
+.simInspectorBreakdownRow span:first-child { color: #9aa7ba; }
+.simInspectorBreakdownRow span:last-child { color: #e6ebf2; font-weight: 500; text-align: right; }
+
+/* State Tab */
+.simInspectorSnapshotSection { margin-bottom: 16px; }
+.simInspectorSnapshotTitle { margin: 0 0 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #8bd39b; }
+.simInspectorUnitState {
+  background: #101812;
+  border: 1px solid #2a4a35;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+.simInspectorUnitName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.simInspectorUnitName .simUnitIcon { width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0; }
+.simInspectorUnitStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 4px 8px;
+  font-size: 11px;
+}
+.simStatMini { display: flex; justify-content: space-between; gap: 8px; }
+.simStatMini span:first-child { color: #9aa7ba; }
+.simStatMini span:last-child { color: #e6ebf2; font-weight: 600; font-variant-numeric: tabular-nums; }
+.simInspectorUnitBuffs, .simInspectorUnitDebuffs, .simInspectorUnitDots {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #9aa7ba;
+}
+.simInspectorUnitBuffs { color: #7fd18a; }
+.simInspectorUnitDebuffs, .simInspectorUnitDots { color: #e08a8a; }
+
+/* Effects Tab */
+.simInspectorEffectSection { margin-bottom: 16px; }
+.simInspectorEffectTitle { margin: 0 0 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #8bd39b; }
+.simInspectorEffectList { display: flex; flex-direction: column; gap: 6px; }
+.simInspectorEffect {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #101812;
+  border: 1px solid #2a4a35;
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+.simInspectorEffect.debuff { border-color: #5a3a3a; background: #2a1a1a; }
+.simInspectorEffectIcon { flex-shrink: 0; }
+.simInspectorEffectIconImg { width: 24px; height: 24px; border-radius: 4px; }
+.simInspectorEffectInfo { flex: 1; min-width: 0; }
+.simInspectorEffectName { font-size: 12px; font-weight: 600; color: #e6ebf2; }
+.simInspectorEffectMeta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 11px; color: #7b8595; margin-top: 2px; }
+.simInspectorEffectMods { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px; }
+.simMod { font-size: 11px; padding: 2px 6px; background: #1a2a1c; border: 1px solid #3a5a45; border-radius: 999px; color: #b8e5c8; }
+.simInspectorEffectShield { margin-top: 4px; font-size: 11px; color: #7ec8ff; }
+
+.simInspectorSnapshotSection { margin-bottom: 16px; }
+.simInspectorSnapshotTitle { margin: 0 0 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #8bd39b; }
+.simInspectorUnitState { background: #101812; border: 1px solid #2a4a35; border-radius: 6px; padding: 10px; margin-bottom: 8px; }
+.simInspectorUnitName { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.simInspectorUnitName .simUnitIcon { width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0; }
+.simInspectorUnitStats { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 4px 8px; font-size: 11px; }
+.simStatMini { display: flex; justify-content: space-between; gap: 8px; }
+.simStatMini span:first-child { color: #9aa7ba; }
+.simStatMini span:last-child { color: #e6ebf2; font-weight: 600; font-variant-numeric: tabular-nums; }
+.simInspectorUnitBuffs, .simInspectorUnitDebuffs, .simInspectorUnitDots { margin-top: 6px; font-size: 11px; color: #9aa7ba; }
+.simInspectorUnitBuffs { color: #7fd18a; }
+.simInspectorUnitDebuffs, .simInspectorUnitDots { color: #e08a8a; }
+
+.simInspectorEffectSection { margin-bottom: 16px; }
+.simInspectorEffectTitle { margin: 0 0 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #8bd39b; }
+.simInspectorEffectList { display: flex; flex-direction: column; gap: 6px; }
+.simInspectorEffect { display: flex; align-items: flex-start; gap: 10px; background: #101812; border: 1px solid #2a4a35; border-radius: 6px; padding: 8px 10px; }
+.simInspectorEffect.debuff { border-color: #5a3a3a; background: #2a1a1a; }
+.simInspectorEffectIcon { flex-shrink: 0; }
+.simInspectorEffectIconImg { width: 24px; height: 24px; border-radius: 4px; }
+.simInspectorEffectInfo { flex: 1; min-width: 0; }
+.simInspectorEffectName { font-size: 12px; font-weight: 600; color: #e6ebf2; }
+.simInspectorEffectMeta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 11px; color: #7b8595; margin-top: 2px; }
+.simInspectorEffectMods { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px; }
+.simMod { font-size: 11px; padding: 2px 6px; background: #1a2a1c; border: 1px solid #3a5a45; border-radius: 999px; color: #b8e5c8; }
+.simInspectorEffectShield { margin-top: 4px; font-size: 11px; color: #7ec8ff; }
+
+.simInspectorEffectMods { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px; }
+.simMod { font-size: 11px; padding: 2px 6px; background: #1a2a1c; border: 1px solid #3a5a45; border-radius: 999px; color: #b8e5c8; }
+.simInspectorEffectShield { margin-top: 4px; font-size: 11px; color: #7ec8ff; }
+
+/* Scrollbar styling */
+.simLogTimeline::-webkit-scrollbar,
+.simLogInspectorPane::-webkit-scrollbar,
+.simLogInspectorContent::-webkit-scrollbar {
+  width: 8px;
+}
+.simLogTimeline::-webkit-scrollbar-track,
+.simLogInspectorPane::-webkit-scrollbar-track,
+.simLogInspectorContent::-webkit-scrollbar-track {
+  background: #0a100d;
+}
+.simLogTimeline::-webkit-scrollbar-thumb,
+.simLogInspectorPane::-webkit-scrollbar-thumb,
+.simLogInspectorContent::-webkit-scrollbar-thumb {
+  background: #2a4a35;
+  border-radius: 4px;
+}
+.simLogTimeline::-webkit-scrollbar-thumb:hover,
+.simLogInspectorPane::-webkit-scrollbar-thumb:hover,
+.simLogInspectorContent::-webkit-scrollbar-thumb:hover {
+  background: #3a5a45;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .simLogWorkspace {
+    grid-template-columns: 1fr;
+  }
+  .simLogInspectorPane {
+    position: static;
+    max-height: none;
+    order: -1;
+  }
+}

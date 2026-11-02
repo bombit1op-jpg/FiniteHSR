@@ -10,15 +10,27 @@ import { runBattle, ENCOUNTER_PRESETS } from '../core/battle'
 import { resolveEncounter, type EncounterSpec, validateEncounter } from '../core/encounter'
 import { toTeamSpec } from './team'
 import { techniquesForRows } from './store'
-import { charIconUrl, elemIconUrl, iconNode, metaBadge, enemyIconUrl, charPortraitUrl, abilityIconUrl, gearBadge } from './icons'
+import { charIconUrl, elemIconUrl, iconNode, metaBadge, enemyIconUrl, charPortraitUrl, gearBadge, effectIconUrl, abilityIconUrl } from './icons'
 import { el } from './dom'
-import { charFinalStats } from '../core/charStats'
+
 import { withBusy, showStatus } from './shell'
 import { openEnemyPicker } from './enemyPicker'
-import type { DebugLevel, BattleEvent } from '../core/battlelog'
-import { EVENT_GROUPS } from '../core/battlelog'
+import { aggregateCombatActions, collectSnapshots, type CombatActionRecord, type CombatActionCategory } from './combatActionView'
+import type { DebugLevel, StateSnapshot } from '../core/battlelog'
 import type { Party } from '../core/party'
 import type { Simulator } from '../core/simulator'
+import { type EndgameMode, endgameVersions, endgameSetup, endgameSections } from '../core/endgame'
+
+/**
+ * Safe helper to get first character of a string for fallback icons.
+ * Handles undefined, null, empty strings, and non-string values.
+ */
+function safeInitial(value: unknown, fallback = '?'): string {
+  if (typeof value !== 'string') return fallback
+  const trimmed = value.trim()
+  if (!trimmed) return fallback
+  return trimmed.charAt(0).toUpperCase()
+}
 
 interface SimPanelHandle {
   root: HTMLElement
@@ -67,7 +79,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
   paramsSection.append(paramsContainer)
   leftCol.append(paramsSection)
 
-  // Mode toggle: preset vs custom
+  // Mode toggle: preset vs custom vs endgame
   const modeRow = el('div', 'encounterModeRow')
   const presetRadio = el('input') as HTMLInputElement
   presetRadio.type = 'radio'
@@ -86,7 +98,15 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
   customLabel.textContent = 'Свой энкаунтер'
   customLabel.prepend(customRadio)
 
-  modeRow.append(presetLabel, customLabel)
+  const endgameRadio = el('input') as HTMLInputElement
+  endgameRadio.type = 'radio'
+  endgameRadio.name = 'encounterMode'
+  endgameRadio.value = 'endgame'
+  const endgameLabel = el('label')
+  endgameLabel.textContent = 'Эндгейм (MoC/PF/AS/AA)'
+  endgameLabel.prepend(endgameRadio)
+
+  modeRow.append(presetLabel, customLabel, endgameLabel)
   paramsContainer.append(modeRow)
 
   // Encounter select (preset mode)
@@ -104,6 +124,28 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
   encounterSel.value = 'moc12'
   encounterLabel.append(encounterSel)
   paramsContainer.append(encounterLabel)
+
+  // Endgame stage select (endgame mode)
+  const endgameContainer = el('div', 'endgameStageContainer')
+  endgameContainer.style.display = 'none'
+  const endgameModeLabel = el('label', 'encounterSelectLabel')
+  endgameModeLabel.textContent = 'Режим'
+  const endgameModeSel = el('select') as HTMLSelectElement
+  for (const mode of ['MoC', 'PF', 'AS', 'AA']) {
+    const opt = el('option')
+    opt.value = mode
+    opt.textContent = mode
+    endgameModeSel.append(opt)
+  }
+  endgameModeLabel.append(endgameModeSel)
+  endgameContainer.append(endgameModeLabel)
+
+  const endgameStageLabel = el('label', 'encounterSelectLabel')
+  endgameStageLabel.textContent = 'Стадия'
+  const endgameStageSel = el('select') as HTMLSelectElement
+  endgameStageLabel.append(endgameStageSel)
+  endgameContainer.append(endgameStageLabel)
+  paramsContainer.append(endgameContainer)
 
   // --- Custom Encounter Builder ---
   const builderSection = section('Конструктор энкаунтера')
@@ -275,10 +317,52 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
   // Toggle handler
   function toggleBuilder() {
     const isCustom = customRadio.checked
-    encounterLabel.style.display = isCustom ? 'none' : ''
+    const isEndgame = endgameRadio.checked
+    encounterLabel.style.display = (isCustom || isEndgame) ? 'none' : ''
+    endgameContainer.style.display = isEndgame ? '' : 'none'
     builderSection.style.display = isCustom ? '' : 'none'
   }
-  presetRadio.onchange = customRadio.onchange = toggleBuilder
+  presetRadio.onchange = customRadio.onchange = endgameRadio.onchange = toggleBuilder
+
+  // Version selector (declared early for closure)
+  const endgameVersionLabel = el('label', 'encounterSelectLabel')
+  endgameVersionLabel.textContent = 'Версия'
+  const endgameVersionSel = el('select') as HTMLSelectElement
+  endgameVersionLabel.append(endgameVersionSel)
+  endgameContainer.insertBefore(endgameVersionLabel, endgameStageLabel)
+
+  // Endgame mode/version change handler
+  function updateEndgameStages() {
+    const mode = endgameModeSel.value as EndgameMode
+    const version = endgameVersionSel.value
+    if (!version) return
+    const sections = endgameSections(mode, version)
+    endgameStageSel.innerHTML = ''
+    for (const section of sections) {
+      const opt = el('option')
+      opt.value = section.id
+      opt.textContent = section.title
+      endgameStageSel.append(opt)
+    }
+  }
+
+  function updateEndgameVersions() {
+    const mode = endgameModeSel.value as EndgameMode
+    const versions = endgameVersions(mode)
+    endgameVersionSel.innerHTML = ''
+    for (const v of versions) {
+      const opt = el('option')
+      opt.value = v
+      opt.textContent = v
+      endgameVersionSel.append(opt)
+    }
+    endgameVersionSel.value = versions[0] || ''
+    updateEndgameStages()
+  }
+  endgameModeSel.onchange = updateEndgameVersions
+  endgameVersionSel.onchange = updateEndgameStages
+  // Initial populate
+  updateEndgameVersions()
 
   // Update cycles input when preset changes
   encounterSel.onchange = () => {
@@ -392,7 +476,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
           const portraitWrap = el('div', 'simSlotPortraitWrap')
           portraitWrap.append(iconNode(charPortraitUrl(slot.kitId), kit.name, {
             cls: 'simSlotPortrait', size: 80, fit: 'cover',
-            fallbackText: kit.name.charAt(0).toUpperCase(), tint: '#7fb3ff', title: kit.name,
+fallbackText: safeInitial(kit.name), tint: '#7fb3ff', title: kit.name,
           }))
           slotEl.append(portraitWrap)
 
@@ -468,7 +552,26 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     // Build encounter spec based on mode
     let encounterSpec: ReturnType<typeof resolveEncounter>
     let encounterId: string
-    if (customRadio.checked) {
+    let isEndgame = endgameRadio.checked
+    if (isEndgame) {
+      const mode = endgameModeSel.value as EndgameMode
+      const version = endgameVersionSel.value
+      const stageId = endgameStageSel.value
+      if (!version || !stageId) {
+        showStatus('Выберите версию и стадию эндгейма', 'error')
+        return
+      }
+      const battleSetup = endgameSetup(mode, version, stageId, team, { seed: parseInt(seedInp.value) || 42 })
+      if (!battleSetup || !battleSetup.encounter) {
+        showStatus('Не удалось построить эндгейм энкаунтер', 'error')
+        return
+      }
+      const enc = battleSetup.encounter
+      encounterSpec = resolveEncounter(typeof enc === 'string' ? { id: enc, mode: 'Endgame', waves: [[]], cycles: battleSetup.cycles } : enc)
+      encounterId = `${mode}_${version}_${stageId}`
+      // Override cycles from endgame setup
+      cyclesInp.value = String(battleSetup.cycles)
+    } else if (customRadio.checked) {
       const errs = validateCustomEncounter(customEncounter)
       if (errs.length > 0) {
         showStatus('Ошибка в энкаунтере: ' + errs.join('; '), 'error')
@@ -494,7 +597,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     // Cycles handling
     const cyclesInputVal = parseInt(cyclesInp.value)
     const cycles = Number.isFinite(cyclesInputVal) && cyclesInputVal > 0 ? cyclesInputVal : (ENCOUNTER_PRESETS[encounterSel.value]?.cycles ?? 8)
-    if (!customRadio.checked) {
+    if (!customRadio.checked && !isEndgame) {
       encounterSpec.cycles = cycles
     }
 
@@ -506,7 +609,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
 
     const setup = {
       team,
-      encounter: encounterId,
+      encounter: encounterId as string,
       enemy: encounterSpec.enemy,
       enemyWaves: encounterSpec.enemyWaves,
       cycles: encounterSpec.cycles ?? cycles,
@@ -525,12 +628,30 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     loading.textContent = 'Симуляция выполняется...'
     resultsContainer.append(loading)
 
-    let newSim: Simulator | null = null
-    try {
-      await withBusy('Симуляция боя', async () => {
-        await new Promise(r => requestAnimationFrame(r))
-        newSim = runBattle({ ...setup, log: { debug: debugLevel } })
-      })
+let newSim: Simulator | null = null
+      try {
+        await withBusy('Симуляция боя', async () => {
+          await new Promise(r => requestAnimationFrame(r))
+          newSim = runBattle({
+            ...setup,
+            log: {
+              debug: debugLevel,
+              // Configure snapshots for historical replay
+              snapshotOn: [
+                'ACTION_START',
+                'ACTION_END',
+                'DAMAGE_DEALT',
+                'BUFF_APPLIED',
+                'DEBUFF_APPLIED',
+                'HEAL_APPLIED',
+                'SHIELD_APPLIED',
+                'WEAKNESS_BREAK',
+                'DEATH',
+                'REVIVAL',
+              ],
+            },
+          })
+        })
 
       loading.remove()
       renderResults(newSim!, currentParty)
@@ -549,7 +670,11 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
   function renderResults(sim: Simulator, party: Party | undefined): void {
     resultsContainer.innerHTML = ''
 
-    // Summary
+    // Aggregate combat actions
+    const snapshots = collectSnapshots(sim.logger)
+    const combatActions = aggregateCombatActions(sim.logger.events, sim, snapshots)
+
+// Summary
     const summary = el('div', 'simSummary')
     const endReason = sim.endReason
     let resultBadge: HTMLElement
@@ -576,7 +701,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
       ['DMG / AV', Math.round(dmgPerAv).toLocaleString()],
       ['Длительность (AV)', sim.avElapsed.toFixed(1)],
       ['Циклы', sim.cycle.toString()],
-      ['Действий', sim.logger.actionId.toString()],
+      ['Действий', combatActions.length.toString()],
       ['Ходов', sim.logger.turn.toString()],
       ['Пробитий', sim.logger.events.filter(e => e.type === 'WEAKNESS_BREAK').length.toString()],
       ['Смертей', sim.logger.events.filter(e => e.type === 'DEATH').length.toString()],
@@ -598,7 +723,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     const dmgSection = section('Урон по персонажам')
     const dmgTable = el('table', 'simDmgTable')
     const thead = el('thead')
-    thead.innerHTML = '<tr><th>Персонаж</th><th>Урон</th><th>Доля</th><th>Атак</th></tr>'
+    thead.innerHTML = '<tr><th>Персонаж</th><th>Урон</th><th>Доля</th><th>Действий</th></tr>'
     dmgTable.append(thead)
     const tbody = el('tbody')
     const totalDmg = [...sim.ownerDamage.values()].reduce((a, b) => a + b, 0)
@@ -612,130 +737,23 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
       dmgCell.textContent = Math.round(dmg).toLocaleString()
       const shareCell = el('td')
       shareCell.textContent = totalDmg > 0 ? ((dmg / totalDmg) * 100).toFixed(1) + '%' : '0%'
-      // Attack count from ownerSkill
-      let attackCount = 0
-      const skillMap = sim.ownerSkill.get(ownerId)
-      if (skillMap) {
-        attackCount = [...skillMap.values()].reduce((a, b) => a + b, 0)
+      // Action count from CombatActionRecord
+      let actionCount = 0
+      for (const action of combatActions) {
+        if (action.sourceId === ownerId) actionCount++
       }
       const attacksCell = el('td')
-      attacksCell.textContent = attackCount.toString()
+      attacksCell.textContent = actionCount.toString()
       row.append(nameCell, dmgCell, shareCell, attacksCell)
       tbody.append(row)
     }
-    dmgTable.append(tbody)
-    dmgSection.append(dmgTable)
     resultsContainer.append(dmgSection)
-
-    // Pre-battle stats
-    const statsSection = section('Характеристики перед боем')
-    const statsGrid = el('div', 'simStatsGrid')
-    if (party) {
-      for (const slot of party.slots.filter(s => s.kitId)) {
-        const spec = toTeamSpec(slot)
-        const stats = charFinalStats(spec)
-        if (!stats) continue
-        const card = el('div', 'simCharStatsCard')
-        const name = el('div', 'simCharStatsName')
-        name.textContent = KITS.find(k => k.id === slot.kitId)?.name ?? slot.kitId
-        card.append(name)
-        const grid = el('div', 'simCharStatsInner')
-        const statsToShow = [
-          ['HP', Math.round(stats.hp).toLocaleString()],
-          ['ATK', Math.round(stats.atk).toLocaleString()],
-          ['DEF', Math.round(stats.def).toLocaleString()],
-          ['SPD', (stats.spd * 10 / 10).toFixed(1)],
-          ['CRIT Rate', (stats.critRate * 100).toFixed(1) + '%'],
-          ['CRIT DMG', (stats.critDmg * 100).toFixed(1) + '%'],
-          ['Break Effect', (stats.be * 100).toFixed(1) + '%'],
-          ['EHR', (stats.ehr * 100).toFixed(1) + '%'],
-          ['Eff RES', (stats.effRes * 100).toFixed(1) + '%'],
-          ['Max Energy', Math.round(stats.energyMax).toString()],
-          ['Out Healing', (stats.outHeal * 100).toFixed(1) + '%'],
-        ]
-        if (stats.elation) statsToShow.push(['Elation DMG', (stats.elation * 100).toFixed(1) + '%'])
-        for (const [label, value] of statsToShow) {
-          const row = el('div', 'simCharStatRow')
-          const labelEl = el('span', 'simCharStatLabel')
-          labelEl.textContent = label
-          const valEl = el('span', 'simCharStatValue')
-          valEl.textContent = value
-          row.append(labelEl, valEl)
-          grid.append(row)
-        }
-        card.append(grid)
-        statsGrid.append(card)
-      }
-    }
-    statsSection.append(statsGrid)
-    resultsContainer.append(statsSection)
-
-    // Battlefield HUD
-    const battlefieldSection = section('Поле боя')
-    const battlefield = el('div', 'simBattlefield')
-    battlefieldSection.append(battlefield)
-    resultsContainer.append(battlefieldSection)
-    renderBattlefield(sim, battlefield)
-    // Store reference for historical replay
-    ;(window as any).__simBattlefield = { sim, battlefield, renderBattlefield }
-
-    // Combat Log - Interactive
+    // Combat Log - Interactive with 4 categories
     const logSection = section('Боевой журнал')
     const logContainer = el('div', 'simLogContainer')
-    renderInteractiveCombatLog(sim, logContainer)
+    renderCombatActionLog(sim, combatActions, snapshots, logContainer)
     logSection.append(logContainer)
     resultsContainer.append(logSection)
-
-    // Damage Breakdown - use logger.damage array (DmgTrace)
-    const dmgBreakSection = section('Разбивка урона')
-    const dmgTraces = sim.logger.damage
-    if (dmgTraces.length) {
-      const list = el('div', 'simDmgBreakList')
-      for (const entry of dmgTraces) {
-        const item = el('div', 'simDmgBreakItem')
-        const header = el('div', 'simDmgBreakHeader')
-        header.textContent = `${entry.who} → ${entry.foe} (${entry.dmg.toLocaleString()})`
-        item.append(header)
-        const details = el('div', 'simDmgBreakDetails')
-        const parts = [
-          ['Base Stat', Math.round(entry.stat).toLocaleString()],
-          ['Multiplier', entry.mult.toFixed(4)],
-          ['Flat Addition', entry.flat.toLocaleString()],
-          ['Final Damage', Math.round(entry.dmg).toLocaleString()],
-          ['Crit', entry.crit ? 'Да' : 'Нет'],
-          ['Crit Rate', (entry.critRate * 100).toFixed(1) + '%'],
-          ['Crit DMG', (entry.critDmg * 100).toFixed(1) + '%'],
-          ['Crit Bonus', (entry.critBonus * 100).toFixed(1) + '%'],
-          ['DMG Boost', (entry.boost * 100).toFixed(1) + '%'],
-          ['Weaken', (entry.weaken * 100).toFixed(1) + '%'],
-          ['DEF Pen', (entry.defPen * 100).toFixed(1) + '%'],
-          ['RES', (entry.res * 100).toFixed(1) + '%'],
-          ['RES Pen', (entry.resPen * 100).toFixed(1) + '%'],
-          ['Vulnerability', (entry.vuln * 100).toFixed(1) + '%'],
-          ['Mitigation', (entry.mit * 100).toFixed(1) + '%'],
-          ['Broken', entry.broken ? 'Да' : 'Нет'],
-          ['vsBroken', (entry.vsBroken * 100).toFixed(1) + '%'],
-          ['No Boost', entry.noBoost ? 'Да' : 'Нет'],
-        ]
-        for (const [label, value] of parts) {
-          if (value === '—' || value === undefined) continue
-          const row = el('div', 'simDmgBreakRow')
-          const labelEl = el('span')
-          labelEl.textContent = label
-          const valEl = el('span')
-          valEl.textContent = value
-          row.append(labelEl, valEl)
-          details.append(row)
-        }
-        item.append(details)
-        list.append(item)
-      }
-      dmgBreakSection.append(list)
-    } else {
-      dmgBreakSection.append(el('em', 'dim'))
-      dmgBreakSection.lastChild!.textContent = 'Нет данных'
-    }
-    resultsContainer.append(dmgBreakSection)
 
     // Debug Trace (collapsed)
     const traceSection = section('Технический trace')
@@ -803,10 +821,12 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     }
     alliesSection.append(alliesGrid)
 
-    // Resources bar
-    const resourcesSection = el('div', 'simBattlefieldResources')
-    resourcesSection.append(createResourceBarFromSnapshot(sp, maxSp, avElapsed, cycle, wave, waveCount))
-    alliesSection.append(resourcesSection)
+    // Resources bar - only show for historical replay (when snapshot is provided)
+    if (snapshot) {
+      const resourcesSection = el('div', 'simBattlefieldResources')
+      resourcesSection.append(createResourceBarFromSnapshot(sp, maxSp, avElapsed, cycle, wave, waveCount))
+      alliesSection.append(resourcesSection)
+    }
 
     // Enemies
     const enemiesSection = el('div', 'simBattlefieldSide')
@@ -847,7 +867,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
       if (kit) {
         header.append(iconNode(charIconUrl(unit.kitId), kit.name, {
           cls: 'simUnitIcon', size: 40, fit: 'cover',
-          fallbackText: kit.name.charAt(0).toUpperCase(), tint: '#7fb3ff', title: kit.name,
+          fallbackText: safeInitial(kit.name), tint: '#7fb3ff', title: kit.name,
         }))
       }
       const name = el('span', 'simUnitName')
@@ -861,7 +881,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     } else {
       header.append(iconNode(enemyIconUrl(unit.name), unit.name, {
         cls: 'simUnitIcon', size: 40, fit: 'cover',
-        fallbackText: unit.name.charAt(0).toUpperCase(), tint: '#f5d76e', title: unit.name,
+        fallbackText: safeInitial(unit.name), tint: '#f5d76e', title: unit.name,
       }))
       const name = el('span', 'simUnitName')
       name.textContent = unit.name
@@ -939,7 +959,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
         for (const elem of unit.weaknesses) {
           weakWrap.append(iconNode(elemIconUrl(elem), elem, {
             cls: 'simWeaknessIcon', size: 20, fit: 'contain',
-            fallbackText: elem.charAt(0), tint: '#7fb3ff', title: elem,
+            fallbackText: safeInitial(elem), tint: '#7fb3ff', title: elem,
           }))
         }
         card.append(weakWrap)
@@ -1011,11 +1031,11 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
   function createEffectIconFromSnapshot(effect: any, isBuff: boolean): HTMLElement {
     const wrap = el('div', `simEffectIcon ${isBuff ? 'buff' : 'debuff'}`)
     wrap.title = `${effect.name} (стаков: ${effect.stacks ?? 1}, ходов: ${effect.turns ?? '∞'})`
-    // Try to get icon
-    const iconUrl = abilityIconUrl(effect.name) || enemyIconUrl(effect.name)
+    // Use proper effect icon catalog
+    const iconUrl = effectIconUrl(effect.name)
     wrap.append(iconNode(iconUrl, effect.name, {
       cls: 'simEffectIconImg', size: 24, fit: 'contain',
-      fallbackText: effect.name.charAt(0).toUpperCase(), tint: isBuff ? '#7fd18a' : '#e08a8a', title: effect.name,
+      fallbackText: safeInitial(effect.name), tint: isBuff ? '#7fd18a' : '#e08a8a', title: effect.name,
     }))
     if ((effect.stacks ?? 1) > 1) {
       const stackBadge = el('span', 'simEffectStack')
@@ -1076,7 +1096,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
   }
 
   // Interactive Combat Log with filters and event inspector
-  function renderInteractiveCombatLog(sim: Simulator, container: HTMLElement): void {
+  function renderCombatActionLog(sim: Simulator, combatActions: CombatActionRecord[], snapshots: StateSnapshot[], container: HTMLElement): void {
     container.innerHTML = ''
 
     // Filter bar
@@ -1088,22 +1108,11 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
 
     const filterSelect = el('select', 'simLogFilter') as HTMLSelectElement
     const filterOptions = [
-      ['all', 'Все события'],
-      ['actions', 'Действия'],
-      ['damage', 'Урон'],
-      ['buffs', 'Баффы'],
-      ['debuffs', 'Дебаффы'],
-      ['dot', 'DoT'],
-      ['heal', 'Лечение'],
-      ['shield', 'Щиты'],
-      ['break', 'Пробития'],
-      ['energy', 'Энергия'],
-      ['sp', 'Очки навыка'],
-      ['timeline', 'Timeline'],
-      ['summon', 'Призовы'],
-      ['enemy', 'Враги'],
-      ['state', 'Состояния'],
-      ['death', 'Смерть/Воскрешение'],
+      ['all', 'Все действия'],
+      ['attack', 'Атаки'],
+      ['bonusAttack', 'Бонус-атаки'],
+      ['extraTurn', 'Доп. ходы'],
+      ['ultimate', 'Ультимейты'],
     ]
     for (const [val, label] of filterOptions) {
       const opt = el('option')
@@ -1128,180 +1137,248 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
       characterFilter.append(opt)
     }
 
-    const actionIdFilter = el('input', 'simLogActionFilter') as HTMLInputElement
-    actionIdFilter.type = 'number'
-    actionIdFilter.placeholder = 'Action ID'
-    actionIdFilter.min = '0'
-    actionIdFilter.style.width = '100px'
-
-    const avFromFilter = el('input', 'simLogAvFromFilter') as HTMLInputElement
-    avFromFilter.type = 'number'
-    avFromFilter.placeholder = 'AV от'
-    avFromFilter.min = '0'
-    avFromFilter.step = '0.1'
-    avFromFilter.style.width = '80px'
-
-    const avToFilter = el('input', 'simLogAvToFilter') as HTMLInputElement
-    avToFilter.type = 'number'
-    avToFilter.placeholder = 'AV до'
-    avToFilter.min = '0'
-    avToFilter.step = '0.1'
-    avToFilter.style.width = '80px'
-
     const clearFiltersBtn = el('button', 'simLogClearBtn btn-secondary')
     clearFiltersBtn.textContent = 'Сбросить фильтры'
 
-    filterBar.append(searchInput, filterSelect, characterFilter, actionIdFilter, avFromFilter, avToFilter, clearFiltersBtn)
+    filterBar.append(searchInput, filterSelect, characterFilter, clearFiltersBtn)
     container.append(filterBar)
 
-    // Event list
-    const eventList = el('div', 'simLogEventList')
-    container.append(eventList)
+    // Main content area - two columns
+    const workspace = el('div', 'simLogWorkspace')
+    container.append(workspace)
 
-    // Event inspector panel
+    // Left: Timeline
+    const timelinePane = el('div', 'simLogTimelinePane')
+    const timeline = el('div', 'simLogTimeline')
+    timelinePane.append(timeline)
+    workspace.append(timelinePane)
+
+    // Right: Inspector
+    const inspectorPane = el('div', 'simLogInspectorPane')
     const inspectorPanel = el('div', 'simLogInspector')
     inspectorPanel.style.display = 'none'
-    container.append(inspectorPanel)
-
-    // Build action groups
-    const actionGroups = new Map<number, BattleEvent[]>()
-    for (const event of sim.logger.events) {
-      const actionId = event.actionId
-      if (!actionGroups.has(actionId)) actionGroups.set(actionId, [])
-      actionGroups.get(actionId)!.push(event)
-    }
+    inspectorPane.append(inspectorPanel)
+    workspace.append(inspectorPane)
 
     // State for filters
     let currentFilters = {
       search: '',
       type: 'all' as string,
       character: 'all' as string,
-      actionId: 0 as number,
-      avFrom: 0 as number,
-      avTo: Infinity as number,
     }
 
     function applyFilters(): void {
+      timeline.innerHTML = ''
 
-      for (const [actionId, events] of actionGroups) {
-        // Filter action group
-        const groupEvents = events.filter(e => {
-          if (currentFilters.search && !JSON.stringify(e).toLowerCase().includes(currentFilters.search.toLowerCase())) return false
-          if (currentFilters.type !== 'all') {
-            const group = EVENT_GROUPS[currentFilters.type] ?? [currentFilters.type as any]
-            if (!group.includes(e.type)) return false
+      const filteredActions = combatActions.filter(action => {
+        if (currentFilters.search) {
+          const searchLower = currentFilters.search.toLowerCase()
+          const abilityName = action.abilityName?.toLowerCase() || ''
+          const sourceName = action.sourceName?.toLowerCase() || ''
+          const targetNames = action.targetNames?.join(' ').toLowerCase() || ''
+          if (!abilityName.includes(searchLower) && !sourceName.includes(searchLower) && !targetNames.includes(searchLower)) {
+            return false
           }
-          if (currentFilters.character !== 'all' && e.sourceId !== currentFilters.character && e.targetId !== currentFilters.character) return false
-          if (currentFilters.actionId && e.actionId !== currentFilters.actionId) return false
-          if (e.time < currentFilters.avFrom || e.time > currentFilters.avTo) return false
-          return true
-        })
-
-        if (groupEvents.length === 0) continue
-
-        // Create action group header
-        const groupEl = el('div', 'simLogActionGroup')
-        const header = el('div', 'simLogActionHeader')
-        const firstEvent = groupEvents[0]
-        const sourceUnit = sim.roster.find(u => u.id === firstEvent.sourceId)
-        const targetUnit = sim.roster.find(u => u.id === firstEvent.targetId)
-        const sourceName = sourceUnit?.name ?? firstEvent.source ?? '—'
-        const targetName = targetUnit?.name ?? firstEvent.target ?? '—'
-
-        header.innerHTML = `
-          <span class="simLogActionId">ACT ${actionId}</span>
-          <span class="simLogActionAv">AV ${firstEvent.time.toFixed(1)}</span>
-          <span class="simLogActionTurn">Turn ${firstEvent.turn}</span>
-          <span class="simLogActionSource">${sourceName}</span>
-          <span class="simLogActionArrow">→</span>
-          <span class="simLogActionTarget">${targetName}</span>
-          <span class="simLogActionType">${firstEvent.type}</span>
-        `
-        groupEl.append(header)
-
-        // Events in this action
-        const eventsContainer = el('div', 'simLogActionEvents')
-        for (const event of groupEvents) {
-          const eventEl = createEventElement(event, sim, () => selectEvent(event))
-          eventsContainer.append(eventEl)
         }
-        groupEl.append(eventsContainer)
-        eventList.append(groupEl)
+        if (currentFilters.type !== 'all' && action.category !== currentFilters.type) {
+          return false
+        }
+        if (currentFilters.character !== 'all' &&
+            action.sourceId !== currentFilters.character &&
+            !action.targetIds.includes(currentFilters.character)) {
+          return false
+        }
+        return true
+      })
+
+      // Group by category for display
+      const categoryOrder: CombatActionCategory[] = ['attack', 'bonusAttack', 'extraTurn', 'ultimate']
+      const categoryLabels: Record<CombatActionCategory, string> = {
+        attack: 'Атаки',
+        bonusAttack: 'Бонус-атаки',
+        extraTurn: 'Дополнительные ходы',
+        ultimate: 'Ультимейты',
+        system: 'Системные',
+      }
+      const categoryColors: Record<CombatActionCategory, string> = {
+        attack: '#3b82f6',
+        bonusAttack: '#f59e0b',
+        extraTurn: '#22c55e',
+        ultimate: '#a855f7',
+        system: '#6b7280',
+      }
+
+      for (const category of categoryOrder) {
+        const categoryActions = filteredActions.filter(a => a.category === category)
+        if (categoryActions.length === 0) continue
+
+        const categoryHeader = el('div', 'simLogCategoryHeader')
+        categoryHeader.style.borderLeftColor = categoryColors[category]
+        categoryHeader.innerHTML = `
+          <span class="simLogCategoryBadge" style="background: ${categoryColors[category]}">${categoryLabels[category]}</span>
+          <span class="simLogCategoryCount">${categoryActions.length}</span>
+        `
+        timeline.append(categoryHeader)
+
+        for (const action of categoryActions) {
+          const actionEl = createActionCard(action, sim, () => selectAction(action))
+          timeline.append(actionEl)
+        }
       }
     }
 
-    function createEventElement(event: BattleEvent, sim: Simulator, onClick: () => void): HTMLElement {
-      const sourceUnit = sim.roster.find(u => u.id === event.sourceId)
-      const targetUnit = sim.roster.find(u => u.id === event.targetId)
-      const sourceIcon = sourceUnit ? (sourceUnit.side === 'ally' ? charIconUrl(sourceUnit.kitId!) : enemyIconUrl(sourceUnit.name)) : undefined
-      const targetIcon = targetUnit ? (targetUnit.side === 'ally' ? charIconUrl(targetUnit.kitId!) : enemyIconUrl(targetUnit.name)) : undefined
+    function createActionCard(action: CombatActionRecord, sim: Simulator, onClick: () => void): HTMLElement {
+      const card = el('div', `simCombatActionCard ${action.category}`)
+      card.style.borderLeftColor = getCategoryColor(action.category)
+      card.style.cursor = 'pointer'
 
-      const el_event = el('div', `simLogEvent ${event.type.toLowerCase().replace(/_/g, '-')}`)
-      el_event.style.cursor = 'pointer'
-      // Store event reference for highlighting
-      ;(el_event as any).__battleEvent = event
+      const sourceUnit = action.sourceId ? sim.roster.find(u => u.id === action.sourceId) : undefined
+      const sourceIcon = sourceUnit ? (sourceUnit.side === 'ally'
+        ? charIconUrl(sourceUnit.kitId!)
+        : enemyIconUrl(sourceUnit.name)) : undefined
 
-      const payloadStr = event.payload ? JSON.stringify(event.payload) : ''
-      const hasPayload = payloadStr.length > 2
+      // Determine ability icon
+      let abilityIconUrl_: string | undefined
+      if (action.abilityId) {
+        abilityIconUrl_ = abilityIconUrl(action.abilityName || action.abilityId)
+      }
 
-      el_event.innerHTML = `
-        <span class="simLogEventTime">[AV ${event.time.toFixed(1)}]</span>
-        <span class="simLogEventId">EVT ${event.eventId}</span>
-        ${sourceIcon ? `<span class="simLogEventSourceIcon">${iconNode(sourceIcon, sourceUnit!.name, { cls: 'simLogEventIcon', size: 16, fit: 'contain', fallbackText: sourceUnit!.name.charAt(0), tint: '#7fb3ff', title: sourceUnit!.name })}</span>` : ''}
-        <span class="simLogEventSource">${sourceUnit?.name ?? event.source ?? '—'}</span>
-        <span class="simLogEventArrow">→</span>
-        ${targetIcon ? `<span class="simLogEventTargetIcon">${iconNode(targetIcon, targetUnit!.name, { cls: 'simLogEventIcon', size: 16, fit: 'contain', fallbackText: targetUnit!.name.charAt(0), tint: '#f5d76e', title: targetUnit!.name })}</span>` : ''}
-        <span class="simLogEventTarget">${targetUnit?.name ?? event.target ?? '—'}</span>
-        <span class="simLogEventType">${event.type}</span>
-        ${event.attackType ? `<span class="simLogEventAbility">${event.attackType}</span>` : ''}
-        ${event.element ? `<span class="simLogEventElement">${event.element}</span>` : ''}
-        ${hasPayload ? `<span class="simLogEventPayload">${payloadStr.slice(0, 100)}${payloadStr.length > 100 ? '...' : ''}</span>` : ''}
+      const targetIcons = action.targetIds.map(id => {
+        const unit = sim.roster.find(u => u.id === id)
+        if (!unit) return ''
+        const iconUrl = unit.side === 'ally' ? charIconUrl(unit.kitId!) : enemyIconUrl(unit.name)
+        return iconNode(iconUrl, unit.name, {
+          cls: 'simActionTargetIcon', size: 24, fit: 'contain',
+          fallbackText: safeInitial(unit.name), tint: unit.side === 'ally' ? '#7fb3ff' : '#f5d76e', title: unit.name,
+        }).outerHTML
+      }).join('')
+
+      const totalDamage = action.hits.reduce((sum, h) => sum + h.damage, 0)
+      const critHits = action.hits.filter(h => h.crit).length
+      const hasBreak = action.hits.some(h => h.breakdown?.broken)
+
+      const categoryLabels: Record<CombatActionCategory, string> = {
+        attack: 'Атака',
+        bonusAttack: 'Бонус-атака',
+        extraTurn: 'Доп. ход',
+        ultimate: 'Ультимейт',
+        system: 'Система',
+      }
+
+      card.innerHTML = `
+        <div class="simActionHeader">
+          <span class="simActionCategory" style="background: ${getCategoryColor(action.category)}">${categoryLabels[action.category] || action.category}</span>
+          <span class="simActionMeta">AV ${action.av.toFixed(1)} | Turn ${action.turn}</span>
+        </div>
+          <div class="simActionSource">
+            ${sourceIcon ? `<span class="simActionSourceIcon">${iconNode(sourceIcon, action.sourceName, { cls: 'simActionIcon', size: 32, fit: 'contain', fallbackText: safeInitial(action.sourceName), tint: '#7fb3ff', title: action.sourceName })}</span>` : ''}
+            <div class="simActionSourceInfo">
+              <span class="simActionSourceName">${action.sourceName}</span>
+              <span class="simActionAbility">${abilityIconUrl_ ? `<span class="simActionAbilityIcon">${iconNode(abilityIconUrl_, action.abilityName || action.abilityId || '?', { cls: 'simActionAbilityIconImg', size: 20, fit: 'contain', fallbackText: safeInitial(action.abilityName || action.abilityId || '?'), tint: '#8fd694', title: action.abilityName || action.abilityId || '?' })}</span>` : ''}<span class="simActionAbilityName">${action.abilityName || 'Атака'}</span></div>
+            </div>
+          </div>
+          <div class="simActionTargets">${targetIcons}</div>
+          <div class="simActionSummary">
+            <span class="simActionDamage">${totalDamage > 0 ? totalDamage.toLocaleString() : '—'}</span>
+            <span class="simActionHits">${action.hits.length} попад.${critHits > 0 ? ` (${critHits} крит)` : ''}${hasBreak ? ' | Пробитие' : ''}</span>
+            <span class="simActionEffects">${action.effects.buffs.length + action.effects.debuffs.length + action.effects.dots.length + action.effects.shields.length + action.effects.heals.length} эфф.</span>
+          </div>
+        </div>
       `
 
-      el_event.onclick = onClick
-      return el_event
+      card.onclick = onClick
+      return card
     }
 
-    function selectEvent(event: BattleEvent): void {
-      renderInspector(event, sim)
+    function getCategoryColor(category: CombatActionCategory): string {
+      const colors: Record<CombatActionCategory, string> = {
+        attack: '#3b82f6',
+        bonusAttack: '#f59e0b',
+        extraTurn: '#22c55e',
+        ultimate: '#a855f7',
+        system: '#6b7280',
+      }
+      return colors[category] || '#6b7280'
+    }
+
+    function selectAction(action: CombatActionRecord): void {
+      // const selectedAction = action
+      renderActionInspector(action, sim)
       inspectorPanel.style.display = ''
-      // Highlight selected event
-      for (const el of eventList.querySelectorAll('.simLogEvent')) {
-        const ev = (el as any).__battleEvent
-        el.classList.toggle('selected', ev === event)
+
+      // Highlight selected action
+      for (const el of timeline.querySelectorAll('.simCombatActionCard')) {
+        el.classList.toggle('selected', (el as any).__action === action)
       }
 
-      // Find snapshot for this event and render historical battlefield
-      const snapshotEvent = sim.logger.events.find(e => e.type === 'STATE_SNAPSHOT' && e.actionId === event.actionId && e.time <= event.time)
-      if (snapshotEvent && snapshotEvent.payload.state) {
+      // Render historical battlefield
+      if (action.afterSnapshot) {
         const battlefieldContainer = document.querySelector('.simBattlefield') as HTMLElement
         if (battlefieldContainer) {
-          renderBattlefield(sim, battlefieldContainer, snapshotEvent.payload.state)
+          renderBattlefield(sim, battlefieldContainer, action.afterSnapshot)
+        }
+      } else if (action.beforeSnapshot) {
+        const battlefieldContainer = document.querySelector('.simBattlefield') as HTMLElement
+        if (battlefieldContainer) {
+          renderBattlefield(sim, battlefieldContainer, action.beforeSnapshot)
         }
       }
     }
 
-    function renderInspector(event: BattleEvent, sim: Simulator): void {
+    function renderActionInspector(action: CombatActionRecord, sim: Simulator): void {
       inspectorPanel.innerHTML = ''
-      const sourceUnit = sim.roster.find(u => u.id === event.sourceId)
-      const targetUnit = sim.roster.find(u => u.id === event.targetId)
 
       const header = el('div', 'simLogInspectorHeader')
       header.innerHTML = `
-        <h4>Event Inspector</h4>
-        <span class="simLogInspectorId">EVT ${event.eventId} | ACT ${event.actionId} | Turn ${event.turn} | AV ${event.time.toFixed(1)}</span>
+        <h4>Инспектор действия</h4>
+        <span class="simLogInspectorId">${action.category} | AV ${action.av.toFixed(1)} | Turn ${action.turn} | ACT ${action.actionId}</span>
       `
       inspectorPanel.append(header)
 
+      const tabs = el('div', 'simInspectorTabs')
+      const tabAction = el('button', 'simInspectorTab active')
+      tabAction.textContent = 'Действие'
+      const tabState = el('button', 'simInspectorTab')
+      tabState.textContent = 'Состояние'
+      const tabEffects = el('button', 'simInspectorTab')
+      tabEffects.textContent = 'Эффекты'
+      tabs.append(tabAction, tabState, tabEffects)
+      inspectorPanel.append(tabs)
+
+      const content = el('div', 'simInspectorContent')
+      inspectorPanel.append(content)
+
+      function showTab(tab: string): void {
+        tabAction.classList.toggle('active', tab === 'action')
+        tabState.classList.toggle('active', tab === 'state')
+        tabEffects.classList.toggle('active', tab === 'effects')
+        content.innerHTML = ''
+        if (tab === 'action') renderActionTab(action, sim, content)
+        else if (tab === 'state') renderStateTab(action, sim, content)
+        else if (tab === 'effects') renderEffectsTab(action, sim, content)
+      }
+
+      tabAction.onclick = () => showTab('action')
+      tabState.onclick = () => showTab('state')
+      tabEffects.onclick = () => showTab('effects')
+
+      showTab('action')
+    }
+
+    function renderActionTab(action: CombatActionRecord, sim: Simulator, content: HTMLElement): void {
       const grid = el('div', 'simLogInspectorGrid')
 
       const fields = [
-        ['Type', event.type],
-        ['Source', sourceUnit?.name ?? event.source ?? '—'],
-        ['Target', targetUnit?.name ?? event.target ?? '—'],
-        ['Attack Type', event.attackType ?? '—'],
-        ['Element', event.element ?? '—'],
-        ['Trace ID', event.traceId ?? '—'],
+        ['Категория', action.category],
+        ['AV', action.av.toFixed(1)],
+        ['Ход', action.turn.toString()],
+        ['Исполнитель', action.sourceName],
+        ['Способность', action.abilityName || '—'],
+        ['Слот', action.abilitySlot || '—'],
+        ['Всего урона', action.hits.reduce((s, h) => s + h.damage, 0).toLocaleString()],
+        ['Попаданий', action.hits.length.toString()],
+        ['Критические', action.hits.filter(h => h.crit).length.toString()],
+        ['Пробитий', action.hits.filter(h => h.breakdown?.broken).length.toString()],
       ]
 
       for (const [label, value] of fields) {
@@ -1315,75 +1392,243 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
       }
 
       // Provenance
-      if (event.provenance) {
+      if (action.provenance) {
         const provRow = el('div', 'simLogInspectorRow')
         const provLabel = el('span', 'simLogInspectorLabel')
-        provLabel.textContent = 'Provenance'
+        provLabel.textContent = 'Источник'
         const provValue = el('span', 'simLogInspectorValue')
-        provValue.textContent = `${event.provenance.sourceKind} ${event.provenance.abilityId ? `(${event.provenance.abilityId})` : ''} ${event.provenance.abilitySlot ? `[${event.provenance.abilitySlot}]` : ''}`
+        provValue.textContent = `${action.provenance.sourceKind} ${action.provenance.abilityId ? `(${action.provenance.abilityId})` : ''} ${action.provenance.abilitySlot ? `[${action.provenance.abilitySlot}]` : ''} ${action.provenance.triggeredByUnitName ? `→ ${action.provenance.triggeredByUnitName}` : ''}`
         provRow.append(provLabel, provValue)
         grid.append(provRow)
       }
 
-      // Payload
-      if (event.payload && Object.keys(event.payload).length > 0) {
-        const payloadRow = el('div', 'simLogInspectorRow')
-        payloadRow.style.gridColumn = '1 / -1'
-        const payloadLabel = el('span', 'simLogInspectorLabel')
-        payloadLabel.textContent = 'Payload'
-        const payloadValue = el('pre', 'simLogInspectorPayload')
-        payloadValue.textContent = JSON.stringify(event.payload, null, 2)
-        payloadRow.append(payloadLabel, payloadValue)
-        grid.append(payloadRow)
+      // Targets
+      if (action.targetNames.length > 0) {
+        const targetRow = el('div', 'simLogInspectorRow')
+        const targetLabel = el('span', 'simLogInspectorLabel')
+        targetLabel.textContent = 'Цели'
+        const targetValue = el('span', 'simLogInspectorValue')
+        targetValue.textContent = action.targetNames.join(', ')
+        targetRow.append(targetLabel, targetValue)
+        grid.append(targetRow)
       }
 
-      // Find snapshot for this event
-      const snapshotEvent = sim.logger.events.find(e => e.type === 'STATE_SNAPSHOT' && e.actionId === event.actionId && e.time <= event.time)
-      if (snapshotEvent && snapshotEvent.payload.state) {
-        const snapRow = el('div', 'simLogInspectorRow')
-        snapRow.style.gridColumn = '1 / -1'
-        const snapLabel = el('span', 'simLogInspectorLabel')
-        snapLabel.textContent = 'State Snapshot (at this moment)'
-        const snapValue = el('div', 'simLogInspectorSnapshot')
-        const snap = snapshotEvent.payload.state as any
-        if (sourceUnit && snap.units[sourceUnit.id]) {
-          const u = snap.units[sourceUnit.id]
-          snapValue.innerHTML = `
-            <strong>Source (${sourceUnit.name}):</strong> HP ${u.hp}/${u.maxHp} | Energy ${u.energy}/${u.maxEnergy} | AV ${u.av} | Toughness ${u.toughness}/${u.maxToughness} | Broken: ${u.broken}
-            <br>Buffs: ${u.buffs.map((b: any) => `${b.name}x${b.stacks}@${b.turns}`).join(', ') || '—'}
-            <br>Debuffs: ${u.debuffs.map((b: any) => `${b.name}x${b.stacks}@${b.turns}`).join(', ') || '—'}
+      // Hits detail
+      if (action.hits.length > 0) {
+        const hitsRow = el('div', 'simLogInspectorRow')
+        hitsRow.style.gridColumn = '1 / -1'
+        const hitsLabel = el('span', 'simLogInspectorLabel')
+        hitsLabel.textContent = 'Попадания'
+        const hitsContainer = el('div', 'simInspectorHits')
+
+        for (let i = 0; i < action.hits.length; i++) {
+          const hit = action.hits[i]
+          const targetUnit = hit.targetId ? sim.roster.find(u => u.id === hit.targetId) : undefined
+          const hitEl = el('div', 'simInspectorHit')
+          hitEl.innerHTML = `
+            <div class="simInspectorHitHeader">
+              <span class="simInspectorHitTarget">${targetUnit?.name || hit.targetName || hit.targetId}</span>
+              <span class="simInspectorHitDamage">${hit.damage.toLocaleString()}${hit.crit ? ' <span class="crit">CRIT</span>' : ''}</span>
+            </div>
           `
+          if (hit.breakdown) {
+            const breakdownEl = el('div', 'simInspectorHitBreakdown')
+            breakdownEl.innerHTML = `
+              <div class="simInspectorBreakdownRow"><span>Базовая стата</span><span>${Math.round(hit.breakdown.stat).toLocaleString()}</span></div>
+              <div class="simInspectorBreakdownRow"><span>Множитель</span><span>${hit.breakdown.mult.toFixed(4)}</span></div>
+              <div class="simInspectorBreakdownRow"><span>Плоское</span><span>${hit.breakdown.flat.toLocaleString()}</span></div>
+              <div class="simInspectorBreakdownRow"><span>Крит. шанс</span><span>${(hit.breakdown.critRate * 100).toFixed(1)}%</span></div>
+              <div class="simInspectorBreakdownRow"><span>Крит. урон</span><span>${(hit.breakdown.critDmg * 100).toFixed(1)}%</span></div>
+              <div class="simInspectorBreakdownRow"><span>Буст</span><span>${(hit.breakdown.boost * 100).toFixed(1)}%</span></div>
+              <div class="simInspectorBreakdownRow"><span>Ослабление</span><span>${(hit.breakdown.weaken * 100).toFixed(1)}%</span></div>
+              <div class="simInspectorBreakdownRow"><span>Пробив. DEF</span><span>${(hit.breakdown.defPen * 100).toFixed(1)}%</span></div>
+              <div class="simInspectorBreakdownRow"><span>RES</span><span>${(hit.breakdown.res * 100).toFixed(1)}%</span></div>
+              <div class="simInspectorBreakdownRow"><span>Пробив. RES</span><span>${(hit.breakdown.resPen * 100).toFixed(1)}%</span></div>
+              <div class="simInspectorBreakdownRow"><span>Уязвимость</span><span>${(hit.breakdown.vuln * 100).toFixed(1)}%</span></div>
+              <div class="simInspectorBreakdownRow"><span>Митигация</span><span>${(hit.breakdown.mit * 100).toFixed(1)}%</span></div>
+              <div class="simInspectorBreakdownRow"><span>Сломан</span><span>${hit.breakdown.broken ? 'Да' : 'Нет'}</span></div>
+              <div class="simInspectorBreakdownRow"><span>Итог</span><span>${hit.breakdown.dmg.toLocaleString()}</span></div>
+            `
+            hitEl.append(breakdownEl)
+          }
+          hitsContainer.append(hitEl)
         }
-        if (targetUnit && snap.units[targetUnit.id]) {
-          const u = snap.units[targetUnit.id]
-          snapValue.innerHTML += `
-            <br><strong>Target (${targetUnit.name}):</strong> HP ${u.hp}/${u.maxHp} | Energy ${u.energy}/${u.maxEnergy} | AV ${u.av} | Toughness ${u.toughness}/${u.maxToughness} | Broken: ${u.broken}
-            <br>Buffs: ${u.buffs.map((b: any) => `${b.name}x${b.stacks}@${b.turns}`).join(', ') || '—'}
-            <br>Debuffs: ${u.debuffs.map((b: any) => `${b.name}x${b.stacks}@${b.turns}`).join(', ') || '—'}
-          `
-        }
-        snapRow.append(snapLabel, snapValue)
-        grid.append(snapRow)
+        hitsRow.append(hitsLabel, hitsContainer)
+        grid.append(hitsRow)
       }
 
-      inspectorPanel.append(grid)
+      content.append(grid)
     }
+
+    function renderStateTab(action: CombatActionRecord, sim: Simulator, content: HTMLElement): void {
+      // Show before/after snapshots
+      if (action.beforeSnapshot || action.afterSnapshot) {
+        const grid = el('div', 'simLogInspectorGrid')
+
+        const addSnapshotSection = (label: string, snapshot: StateSnapshot | undefined, unitIds: string[]) => {
+          if (!snapshot) return
+          const section = el('div', 'simInspectorSnapshotSection')
+          const title = el('h4', 'simInspectorSnapshotTitle')
+          title.textContent = label
+          section.append(title)
+
+          for (const id of unitIds) {
+            const unit = snapshot.units[id]
+            if (!unit) continue
+            const unitEl = el('div', 'simInspectorUnitState')
+            unitEl.innerHTML = `
+              <div class="simInspectorUnitName">
+                ${unit.side === 'ally'
+                  ? `<span class="simUnitIcon">${iconNode(charIconUrl((unit as any).kind === 'char' && (unit as any).kitId ? (unit as any).kitId : 'unknown'), unit.name, { cls: 'simUnitIcon', size: 20, fit: 'cover', fallbackText: safeInitial(unit.name), tint: '#7fb3ff', title: unit.name })}</span>`
+                  : `<span class="simUnitIcon">${iconNode(enemyIconUrl(unit.name), unit.name, { cls: 'simUnitIcon', size: 20, fit: 'cover', fallbackText: safeInitial(unit.name), tint: '#f5d76e', title: unit.name })}</span>`}
+                <span>${unit.name}</span>
+              </div>
+              <div class="simInspectorUnitStats">
+                <div class="simStatMini"><span>HP</span><span>${unit.hp.toLocaleString()} / ${unit.maxHp.toLocaleString()}</span></div>
+                <div class="simStatMini"><span>Energy</span><span>${unit.energy.toLocaleString()} / ${unit.maxEnergy.toLocaleString()}</span></div>
+                <div class="simStatMini"><span>AV</span><span>${unit.av.toFixed(1)}</span></div>
+                <div class="simStatMini"><span>Toughness</span><span>${unit.toughness.toLocaleString()} / ${unit.maxToughness.toLocaleString()} ${unit.broken ? ' <span class="broken">BROKEN</span>' : ''}</span></div>
+                <div class="simStatMini"><span>ATK</span><span>${unit.atk.toLocaleString()}</span></div>
+                <div class="simStatMini"><span>DEF</span><span>${unit.def.toLocaleString()}</span></div>
+                <div class="simStatMini"><span>SPD</span><span>${unit.spd.toFixed(1)}</span></div>
+                <div class="simStatMini"><span>CRIT Rate</span><span>${(unit.critRate * 100).toFixed(1)}%</span></div>
+                <div class="simStatMini"><span>CRIT DMG</span><span>${(unit.critDmg * 100).toFixed(1)}%</span></div>
+                <div class="simStatMini"><span>Break Effect</span><span>${(unit.be * 100).toFixed(1)}%</span></div>
+                <div class="simStatMini"><span>EHR</span><span>${(unit.ehr * 100).toFixed(1)}%</span></div>
+                <div class="simStatMini"><span>Eff RES</span><span>${(unit.effRes * 100).toFixed(1)}%</span></div>
+              </div>
+            `
+            if (unit.buffs.length > 0) {
+              const buffsEl = el('div', 'simInspectorUnitBuffs')
+              buffsEl.innerHTML = `<strong>Баффы:</strong> ${unit.buffs.map(b => `${b.name}x${b.stacks}@${b.turns}`).join(', ')}`
+              unitEl.append(buffsEl)
+            }
+            if (unit.debuffs.length > 0) {
+              const debuffsEl = el('div', 'simInspectorUnitDebuffs')
+              debuffsEl.innerHTML = `<strong>Дебаффы:</strong> ${unit.debuffs.map(b => `${b.name}x${b.stacks}@${b.turns}`).join(', ')}`
+              unitEl.append(debuffsEl)
+            }
+            if (unit.dots.length > 0) {
+              const dotsEl = el('div', 'simInspectorUnitDots')
+              dotsEl.innerHTML = `<strong>DoT:</strong> ${unit.dots.map((d: any) => `${d.name}x${d.stacks}@${d.turns}`).join(', ')}`
+              unitEl.append(dotsEl)
+            }
+            section.append(unitEl)
+          }
+        }
+
+        const allUnitIds = [...new Set([
+          ...action.targetIds,
+          action.sourceId
+        ].filter(Boolean))] as string[]
+
+        if (action.beforeSnapshot) {
+          addSnapshotSection('До действия', action.beforeSnapshot, allUnitIds)
+        }
+        if (action.afterSnapshot) {
+          addSnapshotSection('После действия', action.afterSnapshot, allUnitIds)
+        }
+
+        content.append(grid)
+      } else {
+        content.innerHTML = '<p class="dim">Нет исторических снимков для этого действия</p>'
+      }
+    }
+
+    function renderEffectsTab(action: CombatActionRecord, sim: Simulator, content: HTMLElement): void {
+      const grid = el('div', 'simLogInspectorGrid')
+
+      const addEffectSection = (label: string, effects: any[], isDebuff: boolean) => {
+        if (effects.length === 0) return
+        const section = el('div', 'simInspectorEffectSection')
+        const title = el('h4', 'simInspectorEffectTitle')
+        title.textContent = label
+        section.append(title)
+
+        const list = el('div', 'simInspectorEffectList')
+        for (const effect of effects) {
+          const targetUnit = effect.targetId ? sim.roster.find(u => u.id === effect.targetId) : undefined
+          const sourceUnit = effect.sourceId ? sim.roster.find(u => u.id === effect.sourceId) : undefined
+          const iconUrl = effectIconUrl(effect.name)
+
+          const el_effect = el('div', `simInspectorEffect ${isDebuff ? 'debuff' : 'buff'}`)
+          el_effect.innerHTML = `
+            <div class="simInspectorEffectIcon">${iconNode(iconUrl, effect.name, { cls: 'simInspectorEffectIconImg', size: 24, fit: 'contain', fallbackText: safeInitial(effect.name), tint: isDebuff ? '#e08a8a' : '#7fd18a', title: effect.name })}</div>
+            <div class="simInspectorEffectInfo">
+              <div class="simInspectorEffectName">${effect.name}</div>
+              <div class="simInspectorEffectMeta">
+                <span>Получатель: ${targetUnit?.name || effect.targetId}</span>
+                <span>Источник: ${sourceUnit?.name || effect.sourceId || '—'}</span>
+                <span>Стаки: ${effect.stacks}</span>
+                <span>Ходы: ${effect.turns === Infinity ? '∞' : effect.turns}</span>
+              </div>
+            `
+            if (effect.mods && effect.mods.length > 0) {
+              const modsEl = el('div', 'simInspectorEffectMods')
+              modsEl.innerHTML = effect.mods.map((m: any) => `<span class="simMod">${m.stat}: ${m.value >= 0 ? '+' : ''}${(m.value * 100).toFixed(1)}%</span>`).join(' ')
+              el_effect.append(modsEl)
+            }
+            if (effect.shield) {
+              const shieldEl = el('div', 'simInspectorEffectShield')
+              shieldEl.textContent = `Щит: ${effect.shield.toLocaleString()}`
+              el_effect.append(shieldEl)
+            }
+            list.append(el_effect)
+          }
+          section.append(list)
+        }
+
+        addEffectSection('Баффы', action.effects.buffs, false)
+        addEffectSection('Дебаффы', action.effects.debuffs, true)
+        addEffectSection('DoT', action.effects.dots, true)
+        addEffectSection('Щиты', action.effects.shields, false)
+        addEffectSection('Лечение', action.effects.heals, false)
+        addEffectSection('Пробития', action.effects.breaks, true)
+
+        if (action.effects.energyChanges.length > 0) {
+          const section = el('div', 'simInspectorEffectSection')
+          const title = el('h4', 'simInspectorEffectTitle')
+          title.textContent = 'Изменение энергии'
+          section.append(title)
+          const list = el('div', 'simInspectorEffectList')
+          for (const ec of action.effects.energyChanges) {
+            const targetUnit = ec.targetId ? sim.roster.find(u => u.id === ec.targetId) : undefined
+            const el_ec = el('div', 'simInspectorEffect')
+            el_ec.innerHTML = `<span>${targetUnit?.name || ec.targetId}</span><span class="${ec.delta >= 0 ? 'positive' : 'negative'}">${ec.delta >= 0 ? '+' : ''}${ec.delta}</span><span class="reason">${ec.reason}</span>`
+            list.append(el_ec)
+          }
+          section.append(list)
+          grid.append(section)
+        }
+
+        if (action.effects.spChanges.length > 0) {
+          const section = el('div', 'simInspectorEffectSection')
+          const title = el('h4', 'simInspectorEffectTitle')
+          title.textContent = 'Изменение SP'
+          section.append(title)
+          const list = el('div', 'simInspectorEffectList')
+          for (const sc of action.effects.spChanges) {
+            const targetUnit = sc.targetId ? sim.roster.find(u => u.id === sc.targetId) : undefined
+            const el_sc = el('div', 'simInspectorEffect')
+            el_sc.innerHTML = `<span>${targetUnit?.name || sc.targetId}</span><span class="${sc.delta >= 0 ? 'positive' : 'negative'}">${sc.delta >= 0 ? '+' : ''}${sc.delta}</span><span class="reason">${sc.reason}</span>`
+            list.append(el_sc)
+          }
+          section.append(list)
+          grid.append(section)
+        }
+
+        content.append(grid)
+      }
 
     // Event listeners
     searchInput.oninput = () => { currentFilters.search = searchInput.value; applyFilters() }
     filterSelect.onchange = () => { currentFilters.type = filterSelect.value; applyFilters() }
     characterFilter.onchange = () => { currentFilters.character = characterFilter.value; applyFilters() }
-    actionIdFilter.onchange = () => { currentFilters.actionId = parseInt(actionIdFilter.value) || 0; applyFilters() }
-    avFromFilter.onchange = () => { currentFilters.avFrom = parseFloat(avFromFilter.value) || 0; applyFilters() }
-    avToFilter.onchange = () => { currentFilters.avTo = parseFloat(avToFilter.value) || Infinity; applyFilters() }
     clearFiltersBtn.onclick = () => {
       searchInput.value = ''
       filterSelect.value = 'all'
       characterFilter.value = 'all'
-      actionIdFilter.value = ''
-      avFromFilter.value = ''
-      avToFilter.value = ''
-      currentFilters = { search: '', type: 'all', character: 'all', actionId: 0, avFrom: 0, avTo: Infinity }
+      currentFilters = { search: '', type: 'all', character: 'all' }
       applyFilters()
     }
 

@@ -4,6 +4,16 @@
  * Uses the canonical catalog from `src/core/enemy` and presents variants with
  * search, filters, and preview. Opens as an overlay like the character/cone pickers.
  */
+/**
+ * Safe helper to get first character of a string for fallback icons.
+ * Handles undefined, null, empty strings, and non-string values.
+ */
+function safeInitial(value: string | null | undefined, fallback = '?'): string {
+  if (!value) return fallback
+  const trimmed = value.trim()
+  return trimmed.charAt(0).toUpperCase() || fallback
+}
+
 import { el } from './dom'
 import { iconNode } from './icons'
 import { DEFINITIONS as ENEMY_DEFINITIONS, enemyBehavior, ELEMS, getEnemyStatRow } from '../core/enemy'
@@ -64,7 +74,7 @@ export function openEnemyPicker(opts: EnemyPickerOptions): { close: () => void }
   for (const e of ['all', ...ELEMS]) {
     const b = el('button', 'pickerToggle pickerBtn' + (e === 'all' ? ' active' : '')) as HTMLButtonElement
     b.type = 'button'
-    const icon = e === 'all' ? null : iconNode(e, e, { cls: 'miniIcon', size: 16, fit: 'contain', fallbackText: e.charAt(0), tint: '#7fb3ff', title: e })
+    const icon = e === 'all' ? null : iconNode(e, e, { cls: 'miniIcon', size: 16, fit: 'contain', fallbackText: safeInitial(e), tint: '#7fb3ff', title: e })
     const txt = el('span'); txt.textContent = e === 'all' ? 'Все' : e
     if (icon) b.append(icon)
     b.append(txt)
@@ -141,8 +151,7 @@ export function openEnemyPicker(opts: EnemyPickerOptions): { close: () => void }
       const iconUrl = enemyIconUrl(variant.title)
       const art = iconNode(iconUrl, variant.title, {
         cls: 'enemyPickIcon', size: 56, fit: 'cover',
-        fallbackText: variant.title.trim().charAt(0).toUpperCase() || '?',
-        tint: '#7fb3ff', title: variant.title,
+        fallbackText: safeInitial(variant.title), tint: '#7fb3ff', title: variant.title,
       })
 
       const info = el('div', 'enemyPickInfo')
@@ -150,7 +159,7 @@ export function openEnemyPicker(opts: EnemyPickerOptions): { close: () => void }
       name.textContent = variant.title
       const meta = el('div', 'enemyPickMeta')
       const elemIcon = iconNode(elemIconUrl ? elemIconUrl(variant.weaknesses[0] ?? 'Physical') : undefined, variant.weaknesses[0] ?? 'Physical', {
-        cls: 'miniIcon', size: 14, fit: 'contain', fallbackText: variant.weaknesses[0]?.charAt(0) ?? '?', tint: '#7fb3ff', title: variant.weaknesses[0] ?? 'Physical'
+        cls: 'miniIcon', size: 14, fit: 'contain', fallbackText: safeInitial(variant.weaknesses[0]), tint: '#7fb3ff', title: variant.weaknesses[0] ?? 'Physical'
       })
       const rankBadge = el('span', `enemyRankBadge rank-${variant.rank}`)
       rankBadge.textContent = RANK_LABELS[variant.rank]
@@ -203,8 +212,7 @@ export function openEnemyPicker(opts: EnemyPickerOptions): { close: () => void }
     const iconUrl = enemyIconUrl(variant.title)
     header.append(iconNode(iconUrl, variant.title, {
       cls: 'enemyPreviewIcon', size: 96, fit: 'cover',
-      fallbackText: variant.title.trim().charAt(0).toUpperCase() || '?',
-      tint: '#7fb3ff', title: variant.title,
+      fallbackText: safeInitial(variant.title), tint: '#7fb3ff', title: variant.title,
     }))
 
     const nameWrap = el('div', 'enemyPreviewNameWrap')
@@ -291,7 +299,7 @@ export function openEnemyPicker(opts: EnemyPickerOptions): { close: () => void }
     for (const elem of variant.weaknesses) {
       weakGrid.append(iconNode(elemIconUrl(elem), elem, {
         cls: 'enemyPreviewWeaknessIcon', size: 32, fit: 'contain',
-        fallbackText: elem.charAt(0), tint: '#7fb3ff', title: elem,
+        fallbackText: safeInitial(elem), tint: '#7fb3ff', title: elem,
       }))
     }
     weakSection.append(weakGrid)
@@ -308,7 +316,7 @@ export function openEnemyPicker(opts: EnemyPickerOptions): { close: () => void }
       for (const [elem, value] of Object.entries(variant.resistanceProfile) as [string, number][]) {
         const row = el('div', 'enemyPreviewStatRow')
         const labelEl = el('span', 'enemyPreviewStatLabel')
-        labelEl.append(iconNode(elemIconUrl(elem), elem, { cls: 'miniIcon', size: 14, fit: 'contain', fallbackText: elem.charAt(0), tint: '#7fb3ff', title: elem }))
+        labelEl.append(iconNode(elemIconUrl(elem), elem, { cls: 'miniIcon', size: 14, fit: 'contain', fallbackText: safeInitial(elem), tint: '#7fb3ff', title: elem }))
         labelEl.append(' ' + elem)
         const valueEl = el('span', 'enemyPreviewStatValue')
         valueEl.textContent = (value >= 0 ? '+' : '') + (value * 100).toFixed(0) + '%'
