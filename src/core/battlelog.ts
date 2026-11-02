@@ -109,7 +109,7 @@ const SECTION: Partial<Record<EventType, string>> = {
 }
 
 /** `--event=` groups (§33). */
-const EVENT_GROUPS: Record<string, EventType[]> = {
+export const EVENT_GROUPS: Record<string, EventType[]> = {
   damage: ['DAMAGE_CALCULATED', 'DAMAGE_DEALT', 'TOUGHNESS_DAMAGE'],
   break: ['WEAKNESS_BREAK', 'BREAK_DAMAGE', 'SUPERBREAK', 'TOUGHNESS_BAR_DEPLETED'],
   buff: ['BUFF_APPLIED', 'BUFF_STACKED', 'BUFF_REFRESHED', 'BUFF_EXPIRED'],

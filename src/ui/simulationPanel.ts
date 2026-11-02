@@ -15,7 +15,8 @@ import { el } from './dom'
 import { charFinalStats } from '../core/charStats'
 import { withBusy, showStatus } from './shell'
 import { openEnemyPicker } from './enemyPicker'
-import type { DebugLevel } from '../core/battlelog'
+import type { DebugLevel, BattleEvent } from '../core/battlelog'
+import { EVENT_GROUPS } from '../core/battlelog'
 import type { Party } from '../core/party'
 import type { Simulator } from '../core/simulator'
 
@@ -675,6 +676,8 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     battlefieldSection.append(battlefield)
     resultsContainer.append(battlefieldSection)
     renderBattlefield(sim, battlefield)
+    // Store reference for historical replay
+    ;(window as any).__simBattlefield = { sim, battlefield, renderBattlefield }
 
     // Combat Log - Interactive
     const logSection = section('Боевой журнал')
@@ -745,51 +748,95 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     resultsContainer.append(traceSection)
   }
 
-  function renderBattlefield(sim: ReturnType<typeof runBattle>, container: HTMLElement): void {
-    const allies = sim.roster.filter(u => u.side === 'ally' && !u.dead)
-    const enemies = sim.roster.filter(u => u.side === 'enemy' && !u.dead)
-    const deadAllies = sim.roster.filter(u => u.side === 'ally' && u.dead)
-    const deadEnemies = sim.roster.filter(u => u.side === 'enemy' && u.dead)
+  function renderBattlefield(sim: ReturnType<typeof runBattle>, container: HTMLElement, snapshot?: any): void {
+    container.innerHTML = ''
+
+    let units: any[] = []
+    let sp = sim.sp()
+    let maxSp = sim.maxSp
+    let avElapsed = sim.avElapsed
+    let cycle = sim.cycle
+    let wave = sim.wave
+    let waveCount = sim.waveCount
+
+    if (snapshot) {
+      // Use historical snapshot data
+      units = Object.values(snapshot.units)
+      sp = snapshot.sp
+      maxSp = snapshot.maxSp
+      avElapsed = snapshot.time
+      cycle = snapshot.turn
+      wave = snapshot.units[Object.keys(snapshot.units)[0]]?.wave ?? 1
+      waveCount = snapshot.waveCount ?? sim.waveCount
+    } else {
+      // Use current sim state
+      units = sim.roster
+    }
+
+    const allies = units.filter(u => u.side === 'ally' && !u.dead)
+    const enemies = units.filter(u => u.side === 'enemy' && !u.dead)
+    const deadAllies = units.filter(u => u.side === 'ally' && u.dead)
+    const deadEnemies = units.filter(u => u.side === 'enemy' && u.dead)
 
     // Allies
     const alliesSection = el('div', 'simBattlefieldSide')
     const alliesTitle = el('h3', 'simBattlefieldTitle')
-    alliesTitle.textContent = 'СОЮЗНИКИ'
+    if (snapshot) {
+      alliesTitle.textContent = 'СОЮЗНИКИ (исторический снимок)'
+      const liveBtn = el('button', 'simLiveBtn btn-secondary')
+      liveBtn.textContent = 'Вернуться к текущему'
+      liveBtn.style.marginLeft = '8px'
+      liveBtn.style.fontSize = '11px'
+      liveBtn.onclick = () => renderBattlefield(sim, container)
+      alliesTitle.append(liveBtn)
+    } else {
+      alliesTitle.textContent = 'СОЮЗНИКИ'
+    }
     alliesSection.append(alliesTitle)
 
     const alliesGrid = el('div', 'simBattlefieldGrid')
     for (const unit of allies) {
-      alliesGrid.append(createUnitCard(unit, sim, true))
+      alliesGrid.append(createUnitCardFromSnapshot(unit, true))
     }
     for (const unit of deadAllies) {
-      alliesGrid.append(createUnitCard(unit, sim, true))
+      alliesGrid.append(createUnitCardFromSnapshot(unit, true))
     }
     alliesSection.append(alliesGrid)
 
     // Resources bar
     const resourcesSection = el('div', 'simBattlefieldResources')
-    resourcesSection.append(createResourceBar(sim))
+    resourcesSection.append(createResourceBarFromSnapshot(sp, maxSp, avElapsed, cycle, wave, waveCount))
     alliesSection.append(resourcesSection)
 
     // Enemies
     const enemiesSection = el('div', 'simBattlefieldSide')
     const enemiesTitle = el('h3', 'simBattlefieldTitle')
-    enemiesTitle.textContent = 'ПРОТИВНИКИ'
+    if (snapshot) {
+      enemiesTitle.textContent = 'ПРОТИВНИКИ (исторический снимок)'
+      const liveBtn = el('button', 'simLiveBtn btn-secondary')
+      liveBtn.textContent = 'Вернуться к текущему'
+      liveBtn.style.marginLeft = '8px'
+      liveBtn.style.fontSize = '11px'
+      liveBtn.onclick = () => renderBattlefield(sim, container)
+      enemiesTitle.append(liveBtn)
+    } else {
+      enemiesTitle.textContent = 'ПРОТИВНИКИ'
+    }
     enemiesSection.append(enemiesTitle)
 
     const enemiesGrid = el('div', 'simBattlefieldGrid')
     for (const unit of enemies) {
-      enemiesGrid.append(createUnitCard(unit, sim, false))
+      enemiesGrid.append(createUnitCardFromSnapshot(unit, false))
     }
     for (const unit of deadEnemies) {
-      enemiesGrid.append(createUnitCard(unit, sim, false))
+      enemiesGrid.append(createUnitCardFromSnapshot(unit, false))
     }
     enemiesSection.append(enemiesGrid)
 
     container.append(alliesSection, enemiesSection)
   }
 
-  function createUnitCard(unit: any, sim: ReturnType<typeof runBattle>, isAlly: boolean): HTMLElement {
+  function createUnitCardFromSnapshot(unit: any, isAlly: boolean): HTMLElement {
     const card = el('div', `simUnitCard ${isAlly ? 'ally' : 'enemy'}${unit.dead ? ' dead' : ''}`)
     if (unit.broken) card.classList.add('broken')
 
@@ -904,7 +951,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     const avLabel = el('span', 'simStatBarLabel')
     avLabel.textContent = 'AV'
     const avVal = el('span', 'simStatBarValue')
-    avVal.textContent = unit.av.toFixed(1)
+    avVal.textContent = unit.av?.toFixed(1) ?? '—'
     avWrap.append(avLabel, avVal)
     card.append(avWrap)
 
@@ -916,20 +963,19 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
       buffsWrap.append(buffsTitle)
       const buffsGrid = el('div', 'simEffectsGrid')
       for (const buff of unit.buffs) {
-        buffsGrid.append(createEffectIcon(buff, true))
+        buffsGrid.append(createEffectIconFromSnapshot(buff, true))
       }
       buffsWrap.append(buffsGrid)
       card.append(buffsWrap)
     }
-    if (unit.debuffs?.length || (unit.buffs?.some((b: any) => b.debuff))) {
+    if (unit.debuffs?.length) {
       const debuffsWrap = el('div', 'simUnitEffects')
       const debuffsTitle = el('span', 'simEffectsTitle')
       debuffsTitle.textContent = 'Дебаффы'
       debuffsWrap.append(debuffsTitle)
       const debuffsGrid = el('div', 'simEffectsGrid')
-      const debuffs = [...(unit.debuffs ?? []), ...(unit.buffs?.filter((b: any) => b.debuff) ?? [])]
-      for (const debuff of debuffs) {
-        debuffsGrid.append(createEffectIcon(debuff, false))
+      for (const debuff of unit.debuffs) {
+        debuffsGrid.append(createEffectIconFromSnapshot(debuff, false))
       }
       debuffsWrap.append(debuffsGrid)
       card.append(debuffsWrap)
@@ -941,7 +987,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
       dotsWrap.append(dotsTitle)
       const dotsGrid = el('div', 'simEffectsGrid')
       for (const dot of unit.dots) {
-        dotsGrid.append(createEffectIcon(dot, false))
+        dotsGrid.append(createEffectIconFromSnapshot(dot, false))
       }
       dotsWrap.append(dotsGrid)
       card.append(dotsWrap)
@@ -953,7 +999,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
       ctrlWrap.append(ctrlTitle)
       const ctrlGrid = el('div', 'simEffectsGrid')
       for (const ctrl of unit.controls) {
-        ctrlGrid.append(createEffectIcon(ctrl, false))
+        ctrlGrid.append(createEffectIconFromSnapshot(ctrl, false))
       }
       ctrlWrap.append(ctrlGrid)
       card.append(ctrlWrap)
@@ -962,7 +1008,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     return card
   }
 
-  function createEffectIcon(effect: any, isBuff: boolean): HTMLElement {
+  function createEffectIconFromSnapshot(effect: any, isBuff: boolean): HTMLElement {
     const wrap = el('div', `simEffectIcon ${isBuff ? 'buff' : 'debuff'}`)
     wrap.title = `${effect.name} (стаков: ${effect.stacks ?? 1}, ходов: ${effect.turns ?? '∞'})`
     // Try to get icon
@@ -984,7 +1030,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     return wrap
   }
 
-  function createResourceBar(sim: ReturnType<typeof runBattle>): HTMLElement {
+  function createResourceBarFromSnapshot(sp: number, maxSp: number, avElapsed: number, cycle: number, wave: number, waveCount: number): HTMLElement {
     const wrap = el('div', 'simResourceBar')
 
     // SP
@@ -992,9 +1038,9 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     const spLabel = el('span', 'simResourceLabel')
     spLabel.textContent = 'SP'
     const spValue = el('span', 'simResourceValue')
-    spValue.textContent = `${sim.sp()} / ${sim.maxSp}`
+    spValue.textContent = `${sp} / ${maxSp}`
     const spBar = el('div', 'simResourceBarFill')
-    const spPct = sim.maxSp > 0 ? (sim.sp() / sim.maxSp) * 100 : 0
+    const spPct = maxSp > 0 ? (sp / maxSp) * 100 : 0
     spBar.style.width = spPct + '%'
     spWrap.append(spLabel, spValue, spBar)
     wrap.append(spWrap)
@@ -1004,7 +1050,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     const avLabel = el('span', 'simResourceLabel')
     avLabel.textContent = 'AV'
     const avValue = el('span', 'simResourceValue')
-    avValue.textContent = sim.avElapsed.toFixed(1)
+    avValue.textContent = avElapsed.toFixed(1)
     avWrap.append(avLabel, avValue)
     wrap.append(avWrap)
 
@@ -1013,7 +1059,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     const cycleLabel = el('span', 'simResourceLabel')
     cycleLabel.textContent = 'Цикл'
     const cycleValue = el('span', 'simResourceValue')
-    cycleValue.textContent = `${sim.cycle} / ${sim.cfg.cycles ?? '?'}`
+    cycleValue.textContent = `${cycle} / ${waveCount}`
     cycleWrap.append(cycleLabel, cycleValue)
     wrap.append(cycleWrap)
 
@@ -1022,7 +1068,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     const waveLabel = el('span', 'simResourceLabel')
     waveLabel.textContent = 'Волна'
     const waveValue = el('span', 'simResourceValue')
-    waveValue.textContent = `${sim.wave} / ${sim.waveCount}`
+    waveValue.textContent = `${wave} / ${waveCount}`
     waveWrap.append(waveLabel, waveValue)
     wrap.append(waveWrap)
 
@@ -1134,12 +1180,8 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
       avFrom: 0 as number,
       avTo: Infinity as number,
     }
-    let selectedEvent: BattleEvent | null = null
 
     function applyFilters(): void {
-      eventList.innerHTML = ''
-      inspectorPanel.style.display = 'none'
-      selectedEvent = null
 
       for (const [actionId, events] of actionGroups) {
         // Filter action group
@@ -1196,6 +1238,8 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
 
       const el_event = el('div', `simLogEvent ${event.type.toLowerCase().replace(/_/g, '-')}`)
       el_event.style.cursor = 'pointer'
+      // Store event reference for highlighting
+      ;(el_event as any).__battleEvent = event
 
       const payloadStr = event.payload ? JSON.stringify(event.payload) : ''
       const hasPayload = payloadStr.length > 2
@@ -1219,12 +1263,21 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     }
 
     function selectEvent(event: BattleEvent): void {
-      selectedEvent = event
       renderInspector(event, sim)
       inspectorPanel.style.display = ''
       // Highlight selected event
       for (const el of eventList.querySelectorAll('.simLogEvent')) {
-        el.classList.toggle('selected', el === event)
+        const ev = (el as any).__battleEvent
+        el.classList.toggle('selected', ev === event)
+      }
+
+      // Find snapshot for this event and render historical battlefield
+      const snapshotEvent = sim.logger.events.find(e => e.type === 'STATE_SNAPSHOT' && e.actionId === event.actionId && e.time <= event.time)
+      if (snapshotEvent && snapshotEvent.payload.state) {
+        const battlefieldContainer = document.querySelector('.simBattlefield') as HTMLElement
+        if (battlefieldContainer) {
+          renderBattlefield(sim, battlefieldContainer, snapshotEvent.payload.state)
+        }
       }
     }
 
