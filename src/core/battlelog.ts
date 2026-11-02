@@ -151,6 +151,10 @@ export interface LogConfig {
    *  event produces, so a broken state fails next to its cause instead of at battle end. Opt-in —
    *  off by default so a mass sweep pays nothing. */
   verifyPerEvent?: boolean
+  /** Capture UI history snapshots for historical replay in the simulation panel.
+   *  When enabled, STATE_SNAPSHOT events are emitted for each snapshotOn trigger
+   *  regardless of debug level. This is independent of the technical debug trace. */
+  captureUiHistory?: boolean
   /** write the §40 file tree on flush. */
   dir?: string
   /** file sink for `dir`. Required when there is no CJS `require` (ESM/tsx): pass
@@ -500,6 +504,8 @@ export class BattleLogger {
       traceId: e.trace ? this.id(e.trace) : undefined,
       type: e.type,
       source: e.source, target: e.target,
+      sourceId: e.sourceId,
+      targetId: e.targetId,
       attackType: e.attackType, element: e.element,
       provenance,
       combatActionId,
@@ -644,6 +650,7 @@ export class BattleLogger {
     // diff() stores `next` as the new baseline, so it must run BEFORE this snapshot is published
     const changes = this.debug >= 6 ? this.diff(s) : (this.lastSnapshot = s, [] as string[])
     if (this.debug >= 6) this.emit({ type: 'STATE_SNAPSHOT', payload: { state: s, hash: this.hash(s), diff: changes }, minDebug: 6 })
+    else if (this.cfg.captureUiHistory) this.emit({ type: 'STATE_SNAPSHOT', payload: { state: s, hash: this.hash(s), diff: changes } })
     return s
   }
 
