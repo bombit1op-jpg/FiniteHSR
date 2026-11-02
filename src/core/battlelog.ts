@@ -201,6 +201,7 @@ export interface BattleEvent {
 }
 
 export interface StateSnapshot {
+  snapshotId: string
   turn: number
   actionId: number
   time: number
@@ -224,7 +225,7 @@ export interface StateSnapshot {
     dead: boolean
     buffs: Array<{ id: string; name: string; stacks: number; turns: number; mods: any[]; sourceId?: string }>
     debuffs: Array<{ id: string; name: string; stacks: number; turns: number; mods: any[]; sourceId?: string }>
-    dots: Array<{ id: string; name: string; element: string; damage: number; turns: number; sourceId?: string }>
+    dots: Array<{ id: string; name: string; element: string; damage: number; turns: number; sourceId?: string; sourceBe?: number; defIgnore?: boolean }>
     controls: Array<{ id: string; name: string; turns: number; sourceId?: string }>
     atk: number
     def: number
@@ -235,6 +236,13 @@ export interface StateSnapshot {
     ehr: number
     effRes: number
     wave: number
+    kitId?: string
+    ownerId?: string
+    eidolon?: number
+    rank?: string
+    weaknesses?: string[]
+    resistances?: Record<string, number>
+    runtime?: Record<string, unknown>
   }>
 }
 
@@ -340,6 +348,11 @@ export class BattleLogger {
   private spSpent = 0
   private spGained = 0
   private spStart = 0
+  /** Independent sequence for combatActionId uniqueness across the battle */
+  private combatActionSeq = 0
+
+  /** Independent sequence for snapshotId uniqueness across the battle */
+  private snapshotSeq = 0
 
   constructor(private sim: Simulator, readonly cfg: LogConfig = {}) {
     this.spStart = sim.sp()
@@ -356,6 +369,12 @@ export class BattleLogger {
     provenance?: BattleEvent['provenance']
   }): void {
     this.actionContextStack.push(ctx)
+  }
+
+  /** Generate a unique combatActionId for out-of-turn/extra actions */
+  nextCombatActionId(prefix: string): string {
+    this.combatActionSeq++
+    return `${prefix}-${this.combatActionSeq}`
   }
 
   /** §Combat Action View — pop the current gameplay action context */
@@ -375,6 +394,8 @@ export class BattleLogger {
   get traceRng(): boolean { return this.debug >= 7 }
   get turn(): number { return this.turnNo }
   get actionId(): number { return this.actNo }
+  get actNoValue(): number { return this.actNo }
+  get atkNoValue(): number { return this.atkNo }
 
   /** Route the engine's `DmgTrace` recorder into this logger. DamageCalculator fans every trace out
    *  to all registered consumers, so this coexists with probe-damage-chain instead of losing to it. */
@@ -432,7 +453,16 @@ export class BattleLogger {
     this.emit({ type: 'ACTION_END', source, sourceId, payload: { action } })
     this.popActionContext()
   }
-  beginAttack(): number { this.atkNo++; this.hitNo = 0; return this.atkNo }
+  beginAttack(): number {
+    this.atkNo++
+    this.hitNo = 0
+    // Update the attackId in the current action context
+    const ctx = this.getActionContext()
+    if (ctx) {
+      ctx.attackId = `${this.actNo}.${this.atkNo}`
+    }
+    return this.atkNo
+  }
   beginHit(): number { return ++this.hitNo }
   beginDamage(): number { return ++this.dmgNo }
   beginTrigger(): number { return ++this.trgNo }
@@ -571,7 +601,9 @@ export class BattleLogger {
 
   // ---------- §29 state snapshot / diff / §38 hash
 
-  snapshot(): StateSnapshot {
+snapshot(): StateSnapshot {
+    this.snapshotSeq++
+    const snapshotId = `snap-${this.snapshotSeq}`
     const units: StateSnapshot['units'] = {}
     for (const u of this.sim.units()) {
       // Build detailed buff/debuff/dot info
@@ -612,7 +644,18 @@ export class BattleLogger {
       // Get final stats using the sim's eff function
       const stats = eff(u)
 
-      units[u.id] = {
+      // Get runtime data for historical replay
+      const rt = this.sim.rt(u)
+      const runtime: Record<string, string | number | boolean> = {}
+      const keys = Object.keys(rt)
+      for (const key of keys) {
+        const value = (rt as Record<string, unknown>)[key]
+        if (typeof value === 'number' || typeof value === 'boolean' || typeof value === 'string') {
+          runtime[key] = value
+        }
+      }
+
+units[u.id] = {
         id: u.id,
         name: u.name,
         side: u.side,
@@ -628,9 +671,17 @@ export class BattleLogger {
         maxToughness: u.maxToughness,
         broken: !!u.broken,
         dead: !!u.dead,
-        buffs,
-        debuffs,
-        dots,
+        buffs: buffs,
+        debuffs: debuffs,
+        dots: dots.map(d => ({
+          id: String(d.id),
+          name: String(d.name),
+          element: String(d.element),
+          damage: Number(d.damage),
+          turns: Number(d.turns),
+          sourceBe: d.sourceBe ? Number(d.sourceBe) : undefined,
+          defIgnore: Boolean(d.defIgnore),
+        })),
         controls,
         atk: Math.round(stats.atk ?? u.base.atk ?? 0),
         def: Math.round(stats.def ?? u.base.def ?? 0),
@@ -641,9 +692,17 @@ export class BattleLogger {
         ehr: (u.base.ehr ?? 0) + buffSum(u.buffs, 'ehr'),
         effRes: effectResOf(u),
         wave: u.wave ?? 1,
+        kitId: u.kitId,
+        ownerId: (rt as Record<string, unknown>).ownerId as string | undefined,
+        eidolon: (rt as Record<string, unknown>).eidolon as number | undefined,
+        rank: u.rank,
+        weaknesses: u.weaknesses,
+        resistances: u.res,
+        runtime,
       }
     }
     const s: StateSnapshot = {
+      snapshotId,
       turn: this.turnNo, actionId: this.actNo, time: this.sim.avElapsed,
       sp: this.sim.sp(), maxSp: this.sim.maxSp, units,
     }

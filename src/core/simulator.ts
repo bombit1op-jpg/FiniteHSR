@@ -545,8 +545,8 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
 
     // Push action context for extra turn
     this.logger.pushActionContext({
-      combatActionId: `extra-${this.logger.actionId + 1}`,
-      attackId: `${this.logger.actionId + 1}.1`,
+      combatActionId: this.logger.nextCombatActionId('extra'),
+      attackId: `${this.logger.actNoValue}.${this.logger.atkNoValue + 1}`,
       actionCategory: 'extraTurn',
       provenance: { sourceKind: 'ability', abilityName: 'Extra Turn', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
     })

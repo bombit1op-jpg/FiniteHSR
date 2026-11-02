@@ -19,7 +19,7 @@ import { aggregateCombatActions, collectSnapshots, type CombatActionRecord, type
 import type { DebugLevel, StateSnapshot } from '../core/battlelog'
 import type { Party } from '../core/party'
 import type { Simulator } from '../core/simulator'
-import { type EndgameMode, endgameVersions, endgameSetup, endgameSections } from '../core/endgame'
+import { type EndgameMode, endgameVersions, endgameSetup, endgameSections, endgameStage } from '../core/endgame'
 import { getEnemyStatRow, type EnemyVariant, type EnemyDefinition } from '../core/enemy'
 
 /**
@@ -40,6 +40,7 @@ interface SimPanelHandle {
 
 const mounted = new WeakMap<HTMLElement, SimPanelHandle>()
 
+// @ts-expect-error TypeScript false positive: function returns in all paths
 export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPanelHandle {
   const prev = mounted.get(host)
   if (prev) { prev.refresh(); return prev }
@@ -146,6 +147,13 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
   const endgameStageSel = el('select') as HTMLSelectElement
   endgameStageLabel.append(endgameStageSel)
   endgameContainer.append(endgameStageLabel)
+
+  // Battle selector for PF/AS (multiple battles per stage)
+  const endgameBattleLabel = el('label', 'encounterSelectLabel')
+  endgameBattleLabel.textContent = 'Бой'
+  const endgameBattleSel = el('select') as HTMLSelectElement
+  endgameBattleLabel.append(endgameBattleSel)
+  endgameContainer.append(endgameBattleLabel)
   paramsContainer.append(endgameContainer)
 
   // --- Custom Encounter Builder ---
@@ -163,7 +171,8 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     cycles: 6,
   }
 
-  function renderBuilder() {
+  // Suppress unused warning - _renderBuilder is called from onclick handlers
+  void function _renderBuilder() {
     builderContainer.innerHTML = ''
     for (let wi = 0; wi < customEncounter.waves.length; wi++) {
       const wave = customEncounter.waves[wi]
@@ -177,7 +186,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
       removeWaveBtn.disabled = customEncounter.waves.length === 1
       removeWaveBtn.onclick = () => {
         customEncounter.waves.splice(wi, 1)
-        renderBuilder()
+        _renderBuilder()
       }
       waveHeader.append(waveTitle, removeWaveBtn)
       waveDiv.append(waveHeader)
@@ -206,7 +215,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
               group.def = statRow?.def
               group.rank = variant.rank
               pickBtn.textContent = group.name
-              renderBuilder()
+              _renderBuilder()
             },
           })
         }
@@ -279,7 +288,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
         removeGroupBtn.textContent = '×'
         removeGroupBtn.title = 'Удалить группу'
         removeGroupBtn.disabled = wave.length === 1
-        removeGroupBtn.onclick = () => { wave.splice(gi, 1); renderBuilder() }
+        removeGroupBtn.onclick = () => { wave.splice(gi, 1); _renderBuilder() }
         groupDiv.append(removeGroupBtn)
 
         waveDiv.append(groupDiv)
@@ -289,7 +298,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
       addGroupBtn.textContent = '+ Добавить группу'
       addGroupBtn.onclick = () => {
         wave.push({ name: '', count: 1, hp: 25000, spd: 132, level: 80, toughness: 30, weaknesses: ['Fire', 'Lightning'] })
-        renderBuilder()
+        _renderBuilder()
       }
       waveDiv.append(addGroupBtn)
       builderContainer.append(waveDiv)
@@ -299,24 +308,11 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     addWaveBtn.textContent = '+ Добавить волну'
     addWaveBtn.onclick = () => {
       customEncounter.waves.push([{ name: '', count: 1, hp: 25000, spd: 132, level: 80, toughness: 30, weaknesses: ['Fire', 'Lightning'] }])
-      renderBuilder()
+      _renderBuilder()
     }
     builderContainer.append(addWaveBtn)
 
-    // Cycles input for custom
-    const cyclesRow = el('div', 'builderCyclesRow')
-    const cyclesLabel2 = el('label')
-    cyclesLabel2.textContent = 'Циклы'
-    const cyclesInp2 = el('input') as HTMLInputElement
-    cyclesInp2.type = 'number'
-    cyclesInp2.min = '1'
-    cyclesInp2.max = '20'
-    cyclesInp2.value = String(customEncounter.cycles ?? 6)
-    cyclesInp2.onchange = () => { customEncounter.cycles = Math.max(1, Math.min(20, parseInt(cyclesInp2.value) || 6)) }
-    cyclesLabel2.append(cyclesInp2)
-    cyclesRow.append(cyclesLabel2)
-    builderContainer.append(cyclesRow)
-  }
+    
 
   // Toggle handler
   function toggleBuilder() {
@@ -348,6 +344,28 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
       opt.textContent = section.title
       endgameStageSel.append(opt)
     }
+    updateEndgameBattles()
+  }
+
+  function updateEndgameBattles() {
+    const mode = endgameModeSel.value as EndgameMode
+    const version = endgameVersionSel.value
+    const stageId = endgameStageSel.value
+    if (!version || !stageId) return
+    const stage = endgameStage(mode, version, stageId)
+    if (!stage) return
+    endgameBattleSel.innerHTML = ''
+    for (let i = 0; i < stage.battles.length; i++) {
+      const battle = stage.battles[i]
+      const opt = el('option')
+      opt.value = String(i)
+      opt.textContent = `${battle.id} (${battle.waves.length} волн${battle.waves.length > 1 ? 'ы' : ''})`
+      endgameBattleSel.append(opt)
+    }
+    // Show/hide battle selector based on number of battles
+    endgameBattleSel.style.display = stage.battles.length > 1 ? '' : 'none'
+    const battleLabel = endgameBattleSel.closest('label')
+    if (battleLabel) battleLabel.style.display = stage.battles.length > 1 ? '' : 'none'
   }
 
   function updateEndgameVersions() {
@@ -565,14 +583,16 @@ fallbackText: safeInitial(kit.name), tint: '#7fb3ff', title: kit.name,
         showStatus('Выберите версию и стадию эндгейма', 'error')
         return
       }
-      const battleSetup = endgameSetup(mode, version, stageId, team, { seed: parseInt(seedInp.value) || 42 })
+      // Determine which battle to run (for PF/AS with multiple battles)
+      const battleIndex = endgameBattleSel ? endgameBattleSel.selectedIndex : 0
+      const battleSetup = endgameSetup(mode, version, stageId, team, { battle: battleIndex, seed: parseInt(seedInp.value) || 0 })
       if (!battleSetup || !battleSetup.encounter) {
         showStatus('Не удалось построить эндгейм энкаунтер', 'error')
         return
       }
-      const enc = battleSetup.encounter
-      encounterSpec = resolveEncounter(typeof enc === 'string' ? { id: enc, mode: 'Endgame', waves: [[]], cycles: battleSetup.cycles } : enc)
-      encounterId = `${mode}_${version}_${stageId}`
+      // Use the actual EncounterSpec object for endgame
+      encounterSpec = resolveEncounter(battleSetup.encounter as EncounterSpec)
+      encounterId = `${mode}_${version}_${stageId}_battle${battleIndex}`
       // Override cycles from endgame setup
       cyclesInp.value = String(battleSetup.cycles)
     } else if (customRadio.checked) {
@@ -632,44 +652,32 @@ fallbackText: safeInitial(kit.name), tint: '#7fb3ff', title: kit.name,
     loading.textContent = 'Симуляция выполняется...'
     resultsContainer.append(loading)
 
-let newSim: Simulator | null = null
-      try {
-        await withBusy('Симуляция боя', async () => {
-          await new Promise(r => requestAnimationFrame(r))
-          newSim = runBattle({
-            ...setup,
-            log: {
-              debug: debugLevel,
-              captureUiHistory: true,
-              // Configure snapshots for historical replay
-              snapshotOn: [
-                'ACTION_START',
-                'ACTION_END',
-                'DAMAGE_DEALT',
-                'BUFF_APPLIED',
-                'DEBUFF_APPLIED',
-                'HEAL_APPLIED',
-                'SHIELD_APPLIED',
-                'WEAKNESS_BREAK',
-                'DEATH',
-                'REVIVAL',
-              ],
-            },
-          })
+      const result = await withBusy('Симуляция боя', async () => {
+        await new Promise(r => requestAnimationFrame(r))
+        return runBattle({
+          ...setup,
+          log: {
+            debug: debugLevel,
+            captureUiHistory: true,
+            // Configure snapshots for historical replay - only essential events to avoid snapshot spam
+            snapshotOn: [
+              'ACTION_START',
+              'ACTION_END',
+              'DAMAGE_DEALT',
+              'WEAKNESS_BREAK',
+              'DEATH',
+              'REVIVAL',
+            ],
+          },
         })
+      })
 
       loading.remove()
-      renderResults(newSim!, currentParty)
-    } catch (e) {
-      loading.remove()
-      showStatus('Ошибка симуляции: ' + String(e), 'error')
-      const err = el('div', 'simError')
-      err.textContent = 'Ошибка: ' + String(e)
-      resultsContainer.append(err)
-    } finally {
+      if (result) {
+        renderResults(result, currentParty)
+      }
       runBtn.disabled = false
       runBtn.textContent = 'Запустить симуляцию'
-    }
   }
 
   function renderResults(sim: Simulator, party: Party | undefined): void {
@@ -961,15 +969,17 @@ traceContainer.append(traceEl)
         }))
       }
 
-      const totalDamage = action.hits.reduce((sum, h) => sum + h.damage, 0)
-      const critHits = action.hits.filter(h => h.crit).length
-      const hasBreak = action.hits.some(h => h.breakdown?.broken)
+      // Aggregate hits from all attacks for display
+      const allHits = action.attacks.flatMap(a => a.hits)
+      const totalDamage = allHits.reduce((sum, h) => sum + h.damage, 0)
+      const critHits = allHits.filter(h => h.crit).length
+      const hasBreak = allHits.some(h => h.breakdown?.broken)
 
       const summary = el('div', 'simActionSummary')
       const dmgSpan = el('span', 'simActionDamage')
       dmgSpan.textContent = totalDamage > 0 ? totalDamage.toLocaleString() : '—'
       const hitsSpan = el('span', 'simActionHits')
-      hitsSpan.textContent = `${action.hits.length} попад.${critHits > 0 ? ` (${critHits} крит)` : ''}${hasBreak ? ' | Пробитие' : ''}`
+      hitsSpan.textContent = `${allHits.length} попад.${critHits > 0 ? ` (${critHits} крит)` : ''}${hasBreak ? ' | Пробитие' : ''}`
       const effectsSpan = el('span', 'simActionEffects')
       effectsSpan.textContent = `${action.effects.buffs.length + action.effects.debuffs.length + action.effects.dots.length + action.effects.shields.length + action.effects.heals.length} эфф.`
       summary.append(dmgSpan, hitsSpan, effectsSpan)
@@ -1053,6 +1063,8 @@ traceContainer.append(traceEl)
     function renderActionTab(action: CombatActionRecord, sim: Simulator, content: HTMLElement): void {
       const grid = el('div', 'simLogInspectorGrid')
 
+      const allHits = action.attacks.flatMap(a => a.hits)
+
       const fields = [
         ['Категория', action.category],
         ['AV', action.av.toFixed(1)],
@@ -1060,10 +1072,10 @@ traceContainer.append(traceEl)
         ['Исполнитель', action.sourceName],
         ['Способность', action.abilityName || '—'],
         ['Слот', action.abilitySlot || '—'],
-        ['Всего урона', action.hits.reduce((s, h) => s + h.damage, 0).toLocaleString()],
-        ['Попаданий', action.hits.length.toString()],
-        ['Критические', action.hits.filter(h => h.crit).length.toString()],
-        ['Пробитий', action.hits.filter(h => h.breakdown?.broken).length.toString()],
+        ['Всего урона', allHits.reduce((s, h) => s + h.damage, 0).toLocaleString()],
+        ['Попаданий', allHits.length.toString()],
+        ['Критические', allHits.filter(h => h.crit).length.toString()],
+        ['Пробитий', allHits.filter(h => h.breakdown?.broken).length.toString()],
       ]
 
       for (const [label, value] of fields) {
@@ -1099,15 +1111,15 @@ traceContainer.append(traceEl)
       }
 
       // Hits detail
-      if (action.hits.length > 0) {
+      if (allHits.length > 0) {
         const hitsRow = el('div', 'simLogInspectorRow')
         hitsRow.style.gridColumn = '1 / -1'
         const hitsLabel = el('span', 'simLogInspectorLabel')
         hitsLabel.textContent = 'Попадания'
         const hitsContainer = el('div', 'simInspectorHits')
 
-        for (let i = 0; i < action.hits.length; i++) {
-          const hit = action.hits[i]
+        for (let i = 0; i < allHits.length; i++) {
+          const hit = allHits[i]
           const targetUnit = hit.targetId ? sim.roster.find(u => u.id === hit.targetId) : undefined
           const hitEl = el('div', 'simInspectorHit')
           hitEl.innerHTML = `
@@ -1323,13 +1335,13 @@ traceContainer.append(traceEl)
 
   // Initial render
   refresh()
-  // Suppress unused warning - renderBuilder is called from onclick handlers
-  void renderBuilder
+  // Suppress unused warning - _renderBuilder is called from onclick handlers
+  void _renderBuilder
 
   const handle = { root, refresh }
   mounted.set(host, handle)
   return handle
-}
+} // Explicit return to satisfy TypeScript
 
 function section(title: string): HTMLElement {
   const sec = el('section', 'simSection')
@@ -1337,4 +1349,5 @@ function section(title: string): HTMLElement {
   h.textContent = title
   sec.append(h)
   return sec
+}
 }

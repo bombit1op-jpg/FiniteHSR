@@ -398,8 +398,8 @@ private castUlt(kit: KitDef, u: Unit, ctx: KitRuntime, outOfTurn: boolean): void
 
     if (outOfTurn) {
       this.s.logger.pushActionContext({
-        combatActionId: `ult-oot-${this.s.logger.actionId + 1}`,
-        attackId: `${this.s.logger.actionId + 1}.1`,
+        combatActionId: this.s.logger.nextCombatActionId('ult-oot'),
+        attackId: `${this.s.logger.actNoValue}.${this.s.logger.atkNoValue + 1}`,
         actionCategory: 'ultimate',
         provenance: { sourceKind: 'ability', abilityName: kit.name, abilitySlot: 'ult', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
       })

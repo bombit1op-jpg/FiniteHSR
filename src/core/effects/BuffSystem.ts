@@ -42,6 +42,7 @@ export class BuffSystem {
       this.s.logger.emit({
         type: `${grp}_${kind}` as EventType, source: src?.name, target: u.name, sourceId: b.sourceId, targetId: u.id,
         payload: { id: b.id, name: b.name, stacks: cur?.stacks ?? b.stacks ?? 1, maxStacks: b.maxStacks, turns: cur?.turns ?? b.turns, shield: b.shield, mods: b.mods, debuff: deb },
+        provenance: b.provenance,
       })
       // spec §6 step 6 "Выполнить onApply", paired with the emit above. Hands over the STORED
       // record (`cur`), not the incoming spec: on the stacked/refreshed paths that is the one
@@ -83,7 +84,7 @@ export class BuffSystem {
       ticked++
       if (b.turns > 0) return true
       this.s.events.fireBuffExpire(u, b)
-      this.s.logger.emit({ type: `${isDebuff(b) ? 'DEBUFF_EXPIRED' : 'BUFF_EXPIRED'}` as EventType, target: u.name, targetId: u.id, payload: { id: b.id, name: b.name, stacks: b.stacks ?? 1 } })
+      this.s.logger.emit({ type: `${isDebuff(b) ? 'DEBUFF_EXPIRED' : 'BUFF_EXPIRED'}` as EventType, target: u.name, targetId: u.id, payload: { id: b.id, name: b.name, stacks: b.stacks ?? 1 }, provenance: b.provenance })
       return false
     })
     return ticked

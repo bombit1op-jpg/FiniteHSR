@@ -21,9 +21,9 @@ export class DotSystem {
     }
     target.dots.push(dot as NonNullable<Unit['dots']>[number])
     const src = dot.sourceUnit
-    this.s.logger.emit({ type: 'DOT_APPLIED', source: src?.name, target: target.name, sourceId: src?.id, targetId: target.id, element: dot.elem, payload: { kind: dot.kind, turns: dot.turns, stacks: dot.stacks ?? 1, baseDmg: Math.round(dot.baseDmg) } })
+    this.s.logger.emit({ type: 'DOT_APPLIED', source: src?.name, target: target.name, sourceId: src?.id, targetId: target.id, element: dot.elem, payload: { kind: dot.kind, turns: dot.turns, stacks: dot.stacks ?? 1, baseDmg: Math.round(dot.baseDmg) }, provenance: dot.provenance })
     if (dot.kind === 'Freeze' || dot.kind === 'Imprisonment' || dot.kind === 'Entanglement')
-      this.s.logger.emit({ type: 'CONTROL_APPLIED', source: src?.name, target: target.name, sourceId: src?.id, targetId: target.id, payload: { kind: dot.kind, turns: dot.turns, stacks: dot.stacks ?? 1 } })
+      this.s.logger.emit({ type: 'CONTROL_APPLIED', source: src?.name, target: target.name, sourceId: src?.id, targetId: target.id, payload: { kind: dot.kind, turns: dot.turns, stacks: dot.stacks ?? 1 }, provenance: dot.provenance })
     return dot
   }
 }

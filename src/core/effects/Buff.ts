@@ -8,6 +8,15 @@ export interface Mod {
   whenAbility?: AbilityType[]
 }
 
+export interface BuffProvenance {
+  sourceKind: 'ability' | 'technique' | 'talent' | 'passive' | 'trace' | 'lightCone' | 'relic' | 'enemyAbility' | 'manual' | 'preCombat' | 'environment' | 'unknown'
+  abilityId?: string
+  abilityName?: string
+  abilitySlot?: 'basic' | 'skill' | 'ult' | 'talent' | 'technique' | 'memo'
+  triggeredByUnitId?: string
+  triggeredByUnitName?: string
+}
+
 export interface Buff {
   id: string
   name: string
@@ -25,6 +34,8 @@ export interface Buff {
   payload?: number
   /** remaining damage absorbed by this shield buff (March 7th Skill) */
   shield?: number
+  /** provenance information for effect tracking */
+  provenance?: BuffProvenance
 }
 
 export interface DoT {
@@ -37,4 +48,5 @@ export interface DoT {
   sourceBe?: number
   /** the DoT's own defense ignore (Black Swan Arcana 20%) — applies only to this DoT */
   defIgnore?: number
+  provenance?: BuffProvenance
 }
