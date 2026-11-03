@@ -197,7 +197,7 @@ export interface BattleEvent {
   combatActionId?: string
   attackId?: string
   parentActionId?: string
-  actionCategory?: 'attack' | 'bonusAttack' | 'extraTurn' | 'ultimate' | 'system'
+  actionCategory?: 'attack' | 'bonusAttack' | 'extraTurn' | 'ultimate' | 'system' | 'followUpAttack'
 }
 
 export interface StateSnapshot {
@@ -350,6 +350,8 @@ export class BattleLogger {
   private spStart = 0
   /** Independent sequence for combatActionId uniqueness across the battle */
   private combatActionSeq = 0
+  /** Independent sequence for attackId uniqueness across the battle */
+  private attackIdSeq = 0
 
   /** Independent sequence for snapshotId uniqueness across the battle */
   private snapshotSeq = 0
@@ -371,10 +373,25 @@ export class BattleLogger {
     this.actionContextStack.push(ctx)
   }
 
-  /** Generate a unique combatActionId for out-of-turn/extra actions */
-  nextCombatActionId(prefix: string): string {
+  /** Generate unique IDs for a combat action (independent combatActionId and attackId) */
+  nextActionIds(actionCategory: string, parentActionId?: string): {
+    combatActionId: string
+    attackId: string
+    parentActionId?: string
+    actionCategory: string
+  } {
     this.combatActionSeq++
-    return `${prefix}-${this.combatActionSeq}`
+    return {
+      combatActionId: `${this.combatActionSeq}`,
+      attackId: `${this.attackIdSeq++}`,
+      parentActionId,
+      actionCategory,
+    }
+  }
+
+  /** Generate a unique combatActionId for out-of-turn/extra actions (deprecated, use nextActionIds) */
+  nextCombatActionId(prefix: string): string {
+    return this.nextActionIds(prefix, undefined).combatActionId
   }
 
   /** §Combat Action View — pop the current gameplay action context */
@@ -423,7 +440,7 @@ export class BattleLogger {
   // ---------- ID system (§3): ACT -> ATK -> HIT -> DMG / TRG
 
   beginAction(): number { return ++this.actNo }
-  /** A unit's action begins: new turn number, new ACT id, per-attack/hit/damage counters reset. */
+  /** A unit's action begins: new turn number, new combat action context with independent IDs. */
   turnStart(source: string, action: string, payload?: Record<string, unknown>, sourceId?: string): void {
     this.turnNo++
     this.beginAction()
@@ -435,13 +452,14 @@ export class BattleLogger {
     const isUlt = actionKind === 'ult' || actionKind === 'ultimate'
     const category = isUlt ? 'ultimate' : isExtra ? 'extraTurn' : 'attack'
 
-    const combatActionId = `${this.actNo}`
-    const attackId = `${this.actNo}.1`
+    // Use new independent ID generation
+    const ids = this.nextActionIds(category, payload?.parentActionId as string | undefined)
 
     this.pushActionContext({
-      combatActionId,
-      attackId,
-      actionCategory: category,
+      combatActionId: ids.combatActionId,
+      attackId: ids.attackId,
+      actionCategory: ids.actionCategory as BattleEvent['actionCategory'],
+      parentActionId: ids.parentActionId,
       provenance: payload?.provenance as BattleEvent['provenance'],
     })
 
@@ -453,6 +471,23 @@ export class BattleLogger {
     this.emit({ type: 'ACTION_END', source, sourceId, payload: { action } })
     this.popActionContext()
   }
+
+  /** Start a Follow-Up Attack with its own combatActionId */
+  startFollowUpAttack(parentActionId?: string): void {
+    const ids = this.nextActionIds('followUpAttack', parentActionId)
+    this.pushActionContext({
+      combatActionId: ids.combatActionId,
+      attackId: ids.attackId,
+      actionCategory: 'followUpAttack',
+      parentActionId: ids.parentActionId,
+    })
+  }
+
+  /** End a Follow-Up Attack */
+  endFollowUpAttack(): void {
+    this.popActionContext()
+  }
+
   beginAttack(): number {
     this.atkNo++
     this.hitNo = 0

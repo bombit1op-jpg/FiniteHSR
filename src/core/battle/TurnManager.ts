@@ -397,9 +397,12 @@ private castUlt(kit: KitDef, u: Unit, ctx: KitRuntime, outOfTurn: boolean): void
     this.s.lastAbilityTarget = undefined
 
     if (outOfTurn) {
+      // Use new independent ID generation for out-of-turn ult
+      const ids = this.s.logger.nextActionIds('ultimate', undefined)
+
       this.s.logger.pushActionContext({
-        combatActionId: this.s.logger.nextCombatActionId('ult-oot'),
-        attackId: `${this.s.logger.actNoValue}.${this.s.logger.atkNoValue + 1}`,
+        combatActionId: ids.combatActionId,
+        attackId: ids.attackId,
         actionCategory: 'ultimate',
         provenance: { sourceKind: 'ability', abilityName: kit.name, abilitySlot: 'ult', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
       })

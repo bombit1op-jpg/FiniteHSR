@@ -543,10 +543,12 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
     u.av = 0
     this.log(`>> ${u.name} gains an Extra Turn!`, { type: 'EXTRA_TURN', target: u.name })
 
-    // Push action context for extra turn
+    // Use new independent ID generation for extra turn
+    const ids = this.logger.nextActionIds('extraTurn', undefined)
+
     this.logger.pushActionContext({
-      combatActionId: this.logger.nextCombatActionId('extra'),
-      attackId: `${this.logger.actNoValue}.${this.logger.atkNoValue + 1}`,
+      combatActionId: ids.combatActionId,
+      attackId: ids.attackId,
       actionCategory: 'extraTurn',
       provenance: { sourceKind: 'ability', abilityName: 'Extra Turn', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
     })
