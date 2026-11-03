@@ -342,6 +342,7 @@ export class BattleLogger {
     actionCategory: BattleEvent['actionCategory']
     parentActionId?: string
     provenance?: BattleEvent['provenance']
+    attackUsed: boolean
   }> = []
 
   private counts: Record<string, number> = {}
@@ -370,7 +371,7 @@ export class BattleLogger {
     parentActionId?: string
     provenance?: BattleEvent['provenance']
   }): void {
-    this.actionContextStack.push(ctx)
+    this.actionContextStack.push({ ...ctx, attackUsed: false })
   }
 
   /** Generate unique IDs for a combat action (independent combatActionId and attackId) */
@@ -381,8 +382,7 @@ export class BattleLogger {
     actionCategory: string
   } {
     this.combatActionSeq++
-    // Reset attack counter for new action — attackIdSeq will be incremented on first beginAttack()
-    this.attackIdSeq = 0
+    this.attackIdSeq++
     return {
       combatActionId: `${this.combatActionSeq}`,
       attackId: `${this.attackIdSeq}`,
@@ -490,29 +490,21 @@ export class BattleLogger {
     this.popActionContext()
   }
 
-  /** Track whether an attack has started in the current context */
-  private attackStartedInContext = false
-
   beginAttack(): number {
     this.atkNo++
     this.hitNo = 0
     
-    // First attack in this context uses the reserved attackId from nextActionIds
-    // Subsequent attacks create new independent attackIds
-    if (!this.attackStartedInContext) {
-      const ctx = this.getActionContext()
-      if (ctx) {
-        this.attackStartedInContext = true
-      }
-    } else {
-      // Subsequent attacks get their own unique ID
-      this.attackIdSeq++
-    }
-    
-    // Update the attackId in the current action context
     const ctx = this.getActionContext()
     if (ctx) {
-      ctx.attackId = `${this.actNo}.${this.atkNo}`
+      if (!ctx.attackUsed) {
+        // First attack in this context - use the reserved attackId from nextActionIds
+        ctx.attackUsed = true
+        // attackId is already set in context from nextActionIds()
+      } else {
+        // Subsequent attacks get their own unique ID
+        this.attackIdSeq++
+        ctx.attackId = `${this.attackIdSeq}`
+      }
     }
     return this.atkNo
   }
