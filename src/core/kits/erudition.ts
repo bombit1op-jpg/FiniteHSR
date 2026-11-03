@@ -1959,10 +1959,16 @@ export const rinKit: KitDef = {
     ctx.freeformSeq = seq
     const enemies = [...sim.livingEnemiesOf(rin)]
     if (!enemies.length) return
-    for (const x of enemies) sim.hit(attacker, x, { type: 'fua', mult: mult('rin', 'talent2_a4', lv.talent), elem: 'Quantum', toughDmg: 10, label: 'Freeform (Archer)' })
-    for (const x of [...sim.livingEnemiesOf(rin)]) sim.hit(rin, x, { type: 'fua', mult: mult('rin', 'talent2', lv.talent), elem: 'Quantum', toughDmg: 10, label: 'Freeform (Rin)' })
-    sim.gainSp(Math.round(mult('rin', 'talent2_a2', lv.talent)))
-    sim.log(`${rin.name} & Archer Freeform Tohsaka Style Joint FUA (+${Math.round(mult('rin', 'talent2_a2', lv.talent))} SP)`)
+    const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+    sim.logger.startFollowUpAttack(parentCombatActionId)
+    try {
+      for (const x of enemies) sim.hit(attacker, x, { type: 'fua', mult: mult('rin', 'talent2_a4', lv.talent), elem: 'Quantum', toughDmg: 10, label: 'Freeform (Archer)' })
+      for (const x of [...sim.livingEnemiesOf(rin)]) sim.hit(rin, x, { type: 'fua', mult: mult('rin', 'talent2', lv.talent), elem: 'Quantum', toughDmg: 10, label: 'Freeform (Rin)' })
+      sim.gainSp(Math.round(mult('rin', 'talent2_a2', lv.talent)))
+      sim.log(`${rin.name} & Archer Freeform Tohsaka Style Joint FUA (+${Math.round(mult('rin', 'talent2_a2', lv.talent))} SP)`)
+    } finally {
+      sim.logger.endFollowUpAttack()
+    }
   },
 }
 

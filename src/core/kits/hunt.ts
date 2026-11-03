@@ -988,14 +988,20 @@ function fireFua(sim: SimApi, moze: Unit, ctx: KitRuntime, want?: Unit, tag?: st
   const target = want && !want.dead ? want : sim.rngPick(living)
   // E6 Faithbinder: FUA multiplier +25%
   const fuaMult = mult('moze', 'talent', lv.talent) * (eid >= 6 ? 1.25 : 1)
-  sim.hit(moze, target, { type: 'fua', elem: 'Lightning', mult: fuaMult, toughDmg: 10, label: tag ? `Cascading Featherblade FUA (${tag})` : 'Cascading Featherblade FUA', split: [0.08, 0.08, 0.08, 0.08, 0.08, 0.6], noSeq: true })
-  // A1 Nightfeather: +1 SP after Talent FUA, once per 1 turn (by global turn counter)
-  const tc = sim.turnCount.get(moze.id) ?? 0
-  const cd = (rt.nightfeatherCd as number) ?? 0
-  if (tc >= cd) {
-    sim.gainSp(1)
-    rt.nightfeatherCd = tc + 1
-    sim.log('Nightfeather: +1 SP')
+  const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+  sim.logger.startFollowUpAttack(parentCombatActionId)
+  try {
+    sim.hit(moze, target, { type: 'fua', elem: 'Lightning', mult: fuaMult, toughDmg: 10, label: tag ? `Cascading Featherblade FUA (${tag})` : 'Cascading Featherblade FUA', split: [0.08, 0.08, 0.08, 0.08, 0.08, 0.6], noSeq: true })
+    // A1 Nightfeather: +1 SP after Talent FUA, once per 1 turn (by global turn counter)
+    const tc = sim.turnCount.get(moze.id) ?? 0
+    const cd = (rt.nightfeatherCd as number) ?? 0
+    if (tc >= cd) {
+      sim.gainSp(1)
+      rt.nightfeatherCd = tc + 1
+      sim.log('Nightfeather: +1 SP')
+    }
+  } finally {
+    sim.logger.endFollowUpAttack()
   }
 }
 

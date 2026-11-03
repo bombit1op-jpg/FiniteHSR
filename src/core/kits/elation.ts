@@ -848,26 +848,34 @@ function elSkill_evanescia(sim: SimApi, u: Unit, ctx: KitRuntime): void {
 }
 
 /** "Master Fox" Follow-Up ATK (Talent, fires once per 240 accumulated Energy). */
-function masterFox(sim: SimApi, u: Unit, ctx: KitRuntime): void {
-  const r = rt_evanescia(sim, u)
-  if (r.evFox) return
-  r.evFox = true
-  const lv = levelsOf(ctx)
-  const eid = (ctx.eidolon as number) ?? 0
-  applyMerrymake(sim, u, ctx)
-  const base = mult(PID_evanescia, 'talent', lv.talent)
-  for (const e of sim.livingEnemiesOf(u)) sim.hit(u, e, { type: 'fua', elem: 'Physical', mult: base, label: 'Master Fox' })
-  if (sim.cbOf(u) > 0) {
-    for (const e of sim.livingEnemiesOf(u)) cbElationHit(sim, u, e, mult(PID_evanescia, 'talent_a2', lv.talent), 'Master Fox (CB)', 'Physical')
+  function masterFox(sim: SimApi, u: Unit, ctx: KitRuntime): void {
+    const r = rt_evanescia(sim, u)
+    if (r.evFox) return
+    r.evFox = true
+    const lv = levelsOf(ctx)
+    const eid = (ctx.eidolon as number) ?? 0
+    applyMerrymake(sim, u, ctx)
+    const base = mult(PID_evanescia, 'talent', lv.talent)
+    const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+    sim.logger.startFollowUpAttack(parentCombatActionId)
+    try {
+      applyMerrymake(sim, u, ctx)
+      const base = mult(PID_evanescia, 'talent', lv.talent)
+      for (const e of sim.livingEnemiesOf(u)) sim.hit(u, e, { type: 'fua', elem: 'Physical', mult: base, label: 'Master Fox' })
+      if (sim.cbOf(u) > 0) {
+        for (const e of sim.livingEnemiesOf(u)) cbElationHit(sim, u, e, mult(PID_evanescia, 'talent_a2', lv.talent), 'Master Fox (CB)', 'Physical')
+      }
+      for (const e of sim.livingEnemiesOf(u)) {
+        sim.applyDebuff(u, e, 1, () => sim.addBuff(e, { id: 'ev_a4_vuln', name: 'Weigh All Truths', mods: [{ stat: 'vulnAll', value: 0.12 }], turns: 3, debuff: true }), 'Weigh All Truths')
+      }
+      if (eid >= 1) elSkill_evanescia(sim, u, ctx)
+      sim.gainEnergy(u, mult(PID_evanescia, 'talent_a4', lv.talent))
+      sim.log(`Evanescia Master Fox: Follow-Up ATK ${Math.round(base * 100)}% ATK to all enemies`)
+    } finally {
+      sim.logger.endFollowUpAttack()
+    }
+    r.evFox = false
   }
-  for (const e of sim.livingEnemiesOf(u)) {
-    sim.applyDebuff(u, e, 1, () => sim.addBuff(e, { id: 'ev_a4_vuln', name: 'Weigh All Truths', mods: [{ stat: 'vulnAll', value: 0.12 }], turns: 3, debuff: true }), 'Weigh All Truths')
-  }
-  if (eid >= 1) elSkill_evanescia(sim, u, ctx)
-  sim.gainEnergy(u, mult(PID_evanescia, 'talent_a4', lv.talent))
-  sim.log(`Evanescia Master Fox: Follow-Up ATK ${Math.round(base * 100)}% ATK to all enemies`)
-  r.evFox = false
-}
 
 /**
  * Evanescia — Elation (Physical), 480 Max Energy, ATK-scaling Elation nuker.

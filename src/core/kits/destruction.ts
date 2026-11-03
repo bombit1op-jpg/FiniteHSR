@@ -275,11 +275,17 @@ function triggerFua(sim: SimApi, u: Unit, ctx: KitRuntime): void {
   // A6: FUA DMG +20%; E6: FUA DMG +50% of Max HP
   let m = mult('blade', 'talent', lv.talent) * 1.2
   if (eid >= 6) m += 0.5
-  sim.hitAoe(u, { type: 'fua', scaleStat: 'hp', mult: m, toughDmg: 20, label: "Shuhu's Gift (FUA)", split: [0.33, 0.33, 0.34] })
-  // restores 25% Max HP (canon talent #3); A2 converts 25% of healed into the tally via onAllyHeal
-  sim.heal(u, Math.round(u.maxHp * 0.25))
-  sim.gainEnergy(u, 25)
-  sim.log(`${u.name} Talent FUA + self-heal (energy +25)`)
+  const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+  sim.logger.startFollowUpAttack(parentCombatActionId)
+  try {
+    sim.hitAoe(u, { type: 'fua', scaleStat: 'hp', mult: m, toughDmg: 20, label: "Shuhu's Gift (FUA)", split: [0.33, 0.33, 0.34] })
+    // restores 25% Max HP (canon talent #3); A2 converts 25% of healed into the tally via onAllyHeal
+    sim.heal(u, Math.round(u.maxHp * 0.25))
+    sim.gainEnergy(u, 25)
+    sim.log(`${u.name} Talent FUA + self-heal (energy +25)`)
+  } finally {
+    sim.logger.endFollowUpAttack()
+  }
 }
 
 export const bladeKit: KitDef = {
@@ -1249,19 +1255,25 @@ function fireCounter(sim: SimApi, clara: Unit, attacker: Unit, enhanced: boolean
   // Revenge trace: Svarog's Counter DMG +30% (applies to the whole counter, incl. ult #2 extra)
   const base = mult('clara', 'talent', lv.talent) * 1.3
   const m = enhanced ? (base + mult('clara', 'ult_a2', lv.ult) * 1.3) : base
-  if (enhanced) {
-    // Enhanced Counter: enemies adjacent to the primary take 50% of the primary DMG
-    sim.hitBlast(clara, attacker,
-      { type: 'fua', mult: m, elem: 'Physical', toughDmg: 10, label: 'Svarog Counter' },
-      { type: 'fua', mult: m * 0.5, elem: 'Physical', toughDmg: 5, label: 'Svarog Counter (adj)' },
-    )
-  } else {
-    sim.hit(clara, attacker, { type: 'fua', mult: m, elem: 'Physical', toughDmg: 10, label: 'Svarog Counter' })
+  const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+  sim.logger.startFollowUpAttack(parentCombatActionId)
+  try {
+    if (enhanced) {
+      // Enhanced Counter: enemies adjacent to the primary take 50% of the primary DMG
+      sim.hitBlast(clara, attacker,
+        { type: 'fua', mult: m, elem: 'Physical', toughDmg: 10, label: 'Svarog Counter' },
+        { type: 'fua', mult: m * 0.5, elem: 'Physical', toughDmg: 5, label: 'Svarog Counter (adj)' },
+      )
+    } else {
+      sim.hit(clara, attacker, { type: 'fua', mult: m, elem: 'Physical', toughDmg: 10, label: 'Svarog Counter' })
+    }
+    sim.addBuff(attacker, { id: 'clara_mark', name: 'Mark of Counter', mods: [], turns: 999, sourceId: clara.id })
+    // Because We're Family talent sp_base 5 → Counter regenerates energy (herta/kafka pattern)
+    sim.gainEnergy(clara, 5)
+    sim.log(`Svarog Counter → ${attacker.name}${enhanced ? ' (Enhanced)' : ''} (energy +5)`)
+  } finally {
+    sim.logger.endFollowUpAttack()
   }
-  sim.addBuff(attacker, { id: 'clara_mark', name: 'Mark of Counter', mods: [], turns: 999, sourceId: clara.id })
-  // Because We're Family talent sp_base 5 → Counter regenerates energy (herta/kafka pattern)
-  sim.gainEnergy(clara, 5)
-  sim.log(`Svarog Counter → ${attacker.name}${enhanced ? ' (Enhanced)' : ''} (energy +5)`)
 }
 
 export const claraKit: KitDef = {
@@ -1516,10 +1528,16 @@ function fireFua(sim: SimApi, xueyi: Unit, ctx: KitRuntime): void {
   const eid = xueyiEid(ctx)
   let m = mult('xueyi', 'talent', lv.talent)
   if (eid >= 1) m *= 1.4 // E1 Dvesha: +40% FUA DMG
-  sim.hitRandom(xueyi, FUA_HITS, { type: 'fua', mult: m, elem: 'Quantum', toughDmg: FUA_TOUGH, pierceRatio: eid >= 2 ? 1 : undefined, label: 'Karmic Perpetuation FUA' })
-  sim.gainEnergy(xueyi, FUA_HITS * FUA_ENERGY)
-  if (eid >= 2) sim.heal(xueyi, Math.floor(xueyi.maxHp * 0.05)) // E2: heal 5% MaxHP
-  sim.log('Xueyi Karma full → Follow-Up ATK (3 bounces)')
+  const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+  sim.logger.startFollowUpAttack(parentCombatActionId)
+  try {
+    sim.hitRandom(xueyi, FUA_HITS, { type: 'fua', mult: m, elem: 'Quantum', toughDmg: FUA_TOUGH, pierceRatio: eid >= 2 ? 1 : undefined, label: 'Karmic Perpetuation FUA' })
+    sim.gainEnergy(xueyi, FUA_HITS * FUA_ENERGY)
+    if (eid >= 2) sim.heal(xueyi, Math.floor(xueyi.maxHp * 0.05)) // E2: heal 5% MaxHP
+    sim.log('Xueyi Karma full → Follow-Up ATK (3 bounces)')
+  } finally {
+    sim.logger.endFollowUpAttack()
+  }
 }
 
 /** gain karma; consume-all + FUA when it maxes, A3 tally returns right after */
@@ -2580,19 +2598,25 @@ export const gilgameshKit: KitDef = {
     if ((ctx.tally as number) < thresh) return
     ctx.tally = 0
     const saber = sim.allies('ally').find(c => c.kind === 'char' && c.kitId === 'saber' && !c.dead)
-    for (const e of [...sim.livingEnemiesOf(u)]) {
-      // canon notes: Saber attacks first, then Gilgamesh
-      if (saber) sim.hit(saber, e, { type: 'fua', mult: mult('gilgamesh', 'talent2_a2', lv.talent), elem: 'Wind', toughDmg: 10, label: 'Joint FUA (Saber)' })
-      sim.hit(u, e, { type: 'fua', mult: mult('gilgamesh', 'talent2', lv.talent), elem: 'Lightning', toughDmg: 10, label: 'Joint FUA (Gilgamesh)', split: [0.18, 0.18, 0.18, 0.46] })
+    const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+    sim.logger.startFollowUpAttack(parentCombatActionId)
+    try {
+      for (const e of [...sim.livingEnemiesOf(u)]) {
+        // canon notes: Saber attacks first, then Gilgamesh
+        if (saber) sim.hit(saber, e, { type: 'fua', mult: mult('gilgamesh', 'talent2_a2', lv.talent), elem: 'Wind', toughDmg: 10, label: 'Joint FUA (Saber)' })
+        sim.hit(u, e, { type: 'fua', mult: mult('gilgamesh', 'talent2', lv.talent), elem: 'Lightning', toughDmg: 10, label: 'Joint FUA (Gilgamesh)', split: [0.18, 0.18, 0.18, 0.46] })
+      }
+      setInterest(sim, u, ctx, ((ctx.interest as number) ?? 0) + mult('gilgamesh', 'talent2_a3', lv.talent))
+      if (saber) {
+        sim.gainEnergy(saber, mult('gilgamesh', 'talent2_a4', lv.talent))
+        // Saber next Ult DMG ×2 (talent2_a6) — set flag on saber's runtime
+        const saberRt = sim.rt(saber)
+        saberRt.gilNextUltMul = mult('gilgamesh', 'talent2_a6', lv.talent)
+      }
+      sim.log(`${u.name} Joint FUA triggered (tally reset)`)
+    } finally {
+      sim.logger.endFollowUpAttack()
     }
-    setInterest(sim, u, ctx, ((ctx.interest as number) ?? 0) + mult('gilgamesh', 'talent2_a3', lv.talent))
-    if (saber) {
-      sim.gainEnergy(saber, mult('gilgamesh', 'talent2_a4', lv.talent))
-      // Saber next Ult DMG ×2 (talent2_a6) — set flag on saber's runtime
-      const saberRt = sim.rt(saber)
-      saberRt.gilNextUltMul = mult('gilgamesh', 'talent2_a6', lv.talent)
-    }
-    sim.log(`${u.name} Joint FUA triggered (tally reset)`)
   },
 }
 

@@ -148,10 +148,16 @@ export const march7thKit: KitDef = {
     const flat = eid >= 4 ? eff(march).def * 0.3 : 0
     sim.gainEnergy(march, 10)
     sim.log(`March Talent: Girl Power (counter +10 Energy)`)
-    sim.hit(march, attacker, {
-      type: 'fua', mult: mult('march7th', 'talent', lv.talent), flat,
-      toughDmg: 10, label: 'Girl Power (Counter)',
-    })
+    const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+    sim.logger.startFollowUpAttack(parentCombatActionId)
+    try {
+      sim.hit(march, attacker, {
+        type: 'fua', mult: mult('march7th', 'talent', lv.talent), flat,
+        toughDmg: 10, label: 'Girl Power (Counter)',
+      })
+    } finally {
+      sim.logger.endFollowUpAttack()
+    }
   },
 
   // Ultimate: Frozen enemies take Ice Additional DMG at the start of each turn
@@ -763,9 +769,15 @@ function addBlindBet(sim: SimApi, u: Unit, ctx: KitRuntime, n: number): void {
   }
   rt.blindBet -= BLIND_BET_THRESHOLD
   const hits = mult('aventurine', 'talent_a2', lv.talent) + (eid >= 4 ? 3 : 0)
-  sim.hitRandom(u, hits, { type: 'fua', elem: 'Imaginary', flat: defBase(sim, u, mult('aventurine', 'talent_a3', lv.talent)), toughDmg: 10 / 3, label: "Roulette Shark FUA" })
-  sim.log(`Aventurine: Blind Bet ${BLIND_BET_THRESHOLD} → FUA ×${hits}`)
-  bingoShield(sim, u, ctx)
+  const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+  sim.logger.startFollowUpAttack(parentCombatActionId)
+  try {
+    sim.hitRandom(u, hits, { type: 'fua', elem: 'Imaginary', flat: defBase(sim, u, mult('aventurine', 'talent_a3', lv.talent)), toughDmg: 10 / 3, label: "Roulette Shark FUA" })
+    sim.log(`Aventurine: Blind Bet ${BLIND_BET_THRESHOLD} → FUA ×${hits}`)
+    bingoShield(sim, u, ctx)
+  } finally {
+    sim.logger.endFollowUpAttack()
+  }
 }
 
 export const aventurineKit: KitDef = {

@@ -1378,7 +1378,13 @@ export const cipherKit: KitDef = {
         rt.cipherFuaCount = cnt + 1
         if (eid >= 1) sim.addBuff(u, { id: 'cipher_e1', name: 'Read the Room, Seek the Glee', mods: [{ stat: 'atkPct', value: 0.8 }], turns: 2 } as never)
         const fuaMult = mult('cipher', 'talent', lv.talent) * (eid >= 6 ? 4.5 : 1) // E6 +350%
-        sim.hit(u, target, { type: 'fua', elem: 'Quantum', mult: fuaMult, toughDmg: 5, label: 'Hospitable Dolosian (FUA)', split: [0.2, 0.1, 0.1, 0.6] })
+        const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+        sim.logger.startFollowUpAttack(parentCombatActionId)
+        try {
+          sim.hit(u, target, { type: 'fua', elem: 'Quantum', mult: fuaMult, toughDmg: 5, label: 'Hospitable Dolosian (FUA)', split: [0.2, 0.1, 0.1, 0.6] })
+        } finally {
+          sim.logger.endFollowUpAttack()
+        }
       }
       // E4: Patron attacked by an ally → Additional Quantum DMG 50% ATK (every attack)
       if (eid >= 4 && !target.dead) sim.hit(u, target, { type: 'add', noSeq: true, elem: 'Quantum', flat: Math.round(eff(u).atk * 0.5), canCrit: false, label: 'E4 add DMG' })
@@ -2435,14 +2441,20 @@ export const the_dahliaKit: KitDef = {
     rt.dahlFuaSeq = seq
     const n = mult('the_dahlia', 'talent_a2', lv.talent) + (e2 >= 4 ? 5 : 0)
     sim.log(`${u.name}: Talent FUA (${n} hits) after ${attacker.name}`)
-    for (let i = 0; i < n; i++) {
-      const pool = sim.allies('enemy').filter(e => !e.dead)
-      if (!pool.length) return
-      const t = sim.rngPick(pool)
-      const beforeSb = sim.attackToughRed
-      sim.hit(u, t, { type: 'fua', mult: mult('the_dahlia', 'talent', lv.talent), elem: 'Fire', toughDmg: 15, label: 'Talent FUA' })
-      const sbTough = sim.attackToughRed - beforeSb
-      if (!t.dead && t.broken && sbTough > 0) sim.superBreak(u, t, sbTough, mult('the_dahlia', 'talent_a3', lv.talent))
+    const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+    sim.logger.startFollowUpAttack(parentCombatActionId)
+    try {
+      for (let i = 0; i < n; i++) {
+        const pool = sim.allies('enemy').filter(e => !e.dead)
+        if (!pool.length) return
+        const t = sim.rngPick(pool)
+        const beforeSb = sim.attackToughRed
+        sim.hit(u, t, { type: 'fua', mult: mult('the_dahlia', 'talent', lv.talent), elem: 'Fire', toughDmg: 15, label: 'Talent FUA' })
+        const sbTough = sim.attackToughRed - beforeSb
+        if (!t.dead && t.broken && sbTough > 0) sim.superBreak(u, t, sbTough, mult('the_dahlia', 'talent_a3', lv.talent))
+      }
+    } finally {
+      sim.logger.endFollowUpAttack()
     }
     rt.dahlFuaCount = (rt.dahlFuaCount as number) + 1
     if ((rt.dahlFuaCount as number) % 2 === 0) sim.gainSp(1) // A1: 1 SP per 2 FUA uses

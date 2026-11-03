@@ -830,14 +830,20 @@ function clearNuminosity(sim: SimApi, u: Unit): void {
 }
 
 /** Talent FUA: Quantum AoE = #1% MaxHP. A0: after FUA, self DMG+72% (3 stacks). */
-function talentFua(sim: SimApi, u: Unit, ctx: KitRuntime): void {
-  const lv = levelsOf(ctx)
-  const eid = (ctx.eidolon as number) ?? 0
-  const e6mult = eid >= 6 ? 1 + 7.29 : 1
-  sim.hitAoe(u, { type: 'fua', elem: 'Quantum', mult: mult('tribbie', 'talent', lv.talent) * e6mult, scaleStat: 'hp', toughDmg: 10, label: 'Busy as Tribbie' })
-  // A0: +72% DMG, stacks 3, 3 turns
-  sim.addBuff(u, { id: 'tri_a0', name: 'Lamb Outside the Wall...', mods: [{ stat: 'dmgAll', value: 0.72 }], turns: 3, maxStacks: 3 } as never)
-}
+  function talentFua(sim: SimApi, u: Unit, ctx: KitRuntime): void {
+    const lv = levelsOf(ctx)
+    const eid = (ctx.eidolon as number) ?? 0
+    const e6mult = eid >= 6 ? 1 + 7.29 : 1
+    const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+    sim.logger.startFollowUpAttack(parentCombatActionId)
+    try {
+      sim.hitAoe(u, { type: 'fua', elem: 'Quantum', mult: mult('tribbie', 'talent', lv.talent) * e6mult, scaleStat: 'hp', toughDmg: 10, label: 'Busy as Tribbie' })
+      // A0: +72% DMG, stacks 3, 3 turns
+      sim.addBuff(u, { id: 'tri_a0', name: 'Lamb Outside the Wall...', mods: [{ stat: 'dmgAll', value: 0.72 }], turns: 3, maxStacks: 3 } as never)
+    } finally {
+      sim.logger.endFollowUpAttack()
+    }
+  }
 
 export const tribbieKit: KitDef = {
   id: 'tribbie',
