@@ -7,6 +7,7 @@ import type { CountdownSpec } from './combat/Scheduled'
 import type { ToughnessBarSpec } from './combat/ToughnessBars'
 import type { DebuffCategory } from './combat/StatResolver'
 import type { EventType } from './battlelog'
+import { BattleLogger } from './battlelog'
 export  type { DmgType }
 export type { AbilityType }
 export type { TriggerWindow }
@@ -237,6 +238,8 @@ export interface SimApi {
    *  Only a READY char fires: the energy gate is the sim's own auto-ult condition, so a partially
    *  charged ally is never pushed into a kit whose own energy check is looser than its cap. */
   activateAllyUlt(ally: Unit): boolean
+  /** BattleLogger instance for structured event logging */
+  logger: BattleLogger
 }
 
 /**

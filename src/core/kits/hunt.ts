@@ -613,17 +613,23 @@ export const yanqingKit: KitDef = {
     const lv = levelsOf(ctx)
     afterHitDmg(sim, attacker, target, ctx)
     if (sim.hasBuff(attacker, SOULSTEEL) && sim.rng() < mult('yanqing', 'talent', lv.talent)) {
-      sim.hit(attacker, target, { type: 'fua', mult: mult('yanqing', 'talent_a4', lv.talent), toughDmg: 10, label: 'Soulsteel Sync FUA', split: [0.3, 0.7], onCrit: () => critSpd(sim, attacker) })
-      sim.log(`${attacker.name} Soulsteel Sync FUA`)
-      if (!target.dead) {
-        sim.applyDebuff(attacker, target, mult('yanqing', 'talent_a6', lv.talent), () => {
-          sim.applyDot(target, {
-            kind: 'Freeze', elem: 'Ice', turns: 1,
-            baseDmg: sim.effAtk(attacker) * mult('yanqing', 'talent_a5', lv.talent),
-            sourceUnit: attacker,
-          } as unknown as DoTWithSource)
-          sim.log(`${target.name} Frozen`)
-        }, 'Freeze', 'Freeze')
+      const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+      sim.logger.startFollowUpAttack(parentCombatActionId)
+      try {
+        sim.hit(attacker, target, { type: 'fua', mult: mult('yanqing', 'talent_a4', lv.talent), toughDmg: 10, label: 'Soulsteel Sync FUA', split: [0.3, 0.7], onCrit: () => critSpd(sim, attacker) })
+        sim.log(`${attacker.name} Soulsteel Sync FUA`)
+        if (!target.dead) {
+          sim.applyDebuff(attacker, target, mult('yanqing', 'talent_a6', lv.talent), () => {
+            sim.applyDot(target, {
+              kind: 'Freeze', elem: 'Ice', turns: 1,
+              baseDmg: sim.effAtk(attacker) * mult('yanqing', 'talent_a5', lv.talent),
+              sourceUnit: attacker,
+            } as unknown as DoTWithSource)
+            sim.log(`${target.name} Frozen`)
+          }, 'Freeze', 'Freeze')
+        }
+      } finally {
+        sim.logger.endFollowUpAttack()
       }
     }
     ctx.yqProc = false
@@ -761,7 +767,13 @@ export const feixiaoKit: KitDef = {
       if (sim.spendSp(1)) {
         sim.hit(u, primary, { type: 'skill', mult: mult('feixiao', 'skill', lv.skill), elem: 'Wind', toughDmg: 20, label: 'Waraxe', split: [0.34, 0.33, 0.33] })
         // Skill Waraxe: immediately launches 1 extra instance of Talent's FUA against the target
-        thunderhuntFua(sim, u, ctx, primary, true)
+        const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+        sim.logger.startFollowUpAttack(parentCombatActionId)
+        try {
+          thunderhuntFua(sim, u, ctx, primary, true)
+        } finally {
+          sim.logger.endFollowUpAttack()
+        }
         sim.log(`${u.name} Skill: Waraxe`)
       }
       return
@@ -795,7 +807,15 @@ export const feixiaoKit: KitDef = {
       }
     }
     // Talent FUA triggered by teammate attacks (not Feixiao's own hits), vs the attacked primary target
-    if (attacker !== feixiao && attacker.side === 'ally' && attacker.kind === 'char') thunderhuntFua(sim, feixiao, ctx, target)
+    if (attacker !== feixiao && attacker.side === 'ally' && attacker.kind === 'char') {
+      const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+      sim.logger.startFollowUpAttack(parentCombatActionId)
+      try {
+        thunderhuntFua(sim, feixiao, ctx, target)
+      } finally {
+        sim.logger.endFollowUpAttack()
+      }
+    }
   },
 
   // reset FUA trigger at start of Feixiao's turn
@@ -837,17 +857,23 @@ function triggerFua(sim: SimApi, ratio: Unit, target: Unit, ctx: KitRuntime): vo
   // Deduction: target with ≥3 debuffs → +10% per debuff, cap 50%
   const dc = debuffCount(sim, target)
   if (dc >= 3) sim.addBuff(ratio, { id: 'ratio_deduction', name: 'Deduction', mods: [{ stat: 'dmgAll', value: Math.min(0.5, dc * 0.1) }], turns: Infinity })
-  sim.hit(ratio, target, { type: 'fua', elem: 'Imaginary', mult: fuaMult, toughDmg: 10, label: 'Cogito, Ergo Sum FUA' })
-  sim.removeBuff(ratio, 'ratio_deduction')
-  // E2: per-debuff Imaginary Additional 20% ATK, max 4 hits
-  if (eid >= 2) {
-    const addCount = Math.min(4, dc)
-    for (let i = 0; i < addCount; i++)
-      sim.hit(ratio, target, { type: 'add', noSeq: true, elem: 'Imaginary', mult: 0.20, scaleStat: 'atk', toughDmg: 0, label: 'E2 Additional' })
+  const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+  sim.logger.startFollowUpAttack(parentCombatActionId)
+  try {
+    sim.hit(ratio, target, { type: 'fua', elem: 'Imaginary', mult: fuaMult, toughDmg: 10, label: 'Cogito, Ergo Sum FUA' })
+    sim.removeBuff(ratio, 'ratio_deduction')
+    // E2: per-debuff Imaginary Additional 20% ATK, max 4 hits
+    if (eid >= 2) {
+      const addCount = Math.min(4, dc)
+      for (let i = 0; i < addCount; i++)
+        sim.hit(ratio, target, { type: 'add', noSeq: true, elem: 'Imaginary', mult: 0.20, scaleStat: 'atk', toughDmg: 0, label: 'E2 Additional' })
+    }
+    // E4: +15 Energy on talent trigger
+    if (eid >= 4) sim.gainEnergy(ratio, 15)
+    sim.log(`${ratio.name} Cogito, Ergo Sum FUA`)
+  } finally {
+    sim.logger.endFollowUpAttack()
   }
-  // E4: +15 Energy on talent trigger
-  if (eid >= 4) sim.gainEnergy(ratio, 15)
-  sim.log(`${ratio.name} Cogito, Ergo Sum FUA`)
 }
 
 /** Deduction trace: dmgAll = 10% per debuff on the target (needs ≥3), cap 50%. */

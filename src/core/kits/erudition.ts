@@ -258,9 +258,15 @@ export const himekoKit: KitDef = {
     ctx.charge = 0
     const eid = (ctx.eidolon as number) ?? 0
     if (eid >= 1) sim.addBuff(himeko, { id: 'himeko_e1', name: 'Childhood', mods: [{ stat: 'spdPct', value: 0.20 }], turns: 2 })
-    for (const e of [...sim.livingEnemiesOf(himeko)]) {
-      uiWrap(sim, himeko, e, eid, () => sim.hit(himeko, e, { type: 'fua', mult: mult('himeko', 'talent', levelsOf(ctx).talent), toughDmg: 15, label: 'Victory Rush', split: [0.2, 0.2, 0.2, 0.4] }))
-      applyBurn(sim, himeko, e)
+    const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+    sim.logger.startFollowUpAttack(parentCombatActionId)
+    try {
+      for (const e of [...sim.livingEnemiesOf(himeko)]) {
+        uiWrap(sim, himeko, e, eid, () => sim.hit(himeko, e, { type: 'fua', mult: mult('himeko', 'talent', levelsOf(ctx).talent), toughDmg: 15, label: 'Victory Rush', split: [0.2, 0.2, 0.2, 0.4] }))
+        applyBurn(sim, himeko, e)
+      }
+    } finally {
+      sim.logger.endFollowUpAttack()
     }
     void target
   },
@@ -276,7 +282,13 @@ function fireTalent(sim: SimApi, herta: Unit, ctx: KitRuntime): void {
   const base = mult('herta', 'talent', lv.talent)
   sim.gainEnergy(herta, 5)
   sim.log(`${herta.name} Talent: Fine, I'll Do It Myself (energy +5)`)
-  sim.hitAoe(herta, { type: 'fua', mult: base, elem: 'Ice', toughDmg: 10, label: "Fine, I'll Do It Myself!" })
+  const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+  sim.logger.startFollowUpAttack(parentCombatActionId)
+  try {
+    sim.hitAoe(herta, { type: 'fua', mult: base, elem: 'Ice', toughDmg: 10, label: "Fine, I'll Do It Myself!" })
+  } finally {
+    sim.logger.endFollowUpAttack()
+  }
   if (eid(ctx) >= 2) {
     const count = Math.min(5, ((ctx.herta_fuaCount as number) ?? 0) + 1)
     const crBonus = 0.03 * count
@@ -358,8 +370,14 @@ export const hertaKit: KitDef = {
     const herta = sim.allies('ally').find(u => u.kitId === 'herta' && !u.dead)
     if (herta) {
       ctx.herta_firing = true
-      fireTalent(sim, herta, ctx)
-      ctx.herta_firing = false
+      const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+      sim.logger.startFollowUpAttack(parentCombatActionId)
+      try {
+        fireTalent(sim, herta, ctx)
+      } finally {
+        sim.logger.endFollowUpAttack()
+        ctx.herta_firing = false
+      }
     }
   },
 }

@@ -67,7 +67,13 @@ export const bronyaKit: KitDef = {
     rt.e4Used = true
     sim.gainEnergy(bronya, 5)
     sim.log('E4 Take by Surprise (energy +5)')
-    sim.hit(bronya, target, { type: 'fua', mult: mult('bronya', 'basic', lv.basic) * 0.80, toughDmg: 10, label: 'Take by Surprise (FUA)' })
+    const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+    sim.logger.startFollowUpAttack(parentCombatActionId)
+    try {
+      sim.hit(bronya, target, { type: 'fua', mult: mult('bronya', 'basic', lv.basic) * 0.80, toughDmg: 10, label: 'Take by Surprise (FUA)' })
+    } finally {
+      sim.logger.endFollowUpAttack()
+    }
   },
   perform(sim, u, action, ctx) {
     const lv = levelsOf(ctx)

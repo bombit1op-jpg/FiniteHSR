@@ -592,18 +592,24 @@ export const kafkaKit: KitDef = {
     if (!kafka) return
     if (((ctx.fuUses as number) ?? 0) >= 2) return
     ctx.fuUses = ((ctx.fuUses as number) ?? 0) + 1
-    sim.hit(kafka, target, { type: 'fua', mult: mult('kafka', 'talent', levelsOf(ctx).talent), toughDmg: 10, label: 'Gentle but Cruel', split: [0.15, 0.15, 0.15, 0.15, 0.15, 0.25] })
-    if (target.dead) return
-    // talent sp_base 10: FUA regenerates 10 Energy
-    sim.gainEnergy(kafka, 10)
-    sim.log('Kafka Talent: Gentle but Cruel (energy +10)')
-    kafkaE1(sim, target, (ctx.eidolon as number) ?? 0)
-    // A6 Thorns: FUA detonates all DoTs at 80%
-    if (ctx.thorns) {
-      detonateDots(sim, kafka, target, 0.8)
-      sim.log('Kafka A6: Thorns DoT detonation')
+    const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+    sim.logger.startFollowUpAttack(parentCombatActionId)
+    try {
+      sim.hit(kafka, target, { type: 'fua', mult: mult('kafka', 'talent', levelsOf(ctx).talent), toughDmg: 10, label: 'Gentle but Cruel', split: [0.15, 0.15, 0.15, 0.15, 0.15, 0.25] })
+      if (target.dead) return
+      // talent sp_base 10: FUA regenerates 10 Energy
+      sim.gainEnergy(kafka, 10)
+      sim.log('Kafka Talent: Gentle but Cruel (energy +10)')
+      kafkaE1(sim, target, (ctx.eidolon as number) ?? 0)
+      // A6 Thorns: FUA detonates all DoTs at 80%
+      if (ctx.thorns) {
+        detonateDots(sim, kafka, target, 0.8)
+        sim.log('Kafka A6: Thorns DoT detonation')
+      }
+      sim.applyDebuff(kafka, target, 1.0, () => shockDots(sim, kafka, target, mult('kafka', 'ult_a3', levelsOf(ctx).ult)), 'Shock (Gentle but Cruel)', 'Shock')
+    } finally {
+      sim.logger.endFollowUpAttack()
     }
-    sim.applyDebuff(kafka, target, 1.0, () => shockDots(sim, kafka, target, mult('kafka', 'ult_a3', levelsOf(ctx).ult)), 'Shock (Gentle but Cruel)', 'Shock')
   },
 
   // A4 Plunder: enemy defeated while under Kafka's Shock → +5 Energy (own kill)
