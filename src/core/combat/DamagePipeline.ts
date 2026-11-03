@@ -233,7 +233,24 @@ if (!target || target.dead || (attacker.dead && !o.fromDeadAttacker)) return 0
 
 if (target.side === 'ally' && target.kind === 'char') this.s.gainEnergy(target, 10)
     if (target.hp <= 0) this.s.kill(attacker, target, o.type)
-    if (attacker.side === 'ally' && (attacker.kind === 'char' || attacker.kind === 'summon' || attacker.kind === 'transformed')) this.s.fireAfterAttack(attacker, target, o.type, dmg, this.s.attackToughRed, ctx.ability, o.memoSkill)
+    if (attacker.side === 'ally' && (attacker.kind === 'char' || attacker.kind === 'summon' || attacker.kind === 'transformed')) {
+      // Connect FUA logging: create a new combat action context for Follow-Up Attacks
+      if (ctx.ability === 'fua' || (o.also && o.also.includes('fua'))) {
+        const parentActionId = this.s.logger.getActionContext()?.combatActionId
+        const ids = this.s.logger.nextActionIds('followUpAttack', parentActionId)
+        this.s.logger.pushActionContext({
+          combatActionId: ids.combatActionId,
+          attackId: ids.attackId,
+          actionCategory: 'bonusAttack',
+          parentActionId: ids.parentActionId,
+          provenance: { sourceKind: 'ability', abilityName: 'Follow-Up Attack', triggeredByUnitId: attacker.id, triggeredByUnitName: attacker.name },
+        })
+        try { this.s.fireAfterAttack(attacker, target, o.type, dmg, this.s.attackToughRed, ctx.ability, o.memoSkill) }
+        finally { this.s.logger.popActionContext() }
+      } else {
+        this.s.fireAfterAttack(attacker, target, o.type, dmg, this.s.attackToughRed, ctx.ability, o.memoSkill)
+      }
+    }
     // §61 — enemy Counter state: a SINGLE-target ally-character attack on a countering enemy
     // makes it act immediately on the attacker (canon: Silvermane Lieutenant "Shield Reflect").
     // Blast/AoE/Random shapes are excluded (they are not "an attack by a single character").
