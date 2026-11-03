@@ -543,13 +543,17 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
     u.av = 0
     this.log(`>> ${u.name} gains an Extra Turn!`, { type: 'EXTRA_TURN', target: u.name })
 
+    // Get current combatActionId before creating new context
+    const parentActionId = this.logger.getActionContext()?.combatActionId
+
     // Use new independent ID generation for extra turn
-    const ids = this.logger.nextActionIds('extraTurn', undefined)
+    const ids = this.logger.nextActionIds('extraTurn', parentActionId)
 
     this.logger.pushActionContext({
       combatActionId: ids.combatActionId,
       attackId: ids.attackId,
       actionCategory: 'extraTurn',
+      parentActionId: ids.parentActionId,
       provenance: { sourceKind: 'ability', abilityName: 'Extra Turn', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
     })
 
@@ -558,10 +562,10 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
     this.performAbility(kit, u, action, ctx)
 
     this.logger.popActionContext()
+    ctx.inExtraTurn = false
 
     // memosprites acting inline (Demiurge, Garmentmaker, Evey) never reach endTick — fire here too
     this.fireAllyMemospriteAct(u)
-    ctx.inExtraTurn = false
   }
 
   /** §P5 re-issue an already-decided action as an Extra Turn, at the current timeline point.
@@ -572,8 +576,25 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
     const ctx = this.rt(u)
     const kit = this.kits.get(u.kitId!)!
     ctx.extraRelease = true
+    
+    // Get current combatActionId before creating new context
+    const parentActionId = this.logger.getActionContext()?.combatActionId
+    
+    // Use new independent ID generation for extra turn
+    const ids = this.logger.nextActionIds('extraTurn', parentActionId)
+
+    this.logger.pushActionContext({
+      combatActionId: ids.combatActionId,
+      attackId: ids.attackId,
+      actionCategory: 'extraTurn',
+      parentActionId: ids.parentActionId,
+      provenance: { sourceKind: 'ability', abilityName: 'Re-issued Action', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
+    })
+
     try { this.performAbility(kit, u, action, ctx) }
     finally { ctx.extraRelease = false }
+    
+    this.logger.popActionContext()
     this.fireAllyMemospriteAct(u)
   }
 

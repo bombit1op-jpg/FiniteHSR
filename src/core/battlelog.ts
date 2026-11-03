@@ -381,9 +381,11 @@ export class BattleLogger {
     actionCategory: string
   } {
     this.combatActionSeq++
+    // Reset attack counter for new action — attackIdSeq will be incremented on first beginAttack()
+    this.attackIdSeq = 0
     return {
       combatActionId: `${this.combatActionSeq}`,
-      attackId: `${this.attackIdSeq++}`,
+      attackId: `${this.attackIdSeq}`,
       parentActionId,
       actionCategory,
     }
@@ -488,9 +490,25 @@ export class BattleLogger {
     this.popActionContext()
   }
 
+  /** Track whether an attack has started in the current context */
+  private attackStartedInContext = false
+
   beginAttack(): number {
     this.atkNo++
     this.hitNo = 0
+    
+    // First attack in this context uses the reserved attackId from nextActionIds
+    // Subsequent attacks create new independent attackIds
+    if (!this.attackStartedInContext) {
+      const ctx = this.getActionContext()
+      if (ctx) {
+        this.attackStartedInContext = true
+      }
+    } else {
+      // Subsequent attacks get their own unique ID
+      this.attackIdSeq++
+    }
+    
     // Update the attackId in the current action context
     const ctx = this.getActionContext()
     if (ctx) {

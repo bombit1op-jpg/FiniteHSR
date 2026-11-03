@@ -391,28 +391,34 @@ if (u.side === 'ally') {
   }
 
   /** resolve one Ultimate; fires gear hooks with the out-of-turn marker (gates advance-forward effects) */
-private castUlt(kit: KitDef, u: Unit, ctx: KitRuntime, outOfTurn: boolean): void {
+  private castUlt(kit: KitDef, u: Unit, ctx: KitRuntime, outOfTurn: boolean): void {
     const before = u.energy
     this.s.lastUltOutOfTurn = outOfTurn
     this.s.lastAbilityTarget = undefined
 
+    // Get current combatActionId before creating new context
+    const parentActionId = this.s.logger.getActionContext()?.combatActionId
+
     if (outOfTurn) {
       // Use new independent ID generation for out-of-turn ult
-      const ids = this.s.logger.nextActionIds('ultimate', undefined)
+      const ids = this.s.logger.nextActionIds('ultimate', parentActionId)
 
       this.s.logger.pushActionContext({
         combatActionId: ids.combatActionId,
         attackId: ids.attackId,
         actionCategory: 'ultimate',
+        parentActionId: ids.parentActionId,
         provenance: { sourceKind: 'ability', abilityName: kit.name, abilitySlot: 'ult', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
       })
     }
 
-    this.s.performAbility(kit, u, { kind: 'ult' }, ctx)
-    this.s.lastUltOutOfTurn = false
-
-    if (outOfTurn) {
-      this.s.logger.popActionContext()
+    try {
+      this.s.performAbility(kit, u, { kind: 'ult' }, ctx)
+    } finally {
+      this.s.lastUltOutOfTurn = false
+      if (outOfTurn) {
+        this.s.logger.popActionContext()
+      }
     }
 
     // fired = kit paid Energy, OR a non-Energy kit flipped its own readiness gate (Newbud /
