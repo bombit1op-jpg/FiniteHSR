@@ -297,17 +297,23 @@ export const aglaeaKit: KitDef = {
     // Memosprite Skill "Thorned Snare": #1 of GM ATK to primary, #2 to adjacent.
     // toughDmg from `show_stance_list` [30, 0, 15] — the Blast's hidden toughness data.
     // 1140201.notes: primary 5 hits 30/30/10/10/20, adjacent 3 hits 25/25/50.
-    sim.hitBlast(gm, target,
-      { type: 'fua', elem: 'Lightning', mult: mult('aglaea', 'mem_skill', lv.skill), toughDmg: 30, memoSkill: true, label: 'Thorned Snare', split: [0.3, 0.3, 0.1, 0.1, 0.2] },
-      { type: 'fua', elem: 'Lightning', mult: mult('aglaea', 'mem_skill_a2', lv.skill), toughDmg: 15, memoSkill: true, label: 'Thorned Snare (adj)', split: [0.25, 0.25, 0.5] })
-    if (sim.hasBuff(target, 'gm_stitch')) {
-      const stacks = Math.min(gmSpdMax(eid), ((sim.rt(owner).supStacks as number) ?? 0) + 1)
-      setGmSpdStacks(sim, gm, owner, ctx, stacks)
-      sim.log(`-- ${gm.name} acts (Thorned Snare); SPD stacks ${stacks}/${gmSpdMax(eid)}`)
-    } else {
-      sim.log(`-- ${gm.name} acts (Thorned Snare)`)
+    const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+    sim.logger.startFollowUpAttack(parentCombatActionId)
+    try {
+      sim.hitBlast(gm, target,
+        { type: 'fua', elem: 'Lightning', mult: mult('aglaea', 'mem_skill', lv.skill), toughDmg: 30, memoSkill: true, label: 'Thorned Snare', split: [0.3, 0.3, 0.1, 0.1, 0.2] },
+        { type: 'fua', elem: 'Lightning', mult: mult('aglaea', 'mem_skill_a2', lv.skill), toughDmg: 15, memoSkill: true, label: 'Thorned Snare (adj)', split: [0.25, 0.25, 0.5] })
+      if (sim.hasBuff(target, 'gm_stitch')) {
+        const stacks = Math.min(gmSpdMax(eid), ((sim.rt(owner).supStacks as number) ?? 0) + 1)
+        setGmSpdStacks(sim, gm, owner, ctx, stacks)
+        sim.log(`-- ${gm.name} acts (Thorned Snare); SPD stacks ${stacks}/${gmSpdMax(eid)}`)
+      } else {
+        sim.log(`-- ${gm.name} acts (Thorned Snare)`)
+      }
+      if (eid >= 2) e2DefIgnore(sim, target)
+    } finally {
+      sim.logger.endFollowUpAttack()
     }
-    if (eid >= 2) e2DefIgnore(sim, target)
   },
 
   // Supreme Stance countdown expired → Garmentmaker self-destructs, Supreme ends, +20 Energy.
@@ -480,8 +486,14 @@ function rainclouds(sim: SimApi, u: Unit, ica: Unit, ctx: KitRuntime): void {
   const flat = Math.round(tally * mult('hyacine', 'mem_skill', lv.skill))
   const clear = eid >= 6 ? 0.12 : mult('hyacine', 'mem_skill_a2', lv.skill)
   rt.hyTally = Math.max(0, tally - Math.round(tally * clear))
-  sim.hitAoe(ica, { type: 'fua', elem: 'Wind', flat, memoSkill: true, label: 'Rainclouds, Time to Go!' })
-  sim.log(`${ica.name} Rainclouds: ${flat.toFixed(0)} Wind DMG (tally ${tally.toFixed(0)} → ${((rt.hyTally as number) ?? 0).toFixed(0)})`)
+  const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+  sim.logger.startFollowUpAttack(parentCombatActionId)
+  try {
+    sim.hitAoe(ica, { type: 'fua', elem: 'Wind', flat, memoSkill: true, label: 'Rainclouds, Time to Go!' })
+    sim.log(`${ica.name} Rainclouds: ${flat.toFixed(0)} Wind DMG (tally ${tally.toFixed(0)} → ${((rt.hyTally as number) ?? 0).toFixed(0)})`)
+  } finally {
+    sim.logger.endFollowUpAttack()
+  }
   icaActed(sim, u, ica, ctx)
 }
 
@@ -1061,9 +1073,15 @@ function breathScorches(sim: SimApi, nw: Unit, owner: Unit, ctx: KitRuntime, lv:
 export function clawSplitsVeil(sim: SimApi, nw: Unit, owner: Unit, lv: ReturnType<typeof levelsOf>, eid: number): void {
   sim.newAttack()
   const frac = mult('castorice', 'mem_claw', lv.talent)
-  for (const e of sim.livingEnemiesOf(owner))
-    sim.hit(nw, e, { type: 'fua', elem: 'Quantum', flat: hpBase(sim, owner, frac) * e1Mul(e, eid), label: 'Claw Splits the Veil', toughDmg: CLAW_TOUGH, ...(eid >= 6 ? { pierceRatio: 1 } : null) })
-  sim.log(`Netherwing: Claw Splits the Veil (${Math.round(frac * 100)}% of Castorice MaxHP, all enemies, 30 Toughness)`)
+  const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+  sim.logger.startFollowUpAttack(parentCombatActionId)
+  try {
+    for (const e of sim.livingEnemiesOf(owner))
+      sim.hit(nw, e, { type: 'fua', elem: 'Quantum', flat: hpBase(sim, owner, frac) * e1Mul(e, eid), label: 'Claw Splits the Veil', toughDmg: CLAW_TOUGH, ...(eid >= 6 ? { pierceRatio: 1 } : null) })
+    sim.log(`Netherwing: Claw Splits the Veil (${Math.round(frac * 100)}% of Castorice MaxHP, all enemies, 30 Toughness)`)
+  } finally {
+    sim.logger.endFollowUpAttack()
+  }
 }
 
 export const castoriceKit: KitDef = {

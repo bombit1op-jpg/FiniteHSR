@@ -854,8 +854,6 @@ function elSkill_evanescia(sim: SimApi, u: Unit, ctx: KitRuntime): void {
     r.evFox = true
     const lv = levelsOf(ctx)
     const eid = (ctx.eidolon as number) ?? 0
-    applyMerrymake(sim, u, ctx)
-    const base = mult(PID_evanescia, 'talent', lv.talent)
     const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
     sim.logger.startFollowUpAttack(parentCombatActionId)
     try {

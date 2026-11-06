@@ -985,18 +985,24 @@ function fuyuanAct(sim: SimApi, fy: Unit, owner: Unit, ctx: KitRuntime): void {
   const eid = (ctx.eidolon as number) ?? 0
   const rt = sim.rt(owner)
   fy.base.atk = sim.effAtk(owner) // Fuyuan ATK mirrors Lingsha's current ATK
-  sim.hitAoe(fy, { type: 'fua', mult: mult('lingsha', 'talent', lv.talent), elem: 'Fire', toughDmg: 10, label: 'Fuyuan Follow-Up' })
-  // Extra single-target hit (#8), prioritizes broken/fire-weak — random here
-  const list = sim.livingEnemiesOf(owner)
-  if (list.length)
-    sim.hit(fy, sim.rngPick(list), { type: 'fua', mult: mult('lingsha', 'talent_a2', lv.talent), elem: 'Fire', toughDmg: 5, label: 'Fuyuan random hit' })
-  // E6: +4 extra hits of 50% ATK + All-RES reduction
-  if (eid >= 6) {
-    for (let i = 0; i < 4; i++) {
-      const l2 = sim.livingEnemiesOf(owner)
-      if (!l2.length) break
-      sim.hit(fy, sim.rngPick(l2), { type: 'fua', mult: 0.5, elem: 'Fire', toughDmg: 5, label: 'Fuyuan E6 hit' })
+  const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
+  sim.logger.startFollowUpAttack(parentCombatActionId)
+  try {
+    sim.hitAoe(fy, { type: 'fua', mult: mult('lingsha', 'talent', lv.talent), elem: 'Fire', toughDmg: 10, label: 'Fuyuan Follow-Up' })
+    // Extra single-target hit (#8), prioritizes broken/fire-weak — random here
+    const list = sim.livingEnemiesOf(owner)
+    if (list.length)
+      sim.hit(fy, sim.rngPick(list), { type: 'fua', mult: mult('lingsha', 'talent_a2', lv.talent), elem: 'Fire', toughDmg: 5, label: 'Fuyuan random hit' })
+    // E6: +4 extra hits of 50% ATK + All-RES reduction
+    if (eid >= 6) {
+      for (let i = 0; i < 4; i++) {
+        const l2 = sim.livingEnemiesOf(owner)
+        if (!l2.length) break
+        sim.hit(fy, sim.rngPick(l2), { type: 'fua', mult: 0.5, elem: 'Fire', toughDmg: 5, label: 'Fuyuan E6 hit' })
+      }
     }
+  } finally {
+    sim.logger.endFollowUpAttack()
   }
   // Heal all (#3% ATK + #4 flat)
   healAllies(sim, owner, mult('lingsha', 'talent_a3', lv.talent), mult('lingsha', 'talent_a4', lv.talent))

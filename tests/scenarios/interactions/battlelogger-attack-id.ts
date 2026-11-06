@@ -80,7 +80,7 @@ export default async () => {
     seed: 42, 
     log: { debug: 5 },
     team: [{ kitId: 'yanqing', skillPriority: 1 }], 
-    enemy: ENEMY_PRESETS.mob 
+    enemy: { ...ENEMY_PRESETS.mob, count: 1 } 
   })
   
   const nodes = c.logger.events
