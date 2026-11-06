@@ -71,6 +71,7 @@
   "HIT_END|Kafka|Elite|-|fua [336,5994749]",
   "ENERGY_GAIN|Pela|Kafka|-|- [0,10,100,120]",
   "DOT_APPLIED|Kafka|Elite|-|- [1,2,7424]",
+  "ACTION_END|Kafka|-|-|-",
   "ENERGY_GAIN|Pela|Pela|-|- [0,10,110,95]",
   "ACTION_END|Pela|-|-|-",
   "ACTION_SCHEDULED|-|Kafka|-|- [0,100,50]",

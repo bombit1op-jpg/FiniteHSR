@@ -54,6 +54,7 @@ export function verifyInvariants(units: Unit[], events: BattleEvent[], runtime?:
   const deathAt = new Map<string, number>()
   // unpaired-action: an ACTION_END that no ACTION_START opened, per (ACT, actor).
   // Use a stack per source to handle nested actions (extra turns, FUA).
+  // Store actionId to verify LIFO order on ACTION_END.
   const openAction = new Map<string, number[]>()
   for (const e of events) {
     const src = e.source ?? ''
@@ -66,6 +67,10 @@ export function verifyInvariants(units: Unit[], events: BattleEvent[], runtime?:
       if (!stack || stack.length === 0) {
         bad.push(`unpaired-action: ACTION_END for ACT ${e.actionId} by ${src} with no ACTION_START`)
       } else {
+        const expectedActId = stack[stack.length - 1]
+        if (expectedActId !== e.actionId) {
+          bad.push(`action-order-mismatch: expected ACT ${expectedActId}, received ACT ${e.actionId} for ${src}`)
+        }
         stack.pop()
       }
     }
@@ -112,6 +117,10 @@ export class InvariantWatcher {
       if (!stack || stack.length === 0) {
         bad.push(`unpaired-action: ACTION_END for ACT ${e.actionId} by ${src} with no ACTION_START`)
       } else {
+        const expectedActId = stack[stack.length - 1]
+        if (expectedActId !== e.actionId) {
+          bad.push(`action-order-mismatch: expected ACT ${expectedActId}, received ACT ${e.actionId} for ${src}`)
+        }
         stack.pop()
       }
       bad.push(...rosterViolations(this.units()), ...runtimeViolations(this.runtime?.()))

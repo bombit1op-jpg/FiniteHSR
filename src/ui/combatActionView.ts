@@ -173,10 +173,12 @@ export interface CombatActionRecord {
   isOutOfTurn?: boolean
 }
 
+
+
 /**
  * Aggregates BattleEvent[] into CombatActionRecord[].
  * Uses the combatActionId/attackId from BattleLogger action context.
- * Groups regular attacks under one action; FUA/extraTurn/ultimate become separate actions.
+ * Groups all attacks under one action per combatActionId.
  */
 export function aggregateCombatActions(
   events: BattleEvent[],
@@ -199,56 +201,108 @@ export function aggregateCombatActions(
     // Group by attackId within this combat action
     const attacks = groupEventsByAttack(actionEvents)
 
-    // Separate attacks into: regular attacks vs special (FUA/extraTurn/ultimate)
-    const regularAttacks: Map<string, BattleEvent[]> = new Map()
-    const specialAttacks: Map<string, BattleEvent[]> = new Map()
+    // Build all attacks for this combat action
+    const attacksArray: CombatAttackRecord[] = []
+    let totalDamage = 0
+    let overallCategory: CombatActionCategory = 'system'
+    let abilityEvent: BattleEvent | undefined
+    let provenance: CombatActionRecord['provenance']
+    let firstEvent: BattleEvent | undefined
 
     for (const [attackId, attackEvents] of attacks) {
       const category = categorizeAttack(attackEvents)
       if (category === 'system' && !hasMeaningfulContent(attackEvents)) continue
 
-      if (category === 'attack') {
-        regularAttacks.set(attackId, attackEvents)
-      } else {
-        specialAttacks.set(attackId, attackEvents)
+      // Track the first event for metadata
+      if (!firstEvent) firstEvent = attackEvents[0]
+
+      // Track overall category priority: ultimate > extraTurn > bonusAttack > attack > system
+      const catPriority = { ultimate: 4, extraTurn: 3, bonusAttack: 2, attack: 1, system: 0 }
+      if (catPriority[category] > catPriority[overallCategory]) {
+        overallCategory = category
+      }
+
+      // Track ability event
+      if (!abilityEvent) {
+        abilityEvent = attackEvents.find(e => e.type === 'ABILITY_USED')
+      }
+
+      // Track provenance
+      if (!provenance) {
+        provenance = attackEvents.find(e => e.provenance)?.provenance
+      }
+
+      const attack = buildAttackRecord(attackEvents, attackId, sim)
+      if (attack) {
+        // Override category with the actual attack category
+        attack.category = category
+        attacksArray.push(attack)
+        totalDamage += attack.totalDamage
       }
     }
 
-    // Build regular attacks as a single action with multiple attacks
-    if (regularAttacks.size > 0) {
-      const action = buildRegularAction(
-        regularAttacks,
-        actionEvents,
-        combatActionId,
-        sim,
-        snapshots
-      )
-      if (action) actions.push(action)
+    if (attacksArray.length === 0) continue
+
+    // Use firstEvent for metadata
+    if (!firstEvent) continue
+
+    // Find source unit
+    const sourceId = actionEvents.find(e => e.sourceId)?.sourceId ?? firstEvent.sourceId
+    const sourceUnit = sourceId ? sim.roster.find(u => u.id === sourceId) : undefined
+    const sourceName = sourceUnit?.name ?? firstEvent.source ?? 'Unknown'
+
+    // Determine targets across all attacks
+    const targetIds = [...new Set(attacksArray.flatMap(a => a.targetIds))] as string[]
+    const targetNames = targetIds.map(id => sim.roster.find(u => u.id === id)?.name ?? 'Unknown')
+
+    // Build effects summary from all action events
+    const effects = buildEffectsSummary(actionEvents, sim)
+
+    // Get ability info from ABILITY_USED event
+    const abilitySource = abilityEvent ?? firstEvent
+    const abilityId = (abilitySource.payload.abilityId ?? abilitySource.payload.ability_id) as string | undefined
+    const abilityName = (abilitySource.payload.abilityName ?? abilitySource.payload.ability_name ?? abilitySource.attackType ?? 'Attack') as string
+    const abilitySlot = (abilitySource.payload.slot ?? abilitySource.payload.abilitySlot) as string | undefined
+
+    // Get provenance
+    if (!provenance) {
+      provenance = actionEvents.find(e => e.provenance)?.provenance
     }
 
-    // Build special attacks (FUA, extraTurn, ultimate) as separate actions
-    for (const [attackId, attackEvents] of specialAttacks) {
-      const category = categorizeAttack(attackEvents)
-      const specialCombatActionId = `${combatActionId}-${category}-${attackId}`
+    // Determine if out-of-turn
+    const isOutOfTurn = actionEvents.some(e => e.payload.extra === true || e.payload.outOfTurn === true)
 
-      // Use parentActionId from events (set by BattleLogger FUA context)
-      // Falls back to combatActionId if not available
-      const parentActionId = attackEvents[0].parentActionId ?? combatActionId
+    // Snapshots
+    const beforeSnapshot = snapshots.find(s => s.actionId === firstEvent!.actionId && s.turn === firstEvent!.turn)
+    const afterSnapshot = snapshots.find(s => s.actionId === firstEvent!.actionId + 1 && s.turn === firstEvent!.turn) ?? snapshots.find(s => s.actionId === firstEvent!.actionId && s.turn > firstEvent!.turn)
 
-      const action = buildCombatAction(
-        attackEvents,
-        actionEvents[0].actionId,
-        attackId,
-        category,
-        sim,
-        snapshots,
-        specialCombatActionId
-      )
-      if (action) {
-        action.parentActionId = parentActionId
-        actions.push(action)
-      }
-    }
+    // Determine parentActionId from the first attack's parentActionId
+    const parentActionId = actionEvents.find(e => e.parentActionId)?.parentActionId
+
+    actions.push({
+      id: combatActionId,
+      combatActionId,
+      parentActionId,
+      category: overallCategory,
+      sourceId,
+      sourceName,
+      abilityId,
+      abilityName,
+      abilitySlot,
+      av: firstEvent!.time,
+      turn: firstEvent!.turn,
+      actionId: firstEvent!.actionId,
+      targetIds,
+      targetNames,
+      attacks: attacksArray,
+      totalDamage,
+      effects,
+      events: actionEvents,
+      beforeSnapshot,
+      afterSnapshot,
+      provenance,
+      isOutOfTurn,
+    })
   }
 
   // Sort by AV time for chronological display
@@ -353,208 +407,7 @@ function groupEventsByAttack(events: BattleEvent[]): Map<string, BattleEvent[]> 
   return attacks
 }
 
-function buildRegularAction(
-  regularAttacks: Map<string, BattleEvent[]>,
-  allActionEvents: BattleEvent[],
-  combatActionId: string,
-  sim: Simulator,
-  snapshots: StateSnapshot[]
-): CombatActionRecord | null {
-  // Collect all events from regular attacks
-  const attackEvents: BattleEvent[] = []
-  for (const events of regularAttacks.values()) {
-    attackEvents.push(...events)
-  }
-  if (attackEvents.length === 0) return null
 
-  const firstEvent = attackEvents[0]
-
-  // Find source unit
-  const sourceId = attackEvents.find(e => e.sourceId)?.sourceId ?? firstEvent.sourceId
-  const sourceUnit = sourceId ? sim.roster.find(u => u.id === sourceId) : undefined
-  const sourceName = sourceUnit?.name ?? firstEvent.source ?? 'Unknown'
-
-  // Build attacks
-  const attacks: CombatAttackRecord[] = []
-  let totalDamage = 0
-
-  for (const [attackId, attackEvents] of regularAttacks) {
-    const category = categorizeAttack(attackEvents)
-    if (category !== 'attack') continue
-
-    const attack = buildAttackRecord(attackEvents, attackId, sim)
-    if (attack) {
-      attacks.push(attack)
-      totalDamage += attack.totalDamage
-    }
-  }
-
-  if (attacks.length === 0) return null
-
-  // Determine targets across all attacks
-  const targetIds = [...new Set(attacks.flatMap(a => a.targetIds))] as string[]
-  const targetNames = targetIds.map(id => sim.roster.find(u => u.id === id)?.name ?? 'Unknown')
-
-  // Build effects summary from all action events
-  const effects = buildEffectsSummary(allActionEvents, sim)
-
-  // Get ability info from ABILITY_USED event
-  const abilityEvent = allActionEvents.find(e => e.type === 'ABILITY_USED')
-  const abilitySource = abilityEvent ?? allActionEvents[0]
-  const abilityId = (abilitySource.payload.abilityId ?? abilitySource.payload.ability_id) as string | undefined
-  const abilityName = (abilitySource.payload.abilityName ?? abilitySource.payload.ability_name ?? abilitySource.attackType ?? 'Attack') as string
-  const abilitySlot = (abilitySource.payload.slot ?? abilitySource.payload.abilitySlot) as string | undefined
-
-  // Get provenance
-  const provenance = allActionEvents.find(e => e.provenance)?.provenance
-
-  // Snapshots
-  const beforeSnapshot = snapshots.find(s => s.actionId === firstEvent.actionId && s.turn === firstEvent.turn)
-  const afterSnapshot = snapshots.find(s => s.actionId === firstEvent.actionId + 1 && s.turn === firstEvent.turn) ?? snapshots.find(s => s.actionId === firstEvent.actionId && s.turn > firstEvent.turn)
-
-  return {
-    id: combatActionId,
-    combatActionId,
-    parentActionId: undefined,
-    category: 'attack',
-    sourceId,
-    sourceName,
-    abilityId,
-    abilityName,
-    abilitySlot,
-    av: firstEvent.time,
-    turn: firstEvent.turn,
-    actionId: firstEvent.actionId,
-    targetIds,
-    targetNames,
-    attacks,
-    totalDamage,
-    effects,
-    events: allActionEvents,
-    beforeSnapshot,
-    afterSnapshot,
-    provenance,
-    isOutOfTurn: false,
-  }
-}
-
-function buildAttackRecord(
-  attackEvents: BattleEvent[],
-  attackId: string,
-  sim: Simulator
-): CombatAttackRecord | null {
-  if (attackEvents.length === 0) return null
-
-  const firstEvent = attackEvents[0]
-
-  // Determine targets
-  const targetIds = [...new Set(attackEvents.map(e => e.targetId).filter(Boolean))] as string[]
-  const targetNames = targetIds.map(id => sim.roster.find(u => u.id === id)?.name ?? 'Unknown')
-
-  // Build hits from DAMAGE_DEALT events
-  const hits = buildHits(attackEvents, sim)
-
-  // Calculate total damage
-  const totalDamage = hits.reduce((sum, h) => sum + h.damage, 0)
-
-  // Get ability info
-  const abilityEvent = attackEvents.find(e => e.type === 'ABILITY_USED')
-  const abilitySource = abilityEvent ?? firstEvent
-  const abilityId = (abilitySource.payload.abilityId ?? abilitySource.payload.ability_id) as string | undefined
-  const abilityName = (abilitySource.payload.abilityName ?? abilitySource.payload.ability_name ?? abilitySource.attackType ?? 'Attack') as string
-  const abilitySlot = (abilitySource.payload.slot ?? abilitySource.payload.abilitySlot) as string | undefined
-
-  // Get provenance
-  const provenance = attackEvents.find(e => e.provenance)?.provenance
-
-  return {
-    attackId,
-    targetIds,
-    targetNames,
-    hits,
-    totalDamage,
-    abilityId,
-    abilityName,
-    abilitySlot,
-    category: 'attack',
-    provenance,
-  }
-}
-
-function buildCombatAction(
-  attackEvents: BattleEvent[],
-  actionId: number,
-  attackId: string,
-  category: CombatActionCategory,
-  sim: Simulator,
-  snapshots: StateSnapshot[],
-  combatActionId: string
-): CombatActionRecord | null {
-  if (attackEvents.length === 0) return null
-
-  const firstEvent = attackEvents[0]
-
-  // Find source unit
-  const sourceId = attackEvents.find(e => e.sourceId)?.sourceId ?? firstEvent.sourceId
-  const sourceUnit = sourceId ? sim.roster.find(u => u.id === sourceId) : undefined
-  const sourceName = sourceUnit?.name ?? firstEvent.source ?? 'Unknown'
-
-  // Build attacks (just one for special actions)
-  const attack = buildAttackRecord(attackEvents, attackId, sim)
-  if (!attack) return null
-
-  const attacks = [attack]
-  const totalDamage = attack.totalDamage
-
-  // Determine targets
-  const targetIds = attack.targetIds
-  const targetNames = attack.targetNames
-
-  // Build effects summary
-  const effects = buildEffectsSummary(attackEvents, sim)
-
-  // Determine if out-of-turn
-  const isOutOfTurn = attackEvents.some(e => e.payload.extra === true || e.payload.outOfTurn === true)
-
-  // Get provenance
-  const provenance = attackEvents.find(e => e.provenance)?.provenance
-
-  // Get ability info
-  const abilityEvent = attackEvents.find(e => e.type === 'ABILITY_USED')
-  const abilitySource = abilityEvent ?? firstEvent
-  const abilityId = (abilitySource.payload.abilityId ?? abilitySource.payload.ability_id) as string | undefined
-  const abilityName = (abilitySource.payload.abilityName ?? abilitySource.payload.ability_name ?? abilitySource.attackType ?? 'Attack') as string
-  const abilitySlot = (abilitySource.payload.slot ?? abilitySource.payload.abilitySlot) as string | undefined
-
-  // Snapshots
-  const beforeSnapshot = snapshots.find(s => s.actionId === actionId && s.turn === firstEvent.turn)
-  const afterSnapshot = snapshots.find(s => s.actionId === actionId + 1 && s.turn === firstEvent.turn) ?? snapshots.find(s => s.actionId === actionId && s.turn > firstEvent.turn)
-
-  return {
-    id: combatActionId,
-    combatActionId,
-    parentActionId: undefined, // Will be set by caller
-    category,
-    sourceId,
-    sourceName,
-    abilityId,
-    abilityName,
-    abilitySlot,
-    av: firstEvent.time,
-    turn: firstEvent.turn,
-    actionId,
-    targetIds,
-    targetNames,
-    attacks,
-    totalDamage,
-    effects,
-    events: attackEvents,
-    beforeSnapshot,
-    afterSnapshot,
-    provenance,
-    isOutOfTurn,
-  }
-}
 
 function buildHits(attackEvents: BattleEvent[], sim: Simulator): CombatHitRecord[] {
   const damageEvents = attackEvents.filter(e => e.type === 'DAMAGE_DEALT')

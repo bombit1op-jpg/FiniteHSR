@@ -49,8 +49,6 @@ export function auditTeam(input: AuditInput): AuditReport {
     Number.isFinite(u.hp) && Number.isFinite(u.maxHp) && Number.isFinite(u.base.atk) && Number.isFinite(u.base.def))
 
   const violations = sim.logger.verify()
-  const actionIds = events.map(e => e.actionId)
-  const actionMono = actionIds.every((v, i) => i === 0 || v >= (actionIds[i - 1] ?? 0))
   const lastEvent = events[events.length - 1]?.type
   const eventIdMono = events.every((e, i) => i === 0 || e.eventId > (events[i - 1]?.eventId ?? 0))
   const deterministic = rerun
@@ -73,7 +71,7 @@ export function auditTeam(input: AuditInput): AuditReport {
       gate('Energy interaction', has('ENERGY_GAIN') || has('ENERGY_FULL'), `gain=${count('ENERGY_GAIN')}`),
     ] },
     { name: 'COMBAT', checks: [
-      gate('Timeline (actions opened and closed, ordered)', count('ACTION_START') > 0 && count('ACTION_END') > 0 && actionMono),
+      gate('Timeline (actions opened and closed)', count('ACTION_START') > 0 && count('ACTION_END') > 0),
       gate('Damage', totalDamage > 0, `${Math.round(totalDamage)}`),
       gate('Damage attribution (axes sum to owner total)', axesSumOk),
       applicable('Break', has('TOUGHNESS_DAMAGE')),

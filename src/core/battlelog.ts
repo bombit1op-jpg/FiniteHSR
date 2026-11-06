@@ -343,6 +343,11 @@ export class BattleLogger {
     parentActionId?: string
     provenance?: BattleEvent['provenance']
     attackUsed: boolean
+    // FUA metadata
+    fuaSource?: string
+    fuaSourceId?: string
+    fuaAbilityName?: string
+    fuaActNo?: number
     // Parent trace state for FUA context restoration
     parentActNo?: number
     parentAtkNo?: number
@@ -381,6 +386,10 @@ export class BattleLogger {
     parentHitNo?: number
     parentDmgNo?: number
     parentTrgNo?: number
+    fuaSource?: string
+    fuaSourceId?: string
+    fuaAbilityName?: string
+    fuaActNo?: number
   }): void {
     this.actionContextStack.push({ ...ctx, attackUsed: false })
   }
@@ -496,12 +505,18 @@ export class BattleLogger {
     const parentTrgNo = this.trgNo
     // Give FUA its own actNo to avoid collision with parent action in invariant checker
     this.beginAction()
+    const fuaActNo = this.actNo
     this.pushActionContext({
       combatActionId: ids.combatActionId,
       attackId: ids.attackId,
       actionCategory: 'followUpAttack',
       parentActionId: ids.parentActionId,
       provenance: meta.provenance,
+      // Store FUA metadata directly
+      fuaSource: meta.source,
+      fuaSourceId: meta.sourceId,
+      fuaAbilityName: meta.abilityName,
+      fuaActNo,
       // Save parent trace state
       parentActNo,
       parentAtkNo,
@@ -517,30 +532,20 @@ export class BattleLogger {
 
   /** End a Follow-Up Attack */
   endFollowUpAttack(): void {
-    let ctx: BattleLogger['actionContextStack'][0] | undefined
-    try {
-      ctx = this.getActionContext()
-    } catch {
-      ctx = undefined
+    const ctx = this.getActionContext()
+    if (!ctx || ctx.actionCategory !== 'followUpAttack') {
+      // No FUA context to close - do not pop parent context
+      return
     }
-    if (ctx && ctx.actionCategory === 'followUpAttack' && ctx.provenance) {
-      // Emit ACTION_END for FUA using saved metadata
-      try {
-        this.emit({ type: 'ACTION_END', source: ctx.provenance.triggeredByUnitName ?? 'FUA', sourceId: ctx.provenance.triggeredByUnitId ?? '', payload: { action: ctx.provenance.abilityName ?? 'followUpAttack' } })
-      } catch {
-        // Ignore emit errors
-      }
-      this.popActionContext()
-      // Restore parent trace state (except actNo to maintain monotonicity for audit)
-      // if (ctx.parentActNo !== undefined) this.actNo = ctx.parentActNo
-      if (ctx.parentAtkNo !== undefined) this.atkNo = ctx.parentAtkNo
-      if (ctx.parentHitNo !== undefined) this.hitNo = ctx.parentHitNo
-      if (ctx.parentDmgNo !== undefined) this.dmgNo = ctx.parentDmgNo
-      if (ctx.parentTrgNo !== undefined) this.trgNo = ctx.parentTrgNo
-    } else if (ctx) {
-      this.popActionContext()
-    }
-    // If no context, silently return (prevents crash on mismatched calls)
+    // Emit ACTION_END for FUA using stored metadata
+    this.emit({ type: 'ACTION_END', source: ctx.fuaSource, sourceId: ctx.fuaSourceId, payload: { action: ctx.fuaAbilityName } })
+    this.popActionContext()
+    // Restore parent trace state including actNo for proper invariant checking
+    if (ctx.parentActNo !== undefined) this.actNo = ctx.parentActNo
+    if (ctx.parentAtkNo !== undefined) this.atkNo = ctx.parentAtkNo
+    if (ctx.parentHitNo !== undefined) this.hitNo = ctx.parentHitNo
+    if (ctx.parentDmgNo !== undefined) this.dmgNo = ctx.parentDmgNo
+    if (ctx.parentTrgNo !== undefined) this.trgNo = ctx.parentTrgNo
   }
 
   beginAttack(): number {
