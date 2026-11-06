@@ -549,6 +549,12 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
     // Use new independent ID generation for extra turn
     const ids = this.logger.nextActionIds('extraTurn', parentActionId)
 
+    // Save parent actNo so parent's ACTION_END uses correct actionId
+    const parentActNo = this.logger.actNo
+
+    // Allocate a dedicated actNo for this extra turn
+    this.logger.beginAction()
+
     this.logger.pushActionContext({
       combatActionId: ids.combatActionId,
       attackId: ids.attackId,
@@ -561,6 +567,8 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
     const action = kit.decide(this, u, ctx)
     this.performAbility(kit, u, action, ctx)
 
+    // Restore parent actNo so parent's ACTION_END uses correct actionId
+    this.logger.actNo = parentActNo
     this.logger.popActionContext()
     ctx.inExtraTurn = false
 
@@ -568,10 +576,10 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
     this.fireAllyMemospriteAct(u)
   }
 
-  /** §P5 re-issue an already-decided action as an Extra Turn, at the current timeline point.
-   *  No further timeline action is granted (`av` untouched) and the kit-specific free-action
-   *  semantics of `inExtraTurn` are deliberately NOT inherited — the re-issued action pays its own
-   *  SP/energy. Callers must pass the action they intercepted. */
+/** §P5 re-issue an already-decided action as an Extra Turn, at the current timeline point.
+ *  No further timeline action is granted (`av` untouched) and the kit-specific free-action
+ *  semantics of `inExtraTurn` are deliberately NOT inherited — the re-issued action pays its own
+ *  SP/energy. Callers must pass the action they intercepted. */
   releaseAsExtraTurn(u: Unit, action: Action): void {
     const ctx = this.rt(u)
     const kit = this.kits.get(u.kitId!)!
@@ -582,6 +590,12 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
     
     // Use new independent ID generation for extra turn
     const ids = this.logger.nextActionIds('extraTurn', parentActionId)
+
+    // Save parent actNo so parent's ACTION_END uses correct actionId
+    const parentActNo = this.logger.actNo
+
+    // Allocate a dedicated actNo for this extra turn
+    this.logger.beginAction()
 
     this.logger.pushActionContext({
       combatActionId: ids.combatActionId,
@@ -594,6 +608,8 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
     try { this.performAbility(kit, u, action, ctx) }
     finally { ctx.extraRelease = false }
     
+    // Restore parent actNo so parent's ACTION_END uses correct actionId
+    this.logger.actNo = parentActNo
     this.logger.popActionContext()
     this.fireAllyMemospriteAct(u)
   }

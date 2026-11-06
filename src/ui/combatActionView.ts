@@ -231,6 +231,10 @@ export function aggregateCombatActions(
       const category = categorizeAttack(attackEvents)
       const specialCombatActionId = `${combatActionId}-${category}-${attackId}`
 
+      // Use parentActionId from events (set by BattleLogger FUA context)
+      // Falls back to combatActionId if not available
+      const parentActionId = attackEvents[0].parentActionId ?? combatActionId
+
       const action = buildCombatAction(
         attackEvents,
         actionEvents[0].actionId,
@@ -241,7 +245,7 @@ export function aggregateCombatActions(
         specialCombatActionId
       )
       if (action) {
-        action.parentActionId = combatActionId
+        action.parentActionId = parentActionId
         actions.push(action)
       }
     }
@@ -262,7 +266,11 @@ export function aggregateCombatActions(
 function categorizeAttack(events: BattleEvent[]): CombatActionCategory {
   // Use actionCategory from events if available (set by BattleLogger context)
   const explicitCategory = events.find(e => e.actionCategory)?.actionCategory
-  if (explicitCategory && explicitCategory !== 'system') return explicitCategory
+  if (explicitCategory && explicitCategory !== 'system') {
+    // Engine uses 'followUpAttack' internally; map to UI 'bonusAttack'
+    if (explicitCategory === 'followUpAttack') return 'bonusAttack'
+    return explicitCategory as CombatActionCategory
+  }
 
   // Fallback heuristics
   const hasUlt = events.some(e => e.attackType === 'ult' || e.payload.action === 'ult' || e.payload.actionKind === 'ult')

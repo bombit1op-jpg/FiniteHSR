@@ -323,7 +323,7 @@ export class BattleLogger {
 
   private eventId = 0
   private turnNo = 0
-  private actNo = 0
+  actNo = 0
   private atkNo = 0
   private hitNo = 0
   private dmgNo = 0
@@ -372,6 +372,11 @@ export class BattleLogger {
     provenance?: BattleEvent['provenance']
   }): void {
     this.actionContextStack.push({ ...ctx, attackUsed: false })
+  }
+
+  /** §Combat Action View — pop the current gameplay action context */
+  popActionContext(): void {
+    this.actionContextStack.pop()
   }
 
   /** Generate unique IDs for a combat action (independent combatActionId and attackId) */
@@ -475,18 +480,30 @@ export class BattleLogger {
   }
 
   /** Start a Follow-Up Attack with its own combatActionId */
-  startFollowUpAttack(parentActionId?: string): void {
+  startFollowUpAttack(parentActionId?: string, meta?: { source?: string; sourceId?: string; abilityName?: string; provenance?: BattleEvent['provenance'] }): void {
     const ids = this.nextActionIds('followUpAttack', parentActionId)
+    // Give FUA its own actNo to avoid collision with parent action in invariant checker
+    this.beginAction()
     this.pushActionContext({
       combatActionId: ids.combatActionId,
       attackId: ids.attackId,
       actionCategory: 'followUpAttack',
       parentActionId: ids.parentActionId,
+      provenance: meta?.provenance,
     })
+
+    // Emit ACTION_START and ABILITY_USED for FUA so UI can track it
+    if (meta?.source) {
+      this.emit({ type: 'ACTION_START', source: meta.source, sourceId: meta.sourceId, trace: 'ACT', payload: { action: meta.abilityName ?? 'followUpAttack', actionKind: 'followUpAttack', extra: true, provenance: meta.provenance } })
+      this.emit({ type: 'ABILITY_USED', source: meta.source, sourceId: meta.sourceId, trace: 'ACT', payload: { action: meta.abilityName ?? 'followUpAttack', actionKind: 'followUpAttack', extra: true } })
+    }
   }
 
   /** End a Follow-Up Attack */
-  endFollowUpAttack(): void {
+  endFollowUpAttack(meta?: { source?: string; sourceId?: string; abilityName?: string }): void {
+    if (meta?.source) {
+      this.emit({ type: 'ACTION_END', source: meta.source, sourceId: meta.sourceId, payload: { action: meta.abilityName ?? 'followUpAttack' } })
+    }
     this.popActionContext()
   }
 

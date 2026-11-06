@@ -276,7 +276,7 @@ function triggerFua(sim: SimApi, u: Unit, ctx: KitRuntime): void {
   let m = mult('blade', 'talent', lv.talent) * 1.2
   if (eid >= 6) m += 0.5
   const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-  sim.logger.startFollowUpAttack(parentCombatActionId)
+  sim.logger.startFollowUpAttack(parentCombatActionId, { source: u.name, sourceId: u.id, abilityName: "Shuhu's Gift" })
   try {
     sim.hitAoe(u, { type: 'fua', scaleStat: 'hp', mult: m, toughDmg: 20, label: "Shuhu's Gift (FUA)", split: [0.33, 0.33, 0.34] })
     // restores 25% Max HP (canon talent #3); A2 converts 25% of healed into the tally via onAllyHeal
@@ -284,7 +284,7 @@ function triggerFua(sim: SimApi, u: Unit, ctx: KitRuntime): void {
     sim.gainEnergy(u, 25)
     sim.log(`${u.name} Talent FUA + self-heal (energy +25)`)
   } finally {
-    sim.logger.endFollowUpAttack()
+    sim.logger.endFollowUpAttack({ source: u.name, sourceId: u.id, abilityName: "Shuhu's Gift" })
   }
 }
 
@@ -1256,7 +1256,7 @@ function fireCounter(sim: SimApi, clara: Unit, attacker: Unit, enhanced: boolean
   const base = mult('clara', 'talent', lv.talent) * 1.3
   const m = enhanced ? (base + mult('clara', 'ult_a2', lv.ult) * 1.3) : base
   const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-  sim.logger.startFollowUpAttack(parentCombatActionId)
+  sim.logger.startFollowUpAttack(parentCombatActionId, { source: clara.name, sourceId: clara.id, abilityName: enhanced ? 'Svarog Counter (Enhanced)' : 'Svarog Counter' })
   try {
     if (enhanced) {
       // Enhanced Counter: enemies adjacent to the primary take 50% of the primary DMG
@@ -1272,7 +1272,7 @@ function fireCounter(sim: SimApi, clara: Unit, attacker: Unit, enhanced: boolean
     sim.gainEnergy(clara, 5)
     sim.log(`Svarog Counter → ${attacker.name}${enhanced ? ' (Enhanced)' : ''} (energy +5)`)
   } finally {
-    sim.logger.endFollowUpAttack()
+    sim.logger.endFollowUpAttack({ source: clara.name, sourceId: clara.id, abilityName: enhanced ? 'Svarog Counter (Enhanced)' : 'Svarog Counter' })
   }
 }
 
@@ -1529,14 +1529,14 @@ function fireFua(sim: SimApi, xueyi: Unit, ctx: KitRuntime): void {
   let m = mult('xueyi', 'talent', lv.talent)
   if (eid >= 1) m *= 1.4 // E1 Dvesha: +40% FUA DMG
   const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-  sim.logger.startFollowUpAttack(parentCombatActionId)
+  sim.logger.startFollowUpAttack(parentCombatActionId, { source: xueyi.name, sourceId: xueyi.id, abilityName: 'Karmic Perpetuation' })
   try {
     sim.hitRandom(xueyi, FUA_HITS, { type: 'fua', mult: m, elem: 'Quantum', toughDmg: FUA_TOUGH, pierceRatio: eid >= 2 ? 1 : undefined, label: 'Karmic Perpetuation FUA' })
     sim.gainEnergy(xueyi, FUA_HITS * FUA_ENERGY)
     if (eid >= 2) sim.heal(xueyi, Math.floor(xueyi.maxHp * 0.05)) // E2: heal 5% MaxHP
     sim.log('Xueyi Karma full → Follow-Up ATK (3 bounces)')
   } finally {
-    sim.logger.endFollowUpAttack()
+    sim.logger.endFollowUpAttack({ source: xueyi.name, sourceId: xueyi.id, abilityName: 'Karmic Perpetuation' })
   }
 }
 

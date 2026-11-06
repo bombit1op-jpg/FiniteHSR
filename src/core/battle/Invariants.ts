@@ -52,19 +52,35 @@ export function verifyInvariants(units: Unit[], events: BattleEvent[], runtime?:
   // dead-actor: an ACTION_START after that unit's own DEATH event. Judged on event order, not
   // on the final roster — a unit that dies later in the battle acted while alive.
   const deathAt = new Map<string, number>()
-  // unpaired-action: an ACTION_END that no ACTION_START opened, per (ACT, actor) — a countdown's
-  // END carries its owner's ACT number, so pairing on the ACT alone would pass it.
-  const openAction = new Set<string>()
+  // unpaired-action: an ACTION_END that no ACTION_START opened, per (ACT, actor).
+  // Use a stack per source to handle nested actions (extra turns, FUA).
+  const openAction = new Map<string, number[]>()
   for (const e of events) {
-    const k = `${e.actionId}|${e.source ?? ''}`
-    if (e.type === 'ACTION_START') openAction.add(k)
-    else if (e.type === 'ACTION_END' && !openAction.delete(k)) bad.push(`unpaired-action: ACTION_END for ACT ${e.actionId} by ${e.source ?? '?'} with no ACTION_START`)
+    const src = e.source ?? ''
+    if (e.type === 'ACTION_START') {
+      const stack = openAction.get(src) ?? []
+      stack.push(e.actionId)
+      openAction.set(src, stack)
+    } else if (e.type === 'ACTION_END') {
+      const stack = openAction.get(src)
+      if (!stack || stack.length === 0) {
+        bad.push(`unpaired-action: ACTION_END for ACT ${e.actionId} by ${src} with no ACTION_START`)
+      } else {
+        stack.pop()
+      }
+    }
     if (!e.source && !e.target) continue
     if (e.type === 'DEATH' && e.target) { deathAt.set(e.target, e.eventId); continue }
     if (e.type === 'REVIVAL' && e.target) deathAt.delete(e.target)
     if (e.type !== 'ACTION_START' || !e.source) continue
     const died = deathAt.get(e.source)
     if (died !== undefined && e.eventId > died) bad.push(`dead-actor: ${e.source} acted after death (EVT ${e.eventId}, death EVT ${died})`)
+  }
+  // Check for unclosed actions at battle end
+  for (const [src, stack] of openAction) {
+    if (stack.length > 0) {
+      bad.push(`unclosed-action: ${stack.length} ACTION_START without ACTION_END for ${src}`)
+    }
   }
   return bad
 }
@@ -79,17 +95,25 @@ export function verifyInvariants(units: Unit[], events: BattleEvent[], runtime?:
  *  model — a fatal hit's `hpAfter` in the trace is negative), so only action boundaries are guaranteed
  *  complete. A unit still alive at HP < 0 when its action ends is a real violation and is reported. */
 export class InvariantWatcher {
-  private open = new Set<string>()
+  private open = new Map<string, number[]>()
   private deaths = new Map<string, number>()
   constructor(private readonly units: () => Unit[], private readonly runtime?: () => InvariantRuntime) {}
 
   /** Check the just-emitted event; returns violations new at this event. */
   check(e: BattleEvent): string[] {
     const bad: string[] = []
-    const k = `${e.actionId}|${e.source ?? ''}`
-    if (e.type === 'ACTION_START') this.open.add(k)
-    else if (e.type === 'ACTION_END') {
-      if (!this.open.delete(k)) bad.push(`unpaired-action: ACTION_END for ACT ${e.actionId} by ${e.source ?? '?'} with no ACTION_START`)
+    const src = e.source ?? ''
+    if (e.type === 'ACTION_START') {
+      const stack = this.open.get(src) ?? []
+      stack.push(e.actionId)
+      this.open.set(src, stack)
+    } else if (e.type === 'ACTION_END') {
+      const stack = this.open.get(src)
+      if (!stack || stack.length === 0) {
+        bad.push(`unpaired-action: ACTION_END for ACT ${e.actionId} by ${src} with no ACTION_START`)
+      } else {
+        stack.pop()
+      }
       bad.push(...rosterViolations(this.units()), ...runtimeViolations(this.runtime?.()))
     }
     if (e.type === 'DEATH' && e.target) this.deaths.set(e.target, e.eventId)

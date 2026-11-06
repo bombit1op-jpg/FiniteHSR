@@ -282,13 +282,7 @@ function fireTalent(sim: SimApi, herta: Unit, ctx: KitRuntime): void {
   const base = mult('herta', 'talent', lv.talent)
   sim.gainEnergy(herta, 5)
   sim.log(`${herta.name} Talent: Fine, I'll Do It Myself (energy +5)`)
-  const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-  sim.logger.startFollowUpAttack(parentCombatActionId)
-  try {
-    sim.hitAoe(herta, { type: 'fua', mult: base, elem: 'Ice', toughDmg: 10, label: "Fine, I'll Do It Myself!" })
-  } finally {
-    sim.logger.endFollowUpAttack()
-  }
+  sim.hitAoe(herta, { type: 'fua', mult: base, elem: 'Ice', toughDmg: 10, label: "Fine, I'll Do It Myself!" })
   if (eid(ctx) >= 2) {
     const count = Math.min(5, ((ctx.herta_fuaCount as number) ?? 0) + 1)
     const crBonus = 0.03 * count
