@@ -593,7 +593,7 @@ export const kafkaKit: KitDef = {
     if (((ctx.fuUses as number) ?? 0) >= 2) return
     ctx.fuUses = ((ctx.fuUses as number) ?? 0) + 1
     const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-    sim.logger.startFollowUpAttack(parentCombatActionId)
+    sim.logger.startFollowUpAttack(parentCombatActionId, { source: kafka.name, sourceId: kafka.id, abilityName: 'Gentle but Cruel' })
     try {
       sim.hit(kafka, target, { type: 'fua', mult: mult('kafka', 'talent', levelsOf(ctx).talent), toughDmg: 10, label: 'Gentle but Cruel', split: [0.15, 0.15, 0.15, 0.15, 0.15, 0.25] })
       if (target.dead) return
@@ -1379,7 +1379,7 @@ export const cipherKit: KitDef = {
         if (eid >= 1) sim.addBuff(u, { id: 'cipher_e1', name: 'Read the Room, Seek the Glee', mods: [{ stat: 'atkPct', value: 0.8 }], turns: 2 } as never)
         const fuaMult = mult('cipher', 'talent', lv.talent) * (eid >= 6 ? 4.5 : 1) // E6 +350%
         const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-        sim.logger.startFollowUpAttack(parentCombatActionId)
+        sim.logger.startFollowUpAttack(parentCombatActionId, { source: u.name, sourceId: u.id, abilityName: 'Hospitable Dolosian (FUA)' })
         try {
           sim.hit(u, target, { type: 'fua', elem: 'Quantum', mult: fuaMult, toughDmg: 5, label: 'Hospitable Dolosian (FUA)', split: [0.2, 0.1, 0.1, 0.6] })
         } finally {
@@ -2442,11 +2442,11 @@ export const the_dahliaKit: KitDef = {
     const n = mult('the_dahlia', 'talent_a2', lv.talent) + (e2 >= 4 ? 5 : 0)
     sim.log(`${u.name}: Talent FUA (${n} hits) after ${attacker.name}`)
     const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-    sim.logger.startFollowUpAttack(parentCombatActionId)
+    sim.logger.startFollowUpAttack(parentCombatActionId, { source: u.name, sourceId: u.id, abilityName: 'Talent FUA', provenance: { sourceKind: 'ability', abilityName: 'Talent FUA', triggeredByUnitId: u.id, triggeredByUnitName: u.name } })
     try {
       for (let i = 0; i < n; i++) {
         const pool = sim.allies('enemy').filter(e => !e.dead)
-        if (!pool.length) return
+        if (!pool.length) break
         const t = sim.rngPick(pool)
         const beforeSb = sim.attackToughRed
         sim.hit(u, t, { type: 'fua', mult: mult('the_dahlia', 'talent', lv.talent), elem: 'Fire', toughDmg: 15, label: 'Talent FUA' })

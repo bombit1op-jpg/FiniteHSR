@@ -986,7 +986,7 @@ function fuyuanAct(sim: SimApi, fy: Unit, owner: Unit, ctx: KitRuntime): void {
   const rt = sim.rt(owner)
   fy.base.atk = sim.effAtk(owner) // Fuyuan ATK mirrors Lingsha's current ATK
   const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-  sim.logger.startFollowUpAttack(parentCombatActionId)
+  sim.logger.startFollowUpAttack(parentCombatActionId, { source: fy.name, sourceId: fy.id, abilityName: 'Fuyuan Follow-Up' })
   try {
     sim.hitAoe(fy, { type: 'fua', mult: mult('lingsha', 'talent', lv.talent), elem: 'Fire', toughDmg: 10, label: 'Fuyuan Follow-Up' })
     // Extra single-target hit (#8), prioritizes broken/fire-weak — random here

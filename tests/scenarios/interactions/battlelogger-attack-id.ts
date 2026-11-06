@@ -33,7 +33,7 @@ async function nestedContextTest(): Promise<{ name: string; ok: boolean; detail?
   // (in real usage, hits would happen here)
   
   // 3. Create nested context (FUA) using proper API
-  logger.startFollowUpAttack(parentCombatActionId)
+  logger.startFollowUpAttack(parentCombatActionId, { source: 'FUA Source', sourceId: 'fua-source', abilityName: 'Test FUA' })
   
   // 4. Attack in nested context (FUA)
   logger.beginAttack()

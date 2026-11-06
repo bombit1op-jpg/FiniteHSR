@@ -614,7 +614,7 @@ export const yanqingKit: KitDef = {
     afterHitDmg(sim, attacker, target, ctx)
     if (sim.hasBuff(attacker, SOULSTEEL) && sim.rng() < mult('yanqing', 'talent', lv.talent)) {
       const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-      sim.logger.startFollowUpAttack(parentCombatActionId)
+      sim.logger.startFollowUpAttack(parentCombatActionId, { source: attacker.name, sourceId: attacker.id, abilityName: 'Soulsteel Sync FUA' })
       try {
         sim.hit(attacker, target, { type: 'fua', mult: mult('yanqing', 'talent_a4', lv.talent), toughDmg: 10, label: 'Soulsteel Sync FUA', split: [0.3, 0.7], onCrit: () => critSpd(sim, attacker) })
         sim.log(`${attacker.name} Soulsteel Sync FUA`)
@@ -768,7 +768,7 @@ export const feixiaoKit: KitDef = {
         sim.hit(u, primary, { type: 'skill', mult: mult('feixiao', 'skill', lv.skill), elem: 'Wind', toughDmg: 20, label: 'Waraxe', split: [0.34, 0.33, 0.33] })
         // Skill Waraxe: immediately launches 1 extra instance of Talent's FUA against the target
         const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-        sim.logger.startFollowUpAttack(parentCombatActionId)
+        sim.logger.startFollowUpAttack(parentCombatActionId, { source: u.name, sourceId: u.id, abilityName: 'Waraxe' })
         try {
           thunderhuntFua(sim, u, ctx, primary, true)
         } finally {
@@ -809,7 +809,7 @@ export const feixiaoKit: KitDef = {
     // Talent FUA triggered by teammate attacks (not Feixiao's own hits), vs the attacked primary target
     if (attacker !== feixiao && attacker.side === 'ally' && attacker.kind === 'char') {
       const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-      sim.logger.startFollowUpAttack(parentCombatActionId)
+      sim.logger.startFollowUpAttack(parentCombatActionId, { source: feixiao.name, sourceId: feixiao.id, abilityName: 'Thunderhunt' })
       try {
         thunderhuntFua(sim, feixiao, ctx, target)
       } finally {
@@ -858,7 +858,7 @@ function triggerFua(sim: SimApi, ratio: Unit, target: Unit, ctx: KitRuntime): vo
   const dc = debuffCount(sim, target)
   if (dc >= 3) sim.addBuff(ratio, { id: 'ratio_deduction', name: 'Deduction', mods: [{ stat: 'dmgAll', value: Math.min(0.5, dc * 0.1) }], turns: Infinity })
   const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-  sim.logger.startFollowUpAttack(parentCombatActionId)
+  sim.logger.startFollowUpAttack(parentCombatActionId, { source: ratio.name, sourceId: ratio.id, abilityName: 'Cogito, Ergo Sum FUA' })
   try {
     sim.hit(ratio, target, { type: 'fua', elem: 'Imaginary', mult: fuaMult, toughDmg: 10, label: 'Cogito, Ergo Sum FUA' })
     sim.removeBuff(ratio, 'ratio_deduction')
@@ -989,7 +989,7 @@ function fireFua(sim: SimApi, moze: Unit, ctx: KitRuntime, want?: Unit, tag?: st
   // E6 Faithbinder: FUA multiplier +25%
   const fuaMult = mult('moze', 'talent', lv.talent) * (eid >= 6 ? 1.25 : 1)
   const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-  sim.logger.startFollowUpAttack(parentCombatActionId)
+  sim.logger.startFollowUpAttack(parentCombatActionId, { source: moze.name, sourceId: moze.id, abilityName: 'Cascading Featherblade FUA' })
   try {
     sim.hit(moze, target, { type: 'fua', elem: 'Lightning', mult: fuaMult, toughDmg: 10, label: tag ? `Cascading Featherblade FUA (${tag})` : 'Cascading Featherblade FUA', split: [0.08, 0.08, 0.08, 0.08, 0.08, 0.6], noSeq: true })
     // A1 Nightfeather: +1 SP after Talent FUA, once per 1 turn (by global turn counter)

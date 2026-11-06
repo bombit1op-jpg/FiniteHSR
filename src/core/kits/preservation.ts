@@ -149,7 +149,7 @@ export const march7thKit: KitDef = {
     sim.gainEnergy(march, 10)
     sim.log(`March Talent: Girl Power (counter +10 Energy)`)
     const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-    sim.logger.startFollowUpAttack(parentCombatActionId)
+    sim.logger.startFollowUpAttack(parentCombatActionId, { source: march.name, sourceId: march.id, abilityName: 'Girl Power (Counter)' })
     try {
       sim.hit(march, attacker, {
         type: 'fua', mult: mult('march7th', 'talent', lv.talent), flat,
@@ -770,7 +770,7 @@ function addBlindBet(sim: SimApi, u: Unit, ctx: KitRuntime, n: number): void {
   rt.blindBet -= BLIND_BET_THRESHOLD
   const hits = mult('aventurine', 'talent_a2', lv.talent) + (eid >= 4 ? 3 : 0)
   const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-  sim.logger.startFollowUpAttack(parentCombatActionId)
+  sim.logger.startFollowUpAttack(parentCombatActionId, { source: u.name, sourceId: u.id, abilityName: 'Roulette Shark FUA' })
   try {
     sim.hitRandom(u, hits, { type: 'fua', elem: 'Imaginary', flat: defBase(sim, u, mult('aventurine', 'talent_a3', lv.talent)), toughDmg: 10 / 3, label: "Roulette Shark FUA" })
     sim.log(`Aventurine: Blind Bet ${BLIND_BET_THRESHOLD} → FUA ×${hits}`)

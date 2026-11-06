@@ -70,6 +70,8 @@
   "ACTION_START|Aventurine|-|-|- [110,110,12000,12000]",
   "ABILITY_USED|Aventurine|-|-|-",
   "BUFF_APPLIED|-|Aventurine|-|- [1,2]",
+  "ACTION_START|Aventurine|-|-|-",
+  "ABILITY_USED|Aventurine|-|-|-",
   "HIT_START|Aventurine|Elite|Roulette Shark FUA|fua [1,1000,3.3333,300,5984504]",
   "DAMAGE_CALCULATED|Aventurine|Elite|-|fua [0,0,0,0,0,0,0.144,0.53,1,1000,1996,4]",
   "DAMAGE_DEALT|Aventurine|Elite|Roulette Shark FUA|fua [1,1000,1996,5982508,6000000]",

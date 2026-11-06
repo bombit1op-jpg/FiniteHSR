@@ -259,7 +259,7 @@ export const himekoKit: KitDef = {
     const eid = (ctx.eidolon as number) ?? 0
     if (eid >= 1) sim.addBuff(himeko, { id: 'himeko_e1', name: 'Childhood', mods: [{ stat: 'spdPct', value: 0.20 }], turns: 2 })
     const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-    sim.logger.startFollowUpAttack(parentCombatActionId)
+    sim.logger.startFollowUpAttack(parentCombatActionId, { source: himeko.name, sourceId: himeko.id, abilityName: 'Victory Rush' })
     try {
       for (const e of [...sim.livingEnemiesOf(himeko)]) {
         uiWrap(sim, himeko, e, eid, () => sim.hit(himeko, e, { type: 'fua', mult: mult('himeko', 'talent', levelsOf(ctx).talent), toughDmg: 15, label: 'Victory Rush', split: [0.2, 0.2, 0.2, 0.4] }))
@@ -365,7 +365,7 @@ export const hertaKit: KitDef = {
     if (herta) {
       ctx.herta_firing = true
       const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-      sim.logger.startFollowUpAttack(parentCombatActionId)
+      sim.logger.startFollowUpAttack(parentCombatActionId, { source: herta.name, sourceId: herta.id, abilityName: "Fine, I'll Do It Myself!" })
       try {
         fireTalent(sim, herta, ctx)
       } finally {
@@ -1954,7 +1954,7 @@ export const rinKit: KitDef = {
     const enemies = [...sim.livingEnemiesOf(rin)]
     if (!enemies.length) return
     const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-    sim.logger.startFollowUpAttack(parentCombatActionId)
+    sim.logger.startFollowUpAttack(parentCombatActionId, { source: rin.name, sourceId: rin.id, abilityName: 'Freeform' })
     try {
       for (const x of enemies) sim.hit(attacker, x, { type: 'fua', mult: mult('rin', 'talent2_a4', lv.talent), elem: 'Quantum', toughDmg: 10, label: 'Freeform (Archer)' })
       for (const x of [...sim.livingEnemiesOf(rin)]) sim.hit(rin, x, { type: 'fua', mult: mult('rin', 'talent2', lv.talent), elem: 'Quantum', toughDmg: 10, label: 'Freeform (Rin)' })

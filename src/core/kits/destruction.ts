@@ -284,7 +284,7 @@ function triggerFua(sim: SimApi, u: Unit, ctx: KitRuntime): void {
     sim.gainEnergy(u, 25)
     sim.log(`${u.name} Talent FUA + self-heal (energy +25)`)
   } finally {
-    sim.logger.endFollowUpAttack({ source: u.name, sourceId: u.id, abilityName: "Shuhu's Gift" })
+    sim.logger.endFollowUpAttack()
   }
 }
 
@@ -1272,7 +1272,7 @@ function fireCounter(sim: SimApi, clara: Unit, attacker: Unit, enhanced: boolean
     sim.gainEnergy(clara, 5)
     sim.log(`Svarog Counter → ${attacker.name}${enhanced ? ' (Enhanced)' : ''} (energy +5)`)
   } finally {
-    sim.logger.endFollowUpAttack({ source: clara.name, sourceId: clara.id, abilityName: enhanced ? 'Svarog Counter (Enhanced)' : 'Svarog Counter' })
+    sim.logger.endFollowUpAttack()
   }
 }
 
@@ -1536,7 +1536,7 @@ function fireFua(sim: SimApi, xueyi: Unit, ctx: KitRuntime): void {
     if (eid >= 2) sim.heal(xueyi, Math.floor(xueyi.maxHp * 0.05)) // E2: heal 5% MaxHP
     sim.log('Xueyi Karma full → Follow-Up ATK (3 bounces)')
   } finally {
-    sim.logger.endFollowUpAttack({ source: xueyi.name, sourceId: xueyi.id, abilityName: 'Karmic Perpetuation' })
+    sim.logger.endFollowUpAttack()
   }
 }
 
@@ -2599,7 +2599,7 @@ export const gilgameshKit: KitDef = {
     ctx.tally = 0
     const saber = sim.allies('ally').find(c => c.kind === 'char' && c.kitId === 'saber' && !c.dead)
     const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-    sim.logger.startFollowUpAttack(parentCombatActionId)
+    sim.logger.startFollowUpAttack(parentCombatActionId, { source: u.name, sourceId: u.id, abilityName: 'Joint FUA' })
     try {
       for (const e of [...sim.livingEnemiesOf(u)]) {
         // canon notes: Saber attacks first, then Gilgamesh

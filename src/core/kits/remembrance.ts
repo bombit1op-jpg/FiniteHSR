@@ -298,7 +298,7 @@ export const aglaeaKit: KitDef = {
     // toughDmg from `show_stance_list` [30, 0, 15] — the Blast's hidden toughness data.
     // 1140201.notes: primary 5 hits 30/30/10/10/20, adjacent 3 hits 25/25/50.
     const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-    sim.logger.startFollowUpAttack(parentCombatActionId)
+    sim.logger.startFollowUpAttack(parentCombatActionId, { source: gm.name, sourceId: gm.id, abilityName: 'Thorned Snare' })
     try {
       sim.hitBlast(gm, target,
         { type: 'fua', elem: 'Lightning', mult: mult('aglaea', 'mem_skill', lv.skill), toughDmg: 30, memoSkill: true, label: 'Thorned Snare', split: [0.3, 0.3, 0.1, 0.1, 0.2] },
@@ -487,7 +487,7 @@ function rainclouds(sim: SimApi, u: Unit, ica: Unit, ctx: KitRuntime): void {
   const clear = eid >= 6 ? 0.12 : mult('hyacine', 'mem_skill_a2', lv.skill)
   rt.hyTally = Math.max(0, tally - Math.round(tally * clear))
   const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-  sim.logger.startFollowUpAttack(parentCombatActionId)
+  sim.logger.startFollowUpAttack(parentCombatActionId, { source: ica.name, sourceId: ica.id, abilityName: 'Rainclouds, Time to Go!' })
   try {
     sim.hitAoe(ica, { type: 'fua', elem: 'Wind', flat, memoSkill: true, label: 'Rainclouds, Time to Go!' })
     sim.log(`${ica.name} Rainclouds: ${flat.toFixed(0)} Wind DMG (tally ${tally.toFixed(0)} → ${((rt.hyTally as number) ?? 0).toFixed(0)})`)
@@ -1074,7 +1074,7 @@ export function clawSplitsVeil(sim: SimApi, nw: Unit, owner: Unit, lv: ReturnTyp
   sim.newAttack()
   const frac = mult('castorice', 'mem_claw', lv.talent)
   const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-  sim.logger.startFollowUpAttack(parentCombatActionId)
+  sim.logger.startFollowUpAttack(parentCombatActionId, { source: nw.name, sourceId: nw.id, abilityName: 'Claw Splits the Veil' })
   try {
     for (const e of sim.livingEnemiesOf(owner))
       sim.hit(nw, e, { type: 'fua', elem: 'Quantum', flat: hpBase(sim, owner, frac) * e1Mul(e, eid), label: 'Claw Splits the Veil', toughDmg: CLAW_TOUGH, ...(eid >= 6 ? { pierceRatio: 1 } : null) })

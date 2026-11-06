@@ -42,6 +42,8 @@
   "DAMAGE_CALCULATED|Pela|Elite|-|skill [0,0,0,0,0,0,0.05,0.224,2.1,2274,2360,4]",
   "DAMAGE_DEALT|Pela|Elite|Frostbite|skill [2.1,2274,2360,5996191,6000000]",
   "HIT_END|Pela|Elite|-|skill [2274,5996191]",
+  "ACTION_START|Kafka|-|-|-",
+  "ABILITY_USED|Kafka|-|-|-",
   "HIT_START|Kafka|Elite|Gentle but Cruel|fua [0.15,10,2560,300,5996191]",
   "DAMAGE_CALCULATED|Kafka|Elite|-|fua [0,0,0,0,0,0,0,0.05,0.21,2560,302,5]",
   "DAMAGE_DEALT|Kafka|Elite|Gentle but Cruel|fua [0.21,2560,302,5995889,6000000]",

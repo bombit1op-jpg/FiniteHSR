@@ -343,6 +343,12 @@ export class BattleLogger {
     parentActionId?: string
     provenance?: BattleEvent['provenance']
     attackUsed: boolean
+    // Parent trace state for FUA context restoration
+    parentActNo?: number
+    parentAtkNo?: number
+    parentHitNo?: number
+    parentDmgNo?: number
+    parentTrgNo?: number
   }> = []
 
   private counts: Record<string, number> = {}
@@ -370,6 +376,11 @@ export class BattleLogger {
     actionCategory: BattleEvent['actionCategory']
     parentActionId?: string
     provenance?: BattleEvent['provenance']
+    parentActNo?: number
+    parentAtkNo?: number
+    parentHitNo?: number
+    parentDmgNo?: number
+    parentTrgNo?: number
   }): void {
     this.actionContextStack.push({ ...ctx, attackUsed: false })
   }
@@ -399,11 +410,6 @@ export class BattleLogger {
   /** Generate a unique combatActionId for out-of-turn/extra actions (deprecated, use nextActionIds) */
   nextCombatActionId(prefix: string): string {
     return this.nextActionIds(prefix, undefined).combatActionId
-  }
-
-  /** §Combat Action View — pop the current gameplay action context */
-  popActionContext(): void {
-    this.actionContextStack.pop()
   }
 
   /** §Combat Action View — get the current gameplay action context */
@@ -480,8 +486,14 @@ export class BattleLogger {
   }
 
   /** Start a Follow-Up Attack with its own combatActionId */
-  startFollowUpAttack(parentActionId?: string, meta?: { source?: string; sourceId?: string; abilityName?: string; provenance?: BattleEvent['provenance'] }): void {
+  startFollowUpAttack(parentActionId: string | undefined, meta: { source: string; sourceId: string; abilityName: string; provenance?: BattleEvent['provenance'] }): void {
     const ids = this.nextActionIds('followUpAttack', parentActionId)
+    // Save parent trace state for proper restoration
+    const parentActNo = this.actNo
+    const parentAtkNo = this.atkNo
+    const parentHitNo = this.hitNo
+    const parentDmgNo = this.dmgNo
+    const parentTrgNo = this.trgNo
     // Give FUA its own actNo to avoid collision with parent action in invariant checker
     this.beginAction()
     this.pushActionContext({
@@ -489,22 +501,46 @@ export class BattleLogger {
       attackId: ids.attackId,
       actionCategory: 'followUpAttack',
       parentActionId: ids.parentActionId,
-      provenance: meta?.provenance,
+      provenance: meta.provenance,
+      // Save parent trace state
+      parentActNo,
+      parentAtkNo,
+      parentHitNo,
+      parentDmgNo,
+      parentTrgNo,
     })
 
     // Emit ACTION_START and ABILITY_USED for FUA so UI can track it
-    if (meta?.source) {
-      this.emit({ type: 'ACTION_START', source: meta.source, sourceId: meta.sourceId, trace: 'ACT', payload: { action: meta.abilityName ?? 'followUpAttack', actionKind: 'followUpAttack', extra: true, provenance: meta.provenance } })
-      this.emit({ type: 'ABILITY_USED', source: meta.source, sourceId: meta.sourceId, trace: 'ACT', payload: { action: meta.abilityName ?? 'followUpAttack', actionKind: 'followUpAttack', extra: true } })
-    }
+    this.emit({ type: 'ACTION_START', source: meta.source, sourceId: meta.sourceId, trace: 'ACT', payload: { action: meta.abilityName, actionKind: 'followUpAttack', extra: true, provenance: meta.provenance } })
+    this.emit({ type: 'ABILITY_USED', source: meta.source, sourceId: meta.sourceId, trace: 'ACT', payload: { action: meta.abilityName, actionKind: 'followUpAttack', extra: true } })
   }
 
   /** End a Follow-Up Attack */
-  endFollowUpAttack(meta?: { source?: string; sourceId?: string; abilityName?: string }): void {
-    if (meta?.source) {
-      this.emit({ type: 'ACTION_END', source: meta.source, sourceId: meta.sourceId, payload: { action: meta.abilityName ?? 'followUpAttack' } })
+  endFollowUpAttack(): void {
+    let ctx: BattleLogger['actionContextStack'][0] | undefined
+    try {
+      ctx = this.getActionContext()
+    } catch {
+      ctx = undefined
     }
-    this.popActionContext()
+    if (ctx && ctx.actionCategory === 'followUpAttack' && ctx.provenance) {
+      // Emit ACTION_END for FUA using saved metadata
+      try {
+        this.emit({ type: 'ACTION_END', source: ctx.provenance.triggeredByUnitName ?? 'FUA', sourceId: ctx.provenance.triggeredByUnitId ?? '', payload: { action: ctx.provenance.abilityName ?? 'followUpAttack' } })
+      } catch {
+        // Ignore emit errors
+      }
+      this.popActionContext()
+      // Restore parent trace state (except actNo to maintain monotonicity for audit)
+      // if (ctx.parentActNo !== undefined) this.actNo = ctx.parentActNo
+      if (ctx.parentAtkNo !== undefined) this.atkNo = ctx.parentAtkNo
+      if (ctx.parentHitNo !== undefined) this.hitNo = ctx.parentHitNo
+      if (ctx.parentDmgNo !== undefined) this.dmgNo = ctx.parentDmgNo
+      if (ctx.parentTrgNo !== undefined) this.trgNo = ctx.parentTrgNo
+    } else if (ctx) {
+      this.popActionContext()
+    }
+    // If no context, silently return (prevents crash on mismatched calls)
   }
 
   beginAttack(): number {
@@ -576,7 +612,12 @@ export class BattleLogger {
     if (this.debug < gate) return undefined
 
     // Auto-attach action context for events that don't explicitly provide it
-    const ctx = this.getActionContext()
+    let ctx: BattleLogger['actionContextStack'][0] | undefined
+    try {
+      ctx = this.getActionContext()
+    } catch {
+      ctx = undefined
+    }
     const combatActionId = e.combatActionId ?? ctx?.combatActionId
     const attackId = e.attackId ?? ctx?.attackId
     const parentActionId = e.parentActionId ?? ctx?.parentActionId

@@ -68,7 +68,7 @@ export const bronyaKit: KitDef = {
     sim.gainEnergy(bronya, 5)
     sim.log('E4 Take by Surprise (energy +5)')
     const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-    sim.logger.startFollowUpAttack(parentCombatActionId)
+    sim.logger.startFollowUpAttack(parentCombatActionId, { source: bronya.name, sourceId: bronya.id, abilityName: 'Take by Surprise (FUA)' })
     try {
       sim.hit(bronya, target, { type: 'fua', mult: mult('bronya', 'basic', lv.basic) * 0.80, toughDmg: 10, label: 'Take by Surprise (FUA)' })
     } finally {
@@ -835,7 +835,7 @@ function clearNuminosity(sim: SimApi, u: Unit): void {
     const eid = (ctx.eidolon as number) ?? 0
     const e6mult = eid >= 6 ? 1 + 7.29 : 1
     const parentCombatActionId = sim.logger.getActionContext()?.combatActionId
-    sim.logger.startFollowUpAttack(parentCombatActionId)
+    sim.logger.startFollowUpAttack(parentCombatActionId, { source: u.name, sourceId: u.id, abilityName: 'Busy as Tribbie' })
     try {
       sim.hitAoe(u, { type: 'fua', elem: 'Quantum', mult: mult('tribbie', 'talent', lv.talent) * e6mult, scaleStat: 'hp', toughDmg: 10, label: 'Busy as Tribbie' })
       // A0: +72% DMG, stacks 3, 3 turns
