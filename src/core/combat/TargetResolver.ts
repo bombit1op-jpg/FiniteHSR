@@ -70,18 +70,24 @@ function hpPick(candidates: Unit[], highest: boolean): Unit {
 }
 
 export function resolveTargets(ctx: TargetContext): TargetSelection {
-  const { candidates } = ctx
+  const eligible = ctx.candidates
+    .map((unit, index) => ({ unit, weight: ctx.weights?.[index] ?? baseWeight(unit) }))
+    .filter(({ unit }) => !unit.dead && unit.kind !== 'summon' && unit.kind !== 'timer')
+  const candidates = eligible.map(({ unit }) => unit)
+  const weights = eligible.map(({ weight }) => weight)
   const names = candidates.map(u => u.name)
-  const weights = ctx.weights ?? candidates.map(baseWeight)
 
   if (!candidates.length) return { targets: [], rule: ctx.rule, reason: 'no candidates', candidates: [], weights: [] }
 
   if (ctx.rule === 'aoe') return { targets: [...candidates], rule: 'aoe', reason: 'aoe — every candidate', candidates: names, weights }
   if (ctx.rule === 'self') return { targets: [], rule: 'self', reason: 'self — no targets', candidates: names, weights: [] }
 
-  if (ctx.forcedTarget) return { targets: [ctx.forcedTarget], rule: 'forced', reason: 'forced (Taunt)', candidates: names, weights }
-  if (ctx.markedTarget) return { targets: [ctx.markedTarget], rule: 'marked', reason: 'marked target', candidates: names, weights }
-  if (ctx.lockedTarget) return { targets: [ctx.lockedTarget], rule: 'locked', reason: 'locked target', candidates: names, weights }
+  const forcedTarget = ctx.forcedTarget && candidates.includes(ctx.forcedTarget) ? ctx.forcedTarget : undefined
+  const markedTarget = ctx.markedTarget && candidates.includes(ctx.markedTarget) ? ctx.markedTarget : undefined
+  const lockedTarget = ctx.lockedTarget && candidates.includes(ctx.lockedTarget) ? ctx.lockedTarget : undefined
+  if (forcedTarget) return { targets: [forcedTarget], rule: 'forced', reason: 'forced (Taunt)', candidates: names, weights }
+  if (markedTarget) return { targets: [markedTarget], rule: 'marked', reason: 'marked target', candidates: names, weights }
+  if (lockedTarget) return { targets: [lockedTarget], rule: 'locked', reason: 'locked target', candidates: names, weights }
 
   if (ctx.rule === 'lowest_hp') return { targets: [hpPick(candidates, false)], rule: 'lowest_hp', reason: 'lowest HP', candidates: names, weights }
   if (ctx.rule === 'highest_hp') return { targets: [hpPick(candidates, true)], rule: 'highest_hp', reason: 'highest HP', candidates: names, weights }

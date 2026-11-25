@@ -6,11 +6,11 @@
  */
 import { PartyStore } from './partyStore'
 import { KITS, KIT_PATH } from '../core/kits'
-import { runBattle, ENCOUNTER_PRESETS } from '../core/battle'
+import { runBattle, ENEMY_PRESETS } from '../core/battle'
 import { resolveEncounter, type EncounterSpec, validateEncounter } from '../core/encounter'
 import { toTeamSpec } from './team'
 import { techniquesForRows } from './store'
-import { charIconUrl, iconNode, metaBadge, enemyIconUrl, charPortraitUrl, gearBadge, effectIconUrl, abilityIconUrl } from './icons'
+import { charIconUrl, iconNode, metaBadge, enemyIconUrl, charPortraitUrl, gearBadge, effectIconUrl, abilityIconUrl, statIconUrlForKey } from './icons'
 import { el } from './dom'
 
 import { withBusy, showStatus } from './shell'
@@ -21,6 +21,17 @@ import type { Party } from '../core/party'
 import type { Simulator } from '../core/simulator'
 import { type EndgameMode, endgameVersions, endgameSetup, endgameSections, endgameStage } from '../core/endgame'
 import { getEnemyStatRow, type EnemyVariant, type EnemyDefinition } from '../core/enemy'
+
+const SIM_ENCOUNTER: EncounterSpec = {
+  id: 'enemy-icons',
+  mode: 'Иконки врагов',
+  cycles: 8,
+  waves: [[
+    { ...ENEMY_PRESETS.mob, name: 'Ice Edge (1)', hp: 200_000, count: 1 },
+    { ...ENEMY_PRESETS.mob, name: 'Ice Edge (2)', hp: 200_000, count: 1 },
+    { ...ENEMY_PRESETS.elite, hp: 2_000_000, count: 1 },
+  ]],
+}
 
 /**
  * Safe helper to get first character of a string for fallback icons.
@@ -44,11 +55,15 @@ function allyIconUrl(unit: { kitId?: string; ownerId?: string } | undefined, sim
   return charIconUrl(ownerKitId(unit, sim) ?? 'unknown')
 }
 
-const MEMOSPRITE_NAMES = new Set(['Garmentmaker', 'Little Ica', 'Netherwing: Pollux', 'Evey', 'Demiurge', 'Mem'])
-
-function unitIconUrl(unit: { name?: string; side?: string; kitId?: string; ownerId?: string } | undefined, sim: Simulator): string | undefined {
+function unitIconUrl(unit: { name?: string; side?: string; kind?: string; kitId?: string; ownerId?: string } | undefined, sim: Simulator): string | undefined {
   if (!unit) return undefined
-  if (unit.side === 'ally' && unit.name && MEMOSPRITE_NAMES.has(unit.name)) return effectIconUrl('Memosprite')
+  if (unit.side === 'ally' && unit.kind === 'summon') {
+    if (/^(souldragon|numby|lightning-lord)$/i.test(unit.name ?? '')) {
+      const ownerKit = unit.ownerId ? sim.roster.find(u => u.id === unit.ownerId)?.kitId : ownerKitId(unit, sim)
+      return (ownerKit ? charIconUrl(ownerKit) : undefined) ?? effectIconUrl('Summon') ?? effectIconUrl('Memosprite')
+    }
+    return effectIconUrl('Memosprite') ?? effectIconUrl('Summon')
+  }
   return allyIconUrl(unit, sim)
 }
 
@@ -64,22 +79,95 @@ const ACTION_ENTITY_COLORS = { timer: '#14b8a6', summon: '#e879f9' } as const
 const COUNTDOWN_STATE_KEY = /countdown|timer|cd(?:id|seq)/i
 
 function actionEntityKind(action: CombatActionRecord): keyof typeof ACTION_ENTITY_COLORS | undefined {
-  for (const e of action.effects.other) {
-    if (e.type !== 'SUMMON_CREATED' && e.type !== 'SUMMON_DESPAWNED') continue
-    try {
-      const payload = JSON.parse(e.description) as Record<string, unknown>
-      if (payload.kind === 'timer') return 'timer'
-      if (payload.kind === 'summon') return 'summon'
-    } catch {}
-  }
+  if (action.category === 'timer') return 'timer'
+  if (action.category === 'summon') return 'summon'
   return undefined
 }
 
-function effectIconFor(effect: { name: string; mods?: Array<{ stat: string; value: number }> }): string | undefined {
+function formatSpDelta(delta: number | undefined): string {
+  const value = Math.round(Number(delta ?? 0))
+  return `${value >= 0 ? '+' : ''}${value}`
+}
+
+function isNeutralEffect(effect: any): boolean {
+  const provenance = String(effect?.provenance?.sourceKind ?? '')
+  const label = `${effect?.id ?? ''} ${effect?.name ?? ''}`.toLowerCase()
+  return provenance === 'trace' || provenance === 'lightCone' || provenance === 'relic' || /\b(gear|traces)\b/.test(label)
+}
+
+let renderEffectsTabImpl: ((action: CombatActionRecord, sim: Simulator, content: HTMLElement, scopeId?: string) => void) | undefined
+
+export function renderEffectSummary(action: CombatActionRecord, sim: Simulator, content: HTMLElement, scopeId?: string): void {
+  if (renderEffectsTabImpl) renderEffectsTabImpl(action, sim, content, scopeId)
+}
+
+export function snapshotEffectModTotals(unit: SnapshotUnit): Record<string, number> {
+  const totals: Record<string, number> = {}
+  for (const effect of [...unit.buffs, ...unit.debuffs]) {
+    for (const mod of effect.mods ?? []) {
+      const conditional = Array.isArray((mod as { whenAbility?: unknown }).whenAbility)
+      if (conditional) continue
+      totals[mod.stat] = (totals[mod.stat] ?? 0) + mod.value * (effect.stacks ?? 1)
+    }
+  }
+  return totals
+}
+
+type EffectKind = 'buff' | 'debuff' | 'dot' | 'shield' | 'neutral' | 'removal'
+
+interface EffectIdentity {
+  id?: string
+  name?: string
+  targetId?: string
+  targetName?: string
+  sourceId?: string
+  sourceName?: string
+  appliedById?: string
+}
+
+function effectIconFor(effect: { name: string; kind?: EffectKind; mods?: Array<{ stat: string; value: number }> }): string | undefined {
   const direct = effectIconUrl(effect.name)
   if (direct) return direct
-  const stat = effect.mods?.[0]?.stat
-  return stat ? effectIconUrl(stat) : undefined
+  const mod = effect.mods?.[0]
+  if (mod) {
+    const statIcon = statIconUrlForKey(mod.stat)
+    if (statIcon) return statIcon
+  }
+  if (effect.kind === 'shield') return effectIconUrl('Shield')
+  if (effect.kind === 'debuff' || effect.kind === 'dot' || effect.kind === 'removal') return effectIconUrl('DoT')
+  return effectIconUrl('Buff')
+}
+
+function entityIconUrl(unit: { name?: string; side?: string; kitId?: string; ownerId?: string } | undefined, sim: Simulator): string | undefined {
+  if (!unit) return undefined
+  return unit.side === 'enemy' ? enemyIconUrl(unit.name ?? '') : unitIconUrl(unit, sim)
+}
+
+function effectSourceFor(effect: EffectIdentity, sim: Simulator): { name: string; url?: string } {
+  const sourceId = effect.sourceId ?? effect.appliedById
+  const unit = sourceId ? sim.roster.find(u => u.id === sourceId) : undefined
+  const name = unit?.name ?? effect.sourceName ?? ''
+  return { name: name || '—', url: entityIconUrl(unit, sim) }
+}
+
+function effectTargetFor(effect: EffectIdentity, sim: Simulator): { name: string; url?: string } {
+  const unit = effect.targetId ? sim.roster.find(u => u.id === effect.targetId) : undefined
+  const name = unit?.name ?? effect.targetName ?? ''
+  return { name: name || '—', url: entityIconUrl(unit, sim) }
+}
+
+function formatEffectMod(mod: { stat: string; value: number; whenAbility?: string[] }): string {
+  const flat = /flat/i.test(mod.stat)
+  const value = flat ? mod.value : mod.value * 100
+  const suffix = flat ? '' : '%'
+  const sign = value > 0 ? '+' : ''
+  const condition = mod.whenAbility?.length ? ` [${mod.whenAbility.join('/')}]` : ''
+  const number = Number.isInteger(value) ? String(value) : value.toFixed(1)
+  return `${mod.stat}: ${sign}${number}${suffix}${condition}`
+}
+
+function formatEffectModTotal(mod: { stat: string; value: number; whenAbility?: string[] }, stacks: number): string {
+  return formatEffectMod({ ...mod, value: mod.value * Math.max(1, stacks || 1) })
 }
 
 interface SimPanelHandle {
@@ -159,20 +247,18 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
   modeRow.append(presetLabel, customLabel, endgameLabel)
   paramsContainer.append(modeRow)
 
-  // Encounter select (preset mode)
-  const encounterLabel = el('label', 'encounterSelectLabel')
-  encounterLabel.textContent = 'Противник / Энкаунтер'
-  const encounterSel = el('select') as HTMLSelectElement
-  for (const [key, preset] of Object.entries(ENCOUNTER_PRESETS)) {
-    const opt = el('option')
-    opt.value = key
-    const totalEnemies = preset.waves.reduce((sum, wave) => sum + wave.reduce((s, g) => s + g.count, 0), 0)
-    const waveCount = preset.waves?.length ?? 1
-    opt.textContent = `${preset.mode} (${totalEnemies} враг${totalEnemies > 1 ? 'а' : ''}, ${waveCount} волн${waveCount > 1 ? 'ы' : ''})`
-    encounterSel.append(opt)
+  const encounterLabel = el('div', 'encounterSelectLabel')
+  encounterLabel.textContent = SIM_ENCOUNTER.mode ?? ''
+  const encounterPreview = el('div', 'encounterIconPreview')
+  for (const group of SIM_ENCOUNTER.waves.flat()) {
+    for (let i = 0; i < Math.min(group.count, 6); i++) {
+      encounterPreview.append(iconNode(enemyIconUrl(group.name), group.name, {
+        cls: 'encounterEnemyIcon', size: 32, fit: 'contain',
+        fallbackText: safeInitial(group.name), tint: '#f5d76e', title: group.name,
+      }))
+    }
   }
-  encounterSel.value = 'moc12'
-  encounterLabel.append(encounterSel)
+  encounterLabel.append(encounterPreview)
   paramsContainer.append(encounterLabel)
 
   // Endgame stage select (endgame mode)
@@ -432,14 +518,6 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
   // Initial populate
   updateEndgameVersions()
 
-  // Update cycles input when preset changes
-  encounterSel.onchange = () => {
-    const preset = ENCOUNTER_PRESETS[encounterSel.value]
-    if (preset && preset.cycles) {
-      cyclesInp.value = String(preset.cycles)
-    }
-  }
-
   // Cycles (preset mode)
   const cyclesLabel = el('label')
   cyclesLabel.textContent = 'Циклы'
@@ -447,7 +525,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
   cyclesInp.type = 'number'
   cyclesInp.min = '1'
   cyclesInp.max = '20'
-  cyclesInp.value = String(ENCOUNTER_PRESETS.moc12?.cycles ?? 8)
+  cyclesInp.value = String(SIM_ENCOUNTER.cycles ?? 8)
   cyclesLabel.append(cyclesInp)
   paramsContainer.append(cyclesLabel)
 
@@ -648,14 +726,8 @@ fallbackText: safeInitial(kit.name), tint: '#7fb3ff', title: kit.name,
       encounterSpec = resolveEncounter(customEncounter)
       encounterId = customEncounter
     } else {
-      const encounterKey = encounterSel.value
-      const encounterPreset = ENCOUNTER_PRESETS[encounterKey]
-      if (!encounterPreset) {
-        showStatus('Выбранный энкаунтер не найден', 'error')
-        return
-      }
-      encounterSpec = resolveEncounter(encounterPreset)
-      encounterId = encounterKey
+      encounterSpec = resolveEncounter(SIM_ENCOUNTER)
+      encounterId = SIM_ENCOUNTER
     }
     if (!encounterSpec) {
       showStatus('Не удалось построить энкаунтер', 'error')
@@ -664,7 +736,7 @@ fallbackText: safeInitial(kit.name), tint: '#7fb3ff', title: kit.name,
 
     // Cycles handling
     const cyclesInputVal = parseInt(cyclesInp.value)
-    const cycles = Number.isFinite(cyclesInputVal) && cyclesInputVal > 0 ? cyclesInputVal : (ENCOUNTER_PRESETS[encounterSel.value]?.cycles ?? 8)
+    const cycles = Number.isFinite(cyclesInputVal) && cyclesInputVal > 0 ? cyclesInputVal : (SIM_ENCOUNTER.cycles ?? 8)
     if (!customRadio.checked && !isEndgame) {
       encounterSpec.cycles = cycles
     }
@@ -840,9 +912,15 @@ traceContainer.append(traceEl)
     const filterOptions = [
       ['all', 'Все действия'],
       ['attack', 'Атаки'],
+      ['enemyAttack', 'Атаки врагов'],
       ['bonusAttack', 'Бонус-атаки'],
       ['extraTurn', 'Доп. ходы'],
       ['ultimate', 'Ультимейты'],
+      ['technique', 'Техники'],
+      ['summon', 'Призывы'],
+      ['timer', 'Таймеры'],
+      ['effect', 'Эффекты'],
+      ['system', 'Система'],
     ]
     for (const [val, label] of filterOptions) {
       const opt = el('option')
@@ -897,6 +975,10 @@ traceContainer.append(traceEl)
       character: 'all' as string,
     }
 
+    function selectedInspectorUnitId(action: CombatActionRecord): string | undefined {
+      return currentFilters.character !== 'all' ? currentFilters.character : action.sourceId
+    }
+
     function applyFilters(): void {
       timeline.innerHTML = ''
 
@@ -924,16 +1006,26 @@ traceContainer.append(traceEl)
       // Display in chronological order (combatActions already sorted by AV)
       const categoryLabels: Record<CombatActionCategory, string> = {
         attack: 'Атака',
+        enemyAttack: 'Атака врага',
         bonusAttack: 'Бонус-атака',
         extraTurn: 'Доп. ход',
         ultimate: 'Ультимейт',
+        technique: 'Техника',
+        summon: 'Призыв',
+        timer: 'Таймер',
+        effect: 'Эффект',
         system: 'Система',
       }
       const categoryColors: Record<CombatActionCategory, string> = {
         attack: '#3b82f6',
+        enemyAttack: '#ef4444',
         bonusAttack: '#f59e0b',
         extraTurn: '#22c55e',
         ultimate: '#a855f7',
+        technique: '#14b8a6',
+        summon: '#e879f9',
+        timer: '#0ea5e9',
+        effect: '#8b5cf6',
         system: '#6b7280',
       }
 
@@ -973,6 +1065,50 @@ traceContainer.append(traceEl)
       header.append(target, damage)
       hitEl.append(header)
       return hitEl
+    }
+
+    function vitalBar(label: string, value: number, max: number, color: string, shieldText?: string): HTMLElement {
+      const row = el('div', 'simVitalBar')
+      const labelEl = el('span', 'simVitalLabel')
+      labelEl.textContent = label
+      const track = el('div', 'simVitalTrack')
+      const fill = el('div', 'simVitalFill')
+      const pct = max > 0 ? Math.max(0, Math.min(100, value / max * 100)) : 0
+      fill.style.width = `${pct}%`
+      fill.style.background = color
+      track.append(fill)
+      const valueEl = el('span', 'simVitalValue')
+      valueEl.textContent = `${value.toLocaleString()}/${value === 0 && max === 0 ? '0' : max.toLocaleString()}`
+      row.append(labelEl, track, valueEl)
+      if (shieldText) {
+        const shieldEl = el('span', 'simVitalShield')
+        const shieldValue = el('span')
+        shieldValue.textContent = shieldText
+        shieldEl.append(iconNode(effectIconUrl('Shield'), 'Shield', {
+          cls: 'simVitalShieldIcon', size: 14, fit: 'contain',
+          fallbackText: 'S', tint: '#7ec8ff', title: 'Щит',
+        }), shieldValue)
+        row.append(shieldEl)
+      }
+      return row
+    }
+
+    function createActionVitals(action: CombatActionRecord, sourceUnit: ReturnType<Simulator['roster']['find']>): HTMLElement | undefined {
+      if (!sourceUnit || !action.sourceId) return undefined
+      const before = action.beforeSnapshot
+      const after = action.afterSnapshot
+      const snap = before?.units[action.sourceId] ?? after?.units[action.sourceId]
+      if (!snap) return undefined
+      const teamSnapshot = after ?? before
+      const shield = Number(snap.shield ?? 0) ||
+        (snap.buffs ?? []).reduce((sum, buff) => sum + Number(buff.shield ?? 0), 0)
+      const vitals = el('div', 'simActionVitals')
+      vitals.append(
+        vitalBar('HP', snap.hp, snap.maxHp, '#4ade80', shield > 0 ? shield.toLocaleString() : undefined),
+        vitalBar('EN', snap.energy, snap.maxEnergy, '#60a5fa'),
+        vitalBar('ОД', teamSnapshot?.sp ?? 0, teamSnapshot?.maxSp ?? 5, '#f2c94c'),
+      )
+      return vitals
     }
 
     function createActionCard(action: CombatActionRecord, sim: Simulator, onClick: () => void): HTMLElement {
@@ -1015,6 +1151,8 @@ traceContainer.append(traceEl)
       const sourceName = el('span', 'simActionSourceName')
       sourceName.textContent = action.sourceName
       sourceInfo.append(sourceName)
+      const vitals = createActionVitals(action, sourceUnit)
+      if (vitals) sourceInfo.append(vitals)
       if (abilityIcon) {
         const abilityIconSpan = el('span', 'simActionAbilityIcon')
         abilityIconSpan.append(iconNode(abilityIcon, action.abilityName || action.abilityId || '?', { cls: 'simActionAbilityIconImg', size: 20, fit: 'contain', fallbackText: safeInitial(action.abilityName || action.abilityId || '?'), tint: '#8fd694', title: action.abilityName || action.abilityId || '?' }))
@@ -1022,10 +1160,15 @@ traceContainer.append(traceEl)
       }
       const abilityName = el('span', 'simActionAbilityName')
       abilityName.textContent = action.abilityName || 'Атака'
-      sourceInfo.append(abilityName)
+      const spDeltaEl = el('span', 'simActionSpDelta')
+      spDeltaEl.textContent = `${formatSpDelta(action.spDelta)} ОД`
+      sourceInfo.append(abilityName, spDeltaEl)
       sourceDiv.append(sourceInfo)
 
       const targetsDiv = el('div', 'simActionTargets')
+      const targetsLabel = el('span', 'simActionTargetsLabel')
+      targetsLabel.textContent = 'Targets:'
+      targetsDiv.append(targetsLabel)
       for (const id of action.targetIds) {
         const unit = sim.roster.find(u => u.id === id)
         if (!unit) continue
@@ -1048,7 +1191,7 @@ traceContainer.append(traceEl)
       const hitsSpan = el('span', 'simActionHitsSummary')
       hitsSpan.textContent = `${allHits.length} попад.${critHits > 0 ? ` (${critHits} крит)` : ''}${hasBreak ? ' | Пробитие' : ''}`
       const effectsSpan = el('span', 'simActionEffects')
-      effectsSpan.textContent = `${action.effects.buffs.length + action.effects.debuffs.length + action.effects.dots.length + action.effects.shields.length + action.effects.heals.length} эфф.`
+      effectsSpan.textContent = `${action.effects.buffs.length + action.effects.debuffs.length + action.effects.dots.length + action.effects.shields.length + action.effects.shieldDamage.length + action.effects.heals.length} эфф.`
       summary.append(dmgSpan, hitsSpan, effectsSpan)
       card.append(header, sourceDiv, targetsDiv, summary)
 
@@ -1077,9 +1220,14 @@ traceContainer.append(traceEl)
     function getCategoryColor(category: CombatActionCategory): string {
       const colors: Record<CombatActionCategory, string> = {
         attack: '#3b82f6',
+        enemyAttack: '#ef4444',
         bonusAttack: '#f59e0b',
         extraTurn: '#22c55e',
         ultimate: '#a855f7',
+        technique: '#14b8a6',
+        summon: '#e879f9',
+        timer: '#0ea5e9',
+        effect: '#8b5cf6',
         system: '#6b7280',
       }
       return colors[category] || '#6b7280'
@@ -1090,6 +1238,11 @@ traceContainer.append(traceEl)
       bonusAttack: 'Бонус-атака',
       extraTurn: 'Доп. ход',
       ultimate: 'Ультимейт',
+      enemyAttack: 'Атака врага',
+      technique: 'Техника',
+      summon: 'Призыв',
+      timer: 'Таймер',
+      effect: 'Эффект',
       system: 'Система',
     }
 
@@ -1110,18 +1263,16 @@ traceContainer.append(traceEl)
       const h4 = el('h4')
       h4.textContent = 'Инспектор действия'
       const idSpan = el('span', 'simLogInspectorId')
-      idSpan.textContent = `№${action.order} | ${action.category} | AV ${action.av.toFixed(1)} | ACT ${action.actionId}`
+      idSpan.textContent = `№${action.order} | ${action.category} | AV ${action.av.toFixed(1)} | ACT ${action.actionId} | ${formatSpDelta(action.spDelta)} ОД`
       header.append(h4, idSpan)
       inspectorPanel.append(header)
 
       const tabs = el('div', 'simInspectorTabs')
       const tabAction = el('button', 'simInspectorTab active')
       tabAction.textContent = 'Действие'
-      const tabState = el('button', 'simInspectorTab')
-      tabState.textContent = 'Состояние'
       const tabEffects = el('button', 'simInspectorTab')
       tabEffects.textContent = 'Эффекты'
-      tabs.append(tabAction, tabState, tabEffects)
+      tabs.append(tabAction, tabEffects)
       inspectorPanel.append(tabs)
 
       const content = el('div', 'simInspectorContent')
@@ -1129,29 +1280,23 @@ traceContainer.append(traceEl)
 
       function showTab(tab: string): void {
         tabAction.classList.toggle('active', tab === 'action')
-        tabState.classList.toggle('active', tab === 'state')
         tabEffects.classList.toggle('active', tab === 'effects')
         content.innerHTML = ''
         if (tab === 'action') renderActionTab(action, sim, content)
-        else if (tab === 'state') renderStateTab(action, sim, content)
         else if (tab === 'effects') renderEffectsTab(action, sim, content)
       }
 
       tabAction.onclick = () => showTab('action')
-      tabState.onclick = () => showTab('state')
       tabEffects.onclick = () => showTab('effects')
 
       showTab('action')
     }
 
     function relevantSnapshotUnitIds(action: CombatActionRecord, snapshot: StateSnapshot | undefined, sim: Simulator): string[] {
-      const ids = new Set<string>()
-      if (action.sourceId) ids.add(action.sourceId)
-      for (const id of action.targetIds) {
-        const side = snapshot?.units[id]?.side ?? sim.roster.find(u => u.id === id)?.side
-        if (side === 'enemy') ids.add(id)
-      }
-      return [...ids]
+      void sim
+      const id = selectedInspectorUnitId(action)
+      if (!id) return []
+      return snapshot?.units[id] ? [id] : []
     }
 
     function createSnapshotUnitEl(unit: SnapshotUnit, sim: Simulator, options: { stats: boolean; statuses: boolean; effects: boolean; debuffs?: boolean }): HTMLElement {
@@ -1304,10 +1449,7 @@ traceContainer.append(traceEl)
       for (const id of unitIds) {
         const unit = snapshot.units[id]
         if (!unit) continue
-        section.append(createSnapshotUnitEl(unit, sim, {
-          ...options,
-          debuffs: options.debuffs && unit.side === 'enemy',
-        }))
+        section.append(createSnapshotUnitEl(unit, sim, { ...options }))
         rendered++
       }
       if (rendered > 0) content.append(section)
@@ -1324,74 +1466,38 @@ traceContainer.append(traceEl)
       )
     }
 
-    function renderStateTab(action: CombatActionRecord, sim: Simulator, content: HTMLElement): void {
-      if (!action.beforeSnapshot && !action.afterSnapshot) {
-        content.innerHTML = '<p class="dim">Нет исторических снимков для этого действия</p>'
-        return
-      }
-
-      appendSnapshotSection(
-        content,
-        'До действия',
-        action.beforeSnapshot,
-        relevantSnapshotUnitIds(action, action.beforeSnapshot, sim),
-        sim,
-        { stats: true, statuses: true, effects: false, debuffs: true }
-      )
-      appendSnapshotSection(
-        content,
-        'После действия',
-        action.afterSnapshot,
-        relevantSnapshotUnitIds(action, action.afterSnapshot, sim),
-        sim,
-        { stats: true, statuses: true, effects: false, debuffs: true }
-      )
-    }
-
-    function renderEffectsTab(action: CombatActionRecord, sim: Simulator, content: HTMLElement): void {
+    function renderEffectsTab(action: CombatActionRecord, sim: Simulator, content: HTMLElement, scopeId?: string): void {
       const grid = el('div', 'simLogInspectorGrid')
-      const sparkleEffectIds = new Set(['figment', 'cipher_dmg', 'sparkle_e2'])
-      const effectDisplayNames: Record<string, string> = { cipher_dmg: 'Cipher' }
+      const effectNameFor = (effect: any): string => effect.name || ''
+      const selectedId = scopeId ?? selectedInspectorUnitId(action)
+      const selectedUnit = selectedId ? (action.afterSnapshot?.units[selectedId] ?? action.beforeSnapshot?.units[selectedId]) : undefined
+      const selectedName = selectedUnit?.name ?? sim.roster.find(u => u.id === selectedId)?.name ?? ''
+      const inScope = (effect: any): boolean => !selectedId || effect.targetId === selectedId || (!effect.targetId && effect.sourceId === selectedId)
 
-      const effectNameFor = (effect: any): string => (effect.id && effectDisplayNames[effect.id]) || effect.name || ''
-
-      const sourceFor = (effect: any): { name: string; url?: string } => {
-        if (sparkleEffectIds.has(effect.id)) {
-          const kitId = 'sparkle'
-          const unit = sim.roster.find(u => u.kitId === kitId)
-          return {
-            name: unit?.name ?? KITS.find(k => k.id === kitId)?.name ?? 'Sparkle',
-            url: charIconUrl(kitId),
-          }
+      const snapshotRows = (() => {
+        if (!selectedUnit || !selectedId) return undefined
+        const rows: { buff: any[]; debuff: any[]; shield: any[] } = { buff: [], debuff: [], shield: [] }
+        for (const buff of selectedUnit.buffs) {
+          const row = { ...buff, targetId: selectedId, targetName: selectedName }
+          if (buff.shield) rows.shield.push(row)
+          else rows.buff.push(row)
         }
-        const unitById = effect.sourceId ? sim.roster.find(u => u.id === effect.sourceId) : undefined
-        const name = effect.sourceName ?? unitById?.name ?? action.sourceName
-        const unit = unitById ?? sim.roster.find(u => u.name === name)
-        const url = unit ? (unit.side === 'enemy' ? enemyIconUrl(unit.name) : unitIconUrl(unit, sim)) : undefined
-        return { name: name || '—', url }
-      }
+        for (const debuff of selectedUnit.debuffs) rows.debuff.push({ ...debuff, targetId: selectedId, targetName: selectedName })
+        for (const dot of selectedUnit.dots) rows.debuff.push({ ...dot, targetId: selectedId, targetName: selectedName })
+        return rows
+      })()
 
-      const mergeStacked = (effects: any[]): any[] => {
+      const mergeStacked = (effects: any[], kind: EffectKind): any[] => {
         const merged = new Map<string, any>()
         for (const effect of effects) {
-          const key = `${effect.id ?? ''}|${effectNameFor(effect)}|${sourceFor(effect).name}`
-          const prev = merged.get(key)
-          if (!prev) {
-            merged.set(key, { ...effect })
-            continue
-          }
-          merged.set(key, {
-            ...prev,
-            ...effect,
-            stacks: Math.max(prev.stacks ?? 1, effect.stacks ?? 1),
-            turns: effect.turns ?? prev.turns,
-          })
+          const key = `${kind}|${effect.targetId ?? ''}|${effect.id ?? ''}|${effect.sourceId ?? ''}`
+          merged.set(key, { ...effect })
         }
         return [...merged.values()]
       }
 
-      const addEffectSection = (label: string, effects: any[], kind: 'buff' | 'debuff' | 'neutral', stacked = false) => {
-        const rows = stacked ? mergeStacked(effects) : effects
+      const addEffectSection = (label: string, effects: any[], kind: EffectKind, stacked = false) => {
+        const rows = stacked ? mergeStacked(effects, kind) : effects
         if (rows.length === 0) return
         const section = el('div', 'simInspectorEffectSection')
         const title = el('h4', `simInspectorEffectTitle ${kind}`)
@@ -1401,7 +1507,7 @@ traceContainer.append(traceEl)
         const list = el('div', 'simInspectorEffectList')
         for (const effect of rows) {
           const name = effectNameFor(effect)
-          const iconUrl = effectIconFor({ ...effect, name })
+          const iconUrl = effectIconFor({ ...effect, name, kind })
           const tint = kind === 'debuff' ? '#ff9d9d' : '#7fb3ff'
 
           const el_effect = el('div', `simInspectorEffect ${kind === 'neutral' ? '' : kind}`.trim())
@@ -1410,13 +1516,21 @@ traceContainer.append(traceEl)
           const infoEl = el('div', 'simInspectorEffectInfo')
           const nameEl = el('div', 'simInspectorEffectName')
           nameEl.textContent = name
-          const source = sourceFor(effect)
+          const source = effectSourceFor(effect, sim)
           const sourceEl = el('div', 'simInspectorEffectSource')
           sourceEl.append(iconNode(source.url, source.name, { cls: 'simInspectorEffectSourceIcon', size: 18, fit: 'contain', fallbackText: safeInitial(source.name), tint, title: `Источник: ${source.name}` }))
           const sourceNameEl = el('span')
           sourceNameEl.textContent = source.name
           sourceEl.append(sourceNameEl)
-          infoEl.append(nameEl, sourceEl)
+
+          const target = effectTargetFor(effect, sim)
+          const targetEl = el('div', 'simInspectorEffectTarget')
+          targetEl.append(iconNode(target.url, target.name, { cls: 'simInspectorEffectTargetIcon', size: 18, fit: 'contain', fallbackText: safeInitial(target.name), tint, title: `Получатель: ${target.name}` }))
+          const targetNameEl = el('span')
+          targetNameEl.textContent = target.name
+          targetEl.append(targetNameEl)
+
+          infoEl.append(nameEl, sourceEl, targetEl)
           const metaEl = el('div', 'simInspectorEffectMeta')
           const meta: Array<[string, string]> = []
           if ('stacks' in effect) meta.push(['Стаки', String(effect.stacks)])
@@ -1430,11 +1544,26 @@ traceContainer.append(traceEl)
             metaEl.append(span)
           }
           infoEl.append(metaEl)
-          if (effect.mods?.length > 0) {
+          const mods: Array<{ stat: string; value: number; whenAbility?: string[] }> = effect.mods ?? []
+          const alwaysMods = mods.filter(m => !m.whenAbility?.length)
+          const conditionalMods = mods.filter(m => m.whenAbility?.length)
+          if (alwaysMods.length > 0) {
             const modsEl = el('div', 'simInspectorEffectMods')
-            for (const m of effect.mods) {
+            for (const m of alwaysMods) {
               const modEl = el('span', 'simMod')
-              modEl.textContent = `${m.stat}: ${m.value >= 0 ? '+' : ''}${(m.value * 100).toFixed(1)}%`
+              modEl.textContent = formatEffectModTotal(m, effect.stacks ?? 1)
+              modsEl.append(modEl)
+            }
+            infoEl.append(modsEl)
+          }
+          if (conditionalMods.length > 0) {
+            const modsEl = el('div', 'simInspectorEffectMods conditional')
+            const condLabel = el('span')
+            condLabel.textContent = 'Условно'
+            modsEl.append(condLabel)
+            for (const m of conditionalMods) {
+              const modEl = el('span', 'simMod')
+              modEl.textContent = formatEffectModTotal(m, effect.stacks ?? 1)
               modsEl.append(modEl)
             }
             infoEl.append(modsEl)
@@ -1451,11 +1580,19 @@ traceContainer.append(traceEl)
         grid.append(section)
       }
 
-      addEffectSection('Баффы', action.effects.buffs.filter(e => e.id !== 'sparkle_e2'), 'buff', true)
-      addEffectSection('Щиты', action.effects.shields, 'buff')
-      addEffectSection('Лечение', action.effects.heals, 'buff')
+      const buffRows = [...action.effects.buffs.filter(e => e.shield === undefined), ...(snapshotRows?.buff ?? [])]
+      const debuffRows = [...action.effects.debuffs, ...action.effects.dots, ...(snapshotRows?.debuff ?? [])]
+      const shieldRows = [...action.effects.shields, ...(snapshotRows?.shield ?? [])]
+      const neutralRows = [...buffRows, ...debuffRows].filter(isNeutralEffect)
+      addEffectSection('Баффы', buffRows.filter(e => !isNeutralEffect(e) && inScope(e)), 'buff', true)
+      addEffectSection('Дебаффы', debuffRows.filter(e => !isNeutralEffect(e) && inScope(e)), 'debuff', true)
+      addEffectSection('Снаряжение и следы', neutralRows.filter(inScope), 'neutral', true)
+      addEffectSection('Щиты', shieldRows.filter(inScope), 'shield')
+      addEffectSection('Урон по щитам', action.effects.shieldDamage.filter(inScope), 'shield')
+      addEffectSection('Лечение', action.effects.heals.filter(inScope), 'buff')
+      addEffectSection('Снятие эффектов', action.effects.removals.filter(inScope), 'removal')
 
-      const summons = action.effects.other.filter(e => e.type === 'SUMMON_CREATED' || e.type === 'SUMMON_DESPAWNED')
+      const summons = action.effects.other.filter(e => (e.type === 'SUMMON_CREATED' || e.type === 'SUMMON_DESPAWNED') && inScope(e))
       if (summons.length > 0) {
         const section = el('div', 'simInspectorEffectSection')
         const title = el('h4', 'simInspectorEffectTitle neutral')
@@ -1479,8 +1616,8 @@ traceContainer.append(traceEl)
       }
 
       const changes: Array<[string, typeof action.effects.energyChanges]> = [
-        ['Изменение энергии', action.effects.energyChanges],
-        ['Изменение SP', action.effects.spChanges],
+        ['Изменение энергии', action.effects.energyChanges.filter(inScope)],
+        ['Изменение SP', action.effects.spChanges.filter(inScope)],
       ]
       for (const [label, rows] of changes) {
         if (rows.length === 0) continue
@@ -1505,12 +1642,11 @@ traceContainer.append(traceEl)
         grid.append(section)
       }
 
-      addEffectSection('Дебаффы', action.effects.debuffs, 'debuff', true)
-      addEffectSection('DoT', action.effects.dots, 'debuff', true)
-      addEffectSection('Пробития', action.effects.breaks, 'debuff')
+      addEffectSection('Пробития', action.effects.breaks.filter(inScope), 'debuff')
 
       content.append(grid)
     }
+    renderEffectsTabImpl = renderEffectsTab
 
     // Event listeners
     searchInput.oninput = () => { currentFilters.search = searchInput.value; applyFilters() }

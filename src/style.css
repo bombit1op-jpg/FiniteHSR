@@ -1178,6 +1178,8 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .simParams input:focus, .simParams select:focus { outline: none; border-color: #4ade80; }
 
 .encounterSelectLabel { display: flex; flex-direction: column; gap: 4px; }
+.encounterIconPreview { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+.encounterEnemyIcon { width: 32px; height: 32px; border-radius: 5px; }
 
 .encounterBuilder { display: flex; flex-direction: column; gap: 12px; }
 .encounterWave { background: #0e1e14; border: 1px solid #2a4a35; border-radius: 8px; padding: 12px; }
@@ -1493,15 +1495,26 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .simActionAbilityIconImg { width: 20px; height: 20px; }
 .simActionSourceInfo { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .simActionSourceName { font-size: 13px; font-weight: 600; color: #e6ebf2; }
+.simActionVitals { display: flex; flex-direction: column; gap: 2px; margin-top: 2px; }
+.simVitalBar { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #9aa7ba; }
+.simVitalLabel { width: 22px; flex-shrink: 0; }
+.simVitalTrack { width: 88px; height: 5px; background: #0d1117; border-radius: 3px; overflow: hidden; }
+.simVitalFill { height: 100%; border-radius: 3px; }
+.simVitalValue { min-width: 60px; text-align: right; font-variant-numeric: tabular-nums; }
+.simVitalShield { display: inline-flex; align-items: center; gap: 2px; color: #7ec8ff; font-variant-numeric: tabular-nums; }
+.simVitalShieldIcon { width: 14px; height: 14px; }
 .simActionAbility { display: flex; align-items: center; gap: 4px; }
 .simActionAbilityIcon { width: 20px; height: 20px; border-radius: 4px; }
 .simActionAbilityName { font-size: 12px; color: #f2c94c; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.simActionSpDelta { font-size: 11px; color: #9aa7ba; font-variant-numeric: tabular-nums; }
 
 .simActionTargets {
   display: flex;
   gap: 4px;
   flex-wrap: wrap;
+  align-items: center;
 }
+.simActionTargetsLabel { font-size: 10px; color: #9aa7ba; margin-right: 2px; }
 .simActionTargetIcon { width: 24px; height: 24px; border-radius: 4px; }
 
 .simActionSummary {

@@ -52,6 +52,8 @@ export interface BuffLogEntry {
   stacks?: number
   shield?: number
   mods?: { stat: string; value: number }[]
+  sourceId?: string
+  appliedById?: string
 }
 
 export class Simulator implements SimApi {
@@ -367,7 +369,15 @@ cfg: SimConfig
     if (i < 0) { this.log(`${u.name}: no debuff to dispel`); return false }
     const b = u.buffs[i]
     u.buffs.splice(i, 1)
-    this.logger.emit({ type: 'DISPELLED', target: u.name, targetId: u.id, payload: { id: b.id, name: b.name, stacks: b.stacks ?? 1 } })
+    this.logger.emit({
+      type: 'DISPELLED',
+      source: b.sourceId ? this.find(b.sourceId)?.name : undefined,
+      target: u.name,
+      sourceId: b.sourceId,
+      targetId: u.id,
+      payload: { id: b.id, name: b.name, stacks: b.stacks ?? 1, sourceId: b.sourceId, appliedById: b.appliedById, targetId: u.id },
+      provenance: b.provenance,
+    })
     this.log(`${u.name} dispelled ${b.name}`)
     return true
   }

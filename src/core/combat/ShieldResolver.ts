@@ -23,9 +23,9 @@ export function absorbWithShields(s: Simulator, target: Unit, incoming: number, 
     b.shield -= abs
     remaining -= abs
     const srcName = b.sourceId ? s.find(b.sourceId)?.name : undefined
-    s.logger.emit({ type: 'SHIELD_ABSORBED', source: srcName, target: target.name, sourceId: b.sourceId, targetId: target.id, payload: { id: b.id, amount: abs, remaining: b.shield, incoming: reportedIncoming } })
+    s.logger.emit({ type: 'SHIELD_ABSORBED', source: srcName, target: target.name, sourceId: b.sourceId, targetId: target.id, payload: { id: b.id, name: b.name, amount: abs, remaining: b.shield, incoming: reportedIncoming, sourceId: b.sourceId, appliedById: b.appliedById, targetId: target.id } })
     if (b.shield <= 0) {
-      s.logger.emit({ type: 'SHIELD_BROKEN', source: srcName, target: target.name, sourceId: b.sourceId, targetId: target.id, payload: { id: b.id, absorbed: abs } })
+      s.logger.emit({ type: 'SHIELD_BROKEN', source: srcName, target: target.name, sourceId: b.sourceId, targetId: target.id, payload: { id: b.id, name: b.name, absorbed: abs, sourceId: b.sourceId, appliedById: b.appliedById, targetId: target.id } })
       s.removeBuff(target, b.id)
     }
     if (remaining <= 0) break

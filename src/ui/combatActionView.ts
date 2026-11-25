@@ -12,7 +12,9 @@
 import type { BattleEvent, StateSnapshot, EventType } from '../core/battlelog'
 import type { Simulator } from '../core/simulator'
 
-export type CombatActionCategory = 'attack' | 'bonusAttack' | 'extraTurn' | 'ultimate' | 'system'
+export type CombatActionCategory =
+  | 'attack' | 'bonusAttack' | 'extraTurn' | 'ultimate'
+  | 'enemyAttack' | 'technique' | 'summon' | 'timer' | 'effect' | 'system'
 
 export interface CombatHitRecord {
   hitIndex: number
@@ -67,6 +69,8 @@ export interface CombatEffectSummary {
     turns: number
     sourceId?: string
     sourceName?: string
+    appliedById?: string
+    provenance?: BattleEvent['provenance']
     mods: Array<{ stat: string; value: number }>
     shield?: number
   }>
@@ -79,6 +83,8 @@ export interface CombatEffectSummary {
     turns: number
     sourceId?: string
     sourceName?: string
+    appliedById?: string
+    provenance?: BattleEvent['provenance']
     mods: Array<{ stat: string; value: number }>
   }>
   dots: Array<{
@@ -92,6 +98,7 @@ export interface CombatEffectSummary {
     stacks: number
     sourceId?: string
     sourceName?: string
+    provenance?: BattleEvent['provenance']
   }>
   shields: Array<{
     id: string
@@ -101,6 +108,20 @@ export interface CombatEffectSummary {
     amount: number
     sourceId?: string
     sourceName?: string
+    appliedById?: string
+    provenance?: BattleEvent['provenance']
+  }>
+  shieldDamage: Array<{
+    id: string
+    name: string
+    targetId: string
+    targetName: string
+    amount: number
+    incoming: number
+    remaining: number
+    sourceId?: string
+    sourceName?: string
+    provenance?: BattleEvent['provenance']
   }>
   heals: Array<{
     id: string
@@ -110,6 +131,19 @@ export interface CombatEffectSummary {
     amount: number
     sourceId?: string
     sourceName?: string
+    provenance?: BattleEvent['provenance']
+  }>
+  removals: Array<{
+    kind: 'buff' | 'debuff' | 'dot' | 'shield'
+    id: string
+    name: string
+    targetId: string
+    targetName: string
+    stacks: number
+    sourceId?: string
+    sourceName?: string
+    appliedById?: string
+    provenance?: BattleEvent['provenance']
   }>
   energyChanges: Array<{
     targetId: string
@@ -162,6 +196,7 @@ export interface CombatActionRecord {
   attacks: CombatAttackRecord[]
 
   totalDamage: number
+  spDelta: number
   effects: CombatEffectSummary
   events: BattleEvent[]
 
@@ -193,33 +228,45 @@ export function aggregateCombatActions(
 ): CombatActionRecord[] {
   const eventsByCombatAction = new Map<string, BattleEvent[]>()
   for (const e of events) {
-    if (!e.combatActionId) continue
-    const bucket = eventsByCombatAction.get(e.combatActionId) ?? []
+    const key = e.combatActionId ?? (e.type === 'TECHNIQUE_APPLIED' ? `technique:${e.eventId}` : undefined)
+    if (!key) continue
+    const bucket = eventsByCombatAction.get(key) ?? []
     bucket.push(e)
-    eventsByCombatAction.set(e.combatActionId, bucket)
+    eventsByCombatAction.set(key, bucket)
   }
 
   const actions: CombatActionRecord[] = []
   for (const [combatActionId, actionEvents] of eventsByCombatAction) {
     const boundary = actionEvents.find(e => e.type === 'ACTION_START') ?? actionEvents[0]
     if (!boundary) continue
-    const abilityEvent = actionEvents.find(e => e.type === 'ABILITY_USED') ?? boundary
-    const category = categorizeAction(actionEvents)
-    const abilityId = (abilityEvent.payload.abilityId ?? abilityEvent.payload.ability_id) as string | undefined
-    const abilityName = abilityNameOf(abilityEvent)
-    const abilitySlot = (abilityEvent.payload.slot ?? abilityEvent.payload.abilitySlot) as string | undefined
-    const ability = { abilityId, abilityName, abilitySlot }
-    const attacksArray = [...groupEventsByAttack(actionEvents)]
-      .map(([attackId, attackEvents]) => buildAttackRecord(attackEvents, attackId, sim, category, ability))
-      .filter((a): a is CombatAttackRecord => a !== null)
-
+    const abilityEvent = actionEvents.find(e => e.type === 'ABILITY_USED' || e.type === 'TECHNIQUE_APPLIED') ?? boundary
     const sourceId = boundary.sourceId ?? actionEvents.find(e => e.sourceId)?.sourceId
     const sourceUnit = sourceId ? sim.roster.find(u => u.id === sourceId) : undefined
+    const baseCategory = categorizeAction(actionEvents, sourceUnit)
+    const abilityId = (abilityEvent.payload.abilityId ?? abilityEvent.payload.ability_id) as string | undefined
+    const abilityName = abilityNameOf(abilityEvent)
+    const abilitySlot = (abilityEvent.payload.slot ?? abilityEvent.payload.abilitySlot ??
+      (abilityEvent.type === 'TECHNIQUE_APPLIED' ? 'technique' : undefined)) as string | undefined
+    const ability = { abilityId, abilityName, abilitySlot }
+    const attacksArray = [...groupEventsByAttack(actionEvents)]
+      .map(([attackId, attackEvents]) => buildAttackRecord(attackEvents, attackId, sim, baseCategory, ability))
+      .filter((a): a is CombatAttackRecord => a !== null && (a.hits.length > 0 || a.totalDamage > 0))
+    const category = attacksArray.length === 0 && (baseCategory === 'attack' || baseCategory === 'enemyAttack')
+      ? (hasMeaningfulContent(actionEvents) ? 'effect' : 'system')
+      : baseCategory
+
     const sourceName = sourceUnit?.name ?? boundary.source ?? 'Unknown'
-    const targetIds = [...new Set(attacksArray.flatMap(a => a.targetIds))]
+    const targetIds = [...new Set([
+      ...attacksArray.flatMap(a => a.targetIds),
+      ...actionEvents.filter(e => e.type === 'SUMMON_CREATED').map(e => e.targetId).filter((id): id is string => !!id),
+    ])]
     const beforeSnapshot = snapshots.find(s => s.actionId === boundary.actionId && s.turn === boundary.turn)
     const afterSnapshot = snapshots.find(s => s.actionId === boundary.actionId + 1 && s.turn === boundary.turn)
       ?? snapshots.find(s => s.actionId === boundary.actionId && s.turn > boundary.turn)
+    const effects = buildEffectsSummary(actionEvents, sim)
+    const spFromEvents = effects.spChanges.reduce((sum, change) => sum + change.delta, 0)
+    const spDelta = spFromEvents !== 0 ? spFromEvents
+      : beforeSnapshot && afterSnapshot ? afterSnapshot.sp - beforeSnapshot.sp : 0
 
     actions.push({
       id: combatActionId,
@@ -239,7 +286,8 @@ export function aggregateCombatActions(
       targetNames: targetIds.map(id => sim.roster.find(u => u.id === id)?.name ?? 'Unknown'),
       attacks: attacksArray,
       totalDamage: attacksArray.reduce((sum, a) => sum + a.totalDamage, 0),
-      effects: buildEffectsSummary(actionEvents, sim, { id: sourceId, name: sourceName }),
+      spDelta,
+      effects,
       events: actionEvents,
       beforeSnapshot,
       afterSnapshot,
@@ -261,22 +309,32 @@ export function aggregateCombatActions(
 
 function abilityNameOf(e: BattleEvent): string {
   const p = e.payload
+  if (typeof p.technique === 'string' && p.technique) return p.technique
   return String(p.abilityName ?? p.ability_name ?? p.action ?? e.attackType ?? 'Attack')
 }
 
-function categorizeAction(events: BattleEvent[]): CombatActionCategory {
+function categorizeAction(events: BattleEvent[], sourceUnit?: { kind?: string; side?: string }): CombatActionCategory {
   const explicit = events.find(e => e.actionCategory)?.actionCategory
     ?? events.find(e => typeof e.payload.actionKind === 'string')?.payload.actionKind as string | undefined
   if (explicit) {
     if (explicit === 'followUpAttack') return 'bonusAttack'
-    if (explicit === 'attack' || explicit === 'extraTurn' || explicit === 'ultimate' || explicit === 'bonusAttack') return explicit
+    if (explicit === 'attack' || explicit === 'extraTurn' || explicit === 'ultimate' || explicit === 'bonusAttack' ||
+        explicit === 'enemyAttack' || explicit === 'technique' || explicit === 'summon' || explicit === 'timer' ||
+        explicit === 'effect' || explicit === 'system') return explicit
   }
+
+  if (events.some(e => e.type === 'TECHNIQUE_APPLIED')) return 'technique'
+  if (sourceUnit?.kind === 'timer') return 'timer'
+  if (sourceUnit?.kind === 'summon') return 'summon'
 
   const ability = events.find(e => e.type === 'ABILITY_USED') ?? events[0]
   if (ability && (ability.payload.action === 'ult' || ability.payload.actionKind === 'ult')) return 'ultimate'
   if (events.some(e => e.type === 'EXTRA_TURN' || e.payload.extra === true || e.payload.outOfTurn === true)) return 'extraTurn'
-  if (events.some(e => e.type === 'ABILITY_USED' || e.type === 'HIT_START' || e.type === 'DAMAGE_DEALT')) return 'attack'
-  return hasMeaningfulContent(events) ? 'attack' : 'system'
+  const hasAttack = events.some(e => ATTACK_EVENTS.has(e.type))
+  if (events.some(e => e.type === 'SUMMON_CREATED') && !hasAttack) return 'summon'
+  if (sourceUnit?.side === 'enemy' && (hasAttack || events.some(e => e.type === 'ABILITY_USED' || e.type === 'ACTION_START'))) return 'enemyAttack'
+  if (hasAttack) return 'attack'
+  return hasMeaningfulContent(events) ? 'effect' : 'system'
 }
 
 function hasMeaningfulContent(events: BattleEvent[]): boolean {
@@ -387,15 +445,16 @@ function buildHits(attackEvents: BattleEvent[], sim: Simulator): CombatHitRecord
 
 function buildEffectsSummary(
   attackEvents: BattleEvent[],
-  sim: Simulator,
-  defaultSource: { id?: string; name?: string } = {}
+  sim: Simulator
 ): CombatEffectSummary {
   const summary: CombatEffectSummary = {
     buffs: [],
     debuffs: [],
     dots: [],
     shields: [],
+    shieldDamage: [],
     heals: [],
+    removals: [],
     energyChanges: [],
     spChanges: [],
     breaks: [],
@@ -405,32 +464,58 @@ function buildEffectsSummary(
   for (const e of attackEvents) {
     const payload = e.payload as any
     const targetId = e.targetId ?? payload.targetId ?? ''
-    const sourceId = e.sourceId ?? payload.sourceId ?? defaultSource.id ?? ''
+    const sourceId = e.sourceId ?? payload.sourceId
     const targetUnit = targetId ? sim.roster.find(u => u.id === targetId) : undefined
     const targetName = targetUnit?.name ?? e.target ?? payload.targetName ?? 'Unknown'
-    const sourceName = e.source ?? (typeof payload.sourceName === 'string' ? payload.sourceName : undefined) ?? defaultSource.name
+    const sourceUnit = sourceId ? sim.roster.find(u => u.id === sourceId) : undefined
+    const sourceName = sourceUnit?.name ?? e.source ?? (typeof payload.sourceName === 'string' ? payload.sourceName : undefined)
 
     switch (e.type) {
       case 'BUFF_APPLIED':
       case 'BUFF_STACKED':
       case 'BUFF_REFRESHED': {
         const isDebuff = payload.debuff === true
-        const effect = {
-          id: payload.id as string,
-          name: payload.name as string,
-          targetId,
-          targetName,
-          stacks: (payload.stacks as number) ?? 1,
-          turns: (payload.turns as number) ?? Infinity,
-          sourceId,
-          sourceName,
-          mods: (payload.mods as Array<{ stat: string; value: number }>) ?? [],
-          shield: payload.shield as number | undefined,
-        }
-        if (isDebuff) {
-          summary.debuffs.push(effect)
+        const shieldAmount = payload.shield as number | undefined
+        if (shieldAmount !== undefined) {
+          summary.shields.push({
+            id: payload.id as string,
+            name: payload.name as string,
+            targetId,
+            targetName,
+            amount: shieldAmount,
+            sourceId,
+            sourceName,
+            appliedById: payload.appliedById,
+            provenance: e.provenance,
+          })
+        } else if (isDebuff) {
+          summary.debuffs.push({
+            id: payload.id as string,
+            name: payload.name as string,
+            targetId,
+            targetName,
+            stacks: (payload.stacks as number) ?? 1,
+            turns: (payload.turns as number) ?? Infinity,
+            sourceId,
+            sourceName,
+            appliedById: payload.appliedById,
+            provenance: e.provenance,
+            mods: (payload.mods as Array<{ stat: string; value: number }>) ?? [],
+          })
         } else {
-          summary.buffs.push(effect)
+          summary.buffs.push({
+            id: payload.id as string,
+            name: payload.name as string,
+            targetId,
+            targetName,
+            stacks: (payload.stacks as number) ?? 1,
+            turns: (payload.turns as number) ?? Infinity,
+            sourceId,
+            sourceName,
+            appliedById: payload.appliedById,
+            provenance: e.provenance,
+            mods: (payload.mods as Array<{ stat: string; value: number }>) ?? [],
+          })
         }
         break
       }
@@ -446,6 +531,8 @@ function buildEffectsSummary(
           turns: payload.turns ?? Infinity,
           sourceId,
           sourceName,
+          appliedById: payload.appliedById,
+          provenance: e.provenance,
           mods: payload.mods ?? [],
         })
         break
@@ -462,6 +549,7 @@ function buildEffectsSummary(
           stacks: payload.stacks ?? 1,
           sourceId,
           sourceName,
+          provenance: e.provenance,
         })
         break
       }
@@ -474,6 +562,23 @@ function buildEffectsSummary(
           amount: payload.amount ?? 0,
           sourceId,
           sourceName,
+          appliedById: payload.appliedById,
+          provenance: e.provenance,
+        })
+        break
+      }
+      case 'SHIELD_ABSORBED': {
+        summary.shieldDamage.push({
+          id: payload.id ?? 'shield',
+          name: payload.name ?? 'Shield',
+          targetId,
+          targetName,
+          amount: payload.amount ?? 0,
+          incoming: payload.incoming ?? payload.amount ?? 0,
+          remaining: payload.remaining ?? 0,
+          sourceId,
+          sourceName,
+          provenance: e.provenance,
         })
         break
       }
@@ -486,6 +591,7 @@ function buildEffectsSummary(
           amount: payload.amount ?? 0,
           sourceId,
           sourceName,
+          provenance: e.provenance,
         })
         break
       }
@@ -531,6 +637,30 @@ function buildEffectsSummary(
           targetName,
           element: payload.element ?? e.element ?? 'Physical',
           breakDamage: payload.breakDamage ?? payload.amount ?? 0,
+        })
+        break
+      }
+      case 'BUFF_EXPIRED':
+      case 'DEBUFF_EXPIRED':
+      case 'DISPELLED':
+      case 'DOT_EXPIRED':
+      case 'SHIELD_BROKEN': {
+        const kind: CombatEffectSummary['removals'][number]['kind'] =
+          e.type === 'DOT_EXPIRED' ? 'dot'
+          : e.type === 'SHIELD_BROKEN' ? 'shield'
+          : (e.type === 'DEBUFF_EXPIRED' || e.type === 'DISPELLED' || payload.debuff === true) ? 'debuff'
+          : 'buff'
+        summary.removals.push({
+          kind,
+          id: payload.id ?? payload.kind ?? '',
+          name: payload.name ?? payload.kind ?? '',
+          targetId,
+          targetName,
+          stacks: payload.stacks ?? 1,
+          sourceId,
+          sourceName,
+          appliedById: payload.appliedById,
+          provenance: e.provenance,
         })
         break
       }

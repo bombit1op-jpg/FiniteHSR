@@ -75,14 +75,25 @@ export function gearIconUrl(kind: GearKind, id: string): string | undefined {
 
 export function elemIconUrl(elem: string): string | undefined { return ELEMENTS_ICONS[elem] }
 export function pathIconUrl(path: string): string | undefined { return PATHS_ICONS[PATH_KEY[path] ?? path] }
-export function enemyIconUrl(name: string): string | undefined { return ENEMIES_ICONS[name] }
+const ENEMY_ICON_ALIAS: Record<string, string> = {
+  'Ice Edge': 'Ice Edge (1)',
+  'Sting': 'Gnaw Sting',
+}
+
+export function enemyIconUrl(name: string): string | undefined {
+  const base = name.trim()
+  const match = /^(.*?)\s*#(\d+)$/.exec(base)
+  const numbered = match ? `${match[1]} (${match[2]})` : base
+  const key = ENEMY_ICON_ALIAS[numbered] ?? ENEMY_ICON_ALIAS[base] ?? numbered
+  return ENEMIES_ICONS[key] ?? ENEMIES_ICONS[base]
+}
 
 /** display-name keys of the stat/mechanic icon set (`public/icons/stats`) */
 export type StatIconKey =
   | 'ATK' | 'HP' | 'DEF' | 'SPD' | 'CRIT Rate' | 'CRIT DMG' | 'Break Effect'
   | 'Effect Hit Rate' | 'Effect RES' | 'Energy Regeneration Rate' | 'DMG Boost'
   | 'Toughness' | 'Trace' | 'Eidolon' | 'Skill Point' | 'Energy' | 'Path'
-  | 'Outgoing Healing Boost'
+  | 'Vulnerability' | 'Outgoing Healing Boost'
   | 'Elation (Stat)'
 
 export function statIconUrl(name: StatIconKey | string): string | undefined { return STATS_ICONS[name] }
@@ -95,7 +106,8 @@ const STAT_ICON_KEY: Record<string, StatIconKey> = {
   critRate: 'CRIT Rate', critDmg: 'CRIT DMG', be: 'Break Effect',
   ehr: 'Effect Hit Rate', effRes: 'Effect RES',
   err: 'Energy Regeneration Rate', outHeal: 'Outgoing Healing Boost',
-  elemDmgBoost: 'DMG Boost', energyMax: 'Energy',
+  elemDmgBoost: 'DMG Boost', dmgAll: 'DMG Boost', dmgTaken: 'Vulnerability',
+  defRed: 'DEF', spdDown: 'SPD', energyMax: 'Energy',
   elation: 'Elation (Stat)',
 }
 
@@ -279,7 +291,7 @@ export function effectIconUrl(name: string): string | undefined {
     }
   }
   const key = normIconKey(name)
-  return EFFECT_ICON_ALIAS_INDEX.get(key) ?? EFFECT_ICON_INDEX.get(key) ?? BUFFS_ICONS['Buff'] ?? '/icons/buffs/Buff.png'
+  return EFFECT_ICON_ALIAS_INDEX.get(key) ?? EFFECT_ICON_INDEX.get(key)
 }
 
 /**

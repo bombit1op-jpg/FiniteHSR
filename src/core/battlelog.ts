@@ -17,7 +17,8 @@
 import { traceDamage, type DmgTrace } from './combat/DamageCalculator'
 import { auditSummary, verifyInvariants, InvariantWatcher } from './battle/Invariants'
 import type { Simulator } from './simulator'
-import { eff, effectResOf, buffSum } from './combat/StatResolver'
+import { eff, effectResOf, buffSum, isDebuff } from './combat/StatResolver'
+import type { BuffProvenance } from './effects/Buff'
 
 /** DEBUG levels (§32). 0 = OFF, 1 = SUMMARY, 2 = ACTIONS, 3 = EFFECTS, 4 = DAMAGE,
  *  5 = FULL EVENT TRACE, 6 = STATE SNAPSHOT + DIFF, 7 = RNG + EVERYTHING. */
@@ -223,10 +224,10 @@ export interface StateSnapshot {
     maxToughness: number
     broken: boolean
     dead: boolean
-    buffs: Array<{ id: string; name: string; stacks: number; turns: number; mods: any[]; sourceId?: string }>
-    debuffs: Array<{ id: string; name: string; stacks: number; turns: number; mods: any[]; sourceId?: string }>
-    dots: Array<{ id: string; name: string; element: string; damage: number; turns: number; sourceId?: string; sourceBe?: number; defIgnore?: boolean }>
-    controls: Array<{ id: string; name: string; turns: number; sourceId?: string }>
+    buffs: Array<{ id: string; name: string; stacks: number; maxStacks?: number; turns: number; mods: any[]; sourceId?: string; appliedById?: string; provenance?: BuffProvenance; shield?: number }>
+    debuffs: Array<{ id: string; name: string; stacks: number; maxStacks?: number; turns: number; mods: any[]; sourceId?: string; appliedById?: string; provenance?: BuffProvenance }>
+    dots: Array<{ id: string; name: string; element: string; damage: number; turns: number; stacks?: number; sourceId?: string; sourceBe?: number; defIgnore?: number; provenance?: BuffProvenance }>
+    controls: Array<{ id: string; name: string; turns: number; sourceId?: string; appliedById?: string; provenance?: BuffProvenance }>
     atk: number
     def: number
     spd: number
@@ -698,22 +699,28 @@ snapshot(): StateSnapshot {
     const units: StateSnapshot['units'] = {}
     for (const u of this.sim.units()) {
       // Build detailed buff/debuff/dot info
-      const buffs = u.buffs.filter(b => !b.debuff).map(b => ({
+      const buffs = u.buffs.filter(b => !isDebuff(b)).map(b => ({
         id: b.id,
         name: b.name,
         stacks: b.stacks ?? 1,
+        maxStacks: b.maxStacks,
         turns: b.turns ?? Infinity,
         mods: b.mods ?? [],
         sourceId: b.sourceId,
+        appliedById: b.appliedById,
+        provenance: b.provenance,
         shield: b.shield,
       }))
-      const debuffs = u.buffs.filter(b => b.debuff).map(b => ({
+      const debuffs = u.buffs.filter(b => isDebuff(b)).map(b => ({
         id: b.id,
         name: b.name,
         stacks: b.stacks ?? 1,
+        maxStacks: b.maxStacks,
         turns: b.turns ?? Infinity,
         mods: b.mods ?? [],
         sourceId: b.sourceId,
+        appliedById: b.appliedById,
+        provenance: b.provenance,
       }))
       const dots = u.dots.map(d => ({
         id: d.kind,
@@ -722,14 +729,18 @@ snapshot(): StateSnapshot {
         damage: d.baseDmg,
         turns: d.turns,
         stacks: d.stacks,
+        sourceId: d.sourceId,
         sourceBe: d.sourceBe,
         defIgnore: d.defIgnore,
+        provenance: d.provenance,
       }))
-      const controls = u.buffs.filter(b => b.debuff && (b.id.includes('control') || b.id.includes('imprison') || b.id.includes('freeze') || b.id.includes('shock') || b.id.includes('entangle') || b.id.includes('wind'))).map(b => ({
+      const controls = u.buffs.filter(b => isDebuff(b) && (b.id.includes('control') || b.id.includes('imprison') || b.id.includes('freeze') || b.id.includes('shock') || b.id.includes('entangle') || b.id.includes('wind'))).map(b => ({
         id: b.id,
         name: b.name,
         turns: b.turns ?? 0,
         sourceId: b.sourceId,
+        appliedById: b.appliedById,
+        provenance: b.provenance,
       }))
 
       // Get final stats using the sim's eff function
@@ -770,8 +781,11 @@ units[u.id] = {
           element: String(d.element),
           damage: Number(d.damage),
           turns: Number(d.turns),
-          sourceBe: d.sourceBe ? Number(d.sourceBe) : undefined,
-          defIgnore: Boolean(d.defIgnore),
+          stacks: d.stacks,
+          sourceId: d.sourceId,
+          sourceBe: d.sourceBe,
+          defIgnore: d.defIgnore,
+          provenance: d.provenance,
         })),
         controls,
         atk: Math.round(stats.atk ?? u.base.atk ?? 0),

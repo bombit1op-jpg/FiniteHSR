@@ -25,11 +25,15 @@ export class BuffSystem {
       this.s.logger.emit({ type: 'NOTE', raw: `${u.name} is immune to ${b.name}`, minDebug: 2 })
       return
     }
-    const rec = (stacks: number, turns?: number): void => {
+    const sourceId = b.sourceId ?? b.appliedById
+    b.sourceId = sourceId
+    b.appliedById = b.appliedById ?? sourceId
+    const rec = (stacks: number, turns?: number, stored: Buff = b): void => {
       const e: BuffLogEntry = {
-        unitName: u.name, av: this.s.avElapsed, id: b.id, name: b.name,
-        turns: turns ?? b.turns, maxStacks: b.maxStacks, stacks,
-        shield: b.shield, mods: b.mods,
+        unitName: u.name, av: this.s.avElapsed, id: stored.id, name: stored.name,
+        turns: turns ?? stored.turns, maxStacks: stored.maxStacks, stacks,
+        shield: stored.shield, mods: stored.mods,
+        sourceId: stored.sourceId, appliedById: stored.appliedById,
       }
       this.s.buffLog.push(e)
     }
@@ -38,11 +42,12 @@ export class BuffSystem {
     const grp = deb ? 'DEBUFF' : 'BUFF'
     const emit = (kind: 'APPLIED' | 'STACKED' | 'REFRESHED'): void => {
       const cur = u.buffs.find(x => x.id === b.id)
-      const src = b.sourceId ? this.s.find(b.sourceId) : undefined
+      const stored = cur ?? b
+      const src = stored.sourceId ? this.s.find(stored.sourceId) : undefined
       this.s.logger.emit({
-        type: `${grp}_${kind}` as EventType, source: src?.name, target: u.name, sourceId: b.sourceId, targetId: u.id,
-        payload: { id: b.id, name: b.name, stacks: cur?.stacks ?? b.stacks ?? 1, maxStacks: b.maxStacks, turns: cur?.turns ?? b.turns, shield: b.shield, mods: b.mods, debuff: deb },
-        provenance: b.provenance,
+        type: `${grp}_${kind}` as EventType, source: src?.name, target: u.name, sourceId: stored.sourceId, targetId: u.id,
+        payload: { id: stored.id, name: stored.name, stacks: stored.stacks ?? 1, maxStacks: stored.maxStacks, turns: stored.turns, shield: stored.shield, mods: stored.mods, debuff: deb, sourceId: stored.sourceId, appliedById: stored.appliedById },
+        provenance: stored.provenance,
       })
       // spec §6 step 6 "Выполнить onApply", paired with the emit above. Hands over the STORED
       // record (`cur`), not the incoming spec: on the stacked/refreshed paths that is the one
@@ -51,8 +56,21 @@ export class BuffSystem {
       // trigger queue (spec §27) is the real fix and is not built yet.
       this.s.events.fireBuffApplied(u, cur ?? b, src)
     }
-    if (ex && b.maxStacks) { ex.stacks = Math.min(b.maxStacks, (ex.stacks ?? 1) + 1); ex.turns = b.turns; rec(ex.stacks); emit('STACKED'); return }
-    if (ex) { ex.turns = b.turns ?? ex.turns; rec(ex.stacks ?? 1, ex.turns); emit('REFRESHED'); return }
+    if (ex && b.maxStacks) {
+      ex.stacks = Math.min(b.maxStacks, (ex.stacks ?? 1) + 1)
+      ex.turns = b.turns
+      if (b.appliedById !== undefined) ex.appliedById = b.appliedById
+      rec(ex.stacks, ex.turns, ex)
+      emit('STACKED')
+      return
+    }
+    if (ex) {
+      ex.turns = b.turns ?? ex.turns
+      if (b.appliedById !== undefined) ex.appliedById = b.appliedById
+      rec(ex.stacks ?? 1, ex.turns, ex)
+      emit('REFRESHED')
+      return
+    }
     // shield provided by someone with shield sets: amplify absorption + Self-Enshrouded 4pc ally CRIT DMG
     if (b.shield !== undefined && b.sourceId) {
       const provider = this.s.gearMap.get(b.sourceId)
@@ -67,7 +85,7 @@ export class BuffSystem {
     if (b.shield !== undefined) this.s.events.fireAllyShield(u, b.shield, b.sourceId ? this.s.find(b.sourceId) : undefined)
     rec(b.stacks ?? 1)
     emit('APPLIED')
-    if (b.shield !== undefined) this.s.logger.emit({ type: 'SHIELD_APPLIED', source: b.sourceId ? this.s.find(b.sourceId)?.name : undefined, target: u.name, sourceId: b.sourceId, targetId: u.id, payload: { amount: b.shield, id: b.id } })
+    if (b.shield !== undefined) this.s.logger.emit({ type: 'SHIELD_APPLIED', source: b.sourceId ? this.s.find(b.sourceId)?.name : undefined, target: u.name, sourceId: b.sourceId, targetId: u.id, payload: { amount: b.shield, id: b.id, name: b.name, sourceId: b.sourceId, appliedById: b.appliedById, targetId: u.id } })
   }
 
   /** the one countdown path: tick every timed buff, fire onBuffExpire as each ends, return the count
@@ -84,7 +102,8 @@ export class BuffSystem {
       ticked++
       if (b.turns > 0) return true
       this.s.events.fireBuffExpire(u, b)
-      this.s.logger.emit({ type: `${isDebuff(b) ? 'DEBUFF_EXPIRED' : 'BUFF_EXPIRED'}` as EventType, target: u.name, targetId: u.id, payload: { id: b.id, name: b.name, stacks: b.stacks ?? 1 }, provenance: b.provenance })
+      const src = b.sourceId ? this.s.find(b.sourceId)?.name : undefined
+      this.s.logger.emit({ type: `${isDebuff(b) ? 'DEBUFF_EXPIRED' : 'BUFF_EXPIRED'}` as EventType, source: src, target: u.name, sourceId: b.sourceId, targetId: u.id, payload: { id: b.id, name: b.name, stacks: b.stacks ?? 1, sourceId: b.sourceId, appliedById: b.appliedById, targetId: u.id }, provenance: b.provenance })
       return false
     })
     return ticked

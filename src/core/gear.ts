@@ -1587,8 +1587,8 @@ id: 'blue_sky', name: 'Under the Blue Sky', rarity: 4, path: 'Destruction',
       const dmg = Math.floor(eff(u).def * (0.4 + 0.1 * (si - 1)))
       sim.applyDebuff(u, attacker, 1.0, () => {
         const ex = attacker.dots.find(d => d.kind === 'Burn')
-        if (ex) { ex.baseDmg = Math.max(ex.baseDmg ?? 0, dmg); (ex as DoT & { sourceUnit?: Unit }).sourceUnit = u }
-        else sim.applyDot(attacker, { kind: 'Burn', elem: 'Fire', turns: 2, baseDmg: dmg, sourceUnit: u } as DoT & { sourceUnit?: Unit })
+        if (ex) { ex.baseDmg = Math.max(ex.baseDmg ?? 0, dmg); ex.sourceId = u.id; (ex as DoT & { sourceUnit?: Unit }).sourceUnit = u }
+        else sim.applyDot(attacker, { kind: 'Burn', elem: 'Fire', turns: 2, baseDmg: dmg, sourceId: u.id, sourceUnit: u } as DoT & { sourceUnit?: Unit })
       }, 'Trend Burn', 'Burn')
     },
   },

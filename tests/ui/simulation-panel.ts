@@ -18,9 +18,12 @@ export default async () => {
 
   const { store } = await import('../../src/ui/store')
   const { PartyStore } = await import('../../src/ui/partyStore')
-  const { initSimulationPanel } = await import('../../src/ui/simulationPanel')
+  const { renderEffectSummary, snapshotEffectModTotals, initSimulationPanel } = await import('../../src/ui/simulationPanel')
   const { runBattle, ENEMY_PRESETS, presetTeam } = await import('../../src/core/battle')
   const { aggregateCombatActions, collectSnapshots } = await import('../../src/ui/combatActionView')
+  const { isDebuff } = await import('../../src/core/combat/StatResolver')
+  const { enemyBehavior } = await import('../../src/core/enemy/behaviors')
+  const { resolveTargets } = await import('../../src/core/combat/TargetResolver')
   const originalTeam = [...store.getState().team]
   const host = doc.getElementById('simulationRoot') as HTMLElement
   const handle = initSimulationPanel(host, new PartyStore())
@@ -57,60 +60,185 @@ export default async () => {
   await uiRunBtn.onclick?.call(uiRunBtn, undefined as unknown as PointerEvent)
 
   const cards = [...uiHost.querySelectorAll<HTMLElement>('.simCombatActionCard')]
-  const memoSpriteSourceCard = cards.find(c => c.querySelector('.simActionSourceName')?.textContent === 'Little Ica')
-  const memoSpriteIconSrc = memoSpriteSourceCard?.querySelector('.simActionSourceIcon img')?.getAttribute('src') ?? ''
-  const clickStateTab = () => [...uiHost.querySelectorAll<HTMLButtonElement>('.simInspectorTab')]
-    .find(b => b.textContent === 'Состояние')?.click()
-  const timerCard = cards.find(c => c.classList.contains('timer'))
-  timerCard?.click()
-  clickStateTab()
-  const timerStateText = uiHost.querySelector('.simInspectorContent')?.textContent ?? ''
+  const spDeltaLabels = cards.map(c => c.querySelector('.simActionSpDelta')?.textContent ?? '').filter(Boolean)
   const fuaCard = cards.find(c => c.textContent?.includes('Kafka') && c.textContent?.includes('Gentle but Cruel') && !!c.querySelector('.simActionHitsSummary'))
   fuaCard?.click()
+  const stateTab = [...uiHost.querySelectorAll<HTMLButtonElement>('.simInspectorTab')]
+    .find(b => b.textContent === 'Состояние')
   const actionTabGridCount = uiHost.querySelectorAll('.simLogInspectorGrid').length
-  let stateUnitNames: string[] = []
-  let debuffListCount = 0
-  for (const card of cards.filter(c => /Kafka|Sparkle/.test(c.querySelector('.simActionSourceName')?.textContent ?? ''))) {
-    card.click()
-    clickStateTab()
-    stateUnitNames = [...uiHost.querySelectorAll('.simInspectorUnitState')].map(u => u.querySelector('.simInspectorUnitName')?.textContent ?? '')
-    debuffListCount = uiHost.querySelectorAll('.simUnitDebuffs').length
-    if (debuffListCount > 0) break
-  }
+  const encounterPreview = uiHost.querySelector('.encounterIconPreview')
+  const encounterSelect = encounterPreview?.querySelector('select')
+  const encounterIcons = [...uiHost.querySelectorAll<HTMLImageElement>('.encounterEnemyIcon img')].map(img => img.getAttribute('src') ?? '')
+  const vitalCard = cards.find(c => !!c.querySelector('.simActionVitals'))
+  const vitalLabels = [...(vitalCard?.querySelectorAll<HTMLElement>('.simVitalBar') ?? [])]
+    .map(bar => bar.querySelector('.simVitalLabel')?.textContent ?? '')
 
-  const clickEffectsTab = () => [...uiHost.querySelectorAll<HTMLButtonElement>('.simInspectorTab')]
-    .find(b => b.textContent === 'Эффекты')?.click()
-  let stackedEffectRow: HTMLElement | undefined
-  for (const card of cards) {
-    card.click()
-    clickEffectsTab()
-    stackedEffectRow = [...uiHost.querySelectorAll<HTMLElement>('.simInspectorEffect.buff')]
-      .find(row => {
-        const m = /Стаки:\s*(\d+)/.exec(row.textContent ?? '')
-        return !!m && Number(m[1]) > 1
-      })
-    if (stackedEffectRow) break
-  }
-  const stackedEffectName = stackedEffectRow?.querySelector('.simInspectorEffectName')?.textContent ?? ''
-  const sameNameRows = [...uiHost.querySelectorAll<HTMLElement>('.simInspectorEffect.buff')]
-    .filter(row => row.querySelector('.simInspectorEffectName')?.textContent === stackedEffectName)
-  const effectText = stackedEffectRow?.textContent ?? ''
-  let cipherRow: HTMLElement | undefined
-  let sparkleE2Row: HTMLElement | undefined
-  let sparkleE2InBuffs = false
-  for (const card of cards.filter(c => c.querySelector('.simActionSourceName')?.textContent?.includes('Sparkle'))) {
-    card.click()
-    clickEffectsTab()
-    const buffRows = [...uiHost.querySelectorAll<HTMLElement>('.simInspectorEffect.buff')]
-    const debuffRows = [...uiHost.querySelectorAll<HTMLElement>('.simInspectorEffect.debuff')]
-    cipherRow ??= buffRows.find(row => row.querySelector('.simInspectorEffectName')?.textContent === 'Cipher')
-    sparkleE2Row ??= debuffRows.find(row => row.querySelector('.simInspectorEffectName')?.textContent === 'Purely Fictitious')
-    sparkleE2InBuffs ||= buffRows.some(row => row.querySelector('.simInspectorEffectName')?.textContent === 'Purely Fictitious')
-    if (cipherRow && sparkleE2Row) break
-  }
-  const cipherSourceText = cipherRow?.querySelector('.simInspectorEffectSource')?.textContent ?? ''
-  const sparkleE2SourceText = sparkleE2Row?.querySelector('.simInspectorEffectSource')?.textContent ?? ''
-  const { effectIconUrl } = await import('../../src/ui/icons')
+  const { effectIconUrl, enemyIconUrl, statIconUrlForKey } = await import('../../src/ui/icons')
+
+  const allies = sim.roster.filter(u => u.side === 'ally')
+  const enemy = sim.roster.find(u => u.side === 'enemy')!
+  const allyA = allies[0]
+  const targetPick = resolveTargets({
+    actorId: enemy.id,
+    rule: 'single',
+    candidates: [
+      { id: 'summon_probe', name: 'Souldragon', side: 'ally', kind: 'summon', hp: 100, aggro: 999, dead: false } as any,
+      { id: 'char_probe', name: 'Character', side: 'ally', kind: 'char', hp: 100, aggro: 1, dead: false } as any,
+    ],
+    rng: () => 0,
+  })
+  const enemyCategory = aggregateCombatActions([
+    { eventId: -1, time: 0, turn: 0, actionId: 0, type: 'ACTION_START', source: enemy.name, sourceId: enemy.id, payload: { action: 'attack' }, combatActionId: 'probe_enemy' },
+    { eventId: -2, time: 0, turn: 0, actionId: 0, type: 'ABILITY_USED', source: enemy.name, sourceId: enemy.id, payload: { action: 'attack' }, combatActionId: 'probe_enemy' },
+    { eventId: -3, time: 0, turn: 0, actionId: 0, type: 'HIT_START', source: enemy.name, sourceId: enemy.id, target: allyA.name, targetId: allyA.id, attackId: 'probe_enemy_hit', payload: { abilityName: 'Icy Wind' }, combatActionId: 'probe_enemy' },
+    { eventId: -4, time: 0, turn: 0, actionId: 0, type: 'DAMAGE_DEALT', source: enemy.name, sourceId: enemy.id, target: allyA.name, targetId: allyA.id, attackId: 'probe_enemy_hit', payload: { amount: 100, abilityName: 'Icy Wind' }, combatActionId: 'probe_enemy' },
+  ] as any, sim, [])[0]?.category
+  const techniqueCategory = aggregateCombatActions([
+    { eventId: -3, time: 0, turn: 0, actionId: 0, type: 'TECHNIQUE_APPLIED', source: allyA.name, sourceId: allyA.id, payload: { technique: 'Probe Technique' }, provenance: { sourceKind: 'technique' } },
+  ] as any, sim, [])[0]?.category
+  const summonCategory = aggregateCombatActions([
+    { eventId: -4, time: 0, turn: 0, actionId: 0, type: 'SUMMON_CREATED', source: allyA.name, sourceId: allyA.id, target: 'Souldragon', targetId: 'probe_summon', payload: { kind: 'summon', name: 'Souldragon' }, combatActionId: 'probe_summon' },
+  ] as any, sim, [])[0]?.category
+  const allyB = allies[1] ?? allies[0]
+  sim.addBuff(allyB, {
+    id: 'scope_ally_buff', name: 'Scope Ally Buff', mods: [{ stat: 'atkPct', value: 0.12 }],
+    turns: 2, stacks: 2, maxStacks: 5, sourceId: allyA.id,
+  })
+  sim.addBuff(enemy, {
+    id: 'scope_enemy_debuff', name: 'Scope Enemy Debuff', mods: [{ stat: 'defPct', value: -0.1 }],
+    turns: 2, debuff: true, sourceId: allyA.id,
+  })
+  const stateSnapshot = sim.logger.snapshot()
+  const makeEffect = (id: string, name: string, source: { id: string; name: string }, target: { id: string; name: string }, extra: Record<string, unknown> = {}): any => ({
+    id,
+    name,
+    targetId: target.id,
+    targetName: target.name,
+    stacks: 1,
+    turns: 2,
+    sourceId: source.id,
+    sourceName: source.name,
+    appliedById: source.id,
+    mods: [],
+    ...extra,
+  })
+  const syntheticAction = {
+    id: 'test',
+    combatActionId: 'test',
+    order: 0,
+    category: 'system',
+    sourceId: allyB.id,
+    sourceName: allyB.name,
+    abilityName: 'Attribution Test',
+    av: 0,
+    turn: 0,
+    actionId: 0,
+    targetIds: [],
+    targetNames: [],
+    attacks: [],
+    totalDamage: 0,
+    events: [],
+    beforeSnapshot: stateSnapshot,
+    afterSnapshot: stateSnapshot,
+    effects: {
+      buffs: [
+        makeEffect('atk_up', 'ATK Up', allyA, allyB, { mods: [{ stat: 'atkPct', value: 0.2 }] }),
+        makeEffect('cipher', 'Cipher', allyA, allyB, { mods: [{ stat: 'critDmg', value: 0.1 }] }),
+        makeEffect('flat_atk', 'Flat ATK', allyB, allyB, { mods: [{ stat: 'atkFlat', value: 100 }] }),
+        makeEffect('cond_cd', 'Conditional CD', allyA, allyB, { mods: [{ stat: 'critDmg', value: 0.3, whenAbility: ['skill'] }] }),
+        makeEffect('shield_buff', 'March Shield Buff', allyA, allyB, { shield: 500 }),
+        makeEffect('atk_up', 'ATK Up', allyB, allyB, { mods: [{ stat: 'atkPct', value: 0.2 }] }),
+        makeEffect('stacked_total', 'Stacked Total', allyA, allyB, { stacks: 3, mods: [{ stat: 'atkPct', value: 0.04 }] }),
+        makeEffect('stat_fallback', 'Stat Fallback', allyA, allyB, { stacks: 2, mods: [{ stat: 'defPct', value: 0.06 }] }),
+        makeEffect('mirror', 'Mirror', allyA, allyA),
+        makeEffect('mirror', 'Mirror', allyA, allyB),
+        makeEffect('last_wins', 'Last Wins', allyA, allyB, { stacks: 1 }),
+        makeEffect('last_wins', 'Last Wins', allyA, allyB, { stacks: 3 }),
+        makeEffect('no_max', 'No Max', allyA, allyB, { stacks: 2 }),
+        makeEffect('no_max', 'No Max', allyA, allyB, { stacks: 1 }),
+        makeEffect('gear', 'Gear', allyA, allyB, { provenance: { sourceKind: 'relic' }, mods: [{ stat: 'atkPct', value: 0.15 }] }),
+        makeEffect('traces', 'Traces', allyA, allyB, { provenance: { sourceKind: 'trace' }, mods: [{ stat: 'critDmg', value: 0.2 }] }),
+      ],
+      debuffs: [makeEffect('enemy_only', 'Enemy Only Debuff', enemy, enemy, { mods: [{ stat: 'defPct', value: -0.1 }] })],
+      dots: [{
+        id: 'Shock',
+        name: 'Shock',
+        targetId: allyB.id,
+        targetName: allyB.name,
+        element: 'Lightning',
+        damage: 100,
+        turns: 2,
+        stacks: 1,
+        sourceId: allyA.id,
+        sourceName: allyA.name,
+      }],
+      shields: [{
+        id: 'march_shield',
+        name: 'March Shield',
+        targetId: allyB.id,
+        targetName: allyB.name,
+        amount: 500,
+        sourceId: allyA.id,
+        sourceName: allyA.name,
+      }],
+      shieldDamage: [{
+        id: 'march_shield',
+        name: 'March Shield',
+        targetId: allyB.id,
+        targetName: allyB.name,
+        amount: 320,
+        incoming: 800,
+        remaining: 180,
+        sourceId: allyA.id,
+        sourceName: allyA.name,
+      }],
+      heals: [],
+      removals: [
+        { kind: 'buff', id: 'expired', name: 'Expired Buff', targetId: allyB.id, targetName: allyB.name, stacks: 2, sourceId: allyA.id, sourceName: allyA.name },
+        { kind: 'debuff', id: 'dispel', name: 'Dispel Debuff', targetId: allyB.id, targetName: allyB.name, stacks: 1, sourceId: allyA.id, sourceName: allyA.name },
+      ],
+      energyChanges: [],
+      spChanges: [],
+      breaks: [],
+      other: [],
+    },
+  } as unknown as Parameters<typeof renderEffectSummary>[0]
+
+  const effectHost = doc.createElement('div')
+  const enemyEffectHost = doc.createElement('div')
+  const memoSpriteHost = doc.createElement('div')
+  doc.body.append(effectHost, enemyEffectHost, memoSpriteHost)
+  renderEffectSummary(syntheticAction, sim, effectHost, allyB.id)
+  renderEffectSummary(syntheticAction, sim, enemyEffectHost, enemy.id)
+  const memoSpriteProbe = allyA as { kind?: string }
+  const originalKind = memoSpriteProbe.kind
+  memoSpriteProbe.kind = 'summon'
+  renderEffectSummary(syntheticAction, sim, memoSpriteHost, allyB.id)
+  memoSpriteProbe.kind = originalKind
+
+  const buffRows = (host: HTMLElement = effectHost) => [...host.querySelectorAll<HTMLElement>('.simInspectorEffect.buff')]
+  const rowsNamed = (name: string, host: HTMLElement = effectHost) => buffRows(host).filter(row => row.querySelector('.simInspectorEffectName')?.textContent === name)
+  const textOf = (row?: HTMLElement) => row?.textContent ?? ''
+  const hostText = (host: HTMLElement) => host.textContent ?? ''
+  const sourceOf = (row?: HTMLElement) => row?.querySelector('.simInspectorEffectSource')?.textContent ?? ''
+  const targetOf = (row?: HTMLElement) => row?.querySelector('.simInspectorEffectTarget')?.textContent ?? ''
+  const removalRows = () => [...effectHost.querySelectorAll<HTMLElement>('.simInspectorEffect.removal')]
+
+  const dotWithSource = Object.values(stateSnapshot.units)
+    .flatMap(u => u.dots.map(d => ({ unit: u, dot: d })))
+    .find(x => !!x.dot.sourceId)
+  const engineDebuffIds = sim.units().flatMap(u => u.buffs.filter(isDebuff).map(b => b.id))
+  const snapshotDebuffIds = new Set(Object.values(stateSnapshot.units).flatMap(u => u.debuffs.map(d => d.id)))
+  const snapshotBuffIds = new Set(Object.values(stateSnapshot.units).flatMap(u => u.buffs.map(b => b.id)))
+  const totals = snapshotEffectModTotals({
+    buffs: [
+      { id: 'flat1', name: 'Flat1', stacks: 2, turns: 2, mods: [{ stat: 'atkFlat', value: 100 }] },
+      { id: 'flat2', name: 'Flat2', stacks: 1, turns: 2, mods: [{ stat: 'atkFlat', value: 50 }] },
+      { id: 'pct', name: 'Pct', stacks: 1, turns: 2, mods: [{ stat: 'atkPct', value: 0.25 }] },
+      { id: 'cond', name: 'Cond', stacks: 3, turns: 2, mods: [{ stat: 'critDmg', value: 0.3, whenAbility: ['skill'] }] },
+    ],
+    debuffs: [],
+  } as unknown as Parameters<typeof snapshotEffectModTotals>[0])
 
   for (const row of store.getState().team) store.dispatch({ type: 'team/remove', id: row.id })
   for (const row of originalTeam) store.dispatch({ type: 'team/add', row })
@@ -124,21 +252,44 @@ export default async () => {
     raw('actions link to captured snapshots', actions.some(a => !!a.beforeSnapshot), `with before=${actions.filter(a => !!a.beforeSnapshot).length}`),
     raw('actions have sequential order', actions.every((a, i) => a.order === i + 1), `actions=${actions.length}`),
     raw('attacks resolve action ability names', actions.some(a => a.attacks.some(x => !!x.abilityName && x.abilityName !== 'Attack')), `attacks=${actions.reduce((n, a) => n + a.attacks.length, 0)}`),
-    raw('countdown entities get separate action color', !!timerCard, `timerCards=${cards.filter(c => c.classList.contains('timer')).length}`),
-    raw('countdown is not a character state', !/cdId|cdSeq|Fever Countdown|timer/i.test(timerStateText), timerStateText.slice(0, 120)),
+    raw('attack actions keep real hits', actions.every(a => a.category !== 'attack' || a.attacks.length > 0), `empty=${actions.filter(a => a.category === 'attack' && a.attacks.length === 0).map(a => a.abilityName).join(',')}`),
+    raw('enemy technique and summon actions typed', enemyCategory === 'enemyAttack' && techniqueCategory === 'technique' && summonCategory === 'summon', `enemy=${enemyCategory} technique=${techniqueCategory} summon=${summonCategory}`),
+    raw('state tab removed', !stateTab, String(!!stateTab)),
+    raw('SP delta shown with ability', spDeltaLabels.some(t => /^[+-]?\d+ ОД$/.test(t)), spDeltaLabels.join('|') || 'none'),
+    raw('single encounter replaces preset picker', !encounterSelect && encounterIcons.length >= 3, `select=${!!encounterSelect} icons=${encounterIcons.length}`),
+    raw('enemy icons resolve aliases', enemyIconUrl('Ice Edge') === enemyIconUrl('Ice Edge (1)') && enemyIconUrl('Sting') === enemyIconUrl('Gnaw Sting'), `${enemyIconUrl('Ice Edge')} | ${enemyIconUrl('Sting')}`),
+    raw('numbered Ice Edge icon resolves', enemyIconUrl('Ice Edge #1') === enemyIconUrl('Ice Edge (1)'), `${enemyIconUrl('Ice Edge #1')} | ${enemyIconUrl('Ice Edge (1)')}`),
+    raw('authored Ice Edge uses Icy Wind', enemyBehavior('Ice Edge (1)')?.abilities.some(a => a.name === 'Icy Wind') === true, enemyBehavior('Ice Edge (1)')?.abilities.map(a => a.name).join(',') ?? 'missing'),
+    raw('summons excluded from enemy targets', targetPick.targets[0]?.id === 'char_probe', targetPick.targets.map(t => t.id).join(',')),
+    raw('encounter art uses enemy icons', encounterIcons.includes(enemyIconUrl('Ice Edge') ?? '') && encounterIcons.some(src => decodeURIComponent(src).includes('Ice Edge (1)')), encounterIcons.join(' | ')),
     raw('hit rows omit damage breakdown', uiHost.querySelectorAll('.simInspectorHitBreakdown').length === 0, `breakdowns=${uiHost.querySelectorAll('.simInspectorHitBreakdown').length}`),
     raw('action inspector omits duplicated metadata grid', actionTabGridCount === 0, `grids=${actionTabGridCount}`),
-    raw('state inspector limited to acting unit and enemy target', stateUnitNames.length > 0 && stateUnitNames.every(n => (n.includes('Kafka') || n.includes('MoC') || n.includes('Sparkle')) && !n.includes('Robin') && !n.includes('Hyacine')), stateUnitNames.join(' | ').slice(0, 120)),
-    raw('enemy target exposes debuff list', debuffListCount > 0, `debuffLists=${debuffListCount}`),
-    raw('effect summary carries source name', actions.some(a => a.effects.buffs.some(b => !!b.sourceName)), `withSource=${actions.filter(a => a.effects.buffs.some(b => !!b.sourceName)).length}`),
-    raw('stacked buffs render one row with total stacks', !!stackedEffectRow && sameNameRows.length === 1, `name=${stackedEffectName} rows=${sameNameRows.length}`),
-    raw('effect rows omit recipient', !/Получатель/.test(effectText), effectText.slice(0, 120)),
-    raw('effect row shows source name and icon', !!stackedEffectRow?.querySelector('.simInspectorEffectSource') && !!stackedEffectRow?.querySelector('.simInspectorEffectSourceIcon img') && !/Источник:\s*—/.test(effectText), effectText.slice(0, 120)),
-    raw('missing effect aliases resolve to public icons', effectIconUrl('Pain & Anger DMG+13%')?.startsWith('/icons/') === true && effectIconUrl('A4 Effect RES')?.startsWith('/icons/') === true, `${effectIconUrl('Pain & Anger DMG+13%')} | ${effectIconUrl('A4 Effect RES')}`),
+    raw('battle log shows HP energy and OD vitals', vitalLabels.join(',') === 'HP,EN,ОД', vitalLabels.join(',') || 'none'),
+    raw('battle log labels targets explicitly', [...uiHost.querySelectorAll('.simActionTargetsLabel')].some(label => label.textContent === 'Targets:'), `labels=${uiHost.querySelectorAll('.simActionTargetsLabel').length}`),
+    raw('effect summary carries stable source id', actions.some(a => a.effects.buffs.some(b => !!b.sourceId)), `withSource=${actions.filter(a => a.effects.buffs.some(b => !!b.sourceId)).length}`),
     raw('E0 renders in simulation party card', e0Text === 'E0', e0Text),
-    raw('Memosprite source uses own icon', memoSpriteIconSrc.includes('Memosprite.png'), memoSpriteIconSrc),
-    raw('Sparkle talent buff shows Cipher source', !!cipherRow && /Sparkle/.test(cipherSourceText), cipherSourceText),
-    raw('Sparkle E2 debuff shows Sparkle source outside buffs', !!sparkleE2Row && !sparkleE2InBuffs && /Sparkle/.test(sparkleE2SourceText), sparkleE2SourceText),
-    raw('Cipher and Memosprite icons resolve to public icons', effectIconUrl('Cipher')?.includes('Cipher.png') === true && effectIconUrl('Memosprite')?.includes('Memosprite.png') === true, `${effectIconUrl('Cipher')} | ${effectIconUrl('Memosprite')}`),
+    raw('Memosprite source uses own icon', (rowsNamed('ATK Up', memoSpriteHost)[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src') ?? '').includes('Memosprite.png'), rowsNamed('ATK Up', memoSpriteHost)[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src') ?? ''),
+    raw('effect source from stable sourceId not acting unit', sourceOf(rowsNamed('ATK Up')[0]).includes(allyA.name) && !sourceOf(rowsNamed('ATK Up')[0]).includes(allyB.name), `${sourceOf(rowsNamed('ATK Up')[0])} | actor=${allyB.name}`),
+    raw('effect row shows recipient', targetOf(rowsNamed('ATK Up')[0]).includes(allyB.name), `${targetOf(rowsNamed('ATK Up')[0])} | ${textOf(rowsNamed('ATK Up')[0]).slice(0, 120)}`),
+    raw('same effect id from different sources stays separate', rowsNamed('ATK Up').length === 2, `rows=${rowsNamed('ATK Up').length}`),
+    raw('other-target effect stays outside selected inspector', rowsNamed('Mirror').length === 1 && targetOf(rowsNamed('Mirror')[0]).includes(allyB.name) && !hostText(enemyEffectHost).includes('Mirror'), `ally=${rowsNamed('Mirror').length} enemy=${hostText(enemyEffectHost).includes('Mirror')}`),
+    raw('merge keeps last event stacks', rowsNamed('Last Wins').length === 1 && /Стаки:\s*3/.test(textOf(rowsNamed('Last Wins')[0])), textOf(rowsNamed('Last Wins')[0]).slice(0, 120)),
+    raw('merge does not use max stacks', rowsNamed('No Max').length === 1 && /Стаки:\s*1/.test(textOf(rowsNamed('No Max')[0])), textOf(rowsNamed('No Max')[0]).slice(0, 120)),
+    raw('expired buff keeps identity', removalRows().some(r => /Expired Buff/.test(textOf(r)) && sourceOf(r).includes(allyA.name) && targetOf(r).includes(allyB.name)), removalRows().map(textOf).join(' | ').slice(0, 180)),
+    raw('dispel keeps identity', removalRows().some(r => /Dispel Debuff/.test(textOf(r)) && sourceOf(r).includes(allyA.name) && targetOf(r).includes(allyB.name)), removalRows().map(textOf).join(' | ').slice(0, 180)),
+    raw('dot source id retained in summary', [...effectHost.querySelectorAll<HTMLElement>('.simInspectorEffect.debuff')].some(r => /Shock/.test(textOf(r)) && sourceOf(r).includes(allyA.name)), [...effectHost.querySelectorAll<HTMLElement>('.simInspectorEffect.debuff')].map(textOf).join(' | ').slice(0, 180)),
+    raw('dot source id retained in snapshot', !!dotWithSource, dotWithSource ? `${dotWithSource.unit.id}/${dotWithSource.dot.id}/${dotWithSource.dot.sourceId}` : 'missing'),
+    raw('shield not duplicated as normal buff', rowsNamed('March Shield Buff').length === 0 && [...effectHost.querySelectorAll<HTMLElement>('.simInspectorEffect.shield')].some(r => /March Shield/.test(textOf(r))), `buffRows=${rowsNamed('March Shield Buff').length}`),
+    raw('gear and traces render as neutral', hostText(effectHost).includes('Снаряжение и следы') && rowsNamed('Gear').length === 0 && rowsNamed('Traces').length === 0, hostText(effectHost).slice(0, 220)),
+    raw('shield damage rendered separately', hostText(effectHost).includes('Урон по щитам') && hostText(effectHost).includes('320'), hostText(effectHost).slice(0, 260)),
+    raw('debuff classified via isDebuff in snapshot', engineDebuffIds.length > 0 && engineDebuffIds.every(id => snapshotDebuffIds.has(id) && !snapshotBuffIds.has(id)), `engine=${engineDebuffIds.join(',')} buffs=${[...snapshotBuffIds].join(',')}`),
+    raw('ally inspector shows own effects only', hostText(effectHost).includes('Scope Ally Buff') && !hostText(effectHost).includes('Scope Enemy Debuff') && !hostText(effectHost).includes('Enemy Only Debuff'), hostText(effectHost).slice(0, 200)),
+    raw('enemy inspector shows enemy debuffs in effects', hostText(enemyEffectHost).includes('Scope Enemy Debuff') && hostText(enemyEffectHost).includes('Enemy Only Debuff') && !hostText(enemyEffectHost).includes('Scope Ally Buff'), hostText(enemyEffectHost).slice(0, 200)),
+    raw('unknown effect falls back to stat icon', rowsNamed('Stat Fallback')[0]?.querySelector('.simInspectorEffectIconImg img')?.getAttribute('src') === statIconUrlForKey('defPct'), `${rowsNamed('Stat Fallback')[0]?.querySelector('.simInspectorEffectIconImg img')?.getAttribute('src')}`),
+    raw('effect mods show stacked totals', /atkPct:\s*\+12%/.test(textOf(rowsNamed('Stacked Total')[0])) && /defPct:\s*\+12%/.test(textOf(rowsNamed('Stat Fallback')[0])), `${textOf(rowsNamed('Stacked Total')[0]).slice(0, 120)} | ${textOf(rowsNamed('Stat Fallback')[0]).slice(0, 120)}`),
+    raw('strict effect icon returns undefined for unknown name', effectIconUrl('Definitely Unknown Effect') === undefined, String(effectIconUrl('Definitely Unknown Effect'))),
+    raw('known effect icons still resolve', effectIconUrl('Cipher')?.includes('Cipher.png') === true && effectIconUrl('Memosprite')?.includes('Memosprite.png') === true, `${effectIconUrl('Cipher')} | ${effectIconUrl('Memosprite')}`),
+    raw('flat mods absolute and conditional mods separate', /atkFlat:\s*\+100(?!\.)/.test(textOf(rowsNamed('Flat ATK')[0])) && !!effectHost.querySelector('.simInspectorEffectMods.conditional'), textOf(rowsNamed('Flat ATK')[0]).slice(0, 160)),
+    raw('stat sum multiplies stacks and skips conditional', totals.atkFlat === 250 && totals.atkPct === 0.25 && totals.critDmg === undefined, JSON.stringify(totals)),
   ]
 }

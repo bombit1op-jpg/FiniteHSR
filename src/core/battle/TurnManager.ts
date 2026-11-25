@@ -116,14 +116,15 @@ const p = this.turnPrologue(u)
       const frozen = frozenAll.filter(d => d.baseDmg > 0).pop() ?? frozenAll[frozenAll.length - 1]
       const dropped = frozenAll.length - 1
       u.dots = u.dots.filter(d => d.kind !== 'Freeze' || d === frozen)
-      if (dropped > 0) this.s.logger.emit({ type: 'DOT_EXPIRED', target: u.name, targetId: u.id, payload: { kind: 'Freeze', reason: 'merged_duplicate' } })
+      const droppedDot = dropped > 0 ? frozenAll.find(d => d !== frozen) : undefined
+      if (droppedDot) this.s.logger.emit({ type: 'DOT_EXPIRED', source: droppedDot.sourceId ? this.s.find(droppedDot.sourceId)?.name : undefined, target: u.name, sourceId: droppedDot.sourceId, targetId: u.id, payload: { id: droppedDot.kind, name: droppedDot.kind, kind: droppedDot.kind, stacks: droppedDot.stacks ?? 1, sourceId: droppedDot.sourceId, reason: 'merged_duplicate' }, provenance: droppedDot.provenance })
       this.s.log(`.. ${u.name} is Frozen — turn skipped`)
       this.s.fireFrozenTurn(u)
       this.s.logger.emit({ type: 'ACTION_SKIPPED', target: u.name, targetId: u.id, payload: { reason: 'frozen', action: 'turn', turns: frozen.turns } })
       if (--frozen.turns <= 0) {
         u.dots = u.dots.filter(d => d.kind !== 'Freeze')
-        this.s.logger.emit({ type: 'DOT_EXPIRED', target: u.name, targetId: u.id, payload: { kind: 'Freeze', turns: frozen.turns, reason: 'turns_elapsed' } })
-        this.s.logger.emit({ type: 'CONTROL_EXPIRED', target: u.name, targetId: u.id, payload: { kind: 'Freeze', reason: 'turns_elapsed' } })
+        this.s.logger.emit({ type: 'DOT_EXPIRED', source: frozen.sourceId ? this.s.find(frozen.sourceId)?.name : undefined, target: u.name, sourceId: frozen.sourceId, targetId: u.id, payload: { id: frozen.kind, name: frozen.kind, kind: frozen.kind, stacks: frozen.stacks ?? 1, sourceId: frozen.sourceId, reason: 'turns_elapsed' }, provenance: frozen.provenance })
+        this.s.logger.emit({ type: 'CONTROL_EXPIRED', source: frozen.sourceId ? this.s.find(frozen.sourceId)?.name : undefined, target: u.name, sourceId: frozen.sourceId, targetId: u.id, payload: { id: frozen.kind, name: frozen.kind, kind: frozen.kind, stacks: frozen.stacks ?? 1, sourceId: frozen.sourceId, reason: 'turns_elapsed' }, provenance: frozen.provenance })
       }
       u.av = this.s.baseAv(u) * 0.5
       return 'frozen'
@@ -270,7 +271,7 @@ const p = this.turnPrologue(u)
     u.dots = u.dots.filter(d => {
       if (d.kind === 'Entanglement' || d.kind === 'Freeze') return true
       if (--d.turns > 0) return true
-      this.s.logger.emit({ type: 'DOT_EXPIRED', target: u.name, targetId: u.id, payload: { kind: d.kind, stacks: d.stacks ?? 1, reason: 'turns_elapsed' } })
+      this.s.logger.emit({ type: 'DOT_EXPIRED', source: d.sourceId ? this.s.find(d.sourceId)?.name : undefined, target: u.name, sourceId: d.sourceId, targetId: u.id, payload: { id: d.kind, name: d.kind, kind: d.kind, stacks: d.stacks ?? 1, sourceId: d.sourceId, reason: 'turns_elapsed' }, provenance: d.provenance })
       return false
     })
     if (!u.dots.some(d => d.kind === 'Imprisonment')) this.s.removeBuff(u, 'imprisonSpd')
@@ -308,7 +309,7 @@ if (u.side === 'ally') {
     this.s.log(`${u.name} takes ${real} [Entanglement ×${stacks}]`)
     this.s.fireAllyHpLoss(u, real)
     u.dots = u.dots.filter(d => d.kind !== 'Entanglement')
-    this.s.logger.emit({ type: 'DOT_EXPIRED', target: u.name, targetId: u.id, payload: { kind: 'Entanglement', stacks, reason: 'tick_resolved' } })
+    this.s.logger.emit({ type: 'DOT_EXPIRED', source: ent.sourceId ? this.s.find(ent.sourceId)?.name : undefined, target: u.name, sourceId: ent.sourceId, targetId: u.id, payload: { id: ent.kind, name: ent.kind, kind: ent.kind, stacks, sourceId: ent.sourceId, reason: 'tick_resolved' }, provenance: ent.provenance })
     if (u.hp <= 0) this.s.kill(attacker, u)
   }
 

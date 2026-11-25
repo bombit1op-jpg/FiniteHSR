@@ -28,6 +28,7 @@ export interface Buff {
   /** when true, removed when source's turn ends instead of owner's (exempt from expireBuffs) */
   tickOnSource?: boolean
   sourceId?: string
+  appliedById?: string
   /** true for enemy-side debuffs (Slow, Imprison, Weaken...) — dispel targets */
   debuff?: boolean
   /** free-form payload (e.g. Gallagher Besotted heal amount) */
@@ -46,6 +47,7 @@ export interface DoT {
   turns: number
   stacks?: number
   sourceBe?: number
+  sourceId?: string
   /** the DoT's own defense ignore (Black Swan Arcana 20%) — applies only to this DoT */
   defIgnore?: number
   provenance?: BuffProvenance

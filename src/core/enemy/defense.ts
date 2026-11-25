@@ -105,10 +105,10 @@ export function routeEnemyDamage(sim: Simulator, unit: Unit, incoming: number, s
     const absorb = Math.min(rt.shield, remaining)
     rt.shield -= absorb
     remaining -= absorb
-    sim.logger.emit({ type: 'SHIELD_ABSORBED', target: unit.name, targetId: unit.id, payload: { amount: absorb, id: 'enemy_shield', name: 'Defense Shield', remaining: rt.shield } })
+    sim.logger.emit({ type: 'SHIELD_ABSORBED', source: unit.name, target: unit.name, sourceId: unit.id, targetId: unit.id, payload: { amount: absorb, id: 'enemy_shield', name: 'Defense Shield', remaining: rt.shield, stacks: 1, sourceId: unit.id, targetId: unit.id }, provenance: { sourceKind: 'environment' } })
     if (rt.shield <= 0) {
       sim.log(`${unit.name} Defense Shield broken`)
-      sim.logger.emit({ type: 'SHIELD_BROKEN', target: unit.name, targetId: unit.id, payload: { id: 'enemy_shield', name: 'Defense Shield' } })
+      sim.logger.emit({ type: 'SHIELD_BROKEN', source: unit.name, target: unit.name, sourceId: unit.id, targetId: unit.id, payload: { id: 'enemy_shield', name: 'Defense Shield', stacks: 1, sourceId: unit.id, targetId: unit.id }, provenance: { sourceKind: 'environment' } })
     }
   }
   if (rt.defense.partial !== undefined) {

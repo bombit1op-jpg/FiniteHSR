@@ -19,11 +19,12 @@ export class DotSystem {
       this.s.logger.emit({ type: 'NOTE', raw: `${target.name} is immune to ${dot.kind}`, minDebug: 2 })
       return dot
     }
-    target.dots.push(dot as NonNullable<Unit['dots']>[number])
     const src = dot.sourceUnit
-    this.s.logger.emit({ type: 'DOT_APPLIED', source: src?.name, target: target.name, sourceId: src?.id, targetId: target.id, element: dot.elem, payload: { kind: dot.kind, turns: dot.turns, stacks: dot.stacks ?? 1, baseDmg: Math.round(dot.baseDmg) }, provenance: dot.provenance })
+    if (dot.sourceId === undefined && src?.id !== undefined) dot.sourceId = src.id
+    target.dots.push(dot as NonNullable<Unit['dots']>[number])
+    this.s.logger.emit({ type: 'DOT_APPLIED', source: src?.name, target: target.name, sourceId: dot.sourceId ?? src?.id, targetId: target.id, element: dot.elem, payload: { kind: dot.kind, turns: dot.turns, stacks: dot.stacks ?? 1, baseDmg: Math.round(dot.baseDmg), sourceId: dot.sourceId }, provenance: dot.provenance })
     if (dot.kind === 'Freeze' || dot.kind === 'Imprisonment' || dot.kind === 'Entanglement')
-      this.s.logger.emit({ type: 'CONTROL_APPLIED', source: src?.name, target: target.name, sourceId: src?.id, targetId: target.id, payload: { kind: dot.kind, turns: dot.turns, stacks: dot.stacks ?? 1 }, provenance: dot.provenance })
+      this.s.logger.emit({ type: 'CONTROL_APPLIED', source: src?.name, target: target.name, sourceId: dot.sourceId ?? src?.id, targetId: target.id, payload: { kind: dot.kind, turns: dot.turns, stacks: dot.stacks ?? 1, sourceId: dot.sourceId }, provenance: dot.provenance })
     return dot
   }
 }
