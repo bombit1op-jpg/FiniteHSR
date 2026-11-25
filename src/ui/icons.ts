@@ -124,7 +124,7 @@ export function statBadge(stat: string): HTMLElement {
 
 /** manifest keys are display names; normalize so "Possession: Ethereal Metaflow" finds
  *  "Possession Ethereal Metaflow" (the raw game text differs in punctuation). */
-function normIconKey(s: string): string { return s.toLowerCase().replace(/[^a-z0-9]+/g, '') }
+function normIconKey(s: string): string { return s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '') }
 
 let ABILITY_ICON_INDEX: Map<string, string> | null = null
 
@@ -152,20 +152,134 @@ export function abilityBadge(name: string): HTMLElement {
   return node
 }
 
-/**
- * Resolve effect icon URL using the proper catalogs.
- * Checks BUFFS_ICONS, DEBUFFS_ICONS, STATES_ICONS, then falls back to ability icons.
- */
+const EFFECT_ICON_TABLES = [BUFFS_ICONS, DEBUFFS_ICONS, STATES_ICONS, ABILITIES_ICONS, STATS_ICONS]
+
+const EFFECT_ICON_ALIAS: Record<string, string> = {
+  'A4 Effect RES': 'Effect RES',
+  'A6 ATK+10%': 'ATK',
+  'Aha Elation +200%': 'Elation (Stat)',
+  'Allow Changes? All-RES↓': 'Allow Changes?',
+  'Allow Changes? Quantum Weakness': 'Allow Changes?',
+  'Amphoreus SPD+': 'SPD Boost',
+  'Apotheosis CR+10%': 'Apotheosis',
+  'Apotheosis CR+15%': 'Apotheosis',
+  'Apotheosis CR+20%': 'Apotheosis',
+  'Apotheosis CR+5%': 'Apotheosis',
+  'Banana Summoned CRIT DMG': 'CRIT DMG',
+  'Banquet: Insatiable Appetite DEF↓': 'Banquet: Insatiable Appetite',
+  'Boxing ATK': 'ATK',
+  'Bug (DEF↓)': 'Vulnerability',
+  'Bug (SPD↓)': 'Weaken',
+  'Candleflame DMG+12%': 'All DMG Boost',
+  'Candleflame DMG+6%': 'All DMG Boost',
+  'Companion Protocol: Decimation': 'Charge',
+  'Companion Protocol: Decimation (Skill CRIT DMG)': 'Charge',
+  'Companion Protocol: Verdict': 'Charge',
+  'Companion Protocol: Verdict (Ult DMG)': 'Charge',
+  'Converging Stars CRIT DMG': 'CRIT DMG',
+  'Decadence, False Twilight DEF↓ 21%': 'Decadence, False Twilight',
+  'Deviated Chords (ATK)': 'ATK',
+  'Deviated Chords (CRIT DMG)': 'CRIT DMG',
+  'Dreamdiver CD+63%': 'Dreamdiver',
+  'Dreamdiver CD+70%': 'Dreamdiver',
+  'Dreamdiver CD+87%': 'Dreamdiver',
+  'Edge of the Void SPD↓': 'Edge of the Void',
+  'Elation +10%': 'Elation (Stat)',
+  'Enshrouded CRIT DMG': 'CRIT DMG',
+  'Ensnared DEF↓': 'Vulnerability',
+  'Fever Zone (DEF ignore)': 'DEF',
+  'Firekiss DMG Taken+': 'Firekiss',
+  'Fortified Wager': 'Fortified Wager Spades',
+  'Gear': 'Buff',
+  'Gear hit mods': 'Buff',
+  'Genius DEF-ignore': 'DEF',
+  'Gentle Rain CRIT DMG': 'CRIT DMG',
+  'Gentle Rain SPD': 'SPD Boost',
+  'Guess Who Lives Here DMG Taken+': 'Guess Who Lives Here',
+  'Hackerspace boost': 'ATK',
+  'Hellscape DMG+40%': 'Hellscape',
+  'Hero CRIT DMG': 'CRIT DMG',
+  'Hero SPD+': 'SPD Boost',
+  'I Carry, We Win (Hidden MMR)': 'I Carry, We Win',
+  'Ignite': 'Ignited Flame',
+  'Inference Effect RES↓': 'Effect RES',
+  'Interlock EHR+': 'Effect Hit Rate',
+  'Izumo CRIT Rate': 'CRIT Rate',
+  'Longevous Disciple CR': 'CRIT Rate',
+  'Maelstrom Rhapsody DEF↓': 'Maelstrom Rhapsody',
+  'Military Might': 'Military Merit',
+  'Mom of Victory DEF': 'DEF',
+  'Navigator Skill/Ult DMG': 'DMG Boost',
+  'Night of Fright ATK': 'ATK',
+  'Numinosity RES PEN': 'Numinosity',
+  'O Wakeful World, Goodnight DMG Taken+': 'O Wakeful World, Goodnight',
+  'Of Fire and Far Faring (All-Type RES PEN)': 'Of Fire and Far Faring',
+  'Of Fire and Far Faring (CRIT DMG)': 'Of Fire and Far Faring',
+  'Overtone Hum: Chorus After Dark Tides DMG Taken+': 'Overtone Hum: Chorus After Dark Tides',
+  'Pain & Anger DMG+13%': 'Pain and Anger',
+  'Pain & Anger DMG+15%': 'Pain and Anger',
+  'Pain & Anger DMG+22%': 'Pain and Anger',
+  'Pain & Anger DMG+5%': 'Pain and Anger',
+  'Pain & Anger DMG+8%': 'Pain and Anger',
+  'Panoptic Vision OHB': 'Outgoing Healing Boost',
+  'Proof of Debt FUA Taken+': 'Proof of Debt',
+  'Punklorde CRIT DMG': 'CRIT DMG',
+  'Qualitative Shift DEF↓': 'Vulnerability',
+  'Retribution': 'Retribution of -Law-',
+  'Seam Stitch DMG Taken+': 'Seam Stitch',
+  'Shifu (Tea Time)': 'Shifu',
+  'Slashed Dream Cries in Red All RES↓': 'Slashed Dream Cries in Red',
+  'Sleight of Sky': 'Sleight of Sparx Hand',
+  'Summation CD+15%': 'Summation',
+  'Summation CD+5%': 'Summation',
+  'Summation CR+3%': 'Summation',
+  'Summation CR+8%': 'Summation',
+  'Synthetic Black Hole DEF↓ SPD↓': 'Synthetic Black Hole',
+  'Synthetic Black Hole SPD↓': 'Synthetic Black Hole',
+  'Torrid Scorch DEF↓': 'Torrid Scorch',
+  'Traces': 'Trace',
+  'Transmission CRIT DMG+': 'CRIT DMG',
+  'Vermilion Waft ATK': 'ATK',
+  'Vermilion Waft OHB': 'Outgoing Healing Boost',
+  'World-Remaking DMG': 'DMG Boost',
+  'World-Remaking HP': 'HP',
+  'Youth: Halcyon Evermore (Elation)': 'Youth: Halcyon Evermore',
+  'Zone Suppression DEF↓': 'Zone Suppression',
+}
+
+function tableIcon(name: string): string | undefined {
+  for (const table of EFFECT_ICON_TABLES) {
+    const url = table[name]
+    if (url) return url
+  }
+  return undefined
+}
+
+let EFFECT_ICON_INDEX: Map<string, string> | null = null
+let EFFECT_ICON_ALIAS_INDEX: Map<string, string> | null = null
+
 export function effectIconUrl(name: string): string | undefined {
   if (!name) return undefined
-  // Check buffs first
-  if (BUFFS_ICONS[name]) return BUFFS_ICONS[name]
-  // Check debuffs
-  if (DEBUFFS_ICONS[name]) return DEBUFFS_ICONS[name]
-  // Check states
-  if (STATES_ICONS[name]) return STATES_ICONS[name]
-  // Fall back to ability icons
-  return abilityIconUrl(name)
+  const direct = tableIcon(name)
+  if (direct) return direct
+  if (!EFFECT_ICON_INDEX) {
+    EFFECT_ICON_INDEX = new Map()
+    for (const table of EFFECT_ICON_TABLES) {
+      for (const [k, v] of Object.entries(table)) {
+        const n = normIconKey(k)
+        if (!EFFECT_ICON_INDEX.has(n)) EFFECT_ICON_INDEX.set(n, v)
+      }
+    }
+  }
+  if (!EFFECT_ICON_ALIAS_INDEX) {
+    EFFECT_ICON_ALIAS_INDEX = new Map()
+    for (const [alias, canonical] of Object.entries(EFFECT_ICON_ALIAS)) {
+      const url = tableIcon(canonical) ?? EFFECT_ICON_INDEX.get(normIconKey(canonical))
+      if (url) EFFECT_ICON_ALIAS_INDEX.set(normIconKey(alias), url)
+    }
+  }
+  const key = normIconKey(name)
+  return EFFECT_ICON_ALIAS_INDEX.get(key) ?? EFFECT_ICON_INDEX.get(key) ?? BUFFS_ICONS['Buff'] ?? '/icons/buffs/Buff.png'
 }
 
 /**

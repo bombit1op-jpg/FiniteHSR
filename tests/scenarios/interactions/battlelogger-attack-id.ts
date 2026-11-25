@@ -1,172 +1,142 @@
-/**
- * BattleLogger Attack ID Tests
- * 
- * Tests for independent attackId generation in BattleLogger.
- */
-
 import { runBattle, ENEMY_PRESETS } from '../../../src/core/battle'
-import { case_ } from '../../suites'
+import { BattleLogger, type BattleEvent } from '../../../src/core/battlelog'
+import { Simulator } from '../../../src/core/simulator'
+import { InvariantWatcher, verifyInvariants } from '../../../src/core/battle/Invariants'
+import { aggregateCombatActions } from '../../../src/ui/combatActionView'
+import { case_, type Case } from '../../suites'
 
-// Nested context test - uses BattleLogger directly with minimal stub
-async function nestedContextTest(): Promise<{ name: string; ok: boolean; detail?: string }[]> {
-  const { BattleLogger } = await import('../../../src/core/battlelog')
-  
-  // Minimal stub for Simulator
-  const stubSim = {
-    avElapsed: 0,
-    units: () => [],
-    sp: () => 5,
-    maxSp: 5,
-  }
-  
-  const logger = new BattleLogger(stubSim as any, { debug: 5 })
-  
-  // 1. Create parent context (normal action)
-  logger.turnStart('Parent', 'attack', { actionKind: 'skill' }, 'parent')
-  const parentCombatActionId = logger.getActionContext()?.combatActionId
-  
-  // 2. First attack in parent context
-  logger.beginAttack()
-  const firstAttackId = logger.getActionContext()?.attackId
-  
-  // 2b. End first attack (simulate)
-  // (in real usage, hits would happen here)
-  
-  // 3. Create nested context (FUA) using proper API
-  logger.startFollowUpAttack(parentCombatActionId, { source: 'FUA Source', sourceId: 'fua-source', abilityName: 'Test FUA' })
-  
-  // 4. Attack in nested context (FUA)
-  logger.beginAttack()
-  const nestedAttackId = logger.getActionContext()?.attackId
-  
-  // 5. End nested context
-  logger.endFollowUpAttack()
-  
-  // 6. Continue parent context - second attack
-  logger.beginAttack()
-  const secondParentAttackId = logger.getActionContext()?.attackId
-  
-  // 7. End parent
-  logger.turnEnd('Parent', 'attack', 'parent')
-  
-  const allAttackIds = [firstAttackId, nestedAttackId, secondParentAttackId].filter(Boolean)
-  
-  return [
-    case_('nested context: parent first attack uses reserved ID', 
-      firstAttackId === '1',
-      `Expected "1", got "${firstAttackId}"`),
-    
-    case_('nested context: nested attack gets unique ID', 
-      nestedAttackId === '2',
-      `Expected "2", got "${nestedAttackId}"`),
-    
-    case_('nested context: parent second attack gets new ID', 
-      secondParentAttackId === '3',
-      `Expected "3", got "${secondParentAttackId}"`),
-    
-    case_('nested context: all attackIds unique', 
-      new Set(allAttackIds).size === allAttackIds.length,
-      `Duplicate IDs found: ${allAttackIds.join(', ')}`),
-    
-    case_('nested context: parent context restored after pop', 
-      logger.getActionContext() === undefined,
-      'Parent context should be popped'),
-  ]
+const stubSim = () => ({ avElapsed: 0, units: () => [], sp: () => 5, maxSp: 5, cfg: { seed: 42 }, roster: [] })
+
+const emitHit = (logger: BattleLogger, amount: number): void => {
+  logger.beginHit()
+  logger.beginDamage()
+  logger.emit({ type: 'HIT_START', source: logger.getActionContext()?.source, sourceId: logger.getActionContext()?.sourceId, target: 'Foe', targetId: 'e', attackType: 'skill', trace: 'HIT' })
+  logger.emit({ type: 'DAMAGE_CALCULATED', source: logger.getActionContext()?.source, sourceId: logger.getActionContext()?.sourceId, target: 'Foe', targetId: 'e', attackType: 'skill', trace: 'DMG', payload: { amount } })
+  logger.emit({ type: 'DAMAGE_DEALT', source: logger.getActionContext()?.source, sourceId: logger.getActionContext()?.sourceId, target: 'Foe', targetId: 'e', attackType: 'skill', trace: 'DMG', payload: { amount } })
 }
 
-export default async () => {
-  const c = runBattle({ 
-    cycles: 4, 
-    seed: 42, 
-    log: { debug: 5 },
-    team: [{ kitId: 'yanqing', skillPriority: 1 }], 
-    enemy: { ...ENEMY_PRESETS.mob, count: 1 } 
-  })
-  
-  const nodes = c.logger.events
-  const actionStarts = nodes.filter(n => n.type === 'ACTION_START')
-  const attackEvents = nodes.filter(n => n.type === 'HIT_START' || n.type === 'HIT_END')
-  
-  // Group attack events by attackId to find actual attacks
-  const attacksById = new Map<string, typeof attackEvents[0][]>()
-  for (const e of attackEvents) {
-    if (!e.attackId) continue
-    if (!attacksById.has(e.attackId)) attacksById.set(e.attackId, [])
-    attacksById.get(e.attackId)!.push(e)
-  }
-  
-  // Group attacks by combatActionId to find actions
-  const actionsByCombatActionId = new Map<string, string[]>()
-  for (const [attackId, events] of attacksById) {
-    const combatActionId = events[0].combatActionId
-    if (!combatActionId) continue
-    if (!actionsByCombatActionId.has(combatActionId)) actionsByCombatActionId.set(combatActionId, [])
-    actionsByCombatActionId.get(combatActionId)!.push(attackId)
-  }
-  
-  // Two sequential actions should have different combatActionId and attackId
-  const sequentialActionsUniqueCombatActionId = new Set(actionStarts.map(n => n.combatActionId)).size === actionStarts.length
-  
-  const sequentialActionsUniqueAttackId = new Set(actionStarts.map(n => n.attackId)).size === actionStarts.length
-  
-  // Multiple attacks within one action should have unique attackId
-  let multipleAttacksUnique = true
-  for (const attackIds of actionsByCombatActionId.values()) {
-    if (new Set(attackIds).size !== attackIds.length) {
-      multipleAttacksUnique = false
-      break
+const nestedTrace = () => {
+  const logger = new BattleLogger(stubSim() as any, { debug: 5 })
+  logger.turnStart('Parent', 'skill', { actionKind: 'skill' }, 'p')
+  const parent = logger.getActionContext()!
+  logger.beginAttack()
+  emitHit(logger, 10)
+  logger.startFollowUpAttack(parent.combatActionId, { source: 'FUA Source', sourceId: 'fua-source', abilityName: 'Test FUA' })
+  const fua = logger.getActionContext()!
+  logger.beginAttack()
+  emitHit(logger, 20)
+  logger.endFollowUpAttack()
+  const resumed = logger.getActionContext()!
+  logger.beginAttack()
+  emitHit(logger, 30)
+  logger.turnEnd('Parent', 'skill', 'p')
+  return { logger, parent, fua, resumed, events: logger.events }
+}
+
+const pairBySource = (events: BattleEvent[]): string[] => {
+  const open = new Map<string, number[]>()
+  const bad: string[] = []
+  for (const e of events) {
+    const src = e.sourceId ?? e.source ?? ''
+    if (e.type === 'ACTION_START') {
+      const stack = open.get(src) ?? []
+      stack.push(e.actionId)
+      open.set(src, stack)
+    } else if (e.type === 'ACTION_END') {
+      const expected = open.get(src)?.pop()
+      if (expected !== e.actionId) bad.push(`${src}: expected ACT ${expected}, received ACT ${e.actionId}`)
     }
   }
-  
-  // Multiple hits within one attack should share same attackId
-  let hitsShareSameAttackId = true
-  for (const events of attacksById.values()) {
-    const attackIds = events.map(e => e.attackId).filter(Boolean)
-    if (new Set(attackIds).size !== 1) {
-      hitsShareSameAttackId = false
-      break
-    }
-  }
-  
-  // All attackIds should be unique across the entire battle
-  const allAttackIds = Array.from(attacksById.keys())
-  const allAttackIdsUnique = new Set(allAttackIds).size === allAttackIds.length
-  
-  // Each action should have combatActionId and attackId defined
-  const eachActionHasIds = actionStarts.every(n => n.combatActionId !== undefined && n.attackId !== undefined)
-  
-  // No logger errors
-  const noLoggerErrors = c.logger.errors.length === 0
-  
-  return [
-    case_('sequential actions have unique combatActionId', 
-      sequentialActionsUniqueCombatActionId,
-      `Expected ${actionStarts.length} unique, got ${new Set(actionStarts.map(n => n.combatActionId)).size}`),
-    
-    case_('sequential actions have unique attackId', 
-      sequentialActionsUniqueAttackId,
-      `Expected ${actionStarts.length} unique, got ${new Set(actionStarts.map(n => n.attackId)).size}`),
-    
-    case_('multiple attacks within action have unique attackId', 
-      multipleAttacksUnique,
-      'Some actions have duplicate attackIds'),
-    
-    case_('multiple hits within attack share same attackId', 
-      hitsShareSameAttackId,
-      'Some attacks have different attackIds for different hits'),
-    
-    case_('all attackIds are unique across battle', 
-      allAttackIdsUnique,
-      `Expected ${allAttackIds.length} unique attackIds, got ${new Set(allAttackIds).size}`),
-    
-    case_('each action has combatActionId and attackId', 
-      eachActionHasIds,
-      `Some actions missing combatActionId or attackId`),
-    
-    case_('no logger errors', 
-      noLoggerErrors,
-      c.logger.errors.join('; ')),
-    
-    ...await nestedContextTest(),
+  return [...bad, ...[...open].filter(([, s]) => s.length).map(([src, s]) => `${src}: ${s.length} unclosed`)]
+}
+
+let eventSeq = 0
+const mkEvent = (type: BattleEvent['type'], o: Partial<BattleEvent> = {}): BattleEvent =>
+  ({ eventId: ++eventSeq, time: 0, turn: 0, actionId: 1, type, payload: {}, ...o } as BattleEvent)
+
+export default async (): Promise<Case[]> => {
+  const trace = nestedTrace()
+  const cases: Case[] = [
+    case_('A: parent action keeps its own combatActionId after FUA', trace.resumed.combatActionId === trace.parent.combatActionId && trace.resumed.actionId === trace.parent.actionId),
+    case_('A: FUA gets distinct combatActionId and parentActionId', trace.fua.combatActionId !== trace.parent.combatActionId && trace.fua.parentActionId === trace.parent.combatActionId),
+    case_('A: FUA allocation advances ACT without touching parent ACT', trace.fua.actionId === trace.parent.actionId + 1 && trace.logger.actNoValue === trace.parent.actionId + 1),
+    case_('A: FUA opens and closes with its own actionId', (() => {
+      const start = trace.events.find(e => e.type === 'ACTION_START' && e.sourceId === 'fua-source')
+      const end = trace.events.find(e => e.type === 'ACTION_END' && e.sourceId === 'fua-source')
+      return start?.actionId === trace.fua.actionId && end?.actionId === trace.fua.actionId && end?.payload.action === 'Test FUA'
+    })()),
+    case_('A: parent closes with stored actionId, not global ACT', (() => {
+      const end = trace.events.find(e => e.type === 'ACTION_END' && e.sourceId === 'p')
+      return end?.actionId === trace.parent.actionId && trace.logger.getActionContext() === undefined
+    })()),
+    case_('B: global ACT counter is monotonic across nested FUA', trace.logger.actNoValue === 2 && trace.fua.actionId === 2),
+    case_('C: ATK/HIT/DMG sub-counters are restored after FUA', (() => {
+      const traces = trace.events.filter(e => e.type === 'HIT_START').map(e => e.traceId)
+      const dmg = trace.events.filter(e => e.type === 'DAMAGE_CALCULATED').map(e => e.traceId)
+      return JSON.stringify(traces) === JSON.stringify(['1.1.1', '2.2.1', '1.2.1'])
+        && JSON.stringify(dmg) === JSON.stringify(['1.1.1.1', '2.2.1.2', '1.2.1.2'])
+    })()),
   ]
+
+  const stray = new BattleLogger(stubSim() as any, { debug: 5 })
+  stray.turnStart('Parent', 'skill', { actionKind: 'skill' }, 'p')
+  const strayFrame = stray.getActionContext()!
+  const strayLen = stray.events.length
+  stray.endFollowUpAttack()
+  cases.push(case_('D: stray FUA end neither emits nor pops parent', stray.events.length === strayLen && stray.getActionContext() === strayFrame))
+
+  const runtime: Record<string, unknown> = {}
+  const unit = { id: 'u', name: 'U', kitId: 'fake', av: 100 } as any
+  const throwingSim = {
+    logger: stray,
+    rt: () => runtime,
+    kits: new Map([['fake', { decide: () => ({ kind: 'basic' }) }]]),
+    log: () => {},
+    performAbility: () => { throw new Error('boom') },
+    fireAllyMemospriteAct: () => {},
+  }
+  const actBeforeThrow = stray.actNoValue
+  let threw = false
+  try { Simulator.prototype.grantExtraTurn.call(throwingSim as any, unit) } catch { threw = true }
+  cases.push(case_('D: exception in Extra Turn closes context and clears flag', threw && runtime.inExtraTurn === false && stray.getActionContext() === strayFrame && stray.actNoValue === actBeforeThrow + 1))
+
+  const parentEvents = trace.events.filter(e => e.combatActionId === trace.parent.combatActionId)
+  const aggregated = aggregateCombatActions(parentEvents, stubSim() as any, [])
+  const record = aggregated[0]
+  cases.push(case_('E: one combatActionId aggregates into one action record', aggregated.length === 1 && record?.combatActionId === trace.parent.combatActionId))
+  cases.push(case_('E: action record holds only real attacks, no synthetic IDs', JSON.stringify(record?.attacks.map(a => a.attackId)) === JSON.stringify(['1', '3']) && record?.attacks.every(a => !a.attackId.includes('.'))))
+  cases.push(case_('E: action record damage/category/provenance follow the action', record?.totalDamage === 40 && record?.category === 'attack' && record?.sourceName === 'Parent'))
+  cases.push(case_('E: FUA combatActionId is not merged into parent record', parentEvents.every(e => e.parentActionId === undefined || e.parentActionId === trace.parent.combatActionId) && aggregated.length === 1))
+
+  const mismatched = [mkEvent('ACTION_START', { actionId: 1, source: 'P', sourceId: 'p' }), mkEvent('ACTION_START', { actionId: 2, source: 'P', sourceId: 'p' }), mkEvent('ACTION_END', { actionId: 1, source: 'P', sourceId: 'p' })]
+  const expected = 'action-order-mismatch: expected ACT 2, received ACT 1 for p'
+  const batchBad = verifyInvariants([], mismatched)
+  const watcher = new InvariantWatcher(() => [])
+  const liveBad = mismatched.flatMap(e => watcher.check(e))
+  const pairedStream = [mkEvent('ACTION_START', { actionId: 1, source: 'P', sourceId: 'p' }), mkEvent('ACTION_END', { actionId: 1, source: 'P', sourceId: 'p' })]
+  cases.push(case_('F: batch verifier detects LIFO action mismatch', batchBad.includes(expected), batchBad.join('; ')))
+  cases.push(case_('F: per-event watcher detects same LIFO action mismatch', liveBad.includes(expected), liveBad.join('; ')))
+  cases.push(case_('F: paired action stream stays clean', verifyInvariants([], pairedStream).length === 0))
+
+  const c = runBattle({ cycles: 4, seed: 42, log: { debug: 5 }, team: [{ kitId: 'yanqing', skillPriority: 1 }], enemy: { ...ENEMY_PRESETS.mob, count: 1 } })
+  const evs = c.logger.events
+  const starts = evs.filter(e => e.type === 'ACTION_START')
+  const ends = evs.filter(e => e.type === 'ACTION_END')
+  const byCombat = new Map<string, Set<number>>()
+  for (const e of evs) {
+    if (!e.combatActionId) continue
+    const set = byCombat.get(e.combatActionId) ?? new Set<number>()
+    set.add(e.actionId)
+    byCombat.set(e.combatActionId, set)
+  }
+  const badPairs = pairBySource(evs)
+  const violations = verifyInvariants(c.units(), evs, { sp: c.sp(), maxSp: c.maxSp })
+  cases.push(case_('G: real battle pairs every ACTION_START with ACTION_END', badPairs.length === 0, badPairs.join('; ')))
+  cases.push(case_('G: real battle has no invariant violations', violations.length === 0, violations.join('; ')))
+  cases.push(case_('G: one actionId per combatActionId', [...byCombat.values()].every(s => s.size === 1)))
+  cases.push(case_('G: action starts carry unique combatActionId and attackId', new Set(starts.map(e => e.combatActionId)).size === starts.length && new Set(starts.map(e => e.attackId)).size === starts.length))
+  cases.push(case_('G: hit and damage events carry a real attackId', evs.filter(e => e.type === 'HIT_START' || e.type === 'HIT_END' || e.type === 'DAMAGE_DEALT').every(e => !!e.attackId)))
+  cases.push(case_('G: action counts match and logger reports no errors', starts.length === ends.length && c.logger.errors.length === 0, c.logger.errors.join('; ')))
+
+  return cases
 }

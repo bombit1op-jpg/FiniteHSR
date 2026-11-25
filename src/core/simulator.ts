@@ -539,38 +539,35 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
   grantExtraTurn(u: Unit): void {
     const ctx = this.rt(u)
     ctx.inExtraTurn = true
-    this.currentActor = u
-    u.av = 0
-    this.log(`>> ${u.name} gains an Extra Turn!`, { type: 'EXTRA_TURN', target: u.name })
+    let pushed = false
+    try {
+      this.currentActor = u
+      u.av = 0
+      this.log(`>> ${u.name} gains an Extra Turn!`, { type: 'EXTRA_TURN', target: u.name })
 
-    // Get current combatActionId before creating new context
-    const parentActionId = this.logger.getActionContext()?.combatActionId
+      const parentActionId = this.logger.getActionContext()?.combatActionId
+      const ids = this.logger.nextActionIds('extraTurn', parentActionId)
+      const actionId = this.logger.beginAction()
+      this.logger.pushActionContext({
+        combatActionId: ids.combatActionId,
+        attackId: ids.attackId,
+        actionId,
+        actionCategory: 'extraTurn',
+        parentActionId: ids.parentActionId,
+        provenance: { sourceKind: 'ability', abilityName: 'Extra Turn', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
+        source: u.name,
+        sourceId: u.id,
+        abilityName: 'Extra Turn',
+      })
+      pushed = true
 
-    // Use new independent ID generation for extra turn
-    const ids = this.logger.nextActionIds('extraTurn', parentActionId)
-
-    // Save parent actNo so parent's ACTION_END uses correct actionId
-    const parentActNo = this.logger.actNo
-
-    // Allocate a dedicated actNo for this extra turn
-    this.logger.beginAction()
-
-    this.logger.pushActionContext({
-      combatActionId: ids.combatActionId,
-      attackId: ids.attackId,
-      actionCategory: 'extraTurn',
-      parentActionId: ids.parentActionId,
-      provenance: { sourceKind: 'ability', abilityName: 'Extra Turn', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
-    })
-
-    const kit = this.kits.get(u.kitId!)!
-    const action = kit.decide(this, u, ctx)
-    this.performAbility(kit, u, action, ctx)
-
-    // Restore parent actNo so parent's ACTION_END uses correct actionId
-    this.logger.actNo = parentActNo
-    this.logger.popActionContext()
-    ctx.inExtraTurn = false
+      const kit = this.kits.get(u.kitId!)!
+      const action = kit.decide(this, u, ctx)
+      this.performAbility(kit, u, action, ctx)
+    } finally {
+      if (pushed) this.logger.popActionContext()
+      ctx.inExtraTurn = false
+    }
 
     // memosprites acting inline (Demiurge, Garmentmaker, Evey) never reach endTick — fire here too
     this.fireAllyMemospriteAct(u)
@@ -584,33 +581,29 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
     const ctx = this.rt(u)
     const kit = this.kits.get(u.kitId!)!
     ctx.extraRelease = true
-    
-    // Get current combatActionId before creating new context
-    const parentActionId = this.logger.getActionContext()?.combatActionId
-    
-    // Use new independent ID generation for extra turn
-    const ids = this.logger.nextActionIds('extraTurn', parentActionId)
+    let pushed = false
+    try {
+      const parentActionId = this.logger.getActionContext()?.combatActionId
+      const ids = this.logger.nextActionIds('extraTurn', parentActionId)
+      const actionId = this.logger.beginAction()
+      this.logger.pushActionContext({
+        combatActionId: ids.combatActionId,
+        attackId: ids.attackId,
+        actionId,
+        actionCategory: 'extraTurn',
+        parentActionId: ids.parentActionId,
+        provenance: { sourceKind: 'ability', abilityName: 'Re-issued Action', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
+        source: u.name,
+        sourceId: u.id,
+        abilityName: 'Re-issued Action',
+      })
+      pushed = true
 
-    // Save parent actNo so parent's ACTION_END uses correct actionId
-    const parentActNo = this.logger.actNo
-
-    // Allocate a dedicated actNo for this extra turn
-    this.logger.beginAction()
-
-    this.logger.pushActionContext({
-      combatActionId: ids.combatActionId,
-      attackId: ids.attackId,
-      actionCategory: 'extraTurn',
-      parentActionId: ids.parentActionId,
-      provenance: { sourceKind: 'ability', abilityName: 'Re-issued Action', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
-    })
-
-    try { this.performAbility(kit, u, action, ctx) }
-    finally { ctx.extraRelease = false }
-    
-    // Restore parent actNo so parent's ACTION_END uses correct actionId
-    this.logger.actNo = parentActNo
-    this.logger.popActionContext()
+      this.performAbility(kit, u, action, ctx)
+    } finally {
+      if (pushed) this.logger.popActionContext()
+      ctx.extraRelease = false
+    }
     this.fireAllyMemospriteAct(u)
   }
 

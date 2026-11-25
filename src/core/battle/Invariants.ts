@@ -46,34 +46,42 @@ function runtimeViolations(rt?: InvariantRuntime): string[] {
   return (rt.sp < 0 || rt.sp > rt.maxSp) ? [`invalid-sp: ${rt.sp}/${rt.maxSp}`] : []
 }
 
+/** Stable source identity for action-boundary pairing. Names can repeat across waves; ids cannot. */
+function actionSource(e: BattleEvent): string {
+  return e.sourceId ?? e.source ?? ''
+}
+
+/** Shared ACTION_START/ACTION_END gate for the batch verifier and the per-event watcher.
+ *  Mutates the per-source LIFO stack and reports only boundary violations. */
+function actionBoundaryViolations(open: Map<string, number[]>, e: BattleEvent): string[] {
+  const src = actionSource(e)
+  if (e.type === 'ACTION_START') {
+    const stack = open.get(src) ?? []
+    stack.push(e.actionId)
+    open.set(src, stack)
+    return []
+  }
+  if (e.type !== 'ACTION_END') return []
+  const stack = open.get(src)
+  if (!stack || stack.length === 0) {
+    return [`unpaired-action: ACTION_END for ACT ${e.actionId} by ${src} with no ACTION_START`]
+  }
+  const expected = stack.pop()!
+  return expected === e.actionId
+    ? []
+    : [`action-order-mismatch: expected ACT ${expected}, received ACT ${e.actionId} for ${src}`]
+}
+
 /** Invariant violations found in the live roster + event stream — feed §35 and §36. */
 export function verifyInvariants(units: Unit[], events: BattleEvent[], runtime?: InvariantRuntime): string[] {
   const bad: string[] = [...rosterViolations(units), ...runtimeViolations(runtime)]
   // dead-actor: an ACTION_START after that unit's own DEATH event. Judged on event order, not
   // on the final roster — a unit that dies later in the battle acted while alive.
   const deathAt = new Map<string, number>()
-  // unpaired-action: an ACTION_END that no ACTION_START opened, per (ACT, actor).
-  // Use a stack per source to handle nested actions (extra turns, FUA).
-  // Store actionId to verify LIFO order on ACTION_END.
+  // unpaired-action/action-order-mismatch: one LIFO stack per stable source identity.
   const openAction = new Map<string, number[]>()
   for (const e of events) {
-    const src = e.source ?? ''
-    if (e.type === 'ACTION_START') {
-      const stack = openAction.get(src) ?? []
-      stack.push(e.actionId)
-      openAction.set(src, stack)
-    } else if (e.type === 'ACTION_END') {
-      const stack = openAction.get(src)
-      if (!stack || stack.length === 0) {
-        bad.push(`unpaired-action: ACTION_END for ACT ${e.actionId} by ${src} with no ACTION_START`)
-      } else {
-        const expectedActId = stack[stack.length - 1]
-        if (expectedActId !== e.actionId) {
-          bad.push(`action-order-mismatch: expected ACT ${expectedActId}, received ACT ${e.actionId} for ${src}`)
-        }
-        stack.pop()
-      }
-    }
+    bad.push(...actionBoundaryViolations(openAction, e))
     if (!e.source && !e.target) continue
     if (e.type === 'DEATH' && e.target) { deathAt.set(e.target, e.eventId); continue }
     if (e.type === 'REVIVAL' && e.target) deathAt.delete(e.target)
@@ -106,29 +114,12 @@ export class InvariantWatcher {
 
   /** Check the just-emitted event; returns violations new at this event. */
   check(e: BattleEvent): string[] {
-    const bad: string[] = []
-    const src = e.source ?? ''
-    if (e.type === 'ACTION_START') {
-      const stack = this.open.get(src) ?? []
-      stack.push(e.actionId)
-      this.open.set(src, stack)
-    } else if (e.type === 'ACTION_END') {
-      const stack = this.open.get(src)
-      if (!stack || stack.length === 0) {
-        bad.push(`unpaired-action: ACTION_END for ACT ${e.actionId} by ${src} with no ACTION_START`)
-      } else {
-        const expectedActId = stack[stack.length - 1]
-        if (expectedActId !== e.actionId) {
-          bad.push(`action-order-mismatch: expected ACT ${expectedActId}, received ACT ${e.actionId} for ${src}`)
-        }
-        stack.pop()
-      }
-      bad.push(...rosterViolations(this.units()), ...runtimeViolations(this.runtime?.()))
-    }
+    const bad = actionBoundaryViolations(this.open, e)
+    if (e.type === 'ACTION_END') bad.push(...rosterViolations(this.units()), ...runtimeViolations(this.runtime?.()))
     if (e.type === 'DEATH' && e.target) this.deaths.set(e.target, e.eventId)
     else if (e.type === 'REVIVAL' && e.target) this.deaths.delete(e.target)
     else if (e.type === 'ACTION_START' && e.source) {
-      const died = this.deaths.get(e.source)
+      const died = this.deaths.get(actionSource(e))
       if (died !== undefined && e.eventId > died) bad.push(`dead-actor: ${e.source} acted after death (EVT ${e.eventId}, death EVT ${died})`)
     }
     return bad

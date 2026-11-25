@@ -1343,7 +1343,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
    §Combat Action Log Styles
    ============================================================================ */
 
-.simLogContainer { display: flex; flex-direction: column; height: 100%; min-height: 500px; }
+.simLogContainer { display: flex; flex-direction: column; height: 100%; min-height: 1800px; }
 
 .simLogFilterBar {
   display: flex;
@@ -1380,13 +1380,15 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 }
 
 .simLogTimelinePane {
-  min-height: 0;
+  min-height: 1500px;
   display: flex;
   flex-direction: column;
 }
 
 .simLogTimeline {
   min-height: 0;
+  height: 1500px;
+  max-height: 1500px;
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
@@ -1451,6 +1453,8 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .simCombatActionCard.extraTurn { border-left-color: #22c55e; }
 .simCombatActionCard.ultimate { border-left-color: #a855f7; }
 .simCombatActionCard.system { border-left-color: #6b7280; }
+.simCombatActionCard.timer { border-left-color: #14b8a6; }
+.simCombatActionCard.summon { border-left-color: #e879f9; }
 
 .simActionHeader {
   display: flex;
@@ -1467,6 +1471,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
   border-radius: 999px;
   color: #0a100d;
 }
+.simActionEntity { font-size: 10px; font-weight: 700; letter-spacing: .04em; }
 .simActionMeta {
   font-size: 11px;
   color: #7b8595;
@@ -1507,9 +1512,30 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
   color: #9aa7ba;
 }
 .simActionDamage { font-weight: 700; color: #f2c94c; font-variant-numeric: tabular-nums; }
-.simActionHits { color: #7fd18a; }
+.simActionHitsSummary { color: #7fd18a; }
 .simActionEffects { color: #7fb3ff; }
 .simActionDamage .crit { color: #ffd76a; font-weight: 700; }
+
+.simActionHits {
+  margin-top: 8px;
+  border-top: 1px solid #2a4a35;
+  padding-top: 6px;
+}
+.simActionHits > summary {
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  color: #7fb3ff;
+  list-style-position: inside;
+}
+.simActionAttack { margin-top: 8px; }
+.simActionAttackTitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: #f2c94c;
+  margin-bottom: 6px;
+}
+.simActionAttack .simInspectorHit { padding: 8px; }
 
 /* Inspector */
 .simLogInspector {
@@ -1581,17 +1607,6 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .simInspectorHitTarget { font-weight: 600; color: #e6ebf2; }
 .simInspectorHitDamage { font-weight: 700; color: #f2c94c; font-variant-numeric: tabular-nums; }
 .simInspectorHitDamage .crit { color: #ffd76a; }
-.simInspectorHitBreakdown {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 4px 12px;
-  font-size: 11px;
-  padding-top: 8px;
-  border-top: 1px solid #2a4a35;
-}
-.simInspectorBreakdownRow { display: contents; }
-.simInspectorBreakdownRow span:first-child { color: #9aa7ba; }
-.simInspectorBreakdownRow span:last-child { color: #e6ebf2; font-weight: 500; text-align: right; }
 
 /* State Tab */
 .simInspectorSnapshotSection { margin-bottom: 16px; }
@@ -1624,7 +1639,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
   font-size: 11px;
   color: #9aa7ba;
 }
-.simInspectorUnitBuffs { color: #7fd18a; }
+.simInspectorUnitBuffs { color: #7fb3ff; }
 .simInspectorUnitDebuffs, .simInspectorUnitDots { color: #e08a8a; }
 
 /* Effects Tab */
@@ -1660,7 +1675,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .simStatMini span:first-child { color: #9aa7ba; }
 .simStatMini span:last-child { color: #e6ebf2; font-weight: 600; font-variant-numeric: tabular-nums; }
 .simInspectorUnitBuffs, .simInspectorUnitDebuffs, .simInspectorUnitDots { margin-top: 6px; font-size: 11px; color: #9aa7ba; }
-.simInspectorUnitBuffs { color: #7fd18a; }
+.simInspectorUnitBuffs { color: #7fb3ff; }
 .simInspectorUnitDebuffs, .simInspectorUnitDots { color: #e08a8a; }
 
 .simInspectorEffectSection { margin-bottom: 16px; }
@@ -1680,6 +1695,51 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .simInspectorEffectMods { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px; }
 .simMod { font-size: 11px; padding: 2px 6px; background: #1a2a1c; border: 1px solid #3a5a45; border-radius: 999px; color: #b8e5c8; }
 .simInspectorEffectShield { margin-top: 4px; font-size: 11px; color: #7ec8ff; }
+.simInspectorEffectSource { display: inline-flex; align-items: center; gap: 5px; margin-top: 2px; font-size: 11px; color: #9aa7b8; }
+.simInspectorEffectSourceIcon { display: inline-flex; flex-shrink: 0; }
+.simInspectorEffectSourceIcon img { width: 18px; height: 18px; border-radius: 3px; }
+
+.simInspectorEffect.buff {
+  border-color: #2f4f8a;
+  background: #111a2a;
+}
+.simInspectorEffect.debuff {
+  border-color: #8a3a3a;
+  background: #2a1616;
+}
+.simInspectorEffect.buff .simInspectorEffectName { color: #7fb3ff; }
+.simInspectorEffect.debuff .simInspectorEffectName { color: #ff9d9d; }
+.simInspectorEffectTitle.buff { color: #7fb3ff; }
+.simInspectorEffectTitle.debuff { color: #ff9d9d; }
+.simInspectorEffectTitle.neutral { color: #8bd39b; }
+.simInspectorUnitStatuses {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #f2c94c;
+}
+.simInspectorUnitStates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+.simStateChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  padding: 2px 6px;
+  border: 1px solid #3a3a5a;
+  border-radius: 999px;
+  background: #151525;
+  color: #c9c9ff;
+}
+.simStateIcon { width: 16px; height: 16px; }
+.simUnitDebuffs { margin-top: 6px; font-size: 11px; color: #ff9d9d; }
+.simUnitDebuffs summary { cursor: pointer; font-weight: 600; }
+.simUnitDebuffRow { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+.simUnitDebuffIcon { width: 16px; height: 16px; }
+.simInspectorEffectSection { grid-column: 1 / -1; }
 
 /* Scrollbar styling */
 .simLogTimeline::-webkit-scrollbar,

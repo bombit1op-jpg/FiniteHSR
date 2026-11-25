@@ -406,9 +406,13 @@ if (u.side === 'ally') {
       this.s.logger.pushActionContext({
         combatActionId: ids.combatActionId,
         attackId: ids.attackId,
+        actionId: this.s.logger.actNo,
         actionCategory: 'ultimate',
         parentActionId: ids.parentActionId,
         provenance: { sourceKind: 'ability', abilityName: kit.name, abilitySlot: 'ult', triggeredByUnitId: u.id, triggeredByUnitName: u.name },
+        source: u.name,
+        sourceId: u.id,
+        abilityName: kit.name,
       })
     }
 

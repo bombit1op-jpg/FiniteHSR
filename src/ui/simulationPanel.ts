@@ -15,7 +15,7 @@ import { el } from './dom'
 
 import { withBusy, showStatus } from './shell'
 import { openEnemyPicker } from './enemyPicker'
-import { aggregateCombatActions, collectSnapshots, type CombatActionRecord, type CombatActionCategory } from './combatActionView'
+import { aggregateCombatActions, collectSnapshots, type CombatActionRecord, type CombatActionCategory, type CombatHitRecord } from './combatActionView'
 import type { DebugLevel, StateSnapshot } from '../core/battlelog'
 import type { Party } from '../core/party'
 import type { Simulator } from '../core/simulator'
@@ -33,6 +33,55 @@ function safeInitial(value: unknown, fallback = '?'): string {
   return trimmed.charAt(0).toUpperCase()
 }
 
+type SnapshotUnit = StateSnapshot['units'][string]
+
+function ownerKitId(unit: { kitId?: string; ownerId?: string }, sim: Simulator): string | undefined {
+  return unit.kitId ?? (unit.ownerId ? sim.roster.find(u => u.id === unit.ownerId)?.kitId : undefined)
+}
+
+function allyIconUrl(unit: { kitId?: string; ownerId?: string } | undefined, sim: Simulator): string | undefined {
+  if (!unit) return undefined
+  return charIconUrl(ownerKitId(unit, sim) ?? 'unknown')
+}
+
+const MEMOSPRITE_NAMES = new Set(['Garmentmaker', 'Little Ica', 'Netherwing: Pollux', 'Evey', 'Demiurge', 'Mem'])
+
+function unitIconUrl(unit: { name?: string; side?: string; kitId?: string; ownerId?: string } | undefined, sim: Simulator): string | undefined {
+  if (!unit) return undefined
+  if (unit.side === 'ally' && unit.name && MEMOSPRITE_NAMES.has(unit.name)) return effectIconUrl('Memosprite')
+  return allyIconUrl(unit, sim)
+}
+
+function formatStateValue(value: unknown): string {
+  if (value === null || value === undefined || value === '' || value === false || value === 0) return ''
+  if (typeof value === 'number') return Number.isInteger(value) ? String(value) : value.toFixed(2)
+  if (Array.isArray(value)) return value.join(', ')
+  if (typeof value === 'object') return JSON.stringify(value)
+  return String(value)
+}
+
+const ACTION_ENTITY_COLORS = { timer: '#14b8a6', summon: '#e879f9' } as const
+const COUNTDOWN_STATE_KEY = /countdown|timer|cd(?:id|seq)/i
+
+function actionEntityKind(action: CombatActionRecord): keyof typeof ACTION_ENTITY_COLORS | undefined {
+  for (const e of action.effects.other) {
+    if (e.type !== 'SUMMON_CREATED' && e.type !== 'SUMMON_DESPAWNED') continue
+    try {
+      const payload = JSON.parse(e.description) as Record<string, unknown>
+      if (payload.kind === 'timer') return 'timer'
+      if (payload.kind === 'summon') return 'summon'
+    } catch {}
+  }
+  return undefined
+}
+
+function effectIconFor(effect: { name: string; mods?: Array<{ stat: string; value: number }> }): string | undefined {
+  const direct = effectIconUrl(effect.name)
+  if (direct) return direct
+  const stat = effect.mods?.[0]?.stat
+  return stat ? effectIconUrl(stat) : undefined
+}
+
 interface SimPanelHandle {
   root: HTMLElement
   refresh: () => void
@@ -40,7 +89,6 @@ interface SimPanelHandle {
 
 const mounted = new WeakMap<HTMLElement, SimPanelHandle>()
 
-// @ts-expect-error TypeScript false positive: function returns in all paths
 export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPanelHandle {
   const prev = mounted.get(host)
   if (prev) { prev.refresh(); return prev }
@@ -171,8 +219,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
     cycles: 6,
   }
 
-  // Suppress unused warning - _renderBuilder is called from onclick handlers
-  void function _renderBuilder() {
+  function _renderBuilder(): void {
     builderContainer.innerHTML = ''
     for (let wi = 0; wi < customEncounter.waves.length; wi++) {
       const wave = customEncounter.waves[wi]
@@ -311,8 +358,7 @@ export function initSimulationPanel(host: HTMLElement, store: PartyStore): SimPa
       _renderBuilder()
     }
     builderContainer.append(addWaveBtn)
-
-    
+  }
 
   // Toggle handler
   function toggleBuilder() {
@@ -514,11 +560,9 @@ fallbackText: safeInitial(kit.name), tint: '#7fb3ff', title: kit.name,
           slotEl.append(chips)
 
           // Eidolon
-          if (slot.eidolon > 0) {
-            const eidolonEl = el('div', 'simSlotEidolon')
-            eidolonEl.textContent = `E${slot.eidolon}`
-            slotEl.append(eidolonEl)
-          }
+          const eidolonEl = el('div', 'simSlotEidolon')
+          eidolonEl.textContent = `E${slot.eidolon}`
+          slotEl.append(eidolonEl)
 
           // Light Cone
           if (slot.coneId) {
@@ -914,29 +958,52 @@ traceContainer.append(traceEl)
       }
     }
 
+    function createHitEl(hit: CombatHitRecord, sim: Simulator): HTMLElement {
+      const hitEl = el('div', 'simInspectorHit')
+      const header = el('div', 'simInspectorHitHeader')
+      const target = el('span', 'simInspectorHitTarget')
+      target.textContent = (sim.roster.find(u => u.id === hit.targetId)?.name ?? hit.targetName) || hit.targetId
+      const damage = el('span', 'simInspectorHitDamage')
+      damage.textContent = hit.damage.toLocaleString()
+      if (hit.crit) {
+        const crit = el('span', 'crit')
+        crit.textContent = ' CRIT'
+        damage.append(crit)
+      }
+      header.append(target, damage)
+      hitEl.append(header)
+      return hitEl
+    }
+
     function createActionCard(action: CombatActionRecord, sim: Simulator, onClick: () => void): HTMLElement {
-      const card = el('div', `simCombatActionCard ${action.category}`)
-      card.style.borderLeftColor = getCategoryColor(action.category)
+      const entityKind = actionEntityKind(action)
+      const card = el('div', `simCombatActionCard ${action.category}${entityKind ? ` ${entityKind}` : ''}`)
+      card.dataset.actionId = action.combatActionId
+      const accent = entityKind ? ACTION_ENTITY_COLORS[entityKind] : getCategoryColor(action.category)
+      card.style.borderLeftColor = accent
       card.style.cursor = 'pointer'
 
       const sourceUnit = action.sourceId ? sim.roster.find(u => u.id === action.sourceId) : undefined
-      const sourceIcon = sourceUnit ? (sourceUnit.side === 'ally'
-        ? charIconUrl(sourceUnit.kitId!)
-        : enemyIconUrl(sourceUnit.name)) : undefined
-
-      // Determine ability icon
-      let abilityIconUrl_: string | undefined
-      if (action.abilityId) {
-        abilityIconUrl_ = abilityIconUrl(action.abilityName || action.abilityId)
-      }
+      const sourceIcon = sourceUnit
+        ? (sourceUnit.side === 'ally' ? unitIconUrl(sourceUnit, sim) : enemyIconUrl(sourceUnit.name))
+        : undefined
+      const abilityIcon = abilityIconUrl(action.abilityName || action.abilityId || '')
 
       const header = el('div', 'simActionHeader')
       const categoryBadge = el('span', 'simActionCategory')
-      categoryBadge.style.background = getCategoryColor(action.category)
+      categoryBadge.style.background = accent
       categoryBadge.textContent = categoryLabels[action.category] || action.category
+      if (entityKind) {
+        const entityBadge = el('span', 'simActionEntity')
+        entityBadge.style.color = accent
+        entityBadge.textContent = entityKind === 'timer' ? 'Таймер' : 'Призыв'
+        header.append(categoryBadge, entityBadge)
+      } else {
+        header.append(categoryBadge)
+      }
       const meta = el('span', 'simActionMeta')
-      meta.textContent = `AV ${action.av.toFixed(1)} | Turn ${action.turn}`
-      header.append(categoryBadge, meta)
+      meta.textContent = `№${action.order} | AV ${action.av.toFixed(1)} | ACT ${action.actionId}`
+      header.append(meta)
 
       const sourceDiv = el('div', 'simActionSource')
       if (sourceIcon) {
@@ -948,9 +1015,9 @@ traceContainer.append(traceEl)
       const sourceName = el('span', 'simActionSourceName')
       sourceName.textContent = action.sourceName
       sourceInfo.append(sourceName)
-      if (abilityIconUrl_) {
+      if (abilityIcon) {
         const abilityIconSpan = el('span', 'simActionAbilityIcon')
-        abilityIconSpan.append(iconNode(abilityIconUrl_, action.abilityName || action.abilityId || '?', { cls: 'simActionAbilityIconImg', size: 20, fit: 'contain', fallbackText: safeInitial(action.abilityName || action.abilityId || '?'), tint: '#8fd694', title: action.abilityName || action.abilityId || '?' }))
+        abilityIconSpan.append(iconNode(abilityIcon, action.abilityName || action.abilityId || '?', { cls: 'simActionAbilityIconImg', size: 20, fit: 'contain', fallbackText: safeInitial(action.abilityName || action.abilityId || '?'), tint: '#8fd694', title: action.abilityName || action.abilityId || '?' }))
         sourceInfo.append(abilityIconSpan)
       }
       const abilityName = el('span', 'simActionAbilityName')
@@ -962,7 +1029,7 @@ traceContainer.append(traceEl)
       for (const id of action.targetIds) {
         const unit = sim.roster.find(u => u.id === id)
         if (!unit) continue
-        const iconUrl = unit.side === 'ally' ? charIconUrl(unit.kitId!) : enemyIconUrl(unit.name)
+        const iconUrl = unit.side === 'ally' ? unitIconUrl(unit, sim) : enemyIconUrl(unit.name)
         targetsDiv.append(iconNode(iconUrl, unit.name, {
           cls: 'simActionTargetIcon', size: 24, fit: 'contain',
           fallbackText: safeInitial(unit.name), tint: unit.side === 'ally' ? '#7fb3ff' : '#f5d76e', title: unit.name,
@@ -978,13 +1045,30 @@ traceContainer.append(traceEl)
       const summary = el('div', 'simActionSummary')
       const dmgSpan = el('span', 'simActionDamage')
       dmgSpan.textContent = totalDamage > 0 ? totalDamage.toLocaleString() : '—'
-      const hitsSpan = el('span', 'simActionHits')
+      const hitsSpan = el('span', 'simActionHitsSummary')
       hitsSpan.textContent = `${allHits.length} попад.${critHits > 0 ? ` (${critHits} крит)` : ''}${hasBreak ? ' | Пробитие' : ''}`
       const effectsSpan = el('span', 'simActionEffects')
       effectsSpan.textContent = `${action.effects.buffs.length + action.effects.debuffs.length + action.effects.dots.length + action.effects.shields.length + action.effects.heals.length} эфф.`
       summary.append(dmgSpan, hitsSpan, effectsSpan)
-
       card.append(header, sourceDiv, targetsDiv, summary)
+
+      if (allHits.length > 0) {
+        const details = el('details', 'simActionHits')
+        const hitSummary = el('summary')
+        hitSummary.textContent = `Попадания: ${allHits.length}${critHits > 0 ? ` · ${critHits} крит` : ''} · ${totalDamage.toLocaleString()} урона`
+        details.append(hitSummary)
+        for (const attack of action.attacks) {
+          if (attack.hits.length === 0) continue
+          const attackBlock = el('div', 'simActionAttack')
+          const attackTitle = el('div', 'simActionAttackTitle')
+          attackTitle.textContent = `${attack.abilityName} · ${attack.hits.length} попад. · ${attack.totalDamage.toLocaleString()}`
+          attackBlock.append(attackTitle)
+          for (const hit of attack.hits) attackBlock.append(createHitEl(hit, sim))
+          details.append(attackBlock)
+        }
+        details.onclick = e => e.stopPropagation()
+        card.append(details)
+      }
 
       card.onclick = onClick
       return card
@@ -1014,8 +1098,8 @@ traceContainer.append(traceEl)
       inspectorPanel.style.display = ''
 
       // Highlight selected action
-      for (const el of timeline.querySelectorAll('.simCombatActionCard')) {
-        el.classList.toggle('selected', (el as any).__action === action)
+      for (const card of timeline.querySelectorAll<HTMLElement>('.simCombatActionCard')) {
+        card.classList.toggle('selected', card.dataset.actionId === action.combatActionId)
       }
     }
 
@@ -1026,7 +1110,7 @@ traceContainer.append(traceEl)
       const h4 = el('h4')
       h4.textContent = 'Инспектор действия'
       const idSpan = el('span', 'simLogInspectorId')
-      idSpan.textContent = `${action.category} | AV ${action.av.toFixed(1)} | Turn ${action.turn} | ACT ${action.actionId}`
+      idSpan.textContent = `№${action.order} | ${action.category} | AV ${action.av.toFixed(1)} | ACT ${action.actionId}`
       header.append(h4, idSpan)
       inspectorPanel.append(header)
 
@@ -1060,262 +1144,373 @@ traceContainer.append(traceEl)
       showTab('action')
     }
 
-    function renderActionTab(action: CombatActionRecord, sim: Simulator, content: HTMLElement): void {
-      const grid = el('div', 'simLogInspectorGrid')
-
-      const allHits = action.attacks.flatMap(a => a.hits)
-
-      const fields = [
-        ['Категория', action.category],
-        ['AV', action.av.toFixed(1)],
-        ['Ход', action.turn.toString()],
-        ['Исполнитель', action.sourceName],
-        ['Способность', action.abilityName || '—'],
-        ['Слот', action.abilitySlot || '—'],
-        ['Всего урона', allHits.reduce((s, h) => s + h.damage, 0).toLocaleString()],
-        ['Попаданий', allHits.length.toString()],
-        ['Критические', allHits.filter(h => h.crit).length.toString()],
-        ['Пробитий', allHits.filter(h => h.breakdown?.broken).length.toString()],
-      ]
-
-      for (const [label, value] of fields) {
-        const row = el('div', 'simLogInspectorRow')
-        const labelEl = el('span', 'simLogInspectorLabel')
-        labelEl.textContent = label
-        const valueEl = el('span', 'simLogInspectorValue')
-        valueEl.textContent = String(value)
-        row.append(labelEl, valueEl)
-        grid.append(row)
+    function relevantSnapshotUnitIds(action: CombatActionRecord, snapshot: StateSnapshot | undefined, sim: Simulator): string[] {
+      const ids = new Set<string>()
+      if (action.sourceId) ids.add(action.sourceId)
+      for (const id of action.targetIds) {
+        const side = snapshot?.units[id]?.side ?? sim.roster.find(u => u.id === id)?.side
+        if (side === 'enemy') ids.add(id)
       }
+      return [...ids]
+    }
 
-      // Provenance
-      if (action.provenance) {
-        const provRow = el('div', 'simLogInspectorRow')
-        const provLabel = el('span', 'simLogInspectorLabel')
-        provLabel.textContent = 'Источник'
-        const provValue = el('span', 'simLogInspectorValue')
-        provValue.textContent = `${action.provenance.sourceKind} ${action.provenance.abilityId ? `(${action.provenance.abilityId})` : ''} ${action.provenance.abilitySlot ? `[${action.provenance.abilitySlot}]` : ''} ${action.provenance.triggeredByUnitName ? `→ ${action.provenance.triggeredByUnitName}` : ''}`
-        provRow.append(provLabel, provValue)
-        grid.append(provRow)
-      }
+    function createSnapshotUnitEl(unit: SnapshotUnit, sim: Simulator, options: { stats: boolean; statuses: boolean; effects: boolean; debuffs?: boolean }): HTMLElement {
+      const owner = unit.ownerId ? sim.roster.find(u => u.id === unit.ownerId) : undefined
+      const iconUrl = unit.side === 'enemy'
+        ? enemyIconUrl(unit.name)
+        : unitIconUrl(unit, sim)
 
-      // Targets
-      if (action.targetNames.length > 0) {
-        const targetRow = el('div', 'simLogInspectorRow')
-        const targetLabel = el('span', 'simLogInspectorLabel')
-        targetLabel.textContent = 'Цели'
-        const targetValue = el('span', 'simLogInspectorValue')
-        targetValue.textContent = action.targetNames.join(', ')
-        targetRow.append(targetLabel, targetValue)
-        grid.append(targetRow)
-      }
+      const unitEl = el('div', 'simInspectorUnitState')
+      const nameEl = el('div', 'simInspectorUnitName')
+      nameEl.append(iconNode(iconUrl, unit.name, {
+        cls: 'simUnitIcon', size: 20, fit: 'cover',
+        fallbackText: safeInitial(unit.name), tint: unit.side === 'enemy' ? '#f5d76e' : '#7fb3ff', title: unit.name,
+      }))
+      const label = el('span')
+      label.textContent = owner ? `${unit.name} · ${owner.name}` : unit.name
+      nameEl.append(label)
+      unitEl.append(nameEl)
 
-      // Hits detail
-      if (allHits.length > 0) {
-        const hitsRow = el('div', 'simLogInspectorRow')
-        hitsRow.style.gridColumn = '1 / -1'
-        const hitsLabel = el('span', 'simLogInspectorLabel')
-        hitsLabel.textContent = 'Попадания'
-        const hitsContainer = el('div', 'simInspectorHits')
-
-        for (let i = 0; i < allHits.length; i++) {
-          const hit = allHits[i]
-          const targetUnit = hit.targetId ? sim.roster.find(u => u.id === hit.targetId) : undefined
-          const hitEl = el('div', 'simInspectorHit')
-          hitEl.innerHTML = `
-            <div class="simInspectorHitHeader">
-              <span class="simInspectorHitTarget">${targetUnit?.name || hit.targetName || hit.targetId}</span>
-              <span class="simInspectorHitDamage">${hit.damage.toLocaleString()}${hit.crit ? ' <span class="crit">CRIT</span>' : ''}</span>
-            </div>
-          `
-          if (hit.breakdown) {
-            const breakdownEl = el('div', 'simInspectorHitBreakdown')
-            breakdownEl.innerHTML = `
-              <div class="simInspectorBreakdownRow"><span>Базовая стата</span><span>${Math.round(hit.breakdown.stat).toLocaleString()}</span></div>
-              <div class="simInspectorBreakdownRow"><span>Множитель</span><span>${hit.breakdown.mult.toFixed(4)}</span></div>
-              <div class="simInspectorBreakdownRow"><span>Плоское</span><span>${hit.breakdown.flat.toLocaleString()}</span></div>
-              <div class="simInspectorBreakdownRow"><span>Крит. шанс</span><span>${(hit.breakdown.critRate * 100).toFixed(1)}%</span></div>
-              <div class="simInspectorBreakdownRow"><span>Крит. урон</span><span>${(hit.breakdown.critDmg * 100).toFixed(1)}%</span></div>
-              <div class="simInspectorBreakdownRow"><span>Буст</span><span>${(hit.breakdown.boost * 100).toFixed(1)}%</span></div>
-              <div class="simInspectorBreakdownRow"><span>Ослабление</span><span>${(hit.breakdown.weaken * 100).toFixed(1)}%</span></div>
-              <div class="simInspectorBreakdownRow"><span>Пробив. DEF</span><span>${(hit.breakdown.defPen * 100).toFixed(1)}%</span></div>
-              <div class="simInspectorBreakdownRow"><span>RES</span><span>${(hit.breakdown.res * 100).toFixed(1)}%</span></div>
-              <div class="simInspectorBreakdownRow"><span>Пробив. RES</span><span>${(hit.breakdown.resPen * 100).toFixed(1)}%</span></div>
-              <div class="simInspectorBreakdownRow"><span>Уязвимость</span><span>${(hit.breakdown.vuln * 100).toFixed(1)}%</span></div>
-              <div class="simInspectorBreakdownRow"><span>Митигация</span><span>${(hit.breakdown.mit * 100).toFixed(1)}%</span></div>
-              <div class="simInspectorBreakdownRow"><span>Сломан</span><span>${hit.breakdown.broken ? 'Да' : 'Нет'}</span></div>
-              <div class="simInspectorBreakdownRow"><span>Итог</span><span>${hit.breakdown.dmg.toLocaleString()}</span></div>
-            `
-            hitEl.append(breakdownEl)
-          }
-          hitsContainer.append(hitEl)
+      if (options.stats) {
+        const stats: Array<[string, string]> = [
+          ['HP', `${unit.hp.toLocaleString()} / ${unit.maxHp.toLocaleString()}`],
+          ['Energy', `${unit.energy.toLocaleString()} / ${unit.maxEnergy.toLocaleString()}`],
+          ['AV', unit.av.toFixed(1)],
+          ['Toughness', `${unit.toughness.toLocaleString()} / ${unit.maxToughness.toLocaleString()}`],
+          ['ATK', unit.atk.toLocaleString()],
+          ['DEF', unit.def.toLocaleString()],
+          ['SPD', unit.spd.toFixed(1)],
+          ['CRIT Rate', `${(unit.critRate * 100).toFixed(1)}%`],
+          ['CRIT DMG', `${(unit.critDmg * 100).toFixed(1)}%`],
+          ['Break Effect', `${(unit.be * 100).toFixed(1)}%`],
+          ['EHR', `${(unit.ehr * 100).toFixed(1)}%`],
+          ['Eff RES', `${(unit.effRes * 100).toFixed(1)}%`],
+        ]
+        const statsEl = el('div', 'simInspectorUnitStats')
+        for (const [key, value] of stats) {
+          const row = el('div', 'simStatMini')
+          const keyEl = el('span')
+          keyEl.textContent = key
+          const valueEl = el('span')
+          valueEl.textContent = value
+          row.append(keyEl, valueEl)
+          statsEl.append(row)
         }
-        hitsRow.append(hitsLabel, hitsContainer)
-        grid.append(hitsRow)
+        unitEl.append(statsEl)
       }
 
-      content.append(grid)
+      if (options.statuses) {
+        const statuses: string[] = []
+        if (unit.broken) statuses.push('Сломан')
+        if (unit.dead) statuses.push('Мёртв')
+        if (unit.shield > 0) statuses.push(`Щит ${unit.shield.toLocaleString()}`)
+        for (const control of unit.controls) statuses.push(`${control.name} (${control.turns})`)
+        if (statuses.length > 0) {
+          const statusEl = el('div', 'simInspectorUnitStatuses')
+          statusEl.textContent = statuses.join(' · ')
+          unitEl.append(statusEl)
+        }
+
+        const states: Array<[string, string]> = []
+        for (const [key, value] of Object.entries(unit.runtime ?? {})) {
+          if (COUNTDOWN_STATE_KEY.test(key)) continue
+          const text = formatStateValue(value)
+          if (text) states.push([key, text])
+        }
+        if (states.length > 0) {
+          const statesEl = el('div', 'simInspectorUnitStates')
+          for (const [key, value] of states) {
+            const chip = el('span', 'simStateChip')
+            chip.append(iconNode(effectIconUrl(key), key, {
+              cls: 'simStateIcon', size: 16, fit: 'contain',
+              fallbackText: safeInitial(key), tint: '#b8a1ff', title: `${key}: ${value}`,
+            }))
+            const text = el('span')
+            text.textContent = `${key}: ${value}`
+            chip.append(text)
+            statesEl.append(chip)
+          }
+          unitEl.append(statesEl)
+        }
+
+        if (options.debuffs) {
+          const debuffRows: Array<{ name: string; stacks: number; turns: number }> = []
+          const seen = new Set<string>()
+          for (const debuff of unit.debuffs) {
+            if (seen.has(debuff.name)) continue
+            seen.add(debuff.name)
+            debuffRows.push({ name: debuff.name, stacks: debuff.stacks, turns: debuff.turns })
+          }
+          for (const dot of unit.dots) {
+            if (seen.has(dot.name)) continue
+            seen.add(dot.name)
+            debuffRows.push({ name: dot.name, stacks: 1, turns: dot.turns })
+          }
+          if (debuffRows.length > 0) {
+            const details = el('details', 'simUnitDebuffs')
+            details.open = true
+            const summary = el('summary')
+            summary.textContent = `Дебаффы: ${debuffRows.length}`
+            details.append(summary)
+            for (const debuff of debuffRows) {
+              const row = el('div', 'simUnitDebuffRow')
+              row.append(iconNode(effectIconUrl(debuff.name), debuff.name, {
+                cls: 'simUnitDebuffIcon', size: 16, fit: 'contain',
+                fallbackText: safeInitial(debuff.name), tint: '#ff9d9d', title: debuff.name,
+              }))
+              const text = el('span')
+              text.textContent = `${debuff.name} x${debuff.stacks} · ${debuff.turns === Infinity ? '∞' : `${debuff.turns} ход.`}`
+              row.append(text)
+              details.append(row)
+            }
+            unitEl.append(details)
+          }
+        }
+      }
+
+      if (options.effects) {
+        const groups: Array<[string, typeof unit.buffs | typeof unit.debuffs, string]> = [
+          ['Баффы', unit.buffs, 'buffs'],
+          ['Дебаффы', unit.debuffs, 'debuffs'],
+          ['DoT', unit.dots as unknown as typeof unit.buffs, 'dots'],
+        ]
+        for (const [title, list, cls] of groups) {
+          if (list.length === 0) continue
+          const groupEl = el('div', `simInspectorUnitEffects ${cls}`)
+          const text = el('span')
+          text.textContent = `${title}: ${list.map(e => `${e.name}x${'stacks' in e ? e.stacks : 1}@${'turns' in e ? e.turns : '∞'}`).join(', ')}`
+          groupEl.append(text)
+          unitEl.append(groupEl)
+        }
+      }
+
+      return unitEl
+    }
+
+    function appendSnapshotSection(
+      content: HTMLElement,
+      label: string,
+      snapshot: StateSnapshot | undefined,
+      unitIds: string[],
+      sim: Simulator,
+      options: { stats: boolean; statuses: boolean; effects: boolean; debuffs?: boolean }
+    ): void {
+      if (!snapshot) return
+      const section = el('div', 'simInspectorSnapshotSection')
+      const title = el('h4', 'simInspectorSnapshotTitle')
+      title.textContent = `${label} · SP ${snapshot.sp}/${snapshot.maxSp}`
+      section.append(title)
+      let rendered = 0
+      for (const id of unitIds) {
+        const unit = snapshot.units[id]
+        if (!unit) continue
+        section.append(createSnapshotUnitEl(unit, sim, {
+          ...options,
+          debuffs: options.debuffs && unit.side === 'enemy',
+        }))
+        rendered++
+      }
+      if (rendered > 0) content.append(section)
+    }
+
+    function renderActionTab(action: CombatActionRecord, sim: Simulator, content: HTMLElement): void {
+      appendSnapshotSection(
+        content,
+        'Характеристики в момент действия',
+        action.beforeSnapshot,
+        relevantSnapshotUnitIds(action, action.beforeSnapshot, sim),
+        sim,
+        { stats: true, statuses: false, effects: false }
+      )
     }
 
     function renderStateTab(action: CombatActionRecord, sim: Simulator, content: HTMLElement): void {
-      // Show before/after snapshots
-      if (action.beforeSnapshot || action.afterSnapshot) {
-        const grid = el('div', 'simLogInspectorGrid')
-
-        const addSnapshotSection = (label: string, snapshot: StateSnapshot | undefined, unitIds: string[]) => {
-          if (!snapshot) return
-          const section = el('div', 'simInspectorSnapshotSection')
-          const title = el('h4', 'simInspectorSnapshotTitle')
-          title.textContent = label
-          section.append(title)
-
-          for (const id of unitIds) {
-            const unit = snapshot.units[id]
-            if (!unit) continue
-            const unitEl = el('div', 'simInspectorUnitState')
-            unitEl.innerHTML = `
-              <div class="simInspectorUnitName">
-                ${unit.side === 'ally'
-                  ? `<span class="simUnitIcon">${iconNode(charIconUrl((unit as any).kind === 'char' && (unit as any).kitId ? (unit as any).kitId : 'unknown'), unit.name, { cls: 'simUnitIcon', size: 20, fit: 'cover', fallbackText: safeInitial(unit.name), tint: '#7fb3ff', title: unit.name })}</span>`
-                  : `<span class="simUnitIcon">${iconNode(enemyIconUrl(unit.name), unit.name, { cls: 'simUnitIcon', size: 20, fit: 'cover', fallbackText: safeInitial(unit.name), tint: '#f5d76e', title: unit.name })}</span>`}
-                <span>${unit.name}</span>
-              </div>
-              <div class="simInspectorUnitStats">
-                <div class="simStatMini"><span>HP</span><span>${unit.hp.toLocaleString()} / ${unit.maxHp.toLocaleString()}</span></div>
-                <div class="simStatMini"><span>Energy</span><span>${unit.energy.toLocaleString()} / ${unit.maxEnergy.toLocaleString()}</span></div>
-                <div class="simStatMini"><span>AV</span><span>${unit.av.toFixed(1)}</span></div>
-                <div class="simStatMini"><span>Toughness</span><span>${unit.toughness.toLocaleString()} / ${unit.maxToughness.toLocaleString()} ${unit.broken ? ' <span class="broken">BROKEN</span>' : ''}</span></div>
-                <div class="simStatMini"><span>ATK</span><span>${unit.atk.toLocaleString()}</span></div>
-                <div class="simStatMini"><span>DEF</span><span>${unit.def.toLocaleString()}</span></div>
-                <div class="simStatMini"><span>SPD</span><span>${unit.spd.toFixed(1)}</span></div>
-                <div class="simStatMini"><span>CRIT Rate</span><span>${(unit.critRate * 100).toFixed(1)}%</span></div>
-                <div class="simStatMini"><span>CRIT DMG</span><span>${(unit.critDmg * 100).toFixed(1)}%</span></div>
-                <div class="simStatMini"><span>Break Effect</span><span>${(unit.be * 100).toFixed(1)}%</span></div>
-                <div class="simStatMini"><span>EHR</span><span>${(unit.ehr * 100).toFixed(1)}%</span></div>
-                <div class="simStatMini"><span>Eff RES</span><span>${(unit.effRes * 100).toFixed(1)}%</span></div>
-              </div>
-            `
-            if (unit.buffs.length > 0) {
-              const buffsEl = el('div', 'simInspectorUnitBuffs')
-              buffsEl.innerHTML = `<strong>Баффы:</strong> ${unit.buffs.map(b => `${b.name}x${b.stacks}@${b.turns}`).join(', ')}`
-              unitEl.append(buffsEl)
-            }
-            if (unit.debuffs.length > 0) {
-              const debuffsEl = el('div', 'simInspectorUnitDebuffs')
-              debuffsEl.innerHTML = `<strong>Дебаффы:</strong> ${unit.debuffs.map(b => `${b.name}x${b.stacks}@${b.turns}`).join(', ')}`
-              unitEl.append(debuffsEl)
-            }
-            if (unit.dots.length > 0) {
-              const dotsEl = el('div', 'simInspectorUnitDots')
-              dotsEl.innerHTML = `<strong>DoT:</strong> ${unit.dots.map((d: any) => `${d.name}x${d.stacks}@${d.turns}`).join(', ')}`
-              unitEl.append(dotsEl)
-            }
-            section.append(unitEl)
-          }
-        }
-
-        const allUnitIds = [...new Set([
-          ...action.targetIds,
-          action.sourceId
-        ].filter(Boolean))] as string[]
-
-        if (action.beforeSnapshot) {
-          addSnapshotSection('До действия', action.beforeSnapshot, allUnitIds)
-        }
-        if (action.afterSnapshot) {
-          addSnapshotSection('После действия', action.afterSnapshot, allUnitIds)
-        }
-
-        content.append(grid)
-      } else {
+      if (!action.beforeSnapshot && !action.afterSnapshot) {
         content.innerHTML = '<p class="dim">Нет исторических снимков для этого действия</p>'
+        return
       }
+
+      appendSnapshotSection(
+        content,
+        'До действия',
+        action.beforeSnapshot,
+        relevantSnapshotUnitIds(action, action.beforeSnapshot, sim),
+        sim,
+        { stats: true, statuses: true, effects: false, debuffs: true }
+      )
+      appendSnapshotSection(
+        content,
+        'После действия',
+        action.afterSnapshot,
+        relevantSnapshotUnitIds(action, action.afterSnapshot, sim),
+        sim,
+        { stats: true, statuses: true, effects: false, debuffs: true }
+      )
     }
 
     function renderEffectsTab(action: CombatActionRecord, sim: Simulator, content: HTMLElement): void {
       const grid = el('div', 'simLogInspectorGrid')
+      const sparkleEffectIds = new Set(['figment', 'cipher_dmg', 'sparkle_e2'])
+      const effectDisplayNames: Record<string, string> = { cipher_dmg: 'Cipher' }
 
-      const addEffectSection = (label: string, effects: any[], isDebuff: boolean) => {
-        if (effects.length === 0) return
+      const effectNameFor = (effect: any): string => (effect.id && effectDisplayNames[effect.id]) || effect.name || ''
+
+      const sourceFor = (effect: any): { name: string; url?: string } => {
+        if (sparkleEffectIds.has(effect.id)) {
+          const kitId = 'sparkle'
+          const unit = sim.roster.find(u => u.kitId === kitId)
+          return {
+            name: unit?.name ?? KITS.find(k => k.id === kitId)?.name ?? 'Sparkle',
+            url: charIconUrl(kitId),
+          }
+        }
+        const unitById = effect.sourceId ? sim.roster.find(u => u.id === effect.sourceId) : undefined
+        const name = effect.sourceName ?? unitById?.name ?? action.sourceName
+        const unit = unitById ?? sim.roster.find(u => u.name === name)
+        const url = unit ? (unit.side === 'enemy' ? enemyIconUrl(unit.name) : unitIconUrl(unit, sim)) : undefined
+        return { name: name || '—', url }
+      }
+
+      const mergeStacked = (effects: any[]): any[] => {
+        const merged = new Map<string, any>()
+        for (const effect of effects) {
+          const key = `${effect.id ?? ''}|${effectNameFor(effect)}|${sourceFor(effect).name}`
+          const prev = merged.get(key)
+          if (!prev) {
+            merged.set(key, { ...effect })
+            continue
+          }
+          merged.set(key, {
+            ...prev,
+            ...effect,
+            stacks: Math.max(prev.stacks ?? 1, effect.stacks ?? 1),
+            turns: effect.turns ?? prev.turns,
+          })
+        }
+        return [...merged.values()]
+      }
+
+      const addEffectSection = (label: string, effects: any[], kind: 'buff' | 'debuff' | 'neutral', stacked = false) => {
+        const rows = stacked ? mergeStacked(effects) : effects
+        if (rows.length === 0) return
         const section = el('div', 'simInspectorEffectSection')
-        const title = el('h4', 'simInspectorEffectTitle')
+        const title = el('h4', `simInspectorEffectTitle ${kind}`)
         title.textContent = label
         section.append(title)
 
         const list = el('div', 'simInspectorEffectList')
-        for (const effect of effects) {
-          const targetUnit = effect.targetId ? sim.roster.find(u => u.id === effect.targetId) : undefined
-          const sourceUnit = effect.sourceId ? sim.roster.find(u => u.id === effect.sourceId) : undefined
-          const iconUrl = effectIconUrl(effect.name)
+        for (const effect of rows) {
+          const name = effectNameFor(effect)
+          const iconUrl = effectIconFor({ ...effect, name })
+          const tint = kind === 'debuff' ? '#ff9d9d' : '#7fb3ff'
 
-          const el_effect = el('div', `simInspectorEffect ${isDebuff ? 'debuff' : 'buff'}`)
-          el_effect.innerHTML = `
-            <div class="simInspectorEffectIcon">${iconNode(iconUrl, effect.name, { cls: 'simInspectorEffectIconImg', size: 24, fit: 'contain', fallbackText: safeInitial(effect.name), tint: isDebuff ? '#e08a8a' : '#7fd18a', title: effect.name })}</div>
-            <div class="simInspectorEffectInfo">
-              <div class="simInspectorEffectName">${effect.name}</div>
-              <div class="simInspectorEffectMeta">
-                <span>Получатель: ${targetUnit?.name || effect.targetId}</span>
-                <span>Источник: ${sourceUnit?.name || effect.sourceId || '—'}</span>
-                <span>Стаки: ${effect.stacks}</span>
-                <span>Ходы: ${effect.turns === Infinity ? '∞' : effect.turns}</span>
-              </div>
-            `
-            if (effect.mods && effect.mods.length > 0) {
-              const modsEl = el('div', 'simInspectorEffectMods')
-              modsEl.innerHTML = effect.mods.map((m: any) => `<span class="simMod">${m.stat}: ${m.value >= 0 ? '+' : ''}${(m.value * 100).toFixed(1)}%</span>`).join(' ')
-              el_effect.append(modsEl)
+          const el_effect = el('div', `simInspectorEffect ${kind === 'neutral' ? '' : kind}`.trim())
+          const iconEl = el('div', 'simInspectorEffectIcon')
+          iconEl.append(iconNode(iconUrl, name, { cls: 'simInspectorEffectIconImg', size: 24, fit: 'contain', fallbackText: safeInitial(name), tint, title: name }))
+          const infoEl = el('div', 'simInspectorEffectInfo')
+          const nameEl = el('div', 'simInspectorEffectName')
+          nameEl.textContent = name
+          const source = sourceFor(effect)
+          const sourceEl = el('div', 'simInspectorEffectSource')
+          sourceEl.append(iconNode(source.url, source.name, { cls: 'simInspectorEffectSourceIcon', size: 18, fit: 'contain', fallbackText: safeInitial(source.name), tint, title: `Источник: ${source.name}` }))
+          const sourceNameEl = el('span')
+          sourceNameEl.textContent = source.name
+          sourceEl.append(sourceNameEl)
+          infoEl.append(nameEl, sourceEl)
+          const metaEl = el('div', 'simInspectorEffectMeta')
+          const meta: Array<[string, string]> = []
+          if ('stacks' in effect) meta.push(['Стаки', String(effect.stacks)])
+          if ('turns' in effect) meta.push(['Ходы', effect.turns === Infinity ? '∞' : String(effect.turns)])
+          if ('amount' in effect) meta.push(['Значение', effect.amount.toLocaleString()])
+          if ('damage' in effect) meta.push(['Урон', effect.damage.toLocaleString()])
+          if ('breakDamage' in effect) meta.push(['Урон слома', effect.breakDamage.toLocaleString()])
+          for (const [key, value] of meta) {
+            const span = el('span')
+            span.textContent = `${key}: ${value}`
+            metaEl.append(span)
+          }
+          infoEl.append(metaEl)
+          if (effect.mods?.length > 0) {
+            const modsEl = el('div', 'simInspectorEffectMods')
+            for (const m of effect.mods) {
+              const modEl = el('span', 'simMod')
+              modEl.textContent = `${m.stat}: ${m.value >= 0 ? '+' : ''}${(m.value * 100).toFixed(1)}%`
+              modsEl.append(modEl)
             }
-            if (effect.shield) {
-              const shieldEl = el('div', 'simInspectorEffectShield')
-              shieldEl.textContent = `Щит: ${effect.shield.toLocaleString()}`
-              el_effect.append(shieldEl)
-            }
-            list.append(el_effect)
+            infoEl.append(modsEl)
           }
-          section.append(list)
-        }
-
-        addEffectSection('Баффы', action.effects.buffs, false)
-        addEffectSection('Дебаффы', action.effects.debuffs, true)
-        addEffectSection('DoT', action.effects.dots, true)
-        addEffectSection('Щиты', action.effects.shields, false)
-        addEffectSection('Лечение', action.effects.heals, false)
-        addEffectSection('Пробития', action.effects.breaks, true)
-
-        if (action.effects.energyChanges.length > 0) {
-          const section = el('div', 'simInspectorEffectSection')
-          const title = el('h4', 'simInspectorEffectTitle')
-          title.textContent = 'Изменение энергии'
-          section.append(title)
-          const list = el('div', 'simInspectorEffectList')
-          for (const ec of action.effects.energyChanges) {
-            const targetUnit = ec.targetId ? sim.roster.find(u => u.id === ec.targetId) : undefined
-            const el_ec = el('div', 'simInspectorEffect')
-            el_ec.innerHTML = `<span>${targetUnit?.name || ec.targetId}</span><span class="${ec.delta >= 0 ? 'positive' : 'negative'}">${ec.delta >= 0 ? '+' : ''}${ec.delta}</span><span class="reason">${ec.reason}</span>`
-            list.append(el_ec)
+          if (effect.shield) {
+            const shieldEl = el('div', 'simInspectorEffectShield')
+            shieldEl.textContent = `Щит: ${effect.shield.toLocaleString()}`
+            infoEl.append(shieldEl)
           }
-          section.append(list)
-          grid.append(section)
+          el_effect.append(iconEl, infoEl)
+          list.append(el_effect)
         }
-
-        if (action.effects.spChanges.length > 0) {
-          const section = el('div', 'simInspectorEffectSection')
-          const title = el('h4', 'simInspectorEffectTitle')
-          title.textContent = 'Изменение SP'
-          section.append(title)
-          const list = el('div', 'simInspectorEffectList')
-          for (const sc of action.effects.spChanges) {
-            const targetUnit = sc.targetId ? sim.roster.find(u => u.id === sc.targetId) : undefined
-            const el_sc = el('div', 'simInspectorEffect')
-            el_sc.innerHTML = `<span>${targetUnit?.name || sc.targetId}</span><span class="${sc.delta >= 0 ? 'positive' : 'negative'}">${sc.delta >= 0 ? '+' : ''}${sc.delta}</span><span class="reason">${sc.reason}</span>`
-            list.append(el_sc)
-          }
-          section.append(list)
-          grid.append(section)
-        }
-
-        content.append(grid)
+        section.append(list)
+        grid.append(section)
       }
+
+      addEffectSection('Баффы', action.effects.buffs.filter(e => e.id !== 'sparkle_e2'), 'buff', true)
+      addEffectSection('Щиты', action.effects.shields, 'buff')
+      addEffectSection('Лечение', action.effects.heals, 'buff')
+
+      const summons = action.effects.other.filter(e => e.type === 'SUMMON_CREATED' || e.type === 'SUMMON_DESPAWNED')
+      if (summons.length > 0) {
+        const section = el('div', 'simInspectorEffectSection')
+        const title = el('h4', 'simInspectorEffectTitle neutral')
+        title.textContent = 'Призывы'
+        section.append(title)
+        const list = el('div', 'simInspectorEffectList')
+        for (const summon of summons) {
+          let name = summon.targetName
+          try {
+            const payload = JSON.parse(summon.description) as Record<string, unknown>
+            name = String(payload.name ?? payload.summonName ?? payload.unitName ?? name)
+          } catch {}
+          const item = el('div', 'simInspectorEffect buff')
+          const text = el('span')
+          text.textContent = `${summon.type === 'SUMMON_CREATED' ? 'Призыв' : 'Исчезновение'}: ${name}`
+          item.append(iconNode(effectIconUrl(name), name, { cls: 'simInspectorEffectIconImg', size: 24, fit: 'contain', fallbackText: safeInitial(name), tint: '#7fb3ff', title: name }), text)
+          list.append(item)
+        }
+        section.append(list)
+        grid.append(section)
+      }
+
+      const changes: Array<[string, typeof action.effects.energyChanges]> = [
+        ['Изменение энергии', action.effects.energyChanges],
+        ['Изменение SP', action.effects.spChanges],
+      ]
+      for (const [label, rows] of changes) {
+        if (rows.length === 0) continue
+        const section = el('div', 'simInspectorEffectSection')
+        const title = el('h4', 'simInspectorEffectTitle neutral')
+        title.textContent = label
+        section.append(title)
+        const list = el('div', 'simInspectorEffectList')
+        for (const row of rows) {
+          const targetUnit = row.targetId ? sim.roster.find(u => u.id === row.targetId) : undefined
+          const item = el('div', 'simInspectorEffect')
+          const target = el('span')
+          target.textContent = targetUnit?.name || row.targetId
+          const delta = el('span', row.delta >= 0 ? 'positive' : 'negative')
+          delta.textContent = `${row.delta >= 0 ? '+' : ''}${row.delta}`
+          const reason = el('span', 'reason')
+          reason.textContent = row.reason
+          item.append(target, delta, reason)
+          list.append(item)
+        }
+        section.append(list)
+        grid.append(section)
+      }
+
+      addEffectSection('Дебаффы', action.effects.debuffs, 'debuff', true)
+      addEffectSection('DoT', action.effects.dots, 'debuff', true)
+      addEffectSection('Пробития', action.effects.breaks, 'debuff')
+
+      content.append(grid)
+    }
 
     // Event listeners
     searchInput.oninput = () => { currentFilters.search = searchInput.value; applyFilters() }
@@ -1333,10 +1528,10 @@ traceContainer.append(traceEl)
     applyFilters()
   }
 
+  _renderBuilder()
+
   // Initial render
   refresh()
-  // Suppress unused warning - _renderBuilder is called from onclick handlers
-  void _renderBuilder
 
   const handle = { root, refresh }
   mounted.set(host, handle)
@@ -1349,5 +1544,4 @@ function section(title: string): HTMLElement {
   h.textContent = title
   sec.append(h)
   return sec
-}
 }

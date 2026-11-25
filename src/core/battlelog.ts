@@ -313,6 +313,25 @@ const pad = (n: number, w = 3): string => String(n).padStart(w, '0')
 const BAR = '═'.repeat(60)
 const THIN = '─'.repeat(60)
 
+/** §Combat Action View — one open action frame. `actionId` is fixed at ACTION_START; the global
+ *  `actNo` keeps advancing for nested actions, so closing events must use the stored value. */
+interface ActionContextFrame {
+  combatActionId: string
+  attackId: string
+  actionId: number
+  actionCategory: BattleEvent['actionCategory']
+  parentActionId?: string
+  provenance?: BattleEvent['provenance']
+  source?: string
+  sourceId?: string
+  abilityName?: string
+  attackUsed: boolean
+  parentAtkNo?: number
+  parentHitNo?: number
+  parentDmgNo?: number
+  parentTrgNo?: number
+}
+
 // ---------------------------------------------------------------- the logger
 
 export class BattleLogger {
@@ -336,25 +355,7 @@ export class BattleLogger {
   private detachTrace: () => void = () => {}
 
   /** §Combat Action View — context stack for tracking current gameplay action */
-  private actionContextStack: Array<{
-    combatActionId: string
-    attackId: string
-    actionCategory: BattleEvent['actionCategory']
-    parentActionId?: string
-    provenance?: BattleEvent['provenance']
-    attackUsed: boolean
-    // FUA metadata
-    fuaSource?: string
-    fuaSourceId?: string
-    fuaAbilityName?: string
-    fuaActNo?: number
-    // Parent trace state for FUA context restoration
-    parentActNo?: number
-    parentAtkNo?: number
-    parentHitNo?: number
-    parentDmgNo?: number
-    parentTrgNo?: number
-  }> = []
+  private actionContextStack: ActionContextFrame[] = []
 
   private counts: Record<string, number> = {}
   private spSpent = 0
@@ -375,22 +376,7 @@ export class BattleLogger {
   }
 
   /** §Combat Action View — push a new gameplay action context */
-  pushActionContext(ctx: {
-    combatActionId: string
-    attackId: string
-    actionCategory: BattleEvent['actionCategory']
-    parentActionId?: string
-    provenance?: BattleEvent['provenance']
-    parentActNo?: number
-    parentAtkNo?: number
-    parentHitNo?: number
-    parentDmgNo?: number
-    parentTrgNo?: number
-    fuaSource?: string
-    fuaSourceId?: string
-    fuaAbilityName?: string
-    fuaActNo?: number
-  }): void {
+  pushActionContext(ctx: Omit<ActionContextFrame, 'attackUsed'>): void {
     this.actionContextStack.push({ ...ctx, attackUsed: false })
   }
 
@@ -422,7 +408,7 @@ export class BattleLogger {
   }
 
   /** §Combat Action View — get the current gameplay action context */
-  getActionContext(): BattleLogger['actionContextStack'][0] | undefined {
+  getActionContext(): ActionContextFrame | undefined {
     return this.actionContextStack[this.actionContextStack.length - 1]
   }
 
@@ -465,7 +451,7 @@ export class BattleLogger {
   /** A unit's action begins: new turn number, new combat action context with independent IDs. */
   turnStart(source: string, action: string, payload?: Record<string, unknown>, sourceId?: string): void {
     this.turnNo++
-    this.beginAction()
+    const actionId = this.beginAction()
     this.atkNo = 0; this.hitNo = 0; this.dmgNo = 0; this.trgNo = 0
 
     // Determine action category
@@ -480,9 +466,13 @@ export class BattleLogger {
     this.pushActionContext({
       combatActionId: ids.combatActionId,
       attackId: ids.attackId,
+      actionId,
       actionCategory: ids.actionCategory as BattleEvent['actionCategory'],
       parentActionId: ids.parentActionId,
       provenance: payload?.provenance as BattleEvent['provenance'],
+      source,
+      sourceId,
+      abilityName: action,
     })
 
     this.emit({ type: 'ACTION_START', source, sourceId, trace: 'ACT', payload: { action, actionKind, extra: isExtra, ...payload } })
@@ -490,62 +480,57 @@ export class BattleLogger {
   }
   /** A unit's action ends (all effects resolved). */
   turnEnd(source: string, action: string, sourceId?: string): void {
-    this.emit({ type: 'ACTION_END', source, sourceId, payload: { action } })
-    this.popActionContext()
+    const ctx = this.getActionContext()
+    try {
+      this.emit({ type: 'ACTION_END', source, sourceId, payload: { action }, actionId: ctx?.actionId })
+    } finally {
+      if (ctx) this.popActionContext()
+    }
   }
 
   /** Start a Follow-Up Attack with its own combatActionId */
   startFollowUpAttack(parentActionId: string | undefined, meta: { source: string; sourceId: string; abilityName: string; provenance?: BattleEvent['provenance'] }): void {
     const ids = this.nextActionIds('followUpAttack', parentActionId)
-    // Save parent trace state for proper restoration
-    const parentActNo = this.actNo
     const parentAtkNo = this.atkNo
     const parentHitNo = this.hitNo
     const parentDmgNo = this.dmgNo
     const parentTrgNo = this.trgNo
-    // Give FUA its own actNo to avoid collision with parent action in invariant checker
-    this.beginAction()
-    const fuaActNo = this.actNo
+    // ACT stays globally monotonic; the frame remembers the ID opened here.
+    const actionId = this.beginAction()
     this.pushActionContext({
       combatActionId: ids.combatActionId,
       attackId: ids.attackId,
+      actionId,
       actionCategory: 'followUpAttack',
       parentActionId: ids.parentActionId,
       provenance: meta.provenance,
-      // Store FUA metadata directly
-      fuaSource: meta.source,
-      fuaSourceId: meta.sourceId,
-      fuaAbilityName: meta.abilityName,
-      fuaActNo,
-      // Save parent trace state
-      parentActNo,
+      source: meta.source,
+      sourceId: meta.sourceId,
+      abilityName: meta.abilityName,
       parentAtkNo,
       parentHitNo,
       parentDmgNo,
       parentTrgNo,
     })
 
-    // Emit ACTION_START and ABILITY_USED for FUA so UI can track it
-    this.emit({ type: 'ACTION_START', source: meta.source, sourceId: meta.sourceId, trace: 'ACT', payload: { action: meta.abilityName, actionKind: 'followUpAttack', extra: true, provenance: meta.provenance } })
-    this.emit({ type: 'ABILITY_USED', source: meta.source, sourceId: meta.sourceId, trace: 'ACT', payload: { action: meta.abilityName, actionKind: 'followUpAttack', extra: true } })
+    this.emit({ type: 'ACTION_START', source: meta.source, sourceId: meta.sourceId, trace: 'ACT', actionId, payload: { action: meta.abilityName, actionKind: 'followUpAttack', extra: true, provenance: meta.provenance } })
+    this.emit({ type: 'ABILITY_USED', source: meta.source, sourceId: meta.sourceId, trace: 'ACT', actionId, payload: { action: meta.abilityName, actionKind: 'followUpAttack', extra: true } })
   }
 
   /** End a Follow-Up Attack */
   endFollowUpAttack(): void {
     const ctx = this.getActionContext()
-    if (!ctx || ctx.actionCategory !== 'followUpAttack') {
-      // No FUA context to close - do not pop parent context
-      return
+    if (!ctx || ctx.actionCategory !== 'followUpAttack') return
+    try {
+      this.emit({ type: 'ACTION_END', source: ctx.source, sourceId: ctx.sourceId, actionId: ctx.actionId, payload: { action: ctx.abilityName } })
+    } finally {
+      this.popActionContext()
+      // Sub-counters belong to the resumed parent; ACT itself never moves backwards.
+      if (ctx.parentAtkNo !== undefined) this.atkNo = ctx.parentAtkNo
+      if (ctx.parentHitNo !== undefined) this.hitNo = ctx.parentHitNo
+      if (ctx.parentDmgNo !== undefined) this.dmgNo = ctx.parentDmgNo
+      if (ctx.parentTrgNo !== undefined) this.trgNo = ctx.parentTrgNo
     }
-    // Emit ACTION_END for FUA using stored metadata
-    this.emit({ type: 'ACTION_END', source: ctx.fuaSource, sourceId: ctx.fuaSourceId, payload: { action: ctx.fuaAbilityName } })
-    this.popActionContext()
-    // Restore parent trace state including actNo for proper invariant checking
-    if (ctx.parentActNo !== undefined) this.actNo = ctx.parentActNo
-    if (ctx.parentAtkNo !== undefined) this.atkNo = ctx.parentAtkNo
-    if (ctx.parentHitNo !== undefined) this.hitNo = ctx.parentHitNo
-    if (ctx.parentDmgNo !== undefined) this.dmgNo = ctx.parentDmgNo
-    if (ctx.parentTrgNo !== undefined) this.trgNo = ctx.parentTrgNo
   }
 
   beginAttack(): number {
@@ -571,12 +556,13 @@ export class BattleLogger {
   beginTrigger(): number { return ++this.trgNo }
 
   id(kind: 'ACT' | 'ATK' | 'HIT' | 'DMG' | 'TRG'): string {
+    const act = this.getActionContext()?.actionId ?? this.actNo
     switch (kind) {
-      case 'ACT': return `${this.actNo}`
-      case 'ATK': return `${this.actNo}.${this.atkNo}`
-      case 'HIT': return `${this.actNo}.${this.atkNo}.${this.hitNo}`
-      case 'DMG': return `${this.actNo}.${this.atkNo}.${this.hitNo}.${this.dmgNo}`
-      case 'TRG': return `${this.actNo}.${this.atkNo}.${this.hitNo}.T${pad(this.trgNo, 2)}`
+      case 'ACT': return `${act}`
+      case 'ATK': return `${act}.${this.atkNo}`
+      case 'HIT': return `${act}.${this.atkNo}.${this.hitNo}`
+      case 'DMG': return `${act}.${this.atkNo}.${this.hitNo}.${this.dmgNo}`
+      case 'TRG': return `${act}.${this.atkNo}.${this.hitNo}.T${pad(this.trgNo, 2)}`
     }
   }
 
@@ -611,18 +597,15 @@ export class BattleLogger {
     attackId?: string
     parentActionId?: string
     actionCategory?: BattleEvent['actionCategory']
+    /** explicit owner of an ACTION_START/ACTION_END pair, when the global ACT has moved on. */
+    actionId?: number
   }): BattleEvent | undefined {
     if (!this.on) return undefined
     const gate = e.minDebug ?? MIN_DEBUG[e.type] ?? 2
     if (this.debug < gate) return undefined
 
     // Auto-attach action context for events that don't explicitly provide it
-    let ctx: BattleLogger['actionContextStack'][0] | undefined
-    try {
-      ctx = this.getActionContext()
-    } catch {
-      ctx = undefined
-    }
+    const ctx = this.getActionContext()
     const combatActionId = e.combatActionId ?? ctx?.combatActionId
     const attackId = e.attackId ?? ctx?.attackId
     const parentActionId = e.parentActionId ?? ctx?.parentActionId
@@ -638,7 +621,7 @@ export class BattleLogger {
       eventId: this.eventId + 1,
       time: this.sim.avElapsed,
       turn: this.turnNo,
-      actionId: this.actNo,
+      actionId: e.actionId ?? ctx?.actionId ?? this.actNo,
       traceId: e.trace ? this.id(e.trace) : undefined,
       type: e.type,
       source: e.source, target: e.target,
@@ -817,7 +800,7 @@ units[u.id] = {
     // diff() stores `next` as the new baseline, so it must run BEFORE this snapshot is published
     const changes = this.debug >= 6 ? this.diff(s) : (this.lastSnapshot = s, [] as string[])
     if (this.debug >= 6) this.emit({ type: 'STATE_SNAPSHOT', payload: { state: s, hash: this.hash(s), diff: changes }, minDebug: 6 })
-    else if (this.cfg.captureUiHistory) this.emit({ type: 'STATE_SNAPSHOT', payload: { state: s, hash: this.hash(s), diff: changes } })
+    else if (this.cfg.captureUiHistory) this.emit({ type: 'STATE_SNAPSHOT', payload: { state: s, hash: this.hash(s), diff: changes }, minDebug: 2 })
     return s
   }
 
@@ -860,6 +843,48 @@ units[u.id] = {
 
   // ---------- §4 COMBAT LOG
 
+  /** one readable line for the combat view's non-damage events. */
+  private describe(e: BattleEvent): string {
+    const p = e.payload
+    const who = e.source ?? ''
+    switch (e.type) {
+      case 'ABILITY_USED': return `${who} used ${String(p.action ?? '')}`
+      case 'TECHNIQUE_APPLIED': return `${who} Technique: ${String(p.technique ?? '')}`
+      case 'TOUGHNESS_DAMAGE': return `${e.target ?? ''} Toughness -${num(Number(p.damage ?? 0))} (${p.before} -> ${p.after})`
+      case 'WEAKNESS_BREAK': return `${e.target ?? ''} is Weakness Broken`
+      case 'TOUGHNESS_BAR_DEPLETED': return `${e.target ?? ''} layer ${String(p.bar ?? '')}/${String(p.bars ?? '')} depleted (+${num(Number(p.breakDamage ?? 0))} Break DMG)`
+      case 'BREAK_DAMAGE': return `${e.target ?? ''} took ${num(Number(p.amount ?? 0))} Break DMG`
+      case 'SUPERBREAK': return `${e.target ?? ''} took ${num(Number(p.amount ?? 0))} Super Break DMG`
+      case 'BUFF_APPLIED': case 'BUFF_STACKED': case 'BUFF_REFRESHED': case 'DEBUFF_APPLIED':
+      case 'DEBUFF_STACKED': case 'DEBUFF_REFRESHED':
+        return `${e.target ?? who} gained ${String(p.name ?? p.id ?? '')}${p.stacks ? ` x${p.stacks}` : ''}${p.turns ? ` (${p.turns}t)` : ''}`
+      case 'BUFF_EXPIRED': case 'DEBUFF_EXPIRED': return `${e.target ?? who} lost ${String(p.name ?? p.id ?? '')}`
+      case 'ENERGY_GAIN': return `${who} gained ${num(Number(p.amount ?? 0))} Energy (${p.before} -> ${p.after})`
+      case 'ENERGY_LOSS': return `${who} spent ${num(Number(p.amount ?? 0))} Energy`
+      case 'SP_GAIN': return `Team recovered ${Number(p.n ?? 0)} Skill Point(s) (${p.before} -> ${p.after})`
+      case 'SP_LOSS': return `Team spent ${Number(p.n ?? 0)} Skill Point(s) (${p.before} -> ${p.after})`
+      case 'DOT_TICK': return `${e.target ?? ''} took ${num(Number(p.amount ?? 0))} ${String(p.dot ?? 'DoT')} DMG`
+      case 'DOT_APPLIED': return `${e.target ?? ''} afflicted by ${String(p.dot ?? '')}`
+      case 'HEAL_APPLIED': return `${e.target ?? ''} healed ${num(Number(p.amount ?? 0))} HP`
+      case 'SHIELD_APPLIED': return `${e.target ?? ''} gained ${num(Number(p.amount ?? 0))} Shield`
+      case 'SHIELD_ABSORBED': return `${e.target ?? ''} absorbed ${num(Number(p.amount ?? 0))}`
+      case 'DEATH': return `${e.target ?? ''} defeated`
+      case 'REVIVAL': return `${e.target ?? ''} revived`
+      case 'FLEE': return `${e.target ?? ''} fled the battle`
+      case 'SUMMON_CREATED': return `${who} summoned ${String(p.name ?? e.target ?? '')}`
+      case 'SUMMON_DESPAWNED': return `${who} despawned ${String(p.name ?? e.target ?? '')}`
+      case 'ACTION_ADVANCE': return `${e.target ?? who} advanced ${(Number(p.pct ?? 0) * 100).toFixed(0)}%`
+      case 'ACTION_DELAY': return `${e.target ?? who} delayed ${(Number(p.pct ?? 0) * 100).toFixed(0)}%`
+      case 'EXTRA_TURN': return `${who} gains an Extra Turn`
+      case 'TARGET_SELECTED': return `${who} targeted ${e.target ?? ''}`
+      case 'HP_INTERCEPT': return `${e.target ?? ''} lost ${num(Number(p.amount ?? 0))} HP to ${String(p.by ?? 'interceptor')}`
+      case 'HP_REDIRECT': return `${e.source ? e.source + ' ' : ''}redirected ${num(Number(p.amount ?? 0))} to ${String(p.to ?? e.target ?? '')}`
+      case 'STAT_CHANGED': return `${who} ${String(p.stat ?? '')} ${p.before} -> ${p.after}`
+      case 'NOTE': return e.raw ?? ''
+      default: return `${SECTION[e.type] ?? e.type}: ${who}${e.target ? ' -> ' + e.target : ''}`
+    }
+  }
+
   /** Readable top-to-bottom battle view (§4-§29): what happened, no arithmetic. */
   combatLog(): string {
     const out: string[] = []
@@ -887,7 +912,7 @@ units[u.id] = {
           continue
         }
         const s = SECTION[e.type]
-        if (s) out.push(`${px}  ${s}: ${describe(e)}`)
+        if (s) out.push(`${px}  ${s}: ${this.describe(e)}`)
       }
       out.push(BAR, '')
       block = []
