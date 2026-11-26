@@ -1,7 +1,7 @@
 // Kits of the Hunt path, merged from the former per-character modules (12 kits).
 // Bodies are verbatim; only module-local names that collided across kits are suffixed with their kit id.
 import { decideByPattern, levelsOf, manualTarget, type KitDef, type SimApi, type KitRuntime } from '../kit'
-import type { AbilityLevels, AbilityType, Unit, DmgType, StatKey, Elem } from '../entities/Unit'
+import { isFieldUnit, type AbilityLevels, type AbilityType, type Unit, type DmgType, type StatKey, type Elem } from '../entities/Unit'
 import type { Mod } from '../effects/Buff'
 import { mult, PROG } from '../progression'
 import { eff } from '../combat/StatResolver'
@@ -2025,7 +2025,7 @@ export const march7thTheHuntKit: KitDef = {
     // E2 Blade Dances on Waves' Fight: shield for the ally with the lowest HP at battle start
     const eid = (sim.rt(u).eidolon as number) ?? 0
     if (eid >= 2) {
-      const allies = sim.allies('ally').filter(a => a.kind === 'char' && !a.dead)
+      const allies = sim.allies('ally').filter(isFieldUnit)
       if (allies.length) {
         const low = allies.reduce((m, a) => (a.hp / a.maxHp < m.hp / m.maxHp ? a : m), allies[0])
         sim.addBuff(low, {

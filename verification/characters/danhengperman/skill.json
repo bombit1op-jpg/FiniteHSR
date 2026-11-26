@@ -318,12 +318,11 @@
     {
       "id": "dh_shield_dragon",
       "layer": "interactions",
-      "claim": "The Skill shields the Souldragon as well (dh_shield_sd_a1, 3 turns).",
+      "claim": "The Skill does not shield the Souldragon (true Summon, dh_shield_sd_a1).",
       "assertion": {
-        "assert": "buff",
+        "assert": "noBuff",
         "id": "dh_shield_sd_a1",
-        "target": "Souldragon",
-        "turns": 3
+        "target": "Souldragon"
       },
       "fixtures": [
         "solo-3c"
@@ -332,14 +331,14 @@
     {
       "id": "dh_shield_applied",
       "layer": "structure",
-      "claim": "Exactly 2 shield applications and 9 absorptions occur.",
+      "claim": "Exactly 1 shield application occurs.",
       "assertion": {
         "assert": "count",
         "of": {
           "type": "SHIELD_APPLIED",
           "source": "Dan Heng • Permansor Terrae"
         },
-        "value": 2
+        "value": 1
       },
       "fixtures": [
         "solo-3c"

@@ -14,7 +14,7 @@
  * `rng`, so it consumes exactly the rolls its chosen rule needs (weighted/random = 1, the rest = 0).
  * Golden traces depend on that roll count matching the pre-§62 code exactly.
  */
-import type { Unit } from '../entities/Unit'
+import { isFieldUnit, type Unit } from '../entities/Unit'
 
 export type TargetRule =
   | 'single' | 'aoe' | 'self' | 'blast'
@@ -72,7 +72,7 @@ function hpPick(candidates: Unit[], highest: boolean): Unit {
 export function resolveTargets(ctx: TargetContext): TargetSelection {
   const eligible = ctx.candidates
     .map((unit, index) => ({ unit, weight: ctx.weights?.[index] ?? baseWeight(unit) }))
-    .filter(({ unit }) => !unit.dead && unit.kind !== 'summon' && unit.kind !== 'timer')
+    .filter(({ unit }) => isFieldUnit(unit) && unit.kind !== 'timer' && unit.kind !== 'transformed')
   const candidates = eligible.map(({ unit }) => unit)
   const weights = eligible.map(({ weight }) => weight)
   const names = candidates.map(u => u.name)

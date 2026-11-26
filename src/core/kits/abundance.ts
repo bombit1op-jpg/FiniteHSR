@@ -3,7 +3,7 @@
 import { decideByPattern, levelsOf, manualTarget, type KitDef, type SimApi, type KitRuntime } from '../kit'
 import { mult, PROG } from '../progression'
 import { isDebuff, eff, buffSum } from '../combat/StatResolver'
-import type { AbilityLevels, Unit } from '../entities/Unit'
+import { isFieldUnit, type AbilityLevels, type Unit } from '../entities/Unit'
 import type { Mod } from '../effects/Buff'
 
 // ===== gallagher  (was gallagher.ts) =====
@@ -357,7 +357,7 @@ function findLuocha(sim: SimApi): Unit | undefined {
 }
 
 function lowestHpAlly(sim: SimApi, u: Unit): Unit {
-  const list = sim.allies('ally').filter(a => a.kind === 'char' && !a.dead)
+  const list = sim.allies('ally').filter(isFieldUnit)
   return list.length ? list.reduce((m, a) => (a.hp / a.maxHp < m.hp / m.maxHp ? a : m), list[0]) : u
 }
 

@@ -19,6 +19,7 @@ import {
   ELEMENTS_ICONS, PATHS_ICONS, STATS_ICONS, ENEMIES_ICONS, RELICPIECES_ICONS,
   CHARACTER_PORTRAITS, ABILITIES_ICONS,
   BUFFS_ICONS, DEBUFFS_ICONS, STATES_ICONS,
+  SUMMONS_ICONS, MEMOSPRITES_ICONS,
 } from './iconManifest'
 
 type RelicSlot = RelicPiece['slot']
@@ -137,6 +138,27 @@ export function statBadge(stat: string): HTMLElement {
 /** manifest keys are display names; normalize so "Possession: Ethereal Metaflow" finds
  *  "Possession Ethereal Metaflow" (the raw game text differs in punctuation). */
 function normIconKey(s: string): string { return s.toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]+/g, '') }
+
+const SUMMON_ICON_TABLES = [SUMMONS_ICONS, MEMOSPRITES_ICONS]
+let SUMMON_ICON_INDEX: Map<string, string> | null = null
+
+export function summonIconUrl(name: string): string | undefined {
+  if (!name) return undefined
+  for (const table of SUMMON_ICON_TABLES) {
+    const direct = table[name]
+    if (direct) return direct
+  }
+  if (!SUMMON_ICON_INDEX) {
+    SUMMON_ICON_INDEX = new Map()
+    for (const table of SUMMON_ICON_TABLES) {
+      for (const [key, value] of Object.entries(table)) {
+        const normalized = normIconKey(key)
+        if (!SUMMON_ICON_INDEX.has(normalized)) SUMMON_ICON_INDEX.set(normalized, value)
+      }
+    }
+  }
+  return SUMMON_ICON_INDEX.get(normIconKey(name))
+}
 
 let ABILITY_ICON_INDEX: Map<string, string> | null = null
 

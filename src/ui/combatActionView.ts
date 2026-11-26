@@ -21,6 +21,7 @@ export interface CombatHitRecord {
   targetId: string
   targetName: string
   damage: number
+  shieldDamage: number
   crit: boolean
   element: string
   attackType: string
@@ -51,6 +52,7 @@ export interface CombatAttackRecord {
   targetNames: string[]
   hits: CombatHitRecord[]
   totalDamage: number
+  shieldDamage: number
   abilityId?: string
   abilityName: string
   abilitySlot?: string
@@ -196,6 +198,7 @@ export interface CombatActionRecord {
   attacks: CombatAttackRecord[]
 
   totalDamage: number
+  shieldDamage: number
   spDelta: number
   effects: CombatEffectSummary
   events: BattleEvent[]
@@ -227,11 +230,17 @@ export function aggregateCombatActions(
   snapshots: StateSnapshot[]
 ): CombatActionRecord[] {
   const eventsByCombatAction = new Map<string, BattleEvent[]>()
+  let techniqueKey: string | undefined
   for (const e of events) {
-    const key = e.combatActionId ?? (e.type === 'TECHNIQUE_APPLIED' ? `technique:${e.eventId}` : undefined)
+    if (e.type === 'TECHNIQUE_APPLIED') techniqueKey = `technique:${e.eventId}`
+    else if (techniqueKey && (e.combatActionId || TECHNIQUE_BOUNDARY_EVENTS.has(e.type))) techniqueKey = undefined
+    const key = e.combatActionId ?? techniqueKey
     if (!key) continue
+    const event = techniqueKey && SHIELD_ATTACK_EVENTS.has(e.type) && !e.attackId
+      ? { ...e, attackId: `${techniqueKey}:attack` }
+      : e
     const bucket = eventsByCombatAction.get(key) ?? []
-    bucket.push(e)
+    bucket.push(event)
     eventsByCombatAction.set(key, bucket)
   }
 
@@ -248,17 +257,20 @@ export function aggregateCombatActions(
     const abilitySlot = (abilityEvent.payload.slot ?? abilityEvent.payload.abilitySlot ??
       (abilityEvent.type === 'TECHNIQUE_APPLIED' ? 'technique' : undefined)) as string | undefined
     const ability = { abilityId, abilityName, abilitySlot }
-    const attacksArray = [...groupEventsByAttack(actionEvents)]
+    const rawAttacks = [...groupEventsByAttack(actionEvents)]
       .map(([attackId, attackEvents]) => buildAttackRecord(attackEvents, attackId, sim, baseCategory, ability))
-      .filter((a): a is CombatAttackRecord => a !== null && (a.hits.length > 0 || a.totalDamage > 0))
-    const category = attacksArray.length === 0 && (baseCategory === 'attack' || baseCategory === 'enemyAttack')
+      .filter((a): a is CombatAttackRecord => a !== null)
+    const hasRealAttack = rawAttacks.some(a => a.hits.length > 0 || a.totalDamage > 0)
+    const attacksArray = rawAttacks.filter(a => a.hits.length > 0 || a.totalDamage > 0 || a.shieldDamage > 0)
+    const category = !hasRealAttack && baseCategory === 'attack'
       ? (hasMeaningfulContent(actionEvents) ? 'effect' : 'system')
       : baseCategory
+    if (category === 'system') continue
 
     const sourceName = sourceUnit?.name ?? boundary.source ?? 'Unknown'
     const targetIds = [...new Set([
       ...attacksArray.flatMap(a => a.targetIds),
-      ...actionEvents.filter(e => e.type === 'SUMMON_CREATED').map(e => e.targetId).filter((id): id is string => !!id),
+      ...actionEvents.filter(e => e.type === 'SUMMON_CREATED' || e.type === 'TARGET_SELECTED').map(e => e.targetId).filter((id): id is string => !!id),
     ])]
     const beforeSnapshot = snapshots.find(s => s.actionId === boundary.actionId && s.turn === boundary.turn)
     const afterSnapshot = snapshots.find(s => s.actionId === boundary.actionId + 1 && s.turn === boundary.turn)
@@ -286,6 +298,7 @@ export function aggregateCombatActions(
       targetNames: targetIds.map(id => sim.roster.find(u => u.id === id)?.name ?? 'Unknown'),
       attacks: attacksArray,
       totalDamage: attacksArray.reduce((sum, a) => sum + a.totalDamage, 0),
+      shieldDamage: actionEvents.reduce((sum, e) => sum + (e.type === 'SHIELD_ABSORBED' ? Number(e.payload.amount ?? 0) : 0), 0),
       spDelta,
       effects,
       events: actionEvents,
@@ -318,6 +331,7 @@ function categorizeAction(events: BattleEvent[], sourceUnit?: { kind?: string; s
     ?? events.find(e => typeof e.payload.actionKind === 'string')?.payload.actionKind as string | undefined
   if (explicit) {
     if (explicit === 'followUpAttack') return 'bonusAttack'
+    if (explicit === 'attack' && sourceUnit?.side === 'enemy') return 'enemyAttack'
     if (explicit === 'attack' || explicit === 'extraTurn' || explicit === 'ultimate' || explicit === 'bonusAttack' ||
         explicit === 'enemyAttack' || explicit === 'technique' || explicit === 'summon' || explicit === 'timer' ||
         explicit === 'effect' || explicit === 'system') return explicit
@@ -357,12 +371,14 @@ function hasMeaningfulContent(events: BattleEvent[]): boolean {
 }
 
 const ATTACK_EVENTS = new Set<BattleEvent['type']>(['HIT_START', 'HIT_END', 'DAMAGE_CALCULATED', 'DAMAGE_DEALT'])
+const SHIELD_ATTACK_EVENTS = new Set<BattleEvent['type']>(['HIT_START', 'HIT_END', 'DAMAGE_CALCULATED', 'DAMAGE_DEALT', 'SHIELD_ABSORBED'])
+const TECHNIQUE_BOUNDARY_EVENTS = new Set<BattleEvent['type']>(['ACTION_START', 'ABILITY_USED', 'ACTION_END', 'BATTLE_START', 'BATTLE_END', 'WAVE_START', 'WAVE_END', 'STATE_SNAPSHOT'])
 
 /** Only real attackIds become attacks; action-level and effect events stay on the action record. */
 function groupEventsByAttack(events: BattleEvent[]): Map<string, BattleEvent[]> {
   const attacks = new Map<string, BattleEvent[]>()
   for (const e of events) {
-    if (!e.attackId || !ATTACK_EVENTS.has(e.type)) continue
+    if (!e.attackId || !SHIELD_ATTACK_EVENTS.has(e.type)) continue
     const bucket = attacks.get(e.attackId) ?? []
     bucket.push(e)
     attacks.set(e.attackId, bucket)
@@ -388,6 +404,7 @@ function buildAttackRecord(
     targetNames: targetIds.map(id => sim.roster.find(u => u.id === id)?.name ?? 'Unknown'),
     hits: buildHits(attackEvents, sim),
     totalDamage: attackEvents.reduce((sum, e) => sum + (e.type === 'DAMAGE_DEALT' ? Number(e.payload.amount ?? 0) : 0), 0),
+    shieldDamage: attackEvents.reduce((sum, e) => sum + (e.type === 'SHIELD_ABSORBED' ? Number(e.payload.amount ?? 0) : 0), 0),
     abilityId: ((abilityEvent.payload.abilityId ?? abilityEvent.payload.ability_id) as string | undefined) ?? actionAbility.abilityId,
     abilityName: localName === 'Attack' ? actionAbility.abilityName : localName,
     abilitySlot: ((abilityEvent.payload.slot ?? abilityEvent.payload.abilitySlot) as string | undefined) ?? actionAbility.abilitySlot,
@@ -398,23 +415,28 @@ function buildAttackRecord(
 }
 
 function buildHits(attackEvents: BattleEvent[], sim: Simulator): CombatHitRecord[] {
-  const damageEvents = attackEvents.filter(e => e.type === 'DAMAGE_DEALT')
   const hits: CombatHitRecord[] = []
+  const pendingShield = new Map<string, number>()
 
-  for (let i = 0; i < damageEvents.length; i++) {
-    const e = damageEvents[i]
+  for (const e of attackEvents) {
+    if (e.type === 'SHIELD_ABSORBED') {
+      const targetId = e.targetId ?? (e.payload.targetId as string | undefined) ?? ''
+      pendingShield.set(targetId, (pendingShield.get(targetId) ?? 0) + Number(e.payload.amount ?? 0))
+      continue
+    }
+    if (e.type !== 'DAMAGE_DEALT') continue
+
     const targetId = e.targetId ?? ''
     const targetUnit = targetId ? sim.roster.find(u => u.id === targetId) : undefined
     const payload = e.payload as Record<string, unknown>
-
-    // Use breakdown directly from payload (set by DamagePipeline.ts)
     const breakdown = payload.breakdown as any
 
     hits.push({
-      hitIndex: i,
+      hitIndex: hits.length,
       targetId,
       targetName: targetUnit?.name ?? e.target ?? 'Unknown',
       damage: Math.round(Number(payload.amount) ?? 0),
+      shieldDamage: Math.round(pendingShield.get(targetId) ?? 0),
       crit: payload.crit === true,
       element: e.element ?? 'Physical',
       attackType: e.attackType ?? 'unknown',
@@ -437,6 +459,25 @@ function buildHits(attackEvents: BattleEvent[], sim: Simulator): CombatHitRecord
         mit: breakdown.mit,
         broken: breakdown.broken,
       } : undefined,
+    })
+    pendingShield.delete(targetId)
+  }
+
+  for (const [targetId, amount] of pendingShield) {
+    if (amount <= 0) continue
+    const shieldEvent = [...attackEvents].reverse()
+      .find(e => e.type === 'SHIELD_ABSORBED' && (e.targetId ?? (e.payload.targetId as string | undefined) ?? '') === targetId)
+    const targetUnit = targetId ? sim.roster.find(u => u.id === targetId) : undefined
+    hits.push({
+      hitIndex: hits.length,
+      targetId,
+      targetName: targetUnit?.name ?? shieldEvent?.target ?? 'Unknown',
+      damage: 0,
+      shieldDamage: Math.round(amount),
+      crit: false,
+      element: shieldEvent?.element ?? 'Physical',
+      attackType: shieldEvent?.attackType ?? 'shield',
+      traceId: shieldEvent?.traceId,
     })
   }
 

@@ -25,6 +25,7 @@ interface RelicSet { name: string; parts: Record<string, { name: string }> }
 const SIMPLE = [
   'enemies', 'lightcones', 'relicsets', 'planarsets',
   'stats', 'buffs', 'debuffs', 'states', 'abilities', 'types', 'paths', 'elements',
+  'summons', 'memosprites',
 ] as const
 
 const toAppPath = (file: string): string => '/icons/' + file.replace(/\\/g, '/')

@@ -10,7 +10,7 @@ import { runBattle, ENEMY_PRESETS } from '../core/battle'
 import { resolveEncounter, type EncounterSpec, validateEncounter } from '../core/encounter'
 import { toTeamSpec } from './team'
 import { techniquesForRows } from './store'
-import { charIconUrl, iconNode, metaBadge, enemyIconUrl, charPortraitUrl, gearBadge, effectIconUrl, abilityIconUrl, statIconUrlForKey } from './icons'
+import { charIconUrl, iconNode, metaBadge, enemyIconUrl, charPortraitUrl, gearBadge, effectIconUrl, abilityIconUrl, statIconUrlForKey, summonIconUrl } from './icons'
 import { el } from './dom'
 
 import { withBusy, showStatus } from './shell'
@@ -46,6 +46,44 @@ function safeInitial(value: unknown, fallback = '?'): string {
 
 type SnapshotUnit = StateSnapshot['units'][string]
 
+export function vitalLabelsForSnapshot(unit: Pick<SnapshotUnit, 'kind' | 'sharesOwnerBuffs'>): string[] {
+  const trueSummon = !!unit.sharesOwnerBuffs
+  const memoSprite = unit.kind === 'summon' && !trueSummon
+  return [
+    ...(trueSummon ? [] : ['HP']),
+    ...(trueSummon || memoSprite ? [] : ['EN']),
+    'ОД',
+  ]
+}
+
+export function renderSupportLog(action: CombatActionRecord): HTMLElement | undefined {
+  const seen = new Set<string>()
+  const rows: HTMLElement[] = []
+  for (const s of action.effects.shields) {
+    const key = `shield|${s.sourceId ?? s.sourceName ?? ''}|${s.targetId}|${Math.round(s.amount)}|${s.id}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    const row = el('div', 'simActionSupportRow')
+    row.textContent = `${s.sourceName ?? '?'} → ${s.targetName}: ${s.amount.toLocaleString()} щит`
+    rows.push(row)
+  }
+  for (const h of action.effects.heals) {
+    const key = `heal|${h.sourceId ?? h.sourceName ?? ''}|${h.targetId}|${Math.round(h.amount)}|${h.id}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    const row = el('div', 'simActionSupportRow')
+    row.textContent = `${h.sourceName ?? '?'} → ${h.targetName}: ${h.amount.toLocaleString()} HP`
+    rows.push(row)
+  }
+  if (!rows.length) return undefined
+  const details = el('details', 'simActionSupport')
+  const summary = el('summary')
+  summary.textContent = `Лечение/щиты: ${rows.length}`
+  details.append(summary, ...rows)
+  details.onclick = e => e.stopPropagation()
+  return details
+}
+
 function ownerKitId(unit: { kitId?: string; ownerId?: string }, sim: Simulator): string | undefined {
   return unit.kitId ?? (unit.ownerId ? sim.roster.find(u => u.id === unit.ownerId)?.kitId : undefined)
 }
@@ -58,11 +96,7 @@ function allyIconUrl(unit: { kitId?: string; ownerId?: string } | undefined, sim
 function unitIconUrl(unit: { name?: string; side?: string; kind?: string; kitId?: string; ownerId?: string } | undefined, sim: Simulator): string | undefined {
   if (!unit) return undefined
   if (unit.side === 'ally' && unit.kind === 'summon') {
-    if (/^(souldragon|numby|lightning-lord)$/i.test(unit.name ?? '')) {
-      const ownerKit = unit.ownerId ? sim.roster.find(u => u.id === unit.ownerId)?.kitId : ownerKitId(unit, sim)
-      return (ownerKit ? charIconUrl(ownerKit) : undefined) ?? effectIconUrl('Summon') ?? effectIconUrl('Memosprite')
-    }
-    return effectIconUrl('Memosprite') ?? effectIconUrl('Summon')
+    return summonIconUrl(unit.name ?? '') ?? effectIconUrl('Memosprite') ?? effectIconUrl('Summon')
   }
   return allyIconUrl(unit, sim)
 }
@@ -920,7 +954,6 @@ traceContainer.append(traceEl)
       ['summon', 'Призывы'],
       ['timer', 'Таймеры'],
       ['effect', 'Эффекты'],
-      ['system', 'Система'],
     ]
     for (const [val, label] of filterOptions) {
       const opt = el('option')
@@ -1003,48 +1036,7 @@ traceContainer.append(traceEl)
         return true
       })
 
-      // Display in chronological order (combatActions already sorted by AV)
-      const categoryLabels: Record<CombatActionCategory, string> = {
-        attack: 'Атака',
-        enemyAttack: 'Атака врага',
-        bonusAttack: 'Бонус-атака',
-        extraTurn: 'Доп. ход',
-        ultimate: 'Ультимейт',
-        technique: 'Техника',
-        summon: 'Призыв',
-        timer: 'Таймер',
-        effect: 'Эффект',
-        system: 'Система',
-      }
-      const categoryColors: Record<CombatActionCategory, string> = {
-        attack: '#3b82f6',
-        enemyAttack: '#ef4444',
-        bonusAttack: '#f59e0b',
-        extraTurn: '#22c55e',
-        ultimate: '#a855f7',
-        technique: '#14b8a6',
-        summon: '#e879f9',
-        timer: '#0ea5e9',
-        effect: '#8b5cf6',
-        system: '#6b7280',
-      }
-
-      let lastCategory: CombatActionCategory | null = null
       for (const action of filteredActions) {
-        // Add category header when category changes
-        if (action.category !== lastCategory) {
-          const categoryHeader = el('div', 'simLogCategoryHeader')
-          categoryHeader.style.borderLeftColor = categoryColors[action.category]
-          const badge = el('span', 'simLogCategoryBadge')
-          badge.style.background = categoryColors[action.category]
-          badge.textContent = categoryLabels[action.category] || action.category
-          const count = el('span', 'simLogCategoryCount')
-          count.textContent = filteredActions.filter(a => a.category === action.category).length.toString()
-          categoryHeader.append(badge, count)
-          timeline.append(categoryHeader)
-          lastCategory = action.category
-        }
-
         const actionEl = createActionCard(action, sim, () => selectAction(action))
         timeline.append(actionEl)
       }
@@ -1057,6 +1049,11 @@ traceContainer.append(traceEl)
       target.textContent = (sim.roster.find(u => u.id === hit.targetId)?.name ?? hit.targetName) || hit.targetId
       const damage = el('span', 'simInspectorHitDamage')
       damage.textContent = hit.damage.toLocaleString()
+      if (hit.shieldDamage > 0) {
+        const shield = el('span', 'simInspectorHitShieldDamage')
+        shield.textContent = ` +${hit.shieldDamage.toLocaleString()} щит`
+        damage.append(shield)
+      }
       if (hit.crit) {
         const crit = el('span', 'crit')
         crit.textContent = ' CRIT'
@@ -1102,12 +1099,11 @@ traceContainer.append(traceEl)
       const teamSnapshot = after ?? before
       const shield = Number(snap.shield ?? 0) ||
         (snap.buffs ?? []).reduce((sum, buff) => sum + Number(buff.shield ?? 0), 0)
+      const labels = new Set(vitalLabelsForSnapshot(snap))
       const vitals = el('div', 'simActionVitals')
-      vitals.append(
-        vitalBar('HP', snap.hp, snap.maxHp, '#4ade80', shield > 0 ? shield.toLocaleString() : undefined),
-        vitalBar('EN', snap.energy, snap.maxEnergy, '#60a5fa'),
-        vitalBar('ОД', teamSnapshot?.sp ?? 0, teamSnapshot?.maxSp ?? 5, '#f2c94c'),
-      )
+      if (labels.has('HP')) vitals.append(vitalBar('HP', snap.hp, snap.maxHp, '#4ade80', shield > 0 ? shield.toLocaleString() : undefined))
+      if (labels.has('EN')) vitals.append(vitalBar('EN', snap.energy, snap.maxEnergy, '#60a5fa'))
+      vitals.append(vitalBar('ОД', teamSnapshot?.sp ?? 0, teamSnapshot?.maxSp ?? 5, '#f2c94c'))
       return vitals
     }
 
@@ -1182,6 +1178,7 @@ traceContainer.append(traceEl)
       // Aggregate hits from all attacks for display
       const allHits = action.attacks.flatMap(a => a.hits)
       const totalDamage = allHits.reduce((sum, h) => sum + h.damage, 0)
+      const totalShieldDamage = action.shieldDamage
       const critHits = allHits.filter(h => h.crit).length
       const hasBreak = allHits.some(h => h.breakdown?.broken)
 
@@ -1193,18 +1190,23 @@ traceContainer.append(traceEl)
       const effectsSpan = el('span', 'simActionEffects')
       effectsSpan.textContent = `${action.effects.buffs.length + action.effects.debuffs.length + action.effects.dots.length + action.effects.shields.length + action.effects.shieldDamage.length + action.effects.heals.length} эфф.`
       summary.append(dmgSpan, hitsSpan, effectsSpan)
+      if (totalShieldDamage > 0) {
+        const shieldSpan = el('span', 'simActionShieldDamage')
+        shieldSpan.textContent = `${totalShieldDamage.toLocaleString()} по щиту`
+        summary.append(shieldSpan)
+      }
       card.append(header, sourceDiv, targetsDiv, summary)
 
       if (allHits.length > 0) {
         const details = el('details', 'simActionHits')
         const hitSummary = el('summary')
-        hitSummary.textContent = `Попадания: ${allHits.length}${critHits > 0 ? ` · ${critHits} крит` : ''} · ${totalDamage.toLocaleString()} урона`
+        hitSummary.textContent = `Попадания: ${allHits.length}${critHits > 0 ? ` · ${critHits} крит` : ''} · ${totalDamage.toLocaleString()} урона${totalShieldDamage > 0 ? ` · ${totalShieldDamage.toLocaleString()} по щиту` : ''}`
         details.append(hitSummary)
         for (const attack of action.attacks) {
           if (attack.hits.length === 0) continue
           const attackBlock = el('div', 'simActionAttack')
           const attackTitle = el('div', 'simActionAttackTitle')
-          attackTitle.textContent = `${attack.abilityName} · ${attack.hits.length} попад. · ${attack.totalDamage.toLocaleString()}`
+          attackTitle.textContent = `${attack.abilityName} · ${attack.hits.length} попад. · ${attack.totalDamage.toLocaleString()}${attack.shieldDamage > 0 ? ` · ${attack.shieldDamage.toLocaleString()} по щиту` : ''}`
           attackBlock.append(attackTitle)
           for (const hit of attack.hits) attackBlock.append(createHitEl(hit, sim))
           details.append(attackBlock)
@@ -1212,13 +1214,15 @@ traceContainer.append(traceEl)
         details.onclick = e => e.stopPropagation()
         card.append(details)
       }
+      const supportLog = renderSupportLog(action)
+      if (supportLog) card.append(supportLog)
 
       card.onclick = onClick
       return card
     }
 
     function getCategoryColor(category: CombatActionCategory): string {
-      const colors: Record<CombatActionCategory, string> = {
+      const colors: Partial<Record<CombatActionCategory, string>> = {
         attack: '#3b82f6',
         enemyAttack: '#ef4444',
         bonusAttack: '#f59e0b',
@@ -1228,12 +1232,11 @@ traceContainer.append(traceEl)
         summon: '#e879f9',
         timer: '#0ea5e9',
         effect: '#8b5cf6',
-        system: '#6b7280',
       }
       return colors[category] || '#6b7280'
     }
 
-    const categoryLabels: Record<CombatActionCategory, string> = {
+    const categoryLabels: Partial<Record<CombatActionCategory, string>> = {
       attack: 'Атака',
       bonusAttack: 'Бонус-атака',
       extraTurn: 'Доп. ход',
@@ -1243,7 +1246,6 @@ traceContainer.append(traceEl)
       summon: 'Призыв',
       timer: 'Таймер',
       effect: 'Эффект',
-      system: 'Система',
     }
 
     function selectAction(action: CombatActionRecord): void {
@@ -1317,9 +1319,10 @@ traceContainer.append(traceEl)
       unitEl.append(nameEl)
 
       if (options.stats) {
+        const labels = new Set(vitalLabelsForSnapshot(unit))
         const stats: Array<[string, string]> = [
-          ['HP', `${unit.hp.toLocaleString()} / ${unit.maxHp.toLocaleString()}`],
-          ['Energy', `${unit.energy.toLocaleString()} / ${unit.maxEnergy.toLocaleString()}`],
+          ...(labels.has('HP') ? [['HP', `${unit.hp.toLocaleString()} / ${unit.maxHp.toLocaleString()}`] as [string, string]] : []),
+          ...(labels.has('EN') ? [['Energy', `${unit.energy.toLocaleString()} / ${unit.maxEnergy.toLocaleString()}`] as [string, string]] : []),
           ['AV', unit.av.toFixed(1)],
           ['Toughness', `${unit.toughness.toLocaleString()} / ${unit.maxToughness.toLocaleString()}`],
           ['ATK', unit.atk.toLocaleString()],

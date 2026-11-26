@@ -18,7 +18,7 @@ export default async () => {
 
   const { store } = await import('../../src/ui/store')
   const { PartyStore } = await import('../../src/ui/partyStore')
-  const { renderEffectSummary, snapshotEffectModTotals, initSimulationPanel } = await import('../../src/ui/simulationPanel')
+  const { renderEffectSummary, snapshotEffectModTotals, initSimulationPanel, renderSupportLog, vitalLabelsForSnapshot } = await import('../../src/ui/simulationPanel')
   const { runBattle, ENEMY_PRESETS, presetTeam } = await import('../../src/core/battle')
   const { aggregateCombatActions, collectSnapshots } = await import('../../src/ui/combatActionView')
   const { isDebuff } = await import('../../src/core/combat/StatResolver')
@@ -39,6 +39,9 @@ export default async () => {
   })
   const snapshots = collectSnapshots(sim.logger)
   const actions = aggregateCombatActions(sim.logger.events, sim, snapshots)
+  const hiddenSystemAction = aggregateCombatActions([
+    { eventId: -5, time: 0, turn: 0, actionId: 0, type: 'ACTION_START', source: 'System', payload: {}, combatActionId: 'probe_system' },
+  ] as any, sim, [])[0]
 
   const uiHost = doc.getElementById('uiSimulationRoot') as HTMLElement
   const uiStore = new PartyStore()
@@ -49,7 +52,7 @@ export default async () => {
   const thirdSlot = uiStore.addSlot()!
   uiStore.patchSlot(thirdSlot.id, { kitId: 'kafka', skillPriority: 2 })
   const fourthSlot = uiStore.addSlot()!
-  uiStore.patchSlot(fourthSlot.id, { kitId: 'hyacine', skillPriority: 2 })
+  uiStore.patchSlot(fourthSlot.id, { kitId: 'march7th', eidolon: 2, skillPriority: 2 })
   const uiHandle = initSimulationPanel(uiHost, uiStore)
   uiHandle.refresh()
   const e0Text = uiHost.querySelector('.simPartySlot .simSlotEidolon')?.textContent ?? ''
@@ -60,6 +63,7 @@ export default async () => {
   await uiRunBtn.onclick?.call(uiRunBtn, undefined as unknown as PointerEvent)
 
   const cards = [...uiHost.querySelectorAll<HTMLElement>('.simCombatActionCard')]
+  const enemyAttackCard = cards.find(c => c.classList.contains('enemyAttack'))
   const spDeltaLabels = cards.map(c => c.querySelector('.simActionSpDelta')?.textContent ?? '').filter(Boolean)
   const fuaCard = cards.find(c => c.textContent?.includes('Kafka') && c.textContent?.includes('Gentle but Cruel') && !!c.querySelector('.simActionHitsSummary'))
   fuaCard?.click()
@@ -72,8 +76,18 @@ export default async () => {
   const vitalCard = cards.find(c => !!c.querySelector('.simActionVitals'))
   const vitalLabels = [...(vitalCard?.querySelectorAll<HTMLElement>('.simVitalBar') ?? [])]
     .map(bar => bar.querySelector('.simVitalLabel')?.textContent ?? '')
+  const shieldBadges = [...uiHost.querySelectorAll<HTMLElement>('.simActionShieldDamage')]
+    .map(badge => badge.textContent ?? '')
+  const shieldHitLabels = [...uiHost.querySelectorAll<HTMLElement>('.simInspectorHitShieldDamage')]
+    .map(label => label.textContent ?? '')
 
-  const { effectIconUrl, enemyIconUrl, statIconUrlForKey } = await import('../../src/ui/icons')
+  const { effectIconUrl, enemyIconUrl, statIconUrlForKey, summonIconUrl } = await import('../../src/ui/icons')
+
+  const summonNames = [
+    'Demiurge', 'Evey', 'Fuyuan', 'Garmentmaker', 'Lightning-Lord',
+    'Little Ica', 'Mem', 'Netherwing: Pollux', 'Numby', 'Souldragon', 'Summer Songbirds',
+  ]
+  const missingSummonIcons = summonNames.filter(name => !summonIconUrl(name))
 
   const allies = sim.roster.filter(u => u.side === 'ally')
   const enemy = sim.roster.find(u => u.side === 'enemy')!
@@ -82,8 +96,17 @@ export default async () => {
     actorId: enemy.id,
     rule: 'single',
     candidates: [
-      { id: 'summon_probe', name: 'Souldragon', side: 'ally', kind: 'summon', hp: 100, aggro: 999, dead: false } as any,
+      { id: 'summon_probe', name: 'Souldragon', side: 'ally', kind: 'summon', sharesOwnerBuffs: true, hp: 100, aggro: 999, dead: false } as any,
       { id: 'char_probe', name: 'Character', side: 'ally', kind: 'char', hp: 100, aggro: 1, dead: false } as any,
+    ],
+    rng: () => 0,
+  })
+  const memoSpritePick = resolveTargets({
+    actorId: enemy.id,
+    rule: 'aoe',
+    candidates: [
+      { id: 'memo_probe', name: 'Summer Songbirds', side: 'ally', kind: 'summon', hp: 100, dead: false } as any,
+      { id: 'summon_probe', name: 'Souldragon', side: 'ally', kind: 'summon', sharesOwnerBuffs: true, hp: 100, dead: false } as any,
     ],
     rng: () => 0,
   })
@@ -96,9 +119,44 @@ export default async () => {
   const techniqueCategory = aggregateCombatActions([
     { eventId: -3, time: 0, turn: 0, actionId: 0, type: 'TECHNIQUE_APPLIED', source: allyA.name, sourceId: allyA.id, payload: { technique: 'Probe Technique' }, provenance: { sourceKind: 'technique' } },
   ] as any, sim, [])[0]?.category
+  const effectAllyB = allies[1] ?? allies[0]
+  const techniqueEffects = aggregateCombatActions([
+    { eventId: -30, time: 0, turn: 0, actionId: 0, type: 'TECHNIQUE_APPLIED', source: allyA.name, sourceId: allyA.id, payload: { technique: 'Probe Effects' }, provenance: { sourceKind: 'technique' } },
+    { eventId: -31, time: 0, turn: 0, actionId: 0, type: 'TARGET_SELECTED', source: allyA.name, sourceId: allyA.id, target: allyA.name, targetId: allyA.id, payload: {} },
+    { eventId: -32, time: 0, turn: 0, actionId: 0, type: 'DAMAGE_DEALT', source: allyA.name, sourceId: allyA.id, target: enemy.name, targetId: enemy.id, payload: { amount: 333 } },
+    { eventId: -33, time: 0, turn: 0, actionId: 0, type: 'HEAL_APPLIED', source: allyA.name, sourceId: allyA.id, target: effectAllyB.name, targetId: effectAllyB.id, payload: { amount: 222, id: 'probe_heal', name: 'Probe Heal' } },
+    { eventId: -34, time: 0, turn: 0, actionId: 0, type: 'SP_GAIN', source: allyA.name, sourceId: allyA.id, payload: { n: 1 } },
+    { eventId: -35, time: 0, turn: 0, actionId: 0, type: 'SHIELD_APPLIED', source: allyA.name, sourceId: allyA.id, target: allyA.name, targetId: allyA.id, payload: { amount: 111, id: 'probe_shield', name: 'Probe Shield' } },
+  ] as any, sim, [])[0]
+  const dhSim = runBattle({
+    team: presetTeam('danhengperman'),
+    enemy: { ...ENEMY_PRESETS.mob, count: 1 },
+    cycles: 1,
+    seed: 7,
+    techniques: ['danhengperman'],
+    log: { debug: 4, captureUiHistory: true, snapshotOn: ['ACTION_START', 'ACTION_END', 'DAMAGE_DEALT'] },
+  } as any)
+  const dhActions = aggregateCombatActions(dhSim.logger.events, dhSim, collectSnapshots(dhSim.logger))
+  const dhTechnique = dhActions.find(a => a.category === 'technique' && a.abilityName === 'Earthrend')
+  const bondTargetId = dhSim.logger.events.find(e => e.type === 'TARGET_SELECTED' && e.payload.role === 'bondmate')?.targetId ?? ''
+  const dhShieldTargets = new Set(dhTechnique?.effects.shields.map(s => s.targetId) ?? [])
+  const dhSupportRows = dhTechnique ? [...(renderSupportLog(dhTechnique)?.querySelectorAll('.simActionSupportRow') ?? [])] : []
   const summonCategory = aggregateCombatActions([
     { eventId: -4, time: 0, turn: 0, actionId: 0, type: 'SUMMON_CREATED', source: allyA.name, sourceId: allyA.id, target: 'Souldragon', targetId: 'probe_summon', payload: { kind: 'summon', name: 'Souldragon' }, combatActionId: 'probe_summon' },
   ] as any, sim, [])[0]?.category
+  const shieldHitAction = aggregateCombatActions([
+    { eventId: -6, time: 0, turn: 0, actionId: 0, type: 'ACTION_START', source: enemy.name, sourceId: enemy.id, payload: { action: 'attack' }, actionCategory: 'attack', combatActionId: 'probe_shield_hit' },
+    { eventId: -7, time: 0, turn: 0, actionId: 0, type: 'ABILITY_USED', source: enemy.name, sourceId: enemy.id, attackId: 'probe_shield_atk', payload: { action: 'attack', abilityName: 'Icy Wind' }, combatActionId: 'probe_shield_hit' },
+    { eventId: -8, time: 0, turn: 0, actionId: 0, type: 'SHIELD_ABSORBED', source: allyA.name, sourceId: allyA.id, target: allyA.name, targetId: allyA.id, attackId: 'probe_shield_atk', payload: { id: 'march_shield', name: 'March Shield', amount: 320, incoming: 800, remaining: 180 }, combatActionId: 'probe_shield_hit' },
+    { eventId: -9, time: 0, turn: 0, actionId: 0, type: 'DAMAGE_DEALT', source: enemy.name, sourceId: enemy.id, target: allyA.name, targetId: allyA.id, attackId: 'probe_shield_atk', payload: { amount: 100, abilityName: 'Icy Wind' }, combatActionId: 'probe_shield_hit' },
+  ] as any, sim, [])[0]
+  const shieldHit = shieldHitAction?.attacks[0]?.hits[0]
+  const shieldOnlyAction = aggregateCombatActions([
+    { eventId: -10, time: 0, turn: 0, actionId: 0, type: 'ACTION_START', source: enemy.name, sourceId: enemy.id, payload: { action: 'attack' }, actionCategory: 'attack', combatActionId: 'probe_shield_only' },
+    { eventId: -11, time: 0, turn: 0, actionId: 0, type: 'ABILITY_USED', source: enemy.name, sourceId: enemy.id, attackId: 'probe_shield_only_atk', payload: { action: 'attack', abilityName: 'Icy Wind' }, combatActionId: 'probe_shield_only' },
+    { eventId: -12, time: 0, turn: 0, actionId: 0, type: 'SHIELD_ABSORBED', source: allyA.name, sourceId: allyA.id, target: allyA.name, targetId: allyA.id, attackId: 'probe_shield_only_atk', payload: { id: 'march_shield', name: 'March Shield', amount: 250 }, combatActionId: 'probe_shield_only' },
+  ] as any, sim, [])[0]
+  const shieldOnlyHit = shieldOnlyAction?.attacks[0]?.hits[0]
   const allyB = allies[1] ?? allies[0]
   sim.addBuff(allyB, {
     id: 'scope_ally_buff', name: 'Scope Ally Buff', mods: [{ stat: 'atkPct', value: 0.12 }],
@@ -126,7 +184,7 @@ export default async () => {
     id: 'test',
     combatActionId: 'test',
     order: 0,
-    category: 'system',
+    category: 'effect',
     sourceId: allyB.id,
     sourceName: allyB.name,
     abilityName: 'Attribution Test',
@@ -192,7 +250,15 @@ export default async () => {
         sourceId: allyA.id,
         sourceName: allyA.name,
       }],
-      heals: [],
+      heals: [{
+        id: 'probe_heal',
+        name: 'Probe Heal',
+        targetId: allyB.id,
+        targetName: allyB.name,
+        amount: 350,
+        sourceId: allyA.id,
+        sourceName: allyA.name,
+      }],
       removals: [
         { kind: 'buff', id: 'expired', name: 'Expired Buff', targetId: allyB.id, targetName: allyB.name, stacks: 2, sourceId: allyA.id, sourceName: allyA.name },
         { kind: 'debuff', id: 'dispel', name: 'Dispel Debuff', targetId: allyB.id, targetName: allyB.name, stacks: 1, sourceId: allyA.id, sourceName: allyA.name },
@@ -207,14 +273,27 @@ export default async () => {
   const effectHost = doc.createElement('div')
   const enemyEffectHost = doc.createElement('div')
   const memoSpriteHost = doc.createElement('div')
-  doc.body.append(effectHost, enemyEffectHost, memoSpriteHost)
+  const supportHost = doc.createElement('div')
+  doc.body.append(effectHost, enemyEffectHost, memoSpriteHost, supportHost)
+  const supportEl = renderSupportLog(syntheticAction as any)
+  if (supportEl) supportHost.append(supportEl)
+  const supportText = supportHost.textContent ?? ''
+  const trueSummonVitalLabels = vitalLabelsForSnapshot({ kind: 'summon', sharesOwnerBuffs: true })
+  const memoSpriteVitalLabels = vitalLabelsForSnapshot({ kind: 'summon' })
+  const charVitalLabels = vitalLabelsForSnapshot({ kind: 'char' })
   renderEffectSummary(syntheticAction, sim, effectHost, allyB.id)
   renderEffectSummary(syntheticAction, sim, enemyEffectHost, enemy.id)
-  const memoSpriteProbe = allyA as { kind?: string }
+  const namedSummonHost = doc.createElement('div')
+  doc.body.append(namedSummonHost)
+  const memoSpriteProbe = allyA as { kind?: string; name?: string }
   const originalKind = memoSpriteProbe.kind
+  const originalName = memoSpriteProbe.name
   memoSpriteProbe.kind = 'summon'
   renderEffectSummary(syntheticAction, sim, memoSpriteHost, allyB.id)
+  memoSpriteProbe.name = 'Souldragon'
+  renderEffectSummary(syntheticAction, sim, namedSummonHost, allyB.id)
   memoSpriteProbe.kind = originalKind
+  memoSpriteProbe.name = originalName
 
   const buffRows = (host: HTMLElement = effectHost) => [...host.querySelectorAll<HTMLElement>('.simInspectorEffect.buff')]
   const rowsNamed = (name: string, host: HTMLElement = effectHost) => buffRows(host).filter(row => row.querySelector('.simInspectorEffectName')?.textContent === name)
@@ -261,6 +340,10 @@ export default async () => {
     raw('numbered Ice Edge icon resolves', enemyIconUrl('Ice Edge #1') === enemyIconUrl('Ice Edge (1)'), `${enemyIconUrl('Ice Edge #1')} | ${enemyIconUrl('Ice Edge (1)')}`),
     raw('authored Ice Edge uses Icy Wind', enemyBehavior('Ice Edge (1)')?.abilities.some(a => a.name === 'Icy Wind') === true, enemyBehavior('Ice Edge (1)')?.abilities.map(a => a.name).join(',') ?? 'missing'),
     raw('summons excluded from enemy targets', targetPick.targets[0]?.id === 'char_probe', targetPick.targets.map(t => t.id).join(',')),
+    raw('memosprite stays targetable while true summon excluded', memoSpritePick.targets.some(t => t.id === 'memo_probe') && !memoSpritePick.targets.some(t => t.id === 'summon_probe'), memoSpritePick.targets.map(t => t.id).join(',')),
+    raw('support log shows heal and shield with source target amount', supportText.includes(`${allyA.name} → ${allyB.name}: 500 щит`) && supportText.includes(`${allyA.name} → ${allyB.name}: 350 HP`), supportText),
+    raw('snapshot carries summon ownership flag', Object.values(stateSnapshot.units).every(u => 'sharesOwnerBuffs' in u), Object.values(stateSnapshot.units).map(u => `${u.id}:${u.sharesOwnerBuffs}`).join(',')),
+    raw('vitals hide true summon HP/EN and memosprite EN', trueSummonVitalLabels.join(',') === 'ОД' && memoSpriteVitalLabels.join(',') === 'HP,ОД' && charVitalLabels.join(',') === 'HP,EN,ОД', `${trueSummonVitalLabels.join(',')} | ${memoSpriteVitalLabels.join(',')} | ${charVitalLabels.join(',')}`),
     raw('encounter art uses enemy icons', encounterIcons.includes(enemyIconUrl('Ice Edge') ?? '') && encounterIcons.some(src => decodeURIComponent(src).includes('Ice Edge (1)')), encounterIcons.join(' | ')),
     raw('hit rows omit damage breakdown', uiHost.querySelectorAll('.simInspectorHitBreakdown').length === 0, `breakdowns=${uiHost.querySelectorAll('.simInspectorHitBreakdown').length}`),
     raw('action inspector omits duplicated metadata grid', actionTabGridCount === 0, `grids=${actionTabGridCount}`),
@@ -291,5 +374,25 @@ export default async () => {
     raw('known effect icons still resolve', effectIconUrl('Cipher')?.includes('Cipher.png') === true && effectIconUrl('Memosprite')?.includes('Memosprite.png') === true, `${effectIconUrl('Cipher')} | ${effectIconUrl('Memosprite')}`),
     raw('flat mods absolute and conditional mods separate', /atkFlat:\s*\+100(?!\.)/.test(textOf(rowsNamed('Flat ATK')[0])) && !!effectHost.querySelector('.simInspectorEffectMods.conditional'), textOf(rowsNamed('Flat ATK')[0]).slice(0, 160)),
     raw('stat sum multiplies stacks and skips conditional', totals.atkFlat === 250 && totals.atkPct === 0.25 && totals.critDmg === undefined, JSON.stringify(totals)),
+    raw('summon and memosprite icons resolve', missingSummonIcons.length === 0, missingSummonIcons.join(',') || `icons=${summonNames.length}`),
+    raw('summon aliases use owner art', summonIconUrl('Souldragon')?.includes('Character Blade Icon.png') === true && summonIconUrl('Fuyuan')?.includes('Character Lingsha Icon.png') === true && summonIconUrl('Numby')?.includes('Character Topaz & Numby Icon.png') === true, `${summonIconUrl('Souldragon')} | ${summonIconUrl('Fuyuan')} | ${summonIconUrl('Numby')}`),
+    raw('memosprite icons use dedicated art', summonIconUrl('Demiurge')?.includes('/memosprites/Demiurge.png') === true && summonIconUrl('Summer Songbirds')?.includes('/memosprites/Summer Songbirds.png') === true, `${summonIconUrl('Demiurge')} | ${summonIconUrl('Summer Songbirds')}`),
+    raw('direct summon and memosprite art resolves', summonIconUrl('Lightning-Lord')?.includes('/summons/Lightning-Lord.png') === true && summonIconUrl('Netherwing: Pollux')?.includes('/memosprites/Netherwing_ Pollux.png') === true && summonIconUrl('Evey')?.includes('/memosprites/Evey.png') === true, `${summonIconUrl('Lightning-Lord')} | ${summonIconUrl('Netherwing: Pollux')} | ${summonIconUrl('Evey')}`),
+    raw('named summon source uses own icon', (rowsNamed('ATK Up', namedSummonHost)[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src') ?? '').includes('Character Blade Icon.png'), rowsNamed('ATK Up', namedSummonHost)[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src') ?? ''),
+    raw('real enemy actions categorized as enemy attack', actions.some(a => a.sourceId === enemy.id && a.category === 'enemyAttack'), actions.filter(a => a.sourceId === enemy.id).map(a => a.category).join(',')),
+    raw('enemy attack cards use red accent', !!enemyAttackCard && enemyAttackCard.style.borderLeftColor === '#ef4444', enemyAttackCard?.style.borderLeftColor ?? 'missing'),
+    raw('enemy attack cards carry enemy label', enemyAttackCard?.querySelector('.simActionCategory')?.textContent === 'Атака врага', enemyAttackCard?.querySelector('.simActionCategory')?.textContent ?? 'missing'),
+    raw('shield damage recorded on hit and action', shieldHitAction?.shieldDamage === 320 && shieldHitAction?.attacks[0]?.shieldDamage === 320 && shieldHit?.shieldDamage === 320 && shieldHit?.damage === 100 && shieldHitAction?.totalDamage === 100, `action=${shieldHitAction?.shieldDamage} attack=${shieldHitAction?.attacks[0]?.shieldDamage} hit=${shieldHit?.shieldDamage} hp=${shieldHit?.damage}`),
+    raw('shield-only attack keeps enemy category with zero HP damage', shieldOnlyAction?.category === 'enemyAttack' && shieldOnlyAction?.shieldDamage === 250 && shieldOnlyAction?.totalDamage === 0 && shieldOnlyHit?.shieldDamage === 250 && shieldOnlyHit?.damage === 0, `category=${shieldOnlyAction?.category} shield=${shieldOnlyAction?.shieldDamage} hit=${shieldOnlyHit?.shieldDamage}`),
+    raw('combat cards show shield damage total', shieldBadges.some(text => /[\d,]+\s+по щиту/.test(text)), shieldBadges.join(',') || 'none'),
+    raw('hit rows show shield damage', shieldHitLabels.some(text => /\+[\d,]+\s+щит/.test(text)), shieldHitLabels.join(',') || 'none'),
+    raw('empty system actions hidden from log', hiddenSystemAction === undefined, String(hiddenSystemAction?.category)),
+    raw('combat log drops category headers', uiHost.querySelectorAll('.simLogCategoryHeader').length === 0, `headers=${uiHost.querySelectorAll('.simLogCategoryHeader').length}`),
+    raw('combat log drops system filter', ![...uiHost.querySelectorAll<HTMLOptionElement>('.simLogFilter option')].some(o => o.value === 'system'), 'system filter'),
+    raw('combat log drops system rows', !cards.some(c => c.classList.contains('system')), `systemCards=${cards.filter(c => c.classList.contains('system')).length}`),
+    raw('technique events keep damage healing and SP in one action', techniqueEffects?.category === 'technique' && techniqueEffects?.totalDamage === 333 && techniqueEffects?.effects.heals.some(h => h.amount === 222) === true && techniqueEffects?.spDelta === 1, `category=${techniqueEffects?.category} dmg=${techniqueEffects?.totalDamage} heals=${techniqueEffects?.effects.heals.length} sp=${techniqueEffects?.spDelta}`),
+    raw('technique target selection populates Targets', techniqueEffects?.targetIds.includes(allyA.id) === true, `targets=${techniqueEffects?.targetIds.join(',')}`),
+    raw('Dan Heng Bondmate target emitted and shown', !!bondTargetId && dhTechnique?.targetIds.includes(bondTargetId) === true, `bond=${bondTargetId} targets=${dhTechnique?.targetIds.join(',')}`),
+    raw('all Dan Heng shield targets shown', dhShieldTargets.size >= 4 && dhSupportRows.length >= 4, `targets=${dhShieldTargets.size} rows=${dhSupportRows.length}`),
   ]
 }

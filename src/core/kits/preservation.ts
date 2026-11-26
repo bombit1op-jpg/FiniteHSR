@@ -2,7 +2,7 @@
 // Bodies are verbatim; only module-local names that collided across kits are suffixed with their kit id.
 import { type DoTWithSource } from '../simulator'
 import { levelsOf, manualTarget, decideByPattern, type KitDef, type SimApi, type KitRuntime, type DmgType } from '../kit'
-import type { Unit, AbilityLevels, StatKey } from '../entities/Unit'
+import { isFieldUnit, type Unit, type AbilityLevels, type StatKey } from '../entities/Unit'
 import type { Mod } from '../effects/Buff'
 import { mult, PROG } from '../progression'
 import { eff, isDebuff } from '../combat/StatResolver'
@@ -41,7 +41,7 @@ export const march7thKit: KitDef = {
     // E2: grant the ally with lowest HP a shield at battle start
     const eid = (sim.rt(u).eidolon as number) ?? 0
     if (eid >= 2) {
-      const allies = sim.allies('ally').filter(a => a.kind === 'char' && !a.dead)
+      const allies = sim.allies('ally').filter(isFieldUnit)
       if (allies.length) {
         const low = allies.reduce((m, a) => (a.hp / a.maxHp < m.hp / m.maxHp ? a : m), allies[0])
         sim.addBuff(low, {
@@ -67,7 +67,7 @@ export const march7thKit: KitDef = {
     sim.log(`March E6: heals ${ally.name} +${amount} (Shield regen)`)
   },
   decide(sim, u, ctx) {
-    const allies = sim.allies('ally').filter(a => a.kind === 'char' && !a.dead)
+    const allies = sim.allies('ally').filter(isFieldUnit)
     // shield anyone missing one first; when everyone's shielded, basic to earn SP
     if (sim.sp() >= 1 && allies.some(a => !sim.hasBuff(a, 'march_shield'))) return { kind: 'skill' }
     const pattern = (ctx.skillPattern as string) ?? 'auto'
@@ -107,7 +107,7 @@ export const march7thKit: KitDef = {
 
     if (action.kind === 'skill' && sim.spendSp(1)) {
       sim.gainEnergy(u, 30)
-      const allies = sim.allies('ally').filter(a => a.kind === 'char' && !a.dead)
+      const allies = sim.allies('ally').filter(isFieldUnit)
       const noShield = allies.find(a => !sim.hasBuff(a, 'march_shield'))
       const ally = noShield ?? allies.reduce((m, a) => (a.hp / a.maxHp < m.hp / m.maxHp ? a : m), allies[0])
     sim.markAlliedTarget(ally)
@@ -349,7 +349,7 @@ export const gepardKit: KitDef = {
     apply(sim, u) {
       const shieldVal = Math.floor(sim.effDef(u) * 0.24 + 150)
       for (const a of sim.allies('ally')) {
-        if (a.dead) continue
+        if (!isFieldUnit(a)) continue
         sim.addBuff(a, { id: 'gepard_tech_shield', name: 'Comradery', mods: [], turns: 2, shield: shieldVal, sourceId: u.id })
       }
     },
@@ -372,7 +372,7 @@ export const gepardKit: KitDef = {
       const shieldFlat = mult('gepard', 'ult_a3', lv.ult)
       const shieldVal = Math.floor(sim.effDef(u) * shieldPct + shieldFlat)
       for (const a of sim.allies('ally')) {
-        if (a.dead) continue
+        if (!isFieldUnit(a)) continue
         sim.addBuff(a, { id: 'gepard_shield', name: 'Enduring Bulwark', mods: [], turns: mult('gepard', 'ult_a2', lv.ult), shield: shieldVal })
       }
       sim.log(`Gepard Ult: Shield ${shieldVal} to all allies`)
@@ -461,7 +461,7 @@ function shield(b: Unit): number {
 }
 
 function lowestShieldAlly(sim: SimApi, u: Unit): Unit | undefined {
-  const allies = sim.allies('ally').filter(a => !a.dead)
+  const allies = sim.allies('ally').filter(isFieldUnit)
   if (!allies.length) return undefined
   return allies.reduce((m, a) => (shield(a) < shield(m) ? a : m), allies[0])
 }
@@ -492,6 +492,7 @@ function designateBondmate(sim: SimApi, u: Unit, ctx: KitRuntime, bond: Unit): v
     sim.removeBuff(prev, 'dh_e6_def')
   }
   rt.dhBondmate = bond.id
+  sim.log(`${u.name} targets Bondmate ${bond.name}`, { type: 'TARGET_SELECTED', source: u.name, target: bond.name, sourceId: u.id, targetId: bond.id, payload: { role: 'bondmate' } })
   const eid = (ctx.eidolon as number) ?? 0
   // A0 Empyreanity: Bondmate ATK +15% of DH ATK
   sim.addBuff(bond, { id: 'dh_a0', name: 'Hidden Dragon', mods: [{ stat: 'atkFlat', value: eff(u).atk * 0.15 }], turns: Infinity } as never)
@@ -548,7 +549,7 @@ function dragonAct(sim: SimApi, d: Unit, u: Unit, ctx: KitRuntime): void {
   // shield all allies (talent% of DH ATK + flat); E2 doubles the shield provided in this instance
   let sdShield = eff(u).atk * mult('danhengperman', 'talent', lv.talent) + mult('danhengperman', 'talent_a2', lv.talent)
   if (enhanced && eid >= 2) sdShield *= 2
-  for (const a of sim.allies('ally')) if (a.kind !== 'summon') grantShield(sim, u, a, sdShield, mult('danhengperman', 'talent_a3', 1), lv)
+  for (const a of sim.allies('ally')) if (isFieldUnit(a)) grantShield(sim, u, a, sdShield, mult('danhengperman', 'talent_a3', 1), lv)
   // A6 Sublimity: extra shield 5% ATK + 100 to the lowest-shield ally (every dragon action)
   const ls = lowestShieldAlly(sim, u)
   if (ls) grantShield(sim, u, ls, eff(u).atk * 0.05 + 100, mult('danhengperman', 'talent_a3', 1), lv)
@@ -585,7 +586,7 @@ function danhengSkill(sim: SimApi, u: Unit, ctx: KitRuntime): void {
   designateBondmate(sim, u, ctx, bond)
   summonDragon(sim, u)
   const skShield = eff(u).atk * mult('danhengperman', 'skill', lv.skill) + mult('danhengperman', 'skill_a2', lv.skill)
-  for (const a of sim.allies('ally')) if (a.kind !== 'summon') grantShield(sim, u, a, skShield, 3, lv)
+  for (const a of sim.allies('ally')) if (isFieldUnit(a)) grantShield(sim, u, a, skShield, 3, lv)
   sim.log(`${u.name} Skill: Bondmate ${bond.name}, team shield, summons Souldragon`)
 }
 
@@ -618,7 +619,7 @@ export const danhengpermanKit: KitDef = {
       // AoE Physical + team shield
       for (const e of enemies) sim.hit(u, e, { type: 'ult', elem: 'Physical', mult: mult('danhengperman', 'ult', lv.ult), toughDmg: 15, label: "A Dragon's Zenith" })
       const ulShield = eff(u).atk * mult('danhengperman', 'ult_a3', lv.ult) + mult('danhengperman', 'ult_a4', lv.ult)
-      for (const a of sim.allies('ally')) if (a.kind !== 'summon') grantShield(sim, u, a, ulShield, 3, lv)
+      for (const a of sim.allies('ally')) if (isFieldUnit(a)) grantShield(sim, u, a, ulShield, 3, lv)
       // Enhance Souldragon: canon #3 — ult increases its actions by 2 (E2 adds +2 → 4)
       const d = summonDragon(sim, u)
       rt.dhEnh = 2 + (eid >= 2 ? 2 : 0)
@@ -739,7 +740,7 @@ function addFw(sim: SimApi, u: Unit, ctx: KitRuntime, ally: Unit, val: number): 
 function grantShield_aventurine(sim: SimApi, u: Unit, ctx: KitRuntime, label: string): void {
   const val = shieldValue(sim, u, ctx)
   for (const a of sim.allies(u.side)) {
-    if (a.kind !== 'char') continue
+    if (!isFieldUnit(a)) continue
     addFw(sim, u, ctx, a, val)
   }
   sim.log(`${u.name}: ${label} Fortified Wager (${val}) to all allies`)
@@ -748,7 +749,7 @@ function grantShield_aventurine(sim: SimApi, u: Unit, ctx: KitRuntime, label: st
 /** A3 Bingo!: after the Talent FUA, FW (7% DEF + 96) to all allies + a second copy to the lowest-shield one. */
 function bingoShield(sim: SimApi, u: Unit, ctx: KitRuntime): void {
   const val = Math.round(defBase(sim, u, BINGO_DEF) + BINGO_FLAT)
-  const chars = sim.allies(u.side).filter(a => a.kind === 'char')
+  const chars = sim.allies(u.side).filter(isFieldUnit)
   const lowest = chars.slice().sort((a, b) => fwOf(a) - fwOf(b))[0]
   for (const a of chars) addFw(sim, u, ctx, a, val)
   if (lowest) addFw(sim, u, ctx, lowest, val)
@@ -907,7 +908,7 @@ function effDef(u: Unit): number {
 function applyShield(sim: SimApi, u: Unit, lv: { talent: number }, eid: number) {
   const val = shieldVal(u, lv, eid)
   for (const a of sim.allies('ally')) {
-    if (a.kind !== 'char' || a.dead) continue
+    if (!isFieldUnit(a)) continue
     sim.addBuff(a, { id: 'tb_pres_shield', name: 'Treasure of the Architects', mods: [], turns: mult('trailblazer_preservation', 'talent_a2', lv.talent), shield: val, sourceId: u.id })
   }
 }

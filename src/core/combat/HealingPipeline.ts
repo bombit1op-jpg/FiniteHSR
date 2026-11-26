@@ -1,4 +1,4 @@
-import type { Unit } from '../entities/Unit'
+import { isTrueSummon, type Unit } from '../entities/Unit'
 import { buffSum } from './StatResolver'
 import type { Simulator } from '../simulator'
 
@@ -28,6 +28,7 @@ export class HealingPipeline {
   }
 
   apply(u: Unit, amount: number, src?: Unit): void {
+    if (isTrueSummon(u) || u.kind === 'timer') return
     const healer = src ?? this.s.currentActor
     // Healing Boost Multiplier = 1 + OHB_Healer + IHB_Target − IHR_Target (canon formula, hsr-data
     // combat_mechanics.json "Healing"). OHB and IHB stack ADDITIVELY, not multiplicatively; the

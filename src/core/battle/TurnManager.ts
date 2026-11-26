@@ -1,4 +1,4 @@
-import type { Unit } from '../entities/Unit'
+import { isFieldUnit, type Unit } from '../entities/Unit'
 import type { Mod } from '../effects/Buff'
 import { computeDotDamage } from '../combat/DamageCalculator'
 import { defMultiplier, dmgBoostMult, eff, isDebuff, mitigationMult, resFactor, runtimeString, vulnMult } from '../combat/StatResolver'
@@ -461,7 +461,7 @@ if (u.side === 'ally') {
 
   enemyTurn(e: Unit, tc: number): void {
     // departed chars are off-field (untargetable) — the real "depart" gate: skip them as targets
-    const targets = this.s.allies('ally').filter(a => a.kind === 'char' && !this.departed(a))
+    const targets = this.s.allies('ally').filter(a => isFieldUnit(a) && a.kind !== 'transformed' && !this.departed(a))
     if (!targets.length) return
     for (const u of this.s.roster) {
       if (u.dead || u.side !== 'ally' || u.kind !== 'char') continue

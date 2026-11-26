@@ -10582,5 +10582,61 @@
         "name": "Wind"
       }
     ]
+  },
+  "summons": {
+    "label": "Иконки призывов",
+    "count": 4,
+    "icons": [
+      {
+        "file": "characters/Character Lingsha Icon.png",
+        "name": "Fuyuan"
+      },
+      {
+        "file": "summons/Lightning-Lord.png",
+        "name": "Lightning-Lord"
+      },
+      {
+        "file": "characters/Character Topaz & Numby Icon.png",
+        "name": "Numby"
+      },
+      {
+        "file": "characters/Character Blade Icon.png",
+        "name": "Souldragon"
+      }
+    ]
+  },
+  "memosprites": {
+    "label": "Иконки мемоспрайтов",
+    "count": 7,
+    "icons": [
+      {
+        "file": "memosprites/Demiurge.png",
+        "name": "Demiurge"
+      },
+      {
+        "file": "memosprites/Evey.png",
+        "name": "Evey"
+      },
+      {
+        "file": "memosprites/Garmentmaker.png",
+        "name": "Garmentmaker"
+      },
+      {
+        "file": "memosprites/Little Ica.png",
+        "name": "Little Ica"
+      },
+      {
+        "file": "memosprites/Mem.png",
+        "name": "Mem"
+      },
+      {
+        "file": "memosprites/Netherwing_ Pollux.png",
+        "name": "Netherwing: Pollux"
+      },
+      {
+        "file": "memosprites/Summer Songbirds.png",
+        "name": "Summer Songbirds"
+      }
+    ]
   }
 }

@@ -1,6 +1,7 @@
 import { prepareBattle } from '../../src/core/battle'
 import { eff, buffSum } from '../../src/core/combat/StatResolver'
-import type { Unit } from '../../src/core/entities/Unit'
+import { resolveTargets } from '../../src/core/combat/TargetResolver'
+import { isFieldUnit, type Unit } from '../../src/core/entities/Unit'
 import { case_, type Case } from '../suites'
 
 /** L186 adversarial summon/memosprite lifecycle (AGENTS.md §11). Pins the engine contract that
@@ -199,6 +200,58 @@ export default (): Case[] => {
     cases.push(case_('summon: I dead owner tolerated — summon still hits + folds to owner id',
       s.find(owner.id) === undefined && s.find(sm.id) === sm && d > 0 && (s.ownerDamage.get(owner.id) ?? 0) > 0,
       `owner=${s.find(owner.id) === undefined} dmg=${d} ownerDmg=${s.ownerDamage.get(owner.id) ?? 0}`))
+  }
+  // J — field eligibility: true summons are off-field, memosprites are field targets/support recipients
+  {
+    const { s, owner, e } = base()
+    const trueSummon = probe('probe_j_true', 'True Summon', owner, 'summon', { sharesOwnerBuffs: true, hp: 0.4 })
+    const memo = probe('probe_j_memo', 'Memo', owner, 'summon', { hp: 0.4 })
+    own(s, owner, trueSummon)
+    own(s, owner, memo)
+    const sel = resolveTargets({ actorId: e.id, rule: 'aoe', candidates: [trueSummon, memo, owner], rng: () => 0 })
+    cases.push(case_('summon: J true summon is off-field, memosprite stays targetable',
+      isFieldUnit(memo) && !isFieldUnit(trueSummon) &&
+      sel.targets.includes(memo) && !sel.targets.includes(trueSummon) && sel.targets.includes(owner),
+      `field=${isFieldUnit(memo)}/${isFieldUnit(trueSummon)} targets=${sel.targets.map(t => t.id).join(',')}`))
+
+    s.addBuff(trueSummon, { id: 'probe_shield_true', name: 'Probe Shield True', mods: [], turns: 2, shield: 100 } as never)
+    s.addBuff(memo, { id: 'probe_shield_memo', name: 'Probe Shield Memo', mods: [], turns: 2, shield: 100 } as never)
+    cases.push(case_('summon: J2 shield reaches memosprite but not true summon',
+      trueSummon.buffs.length === 0 && memo.buffs.some(b => b.shield === 100),
+      `buffs=${trueSummon.buffs.length}/${memo.buffs.length} shield=${memo.buffs.map(b => b.shield).join(',')}`))
+
+    const healEvents = s.logger.events.length
+    s.heal(trueSummon, 0.5, owner)
+    s.heal(memo, 0.5, owner)
+    cases.push(case_('summon: J3 heal reaches memosprite but not true summon',
+      trueSummon.hp === 0.4 && memo.hp > 0.4 && s.logger.events.slice(healEvents).some(ev => ev.type === 'HEAL_APPLIED' && ev.targetId === memo.id)
+      && !s.logger.events.slice(healEvents).some(ev => ev.type === 'HEAL_APPLIED' && ev.targetId === trueSummon.id),
+      `hp=${trueSummon.hp}/${memo.hp} events=${s.logger.events.slice(healEvents).filter(ev => ev.type === 'HEAL_APPLIED').map(ev => ev.targetId).join(',')}`))
+  }
+  {
+    const { s, owner, e } = base()
+    const timer = probe('probe_k', 'Fever Countdown', owner, 'timer')
+    own(s, owner, timer)
+    const from = s.logLines.length
+    const hp0 = timer.hp
+    s.turns.enemyTurn(e, 3)
+    const lines = s.logLines.slice(from)
+    const pool = s.livingEnemiesOf(e)
+    cases.push(case_('summon: K timer is off-field and never hit by enemy AoE',
+      !isFieldUnit(timer) && !pool.includes(timer) && hp0 === timer.hp &&
+      !lines.some(l => l.includes(`hits ${timer.name}:`)),
+      `field=${isFieldUnit(timer)} pool=${pool.map(u => u.id).join(',')} hp=${hp0}→${timer.hp} lines=${lines.filter(l => l.includes('hits ')).join(' / ')}`))
+  }
+  {
+    const { s, owner } = base()
+    const timer = probe('probe_k2', 'Fever Countdown', owner, 'timer')
+    own(s, owner, timer)
+    s.addBuff(timer, { id: 'probe_shield_timer', name: 'Probe Shield Timer', mods: [], turns: 2, shield: 614 } as never)
+    const heals0 = c(s, 'HEAL_APPLIED').length
+    s.heal(timer, 100, owner)
+    cases.push(case_('summon: K2 timer receives no shield or heal',
+      timer.buffs.length === 0 && timer.hp === 1 && c(s, 'HEAL_APPLIED').length === heals0,
+      `buffs=${timer.buffs.length} hp=${timer.hp} heals=${c(s, 'HEAL_APPLIED').length - heals0}`))
   }
   return cases
 }

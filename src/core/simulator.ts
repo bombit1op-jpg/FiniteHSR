@@ -1,4 +1,5 @@
 import type { AbilityType, BaseStats, DmgType, Elem, GearConfig, Unit } from './entities/Unit'
+import { isFieldUnit, isMemosprite } from './entities/Unit'
 import type { Buff, DoT } from './effects/Buff'
 import { eff, effectResOf, isDebuff, debuffResMult, type DebuffCategory } from './combat/StatResolver'
 import { isElation, type CBStack } from './elation'
@@ -241,7 +242,10 @@ cfg: SimConfig
   // ---------- SimApi ----------
   units(): Unit[] { return this.roster }
   allies(side: 'ally' | 'enemy' | 'neutral'): Unit[] { return this.roster.filter(u => u.side === side && !u.dead) }
-  livingEnemiesOf(u: Unit): Unit[] { return this.allies(u.side === 'ally' ? 'enemy' : 'ally') }
+  livingEnemiesOf(u: Unit): Unit[] {
+    const pool = this.allies(u.side === 'ally' ? 'enemy' : 'ally')
+    return pool.filter(a => isFieldUnit(a))
+  }
   /** raw LCG output, in draw order — the 32-bit stream a seed reproduces exactly */
   rng(): number {
     const r = this.rngf()
@@ -829,14 +833,7 @@ export function buffVal(u: Unit, key: string): number {
     .reduce((a, m) => a + m.value, 0)
 }
 
-/** Is this unit a MEMOSPRITE? A `kind:'summon'` unit is one unless it is flagged
- *  `sharesOwnerBuffs` — that flag marks a true SUMMON, which fights with its wearer's stats and
- *  deals its own Follow-Up Attack. Only memosprite skills get the dedicated `mem_skill` damage
- *  axis; a true summon reports its real DmgType like any other attacker. Classification is
- *  data-driven: a `memosprite` block in characters.json means memosprite, no block means summon. */
-export function isMemosprite(u: Unit): boolean {
-  return u.kind === 'summon' && !u.sharesOwnerBuffs
-}
+export { isMemosprite }
 
 /** damage axis of a normal hit: Aha's Elation Skill (Let There Be Laughter) and memosprite
  *  skills are their own types, everything else uses its DmgType (basic/skill/ult/fua/add/elation). */

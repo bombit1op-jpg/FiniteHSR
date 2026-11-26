@@ -17,7 +17,7 @@ export type Assertion =
   | { assert: 'payloadAtLeast'; of: EventMatch; field: string; value: number; pick?: 'first' | 'last' }
   | { assert: 'buff'; id: string; target?: string; turns?: number; stacks?: number }
   | { assert: 'noBuff'; id: string; target?: string }
-  | { assert: 'buffStat'; id: string; stat: string; value?: number; atLeast?: number; tol?: number }
+  | { assert: 'buffStat'; id: string; stat: string; value?: number; atLeast?: number; tol?: number; pick?: 'first' | 'last' | 'max' }
   | { assert: 'energy'; who: string; atLeast?: number; atMost?: number }
   | { assert: 'unitState'; who?: string; kitId?: string; field: string; value?: number; tol?: number; atLeast?: number; atMost?: number }
   | { assert: 'ordering'; before: EventMatch[]; after: EventMatch[] }
@@ -115,9 +115,11 @@ export function evaluate(a: Assertion, ctx: Ctx): Result {
       return { ok: !hits.length, detail: hits.length ? `buff ${a.id} applied ${hits.length}x` : 'never applied' }
     }
     case 'buffStat': {
-      const e = buffLog.filter(x => x.id === a.id).pop()
-      const got = e?.mods?.find(m => m.stat === a.stat)?.value
-      if (got === undefined) return { ok: false, detail: `buff ${a.id} has no mod ${a.stat}` }
+      const vals = buffLog.filter(x => x.id === a.id)
+        .map(e => e.mods?.find(m => m.stat === a.stat)?.value)
+        .filter((v): v is number => v !== undefined)
+      if (!vals.length) return { ok: false, detail: `buff ${a.id} has no mod ${a.stat}` }
+      const got = a.pick === 'first' ? vals[0]! : a.pick === 'max' ? Math.max(...vals) : vals[vals.length - 1]!
       if (a.atLeast !== undefined) return { ok: got >= a.atLeast, detail: `${a.stat}=${got} >= ${a.atLeast}` }
       if (a.value === undefined) return { ok: false, detail: 'buffStat needs value or atLeast' }
       return { ok: near(got, a.value, a.tol ?? 0.01), detail: `${a.stat}=${got} want ${a.value}` }

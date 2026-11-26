@@ -239,6 +239,7 @@ export interface StateSnapshot {
     wave: number
     kitId?: string
     ownerId?: string
+    sharesOwnerBuffs?: boolean
     eidolon?: number
     rank?: string
     weaknesses?: string[]
@@ -799,6 +800,7 @@ units[u.id] = {
         wave: u.wave ?? 1,
         kitId: u.kitId,
         ownerId: (rt as Record<string, unknown>).ownerId as string | undefined,
+        sharesOwnerBuffs: u.sharesOwnerBuffs,
         eidolon: (rt as Record<string, unknown>).eidolon as number | undefined,
         rank: u.rank,
         weaknesses: u.weaknesses,
@@ -879,8 +881,8 @@ units[u.id] = {
       case 'SP_LOSS': return `Team spent ${Number(p.n ?? 0)} Skill Point(s) (${p.before} -> ${p.after})`
       case 'DOT_TICK': return `${e.target ?? ''} took ${num(Number(p.amount ?? 0))} ${String(p.dot ?? 'DoT')} DMG`
       case 'DOT_APPLIED': return `${e.target ?? ''} afflicted by ${String(p.dot ?? '')}`
-      case 'HEAL_APPLIED': return `${e.target ?? ''} healed ${num(Number(p.amount ?? 0))} HP`
-      case 'SHIELD_APPLIED': return `${e.target ?? ''} gained ${num(Number(p.amount ?? 0))} Shield`
+      case 'HEAL_APPLIED': return `${who ? `${who} → ` : ''}${e.target ?? ''} healed ${num(Number(p.amount ?? 0))} HP`
+      case 'SHIELD_APPLIED': return `${who ? `${who} → ` : ''}${e.target ?? ''} gained ${num(Number(p.amount ?? 0))} Shield`
       case 'SHIELD_ABSORBED': return `${e.target ?? ''} absorbed ${num(Number(p.amount ?? 0))}`
       case 'DEATH': return `${e.target ?? ''} defeated`
       case 'REVIVAL': return `${e.target ?? ''} revived`

@@ -3,7 +3,7 @@
  * Maps stable display keys (character/Light Cone/set/stat/... names) to committed icon paths.
  * Keys are display names because that is the identity the raw game data and the manifest share;
  * the UI call sites do the id -> name lookup through the existing gear/kit tables.
- * Source: public/icons/_manifest.json (2487 files).
+ * Source: public/icons/_manifest.json (2498 files).
  */
 
 export const CHARACTERS_ICONS: Record<string, string> = {
@@ -1791,6 +1791,23 @@ export const ELEMENTS_ICONS: Record<string, string> = {
   'Wind': '/icons/elements/Wind.png',
 }
 
+export const SUMMONS_ICONS: Record<string, string> = {
+  'Fuyuan': '/icons/characters/Character Lingsha Icon.png',
+  'Lightning-Lord': '/icons/summons/Lightning-Lord.png',
+  'Numby': '/icons/characters/Character Topaz & Numby Icon.png',
+  'Souldragon': '/icons/characters/Character Blade Icon.png',
+}
+
+export const MEMOSPRITES_ICONS: Record<string, string> = {
+  'Demiurge': '/icons/memosprites/Demiurge.png',
+  'Evey': '/icons/memosprites/Evey.png',
+  'Garmentmaker': '/icons/memosprites/Garmentmaker.png',
+  'Little Ica': '/icons/memosprites/Little Ica.png',
+  'Mem': '/icons/memosprites/Mem.png',
+  'Netherwing: Pollux': '/icons/memosprites/Netherwing_ Pollux.png',
+  'Summer Songbirds': '/icons/memosprites/Summer Songbirds.png',
+}
+
 export const EIDOLON_ICONS: Record<string, string[]> = {
   'Acheron': ['/icons/eidolons/Acheron/E1_Silenced Sky Spake Sooth.png', '/icons/eidolons/Acheron/E2_Mute Thunder in Still Tempest.png', '/icons/eidolons/Acheron/E3_Frost Bites in Death.png', '/icons/eidolons/Acheron/E4_Shrined Fire for Mirrored Soul.png', '/icons/eidolons/Acheron/E5_Strewn Souls on Erased Earths.png', '/icons/eidolons/Acheron/E6_Apocalypse, the Emancipator.png'],
   'Aglaea': ['/icons/eidolons/Aglaea/E1_Drift at the Whim of Venus.png', '/icons/eidolons/Aglaea/E2_Sail on the Raft of Eyelids.png', '/icons/eidolons/Aglaea/E3_Bequeath in the Coalescence of Dew.png', '/icons/eidolons/Aglaea/E4_Flicker Below the Surface of Marble.png', '/icons/eidolons/Aglaea/E5_Weave Under the Shroud of Woe.png', '/icons/eidolons/Aglaea/E6_Fluctuate in the Tapestry of Fates.png'],
@@ -2131,10 +2148,6 @@ export const RELICPIECES_ICONS: Record<string, Record<string, string>> = {
   'sss': {
     '0': '/icons/relicpieces/Herta\'s Space Station.png',
     '1': '/icons/relicpieces/Herta\'s Wandering Trek.png',
-  },
-  'talia': {
-    '0': '/icons/relicpieces/Talia\'s Nailscrap Town.png',
-    '1': '/icons/relicpieces/Talia\'s Exposed Electric Wire.png',
   },
   'tengoku': {
     '0': '/icons/relicpieces/Livestream\'s Protean Vistas.png',

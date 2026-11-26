@@ -1,4 +1,4 @@
-import type { Unit } from '../entities/Unit'
+import { isTrueSummon, type Unit } from '../entities/Unit'
 import type { Buff } from './Buff'
 import type { Simulator, BuffLogEntry } from '../simulator'
 import { isDebuff } from '../combat/StatResolver'
@@ -17,6 +17,7 @@ export class BuffSystem {
    *  Shield amplification from the provider's gear and the Self-Enshrouded 4pc bonus live here
    *  because they can only be resolved once we know a NEW shield is being handed out. */
   add(u: Unit, b: Buff): void {
+    if ((isTrueSummon(u) || u.kind === 'timer') && b.shield !== undefined) return
     // §58 control-immune: the debuff never lands (buffs for allies pass through — the profile is
     // enemy-only). No DEBUFF_APPLIED, one NOTE so the immunity is observable. Data-driven: only
     // enemies with a registered `controlImmune` profile are affected; everything else is untouched.

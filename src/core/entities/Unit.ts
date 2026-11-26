@@ -132,6 +132,18 @@ export interface Unit {
   critOwner?: Unit
 }
 
+export function isTrueSummon(u: Pick<Unit, 'kind' | 'sharesOwnerBuffs'>): boolean {
+  return u.kind === 'summon' && !!u.sharesOwnerBuffs
+}
+
+export function isMemosprite(u: Pick<Unit, 'kind' | 'sharesOwnerBuffs'>): boolean {
+  return u.kind === 'summon' && !u.sharesOwnerBuffs
+}
+
+export function isFieldUnit(u: Pick<Unit, 'kind' | 'dead' | 'fled' | 'departedFlag' | 'untargetable' | 'sharesOwnerBuffs'>): boolean {
+  return u.kind !== 'timer' && !u.dead && !u.fled && !u.departedFlag && !u.untargetable && !isTrueSummon(u)
+}
+
 /** ability levels as chosen in game (basic 1-7, others 1-12 with eidolons) */
 export interface AbilityLevels {
   basic: number
