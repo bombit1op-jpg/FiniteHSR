@@ -1,5 +1,5 @@
 import { PatternAI, type EnemyBehavior } from './ai'
-import { warArmor, safeguard, moonRage, MOON_RAGE } from './passive'
+import { warArmor, safeguard, moonRage, MOON_RAGE, sanctionSummon } from './passive'
 import { BANACADEMIC_CLASSROOM, BANACADEMIC_OFFCLASS, banacademicDisrupt } from './mob-profiles'
 import type { Elem } from '../entities/Unit'
 
@@ -407,13 +407,14 @@ export const BOSS_BEHAVIORS: Record<string, EnemyBehavior> = {
   },
   // Aurumaton Gatekeeper (Elite, Imaginary): Restraint single 300%; Dread — AoE 150% + high-chance
   // Weaken (authored 10%×2t). Talent Sanction Rate / summoning Entranced Ingenium: Illumination
-  // Dragonfish ×2 → deviation (no summon primitive).
+  // Dragonfish ×2 → sanctionSummon passive.
   'Aurumaton Gatekeeper': {
     abilities: [
       { id: 'gatekeeper_restraint', name: 'Restraint', targetRule: 'single', effects: [{ op: 'attack', mult: 3.0, elem: 'Imaginary' }] },
       { id: 'gatekeeper_dread', name: 'Dread', targetRule: 'aoe', effects: [{ op: 'aoe', mult: 1.5, elem: 'Imaginary' }, { op: 'debuff', chance: 0.75, buff: { id: 'gatekeeper_weaken', name: 'Weaken', mods: [{ stat: 'weaken', value: 0.10 }], turns: 2 } }] },
     ],
     ai: new PatternAI(['gatekeeper_dread', 'gatekeeper_restraint']),
+    passive: sanctionSummon({ threshold: 3, summonName: 'Entranced Ingenium: Illumination Dragonfish', count: 2 }),
   },
   // Automaton Direwolf (Elite, Physical): Lock On Target — pins a random character (the follow-up
   // "Felling Order" is absent → deviation); Disintegration Order / Dismantle — single 250% + high

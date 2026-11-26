@@ -2511,7 +2511,7 @@ function critBuff(sim: SimApi, u: Unit, birds?: Unit): void {
 function refreshBirds(sim: SimApi, u: Unit, b: Unit, ctx: KitRuntime): void {
   const lv = levelsOf(ctx)
   const eu = eff(u)
-  const ratio = b.maxHp > 0 ? b.hp / b.maxHp : 1
+  const ratio = b.base.hp > 0 ? b.hp / b.base.hp : 1
   const ghp = Math.max(1, Math.round(eu.hp * mult(PID, 'talent', lv.talent)))
   b.base.hp = ghp
   b.maxHp = ghp

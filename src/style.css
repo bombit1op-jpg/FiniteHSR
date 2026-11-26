@@ -1498,7 +1498,24 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
   font-size: 11px;
   color: #9aa7ba;
 }
-.simActionDamage { font-weight: 700; color: #f2c94c; font-variant-numeric: tabular-nums; }
+.simActionDamage { font-weight: 700; color: #f2c94c; font-variant-numeric: tabular-nums; display: inline-flex; align-items: center; gap: 2px; }
+.simActionDamageGroup { display: inline-flex; flex-direction: column; gap: 2px; align-items: flex-start; }
+.simActionDamageValue { font-variant-numeric: tabular-nums; }
+.simActionDamageElement { display: inline-flex; align-items: center; }
+.simActionDamageElementIcon { width: 14px; height: 14px; display: inline-flex; }
+.simActionDamageElementIcon img { width: 14px; height: 14px; object-fit: contain; }
+.simActionDamageSlash { color: #6b7280; margin: 0 1px; }
+.simActionSupportSummary { font-size: 10px; font-variant-numeric: tabular-nums; }
+.simActionSupportSlash { color: #6b7280; }
+.simActionHealSummary, .simActionShieldSummary { font-weight: 700; }
+.simActionDamage.elation {
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 0 4px;
+  background: linear-gradient(#101713, #101713) padding-box,
+    linear-gradient(90deg, #ff4d4d, #ffb84d, #5cff7a, #5cc8ff, #b45cff, #ff5cc8) border-box;
+}
+.simToughnessBar { margin-top: 2px; }
 .simActionShieldDamage { font-weight: 700; color: #7ec8ff; font-variant-numeric: tabular-nums; }
 .simActionHitsSummary { color: #7fd18a; }
 .simActionEffects { color: #7fb3ff; }

@@ -244,7 +244,7 @@ if (target.side === 'ally' && target.kind === 'char') this.s.gainEnergy(target, 
     // §57 enemy passive: a "reacts when attacked" status (War Armor). Once per attack-target, in the
     // same window as the Counter. Skipped when the attack is a unit hitting itself (no self-reaction).
     if (target.side === 'enemy' && !target.dead && attacker !== target)
-      enemyBehavior(target.name)?.passive?.onHitTaken?.(this.s, target, attacker)
+      enemyBehavior(target.name)?.passive?.onHitTaken?.(this.s, target, attacker, ctx.ability)
   }
 
   hitAoe(attacker: Unit, o: HitOpts): void {

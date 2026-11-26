@@ -2619,7 +2619,7 @@ function ninjaCd(sim: SimApi, u: Unit, si: number): void {
 /** Long May Rainbows: memosprite-skill → all enemies DMG taken +% */
 function rainbowVuln(sim: SimApi, u: Unit, si: number): void {
   for (const e of sim.allies(u.side === 'ally' ? 'enemy' : 'ally')) {
-    sim.addBuff(e, gearBuff('rainbow_vuln', 'Rainbow Vow', [{ stat: 'vulnAll', value: 0.18 + 0.045 * (si - 1) }], 2))
+    sim.addBuff(e, { ...gearBuff('rainbow_vuln', 'Rainbow Vow', [{ stat: 'vulnAll', value: 0.18 + 0.045 * (si - 1) }], 2), debuff: true })
   }
 }
 

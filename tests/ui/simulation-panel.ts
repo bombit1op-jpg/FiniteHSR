@@ -18,7 +18,7 @@ export default async () => {
 
   const { store } = await import('../../src/ui/store')
   const { PartyStore } = await import('../../src/ui/partyStore')
-  const { renderEffectSummary, snapshotEffectModTotals, initSimulationPanel, renderSupportLog, vitalLabelsForSnapshot } = await import('../../src/ui/simulationPanel')
+  const { renderEffectSummary, snapshotEffectModTotals, initSimulationPanel, renderSupportLog, vitalLabelsForSnapshot, damageDisplay, damageElementParts, supportSummaryParts } = await import('../../src/ui/simulationPanel')
   const { runBattle, ENEMY_PRESETS, presetTeam } = await import('../../src/core/battle')
   const { aggregateCombatActions, collectSnapshots } = await import('../../src/ui/combatActionView')
   const { isDebuff } = await import('../../src/core/combat/StatResolver')
@@ -67,6 +67,9 @@ export default async () => {
   const spDeltaLabels = cards.map(c => c.querySelector('.simActionSpDelta')?.textContent ?? '').filter(Boolean)
   const fuaCard = cards.find(c => c.textContent?.includes('Kafka') && c.textContent?.includes('Gentle but Cruel') && !!c.querySelector('.simActionHitsSummary'))
   fuaCard?.click()
+  enemyAttackCard?.click()
+  const toughnessBars = [...uiHost.querySelectorAll<HTMLElement>('.simInspectorUnitState .simToughnessBar')]
+  const toughnessText = toughnessBars.map(bar => bar.textContent ?? '').join(' | ')
   const stateTab = [...uiHost.querySelectorAll<HTMLButtonElement>('.simInspectorTab')]
     .find(b => b.textContent === 'Состояние')
   const actionTabGridCount = uiHost.querySelectorAll('.simLogInspectorGrid').length
@@ -278,6 +281,13 @@ export default async () => {
   const supportEl = renderSupportLog(syntheticAction as any)
   if (supportEl) supportHost.append(supportEl)
   const supportText = supportHost.textContent ?? ''
+  const supportParts = supportSummaryParts(syntheticAction as any)
+  const windDamage = damageDisplay({ attacks: [{ hits: [{ element: 'Wind', attackType: 'basic' }] }] } as any)
+  const elationDamage = damageDisplay({ attacks: [{ hits: [{ element: 'Wind', attackType: 'elation' }] }] } as any)
+  const multiElementDamage = damageElementParts({ attacks: [{ hits: [
+    { element: 'Physical', damage: 10, attackType: 'add' },
+    { element: 'Quantum', damage: 100, attackType: 'add' },
+  ] }] } as any)
   const trueSummonVitalLabels = vitalLabelsForSnapshot({ kind: 'summon', sharesOwnerBuffs: true })
   const memoSpriteVitalLabels = vitalLabelsForSnapshot({ kind: 'summon' })
   const charVitalLabels = vitalLabelsForSnapshot({ kind: 'char' })
@@ -319,6 +329,20 @@ export default async () => {
     debuffs: [],
   } as unknown as Parameters<typeof snapshotEffectModTotals>[0])
 
+  const gate = sim.addEnemy({ name: 'Aurumaton Gatekeeper', hp: 100_000, spd: 100, level: 95, toughness: 90, weaknesses: ['Imaginary'] as any, atk: 800 })
+  const enemyCountBeforeSanction = sim.units().filter(u => u.side === 'enemy').length
+  const gatePassive = enemyBehavior('Aurumaton Gatekeeper')?.passive
+  for (let i = 0; i < 3; i++) gatePassive?.onHitTaken?.(sim, gate, allyA, 'skill')
+  const dragonfish = sim.units().filter(u => u.side === 'enemy' && u.name.includes('Illumination Dragonfish'))
+  const robinSim = runBattle({
+    team: presetTeam('robin_summeretto'),
+    enemy: { ...ENEMY_PRESETS.mob, count: 1 },
+    cycles: 1,
+    seed: 7,
+    log: { debug: 0 },
+  })
+  const robinBird = robinSim.units().find(u => u.name === 'Summer Songbirds')
+
   for (const row of store.getState().team) store.dispatch({ type: 'team/remove', id: row.id })
   for (const row of originalTeam) store.dispatch({ type: 'team/add', row })
 
@@ -354,6 +378,7 @@ export default async () => {
     raw('Memosprite source uses own icon', (rowsNamed('ATK Up', memoSpriteHost)[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src') ?? '').includes('Memosprite.png'), rowsNamed('ATK Up', memoSpriteHost)[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src') ?? ''),
     raw('effect source from stable sourceId not acting unit', sourceOf(rowsNamed('ATK Up')[0]).includes(allyA.name) && !sourceOf(rowsNamed('ATK Up')[0]).includes(allyB.name), `${sourceOf(rowsNamed('ATK Up')[0])} | actor=${allyB.name}`),
     raw('effect row shows recipient', targetOf(rowsNamed('ATK Up')[0]).includes(allyB.name), `${targetOf(rowsNamed('ATK Up')[0])} | ${textOf(rowsNamed('ATK Up')[0]).slice(0, 120)}`),
+    raw('effect source and target labeled explicitly', sourceOf(rowsNamed('ATK Up')[0]).includes('Источник:') && targetOf(rowsNamed('ATK Up')[0]).includes('Получатель:'), `${sourceOf(rowsNamed('ATK Up')[0])} | ${targetOf(rowsNamed('ATK Up')[0])}`),
     raw('same effect id from different sources stays separate', rowsNamed('ATK Up').length === 2, `rows=${rowsNamed('ATK Up').length}`),
     raw('other-target effect stays outside selected inspector', rowsNamed('Mirror').length === 1 && targetOf(rowsNamed('Mirror')[0]).includes(allyB.name) && !hostText(enemyEffectHost).includes('Mirror'), `ally=${rowsNamed('Mirror').length} enemy=${hostText(enemyEffectHost).includes('Mirror')}`),
     raw('merge keeps last event stacks', rowsNamed('Last Wins').length === 1 && /Стаки:\s*3/.test(textOf(rowsNamed('Last Wins')[0])), textOf(rowsNamed('Last Wins')[0]).slice(0, 120)),
@@ -363,7 +388,7 @@ export default async () => {
     raw('dot source id retained in summary', [...effectHost.querySelectorAll<HTMLElement>('.simInspectorEffect.debuff')].some(r => /Shock/.test(textOf(r)) && sourceOf(r).includes(allyA.name)), [...effectHost.querySelectorAll<HTMLElement>('.simInspectorEffect.debuff')].map(textOf).join(' | ').slice(0, 180)),
     raw('dot source id retained in snapshot', !!dotWithSource, dotWithSource ? `${dotWithSource.unit.id}/${dotWithSource.dot.id}/${dotWithSource.dot.sourceId}` : 'missing'),
     raw('shield not duplicated as normal buff', rowsNamed('March Shield Buff').length === 0 && [...effectHost.querySelectorAll<HTMLElement>('.simInspectorEffect.shield')].some(r => /March Shield/.test(textOf(r))), `buffRows=${rowsNamed('March Shield Buff').length}`),
-    raw('gear and traces render as neutral', hostText(effectHost).includes('Снаряжение и следы') && rowsNamed('Gear').length === 0 && rowsNamed('Traces').length === 0, hostText(effectHost).slice(0, 220)),
+    raw('gear and traces omitted from buff list', !hostText(effectHost).includes('Снаряжение и следы') && rowsNamed('Gear').length === 0 && rowsNamed('Traces').length === 0, hostText(effectHost).slice(0, 220)),
     raw('shield damage rendered separately', hostText(effectHost).includes('Урон по щитам') && hostText(effectHost).includes('320'), hostText(effectHost).slice(0, 260)),
     raw('debuff classified via isDebuff in snapshot', engineDebuffIds.length > 0 && engineDebuffIds.every(id => snapshotDebuffIds.has(id) && !snapshotBuffIds.has(id)), `engine=${engineDebuffIds.join(',')} buffs=${[...snapshotBuffIds].join(',')}`),
     raw('ally inspector shows own effects only', hostText(effectHost).includes('Scope Ally Buff') && !hostText(effectHost).includes('Scope Enemy Debuff') && !hostText(effectHost).includes('Enemy Only Debuff'), hostText(effectHost).slice(0, 200)),
@@ -382,6 +407,13 @@ export default async () => {
     raw('real enemy actions categorized as enemy attack', actions.some(a => a.sourceId === enemy.id && a.category === 'enemyAttack'), actions.filter(a => a.sourceId === enemy.id).map(a => a.category).join(',')),
     raw('enemy attack cards use red accent', !!enemyAttackCard && enemyAttackCard.style.borderLeftColor === '#ef4444', enemyAttackCard?.style.borderLeftColor ?? 'missing'),
     raw('enemy attack cards carry enemy label', enemyAttackCard?.querySelector('.simActionCategory')?.textContent === 'Атака врага', enemyAttackCard?.querySelector('.simActionCategory')?.textContent ?? 'missing'),
+    raw('action card shows ability name in header', [...uiHost.querySelectorAll<HTMLElement>('.simActionHeader .simActionAbilityName')].some(n => (n.textContent ?? '').length > 0), `headers=${uiHost.querySelectorAll('.simActionHeader .simActionAbilityName').length}`),
+    raw('damage summary labels damage explicitly', [...uiHost.querySelectorAll<HTMLElement>('.simActionDamage')].some(n => (n.textContent ?? '').startsWith('Урон:')), `damage=${[...uiHost.querySelectorAll<HTMLElement>('.simActionDamage')].map(n => n.textContent).join('|')}`),
+    raw('damage summary shows heal and shield together', supportParts.length === 2 && supportParts[0].label === 'Лечение' && supportParts[0].amount === 350 && supportParts[1].label === 'Щит' && supportParts[1].amount === 500, JSON.stringify(supportParts)),
+    raw('damage colors distinguish elements and mark elation', windDamage.color === '#5eead4' && elationDamage.elation && supportParts[0].color !== windDamage.color && supportParts[1].color !== '#67e8f9', `${windDamage.color} | ${JSON.stringify(elationDamage)} | ${JSON.stringify(supportParts)}`),
+    raw('multi-element damage groups by element largest first', multiElementDamage.map(p => `${p.element}:${p.amount}`).join('|') === 'Quantum:100|Physical:10', JSON.stringify(multiElementDamage)),
+    raw('damage summary shows element icons after numbers', [...uiHost.querySelectorAll<HTMLElement>('.simActionDamageElement')].some(n => !!n.dataset.element && !!n.querySelector('img')), `icons=${uiHost.querySelectorAll('.simActionDamageElement').length}`),
+    raw('enemy inspector shows toughness bar', toughnessBars.length > 0 && /Tgh/.test(toughnessText) && /\d+\/\d+/.test(toughnessText), toughnessText || 'none'),
     raw('shield damage recorded on hit and action', shieldHitAction?.shieldDamage === 320 && shieldHitAction?.attacks[0]?.shieldDamage === 320 && shieldHit?.shieldDamage === 320 && shieldHit?.damage === 100 && shieldHitAction?.totalDamage === 100, `action=${shieldHitAction?.shieldDamage} attack=${shieldHitAction?.attacks[0]?.shieldDamage} hit=${shieldHit?.shieldDamage} hp=${shieldHit?.damage}`),
     raw('shield-only attack keeps enemy category with zero HP damage', shieldOnlyAction?.category === 'enemyAttack' && shieldOnlyAction?.shieldDamage === 250 && shieldOnlyAction?.totalDamage === 0 && shieldOnlyHit?.shieldDamage === 250 && shieldOnlyHit?.damage === 0, `category=${shieldOnlyAction?.category} shield=${shieldOnlyAction?.shieldDamage} hit=${shieldOnlyHit?.shieldDamage}`),
     raw('combat cards show shield damage total', shieldBadges.some(text => /[\d,]+\s+по щиту/.test(text)), shieldBadges.join(',') || 'none'),
@@ -394,5 +426,7 @@ export default async () => {
     raw('technique target selection populates Targets', techniqueEffects?.targetIds.includes(allyA.id) === true, `targets=${techniqueEffects?.targetIds.join(',')}`),
     raw('Dan Heng Bondmate target emitted and shown', !!bondTargetId && dhTechnique?.targetIds.includes(bondTargetId) === true, `bond=${bondTargetId} targets=${dhTechnique?.targetIds.join(',')}`),
     raw('all Dan Heng shield targets shown', dhShieldTargets.size >= 4 && dhSupportRows.length >= 4, `targets=${dhShieldTargets.size} rows=${dhSupportRows.length}`),
+    raw('Gatekeeper sanction summons Dragonfish', dragonfish.length === 2 && dragonfish.every(u => !u.dead), `${dragonfish.map(u => u.name).join(',')} before=${enemyCountBeforeSanction}`),
+    raw('Summer Songbirds summoned at full HP', !!robinBird && robinBird.hp === robinBird.maxHp, robinBird ? `${robinBird.hp}/${robinBird.maxHp}` : 'missing'),
   ]
 }

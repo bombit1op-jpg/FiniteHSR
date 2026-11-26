@@ -50,7 +50,18 @@
             "Wind",
             "Quantum",
             "Imaginary"
-          ]
+          ],
+          "buff": {
+            "id": "fixture_positive",
+            "name": "Fixture Positive Buff",
+            "mods": [
+              {
+                "stat": "atkPct",
+                "value": 0.1
+              }
+            ],
+            "turns": 99
+          }
         },
         "cycles": 6,
         "seed": 11
@@ -73,7 +84,7 @@
     {
       "id": "pela_pela_e2",
       "layer": "interactions",
-      "claim": "Eidolon/trace observable pela_e2 is present once a companion shares the field.",
+      "claim": "E2 Adamant Charge appears after Frostbite dispels the enemy's opening positive buff.",
       "fixtures": [
         "pair"
       ],

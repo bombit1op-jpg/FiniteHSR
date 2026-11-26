@@ -53,6 +53,7 @@ export interface SimApi {
   /** legacy pretty line + optional structured event (mirrors `Simulator.log`); used by engine
    *  reactions (enemy passives) so a state change is both human- and machine-observable. */
   log(msg: string, evt?: { type: EventType; source?: string; target?: string; sourceId?: string; targetId?: string; ownerId?: string; payload?: Record<string, unknown> }): void
+  addEnemy(o: { name: string; hp: number; spd: number; level: number; toughness: number; weaknesses: Elem[]; res?: Partial<Record<Elem, number>>; atk?: number; effectRes?: number; debuffRes?: number[]; wave?: number; rank?: 'mob' | 'elite' | 'boss'; toughnessBars?: number[]; def?: number }): Unit
   baseAv(u: Unit): number
   hit(attacker: Unit, target: Unit, opts: HitOpts, scope?: 'single' | 'blast' | 'aoe' | 'random'): number
   hitAoe(attacker: Unit, opts: HitOpts): void

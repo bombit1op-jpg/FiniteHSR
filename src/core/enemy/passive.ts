@@ -1,5 +1,6 @@
-import type { Elem, Unit } from '../entities/Unit'
+import type { AbilityType, Elem, Unit } from '../entities/Unit'
 import type { SimApi } from '../kit'
+import { enemyAtLevel } from '../endgame'
 
 /** §57 — optional per-enemy reaction hooks, attached to an `EnemyBehavior`.
  *
@@ -23,7 +24,7 @@ import type { SimApi } from '../kit'
  */
 export interface EnemyPassive {
   onSpawn?(sim: SimApi, self: Unit): void
-  onHitTaken?(sim: SimApi, self: Unit, attacker: Unit): void
+  onHitTaken?(sim: SimApi, self: Unit, attacker: Unit, ability?: AbilityType): void
   onTurnStart?(sim: SimApi, self: Unit): void
   onTurnEnd?(sim: SimApi, self: Unit): void
   onKilled?(sim: SimApi, self: Unit, killer: Unit): void
@@ -263,6 +264,54 @@ export function moonRage(opt: MoonRageOpts = {}): EnemyPassive {
       if (!self.buffs.some(b => b.id === MOON_RAGE)) return
       sim.removeBuff(self, MOON_RAGE)
       sim.log(`${self.name}'s Moon Rage is dispelled by Weakness Break`)
+    },
+  }
+}
+
+export interface SanctionSummonOpts {
+  threshold?: number
+  summonName?: string
+  count?: number
+  weaknesses?: Elem[]
+}
+
+export function sanctionSummon(opt: SanctionSummonOpts = {}): EnemyPassive {
+  const threshold = opt.threshold ?? 3
+  const summonName = opt.summonName ?? 'Entranced Ingenium: Illumination Dragonfish'
+  const count = opt.count ?? 2
+  const control = new Set(['Freeze', 'Imprisonment', 'Entanglement'])
+  return {
+    onSpawn(sim, self) { sim.rt(self).sanctionStacks = 0 },
+    onHitTaken(sim, self, attacker, ability) {
+      if (attacker.side !== 'ally' || (ability !== 'skill' && ability !== 'ult')) return
+      if (self.dead || self.broken || self.dots.some(d => control.has(d.kind))) return
+      const before = (sim.rt(self).sanctionStacks as number) ?? 0
+      if (before >= threshold) return
+      const after = before + 1
+      sim.rt(self).sanctionStacks = after
+      sim.log(`${self.name} Sanction Rate +${Math.round(100 / threshold)}% (${after}/${threshold})`, {
+        type: 'STAT_CHANGED', target: self.name, targetId: self.id,
+        payload: { stat: 'sanctionRate', before, after },
+      })
+      if (after < threshold) return
+      sim.rt(self).sanctionStacks = 0
+      sim.addBuff(self, { id: 'gatekeeper_sanction', name: 'Sanction Mode', mods: [], turns: Infinity, sourceId: self.id })
+      sim.advance(self, 1)
+      const wave = (self as Unit & { wave?: number }).wave ?? 1
+      for (let i = 0; i < count; i++) {
+        const spec = enemyAtLevel(summonName, self.base.level, 1, opt.weaknesses)
+        const spawned = spec
+          ? sim.addEnemy({ ...spec, name: `${summonName} #${i + 1}`, wave })
+          : sim.addEnemy({
+              name: `${summonName} #${i + 1}`, hp: Math.round(self.maxHp * 0.25), spd: self.base.spd,
+              level: self.base.level, toughness: 30, weaknesses: opt.weaknesses ?? ['Physical'],
+              atk: self.base.atk, wave,
+            })
+        sim.log(`${self.name} summons ${spawned.name}`, {
+          type: 'SUMMON_CREATED', source: self.name, sourceId: self.id,
+          target: spawned.name, targetId: spawned.id, payload: { name: spawned.name },
+        })
+      }
     },
   }
 }

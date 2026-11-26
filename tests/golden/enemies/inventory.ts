@@ -28,7 +28,7 @@ export default () => {
     t.eq('inventory: telegraphed abilities == 68', s.telegraphed, 68),
     t.eq('inventory: state-gated abilities == 43', s.withRequire, 43),
     t.eq('inventory: charged abilities == 8', s.withCharges, 8),
-    t.eq('inventory: passive-carrying behaviours == 71', s.passiveBehaviors, 71),
+    t.eq('inventory: passive-carrying behaviours == 72', s.passiveBehaviors, 72),
     t.eq('inventory: phased behaviours == 1', s.phasedBehaviors, 1),
 
     // cross-checks against the §64 base-name coverage registry

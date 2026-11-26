@@ -10,7 +10,7 @@ import { runBattle, ENEMY_PRESETS } from '../core/battle'
 import { resolveEncounter, type EncounterSpec, validateEncounter } from '../core/encounter'
 import { toTeamSpec } from './team'
 import { techniquesForRows } from './store'
-import { charIconUrl, iconNode, metaBadge, enemyIconUrl, charPortraitUrl, gearBadge, effectIconUrl, abilityIconUrl, statIconUrlForKey, summonIconUrl } from './icons'
+import { charIconUrl, iconNode, metaBadge, enemyIconUrl, charPortraitUrl, gearBadge, effectIconUrl, abilityIconUrl, statIconUrlForKey, summonIconUrl, elemIconUrl } from './icons'
 import { el } from './dom'
 
 import { withBusy, showStatus } from './shell'
@@ -110,7 +110,49 @@ function formatStateValue(value: unknown): string {
 }
 
 const ACTION_ENTITY_COLORS = { timer: '#14b8a6', summon: '#e879f9' } as const
+const DAMAGE_ELEMENT_COLORS: Record<string, string> = {
+  Physical: '#d1d5db',
+  Fire: '#ff7a59',
+  Ice: '#67e8f9',
+  Lightning: '#c084fc',
+  Wind: '#5eead4',
+  Quantum: '#a5b4fc',
+  Imaginary: '#facc15',
+}
+const HEAL_COLOR = '#b6ff3d'
+const SHIELD_COLOR = '#5f83ff'
 const COUNTDOWN_STATE_KEY = /countdown|timer|cd(?:id|seq)/i
+
+export function supportSummaryParts(action: CombatActionRecord): Array<{ label: string; amount: number; color: string }> {
+  const heal = action.effects.heals.reduce((sum, e) => sum + Math.max(0, Number(e.amount) || 0), 0)
+  const shield = action.effects.shields.reduce((sum, e) => sum + Math.max(0, Number(e.amount) || 0), 0)
+  return [
+    ...(heal > 0 ? [{ label: 'Лечение', amount: heal, color: HEAL_COLOR }] : []),
+    ...(shield > 0 ? [{ label: 'Щит', amount: shield, color: SHIELD_COLOR }] : []),
+  ]
+}
+
+export function damageElementParts(action: CombatActionRecord, fallbackElement?: string): Array<{ element: string; amount: number; color: string }> {
+  const byElement = new Map<string, number>()
+  for (const hit of action.attacks.flatMap(a => a.hits)) {
+    const amount = Math.max(0, Number(hit.damage) || 0)
+    if (amount <= 0) continue
+    const element = hit.element || fallbackElement || ''
+    byElement.set(element, (byElement.get(element) ?? 0) + amount)
+  }
+  return [...byElement.entries()]
+    .map(([element, amount]) => ({ element, amount, color: DAMAGE_ELEMENT_COLORS[element] ?? '#f2c94c' }))
+    .sort((a, b) => b.amount - a.amount || a.element.localeCompare(b.element))
+}
+
+export function damageDisplay(action: CombatActionRecord, fallbackElement?: string): { color: string; elation: boolean } {
+  const hit = action.attacks.flatMap(a => a.hits).find(h => h.element)
+  const parts = damageElementParts(action, fallbackElement)
+  return {
+    color: parts[0]?.color ?? DAMAGE_ELEMENT_COLORS[hit?.element ?? fallbackElement ?? ''] ?? '#f2c94c',
+    elation: action.attacks.some(a => a.hits.some(h => h.attackType === 'elation')),
+  }
+}
 
 function actionEntityKind(action: CombatActionRecord): keyof typeof ACTION_ENTITY_COLORS | undefined {
   if (action.category === 'timer') return 'timer'
@@ -180,7 +222,8 @@ function entityIconUrl(unit: { name?: string; side?: string; kitId?: string; own
 function effectSourceFor(effect: EffectIdentity, sim: Simulator): { name: string; url?: string } {
   const sourceId = effect.sourceId ?? effect.appliedById
   const unit = sourceId ? sim.roster.find(u => u.id === sourceId) : undefined
-  const name = unit?.name ?? effect.sourceName ?? ''
+  const gearName = sourceId === 'gear' && effect.name ? `Снаряжение · ${effect.name}` : ''
+  const name = unit?.name ?? effect.sourceName ?? gearName
   return { name: name || '—', url: entityIconUrl(unit, sim) }
 }
 
@@ -1125,13 +1168,16 @@ traceContainer.append(traceEl)
       const categoryBadge = el('span', 'simActionCategory')
       categoryBadge.style.background = accent
       categoryBadge.textContent = categoryLabels[action.category] || action.category
+      const abilityName = el('span', 'simActionAbilityName')
+      abilityName.textContent = action.abilityName || 'Атака'
+      abilityName.title = abilityName.textContent
       if (entityKind) {
         const entityBadge = el('span', 'simActionEntity')
         entityBadge.style.color = accent
         entityBadge.textContent = entityKind === 'timer' ? 'Таймер' : 'Призыв'
-        header.append(categoryBadge, entityBadge)
+        header.append(categoryBadge, abilityName, entityBadge)
       } else {
-        header.append(categoryBadge)
+        header.append(categoryBadge, abilityName)
       }
       const meta = el('span', 'simActionMeta')
       meta.textContent = `№${action.order} | AV ${action.av.toFixed(1)} | ACT ${action.actionId}`
@@ -1154,11 +1200,9 @@ traceContainer.append(traceEl)
         abilityIconSpan.append(iconNode(abilityIcon, action.abilityName || action.abilityId || '?', { cls: 'simActionAbilityIconImg', size: 20, fit: 'contain', fallbackText: safeInitial(action.abilityName || action.abilityId || '?'), tint: '#8fd694', title: action.abilityName || action.abilityId || '?' }))
         sourceInfo.append(abilityIconSpan)
       }
-      const abilityName = el('span', 'simActionAbilityName')
-      abilityName.textContent = action.abilityName || 'Атака'
       const spDeltaEl = el('span', 'simActionSpDelta')
       spDeltaEl.textContent = `${formatSpDelta(action.spDelta)} ОД`
-      sourceInfo.append(abilityName, spDeltaEl)
+      sourceInfo.append(spDeltaEl)
       sourceDiv.append(sourceInfo)
 
       const targetsDiv = el('div', 'simActionTargets')
@@ -1183,13 +1227,56 @@ traceContainer.append(traceEl)
       const hasBreak = allHits.some(h => h.breakdown?.broken)
 
       const summary = el('div', 'simActionSummary')
+      const display = damageDisplay(action, sourceUnit?.elem)
+      const damageParts = damageElementParts(action, sourceUnit?.elem)
+      const damageGroup = el('span', 'simActionDamageGroup')
       const dmgSpan = el('span', 'simActionDamage')
-      dmgSpan.textContent = totalDamage > 0 ? totalDamage.toLocaleString() : '—'
+      if (display.elation) dmgSpan.classList.add('elation')
+      dmgSpan.style.color = display.color
+      dmgSpan.title = damageParts.map(p => `${p.element || 'Урон'}: ${p.amount.toLocaleString()}`).join(' / ')
+      if (damageParts.length === 0) {
+        dmgSpan.textContent = `Урон: ${totalDamage > 0 ? totalDamage.toLocaleString() : '—'}`
+      } else {
+        dmgSpan.append(document.createTextNode('Урон: '))
+        damageParts.forEach((part, i) => {
+          if (i > 0) {
+            const slash = el('span', 'simActionDamageSlash')
+            slash.textContent = '/'
+            dmgSpan.append(slash)
+          }
+          const value = el('span', 'simActionDamageValue')
+          value.textContent = part.amount.toLocaleString()
+          const icon = el('span', 'simActionDamageElement')
+          icon.dataset.element = part.element
+          icon.append(iconNode(elemIconUrl(part.element), part.element || '?', {
+            cls: 'simActionDamageElementIcon', size: 14, fit: 'contain',
+            fallbackText: safeInitial(part.element), tint: part.color, title: part.element || 'Урон',
+          }))
+          dmgSpan.append(value, icon)
+        })
+      }
+      damageGroup.append(dmgSpan)
+      const supportParts = supportSummaryParts(action)
+      if (supportParts.length > 0) {
+        const supportLine = el('span', 'simActionSupportSummary')
+        supportParts.forEach((part, i) => {
+          if (i > 0) {
+            const slash = el('span', 'simActionSupportSlash')
+            slash.textContent = ' / '
+            supportLine.append(slash)
+          }
+          const partSpan = el('span', part.label === 'Лечение' ? 'simActionHealSummary' : 'simActionShieldSummary')
+          partSpan.style.color = part.color
+          partSpan.textContent = `${part.label}: ${part.amount.toLocaleString()}`
+          supportLine.append(partSpan)
+        })
+        damageGroup.append(supportLine)
+      }
       const hitsSpan = el('span', 'simActionHitsSummary')
       hitsSpan.textContent = `${allHits.length} попад.${critHits > 0 ? ` (${critHits} крит)` : ''}${hasBreak ? ' | Пробитие' : ''}`
       const effectsSpan = el('span', 'simActionEffects')
       effectsSpan.textContent = `${action.effects.buffs.length + action.effects.debuffs.length + action.effects.dots.length + action.effects.shields.length + action.effects.shieldDamage.length + action.effects.heals.length} эфф.`
-      summary.append(dmgSpan, hitsSpan, effectsSpan)
+      summary.append(damageGroup, hitsSpan, effectsSpan)
       if (totalShieldDamage > 0) {
         const shieldSpan = el('span', 'simActionShieldDamage')
         shieldSpan.textContent = `${totalShieldDamage.toLocaleString()} по щиту`
@@ -1317,6 +1404,11 @@ traceContainer.append(traceEl)
       label.textContent = owner ? `${unit.name} · ${owner.name}` : unit.name
       nameEl.append(label)
       unitEl.append(nameEl)
+      if (options.stats && unit.side === 'enemy' && unit.maxToughness > 0) {
+        const toughBar = vitalBar('Tgh', unit.toughness, unit.maxToughness, '#c9a7ff')
+        toughBar.classList.add('simToughnessBar')
+        unitEl.append(toughBar)
+      }
 
       if (options.stats) {
         const labels = new Set(vitalLabelsForSnapshot(unit))
@@ -1523,14 +1615,14 @@ traceContainer.append(traceEl)
           const sourceEl = el('div', 'simInspectorEffectSource')
           sourceEl.append(iconNode(source.url, source.name, { cls: 'simInspectorEffectSourceIcon', size: 18, fit: 'contain', fallbackText: safeInitial(source.name), tint, title: `Источник: ${source.name}` }))
           const sourceNameEl = el('span')
-          sourceNameEl.textContent = source.name
+          sourceNameEl.textContent = `Источник: ${source.name}`
           sourceEl.append(sourceNameEl)
 
           const target = effectTargetFor(effect, sim)
           const targetEl = el('div', 'simInspectorEffectTarget')
           targetEl.append(iconNode(target.url, target.name, { cls: 'simInspectorEffectTargetIcon', size: 18, fit: 'contain', fallbackText: safeInitial(target.name), tint, title: `Получатель: ${target.name}` }))
           const targetNameEl = el('span')
-          targetNameEl.textContent = target.name
+          targetNameEl.textContent = `Получатель: ${target.name}`
           targetEl.append(targetNameEl)
 
           infoEl.append(nameEl, sourceEl, targetEl)
@@ -1586,10 +1678,8 @@ traceContainer.append(traceEl)
       const buffRows = [...action.effects.buffs.filter(e => e.shield === undefined), ...(snapshotRows?.buff ?? [])]
       const debuffRows = [...action.effects.debuffs, ...action.effects.dots, ...(snapshotRows?.debuff ?? [])]
       const shieldRows = [...action.effects.shields, ...(snapshotRows?.shield ?? [])]
-      const neutralRows = [...buffRows, ...debuffRows].filter(isNeutralEffect)
       addEffectSection('Баффы', buffRows.filter(e => !isNeutralEffect(e) && inScope(e)), 'buff', true)
       addEffectSection('Дебаффы', debuffRows.filter(e => !isNeutralEffect(e) && inScope(e)), 'debuff', true)
-      addEffectSection('Снаряжение и следы', neutralRows.filter(inScope), 'neutral', true)
       addEffectSection('Щиты', shieldRows.filter(inScope), 'shield')
       addEffectSection('Урон по щитам', action.effects.shieldDamage.filter(inScope), 'shield')
       addEffectSection('Лечение', action.effects.heals.filter(inScope), 'buff')
