@@ -63,9 +63,12 @@ export function normalize(events: readonly RawEvent[]): Node[] {
  *  (re-rolled damage, flipped energy grant, bigger shield) must part the traces. Finite numbers are
  *  rounded to 4 decimals to shake float noise and sorted so payload key order never matters;
  *  non-finite values stay literal so a NaN in the trace diverges loudly instead of vanishing. */
-function amountOf(p: Record<string, unknown>): string {
+const TRACE_DISPLAY_META = new Set(['requested', 'applied'])
+
+function amountOf(n: Node): string {
   const nums: string[] = []
-  for (const v of Object.values(p)) {
+  for (const [k, v] of Object.entries(n.payload)) {
+    if (n.type === 'HEAL_APPLIED' && TRACE_DISPLAY_META.has(k)) continue
     if (typeof v !== 'number') continue
     nums.push(Number.isFinite(v) ? String(Math.round(v * 1e4) / 1e4) : String(v))
   }
@@ -76,7 +79,7 @@ function amountOf(p: Record<string, unknown>): string {
  *  The amount fingerprint rides the key: identical shape with a different number is a divergence. */
 export function key(n: Node): string {
   const head = [n.type, n.source ?? '-', n.target ?? '-', n.label ?? '-', n.attackType ?? '-'].join('|')
-  const amount = amountOf(n.payload)
+  const amount = amountOf(n)
   return amount ? `${head} [${amount}]` : head
 }
 

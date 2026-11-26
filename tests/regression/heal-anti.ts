@@ -79,6 +79,17 @@ export default (): Case[] => {
     s2.heal(h2, 100000, h2)
     cases.push(case_('heal: H2 caps at maxHP', healAmt(s2, f2) === 5000, String(healAmt(s2, f2))))
   }
+  // Full HP: HP restore stays zero, but the requested heal remains observable for UI support log.
+  {
+    const { s, h } = mk()
+    h.hp = h.maxHp
+    s.heal(h, 1000, h)
+    const ev = s.logger.events[s.logger.events.length - 1]
+    const p = (ev?.payload ?? {}) as { amount?: number; requested?: number; applied?: number }
+    cases.push(case_('heal: full HP exposes requested without changing HP',
+      ev?.type === 'HEAL_APPLIED' && p.requested === 1000 && p.amount === 0 && p.applied === 0 && h.hp === h.maxHp,
+      `type=${ev?.type} requested=${p.requested} amount=${p.amount} applied=${p.applied} hp=${h.hp}/${h.maxHp}`))
+  }
 
   // I/J: per-mod ability gate (Cornucopia): OHB counts only for a heal produced by a Skill/Ult.
   // I — off-ability heal: the gated mod is skipped (base 1000).

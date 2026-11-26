@@ -16,6 +16,9 @@ export type CombatActionCategory =
   | 'attack' | 'bonusAttack' | 'extraTurn' | 'ultimate'
   | 'enemyAttack' | 'technique' | 'summon' | 'timer' | 'effect' | 'system'
 
+export type CombatActionTag = Exclude<CombatActionCategory, 'system'>
+  | 'counter' | 'dot' | 'breakRestore'
+
 export interface CombatHitRecord {
   hitIndex: number
   targetId: string
@@ -131,6 +134,8 @@ export interface CombatEffectSummary {
     targetId: string
     targetName: string
     amount: number
+    requested?: number
+    applied?: number
     sourceId?: string
     sourceName?: string
     provenance?: BattleEvent['provenance']
@@ -180,6 +185,7 @@ export interface CombatActionRecord {
   order: number
 
   category: CombatActionCategory
+  tags: CombatActionTag[]
 
   sourceId?: string
   sourceName: string
@@ -266,11 +272,15 @@ export function aggregateCombatActions(
       ? (hasMeaningfulContent(actionEvents) ? 'effect' : 'system')
       : baseCategory
     if (category === 'system') continue
+    const tags = categorizeTags(actionEvents, category, abilityName, hasRealAttack)
 
     const sourceName = sourceUnit?.name ?? boundary.source ?? 'Unknown'
+    const attackTargetIds = attacksArray.flatMap(a => a.targetIds)
     const targetIds = [...new Set([
-      ...attacksArray.flatMap(a => a.targetIds),
-      ...actionEvents.filter(e => e.type === 'SUMMON_CREATED' || e.type === 'TARGET_SELECTED').map(e => e.targetId).filter((id): id is string => !!id),
+      ...attackTargetIds,
+      ...actionEvents
+        .filter(e => e.type === 'TARGET_SELECTED' || (e.type === 'SUMMON_CREATED' && attackTargetIds.length === 0))
+        .map(e => e.targetId).filter((id): id is string => !!id),
     ])]
     const beforeSnapshot = snapshots.find(s => s.actionId === boundary.actionId && s.turn === boundary.turn)
     const afterSnapshot = snapshots.find(s => s.actionId === boundary.actionId + 1 && s.turn === boundary.turn)
@@ -286,6 +296,7 @@ export function aggregateCombatActions(
       parentActionId: actionEvents.find(e => e.parentActionId !== undefined)?.parentActionId,
       order: 0,
       category,
+      tags,
       sourceId,
       sourceName,
       abilityId,
@@ -349,6 +360,54 @@ function categorizeAction(events: BattleEvent[], sourceUnit?: { kind?: string; s
   if (sourceUnit?.side === 'enemy' && (hasAttack || events.some(e => e.type === 'ABILITY_USED' || e.type === 'ACTION_START'))) return 'enemyAttack'
   if (hasAttack) return 'attack'
   return hasMeaningfulContent(events) ? 'effect' : 'system'
+}
+
+const TAG_ORDER: CombatActionTag[] = [
+  'effect', 'technique', 'enemyAttack', 'ultimate', 'attack', 'extraTurn',
+  'bonusAttack', 'counter', 'dot', 'breakRestore', 'summon', 'timer',
+]
+
+function categorizeTags(
+  events: BattleEvent[],
+  category: CombatActionCategory,
+  abilityName: string,
+  hasRealAttack: boolean
+): CombatActionTag[] {
+  const tags = new Set<CombatActionTag>()
+  if (category !== 'system') tags.add(category)
+  const text = [abilityName, ...events.flatMap(e => [
+    String(e.payload.abilityName ?? ''),
+    String(e.payload.action ?? ''),
+    String(e.provenance?.abilityName ?? ''),
+  ])].join(' ').toLowerCase()
+  const followUp = events.some(e => e.actionCategory === 'followUpAttack' || e.payload.actionKind === 'followUpAttack')
+  const counter = events.some(e =>
+    e.payload.counter === true || e.payload.counterAttack === true || e.payload.isCounter === true) ||
+    /counter(?:attack)?/.test(text)
+  const dot = events.some(e => e.type === 'DOT_APPLIED' || e.type === 'DOT_TICK' || e.type === 'DOT_EXPIRED')
+  const breakRestore = events.some(e =>
+    e.payload.breakRestore === true || e.payload.restoreToughness === true ||
+    e.payload.toughnessRestore === true || e.payload.reason === 'break_restore') ||
+    /(?:break|weakness)[^|]{0,24}(?:restore|recover)|(?:restore|recover)[^|]{0,24}(?:toughness|break)/.test(text)
+  const summon = events.some(e => e.type === 'SUMMON_CREATED' || e.payload.summon === true)
+  const ultimate = events.some(e =>
+    e.payload.action === 'ult' || e.payload.actionKind === 'ult' ||
+    e.payload.actionKind === 'ultimate' || e.payload.ult === true ||
+    e.provenance?.abilitySlot === 'ult') || /\bult(?:imate)?\b/.test(text)
+  const extraTurn = events.some(e =>
+    e.type === 'EXTRA_TURN' || (e.payload.extra === true && !followUp) || e.payload.outOfTurn === true)
+  const effect = hasMeaningfulContent(events) ||
+    events.some(e => e.type === 'BUFF_EXPIRED' || e.type === 'DEBUFF_EXPIRED' || e.type === 'DISPELLED')
+  if (hasRealAttack && category !== 'enemyAttack') tags.add('attack')
+  if (followUp) tags.add('bonusAttack')
+  if (counter) tags.add('counter')
+  if (dot) tags.add('dot')
+  if (breakRestore) tags.add('breakRestore')
+  if (summon) tags.add('summon')
+  if (ultimate && category !== 'enemyAttack') tags.add('ultimate')
+  if (extraTurn) tags.add('extraTurn')
+  if (effect && category !== 'enemyAttack') tags.add('effect')
+  return TAG_ORDER.filter(tag => tags.has(tag))
 }
 
 function hasMeaningfulContent(events: BattleEvent[]): boolean {
@@ -630,6 +689,8 @@ function buildEffectsSummary(
           targetId,
           targetName,
           amount: payload.amount ?? 0,
+          requested: payload.requested ?? payload.amount ?? 0,
+          applied: payload.applied ?? payload.amount ?? 0,
           sourceId,
           sourceName,
           provenance: e.provenance,

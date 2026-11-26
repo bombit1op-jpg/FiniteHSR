@@ -1438,7 +1438,9 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
   gap: 8px;
   margin-bottom: 6px;
 }
-.simActionCategory {
+.simActionTags { display: flex; flex-wrap: wrap; gap: 4px; }
+.simActionCategory,
+.simActionTag {
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
@@ -1516,6 +1518,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
     linear-gradient(90deg, #ff4d4d, #ffb84d, #5cff7a, #5cc8ff, #b45cff, #ff5cc8) border-box;
 }
 .simToughnessBar { margin-top: 2px; }
+.simToughnessBar .simVitalValue { color: #fff; }
 .simActionShieldDamage { font-weight: 700; color: #7ec8ff; font-variant-numeric: tabular-nums; }
 .simActionHitsSummary { color: #7fd18a; }
 .simActionEffects { color: #7fb3ff; }

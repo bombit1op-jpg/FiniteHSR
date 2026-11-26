@@ -42,6 +42,13 @@ export default async () => {
   const hiddenSystemAction = aggregateCombatActions([
     { eventId: -5, time: 0, turn: 0, actionId: 0, type: 'ACTION_START', source: 'System', payload: {}, combatActionId: 'probe_system' },
   ] as any, sim, [])[0]
+  const summonAfterHitAction = aggregateCombatActions([
+    { eventId: -40, time: 0, turn: 0, actionId: 1, type: 'ACTION_START', source: sim.roster.find(u => u.side === 'ally')!.name, sourceId: sim.roster.find(u => u.side === 'ally')!.id, payload: { action: 'skill' }, actionCategory: 'attack', combatActionId: 'probe_summon_after_hit' },
+    { eventId: -41, time: 0, turn: 0, actionId: 1, type: 'ABILITY_USED', source: sim.roster.find(u => u.side === 'ally')!.name, sourceId: sim.roster.find(u => u.side === 'ally')!.id, attackId: 'probe_summon_after_hit_atk', payload: { action: 'skill', abilityName: 'Probe AoE' }, combatActionId: 'probe_summon_after_hit' },
+    { eventId: -42, time: 0, turn: 0, actionId: 1, type: 'HIT_START', source: sim.roster.find(u => u.side === 'ally')!.name, sourceId: sim.roster.find(u => u.side === 'ally')!.id, target: sim.roster.find(u => u.side === 'enemy')!.name, targetId: sim.roster.find(u => u.side === 'enemy')!.id, attackId: 'probe_summon_after_hit_atk', payload: { abilityName: 'Probe AoE' }, combatActionId: 'probe_summon_after_hit' },
+    { eventId: -43, time: 0, turn: 0, actionId: 1, type: 'DAMAGE_DEALT', source: sim.roster.find(u => u.side === 'ally')!.name, sourceId: sim.roster.find(u => u.side === 'ally')!.id, target: sim.roster.find(u => u.side === 'enemy')!.name, targetId: sim.roster.find(u => u.side === 'enemy')!.id, attackId: 'probe_summon_after_hit_atk', payload: { amount: 100, abilityName: 'Probe AoE' }, combatActionId: 'probe_summon_after_hit' },
+    { eventId: -44, time: 0, turn: 0, actionId: 1, type: 'SUMMON_CREATED', source: sim.roster.find(u => u.side === 'ally')!.name, sourceId: sim.roster.find(u => u.side === 'ally')!.id, target: 'Late Summon', targetId: 'probe_late_summon', payload: { kind: 'summon', name: 'Late Summon' }, combatActionId: 'probe_summon_after_hit' },
+  ] as any, sim, [])[0]
 
   const uiHost = doc.getElementById('uiSimulationRoot') as HTMLElement
   const uiStore = new PartyStore()
@@ -63,6 +70,8 @@ export default async () => {
   await uiRunBtn.onclick?.call(uiRunBtn, undefined as unknown as PointerEvent)
 
   const cards = [...uiHost.querySelectorAll<HTMLElement>('.simCombatActionCard')]
+  const tagBadges = [...uiHost.querySelectorAll<HTMLElement>('.simActionTag')]
+  const multiTagCards = cards.filter(c => c.querySelectorAll('.simActionTag').length > 1)
   const enemyAttackCard = cards.find(c => c.classList.contains('enemyAttack'))
   const spDeltaLabels = cards.map(c => c.querySelector('.simActionSpDelta')?.textContent ?? '').filter(Boolean)
   const fuaCard = cards.find(c => c.textContent?.includes('Kafka') && c.textContent?.includes('Gentle but Cruel') && !!c.querySelector('.simActionHitsSummary'))
@@ -76,9 +85,8 @@ export default async () => {
   const encounterPreview = uiHost.querySelector('.encounterIconPreview')
   const encounterSelect = encounterPreview?.querySelector('select')
   const encounterIcons = [...uiHost.querySelectorAll<HTMLImageElement>('.encounterEnemyIcon img')].map(img => img.getAttribute('src') ?? '')
-  const vitalCard = cards.find(c => !!c.querySelector('.simActionVitals'))
-  const vitalLabels = [...(vitalCard?.querySelectorAll<HTMLElement>('.simVitalBar') ?? [])]
-    .map(bar => bar.querySelector('.simVitalLabel')?.textContent ?? '')
+  const enemyCardVitalLabels = [...(enemyAttackCard?.querySelectorAll<HTMLElement>('.simVitalLabel') ?? [])]
+    .map(label => label.textContent ?? '')
   const shieldBadges = [...uiHost.querySelectorAll<HTMLElement>('.simActionShieldDamage')]
     .map(badge => badge.textContent ?? '')
   const shieldHitLabels = [...uiHost.querySelectorAll<HTMLElement>('.simInspectorHitShieldDamage')]
@@ -113,6 +121,32 @@ export default async () => {
     ],
     rng: () => 0,
   })
+  const taggedAction = (id: string, seed: number, payload: Record<string, unknown>, actionCategory: string | undefined, tail: any[]): any => aggregateCombatActions([
+    { eventId: -200 - seed * 10, time: 0, turn: 0, actionId: seed, type: 'ACTION_START', source: allyA.name, sourceId: allyA.id, payload, actionCategory, combatActionId: id },
+    ...tail.map((e, i) => ({ eventId: -201 - seed * 10 - i, time: 0, turn: 0, actionId: seed, source: allyA.name, sourceId: allyA.id, combatActionId: id, ...e })),
+  ] as any, sim, [])[0]
+  const taggedAttackTail = (attackId: string, abilityName: string): any[] => [
+    { type: 'ABILITY_USED', attackId, payload: { abilityName } },
+    { type: 'HIT_START', attackId, target: enemy.name, targetId: enemy.id, payload: { abilityName } },
+    { type: 'DAMAGE_DEALT', attackId, target: enemy.name, targetId: enemy.id, payload: { amount: 100, abilityName } },
+  ]
+  const seeleTags = taggedAction('probe_tag_extra', 10, { action: 'skill', abilityName: 'Seele Skill' }, 'attack', [
+    ...taggedAttackTail('probe_tag_extra_atk', 'Seele Skill'),
+    { type: 'EXTRA_TURN', payload: {} },
+  ])
+  const souldragonTags = taggedAction('probe_tag_bonus', 11, { action: 'skill', abilityName: 'Souldragon Strike' }, 'followUpAttack',
+    taggedAttackTail('probe_tag_bonus_atk', 'Souldragon Strike'))
+  const yunliTags = taggedAction('probe_tag_counter', 12, { action: 'ult', abilityName: 'Enhanced Counter', counter: true, actionKind: 'followUpAttack' }, 'followUpAttack', [
+    ...taggedAttackTail('probe_tag_counter_atk', 'Enhanced Counter'),
+    { type: 'BUFF_APPLIED', target: allyA.name, targetId: allyA.id, payload: { id: 'yunli_buff', name: 'Enhanced Counter' } },
+  ])
+  const castoriceTags = taggedAction('probe_tag_summon', 13, { action: 'ult', abilityName: 'Castorice Ult' }, undefined, [
+    { type: 'SUMMON_CREATED', target: 'Pollux', targetId: 'probe_tag_pollux', payload: { kind: 'summon', name: 'Pollux' } },
+  ])
+  const dotBreakTags = taggedAction('probe_tag_dot', 14, { action: 'skill', abilityName: 'Break Restore' }, 'effect', [
+    { type: 'DOT_APPLIED', target: enemy.name, targetId: enemy.id, payload: { kind: 'Bleed', name: 'Bleed' } },
+    { type: 'BUFF_APPLIED', target: allyA.name, targetId: allyA.id, payload: { id: 'hp_restore', name: 'HP Restore', reason: 'break_restore' } },
+  ])
   const enemyCategory = aggregateCombatActions([
     { eventId: -1, time: 0, turn: 0, actionId: 0, type: 'ACTION_START', source: enemy.name, sourceId: enemy.id, payload: { action: 'attack' }, combatActionId: 'probe_enemy' },
     { eventId: -2, time: 0, turn: 0, actionId: 0, type: 'ABILITY_USED', source: enemy.name, sourceId: enemy.id, payload: { action: 'attack' }, combatActionId: 'probe_enemy' },
@@ -131,6 +165,11 @@ export default async () => {
     { eventId: -34, time: 0, turn: 0, actionId: 0, type: 'SP_GAIN', source: allyA.name, sourceId: allyA.id, payload: { n: 1 } },
     { eventId: -35, time: 0, turn: 0, actionId: 0, type: 'SHIELD_APPLIED', source: allyA.name, sourceId: allyA.id, target: allyA.name, targetId: allyA.id, payload: { amount: 111, id: 'probe_shield', name: 'Probe Shield' } },
   ] as any, sim, [])[0]
+  const fullHpHealAction = aggregateCombatActions([
+    { eventId: -36, time: 0, turn: 0, actionId: 0, type: 'HEAL_APPLIED', source: allyA.name, sourceId: allyA.id, target: allyA.name, targetId: allyA.id, payload: { amount: 0, requested: 777, applied: 0, id: 'probe_full_hp_heal', name: 'Probe Full HP Heal' }, combatActionId: 'probe_full_hp_heal' },
+  ] as any, sim, [])[0]
+  const fullHpHealText = renderSupportLog(fullHpHealAction as any)?.textContent ?? ''
+  const fullHpHealParts = supportSummaryParts(fullHpHealAction as any)
   const dhSim = runBattle({
     team: presetTeam('danhengperman'),
     enemy: { ...ENEMY_PRESETS.mob, count: 1 },
@@ -288,6 +327,8 @@ export default async () => {
     { element: 'Physical', damage: 10, attackType: 'add' },
     { element: 'Quantum', damage: 100, attackType: 'add' },
   ] }] } as any)
+  const multiElementColors = multiElementDamage.map(p => p.color)
+  const enemyVitalLabels = vitalLabelsForSnapshot({ kind: 'char', side: 'enemy' } as any)
   const trueSummonVitalLabels = vitalLabelsForSnapshot({ kind: 'summon', sharesOwnerBuffs: true })
   const memoSpriteVitalLabels = vitalLabelsForSnapshot({ kind: 'summon' })
   const charVitalLabels = vitalLabelsForSnapshot({ kind: 'char' })
@@ -368,10 +409,12 @@ export default async () => {
     raw('support log shows heal and shield with source target amount', supportText.includes(`${allyA.name} → ${allyB.name}: 500 щит`) && supportText.includes(`${allyA.name} → ${allyB.name}: 350 HP`), supportText),
     raw('snapshot carries summon ownership flag', Object.values(stateSnapshot.units).every(u => 'sharesOwnerBuffs' in u), Object.values(stateSnapshot.units).map(u => `${u.id}:${u.sharesOwnerBuffs}`).join(',')),
     raw('vitals hide true summon HP/EN and memosprite EN', trueSummonVitalLabels.join(',') === 'ОД' && memoSpriteVitalLabels.join(',') === 'HP,ОД' && charVitalLabels.join(',') === 'HP,EN,ОД', `${trueSummonVitalLabels.join(',')} | ${memoSpriteVitalLabels.join(',')} | ${charVitalLabels.join(',')}`),
+    raw('enemy vitals omit energy and SP', enemyVitalLabels.join(',') === 'HP', enemyVitalLabels.join(',') || 'none'),
+    raw('enemy action card hides energy and SP vitals', !!enemyAttackCard && enemyCardVitalLabels.every(label => label !== 'EN' && label !== 'ОД'), enemyCardVitalLabels.join(',') || 'missing'),
     raw('encounter art uses enemy icons', encounterIcons.includes(enemyIconUrl('Ice Edge') ?? '') && encounterIcons.some(src => decodeURIComponent(src).includes('Ice Edge (1)')), encounterIcons.join(' | ')),
     raw('hit rows omit damage breakdown', uiHost.querySelectorAll('.simInspectorHitBreakdown').length === 0, `breakdowns=${uiHost.querySelectorAll('.simInspectorHitBreakdown').length}`),
     raw('action inspector omits duplicated metadata grid', actionTabGridCount === 0, `grids=${actionTabGridCount}`),
-    raw('battle log shows HP energy and OD vitals', vitalLabels.join(',') === 'HP,EN,ОД', vitalLabels.join(',') || 'none'),
+    raw('battle log shows HP energy and OD vitals', charVitalLabels.join(',') === 'HP,EN,ОД', charVitalLabels.join(',') || 'none'),
     raw('battle log labels targets explicitly', [...uiHost.querySelectorAll('.simActionTargetsLabel')].some(label => label.textContent === 'Targets:'), `labels=${uiHost.querySelectorAll('.simActionTargetsLabel').length}`),
     raw('effect summary carries stable source id', actions.some(a => a.effects.buffs.some(b => !!b.sourceId)), `withSource=${actions.filter(a => a.effects.buffs.some(b => !!b.sourceId)).length}`),
     raw('E0 renders in simulation party card', e0Text === 'E0', e0Text),
@@ -406,12 +449,13 @@ export default async () => {
     raw('named summon source uses own icon', (rowsNamed('ATK Up', namedSummonHost)[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src') ?? '').includes('Character Blade Icon.png'), rowsNamed('ATK Up', namedSummonHost)[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src') ?? ''),
     raw('real enemy actions categorized as enemy attack', actions.some(a => a.sourceId === enemy.id && a.category === 'enemyAttack'), actions.filter(a => a.sourceId === enemy.id).map(a => a.category).join(',')),
     raw('enemy attack cards use red accent', !!enemyAttackCard && enemyAttackCard.style.borderLeftColor === '#ef4444', enemyAttackCard?.style.borderLeftColor ?? 'missing'),
-    raw('enemy attack cards carry enemy label', enemyAttackCard?.querySelector('.simActionCategory')?.textContent === 'Атака врага', enemyAttackCard?.querySelector('.simActionCategory')?.textContent ?? 'missing'),
+    raw('enemy attack cards carry enemy label', enemyAttackCard?.querySelector('.simActionCategory')?.textContent === 'Атака Врага', enemyAttackCard?.querySelector('.simActionCategory')?.textContent ?? 'missing'),
     raw('action card shows ability name in header', [...uiHost.querySelectorAll<HTMLElement>('.simActionHeader .simActionAbilityName')].some(n => (n.textContent ?? '').length > 0), `headers=${uiHost.querySelectorAll('.simActionHeader .simActionAbilityName').length}`),
     raw('damage summary labels damage explicitly', [...uiHost.querySelectorAll<HTMLElement>('.simActionDamage')].some(n => (n.textContent ?? '').startsWith('Урон:')), `damage=${[...uiHost.querySelectorAll<HTMLElement>('.simActionDamage')].map(n => n.textContent).join('|')}`),
     raw('damage summary shows heal and shield together', supportParts.length === 2 && supportParts[0].label === 'Лечение' && supportParts[0].amount === 350 && supportParts[1].label === 'Щит' && supportParts[1].amount === 500, JSON.stringify(supportParts)),
     raw('damage colors distinguish elements and mark elation', windDamage.color === '#5eead4' && elationDamage.elation && supportParts[0].color !== windDamage.color && supportParts[1].color !== '#67e8f9', `${windDamage.color} | ${JSON.stringify(elationDamage)} | ${JSON.stringify(supportParts)}`),
     raw('multi-element damage groups by element largest first', multiElementDamage.map(p => `${p.element}:${p.amount}`).join('|') === 'Quantum:100|Physical:10', JSON.stringify(multiElementDamage)),
+    raw('multi-element damage parts keep element-specific colors', multiElementColors.length === 2 && multiElementColors[0] !== multiElementColors[1] && multiElementColors.every(color => /^#[0-9a-f]{6}$/i.test(color)), multiElementColors.join('|')),
     raw('damage summary shows element icons after numbers', [...uiHost.querySelectorAll<HTMLElement>('.simActionDamageElement')].some(n => !!n.dataset.element && !!n.querySelector('img')), `icons=${uiHost.querySelectorAll('.simActionDamageElement').length}`),
     raw('enemy inspector shows toughness bar', toughnessBars.length > 0 && /Tgh/.test(toughnessText) && /\d+\/\d+/.test(toughnessText), toughnessText || 'none'),
     raw('shield damage recorded on hit and action', shieldHitAction?.shieldDamage === 320 && shieldHitAction?.attacks[0]?.shieldDamage === 320 && shieldHit?.shieldDamage === 320 && shieldHit?.damage === 100 && shieldHitAction?.totalDamage === 100, `action=${shieldHitAction?.shieldDamage} attack=${shieldHitAction?.attacks[0]?.shieldDamage} hit=${shieldHit?.shieldDamage} hp=${shieldHit?.damage}`),
@@ -424,9 +468,19 @@ export default async () => {
     raw('combat log drops system rows', !cards.some(c => c.classList.contains('system')), `systemCards=${cards.filter(c => c.classList.contains('system')).length}`),
     raw('technique events keep damage healing and SP in one action', techniqueEffects?.category === 'technique' && techniqueEffects?.totalDamage === 333 && techniqueEffects?.effects.heals.some(h => h.amount === 222) === true && techniqueEffects?.spDelta === 1, `category=${techniqueEffects?.category} dmg=${techniqueEffects?.totalDamage} heals=${techniqueEffects?.effects.heals.length} sp=${techniqueEffects?.spDelta}`),
     raw('technique target selection populates Targets', techniqueEffects?.targetIds.includes(allyA.id) === true, `targets=${techniqueEffects?.targetIds.join(',')}`),
+    raw('summons created during an attack are not shown as targets', summonAfterHitAction?.targetIds.includes(enemy.id) === true && summonAfterHitAction?.targetIds.includes('probe_late_summon') === false, `targets=${summonAfterHitAction?.targetIds.join(',')}`),
     raw('Dan Heng Bondmate target emitted and shown', !!bondTargetId && dhTechnique?.targetIds.includes(bondTargetId) === true, `bond=${bondTargetId} targets=${dhTechnique?.targetIds.join(',')}`),
     raw('all Dan Heng shield targets shown', dhShieldTargets.size >= 4 && dhSupportRows.length >= 4, `targets=${dhShieldTargets.size} rows=${dhSupportRows.length}`),
     raw('Gatekeeper sanction summons Dragonfish', dragonfish.length === 2 && dragonfish.every(u => !u.dead), `${dragonfish.map(u => u.name).join(',')} before=${enemyCountBeforeSanction}`),
     raw('Summer Songbirds summoned at full HP', !!robinBird && robinBird.hp === robinBird.maxHp, robinBird ? `${robinBird.hp}/${robinBird.maxHp}` : 'missing'),
+    raw('combat actions carry multiple mechanic tags',
+      seeleTags?.tags.join(',') === 'attack,extraTurn'
+      && souldragonTags?.tags.join(',') === 'attack,bonusAttack'
+      && yunliTags?.tags.join(',') === 'effect,ultimate,attack,bonusAttack,counter'
+      && castoriceTags?.tags.join(',') === 'ultimate,summon'
+      && dotBreakTags?.tags.join(',') === 'effect,dot,breakRestore',
+      `seele=${seeleTags?.tags.join(',')} dragon=${souldragonTags?.tags.join(',')} yunli=${yunliTags?.tags.join(',')} castorice=${castoriceTags?.tags.join(',')} dot=${dotBreakTags?.tags.join(',')}`),
+    raw('action cards render mechanic tag badges', tagBadges.length > 0 && cards.length > 0 && cards.every(c => !!c.querySelector('.simActionTags') && !!c.querySelector('.simActionTag')), `badges=${tagBadges.length} multi=${multiTagCards.length} cards=${cards.length}`),
+    raw('full HP heal stays visible with requested amount', fullHpHealText.includes('777 HP') && fullHpHealParts.length === 1 && fullHpHealParts[0].amount === 777, `${fullHpHealText} | ${JSON.stringify(fullHpHealParts)}`),
   ]
 }

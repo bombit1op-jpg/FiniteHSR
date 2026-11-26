@@ -15,7 +15,7 @@ import { el } from './dom'
 
 import { withBusy, showStatus } from './shell'
 import { openEnemyPicker } from './enemyPicker'
-import { aggregateCombatActions, collectSnapshots, type CombatActionRecord, type CombatActionCategory, type CombatHitRecord } from './combatActionView'
+import { aggregateCombatActions, collectSnapshots, type CombatActionRecord, type CombatActionCategory, type CombatActionTag, type CombatHitRecord } from './combatActionView'
 import type { DebugLevel, StateSnapshot } from '../core/battlelog'
 import type { Party } from '../core/party'
 import type { Simulator } from '../core/simulator'
@@ -46,13 +46,14 @@ function safeInitial(value: unknown, fallback = '?'): string {
 
 type SnapshotUnit = StateSnapshot['units'][string]
 
-export function vitalLabelsForSnapshot(unit: Pick<SnapshotUnit, 'kind' | 'sharesOwnerBuffs'>): string[] {
+export function vitalLabelsForSnapshot(unit: Pick<SnapshotUnit, 'kind' | 'sharesOwnerBuffs'> & { side?: SnapshotUnit['side'] }): string[] {
   const trueSummon = !!unit.sharesOwnerBuffs
   const memoSprite = unit.kind === 'summon' && !trueSummon
+  const enemy = unit.side === 'enemy'
   return [
     ...(trueSummon ? [] : ['HP']),
-    ...(trueSummon || memoSprite ? [] : ['EN']),
-    'ОД',
+    ...(enemy || trueSummon || memoSprite ? [] : ['EN']),
+    ...(enemy ? [] : ['ОД']),
   ]
 }
 
@@ -68,11 +69,12 @@ export function renderSupportLog(action: CombatActionRecord): HTMLElement | unde
     rows.push(row)
   }
   for (const h of action.effects.heals) {
-    const key = `heal|${h.sourceId ?? h.sourceName ?? ''}|${h.targetId}|${Math.round(h.amount)}|${h.id}`
+    const amount = Math.max(0, Number(h.requested ?? h.amount) || 0)
+    const key = `heal|${h.sourceId ?? h.sourceName ?? ''}|${h.targetId}|${Math.round(amount)}|${h.id}`
     if (seen.has(key)) continue
     seen.add(key)
     const row = el('div', 'simActionSupportRow')
-    row.textContent = `${h.sourceName ?? '?'} → ${h.targetName}: ${h.amount.toLocaleString()} HP`
+    row.textContent = `${h.sourceName ?? '?'} → ${h.targetName}: ${amount.toLocaleString()} HP`
     rows.push(row)
   }
   if (!rows.length) return undefined
@@ -124,7 +126,7 @@ const SHIELD_COLOR = '#5f83ff'
 const COUNTDOWN_STATE_KEY = /countdown|timer|cd(?:id|seq)/i
 
 export function supportSummaryParts(action: CombatActionRecord): Array<{ label: string; amount: number; color: string }> {
-  const heal = action.effects.heals.reduce((sum, e) => sum + Math.max(0, Number(e.amount) || 0), 0)
+  const heal = action.effects.heals.reduce((sum, e) => sum + Math.max(0, Number(e.requested ?? e.amount) || 0), 0)
   const shield = action.effects.shields.reduce((sum, e) => sum + Math.max(0, Number(e.amount) || 0), 0)
   return [
     ...(heal > 0 ? [{ label: 'Лечение', amount: heal, color: HEAL_COLOR }] : []),
@@ -1146,7 +1148,12 @@ traceContainer.append(traceEl)
       const vitals = el('div', 'simActionVitals')
       if (labels.has('HP')) vitals.append(vitalBar('HP', snap.hp, snap.maxHp, '#4ade80', shield > 0 ? shield.toLocaleString() : undefined))
       if (labels.has('EN')) vitals.append(vitalBar('EN', snap.energy, snap.maxEnergy, '#60a5fa'))
-      vitals.append(vitalBar('ОД', teamSnapshot?.sp ?? 0, teamSnapshot?.maxSp ?? 5, '#f2c94c'))
+      if (labels.has('ОД')) vitals.append(vitalBar('ОД', teamSnapshot?.sp ?? 0, teamSnapshot?.maxSp ?? 5, '#f2c94c'))
+      if (snap.side === 'enemy' && snap.maxToughness > 0) {
+        const tough = vitalBar('Tgh', snap.toughness, snap.maxToughness, '#c9a7ff')
+        tough.classList.add('simToughnessBar')
+        vitals.append(tough)
+      }
       return vitals
     }
 
@@ -1165,9 +1172,16 @@ traceContainer.append(traceEl)
       const abilityIcon = abilityIconUrl(action.abilityName || action.abilityId || '')
 
       const header = el('div', 'simActionHeader')
-      const categoryBadge = el('span', 'simActionCategory')
-      categoryBadge.style.background = accent
-      categoryBadge.textContent = categoryLabels[action.category] || action.category
+      const tags = action.tags?.length ? action.tags : [action.category]
+      const tagGroup = el('span', 'simActionTags')
+      tags.forEach((tag, i) => {
+        const badge = el('span', i === 0 ? 'simActionCategory simActionTag' : 'simActionTag')
+        badge.classList.add(`simActionTag-${tag}`)
+        const colorKey = tag as CombatActionTag
+        badge.style.background = tagColors[colorKey] ?? accent
+        badge.textContent = tagLabels[colorKey] ?? categoryLabels[tag as CombatActionCategory] ?? tag
+        tagGroup.append(badge)
+      })
       const abilityName = el('span', 'simActionAbilityName')
       abilityName.textContent = action.abilityName || 'Атака'
       abilityName.title = abilityName.textContent
@@ -1175,9 +1189,9 @@ traceContainer.append(traceEl)
         const entityBadge = el('span', 'simActionEntity')
         entityBadge.style.color = accent
         entityBadge.textContent = entityKind === 'timer' ? 'Таймер' : 'Призыв'
-        header.append(categoryBadge, abilityName, entityBadge)
+        header.append(tagGroup, abilityName, entityBadge)
       } else {
-        header.append(categoryBadge, abilityName)
+        header.append(tagGroup, abilityName)
       }
       const meta = el('span', 'simActionMeta')
       meta.textContent = `№${action.order} | AV ${action.av.toFixed(1)} | ACT ${action.actionId}`
@@ -1245,6 +1259,7 @@ traceContainer.append(traceEl)
             dmgSpan.append(slash)
           }
           const value = el('span', 'simActionDamageValue')
+          value.style.color = part.color
           value.textContent = part.amount.toLocaleString()
           const icon = el('span', 'simActionDamageElement')
           icon.dataset.element = part.element
@@ -1326,13 +1341,43 @@ traceContainer.append(traceEl)
     const categoryLabels: Partial<Record<CombatActionCategory, string>> = {
       attack: 'Атака',
       bonusAttack: 'Бонус-атака',
-      extraTurn: 'Доп. ход',
+      extraTurn: 'Доп.Ход',
       ultimate: 'Ультимейт',
-      enemyAttack: 'Атака врага',
+      enemyAttack: 'Атака Врага',
       technique: 'Техника',
       summon: 'Призыв',
       timer: 'Таймер',
       effect: 'Эффект',
+    }
+
+    const tagLabels: Record<CombatActionTag, string> = {
+      attack: 'Атака',
+      bonusAttack: 'Бонус-атака',
+      extraTurn: 'Доп.Ход',
+      ultimate: 'Ультимейт',
+      enemyAttack: 'Атака Врага',
+      technique: 'Техника',
+      summon: 'Призыв',
+      timer: 'Таймер',
+      effect: 'Эффект',
+      counter: 'Контратака',
+      dot: 'DoT',
+      breakRestore: 'Восстановление из пробития',
+    }
+
+    const tagColors: Record<CombatActionTag, string> = {
+      attack: '#3b82f6',
+      bonusAttack: '#f59e0b',
+      extraTurn: '#22c55e',
+      ultimate: '#a855f7',
+      enemyAttack: '#ef4444',
+      technique: '#14b8a6',
+      summon: '#e879f9',
+      timer: '#0ea5e9',
+      effect: '#8b5cf6',
+      counter: '#fb7185',
+      dot: '#84cc16',
+      breakRestore: '#facc15',
     }
 
     function selectAction(action: CombatActionRecord): void {

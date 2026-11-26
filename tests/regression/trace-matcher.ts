@@ -27,6 +27,13 @@ export default (): Case[] => {
     key(ev('DAMAGE_CALCULATED', { mult: 0.3, dmg: 38214 })),
     key(ev('DAMAGE_CALCULATED', { mult: 0.30000000000000004, dmg: 38214 }))))
 
+  const healKey = (amount: number, requested: number, applied: number): string =>
+    key(ev('HEAL_APPLIED', { amount, requested, applied, hp: 100, maxHp: 100, ohb: 0, ihb: 0 }))
+  cases.push(t.eq('TraceMatcher: heal display metadata does not diverge',
+    healKey(0, 1000, 0), healKey(0, 777, 0)))
+  cases.push(t.truthy('TraceMatcher: heal amount still diverges',
+    healKey(0, 1000, 0) !== healKey(500, 1000, 500)))
+
   const note = (msg: string): Node => normalize([
     { eventId: 2, turn: 1, actionId: 2, type: 'NOTE', raw: msg },
   ])[0]

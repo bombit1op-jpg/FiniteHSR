@@ -39,9 +39,10 @@ export class HealingPipeline {
     const ohb = healer && healer.side === 'ally' && healer.kind === 'char' ? this.ohb(healer) : 0
     const mult = Math.max(0, 1 + ihb + ohb)
     const before = u.hp
-    u.hp = Math.min(u.maxHp, u.hp + Math.round(amount * mult))
+    const requested = Math.round(amount * mult)
+    u.hp = Math.min(u.maxHp, u.hp + requested)
     if (u.hp > before) this.s.events.fireAllyHeal(u, u.hp - before, healer)
-    this.s.logger.emit({ type: 'HEAL_APPLIED', source: healer?.name, target: u.name, sourceId: healer?.id, targetId: u.id, payload: { amount: u.hp - before, hp: u.hp, maxHp: u.maxHp, ohb, ihb } })
+    this.s.logger.emit({ type: 'HEAL_APPLIED', source: healer?.name, target: u.name, sourceId: healer?.id, targetId: u.id, payload: { amount: u.hp - before, requested, applied: u.hp - before, hp: u.hp, maxHp: u.maxHp, ohb, ihb } })
     // the acting ally healed someone else -> fire their gear hook (Goddess Gentle Rain)
     if (healer && healer.side === 'ally' && healer.kind === 'char' && healer !== u)
       this.s.gearMap.get(healer.id)?.relicSets?.forEach(s => s.onAllyHeal?.(this.s, healer))
