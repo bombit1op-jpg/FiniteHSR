@@ -12,6 +12,7 @@ import { el } from './dom'
 import { charIconUrl, charPortrait, gearIconUrl, iconNode, elemIconUrl, pathIconUrl } from './icons'
 import type { Party } from '../core/party'
 import type { TeamRowState } from './store'
+import RELIC_SET_DATA from '../../hsr-data/data/relicsets.json'
 
 // Shared rank labels used by pickers
 export const RANK_LABELS: Record<string, string> = {
@@ -105,6 +106,122 @@ export function openOverlay(title: string, onDismiss: () => void, anchor?: HTMLE
   x.onclick = () => { close(); onDismiss() }
   root.addEventListener('click', (e) => { if (e.target === root) { close(); onDismiss() } })
   return { root, body, close }
+}
+
+const SET_NAME_ALIASES: Record<string, string> = {
+  'Talia- Kingdom of Banditry': 'Talia: Kingdom of Banditry',
+  'Firmament Frontline- Glamoth': 'Firmament Frontline: Glamoth',
+}
+const SET_DATA_BY_NAME = new Map(
+  Object.values(RELIC_SET_DATA).map(s => [s.name, s]),
+)
+
+function setEffectLines(name: string): string[] {
+  const data = SET_DATA_BY_NAME.get(SET_NAME_ALIASES[name] ?? name)
+  if (!data) return []
+  const bonuses = data.set_bonuses as Record<string, { desc?: string; param_list?: number[] }> | undefined
+  if (!bonuses) return []
+  const lines: string[] = []
+  for (const pieces of ['2', '4']) {
+    const bonus = bonuses[pieces]
+    if (!bonus?.desc) continue
+    const params = bonus.param_list ?? []
+    const text = bonus.desc
+      .replace(/<\/?unbreak>/g, '')
+      .replace(/#(\d+)\[i\]%/g, (_, i: string) => `${Math.round((params[Number(i) - 1] ?? 0) * 100)}%`)
+      .replace(/#(\d+)\[f1\]%/g, (_, i: string) => `${((params[Number(i) - 1] ?? 0) * 100).toFixed(1)}%`)
+      .replace(/#(\d+)\[i\]/g, (_, i: string) => `${Math.round(params[Number(i) - 1] ?? 0)}`)
+    lines.push(`${pieces}pc: ${text}`)
+  }
+  return lines
+}
+
+export function openSetPicker(opts: {
+  kind: 'relic' | 'planar'
+  current?: string
+  entries: Array<[string, string]>
+}): Promise<string | null> {
+  let resolve!: (v: string | null) => void
+  const promise = new Promise<string | null>(r => { resolve = r })
+  const ov = openOverlay(opts.kind === 'planar' ? 'ВЫБОР ПЛАНАРНОГО СЕТА' : 'ВЫБОР СЕТА РЕЛИКВИЙ', () => resolve(null))
+  ov.root.classList.add('setPickerOverlay')
+  const grid = el('div', 'pickerGrid sets')
+  ov.body.append(grid)
+
+  for (const [id, name] of opts.entries) {
+    const btn = el('button', 'pickSetCard' + (id === opts.current ? ' current' : '')) as HTMLButtonElement
+    btn.type = 'button'
+    btn.dataset.setId = id
+    if (id) {
+      btn.append(iconNode(gearIconUrl(opts.kind, id), name, {
+        cls: 'gearIcon', size: 48, fit: 'contain',
+        fallbackText: safeInitial(name), tint: '#7fb3ff', title: name,
+      }))
+    }
+    const title = el('div', 'pickSetName')
+    title.textContent = name
+    btn.append(title)
+    for (const line of setEffectLines(name)) {
+      const effect = el('div', 'pickSetEffect')
+      effect.textContent = line
+      btn.append(effect)
+    }
+    btn.onclick = () => { ov.close(); resolve(id) }
+    grid.append(btn)
+  }
+  return promise
+}
+
+export class SetPicker {
+  readonly root: HTMLElement
+  private btn: HTMLButtonElement
+  private entries: Array<[string, string]> = []
+  private icons: Record<string, string> = {}
+  private _value = ''
+  private kind: 'relic' | 'planar'
+  onchange: (() => void) | null = null
+
+  constructor(kind: 'relic' | 'planar', cls = '') {
+    this.kind = kind
+    this.root = el('div', 'dd setPicker' + (cls ? ' ' + cls : ''))
+    this.btn = el('button', 'ddBtn setPickerBtn') as HTMLButtonElement
+    this.btn.type = 'button'
+    this.root.append(this.btn)
+    this.btn.onclick = async () => {
+      const chosen = await openSetPicker({ kind: this.kind, current: this._value, entries: this.entries })
+      if (chosen === null) return
+      this.value = chosen
+      this.onchange?.()
+    }
+  }
+
+  get value(): string { return this._value }
+  set value(v: string) { this._value = v; this.paint() }
+
+  setEntries(entries: Array<[string, string]>, opts: { icons?: Record<string, string> } = {}): void {
+    this.entries = entries
+    this.icons = opts.icons ?? {}
+    if (!entries.some(([v]) => v === this._value)) this._value = entries[0]?.[0] ?? ''
+    this.paint()
+  }
+
+  private paint(): void {
+    this.btn.textContent = ''
+    const icon = this.icons[this._value]
+    if (icon) {
+      const img = document.createElement('img')
+      img.className = 'ddOptIcon'
+      img.src = icon
+      img.alt = ''
+      this.btn.append(img)
+    } else {
+      const ph = el('span', 'ddOptIcon ddOptIcon-placeholder')
+      this.btn.append(ph)
+    }
+    const label = el('span', 'ddOptLabel')
+    label.textContent = this.entries.find(([v]) => v === this._value)?.[1] ?? '-None-'
+    this.btn.append(label)
+  }
 }
 
 const PATHS = [...new Set(Object.values(KIT_PATH))].filter(Boolean).sort()

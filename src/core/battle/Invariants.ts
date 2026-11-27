@@ -51,6 +51,10 @@ function actionSource(e: BattleEvent): string {
   return e.sourceId ?? e.source ?? ''
 }
 
+function isDeathRattle(e: BattleEvent): boolean {
+  return e.payload.deathRattle === true
+}
+
 /** Shared ACTION_START/ACTION_END gate for the batch verifier and the per-event watcher.
  *  Mutates the per-source LIFO stack and reports only boundary violations. */
 function actionBoundaryViolations(open: Map<string, number[]>, e: BattleEvent): string[] {
@@ -85,7 +89,7 @@ export function verifyInvariants(units: Unit[], events: BattleEvent[], runtime?:
     if (!e.source && !e.target) continue
     if (e.type === 'DEATH' && e.target) { deathAt.set(e.target, e.eventId); continue }
     if (e.type === 'REVIVAL' && e.target) deathAt.delete(e.target)
-    if (e.type !== 'ACTION_START' || !e.source) continue
+    if (e.type !== 'ACTION_START' || !e.source || isDeathRattle(e)) continue
     const died = deathAt.get(e.source)
     if (died !== undefined && e.eventId > died) bad.push(`dead-actor: ${e.source} acted after death (EVT ${e.eventId}, death EVT ${died})`)
   }
@@ -118,7 +122,7 @@ export class InvariantWatcher {
     if (e.type === 'ACTION_END') bad.push(...rosterViolations(this.units()), ...runtimeViolations(this.runtime?.()))
     if (e.type === 'DEATH' && e.target) this.deaths.set(e.target, e.eventId)
     else if (e.type === 'REVIVAL' && e.target) this.deaths.delete(e.target)
-    else if (e.type === 'ACTION_START' && e.source) {
+    else if (e.type === 'ACTION_START' && e.source && !isDeathRattle(e)) {
       const died = this.deaths.get(actionSource(e))
       if (died !== undefined && e.eventId > died) bad.push(`dead-actor: ${e.source} acted after death (EVT ${e.eventId}, death EVT ${died})`)
     }

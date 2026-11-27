@@ -97,7 +97,7 @@ export interface SimApi {
   delay(u: Unit, pct: number): void
   setSpeedDynamic(u: Unit, spd: number): void
 
-  gainEnergy(u: Unit, base: number): void
+  gainEnergy(u: Unit, base: number, reason?: string): void
   /** flat energy regen — NOT multiplied by ERR (light cones / sets / wave-start / techniques) */
   gainEnergyFlat(u: Unit, base: number): void
   /** §7 energy drain: remove up to `base` Energy (clamped at 0) through the shared resource path

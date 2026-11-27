@@ -4,6 +4,7 @@ import { enemyDefenseOf } from './defense'
 import type { EnemyAbilityDefinition } from './ability'
 import type { HitOpts, SimApi } from '../kit'
 import type { Unit } from '../entities/Unit'
+import type { Simulator } from '../simulator'
 
 /** §54 — production behaviors for ORDINARY enemies (rank `mob`), keyed by base name.
  *
@@ -523,10 +524,28 @@ export const MOB_BEHAVIORS: Record<string, EnemyBehavior> = {
     // a 30% DEF-down (2 turns) to ALL friendly units — the enemy side's own team (§57 onKilled).
     passive: {
       onKilled(sim, self) {
-        const opts: HitOpts = { type: 'basic', scaleStat: 'hp', mult: 0.4, elem: 'Fire', toughDmg: 10, canCrit: false, fromDeadAttacker: true, label: 'Candle Flame' }
-        for (const t of sim.allies(self.side)) {
-          sim.hit(self, t, opts)
-          if (!t.dead) sim.applyDebuff(self, t, 1.0, () => sim.addBuff(t, { id: 'dragonfish_candle_defdown', name: 'DEF Reduced', mods: [{ stat: 'defRed', value: 0.30 }], turns: 2, sourceId: self.id, debuff: true }), 'Candle Flame')
+        const logger = (sim as unknown as Simulator).logger
+        const parentActionId = logger.getActionContext()?.combatActionId
+        logger.startFollowUpAttack(parentActionId, {
+          source: self.name,
+          sourceId: self.id,
+          abilityName: 'Candle Flame',
+          deathRattle: true,
+          provenance: {
+            sourceKind: 'passive',
+            abilityName: 'Candle Flame',
+            triggeredByUnitId: self.id,
+            triggeredByUnitName: self.name,
+          },
+        })
+        try {
+          const opts: HitOpts = { type: 'basic', scaleStat: 'hp', mult: 0.4, elem: 'Fire', toughDmg: 10, canCrit: false, fromDeadAttacker: true, label: 'Candle Flame' }
+          for (const t of sim.allies(self.side)) {
+            sim.hit(self, t, opts)
+            if (!t.dead) sim.applyDebuff(self, t, 1.0, () => sim.addBuff(t, { id: 'dragonfish_candle_defdown', name: 'DEF Reduced', mods: [{ stat: 'defRed', value: 0.30 }], turns: 2, sourceId: self.id, debuff: true }), 'Candle Flame')
+          }
+        } finally {
+          logger.endFollowUpAttack()
         }
       },
     },

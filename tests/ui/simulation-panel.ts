@@ -20,7 +20,7 @@ export default async () => {
 
   const { store } = await import('../../src/ui/store')
   const { PartyStore } = await import('../../src/ui/partyStore')
-  const { renderEffectSummary, snapshotEffectModTotals, initSimulationPanel, renderSupportLog, vitalLabelsForSnapshot, damageDisplay, damageElementParts, supportSummaryParts } = await import('../../src/ui/simulationPanel')
+  const { renderEffectSummary, snapshotEffectModTotals, initSimulationPanel, renderSupportLog, renderEventLog, renderEnergyLog, actionTargetGroups, renderActionTargets, vitalLabelsForSnapshot, damageDisplay, damageElementParts, supportSummaryParts } = await import('../../src/ui/simulationPanel')
   const { runBattle, ENEMY_PRESETS, presetTeam } = await import('../../src/core/battle')
   const { aggregateCombatActions, collectSnapshots } = await import('../../src/ui/combatActionView')
   const { isDebuff } = await import('../../src/core/combat/StatResolver')
@@ -51,6 +51,56 @@ export default async () => {
     { eventId: -43, time: 0, turn: 0, actionId: 1, type: 'DAMAGE_DEALT', source: sim.roster.find(u => u.side === 'ally')!.name, sourceId: sim.roster.find(u => u.side === 'ally')!.id, target: sim.roster.find(u => u.side === 'enemy')!.name, targetId: sim.roster.find(u => u.side === 'enemy')!.id, attackId: 'probe_summon_after_hit_atk', payload: { amount: 100, abilityName: 'Probe AoE' }, combatActionId: 'probe_summon_after_hit' },
     { eventId: -44, time: 0, turn: 0, actionId: 1, type: 'SUMMON_CREATED', source: sim.roster.find(u => u.side === 'ally')!.name, sourceId: sim.roster.find(u => u.side === 'ally')!.id, target: 'Late Summon', targetId: 'probe_late_summon', payload: { kind: 'summon', name: 'Late Summon' }, combatActionId: 'probe_summon_after_hit' },
   ] as any, sim, [])[0]
+  const probeEnemy = sim.roster.find(u => u.side === 'enemy')!
+  const probeEnemy2 = { ...probeEnemy, id: 'probe_enemy_2', name: 'Probe Enemy 2' } as any
+  const probeMemo = {
+    ...sim.roster.find(u => u.side === 'ally')!,
+    id: 'probe_memo', name: 'Probe Memo', kind: 'summon', sharesOwnerBuffs: false,
+  } as any
+  sim.roster.push(probeEnemy2, probeMemo)
+  const probeAllyA = sim.roster.find(u => u.side === 'ally')!
+  const probeAllyB = sim.roster.filter(u => u.side === 'ally')[1] ?? probeAllyA
+  const effectTargetsAction = aggregateCombatActions([
+    { eventId: -50, time: 0, turn: 0, actionId: 2, type: 'ACTION_START', source: probeAllyA.name, sourceId: probeAllyA.id, payload: { action: 'ult' }, actionCategory: 'ultimate', combatActionId: 'probe_effect_targets' },
+    { eventId: -51, time: 0, turn: 0, actionId: 2, type: 'BUFF_APPLIED', source: probeAllyA.name, sourceId: probeAllyA.id, target: probeAllyB.name, targetId: probeAllyB.id, payload: { id: 'probe_buff', name: 'Probe Buff', mods: [] }, combatActionId: 'probe_effect_targets' },
+    { eventId: -52, time: 0, turn: 0, actionId: 2, type: 'HEAL_APPLIED', source: probeAllyA.name, sourceId: probeAllyA.id, target: probeAllyA.name, targetId: probeAllyA.id, payload: { id: 'probe_heal', name: 'Probe Heal', amount: 10 }, combatActionId: 'probe_effect_targets' },
+  ] as any, sim, [])[0]
+  const multiToughnessAction = aggregateCombatActions([
+    { eventId: -60, time: 0, turn: 0, actionId: 3, type: 'ACTION_START', source: probeAllyA.name, sourceId: probeAllyA.id, payload: { action: 'skill' }, actionCategory: 'attack', combatActionId: 'probe_multi_toughness' },
+    { eventId: -61, time: 0, turn: 0, actionId: 3, type: 'ABILITY_USED', source: probeAllyA.name, sourceId: probeAllyA.id, attackId: 'probe_multi_toughness_atk', payload: { action: 'skill', abilityName: 'Probe AoE' }, combatActionId: 'probe_multi_toughness' },
+    { eventId: -62, time: 0, turn: 0, actionId: 3, type: 'DAMAGE_DEALT', source: probeAllyA.name, sourceId: probeAllyA.id, target: probeEnemy.name, targetId: probeEnemy.id, attackId: 'probe_multi_toughness_atk', payload: { amount: 100 }, combatActionId: 'probe_multi_toughness' },
+    { eventId: -63, time: 0, turn: 0, actionId: 3, type: 'DAMAGE_DEALT', source: probeAllyA.name, sourceId: probeAllyA.id, target: probeEnemy2.name, targetId: probeEnemy2.id, attackId: 'probe_multi_toughness_atk', payload: { amount: 50 }, combatActionId: 'probe_multi_toughness' },
+    { eventId: -64, time: 0, turn: 0, actionId: 3, type: 'TOUGHNESS_DAMAGE', source: probeAllyA.name, sourceId: probeAllyA.id, target: probeEnemy2.name, targetId: probeEnemy2.id, payload: { amount: 7 }, combatActionId: 'probe_multi_toughness' },
+    { eventId: -65, time: 0, turn: 0, actionId: 3, type: 'TOUGHNESS_DAMAGE', source: probeAllyA.name, sourceId: probeAllyA.id, target: probeEnemy.name, targetId: probeEnemy.id, payload: { amount: 12 }, combatActionId: 'probe_multi_toughness' },
+    { eventId: -66, time: 0, turn: 0, actionId: 3, type: 'TOUGHNESS_DAMAGE', source: probeAllyA.name, sourceId: probeAllyA.id, target: probeEnemy2.name, targetId: probeEnemy2.id, payload: { amount: 3 }, combatActionId: 'probe_multi_toughness' },
+  ] as any, sim, [])[0]
+  const memoSpriteAction = aggregateCombatActions([
+    { eventId: -70, time: 0, turn: 0, actionId: 4, type: 'ACTION_START', source: probeMemo.name, sourceId: probeMemo.id, payload: { action: 'skill', abilityName: 'Memo Skill' }, combatActionId: 'probe_memo_action' },
+    { eventId: -71, time: 0, turn: 0, actionId: 4, type: 'ABILITY_USED', source: probeMemo.name, sourceId: probeMemo.id, payload: { action: 'skill', abilityName: 'Memo Skill' }, combatActionId: 'probe_memo_action' },
+    { eventId: -72, time: 0, turn: 0, actionId: 4, type: 'BUFF_APPLIED', source: probeMemo.name, sourceId: probeMemo.id, target: probeAllyA.name, targetId: probeAllyA.id, payload: { id: 'memo_buff', name: 'Memo Buff', mods: [] }, combatActionId: 'probe_memo_action' },
+  ] as any, sim, [])[0]
+  sim.roster.splice(sim.roster.indexOf(probeMemo), 1)
+  const eventLogAction = aggregateCombatActions([
+    { eventId: -80, time: 0, turn: 0, actionId: 5, type: 'ACTION_START', source: probeEnemy.name, sourceId: probeEnemy.id, payload: { action: 'state' }, combatActionId: 'probe_event_log' },
+    { eventId: -81, time: 0, turn: 0, actionId: 5, type: 'NOTE', raw: 'Sanction Mode', payload: {}, combatActionId: 'probe_event_log' },
+    { eventId: -82, time: 0, turn: 0, actionId: 5, type: 'PHASE_START', source: probeEnemy.name, sourceId: probeEnemy.id, target: probeEnemy.name, targetId: probeEnemy.id, payload: { phase: 'phase_2', index: 1 }, combatActionId: 'probe_event_log' },
+  ] as any, sim, [])[0]
+  const eventLogText = renderEventLog(eventLogAction)?.textContent ?? ''
+  const onKillEnergyAction = aggregateCombatActions([
+    { eventId: -90, time: 0, turn: 0, actionId: 6, type: 'ACTION_START', source: probeAllyA.name, sourceId: probeAllyA.id, payload: { action: 'attack' }, actionCategory: 'attack', combatActionId: 'probe_on_kill_energy' },
+    { eventId: -91, time: 0, turn: 0, actionId: 6, type: 'ENERGY_GAIN', source: probeAllyA.name, sourceId: probeAllyA.id, target: probeAllyA.name, targetId: probeAllyA.id, payload: { n: 10, reason: 'on_kill' }, combatActionId: 'probe_on_kill_energy' },
+  ] as any, sim, [])[0]
+  const groupedTargetsAction = aggregateCombatActions([
+    { eventId: -100, time: 0, turn: 0, actionId: 7, type: 'ACTION_START', source: probeAllyA.name, sourceId: probeAllyA.id, payload: { action: 'skill' }, actionCategory: 'attack', combatActionId: 'probe_grouped_targets' },
+    { eventId: -101, time: 0, turn: 0, actionId: 7, type: 'ABILITY_USED', source: probeAllyA.name, sourceId: probeAllyA.id, attackId: 'probe_grouped_targets_atk', payload: { action: 'skill', abilityName: 'Probe Grouped Skill' }, combatActionId: 'probe_grouped_targets' },
+    { eventId: -102, time: 0, turn: 0, actionId: 7, type: 'DAMAGE_DEALT', source: probeAllyA.name, sourceId: probeAllyA.id, target: probeEnemy.name, targetId: probeEnemy.id, attackId: 'probe_grouped_targets_atk', payload: { amount: 100 }, combatActionId: 'probe_grouped_targets' },
+    { eventId: -103, time: 0, turn: 0, actionId: 7, type: 'BUFF_APPLIED', source: probeAllyA.name, sourceId: probeAllyA.id, target: probeAllyA.name, targetId: probeAllyA.id, payload: { id: 'probe_group_buff', name: 'Probe Group Buff', mods: [] }, combatActionId: 'probe_grouped_targets' },
+    { eventId: -104, time: 0, turn: 0, actionId: 7, type: 'DEBUFF_APPLIED', source: probeAllyA.name, sourceId: probeAllyA.id, target: probeEnemy2.name, targetId: probeEnemy2.id, payload: { id: 'probe_group_debuff', name: 'Probe Group Debuff', mods: [] }, combatActionId: 'probe_grouped_targets' },
+  ] as any, sim, [])[0]
+  const groupedTargetGroups = actionTargetGroups(groupedTargetsAction)
+  const groupedTargetLabels = [...(renderActionTargets(groupedTargetsAction, sim)?.querySelectorAll<HTMLElement>('.simActionTargetGroupLabel') ?? [])]
+    .map(label => label.textContent ?? '')
+  const energyLogText = renderEnergyLog(onKillEnergyAction)?.textContent ?? ''
 
   const uiHost = doc.getElementById('uiSimulationRoot') as HTMLElement
   const uiStore = new PartyStore()
@@ -70,6 +120,13 @@ export default async () => {
   seedInp.value = '0'
   const uiRunBtn = uiHost.querySelector<HTMLButtonElement>('.simRunBtn')!
   await uiRunBtn.onclick?.call(uiRunBtn, undefined as unknown as PointerEvent)
+  const traceCopyBtn = uiHost.querySelector<HTMLButtonElement>('.simTraceCopyBtn')!
+  const traceText = uiHost.querySelector('.simTrace')?.textContent ?? ''
+  const copied: string[] = []
+  const originalNavigator = Object.getOwnPropertyDescriptor(g, 'navigator')
+  Object.defineProperty(g, 'navigator', { configurable: true, value: { clipboard: { writeText: async (text: string) => { copied.push(text) } } } })
+  await traceCopyBtn.onclick?.call(traceCopyBtn, undefined as unknown as PointerEvent)
+  if (originalNavigator) Object.defineProperty(g, 'navigator', originalNavigator)
 
   const deltaHost = doc.createElement('div')
   doc.body.append(deltaHost)
@@ -125,6 +182,7 @@ export default async () => {
   const fuaCard = cards.find(c => c.textContent?.includes('Kafka') && c.textContent?.includes('Gentle but Cruel') && !!c.querySelector('.simActionHitsSummary'))
   fuaCard?.click()
   enemyAttackCard?.click()
+  const actionInspectorText = uiHost.querySelector('.simLogInspector')?.textContent ?? ''
   const toughnessBars = [...uiHost.querySelectorAll<HTMLElement>('.simInspectorUnitState .simToughnessBar')]
   const toughnessText = toughnessBars.map(bar => bar.textContent ?? '').join(' | ')
   const stateTab = [...uiHost.querySelectorAll<HTMLButtonElement>('.simInspectorTab')]
@@ -153,7 +211,7 @@ export default async () => {
   const allyA = allies[0]
   sim.gearMap.set(allyA.id, {
     cone: { id: 'secret_vow' }, coneSi: 1, mods: [], pieces: [],
-    relicSets: [], relicSets4: [], planar: undefined, post: [],
+    relicSets: [], relicSets4: [{ id: 'musketeer', name: 'Musketeer' }], planar: undefined, post: [],
   } as any)
   const targetPick = resolveTargets({
     actorId: enemy.id,
@@ -197,7 +255,20 @@ export default async () => {
   ])
   const dotBreakTags = taggedAction('probe_tag_dot', 14, { action: 'skill', abilityName: 'Break Restore' }, 'effect', [
     { type: 'DOT_APPLIED', target: enemy.name, targetId: enemy.id, payload: { kind: 'Bleed', name: 'Bleed' } },
+    { type: 'DOT_TICK', target: enemy.name, targetId: enemy.id, payload: { kind: 'Bleed', name: 'Bleed', amount: 50 } },
     { type: 'BUFF_APPLIED', target: allyA.name, targetId: allyA.id, payload: { id: 'hp_restore', name: 'HP Restore', reason: 'break_restore' } },
+  ])
+  const dotTopLevelAction = taggedAction('probe_dot_top_level', 15, { action: 'skill' }, 'effect', [
+    { type: 'DOT_APPLIED', target: enemy.name, targetId: enemy.id, element: 'Fire', payload: { kind: 'Burn', turns: 3, stacks: 2, baseDmg: 77 }, provenance: { abilityName: 'Burn Skill' } },
+  ])
+  const shieldDedupeAction = taggedAction('probe_shield_dedupe', 16, { action: 'skill' }, 'effect', [
+    { type: 'BUFF_APPLIED', target: allyA.name, targetId: allyA.id, payload: { id: 'probe_dupe_shield', name: 'Probe Dupe Shield', shield: 42 } },
+    { type: 'SHIELD_APPLIED', target: allyA.name, targetId: allyA.id, payload: { id: 'probe_dupe_shield', name: 'Probe Dupe Shield', amount: 42 } },
+  ])
+  const controlStateAction = taggedAction('probe_control_state', 17, { action: 'skill' }, 'effect', [
+    { type: 'CONTROL_APPLIED', target: enemy.name, targetId: enemy.id, payload: { id: 'Freeze', name: 'Freeze', turns: 2, stacks: 1 } },
+    { type: 'DOT_TICK', target: enemy.name, targetId: enemy.id, element: 'Ice', payload: { kind: 'Shock', name: 'Shock', amount: 55 } },
+    { type: 'CONTROL_EXPIRED', target: enemy.name, targetId: enemy.id, payload: { id: 'Freeze', name: 'Freeze' } },
   ])
   const enemyCategory = aggregateCombatActions([
     { eventId: -1, time: 0, turn: 0, actionId: 0, type: 'ACTION_START', source: enemy.name, sourceId: enemy.id, payload: { action: 'attack' }, combatActionId: 'probe_enemy' },
@@ -294,7 +365,7 @@ export default async () => {
     afterSnapshot: stateSnapshot,
     effects: {
       buffs: [
-        makeEffect('atk_up', 'ATK Up', allyA, allyB, { mods: [{ stat: 'atkPct', value: 0.2 }] }),
+        makeEffect('atk_up', 'ATK Up', allyA, allyB, { mods: [{ stat: 'atkPct', value: 0.2 }], provenance: { abilityName: 'Probe Ult' } }),
         makeEffect('cipher', 'Cipher', allyA, allyB, { mods: [{ stat: 'critDmg', value: 0.1 }] }),
         makeEffect('flat_atk', 'Flat ATK', allyB, allyB, { mods: [{ stat: 'atkFlat', value: 100 }] }),
         makeEffect('cond_cd', 'Conditional CD', allyA, allyB, { mods: [{ stat: 'critDmg', value: 0.3, whenAbility: ['skill'] }] }),
@@ -308,7 +379,12 @@ export default async () => {
         makeEffect('last_wins', 'Last Wins', allyA, allyB, { stacks: 3 }),
         makeEffect('no_max', 'No Max', allyA, allyB, { stacks: 2 }),
         makeEffect('no_max', 'No Max', allyA, allyB, { stacks: 1 }),
+        makeEffect('capped_stack', 'Capped Stack', allyA, allyB, { stacks: 3, maxStacks: 5, mods: [{ stat: 'atkPct', value: 0.04 }] }),
+        makeEffect('aggro_up', 'Probe Aggro', allyA, allyB, { mods: [{ stat: 'aggro', value: 150 }] }),
+        makeEffect('fire_vuln', 'Fire Vulnerability', allyA, allyB, { mods: [{ stat: 'vuln:Fire', value: 0.3 }] }),
         makeEffect('gear', 'Gear', allyA, allyB, { provenance: { sourceKind: 'relic' }, mods: [{ stat: 'atkPct', value: 0.15 }] }),
+        makeEffect('musketeer_set', 'Musketeer ATK', allyA, allyB, { sourceId: 'gear', appliedById: allyA.id, provenance: { sourceKind: 'relic' }, mods: [{ stat: 'atkPct', value: 0.12 }] }),
+        makeEffect('cone_crit', 'Cone Crit', allyA, allyB, { sourceId: 'gear', appliedById: allyA.id, provenance: { sourceKind: 'lightCone' }, mods: [{ stat: 'critDmg', value: 0.24 }] }),
         makeEffect('traces', 'Traces', allyA, allyB, { provenance: { sourceKind: 'trace' }, mods: [{ stat: 'critDmg', value: 0.2 }] }),
         makeEffect('genius_def', 'Genius DEF Ignore', enemy, allyB, { sourceId: 'gear', appliedById: allyA.id, mods: [{ stat: 'defIgnore', value: 0.2 }] }),
         makeEffect('gear_atk', 'Gear ATK', allyA, allyB, { sourceId: 'gear', appliedById: allyA.id, mods: [{ stat: 'atkPct', value: 0.12 }] }),
@@ -323,6 +399,17 @@ export default async () => {
         damage: 100,
         turns: 2,
         stacks: 1,
+        sourceId: allyA.id,
+        sourceName: allyA.name,
+      }],
+      controls: [makeEffect('Freeze', 'Probe Freeze', allyA, allyB, { turns: 2 })],
+      ticks: [{
+        id: 'Shock',
+        name: 'Shock',
+        targetId: allyB.id,
+        targetName: allyB.name,
+        element: 'Lightning',
+        amount: 55,
         sourceId: allyA.id,
         sourceName: allyA.name,
       }],
@@ -508,6 +595,7 @@ export default async () => {
     raw('custom encounter builder renders', !!addWaveBtn, addWaveBtn?.textContent ?? 'missing'),
     raw('enemy picker selection configures custom encounter', deltaPickedEnemy === 'Ice Edge (1)', deltaPickedEnemy || 'missing'),
     raw('initSimulationPanel returns handle', typeof handle?.refresh === 'function', String(typeof handle?.refresh)),
+    raw('trace copy button copies the whole trace', !!traceText && copied[0] === traceText && traceCopyBtn.textContent === 'Скопировано', `${copied.length}`),
     raw('UI history captures snapshots at debug 4', snapshots.length > 0, `snapshots=${snapshots.length}`),
     raw('actions link to captured snapshots', actions.some(a => !!a.beforeSnapshot), `with before=${actions.filter(a => !!a.beforeSnapshot).length}`),
     raw('actions have sequential order', actions.every((a, i) => a.order === i + 1), `actions=${actions.length}`),
@@ -543,7 +631,7 @@ export default async () => {
     raw('hit rows omit damage breakdown', uiHost.querySelectorAll('.simInspectorHitBreakdown').length === 0, `breakdowns=${uiHost.querySelectorAll('.simInspectorHitBreakdown').length}`),
     raw('action inspector omits duplicated metadata grid', actionTabGridCount === 0, `grids=${actionTabGridCount}`),
     raw('battle log shows HP energy and OD vitals', charVitalLabels.join(',') === 'HP,EN,ОД', charVitalLabels.join(',') || 'none'),
-    raw('battle log labels targets explicitly', [...uiHost.querySelectorAll('.simActionTargetsLabel')].some(label => label.textContent === 'Targets:'), `labels=${uiHost.querySelectorAll('.simActionTargetsLabel').length}`),
+    raw('battle log labels targets by role', [...uiHost.querySelectorAll('.simActionTargetGroupLabel')].some(label => ['Attack Targets:', 'Buff Targets:', 'Debuff Targets:'].includes(label.textContent ?? '')), `labels=${[...uiHost.querySelectorAll('.simActionTargetGroupLabel')].map(label => label.textContent).join('|')}`),
     raw('effect summary carries stable source id', actions.some(a => a.effects.buffs.some(b => !!b.sourceId)), `withSource=${actions.filter(a => a.effects.buffs.some(b => !!b.sourceId)).length}`),
     raw('E0 renders in simulation party card', e0Text === 'E0', e0Text),
     raw('Memosprite source uses own icon', (rowsNamed('ATK Up', memoSpriteHost)[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src') ?? '').includes('Memosprite.png'), rowsNamed('ATK Up', memoSpriteHost)[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src') ?? ''),
@@ -606,6 +694,15 @@ export default async () => {
     raw('technique target selection populates Targets', techniqueEffects?.targetIds.includes(allyA.id) === true, `targets=${techniqueEffects?.targetIds.join(',')}`),
     raw('energy gain payload uses n field', energyProbeAction?.effects.energyChanges.some(c => c.delta === 30) === true && energyProbeAction?.effects.energyChanges.some(c => c.delta === -12) === true, JSON.stringify(energyProbeAction?.effects.energyChanges ?? [])),
     raw('summons created during an attack are not shown as targets', summonAfterHitAction?.targetIds.includes(enemy.id) === true && summonAfterHitAction?.targetIds.includes('probe_late_summon') === false, `targets=${summonAfterHitAction?.targetIds.join(',')}`),
+    raw('effect actions show effect recipients as targets', effectTargetsAction?.targetIds.includes(probeAllyB.id) === true && effectTargetsAction?.targetIds.includes(probeAllyA.id) === true, `targets=${effectTargetsAction?.targetIds.join(',')}`),
+    raw('multi-target toughness follows target order', multiToughnessAction?.targetIds.join(',') === `${probeEnemy.id},${probeEnemy2.id}` && multiToughnessAction?.toughnessDamageByTarget.map(t => `${t.targetId}:${t.damage}`).join(',') === `${probeEnemy.id}:12,${probeEnemy2.id}:10`, `targets=${multiToughnessAction?.targetIds.join(',')} tgh=${multiToughnessAction?.toughnessDamageByTarget.map(t => `${t.targetId}:${t.damage}`).join(',')}`),
+    raw('summons created during an attack do not add summon tag', summonAfterHitAction?.tags.includes('summon') === false, `tags=${summonAfterHitAction?.tags.join(',')}`),
+    raw('memosprite action is not categorized as summon', memoSpriteAction?.category === 'effect' && memoSpriteAction?.tags.includes('summon') === false, `category=${memoSpriteAction?.category} tags=${memoSpriteAction?.tags.join(',')}`),
+    raw('notes and phase events visible in event log', eventLogText.includes('Заметка: Sanction Mode') && eventLogText.includes('Фаза: phase: phase_2'), eventLogText),
+    raw('kill energy reason retained', onKillEnergyAction?.effects.energyChanges[0]?.reason === 'on_kill', JSON.stringify(onKillEnergyAction?.effects.energyChanges ?? [])),
+    raw('energy gain rendered as labeled log', energyLogText.includes('Energy Gain: +10 EN') && energyLogText.includes('убийство'), energyLogText),
+    raw('targets split into attack buff and debuff groups', groupedTargetGroups.find(g => g.role === 'attack')?.ids.join(',') === probeEnemy.id && groupedTargetGroups.find(g => g.role === 'buff')?.ids.join(',') === probeAllyA.id && groupedTargetGroups.find(g => g.role === 'debuff')?.ids.join(',') === probeEnemy2.id, JSON.stringify(groupedTargetGroups)),
+    raw('target groups render explicit labels', groupedTargetLabels.join('|') === 'Attack Targets:|Buff Targets:|Debuff Targets:', groupedTargetLabels.join('|')),
     raw('Dan Heng Bondmate target emitted and shown', !!bondTargetId && dhTechnique?.targetIds.includes(bondTargetId) === true, `bond=${bondTargetId} targets=${dhTechnique?.targetIds.join(',')}`),
     raw('all Dan Heng shield targets shown', dhShieldTargets.size >= 4 && dhSupportRows.length >= 4, `targets=${dhShieldTargets.size} rows=${dhSupportRows.length}`),
     raw('Gatekeeper sanction summons Dragonfish', dragonfish.length === 2 && dragonfish.every(u => !u.dead), `${dragonfish.map(u => u.name).join(',')} before=${enemyCountBeforeSanction}`),
@@ -619,5 +716,19 @@ export default async () => {
       `seele=${seeleTags?.tags.join(',')} dragon=${souldragonTags?.tags.join(',')} yunli=${yunliTags?.tags.join(',')} castorice=${castoriceTags?.tags.join(',')} dot=${dotBreakTags?.tags.join(',')}`),
     raw('action cards render mechanic tag badges', tagBadges.length > 0 && cards.length > 0 && cards.every(c => !!c.querySelector('.simActionTags') && !!c.querySelector('.simActionTag')), `badges=${tagBadges.length} multi=${multiTagCards.length} cards=${cards.length}`),
     raw('full HP heal stays visible with requested amount', fullHpHealText.includes('777 HP') && fullHpHealParts.length === 1 && fullHpHealParts[0].amount === 777, `${fullHpHealText} | ${JSON.stringify(fullHpHealParts)}`),
+    raw('shield applied via buff and event counted once', shieldDedupeAction?.effects.shields.length === 1 && shieldDedupeAction?.effects.buffs.length === 0, JSON.stringify(shieldDedupeAction?.effects.shields ?? [])),
+    raw('DOT_APPLIED uses top-level element and payload kind', dotTopLevelAction?.effects.dots[0]?.id === 'Burn' && dotTopLevelAction?.effects.dots[0]?.name === 'Burn' && dotTopLevelAction?.effects.dots[0]?.element === 'Fire' && dotTopLevelAction?.effects.dots[0]?.damage === 77, JSON.stringify(dotTopLevelAction?.effects.dots ?? [])),
+    raw('control, tick, and expiration recorded', controlStateAction?.effects.controls.length === 1 && controlStateAction?.effects.ticks[0]?.amount === 55 && controlStateAction?.effects.removals.some((r: any) => r.kind === 'debuff' && r.id === 'Freeze'), JSON.stringify({ controls: controlStateAction?.effects.controls, ticks: controlStateAction?.effects.ticks, removals: controlStateAction?.effects.removals })),
+    raw('effect inspector separates before after and changes', hostText(effectHost).includes('Состояние до действия') && hostText(effectHost).includes('Состояние после действия') && hostText(effectHost).includes('Изменения за действие'), hostText(effectHost).slice(0, 220)),
+    raw('action inspector shows before and after stats', actionInspectorText.includes('Характеристики до действия') && actionInspectorText.includes('Характеристики после действия'), actionInspectorText.slice(0, 220)),
+    raw('effect row describes human-readable modifier', /Увеличивает ATK на 20%/.test(textOf(rowsNamed('ATK Up')[0])), textOf(rowsNamed('ATK Up')[0]).slice(0, 220)),
+    raw('effect row names ability from provenance', textOf(rowsNamed('ATK Up')[0]).includes('Способность: Probe Ult'), textOf(rowsNamed('ATK Up')[0]).slice(0, 220)),
+    raw('effect row shows current and max stacks', /Стаки:\s*3\/5/.test(textOf(rowsNamed('Capped Stack')[0])), textOf(rowsNamed('Capped Stack')[0]).slice(0, 220)),
+    raw('aggro stays absolute in effect mods', /aggro:\s*\+150(?!%)/.test(textOf(rowsNamed('Probe Aggro')[0])) && !textOf(rowsNamed('Probe Aggro')[0]).includes('+150%'), textOf(rowsNamed('Probe Aggro')[0]).slice(0, 220)),
+    raw('vulnerability described in human-readable text', /Уязвимость к Fire урону \+30%/.test(textOf(rowsNamed('Fire Vulnerability')[0])), textOf(rowsNamed('Fire Vulnerability')[0]).slice(0, 220)),
+    raw('conditional effect states activation window', /Условие: во время Skill/.test(textOf(rowsNamed('Conditional CD')[0])), textOf(rowsNamed('Conditional CD')[0]).slice(0, 260)),
+    raw('relic set icon wins over cone and names source kind', sourceOf(rowsNamed('Musketeer ATK')[0]).includes('Набор реликвий') && rowsNamed('Musketeer ATK')[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src') === gearIconUrl('relic', 'musketeer'), `${sourceOf(rowsNamed('Musketeer ATK')[0])} | ${rowsNamed('Musketeer ATK')[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src')}`),
+    raw('light cone provenance names source kind', sourceOf(rowsNamed('Cone Crit')[0]).includes('Световой конус'), sourceOf(rowsNamed('Cone Crit')[0])),
+    raw('control and tick rows render with dispel hint', hostText(effectHost).includes('Probe Freeze') && hostText(effectHost).includes('Тики DoT') && hostText(effectHost).includes('55') && !!effectHost.querySelector('.simInspectorEffectDispel'), hostText(effectHost).slice(0, 320)),
   ]
 }

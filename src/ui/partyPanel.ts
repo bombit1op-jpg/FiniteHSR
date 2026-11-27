@@ -16,7 +16,6 @@ import { resolveLevels, EIDOLON_LV, LEVEL_CAPS } from '../core/battle'
 import type { AbilityLevels } from '../core/entities/Unit'
 import { EIDOLON_ICONS } from './iconManifest'
 import { el, fillSelect, STAT_LABELS } from './dom'
-import { Dropdown } from './dropdown'
 import { relicOptions, planarOptions, signatureCone } from '../core/gearOrder'
 import { LIGHT_CONES } from '../core/gear'
 import type { TeamRowState } from './store'
@@ -31,7 +30,7 @@ import { charFinalStats, SKILL_LABELS } from '../core/charStats'
 import { traceMods } from '../core/progression'
 import { PartyStore } from './partyStore'
 import { MAX_SLOTS } from '../core/party'
-import { openCharacterPicker, openConePicker, openPartyListPicker } from './pickers'
+import { openCharacterPicker, openConePicker, openPartyListPicker, SetPicker } from './pickers'
 import { survivingTechniqueUses } from './store'
 
 const KIT_TO_EIDOLON_NAME: Record<string, string> = {
@@ -568,15 +567,15 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     relicSection.classList.add('pcBody-relics')
 
     // set plan: 4-piece / 2+2 relic sets + the 2-piece planar set.
-    // The plan is a shortcut — it writes the per-piece set dropdowns, which stay editable.
+    // The plan is a shortcut — it writes the per-piece set pickers, which stay editable.
     const planRow = el('div', 'setPlan planRow')
     const planSel = el('select') as HTMLSelectElement
     planSel.style.width = '110px'
     fillSelect(planSel, [['4', '4 сета'], ['2+2', '2+2']])
     planSel.title = 'Набор сетов реликвий: один 4-сет или два 2-сета'
-    const setA = new Dropdown('setDrop')
-    const setB = new Dropdown('setDrop')
-    const planarSet = new Dropdown('setDrop')
+    const setA = new SetPicker('relic', 'setDrop')
+    const setB = new SetPicker('relic', 'setDrop')
+    const planarSet = new SetPicker('planar', 'setDrop')
     const fillPlan = (kitId: string): void => {
       const relicEntries = relicOptions(kitId)
       const planarEntries = planarOptions(kitId)

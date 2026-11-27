@@ -11,12 +11,12 @@ import { resolveEncounter, type EncounterSpec, validateEncounter } from '../core
 import { toTeamSpec } from './team'
 import { techniquesForRows } from './store'
 import { charIconUrl, iconNode, metaBadge, enemyIconUrl, charPortraitUrl, gearBadge, gearIconUrl, effectIconUrl, abilityIconUrl, statIconUrlForKey, summonIconUrl, elemIconUrl } from './icons'
-import { el } from './dom'
+import { el, STAT_LABELS } from './dom'
 
 import { withBusy, showStatus } from './shell'
 import { openEnemyPicker } from './enemyPicker'
 import { aggregateCombatActions, collectSnapshots, type CombatActionRecord, type CombatActionCategory, type CombatActionTag, type CombatHitRecord } from './combatActionView'
-import type { DebugLevel, StateSnapshot } from '../core/battlelog'
+import type { DebugLevel, EventType, StateSnapshot } from '../core/battlelog'
 import type { Party } from '../core/party'
 import type { Simulator } from '../core/simulator'
 import { type EndgameMode, endgameVersions, endgameSetup, endgameSections, endgameStage } from '../core/endgame'
@@ -92,6 +92,167 @@ export function renderSupportLog(action: CombatActionRecord): HTMLElement | unde
   return details
 }
 
+const OTHER_EVENT_LABELS: Partial<Record<EventType, string>> = {
+  NOTE: 'Заметка',
+  PHASE_START: 'Фаза',
+  PHASE_END: 'Конец фазы',
+  BOSS_RESET: 'Сброс босса',
+  ENEMY_SPAWN: 'Появление врага',
+  ENEMY_DESPAWN: 'Уход врага',
+  STAT_CHANGED: 'Состояние',
+  TARGET_SELECTED: 'Цель',
+  DEATH: 'Смерть',
+  REVIVAL: 'Возрождение',
+}
+
+const REASON_LABELS: Record<string, string> = {
+  on_kill: 'убийство',
+  energy_gain: 'получение',
+  energy_loss: 'потрачено',
+  ult_cost: 'ULT',
+  drain: 'отток',
+  break_restore: 'из пробития',
+}
+
+function reasonLabel(reason: string): string {
+  return REASON_LABELS[reason] ?? reason
+}
+
+function formatOtherDescription(description: string): string {
+  const text = description || ''
+  try {
+    const payload = JSON.parse(text) as Record<string, unknown>
+    if (payload && typeof payload === 'object') {
+      const keys = ['phase', 'index', 'stat', 'from', 'to', 'reason', 'kind', 'name', 'wave', 'enemies']
+      const parts = keys
+        .filter(key => key in payload)
+        .map(key => `${key}: ${Array.isArray(payload[key]) ? payload[key].join(', ') : payload[key]}`)
+      if (parts.length === 0) {
+        parts.push(...Object.entries(payload).slice(0, 3).map(([key, value]) => `${key}: ${value}`))
+      }
+      if (parts.length > 0) return parts.join(' · ')
+    }
+  } catch {}
+  return text.length > 160 ? `${text.slice(0, 157)}...` : text
+}
+
+function loggableOtherEvents(action: CombatActionRecord) {
+  return action.effects.other.filter(e => e.type !== 'SUMMON_CREATED' && e.type !== 'SUMMON_DESPAWNED')
+}
+
+export function renderEventLog(action: CombatActionRecord): HTMLElement | undefined {
+  const rows = loggableOtherEvents(action)
+  if (rows.length === 0) return undefined
+  const details = el('details', 'simActionEvents')
+  const summary = el('summary')
+  summary.textContent = `События: ${rows.length}`
+  details.append(summary)
+  for (const row of rows) {
+    const item = el('div', 'simActionEventRow')
+    item.textContent = `${OTHER_EVENT_LABELS[row.type] ?? row.type}: ${formatOtherDescription(row.description)}`
+    details.append(item)
+  }
+  details.onclick = e => e.stopPropagation()
+  return details
+}
+
+export function renderEnergyLog(action: CombatActionRecord): HTMLElement | undefined {
+  const rows = action.effects.energyChanges.filter(change => change.delta !== 0)
+  if (rows.length === 0) return undefined
+  const total = rows.reduce((sum, change) => sum + change.delta, 0)
+  const title = rows.every(change => change.delta > 0) ? 'Energy Gain'
+    : rows.every(change => change.delta < 0) ? 'Energy Loss' : 'Energy Change'
+  const details = el('details', 'simActionEnergyLog')
+  const summary = el('summary')
+  summary.textContent = `${title}: ${total > 0 ? '+' : ''}${total} EN`
+  details.append(summary)
+  for (const row of rows) {
+    const item = el('div', 'simActionEnergyRow')
+    const parts = [`${row.delta > 0 ? '+' : ''}${row.delta} EN`, row.targetName]
+    if (row.reason) parts.push(reasonLabel(row.reason))
+    item.textContent = parts.join(' · ')
+    details.append(item)
+  }
+  details.onclick = e => e.stopPropagation()
+  return details
+}
+
+export type ActionTargetRole = 'attack' | 'buff' | 'debuff'
+export interface ActionTargetGroup {
+  role: ActionTargetRole
+  label: string
+  ids: string[]
+}
+
+const TARGET_GROUP_LABELS: Record<ActionTargetRole, string> = {
+  attack: 'Attack Targets',
+  buff: 'Buff Targets',
+  debuff: 'Debuff Targets',
+}
+
+function uniqueTargetIds(ids: Array<string | undefined>): string[] {
+  return [...new Set(ids.filter((id): id is string => !!id))]
+}
+
+export function actionTargetGroups(action: CombatActionRecord): ActionTargetGroup[] {
+  const attackIds = uniqueTargetIds(action.attacks.flatMap(attack => attack.targetIds))
+  const buffIds = uniqueTargetIds([
+    ...action.effects.buffs.map(effect => effect.targetId),
+    ...action.effects.shields.map(effect => effect.targetId),
+    ...action.effects.heals.map(effect => effect.targetId),
+  ])
+  const debuffIds = uniqueTargetIds([
+    ...action.effects.debuffs.map(effect => effect.targetId),
+    ...action.effects.dots.map(effect => effect.targetId),
+    ...action.effects.breaks.map(effect => effect.targetId),
+  ])
+  if (attackIds.length === 0 && buffIds.length === 0 && debuffIds.length === 0) {
+    attackIds.push(...uniqueTargetIds(action.events
+      .filter(event => event.type === 'TARGET_SELECTED')
+      .map(event => event.targetId)))
+  }
+  return ([
+    { role: 'attack' as const, ids: attackIds },
+    { role: 'buff' as const, ids: buffIds },
+    { role: 'debuff' as const, ids: debuffIds },
+  ])
+    .filter(group => group.ids.length > 0)
+    .map(group => ({ ...group, label: TARGET_GROUP_LABELS[group.role] }))
+}
+
+export function renderActionTargets(action: CombatActionRecord, sim: Simulator): HTMLElement | undefined {
+  const groups = actionTargetGroups(action)
+  if (groups.length === 0) return undefined
+  const wrapper = el('div', 'simActionTargets')
+  for (const group of groups) {
+    const row = el('div', `simActionTargetGroup ${group.role}`)
+    const label = el('span', 'simActionTargetGroupLabel')
+    label.textContent = `${group.label}:`
+    row.append(label)
+    for (const id of group.ids) {
+      const unit = sim.roster.find(u => u.id === id)
+      if (!unit) continue
+      const iconUrl = unit.side === 'ally' ? unitIconUrl(unit, sim) : enemyIconUrl(unit.name)
+      const targetEl = el('span', 'simActionTarget')
+      targetEl.append(iconNode(iconUrl, unit.name, {
+        cls: 'simActionTargetIcon', size: 24, fit: 'contain',
+        fallbackText: safeInitial(unit.name), tint: unit.side === 'ally' ? '#7fb3ff' : '#f5d76e', title: unit.name,
+      }))
+      if (group.role === 'attack') {
+        const toughness = (action.toughnessDamageByTarget ?? []).find(record => record.targetId === id)?.damage ?? 0
+        if (toughness > 0) {
+          const toughnessEl = el('span', 'simActionToughnessDamage')
+          toughnessEl.textContent = `Tgh ${floorDisplay(toughness).toLocaleString()}`
+          targetEl.append(toughnessEl)
+        }
+      }
+      row.append(targetEl)
+    }
+    wrapper.append(row)
+  }
+  return wrapper
+}
+
 function ownerKitId(unit: { kitId?: string; ownerId?: string }, sim: Simulator): string | undefined {
   return unit.kitId ?? (unit.ownerId ? sim.roster.find(u => u.id === unit.ownerId)?.kitId : undefined)
 }
@@ -133,7 +294,13 @@ const COUNTDOWN_STATE_KEY = /countdown|timer|cd(?:id|seq)/i
 
 export function supportSummaryParts(action: CombatActionRecord): Array<{ label: string; amount: number; color: string }> {
   const heal = action.effects.heals.reduce((sum, e) => sum + Math.max(0, Number(e.requested ?? e.amount) || 0), 0)
-  const shield = action.effects.shields.reduce((sum, e) => sum + floorDisplay(e.amount), 0)
+  const seenShields = new Set<string>()
+  const shield = action.effects.shields.reduce((sum, e) => {
+    const key = `${e.id ?? ''}|${e.targetId}|${floorDisplay(e.amount)}`
+    if (seenShields.has(key)) return sum
+    seenShields.add(key)
+    return sum + floorDisplay(e.amount)
+  }, 0)
   return [
     ...(heal > 0 ? [{ label: 'Лечение', amount: heal, color: HEAL_COLOR }] : []),
     ...(shield > 0 ? [{ label: 'Щит', amount: shield, color: SHIELD_COLOR }] : []),
@@ -194,18 +361,80 @@ function isNeutralEffect(effect: any): boolean {
   if (effect?.id === 'genius_def') return true
   if (effect?.name === 'Gear' || effect?.name === 'Traces') return true
   const provenance = String(effect?.provenance?.sourceKind ?? '')
-  return provenance === 'trace' || provenance === 'lightCone' || provenance === 'relic'
+  return provenance === 'trace'
+}
+
+const ABSOLUTE_MOD_STATS = new Set(['aggro'])
+const ABILITY_LABELS: Record<string, string> = {
+  basic: 'Basic ATK', skill: 'Skill', ult: 'Ultimate', talent: 'Talent',
+  technique: 'Technique', fua: 'Follow-up Attack', add: 'Additional DMG',
+  memo: 'Memosprite', other: 'другой способности',
+}
+
+function modIsAbsolute(stat: string): boolean {
+  return /flat/i.test(stat) || ABSOLUTE_MOD_STATS.has(stat)
+}
+
+function modDisplayValue(mod: { stat: string; value: number }): string {
+  const absolute = modIsAbsolute(mod.stat)
+  const value = absolute ? mod.value : mod.value * 100
+  const number = Number.isInteger(value) ? String(value) : value.toFixed(1)
+  return `${value > 0 ? '+' : ''}${number}${absolute ? '' : '%'}`
+}
+
+function statPhrase(stat: string): string {
+  if (stat === 'vulnAll') return 'Уязвимость ко всем типам урона'
+  const elem = stat.match(/^vuln:(.+)$/)?.[1]
+  if (elem) return `Уязвимость к ${elem} урону`
+  const vulnType = stat.match(/^vulnType:(.+)$/)?.[1]
+  if (vulnType) return `Уязвимость к ${vulnType} урону`
+  const dmg = stat.match(/^(?:dmg|boost|critDmgTaken):(.+)$/)?.[1]
+  if (dmg) return `${dmg} DMG`
+  return STAT_LABELS[stat]?.replace(/%+$/, '') ?? stat
+}
+
+function describeMod(mod: { stat: string; value: number; whenAbility?: string[] }): string {
+  const magnitude = modDisplayValue(mod).replace(/^[+-]/, '')
+  if (mod.stat === 'aggro') return `Агро ${modDisplayValue(mod)}.`
+  if (mod.stat === 'weaken') return `Наносимый урон -${magnitude}.`
+  if (mod.stat === 'mitigation') return `Получаемый урон -${magnitude}.`
+  const phrase = statPhrase(mod.stat)
+  if (/^(?:vuln|critDmgTaken)/.test(mod.stat)) return `${phrase} ${modDisplayValue(mod)}.`
+  return mod.value >= 0 ? `Увеличивает ${phrase} на ${magnitude}.` : `Снижает ${phrase} на ${magnitude}.`
+}
+
+function effectDescriptionFor(effect: any, kind: EffectKind): string | undefined {
+  const parts: string[] = []
+  if (kind === 'dot') parts.push(`${effect.element ?? 'Physical'} DoT: ${effect.damage ?? 0} урона за ход.`)
+  if (kind === 'shield') parts.push(`Поглощает ${floorDisplay(effect.amount ?? effect.shield ?? 0).toLocaleString()} урона.`)
+  if (kind === 'removal') parts.push(`Снимает ${effect.name || 'эффект'}.`)
+  if (kind === 'debuff' && effect.breakDamage !== undefined) parts.push(`Урон слома: ${floorDisplay(effect.breakDamage).toLocaleString()}.`)
+  const stacks = Math.max(1, Number(effect.stacks) || 1)
+  for (const mod of effect.mods ?? []) parts.push(describeMod({ ...mod, value: mod.value * stacks }))
+  return parts.length > 0 ? parts.join(' ') : undefined
+}
+
+function effectAbilityFor(effect: any): string | undefined {
+  const provenance = effect?.provenance
+  if (!provenance) return undefined
+  if (provenance.abilityName) return provenance.abilityName
+  if (provenance.abilitySlot) return ABILITY_LABELS[provenance.abilitySlot] ?? provenance.abilitySlot
+  if (provenance.sourceKind && provenance.sourceKind !== 'unknown') return provenance.sourceKind
+  return undefined
 }
 
 function gearIconFor(effect: EffectIdentity, sim: Simulator): string | undefined {
   if (effect.sourceId !== 'gear' || !effect.appliedById) return undefined
   const gear = sim.gearMap.get(effect.appliedById)
   if (!gear) return undefined
+  const sets = [...(gear.relicSets4 ?? []), ...(gear.relicSets ?? []), ...(gear.planar ? [gear.planar] : [])] as Array<{ id?: string; name?: string }>
+  const identity = `${effect.id ?? ''} ${effect.name ?? ''}`.toLowerCase()
+  const setName = sets.find(s => !!s.id && identity.includes(String(s.id).toLowerCase()))?.id
+    ?? (effect.provenance?.sourceKind === 'relic' ? sets[0]?.id : undefined)
+  if (setName) return gearIconUrl(gear.planar?.id === setName ? 'planar' : 'relic', setName)
   const coneId = (gear.cone as { id?: string } | undefined)?.id
   if (coneId) return gearIconUrl('cone', coneId)
-  const setName = gear.relicSets4?.[0]?.id ?? gear.relicSets?.[0]?.id ?? gear.planar?.id
-  if (!setName) return undefined
-  return gearIconUrl(gear.planar?.id === setName ? 'planar' : 'relic', setName)
+  return undefined
 }
 
 let renderEffectsTabImpl: ((action: CombatActionRecord, sim: Simulator, content: HTMLElement, scopeId?: string) => void) | undefined
@@ -236,6 +465,7 @@ interface EffectIdentity {
   sourceId?: string
   sourceName?: string
   appliedById?: string
+  provenance?: { sourceKind?: string; abilityName?: string; abilitySlot?: string }
 }
 
 function effectIconFor(effect: { name: string; kind?: EffectKind; sourceId?: string; mods?: Array<{ stat: string; value: number }> }): string | undefined {
@@ -264,8 +494,10 @@ function effectSourceFor(effect: EffectIdentity, sim: Simulator): { name: string
   const isGear = effect.sourceId === 'gear'
   const sourceId = isGear ? effect.appliedById : effect.sourceId ?? effect.appliedById
   const unit = sourceId && sourceId !== 'gear' ? sim.roster.find(u => u.id === sourceId) : undefined
-  const gearName = isGear && effect.name ? `Снаряжение · ${effect.name}` : ''
-  const name = unit?.name ?? effect.sourceName ?? gearName
+  const gearKind = effect.provenance?.sourceKind === 'lightCone' ? 'Световой конус'
+    : effect.provenance?.sourceKind === 'relic' ? 'Набор реликвий' : 'Снаряжение'
+  const gearName = isGear && effect.name ? `${gearKind} · ${effect.name}` : ''
+  const name = unit && isGear ? [unit.name, gearName].filter(Boolean).join(' · ') : unit?.name ?? effect.sourceName ?? gearName
   const url = isGear ? gearIconFor(effect, sim) ?? entityIconUrl(unit, sim) : entityIconUrl(unit, sim)
   return { name: name || '—', url }
 }
@@ -277,13 +509,8 @@ function effectTargetFor(effect: EffectIdentity, sim: Simulator): { name: string
 }
 
 function formatEffectMod(mod: { stat: string; value: number; whenAbility?: string[] }): string {
-  const flat = /flat/i.test(mod.stat)
-  const value = flat ? mod.value : mod.value * 100
-  const suffix = flat ? '' : '%'
-  const sign = value > 0 ? '+' : ''
   const condition = mod.whenAbility?.length ? ` [${mod.whenAbility.join('/')}]` : ''
-  const number = Number.isInteger(value) ? String(value) : value.toFixed(1)
-  return `${mod.stat}: ${sign}${number}${suffix}${condition}`
+  return `${mod.stat}: ${modDisplayValue(mod)}${condition}`
 }
 
 function formatEffectModTotal(mod: { stat: string; value: number; whenAbility?: string[] }, stacks: number): string {
@@ -1008,11 +1235,22 @@ fallbackText: safeInitial(kit.name), tint: '#7fb3ff', title: kit.name,
 
     // Debug Trace (collapsed)
     const traceSection = section('Технический trace')
+    const traceHead = el('div', 'simTraceHead')
+    const copyBtn = el('button', 'simTraceCopyBtn') as HTMLButtonElement
+    copyBtn.type = 'button'
+    copyBtn.textContent = 'Копировать trace'
+    copyBtn.onclick = async () => {
+      await navigator.clipboard.writeText(traceSummary)
+      copyBtn.textContent = 'Скопировано'
+      setTimeout(() => { copyBtn.textContent = 'Копировать trace' }, 1200)
+    }
+    traceHead.append(traceSection.querySelector('h2')!, copyBtn)
+    traceSection.prepend(traceHead)
     const traceContainer = el('div', 'simTraceContainer')
     const traceSummary = sim.logger.debugTrace()
     const traceEl = el('pre', 'simTrace')
     traceEl.textContent = traceSummary
-traceContainer.append(traceEl)
+    traceContainer.append(traceEl)
     traceSection.append(traceContainer)
     resultsContainer.append(traceSection)
   }
@@ -1196,19 +1434,7 @@ traceContainer.append(traceEl)
       if (vitals) sourceInfo.append(vitals)
       sourceDiv.append(sourceInfo)
 
-      const targetsDiv = el('div', 'simActionTargets')
-      const targetsLabel = el('span', 'simActionTargetsLabel')
-      targetsLabel.textContent = 'Targets:'
-      targetsDiv.append(targetsLabel)
-      for (const id of action.targetIds) {
-        const unit = sim.roster.find(u => u.id === id)
-        if (!unit) continue
-        const iconUrl = unit.side === 'ally' ? unitIconUrl(unit, sim) : enemyIconUrl(unit.name)
-        targetsDiv.append(iconNode(iconUrl, unit.name, {
-          cls: 'simActionTargetIcon', size: 24, fit: 'contain',
-          fallbackText: safeInitial(unit.name), tint: unit.side === 'ally' ? '#7fb3ff' : '#f5d76e', title: unit.name,
-        }))
-      }
+      const targetsDiv = renderActionTargets(action, sim)
 
       // Aggregate hits from all attacks for display
       const allHits = action.attacks.flatMap(a => a.hits)
@@ -1278,12 +1504,19 @@ traceContainer.append(traceEl)
       ].filter(effect => !isNeutralEffect(effect))
       effectsSpan.textContent = `${visibleEffects.length} эфф.`
       summary.append(damageGroup, hitsSpan, effectsSpan)
+      const eventCount = loggableOtherEvents(action).length
+      if (eventCount > 0) {
+        const eventsSpan = el('span', 'simActionEvents')
+        eventsSpan.textContent = `${eventCount} событий`
+        summary.append(eventsSpan)
+      }
       if (totalShieldDamage > 0) {
         const shieldSpan = el('span', 'simActionShieldDamage')
         shieldSpan.textContent = `${totalShieldDamage.toLocaleString()} по щиту`
         summary.append(shieldSpan)
       }
-      card.append(header, sourceDiv, targetsDiv, summary)
+      if (targetsDiv) card.append(header, sourceDiv, targetsDiv, summary)
+      else card.append(header, sourceDiv, summary)
 
       if (allHits.length > 0) {
         const details = el('details', 'simActionHits')
@@ -1304,6 +1537,10 @@ traceContainer.append(traceEl)
       }
       const supportLog = renderSupportLog(action)
       if (supportLog) card.append(supportLog)
+      const energyLog = renderEnergyLog(action)
+      if (energyLog) card.append(energyLog)
+      const eventLog = renderEventLog(action)
+      if (eventLog) card.append(eventLog)
 
       card.onclick = onClick
       return card
@@ -1415,9 +1652,21 @@ traceContainer.append(traceEl)
 
     function relevantSnapshotUnitIds(action: CombatActionRecord, snapshot: StateSnapshot | undefined, sim: Simulator): string[] {
       void sim
-      const id = action.sourceId
-      if (!id) return []
-      return snapshot?.units[id] ? [id] : []
+      const candidates = [action.sourceId, ...action.targetIds]
+      const effects = [
+        ...action.effects.buffs, ...action.effects.debuffs, ...action.effects.dots,
+        ...(action.effects.controls ?? []), ...(action.effects.ticks ?? []),
+        ...action.effects.shields, ...action.effects.shieldDamage,
+        ...action.effects.heals, ...action.effects.removals,
+      ] as Array<Record<string, unknown>>
+      for (const effect of effects) candidates.push(effect.targetId as string | undefined, effect.sourceId as string | undefined, effect.appliedById as string | undefined)
+      const ids = new Set(candidates.filter((id): id is string => typeof id === 'string' && id.length > 0))
+      if (ids.size <= 1) {
+        for (const [id, unit] of Object.entries(snapshot?.units ?? {})) {
+          if (unit.buffs.length > 0 || unit.debuffs.length > 0 || unit.dots.length > 0 || unit.controls.length > 0) ids.add(id)
+        }
+      }
+      return [...ids].filter(id => !!snapshot?.units[id])
     }
 
     function createSnapshotUnitEl(unit: SnapshotUnit, sim: Simulator, options: { stats: boolean; statuses: boolean; effects: boolean; debuffs?: boolean }): HTMLElement {
@@ -1583,11 +1832,21 @@ traceContainer.append(traceEl)
     }
 
     function renderActionTab(action: CombatActionRecord, sim: Simulator, content: HTMLElement): void {
+      const afterSnapshot = action.afterSnapshot ?? action.beforeSnapshot
+      const ids = relevantSnapshotUnitIds(action, afterSnapshot, sim)
       appendSnapshotSection(
         content,
-        'Характеристики в момент действия',
+        'Характеристики до действия',
         action.beforeSnapshot,
-        relevantSnapshotUnitIds(action, action.beforeSnapshot, sim),
+        ids,
+        sim,
+        { stats: true, statuses: false, effects: false }
+      )
+      appendSnapshotSection(
+        content,
+        'Характеристики после действия',
+        afterSnapshot,
+        ids,
         sim,
         { stats: true, statuses: false, effects: false }
       )
@@ -1599,25 +1858,15 @@ traceContainer.append(traceEl)
       const selectedId = scopeId
       const inScope = (effect: any): boolean => !selectedId || effect.targetId === selectedId || (!effect.targetId && effect.sourceId === selectedId)
 
-      const snapshotRows = (() => {
-        const snapshot = action.afterSnapshot ?? action.beforeSnapshot
-        if (!snapshot) return undefined
-        const rows: { buff: any[]; debuff: any[]; shield: any[] } = { buff: [], debuff: [], shield: [] }
-        const ids = selectedId ? [selectedId] : Object.keys(snapshot.units)
-        for (const id of ids) {
-          const unit = snapshot.units[id]
-          if (!unit) continue
-          const name = unit.name ?? sim.roster.find(u => u.id === id)?.name ?? ''
-          for (const buff of unit.buffs) {
-            const row = { ...buff, targetId: id, targetName: name }
-            if (buff.shield) rows.shield.push(row)
-            else rows.buff.push(row)
-          }
-          for (const debuff of unit.debuffs) rows.debuff.push({ ...debuff, targetId: id, targetName: name })
-          for (const dot of unit.dots) rows.debuff.push({ ...dot, targetId: id, targetName: name })
-        }
-        return rows
-      })()
+      const snapshotIds = (snapshot: StateSnapshot | undefined): string[] => {
+        if (!snapshot) return []
+        const ids = selectedId ? [selectedId] : relevantSnapshotUnitIds(action, snapshot, sim)
+        return ids.filter(id => !!snapshot.units[id])
+      }
+      const beforeIds = snapshotIds(action.beforeSnapshot)
+      const afterIds = snapshotIds(action.afterSnapshot ?? action.beforeSnapshot)
+      appendSnapshotSection(content, 'Состояние до действия', action.beforeSnapshot, beforeIds, sim, { stats: false, statuses: true, effects: true, debuffs: true })
+      appendSnapshotSection(content, 'Состояние после действия', action.afterSnapshot ?? action.beforeSnapshot, afterIds, sim, { stats: false, statuses: true, effects: true, debuffs: true })
 
       const mergeStacked = (effects: any[], kind: EffectKind): any[] => {
         const merged = new Map<string, any>()
@@ -1662,10 +1911,23 @@ traceContainer.append(traceEl)
           targetNameEl.textContent = `Получатель: ${target.name}`
           targetEl.append(targetNameEl)
 
+          const ability = effectAbilityFor(effect)
+          const abilityEl = ability ? el('div', 'simInspectorEffectAbility') : undefined
+          if (abilityEl && ability) abilityEl.textContent = `Способность: ${ability}`
+          const description = effectDescriptionFor(effect, kind)
+          const descriptionEl = description ? el('div', 'simInspectorEffectDescription') : undefined
+          if (descriptionEl && description) descriptionEl.textContent = description
           infoEl.append(nameEl, sourceEl, targetEl)
+          if (abilityEl) infoEl.append(abilityEl)
+          if (descriptionEl) infoEl.append(descriptionEl)
+          if (kind === 'debuff' || kind === 'dot') {
+            const dispelEl = el('div', 'simInspectorEffectDispel')
+            dispelEl.textContent = 'Очищение: снимается как дебафф'
+            infoEl.append(dispelEl)
+          }
           const metaEl = el('div', 'simInspectorEffectMeta')
           const meta: Array<[string, string]> = []
-          if ('stacks' in effect) meta.push(['Стаки', String(effect.stacks)])
+          if ('stacks' in effect) meta.push(['Стаки', effect.maxStacks ? `${effect.stacks}/${effect.maxStacks}` : String(effect.stacks)])
           if ('turns' in effect) meta.push(['Ходы', effect.turns === Infinity ? '∞' : String(effect.turns)])
           if ('amount' in effect) meta.push(['Значение', (kind === 'shield' ? floorDisplay(effect.amount) : effect.amount).toLocaleString()])
           if ('damage' in effect) meta.push(['Урон', (kind === 'shield' ? floorDisplay(effect.damage) : effect.damage).toLocaleString()])
@@ -1699,6 +1961,10 @@ traceContainer.append(traceEl)
               modsEl.append(modEl)
             }
             infoEl.append(modsEl)
+            const when = [...new Set(conditionalMods.flatMap(m => m.whenAbility ?? []))]
+            const conditionEl = el('div', 'simInspectorEffectCondition')
+            conditionEl.textContent = `Условие: во время ${when.map(s => ABILITY_LABELS[s] ?? s).join(' / ')}`
+            infoEl.append(conditionEl)
           }
           if (effect.shield) {
             const shieldEl = el('div', 'simInspectorEffectShield')
@@ -1712,12 +1978,16 @@ traceContainer.append(traceEl)
         grid.append(section)
       }
 
-      const buffRows = [...action.effects.buffs.filter(e => e.shield === undefined), ...(snapshotRows?.buff ?? [])]
-      const debuffRows = [...action.effects.debuffs, ...action.effects.dots, ...(snapshotRows?.debuff ?? [])]
-      const shieldRows = [...action.effects.shields, ...(snapshotRows?.shield ?? [])]
+      const changesTitle = el('h4', 'simInspectorSnapshotTitle')
+      changesTitle.textContent = 'Изменения за действие'
+      content.append(changesTitle)
+      const buffRows = action.effects.buffs.filter(e => e.shield === undefined)
+      const debuffRows = [...action.effects.debuffs, ...action.effects.dots, ...(action.effects.controls ?? [])]
+      const shieldRows = action.effects.shields
       addEffectSection('Баффы', buffRows.filter(e => !isNeutralEffect(e) && inScope(e)), 'buff', true)
       addEffectSection('Дебаффы', debuffRows.filter(e => !isNeutralEffect(e) && inScope(e)), 'debuff', true)
       addEffectSection('Щиты', shieldRows.filter(inScope), 'shield')
+      addEffectSection('Тики DoT', (action.effects.ticks ?? []).filter(inScope), 'dot')
       addEffectSection('Урон по щитам', action.effects.shieldDamage.filter(inScope), 'shield')
       addEffectSection('Лечение', action.effects.heals.filter(inScope), 'buff')
       addEffectSection('Снятие эффектов', action.effects.removals.filter(inScope), 'removal')
@@ -1745,6 +2015,24 @@ traceContainer.append(traceEl)
         grid.append(section)
       }
 
+      const otherRows = action.effects.other.filter(e => !summons.includes(e) && inScope(e))
+      if (otherRows.length > 0) {
+        const section = el('div', 'simInspectorEffectSection')
+        const title = el('h4', 'simInspectorEffectTitle neutral')
+        title.textContent = 'Прочие события'
+        section.append(title)
+        const list = el('div', 'simInspectorEffectList')
+        for (const row of otherRows) {
+          const item = el('div', 'simInspectorEffect')
+          const text = el('span')
+          text.textContent = `${OTHER_EVENT_LABELS[row.type] ?? row.type}: ${formatOtherDescription(row.description)}`
+          item.append(text)
+          list.append(item)
+        }
+        section.append(list)
+        grid.append(section)
+      }
+
       const changes: Array<[string, typeof action.effects.energyChanges]> = [
         ['Изменение энергии', action.effects.energyChanges.filter(inScope)],
         ['Изменение SP', action.effects.spChanges.filter(inScope)],
@@ -1764,7 +2052,7 @@ traceContainer.append(traceEl)
           const delta = el('span', row.delta >= 0 ? 'positive' : 'negative')
           delta.textContent = `${row.delta >= 0 ? '+' : ''}${row.delta}`
           const reason = el('span', 'reason')
-          reason.textContent = row.reason
+          reason.textContent = reasonLabel(row.reason)
           item.append(target, delta, reason)
           list.append(item)
         }

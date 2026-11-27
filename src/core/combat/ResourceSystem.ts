@@ -65,14 +65,14 @@ export class ResourceSystem {
   }
 
   /** ERR from buffs multiplies flat regen */
-  gainEnergy(u: Unit, base: number): void {
+  gainEnergy(u: Unit, base: number, reason?: string): void {
     const err = buffVal(u, 'err')
     const wasFull = u.energy >= u.maxEnergy
     const before = u.energy
     u.energy = Math.min(u.maxEnergy, u.energy + base * (1 + err))
     if (this.s.logger.on && u.energy > before) {
       const gained = u.energy - before
-      this.s.logger.emit({ type: 'ENERGY_GAIN', source: this.s.currentActor?.name ?? u.name, target: u.name, sourceId: this.s.currentActor?.id ?? u.id, targetId: u.id, payload: { n: gained, total: u.energy, max: u.maxEnergy, err } })
+      this.s.logger.emit({ type: 'ENERGY_GAIN', source: this.s.currentActor?.name ?? u.name, target: u.name, sourceId: this.s.currentActor?.id ?? u.id, targetId: u.id, payload: { n: gained, total: u.energy, max: u.maxEnergy, err, ...(reason ? { reason } : {}) } })
       if (!wasFull && u.energy >= u.maxEnergy) this.s.logger.emit({ type: 'ENERGY_FULL', source: this.s.currentActor?.name ?? u.name, target: u.name, sourceId: this.s.currentActor?.id ?? u.id, targetId: u.id })
     }
     if (!wasFull && u.energy >= u.maxEnergy && this.s.turns.departedUlt(u)) this.s.immediateTurn(u)

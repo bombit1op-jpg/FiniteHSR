@@ -78,6 +78,7 @@ export interface CombatEffectSummary {
     appliedById?: string
     provenance?: BattleEvent['provenance']
     mods: Array<{ stat: string; value: number }>
+    maxStacks?: number
     shield?: number
   }>
   debuffs: Array<{
@@ -86,6 +87,7 @@ export interface CombatEffectSummary {
     targetId: string
     targetName: string
     stacks: number
+    maxStacks?: number
     turns: number
     sourceId?: string
     sourceName?: string
@@ -102,6 +104,28 @@ export interface CombatEffectSummary {
     damage: number
     turns: number
     stacks: number
+    sourceId?: string
+    sourceName?: string
+    provenance?: BattleEvent['provenance']
+  }>
+  controls: Array<{
+    id: string
+    name: string
+    targetId: string
+    targetName: string
+    turns: number
+    stacks: number
+    sourceId?: string
+    sourceName?: string
+    provenance?: BattleEvent['provenance']
+  }>
+  ticks: Array<{
+    id: string
+    name: string
+    targetId: string
+    targetName: string
+    amount: number
+    element: string
     sourceId?: string
     sourceName?: string
     provenance?: BattleEvent['provenance']
@@ -179,6 +203,12 @@ export interface CombatEffectSummary {
   }>
 }
 
+export interface CombatToughnessRecord {
+  targetId: string
+  targetName: string
+  damage: number
+}
+
 export interface CombatActionRecord {
   id: string
   combatActionId: string
@@ -207,6 +237,7 @@ export interface CombatActionRecord {
   totalDamage: number
   shieldDamage: number
   toughnessDamage: number
+  toughnessDamageByTarget: CombatToughnessRecord[]
   spDelta: number
   effects: CombatEffectSummary
   events: BattleEvent[]
@@ -226,6 +257,37 @@ export interface CombatActionRecord {
 }
 
 
+
+function effectTargetIds(effects: CombatEffectSummary): string[] {
+  return [...new Set([
+    ...effects.buffs.map(e => e.targetId),
+    ...effects.debuffs.map(e => e.targetId),
+    ...effects.dots.map(e => e.targetId),
+    ...effects.shields.map(e => e.targetId),
+    ...effects.heals.map(e => e.targetId),
+    ...effects.breaks.map(e => e.targetId),
+  ].filter((id): id is string => !!id))]
+}
+
+function buildToughnessDamageByTarget(events: BattleEvent[], sim: Simulator, targetOrder: string[]): CombatToughnessRecord[] {
+  const byTarget = new Map<string, CombatToughnessRecord>()
+  for (const e of events) {
+    if (e.type !== 'TOUGHNESS_DAMAGE') continue
+    const targetId = e.targetId ?? ''
+    if (!targetId) continue
+    const amount = Math.max(0, Number(e.payload.amount ?? e.payload.damage ?? 0) || 0)
+    const existing = byTarget.get(targetId)
+    if (existing) existing.damage += amount
+    else byTarget.set(targetId, {
+      targetId,
+      targetName: sim.roster.find(u => u.id === targetId)?.name ?? e.target ?? 'Unknown',
+      damage: amount,
+    })
+  }
+  const ordered = targetOrder.map(id => byTarget.get(id)).filter((t): t is CombatToughnessRecord => !!t)
+  const orderedIds = new Set(ordered.map(t => t.targetId))
+  return [...ordered, ...[...byTarget.values()].filter(t => !orderedIds.has(t.targetId))]
+}
 
 /**
  * Aggregates BattleEvent[] into CombatActionRecord[].
@@ -277,19 +339,22 @@ export function aggregateCombatActions(
     const tags = categorizeTags(actionEvents, category, abilityName, hasRealAttack)
 
     const sourceName = sourceUnit?.name ?? boundary.source ?? 'Unknown'
+    const effects = buildEffectsSummary(actionEvents, sim)
+    const effectTargets = effectTargetIds(effects)
     const attackTargetIds = attacksArray.flatMap(a => a.targetIds)
     const targetIds = [...new Set([
       ...attackTargetIds,
+      ...effectTargets,
       ...actionEvents
-        .filter(e => e.type === 'TARGET_SELECTED' || (e.type === 'SUMMON_CREATED' && attackTargetIds.length === 0))
+        .filter(e => e.type === 'TARGET_SELECTED' ||
+          (e.type === 'SUMMON_CREATED' && attackTargetIds.length === 0 && effectTargets.length === 0))
         .map(e => e.targetId).filter((id): id is string => !!id),
     ])]
     const beforeSnapshot = snapshots.find(s => s.actionId === boundary.actionId && s.turn === boundary.turn)
     const afterSnapshot = snapshots.find(s => s.actionId === boundary.actionId + 1 && s.turn === boundary.turn)
       ?? snapshots.find(s => s.actionId === boundary.actionId && s.turn > boundary.turn)
-    const effects = buildEffectsSummary(actionEvents, sim)
-    const toughnessDamage = actionEvents.reduce((sum, e) =>
-      sum + (e.type === 'TOUGHNESS_DAMAGE' ? Math.max(0, Number(e.payload.amount ?? e.payload.damage ?? 0) || 0) : 0), 0)
+    const toughnessDamageByTarget = buildToughnessDamageByTarget(actionEvents, sim, targetIds)
+    const toughnessDamage = toughnessDamageByTarget.reduce((sum, t) => sum + t.damage, 0)
     const spFromEvents = effects.spChanges.reduce((sum, change) => sum + change.delta, 0)
     const spDelta = spFromEvents !== 0 ? spFromEvents
       : beforeSnapshot && afterSnapshot ? afterSnapshot.sp - beforeSnapshot.sp : 0
@@ -315,6 +380,7 @@ export function aggregateCombatActions(
       totalDamage: attacksArray.reduce((sum, a) => sum + a.totalDamage, 0),
       shieldDamage: actionEvents.reduce((sum, e) => sum + (e.type === 'SHIELD_ABSORBED' ? Number(e.payload.amount ?? 0) : 0), 0),
       toughnessDamage,
+      toughnessDamageByTarget,
       spDelta,
       effects,
       events: actionEvents,
@@ -378,7 +444,7 @@ function resolveAbilityName(
   return text
 }
 
-function categorizeAction(events: BattleEvent[], sourceUnit?: { kind?: string; side?: string }): CombatActionCategory {
+function categorizeAction(events: BattleEvent[], sourceUnit?: { kind?: string; side?: string; sharesOwnerBuffs?: boolean }): CombatActionCategory {
   const explicit = events.find(e => e.actionCategory)?.actionCategory
     ?? events.find(e => typeof e.payload.actionKind === 'string')?.payload.actionKind as string | undefined
   if (explicit) {
@@ -391,7 +457,7 @@ function categorizeAction(events: BattleEvent[], sourceUnit?: { kind?: string; s
 
   if (events.some(e => e.type === 'TECHNIQUE_APPLIED')) return 'technique'
   if (sourceUnit?.kind === 'timer') return 'timer'
-  if (sourceUnit?.kind === 'summon') return 'summon'
+  if (sourceUnit?.kind === 'summon' && sourceUnit.sharesOwnerBuffs === true) return 'summon'
 
   const ability = events.find(e => e.type === 'ABILITY_USED') ?? events[0]
   if (ability && (ability.payload.action === 'ult' || ability.payload.actionKind === 'ult')) return 'ultimate'
@@ -425,12 +491,13 @@ function categorizeTags(
   const counter = events.some(e =>
     e.payload.counter === true || e.payload.counterAttack === true || e.payload.isCounter === true) ||
     /counter(?:attack)?/.test(text)
-  const dot = events.some(e => e.type === 'DOT_APPLIED' || e.type === 'DOT_TICK' || e.type === 'DOT_EXPIRED')
+  const dot = events.some(e => e.type === 'DOT_TICK' && Number(e.payload.amount ?? 0) > 0)
   const breakRestore = events.some(e =>
     e.payload.breakRestore === true || e.payload.restoreToughness === true ||
     e.payload.toughnessRestore === true || e.payload.reason === 'break_restore') ||
     /(?:break|weakness)[^|]{0,24}(?:restore|recover)|(?:restore|recover)[^|]{0,24}(?:toughness|break)/.test(text)
-  const summon = events.some(e => e.type === 'SUMMON_CREATED' || e.payload.summon === true)
+  const summon = category === 'summon' ||
+    (!hasRealAttack && category !== 'attack' && events.some(e => e.type === 'SUMMON_CREATED'))
   const ultimate = events.some(e =>
     e.payload.action === 'ult' || e.payload.actionKind === 'ult' ||
     e.payload.actionKind === 'ultimate' || e.payload.ult === true ||
@@ -466,7 +533,12 @@ function hasMeaningfulContent(events: BattleEvent[]): boolean {
     e.type === 'SP_GAIN' ||
     e.type === 'SP_LOSS' ||
     e.type === 'DOT_APPLIED' ||
-    e.type === 'WEAKNESS_BREAK'
+    e.type === 'WEAKNESS_BREAK' ||
+    e.type === 'ENEMY_SPAWN' ||
+    e.type === 'PHASE_START' ||
+    e.type === 'PHASE_END' ||
+    e.type === 'STAT_CHANGED' ||
+    e.type === 'NOTE'
   )
 }
 
@@ -593,6 +665,8 @@ function buildEffectsSummary(
     buffs: [],
     debuffs: [],
     dots: [],
+    controls: [],
+    ticks: [],
     shields: [],
     shieldDamage: [],
     heals: [],
@@ -602,6 +676,15 @@ function buildEffectsSummary(
     breaks: [],
     other: [],
   }
+
+  const shieldKey = (id: unknown, targetId: string, amount: unknown): string =>
+    `${String(id ?? '')}|${targetId}|${Math.round(Number(amount) || 0)}`
+  const explicitShieldKeys = new Set(
+    attackEvents
+      .filter(e => e.type === 'SHIELD_APPLIED')
+      .map(e => shieldKey((e.payload as any)?.id, e.targetId ?? (e.payload as any)?.targetId ?? '', (e.payload as any)?.amount))
+  )
+  const emittedShieldKeys = new Set<string>()
 
   for (const e of attackEvents) {
     const payload = e.payload as any
@@ -619,17 +702,21 @@ function buildEffectsSummary(
         const isDebuff = payload.debuff === true
         const shieldAmount = payload.shield as number | undefined
         if (shieldAmount !== undefined) {
-          summary.shields.push({
-            id: payload.id as string,
-            name: payload.name as string,
-            targetId,
-            targetName,
-            amount: shieldAmount,
-            sourceId,
-            sourceName,
-            appliedById: payload.appliedById,
-            provenance: e.provenance,
-          })
+          const key = shieldKey(payload.id, targetId, shieldAmount)
+          if (!explicitShieldKeys.has(key) && !emittedShieldKeys.has(key)) {
+            emittedShieldKeys.add(key)
+            summary.shields.push({
+              id: payload.id as string,
+              name: payload.name as string,
+              targetId,
+              targetName,
+              amount: shieldAmount,
+              sourceId,
+              sourceName,
+              appliedById: payload.appliedById,
+              provenance: e.provenance,
+            })
+          }
         } else if (isDebuff) {
           summary.debuffs.push({
             id: payload.id as string,
@@ -637,6 +724,7 @@ function buildEffectsSummary(
             targetId,
             targetName,
             stacks: (payload.stacks as number) ?? 1,
+            maxStacks: payload.maxStacks as number | undefined,
             turns: (payload.turns as number) ?? Infinity,
             sourceId,
             sourceName,
@@ -651,6 +739,7 @@ function buildEffectsSummary(
             targetId,
             targetName,
             stacks: (payload.stacks as number) ?? 1,
+            maxStacks: payload.maxStacks as number | undefined,
             turns: (payload.turns as number) ?? Infinity,
             sourceId,
             sourceName,
@@ -670,6 +759,7 @@ function buildEffectsSummary(
           targetId,
           targetName,
           stacks: payload.stacks ?? 1,
+          maxStacks: payload.maxStacks as number | undefined,
           turns: payload.turns ?? Infinity,
           sourceId,
           sourceName,
@@ -681,32 +771,64 @@ function buildEffectsSummary(
       }
       case 'DOT_APPLIED': {
         summary.dots.push({
-          id: payload.id,
-          name: payload.name,
+          id: payload.id ?? payload.kind ?? 'dot',
+          name: payload.name ?? payload.kind ?? e.source ?? 'DoT',
           targetId,
           targetName,
-          element: payload.element ?? 'Physical',
+          element: payload.element ?? e.element ?? 'Physical',
           damage: payload.baseDmg ?? payload.damage ?? 0,
           turns: payload.turns ?? 0,
           stacks: payload.stacks ?? 1,
           sourceId,
-          sourceName,
+          sourceName: sourceName ?? e.source ?? payload.sourceName,
+          provenance: e.provenance,
+        })
+        break
+      }
+      case 'CONTROL_APPLIED': {
+        summary.controls.push({
+          id: payload.id ?? payload.kind ?? 'control',
+          name: payload.name ?? payload.kind ?? 'Control',
+          targetId,
+          targetName,
+          turns: payload.turns ?? 0,
+          stacks: payload.stacks ?? 1,
+          sourceId,
+          sourceName: sourceName ?? e.source ?? payload.sourceName,
+          provenance: e.provenance,
+        })
+        break
+      }
+      case 'DOT_TICK': {
+        summary.ticks.push({
+          id: payload.id ?? payload.kind ?? 'dot',
+          name: payload.name ?? payload.kind ?? 'DoT',
+          targetId,
+          targetName,
+          amount: payload.amount ?? 0,
+          element: payload.element ?? e.element ?? 'Physical',
+          sourceId,
+          sourceName: sourceName ?? e.source ?? payload.sourceName,
           provenance: e.provenance,
         })
         break
       }
       case 'SHIELD_APPLIED': {
-        summary.shields.push({
-          id: payload.id,
-          name: payload.name,
-          targetId,
-          targetName,
-          amount: payload.amount ?? 0,
-          sourceId,
-          sourceName,
-          appliedById: payload.appliedById,
-          provenance: e.provenance,
-        })
+        const key = shieldKey(payload.id, targetId, payload.amount)
+        if (!emittedShieldKeys.has(key)) {
+          emittedShieldKeys.add(key)
+          summary.shields.push({
+            id: payload.id,
+            name: payload.name,
+            targetId,
+            targetName,
+            amount: payload.amount ?? 0,
+            sourceId,
+            sourceName,
+            appliedById: payload.appliedById,
+            provenance: e.provenance,
+          })
+        }
         break
       }
       case 'SHIELD_ABSORBED': {
@@ -786,13 +908,14 @@ function buildEffectsSummary(
       }
       case 'BUFF_EXPIRED':
       case 'DEBUFF_EXPIRED':
+      case 'CONTROL_EXPIRED':
       case 'DISPELLED':
       case 'DOT_EXPIRED':
       case 'SHIELD_BROKEN': {
         const kind: CombatEffectSummary['removals'][number]['kind'] =
           e.type === 'DOT_EXPIRED' ? 'dot'
           : e.type === 'SHIELD_BROKEN' ? 'shield'
-          : (e.type === 'DEBUFF_EXPIRED' || e.type === 'DISPELLED' || payload.debuff === true) ? 'debuff'
+          : (e.type === 'DEBUFF_EXPIRED' || e.type === 'CONTROL_EXPIRED' || e.type === 'DISPELLED' || payload.debuff === true) ? 'debuff'
           : 'buff'
         summary.removals.push({
           kind,
@@ -808,8 +931,16 @@ function buildEffectsSummary(
         })
         break
       }
+      case 'NOTE':
+        summary.other.push({
+          type: e.type,
+          targetId,
+          targetName,
+          description: e.raw || JSON.stringify(e.payload),
+        })
+        break
       default:
-        if (e.type !== 'NOTE' && e.type !== 'ACTION_START' && e.type !== 'ACTION_END' &&
+        if (e.type !== 'ACTION_START' && e.type !== 'ACTION_END' &&
             e.type !== 'HIT_START' && e.type !== 'HIT_END' && e.type !== 'DAMAGE_DEALT' &&
             e.type !== 'DAMAGE_CALCULATED') {
           summary.other.push({

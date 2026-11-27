@@ -5,6 +5,7 @@ import { LIGHT_CONES, RELIC_SETS, PLANAR_SETS, SLOT_MAINS, SUBSTAT_TIERS, RELIC_
 import type { GearConfig, RelicPiece } from '../core/entities/Unit'
 import { el, fillSelect, fmtStatVal, escapeHtml, STAT_LABELS } from './dom'
 import { Dropdown } from './dropdown'
+import { SetPicker } from './pickers'
 import { coneOptions, relicOptions, planarOptions, signatureCone } from '../core/gearOrder'
 import { store, techniquesForRows } from './store'
 import type { PieceState, TeamRowState } from './store'
@@ -19,7 +20,7 @@ export interface PieceEditor {
   slot: RelicPiece['slot']
   card: HTMLElement
   /** per-piece set picker — name + set icon */
-  setDrop: Dropdown
+  setDrop: SetPicker
   pieceBadgeEl: HTMLElement
   ratingEl: HTMLElement
   mainSel: HTMLSelectElement
@@ -461,7 +462,7 @@ export function buildPieceEditors(onChange?: () => void, kitIdOf?: () => string)
 
     const isPlanar = slot === 'sphere' || slot === 'rope'
     const pool = isPlanar ? PLANAR_SETS : RELIC_SETS
-    const setDrop = new Dropdown('setDrop')
+    const setDrop = new SetPicker(isPlanar ? 'planar' : 'relic', 'setDrop')
     const setIcons: Record<string, string> = {}
     for (const s of pool) {
       const url = gearIconUrl(isPlanar ? 'planar' : 'relic', s.id)

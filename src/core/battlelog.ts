@@ -491,7 +491,7 @@ export class BattleLogger {
   }
 
   /** Start a Follow-Up Attack with its own combatActionId */
-  startFollowUpAttack(parentActionId: string | undefined, meta: { source: string; sourceId: string; abilityName: string; provenance?: BattleEvent['provenance'] }): void {
+  startFollowUpAttack(parentActionId: string | undefined, meta: { source: string; sourceId: string; abilityName: string; provenance?: BattleEvent['provenance']; deathRattle?: boolean }): void {
     const ids = this.nextActionIds('followUpAttack', parentActionId)
     const parentAtkNo = this.atkNo
     const parentHitNo = this.hitNo
@@ -515,7 +515,7 @@ export class BattleLogger {
       parentTrgNo,
     })
 
-    this.emit({ type: 'ACTION_START', source: meta.source, sourceId: meta.sourceId, trace: 'ACT', actionId, payload: { action: meta.abilityName, actionKind: 'followUpAttack', extra: true, provenance: meta.provenance } })
+    this.emit({ type: 'ACTION_START', source: meta.source, sourceId: meta.sourceId, trace: 'ACT', actionId, payload: { action: meta.abilityName, actionKind: 'followUpAttack', extra: true, provenance: meta.provenance, ...(meta.deathRattle ? { deathRattle: true } : {}) } })
     this.emit({ type: 'ABILITY_USED', source: meta.source, sourceId: meta.sourceId, trace: 'ACT', actionId, payload: { action: meta.abilityName, actionKind: 'followUpAttack', extra: true } })
   }
 

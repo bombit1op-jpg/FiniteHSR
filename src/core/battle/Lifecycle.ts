@@ -109,7 +109,7 @@ export class Lifecycle {
     // the revive follows it, exactly the observable "killing blow → restored" sequence).
     if (victim.side === 'enemy') enemyBehavior(victim.name)?.passive?.onKilled?.(this.s, victim, killer)
     if (!victim.dead) return
-    if (killer.side === 'ally' && killer.kind === 'char') this.s.gainEnergy(killer, 10)
+    if (killer.side === 'ally' && killer.kind === 'char') this.s.gainEnergy(killer, 10, 'on_kill')
     const kit = killer.kitId ? this.s.kits.get(killer.kitId) : undefined
     kit?.onKill?.(this.s, killer, victim, this.s.rt(killer))
     // OnAllyKill: notify OTHER ally kits (Tingyun E2 — kill by Benediction ally)

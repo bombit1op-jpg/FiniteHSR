@@ -728,6 +728,9 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .pickerGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(68px, 1fr)); gap: 8px; }
 .pickerGrid.icons { grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); }
 .pickerGrid.cones { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.pickerGrid.sets { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.setPickerOverlay .pickerPanel { width: min(1000px, calc(100vw - 24px)); }
+.setPickerBtn::after { content: '⋯'; }
 .pickerChar { display: flex; flex-direction: column; align-items: stretch; gap: 3px; padding: 5px; background: #111a14; border: 1px solid #26352b; border-radius: 8px; cursor: pointer; color: inherit; text-align: center; }
 .pickerChar:hover { border-color: #67b97b; background: #17241b; }
 .pickerChar.current { border-color: #f2c94c; }
@@ -753,6 +756,13 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .pickConeRarity.r5 { color: #f2c94c; }
 .pickConeRarity.r4 { color: #a78bfa; }
 .pickConeRarity.r3 { color: #5ea9d6; }
+.pickSetCard { display: grid; grid-template-columns: 48px 1fr; align-items: start; gap: 2px 10px; padding: 8px; background: #111a14; border: 1px solid #26352b; border-radius: 10px; cursor: pointer; color: inherit; text-align: left; }
+.pickSetCard:hover { border-color: #67b97b; background: #17241b; }
+.pickSetCard.current { border-color: #f2c94c; }
+.pickSetCard .gearIcon { grid-row: 1 / span 2; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; background: #0a120d; border-radius: 8px; }
+.pickSetCard .gearIcon img { max-width: 48px; max-height: 48px; object-fit: contain; }
+.pickSetName { font-size: 12px; font-weight: 700; color: #dbe8de; }
+.pickSetEffect { font-size: 11px; line-height: 1.35; color: #9fb2a4; }
 .pickerList { display: flex; flex-direction: column; gap: 2px; }
 .pickerCone { display: flex; align-items: center; gap: 10px; width: 100%; padding: 6px 8px; background: transparent; border: 1px solid transparent; border-radius: 7px; color: inherit; cursor: pointer; text-align: left; }
 .pickerCone:hover { background: #142018; border-color: #2c4935; }
@@ -1242,6 +1252,9 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 
 .simTraceContainer { max-height: 300px; overflow: auto; background: #0d1117; border: 1px solid #1e2530; border-radius: 6px; }
 .simTrace { margin: 0; padding: 10px; font: 11px/1.5 Consolas, monospace; color: #aab6c5; white-space: pre-wrap; }
+.simTraceHead { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.simTraceCopyBtn { border: 1px solid #2a4a35; background: #101812; color: #8bd39b; border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; }
+.simTraceCopyBtn:hover { border-color: #67b97b; color: #b6f0c2; }
 
 .simBattlefield { display: flex; flex-direction: column; gap: 16px; }
 .simBattlefieldSide { flex: 1; display: flex; flex-direction: column; gap: 12px; }
@@ -1491,14 +1504,18 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .simActionEnergyDelta { font-size: 11px; color: #60a5fa; font-variant-numeric: tabular-nums; }
 .simActionToughnessDamage { font-size: 11px; color: #c9a7ff; font-variant-numeric: tabular-nums; }
 
-.simActionTargets {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.simActionTargetsLabel { font-size: 10px; color: #9aa7ba; margin-right: 2px; }
+.simActionTargets { display: flex; flex-direction: column; gap: 3px; }
+.simActionTargetGroup { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+.simActionTargetGroupLabel { font-size: 10px; color: #9aa7ba; min-width: 88px; }
+.simActionTargetGroup.attack .simActionTargetGroupLabel { color: #f5d76e; }
+.simActionTargetGroup.buff .simActionTargetGroupLabel { color: #7fd18a; }
+.simActionTargetGroup.debuff .simActionTargetGroupLabel { color: #e08a8a; }
+.simActionTarget { display: inline-flex; align-items: center; gap: 3px; }
 .simActionTargetIcon { width: 24px; height: 24px; border-radius: 4px; }
+.simActionEnergyLog { font-size: 11px; color: #60a5fa; }
+.simActionEnergyRow { padding: 2px 0; font-variant-numeric: tabular-nums; }
+.simActionEvents { font-size: 11px; color: #9aa7ba; }
+.simActionEventRow { font-size: 11px; color: #9aa7ba; padding: 2px 0; }
 
 .simActionSummary {
   display: flex;
@@ -1724,6 +1741,13 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .simInspectorEffectSource { display: inline-flex; align-items: center; gap: 5px; margin-top: 2px; font-size: 11px; color: #9aa7b8; }
 .simInspectorEffectSourceIcon { display: inline-flex; flex-shrink: 0; }
 .simInspectorEffectSourceIcon img { width: 18px; height: 18px; border-radius: 3px; }
+.simInspectorEffectDescription { margin-top: 4px; font-size: 11px; line-height: 1.4; color: #d6e3f2; }
+.simInspectorEffectAbility { margin-top: 2px; font-size: 11px; color: #c9a7ff; }
+.simInspectorEffectCondition { margin-top: 4px; font-size: 11px; color: #f2c94c; }
+.simInspectorEffectDispel { margin-top: 4px; font-size: 11px; color: #8bd39b; }
+.simInspectorEffectTarget { display: inline-flex; align-items: center; gap: 5px; margin-top: 2px; font-size: 11px; color: #9aa7b8; }
+.simInspectorEffectTargetIcon { display: inline-flex; flex-shrink: 0; }
+.simInspectorEffectTargetIcon img { width: 18px; height: 18px; border-radius: 3px; }
 
 .simInspectorEffect.buff {
   border-color: #2f4f8a;

@@ -21,7 +21,7 @@ import type { TeamRowState } from '../../src/ui/store'
  *
  * The DOM block follows the CURRENT panel markup: the character is picked from the portrait (no
  * select), a new party starts with ONE slot (§Task 9), a single-use Technique is a checkbox and a
- * multi-use Technique is a count select, and a relic piece carries a set dropdown plus ONE number
+ * multi-use Technique is a count select, and a relic piece carries a set picker plus ONE number
  * for the summed substat value (§Task 7).
  */
 
@@ -105,6 +105,8 @@ export default () => {
   g.document = doc
   g.HTMLElement = (win as unknown as { HTMLElement: unknown }).HTMLElement
   g.Event = (win as unknown as { Event: unknown }).Event
+  g.innerWidth = 1280
+  g.innerHeight = 900
   const host = doc.createElement('div')
   doc.body.append(host)
 
@@ -194,6 +196,17 @@ export default () => {
   const planRow = cardA.querySelector('.setPlan') as HTMLElement
   cases.push(raw('the set plan sits above the relic pieces', !!planRow))
   cases.push(raw('the plan carries the relic + planar set pickers', planRow.querySelectorAll('.dd').length === 3, `${planRow.querySelectorAll('.dd').length}`))
+  const setBtn = planRow.querySelector<HTMLButtonElement>('.setPickerBtn')!
+  void setBtn.onclick?.call(setBtn, new Event('click') as never)
+  const setOverlay = doc.querySelector('.setPickerOverlay') as HTMLElement
+  const setGrid = setOverlay?.querySelector('.pickerGrid.sets')
+  const setCards = [...(setGrid?.querySelectorAll<HTMLElement>('.pickSetCard') ?? [])]
+  const musketeerCard = setCards.find(c => c.dataset.setId === 'musketeer')
+  cases.push(raw('set selection opens a filterless modal', !!setOverlay && !setOverlay.querySelector('.pickerSearch') && !setOverlay.querySelector('.pickerBtnRow')))
+  cases.push(raw('set modal uses a two-column grid', !!setGrid, String(!!setGrid)))
+  cases.push(raw('set cards show 2pc/4pc effects', !!musketeerCard?.textContent?.includes('2pc: Increases ATK by 12%.'), musketeerCard?.textContent?.slice(0, 120) ?? 'missing'))
+  const closeSetBtn = setOverlay.querySelector<HTMLButtonElement>('.pickerClose')!
+  closeSetBtn.onclick?.call(closeSetBtn, new Event('click') as never)
 
   // collect() must not carry empty slots into the engine
   const setup = collect()

@@ -404,7 +404,7 @@ cfg: SimConfig
     this.logger.emit({ type: 'STAT_CHANGED', source: u.name, sourceId: u.id, payload: { stat: 'spdBase', from: before, to: spdNew } })
   }
 
-  gainEnergy(u: Unit, base: number): void { this.res.gainEnergy(u, base) }
+  gainEnergy(u: Unit, base: number, reason?: string): void { this.res.gainEnergy(u, base, reason) }
   gainEnergyFlat(u: Unit, base: number): void { this.res.gainEnergyFlat(u, base) }
   loseEnergy(u: Unit, base: number): void { this.res.loseEnergy(u, base) }
 
