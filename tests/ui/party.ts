@@ -165,6 +165,17 @@ export default () => {
   techSel1.onchange?.(new Event('change') as never)
   cases.push(raw('the Technique use count is stored', pStore.active?.slots.find(s => s.id === 'r2')?.techniqueUses === 2))
 
+  // ---- Eidolon EX: Jing Yuan only, stored as eidolon 7
+  const exA = cardA.querySelector('.eidolon[data-eidolon="7"]') as HTMLButtonElement
+  cases.push(raw('Jing Yuan card exposes EX', !!exA && exA.textContent?.includes('EX')))
+  const exB = cardB.querySelector('.eidolon[data-eidolon="7"]') as HTMLButtonElement
+  cases.push(raw('non-Jing Yuan card hides EX', !exB || exB.style.display === 'none'))
+  exA.click()
+  cases.push(raw('EX toggle stores eidolon 7', pStore.active?.slots.find(s => s.id === 'r1')?.eidolon === 7))
+  cases.push(raw('EX toggle displays EX', (cardA.querySelector('.eidolonDisplay') as HTMLElement).textContent === 'EX'))
+  pStore.patchSlot('r1', { eidolon: 0 })
+  pHandle.render()
+
   // ---- skill levels (number input + +/- buttons)
   const skillInp = cardA.querySelectorAll('.lvlInput')[1] as HTMLInputElement
   skillInp.value = '10'

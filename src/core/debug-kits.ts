@@ -471,6 +471,18 @@ const lastVal = (sim: ReturnType<typeof runBattle>, id: string, stat: string): n
     chk(s, 'jingyuan', 'A4 Savant Providence +15 EN', s.logLines.some(l => />>> Jing Yuan \[SKILL\].* EN:15(\.\d+)?\//.test(l)))
   }
 }
+// EX: One Quiet Cup of Thunder
+{
+  const s = runBattle({
+    team: [{ kitId: 'jingyuan', stats: { ...DPS, spd: 2000 }, eidolon: 7, energyStartFrac: 1 }],
+    enemy: foe(10_000_000, ['Lightning'], 1, 120, 60, 400, 'Mob'),
+    cycles: 2, seed: 1,
+  })
+  const enhance = s.buffLog.filter(e => e.id === 'jy_ex_enhance' && e.mods?.some(m => m.stat === 'dmgAll' && m.value === 2.4))
+  chk(s, 'jingyuan', 'EX: start + after each LL action applies 240% DMG buff', enhance.length >= 2)
+  chk(s, 'jingyuan', 'EX: max 30 hits triggers immediate Lightning-Lord action',
+    s.logLines.some(l => /Hits Per Action reached 30/.test(l)) && s.logLines.some(l => /Lightning-Lord acts \(30 hits\)/.test(l)))
+}
 
 // ============ 3. FIREFLY (выживаемость+break → E2) ============
 {

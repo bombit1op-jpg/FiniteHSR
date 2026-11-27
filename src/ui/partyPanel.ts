@@ -281,7 +281,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       const chosen = await openCharacterPicker({ exclude: filteredExclude, current: row.kitId || undefined })
       if (chosen === null) return
       if (chosen === '') { clearSlot(row.id); render(); return }
-      patch({ kitId: chosen, coneId: '', relic1: '', relic2: '', planar: '', pieces: [], techniqueUses: 0 })
+      patch({ kitId: chosen, eidolon: Math.min(liveRow().eidolon ?? 0, 6), coneId: '', relic1: '', relic2: '', planar: '', pieces: [], techniqueUses: 0 })
       render()
     }
     portrait.onclick = pickChar
@@ -325,23 +325,26 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
     const rightColumn = el('div', 'pcRightColumn')
     detailsGrid.append(leftColumn, rightColumn)
 
-    // --- eidolons: E1..E6 toggle buttons (unselected grey, E6 gets shimmer when active)
+    // --- eidolons: E1..E6 toggle buttons, plus EX for Jing Yuan
     const eidSection = section('ЭЙДОЛОНЫ')
     const eidRow = el('div', 'eidolons')
     const eidButtons: HTMLButtonElement[] = []
-    for (let e = 1; e <= 6; e++) {
+    for (let e = 1; e <= 7; e++) {
       const b = el('button', 'eidolon') as HTMLButtonElement
       b.type = 'button'
       b.dataset.eidolon = String(e)
       const iconWrap = el('div', 'eidolonIcon')
-      const img = document.createElement('img')
-      img.className = 'eidolonImg'
-      img.alt = ''
-      const iconUrl = getEidolonIcon(row.kitId ?? '', e)
-      if (iconUrl) img.src = iconUrl
-      iconWrap.append(img)
+      if (e <= 6) {
+        const img = document.createElement('img')
+        img.className = 'eidolonImg'
+        img.alt = ''
+        const iconUrl = getEidolonIcon(row.kitId ?? '', e)
+        if (iconUrl) img.src = iconUrl
+        iconWrap.append(img)
+      }
       const textWrap = el('span', 'eidolonText')
-      textWrap.textContent = `E${e}`
+      textWrap.textContent = e === 7 ? 'EX' : `E${e}`
+      if (e === 7) b.classList.add('ex')
       b.append(iconWrap, textWrap)
       b.onclick = () => {
         const current = Number(store.active?.slots.find(s => s.id === row.id)?.eidolon ?? 0)
@@ -740,8 +743,11 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       techniqueSel.value = String(uses)
       techniqueChk.checked = uses > 0
       const eid = Number(live.eidolon ?? 0)
+      eidRow.classList.toggle('ex', kitId === 'jingyuan')
       for (const b of eidButtons) {
         const n = Number(b.dataset.eidolon)
+        if (n === 7 && kitId !== 'jingyuan') { b.style.display = 'none'; continue }
+        b.style.display = ''
         const active = n <= eid
         b.classList.toggle('active', active)
         b.classList.toggle('e6', active && n === 6)
@@ -752,9 +758,9 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
           if (iconUrl) img.src = iconUrl
         }
       }
-      // Update eidolon level display (E0-E6)
+      // Update eidolon level display (E0-E6, EX)
       if (eidolonDisplay) {
-        eidolonDisplay.textContent = `E${eid}`
+        eidolonDisplay.textContent = eid === 7 ? 'EX' : `E${eid}`
         eidolonDisplay.style.display = kitId ? 'inline-flex' : 'none'
       }
       paintSkills(view, live, kitId)

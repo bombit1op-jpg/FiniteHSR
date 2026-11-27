@@ -8,6 +8,79 @@ import { type DoTWithSource } from '../simulator'
 import { mainDpsOf } from '../autoai'
 import { computeBreakDamage } from '../combat/DamageCalculator'
 
+const JY_EX_EIDOLON = 7
+const JY_EX_HPA_CAP = 30
+const JY_EX_DMG_BOOST = 2.4
+const JY_EX_ENHANCE_ID = 'jy_ex_enhance'
+type JyExHpaHit = { hits: number; turns: number }
+
+function jyExActive(ctx: Record<string, unknown>): boolean {
+  return ((ctx.eidolon as number) ?? 0) >= JY_EX_EIDOLON
+}
+
+function jyExBonusHits(ctx: Record<string, unknown>): number {
+  const list = ctx.exHits as JyExHpaHit[] | undefined
+  return list ? list.reduce((sum, b) => sum + b.hits, 0) : 0
+}
+
+function jyHpaCap(ctx: Record<string, unknown>): number {
+  return jyExActive(ctx) ? JY_EX_HPA_CAP : 10
+}
+
+function jyEffectiveHpa(ownerCtx: Record<string, unknown>, llCtx: Record<string, unknown>): number {
+  const hpa = (llCtx.hpa as number) ?? ((llCtx.baseHpa as number) ?? 3)
+  const tech = (llCtx.techHits as number) ?? 0
+  const total = hpa + tech + jyExBonusHits(ownerCtx)
+  return jyExActive(ownerCtx) ? Math.min(jyHpaCap(ownerCtx), total) : total
+}
+
+function jySyncSpeed(sim: SimApi, ll: Unit, ownerCtx: Record<string, unknown>, llCtx: Record<string, unknown>): number {
+  const hpa = jyEffectiveHpa(ownerCtx, llCtx)
+  const baseHpa = (llCtx.baseHpa as number) ?? 3
+  const spd = ((llCtx.baseSpd as number) ?? 60) + 10 * (hpa - baseHpa)
+  if (ll.base.spd !== spd) sim.setSpeedDynamic(ll, spd)
+  return hpa
+}
+
+function jyAfterHpa(sim: SimApi, owner: Unit, ll: Unit): void {
+  const ownerCtx = sim.rt(owner)
+  const hpa = jySyncSpeed(sim, ll, ownerCtx, sim.rt(ll))
+  if (!jyExActive(ownerCtx) || hpa < JY_EX_HPA_CAP || ll.av <= 0) return
+  ll.av = 0
+  sim.log(`${ll.name} Hits Per Action reached ${JY_EX_HPA_CAP}: acts immediately`, {
+    type: 'ACTION_ADVANCE',
+    target: ll.name,
+    targetId: ll.id,
+    payload: { pct: 1, av: 0, hits: hpa },
+  })
+}
+
+function jyAddExHpa(sim: SimApi, owner: Unit, ll: Unit, hits: number): void {
+  const ctx = sim.rt(owner)
+  if (!jyExActive(ctx)) return
+  const list = (ctx.exHits ??= []) as JyExHpaHit[]
+  list.push({ hits, turns: 4 })
+  jyAfterHpa(sim, owner, ll)
+}
+
+function jyTickExHpa(sim: SimApi, owner: Unit, ll: Unit): void {
+  const ctx = sim.rt(owner)
+  const list = ctx.exHits as JyExHpaHit[] | undefined
+  if (!list?.length) return
+  ctx.exHits = list.map(b => ({ hits: b.hits, turns: b.turns - 1 })).filter(b => b.turns > 0)
+  jySyncSpeed(sim, ll, ctx, sim.rt(ll))
+}
+
+function jyExEnhance(sim: SimApi, owner: Unit): void {
+  if (!jyExActive(sim.rt(owner))) return
+  sim.addBuff(owner, {
+    id: JY_EX_ENHANCE_ID,
+    name: 'One Quiet Cup of Thunder (Enhanced)',
+    mods: [{ stat: 'dmgAll', value: JY_EX_DMG_BOOST }],
+    turns: Infinity,
+  })
+}
+
 // ===== jingyuan  (was jingyuan.ts) =====
 export const jingyuanKit: KitDef = {
   id: 'jingyuan',
@@ -47,15 +120,17 @@ export const jingyuanKit: KitDef = {
     lrt.mult = mult('jingyuan', 'talent', lv.talent)
     sim.registerUnit(ll)
     sim.log(`${u.name} summons Lightning-Lord`)
+    jyExEnhance(sim, u)
   },
   // Lightning-Lord's own turn: it acts once its AV reaches the front of the turn order. Its hits
   // land as the unit itself and it shares Jing Yuan's buffs + stats, so there is no snapshot to
   // refresh — the merge in hitDigit reads Jing Yuan's live buffs and base.
   onSummonTurn(sim, s, owner, ctx) {
     const lrt = sim.rt(s)
-    const hpa = ((lrt.hpa as number) ?? 3) + ((lrt.techHits as number) ?? 0)
+    const ownerCtx = sim.rt(owner)
+    const hpa = jyEffectiveHpa(ownerCtx, lrt)
     lrt.techHits = 0
-    const eid = (sim.rt(owner).eidolon as number) ?? 0
+    const eid = (ownerCtx.eidolon as number) ?? 0
     sim.log(`-- ${s.name} acts (${hpa} hits)`)
     if (hpa >= 6) sim.addBuff(owner, { id: 'battalia', name: 'Battalia Crush', mods: [{ stat: 'critDmg', value: 0.25 }] })
     // E6: each LL hit → Vulnerable +12% (stacks up to 3x)
@@ -74,7 +149,13 @@ export const jingyuanKit: KitDef = {
     // E4: each LL hit → +2 Energy for Jing Yuan
     if (eid >= 4) sim.gainEnergy(owner, 2 * hpa)
     lrt.hpa = lrt.baseHpa ?? 3
-    sim.setSpeedDynamic(s, (lrt.baseSpd as number) ?? 60)
+    jyExEnhance(sim, owner)
+    jySyncSpeed(sim, s, ownerCtx, lrt)
+  },
+  onTurnEnd(sim, u, _ctx) {
+    if (u.kind !== 'char') return
+    const ll = sim.find(`ll_${u.id}`)
+    if (ll) jyTickExHpa(sim, u, ll)
   },
   decide(sim, u, ctx) {
     if ((ctx.skillPriority as number) > 0 && sim.sp() >= 1) return { kind: 'skill' }
@@ -89,14 +170,16 @@ export const jingyuanKit: KitDef = {
       u.energy = 0
       sim.log('Lightbringer (energy +5)') // +5 from castUlt
       sim.hitAoe(u, { type: 'ult', mult: mult('jingyuan', 'ult', lv.ult), toughDmg: 20, label: 'Lightbringer' })
-      addHpa(sim, ll, sim.rt(ll), 3)
+      addHpa(sim, u, ll, 3)
+      jyAddExHpa(sim, u, ll, 12)
       return
     }
     if (action.kind === 'skill' && sim.spendSp(1)) {
       sim.gainEnergy(u, 30)
       sim.addBuff(u, { id: 'war_marshal', name: 'War Marshal', mods: [{ stat: 'critRate', value: 0.10 }], turns: 2 })
       sim.hitAoe(u, { type: 'skill', mult: mult('jingyuan', 'skill', lv.skill), toughDmg: 10, label: 'Rifting Zenith', split: [0.4, 0.3, 0.3] })
-      addHpa(sim, ll, sim.rt(ll), 2)
+      addHpa(sim, u, ll, 2)
+      jyAddExHpa(sim, u, ll, 6)
       return
     }
     sim.gainSp(1)
@@ -105,12 +188,11 @@ export const jingyuanKit: KitDef = {
   },
 }
 
-function addHpa(sim: SimApi, ll: Unit, ctx: Record<string, unknown>, n: number): void {
-  const hpa = Math.min(10, ((ctx.hpa as number) ?? 3) + n)
+function addHpa(sim: SimApi, owner: Unit, ll: Unit, n: number): void {
+  const ctx = sim.rt(ll)
+  const hpa = Math.min(jyHpaCap(sim.rt(owner)), ((ctx.hpa as number) ?? 3) + n)
   ctx.hpa = hpa
-  const baseSpd = (ctx.baseSpd as number) ?? 60
-  const spd = baseSpd + 10 * (hpa - ((ctx.baseHpa as number) ?? 3))
-  sim.setSpeedDynamic(ll, spd)
+  jyAfterHpa(sim, owner, ll)
 }
 
 

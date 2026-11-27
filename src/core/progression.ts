@@ -70,6 +70,7 @@ const JINGYUAN: CharProg = {
     "E4: Spin, Stars Sieged — For each hit performed by the Lightning-Lord when it takes action, Jing Yuan regenerates 2 Energy.",
     "E5: Stride, Spoils Seized — Skill Lv. +2, up to a maximum of Lv. 15. Talent Lv. +2, up to a maximum of Lv. 15.",
     "E6: Sweep, Souls Slain — Each hit performed by the Lightning-Lord when it takes action will make the target enemy Vulnerable. While Vulnerable, enemies receive 12% more DMG until the end of the Lightning-Lord's current turn, stacking up to 3 time(s).",
+    "EX: One Quiet Cup of Thunder — The Max Hits Per Action for Lightning-Lord increases by 20. When Lightning-Lord's Hits Per Action reaches its upper limit, it immediately takes action. At the start of combat and after every 1 time(s) Lightning-Lord takes action, Lightning-Lord gets enhanced, and Jing Yuan's DMG dealt increases by 240%. When using Skill/Ultimate, additionally increases Lightning-Lord's Hits Per Action by 6/12 respectively, lasting for 4 turn(s).",
   ],
   traces: [
     { stat: "atkPct", value: 0.28 },

@@ -146,6 +146,7 @@ body.busy { cursor: progress; }
 .ddOpt.ddSig,
 .ddBtn.ddSig,
 .eidolon.e6.active,
+.eidolon.ex.active,
 .coneArt.signature .gearIcon,
 .pickConeCard.sig .gearIcon {
   position: relative;
@@ -157,6 +158,7 @@ body.busy { cursor: progress; }
 .ddOpt.ddSig > *,
 .ddBtn.ddSig > *,
 .eidolon.e6.active > *,
+.eidolon.ex.active > *,
 .coneArt.signature .gearIcon > *,
 .pickConeCard.sig .gearIcon > * {
   position: relative;
@@ -167,6 +169,7 @@ body.busy { cursor: progress; }
 .ddOpt.ddSig::before,
 .ddBtn.ddSig::before,
 .eidolon.e6.active::before,
+.eidolon.ex.active::before,
 .coneArt.signature .gearIcon::before,
 .pickConeCard.sig .gearIcon::before {
   content: "";
@@ -625,6 +628,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .sectionValue { font-size: 11px; color: #7b8595; }
 
 .eidolons { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+.eidolons.ex { grid-template-columns: repeat(7, 1fr); }
 .eidolon { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 4px 10px; font-size: 11px; background: #141a16; border: 1px solid #2a332d; border-radius: 6px; color: #5c6b61; cursor: pointer; transition: color .15s, border-color .15s, background .15s; gap: 6px; min-height: 72px; }
 .eidolon:hover { border-color: #67b97b; color: #9dc9a8; }
 .eidolon.active { background: #285d39; border-color: #67b97b; color: #e4ffe9; }
@@ -633,7 +637,8 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .eidolonImg { width: 36px; height: 36px; object-fit: contain; border-radius: 4px; }
 .eidolonText { text-align: center; }
 /* E6 keeps the shared green shimmer (same sweep as the signature cone), only the frame/colour change here */
-.eidolon.e6.active {
+.eidolon.e6.active,
+.eidolon.ex.active {
   border-color: #a0edab;
   background-color: #2f7444;
   color: #e4ffe9;
