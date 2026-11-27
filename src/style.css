@@ -1483,6 +1483,8 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .simActionAbilityIcon { width: 20px; height: 20px; border-radius: 4px; }
 .simActionAbilityName { font-size: 12px; color: #f2c94c; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .simActionSpDelta { font-size: 11px; color: #9aa7ba; font-variant-numeric: tabular-nums; }
+.simActionEnergyDelta { font-size: 11px; color: #93c5fd; font-variant-numeric: tabular-nums; }
+.simActionToughnessDamage { font-size: 11px; color: #c9a7ff; font-variant-numeric: tabular-nums; }
 
 .simActionTargets {
   display: flex;

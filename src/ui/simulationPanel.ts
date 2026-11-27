@@ -44,6 +44,11 @@ function safeInitial(value: unknown, fallback = '?'): string {
   return trimmed.charAt(0).toUpperCase()
 }
 
+function floorDisplay(value: unknown): number {
+  const n = Number(value)
+  return Number.isFinite(n) ? Math.floor(Math.max(0, n)) : 0
+}
+
 type SnapshotUnit = StateSnapshot['units'][string]
 
 export function vitalLabelsForSnapshot(unit: Pick<SnapshotUnit, 'kind' | 'sharesOwnerBuffs'> & { side?: SnapshotUnit['side'] }): string[] {
@@ -61,11 +66,12 @@ export function renderSupportLog(action: CombatActionRecord): HTMLElement | unde
   const seen = new Set<string>()
   const rows: HTMLElement[] = []
   for (const s of action.effects.shields) {
-    const key = `shield|${s.sourceId ?? s.sourceName ?? ''}|${s.targetId}|${Math.round(s.amount)}|${s.id}`
+    const amount = floorDisplay(s.amount)
+    const key = `shield|${s.sourceId ?? s.sourceName ?? ''}|${s.targetId}|${amount}|${s.id}`
     if (seen.has(key)) continue
     seen.add(key)
     const row = el('div', 'simActionSupportRow')
-    row.textContent = `${s.sourceName ?? '?'} → ${s.targetName}: ${s.amount.toLocaleString()} щит`
+    row.textContent = `${s.sourceName ?? '?'} → ${s.targetName}: ${amount.toLocaleString()} щит`
     rows.push(row)
   }
   for (const h of action.effects.heals) {
@@ -127,7 +133,7 @@ const COUNTDOWN_STATE_KEY = /countdown|timer|cd(?:id|seq)/i
 
 export function supportSummaryParts(action: CombatActionRecord): Array<{ label: string; amount: number; color: string }> {
   const heal = action.effects.heals.reduce((sum, e) => sum + Math.max(0, Number(e.requested ?? e.amount) || 0), 0)
-  const shield = action.effects.shields.reduce((sum, e) => sum + Math.max(0, Number(e.amount) || 0), 0)
+  const shield = action.effects.shields.reduce((sum, e) => sum + floorDisplay(e.amount), 0)
   return [
     ...(heal > 0 ? [{ label: 'Лечение', amount: heal, color: HEAL_COLOR }] : []),
     ...(shield > 0 ? [{ label: 'Щит', amount: shield, color: SHIELD_COLOR }] : []),
@@ -165,6 +171,11 @@ function actionEntityKind(action: CombatActionRecord): keyof typeof ACTION_ENTIT
 function formatSpDelta(delta: number | undefined): string {
   const value = Math.round(Number(delta ?? 0))
   return `${value >= 0 ? '+' : ''}${value}`
+}
+
+function formatEnergyDelta(delta: number): string {
+  const value = Math.round(Number(delta) || 0)
+  return `${value >= 0 ? '+' : ''}${value} EN`
 }
 
 function isNeutralEffect(effect: any): boolean {
@@ -1096,7 +1107,7 @@ traceContainer.append(traceEl)
       damage.textContent = hit.damage.toLocaleString()
       if (hit.shieldDamage > 0) {
         const shield = el('span', 'simInspectorHitShieldDamage')
-        shield.textContent = ` +${hit.shieldDamage.toLocaleString()} щит`
+        shield.textContent = ` +${floorDisplay(hit.shieldDamage).toLocaleString()} щит`
         damage.append(shield)
       }
       if (hit.crit) {
@@ -1109,7 +1120,7 @@ traceContainer.append(traceEl)
       return hitEl
     }
 
-    function vitalBar(label: string, value: number, max: number, color: string, shieldText?: string): HTMLElement {
+    function vitalBar(label: string, value: number, max: number, color: string, shieldText?: string, deltaText?: string, deltaClass?: string): HTMLElement {
       const row = el('div', 'simVitalBar')
       const labelEl = el('span', 'simVitalLabel')
       labelEl.textContent = label
@@ -1122,6 +1133,11 @@ traceContainer.append(traceEl)
       const valueEl = el('span', 'simVitalValue')
       valueEl.textContent = `${value.toLocaleString()}/${value === 0 && max === 0 ? '0' : max.toLocaleString()}`
       row.append(labelEl, track, valueEl)
+      if (deltaText) {
+        const deltaEl = el('span', `simVitalDelta${deltaClass ? ` ${deltaClass}` : ''}`)
+        deltaEl.textContent = deltaText
+        row.append(deltaEl)
+      }
       if (shieldText) {
         const shieldEl = el('span', 'simVitalShield')
         const shieldValue = el('span')
@@ -1145,10 +1161,16 @@ traceContainer.append(traceEl)
       const shield = Number(snap.shield ?? 0) ||
         (snap.buffs ?? []).reduce((sum, buff) => sum + Number(buff.shield ?? 0), 0)
       const labels = new Set(vitalLabelsForSnapshot(snap))
+      const beforeEnergy = before?.units[action.sourceId]?.energy ?? snap.energy
+      const energyDelta = action.category === 'ultimate'
+        ? -Number(beforeEnergy ?? 0)
+        : action.effects.energyChanges
+          .filter(change => change.targetId === action.sourceId)
+          .reduce((sum, change) => sum + change.delta, 0)
       const vitals = el('div', 'simActionVitals')
-      if (labels.has('HP')) vitals.append(vitalBar('HP', snap.hp, snap.maxHp, '#4ade80', shield > 0 ? shield.toLocaleString() : undefined))
-      if (labels.has('EN')) vitals.append(vitalBar('EN', snap.energy, snap.maxEnergy, '#60a5fa'))
-      if (labels.has('ОД')) vitals.append(vitalBar('ОД', teamSnapshot?.sp ?? 0, teamSnapshot?.maxSp ?? 5, '#f2c94c'))
+      if (labels.has('HP')) vitals.append(vitalBar('HP', snap.hp, snap.maxHp, '#4ade80', shield > 0 ? floorDisplay(shield).toLocaleString() : undefined))
+      if (labels.has('EN')) vitals.append(vitalBar('EN', action.category === 'ultimate' ? 0 : snap.energy, snap.maxEnergy, '#60a5fa', undefined, formatEnergyDelta(energyDelta), 'simActionEnergyDelta'))
+      if (labels.has('ОД')) vitals.append(vitalBar('ОД', teamSnapshot?.sp ?? 0, teamSnapshot?.maxSp ?? 5, '#f2c94c', undefined, `${formatSpDelta(action.spDelta)} ОД`, 'simActionSpDelta'))
       if (snap.side === 'enemy' && snap.maxToughness > 0) {
         const tough = vitalBar('Tgh', snap.toughness, snap.maxToughness, '#c9a7ff')
         tough.classList.add('simToughnessBar')
@@ -1214,9 +1236,6 @@ traceContainer.append(traceEl)
         abilityIconSpan.append(iconNode(abilityIcon, action.abilityName || action.abilityId || '?', { cls: 'simActionAbilityIconImg', size: 20, fit: 'contain', fallbackText: safeInitial(action.abilityName || action.abilityId || '?'), tint: '#8fd694', title: action.abilityName || action.abilityId || '?' }))
         sourceInfo.append(abilityIconSpan)
       }
-      const spDeltaEl = el('span', 'simActionSpDelta')
-      spDeltaEl.textContent = `${formatSpDelta(action.spDelta)} ОД`
-      sourceInfo.append(spDeltaEl)
       sourceDiv.append(sourceInfo)
 
       const targetsDiv = el('div', 'simActionTargets')
@@ -1236,7 +1255,7 @@ traceContainer.append(traceEl)
       // Aggregate hits from all attacks for display
       const allHits = action.attacks.flatMap(a => a.hits)
       const totalDamage = allHits.reduce((sum, h) => sum + h.damage, 0)
-      const totalShieldDamage = action.shieldDamage
+      const totalShieldDamage = floorDisplay(action.shieldDamage)
       const critHits = allHits.filter(h => h.crit).length
       const hasBreak = allHits.some(h => h.breakdown?.broken)
 
@@ -1271,6 +1290,11 @@ traceContainer.append(traceEl)
         })
       }
       damageGroup.append(dmgSpan)
+      if (action.toughnessDamage > 0) {
+        const tghSpan = el('span', 'simActionToughnessDamage')
+        tghSpan.textContent = `Tgh: ${floorDisplay(action.toughnessDamage).toLocaleString()}`
+        damageGroup.append(tghSpan)
+      }
       const supportParts = supportSummaryParts(action)
       if (supportParts.length > 0) {
         const supportLine = el('span', 'simActionSupportSummary')
@@ -1308,7 +1332,7 @@ traceContainer.append(traceEl)
           if (attack.hits.length === 0) continue
           const attackBlock = el('div', 'simActionAttack')
           const attackTitle = el('div', 'simActionAttackTitle')
-          attackTitle.textContent = `${attack.abilityName} · ${attack.hits.length} попад. · ${attack.totalDamage.toLocaleString()}${attack.shieldDamage > 0 ? ` · ${attack.shieldDamage.toLocaleString()} по щиту` : ''}`
+          attackTitle.textContent = `${attack.abilityName} · ${attack.hits.length} попад. · ${attack.totalDamage.toLocaleString()}${attack.shieldDamage > 0 ? ` · ${floorDisplay(attack.shieldDamage).toLocaleString()} по щиту` : ''}`
           attackBlock.append(attackTitle)
           for (const hit of attack.hits) attackBlock.append(createHitEl(hit, sim))
           details.append(attackBlock)
@@ -1488,7 +1512,7 @@ traceContainer.append(traceEl)
         const statuses: string[] = []
         if (unit.broken) statuses.push('Сломан')
         if (unit.dead) statuses.push('Мёртв')
-        if (unit.shield > 0) statuses.push(`Щит ${unit.shield.toLocaleString()}`)
+        if (unit.shield > 0) statuses.push(`Щит ${floorDisplay(unit.shield).toLocaleString()}`)
         for (const control of unit.controls) statuses.push(`${control.name} (${control.turns})`)
         if (statuses.length > 0) {
           const statusEl = el('div', 'simInspectorUnitStatuses')
@@ -1675,8 +1699,8 @@ traceContainer.append(traceEl)
           const meta: Array<[string, string]> = []
           if ('stacks' in effect) meta.push(['Стаки', String(effect.stacks)])
           if ('turns' in effect) meta.push(['Ходы', effect.turns === Infinity ? '∞' : String(effect.turns)])
-          if ('amount' in effect) meta.push(['Значение', effect.amount.toLocaleString()])
-          if ('damage' in effect) meta.push(['Урон', effect.damage.toLocaleString()])
+          if ('amount' in effect) meta.push(['Значение', (kind === 'shield' ? floorDisplay(effect.amount) : effect.amount).toLocaleString()])
+          if ('damage' in effect) meta.push(['Урон', (kind === 'shield' ? floorDisplay(effect.damage) : effect.damage).toLocaleString()])
           if ('breakDamage' in effect) meta.push(['Урон слома', effect.breakDamage.toLocaleString()])
           for (const [key, value] of meta) {
             const span = el('span')
@@ -1710,7 +1734,7 @@ traceContainer.append(traceEl)
           }
           if (effect.shield) {
             const shieldEl = el('div', 'simInspectorEffectShield')
-            shieldEl.textContent = `Щит: ${effect.shield.toLocaleString()}`
+            shieldEl.textContent = `Щит: ${floorDisplay(effect.shield).toLocaleString()}`
             infoEl.append(shieldEl)
           }
           el_effect.append(iconEl, infoEl)

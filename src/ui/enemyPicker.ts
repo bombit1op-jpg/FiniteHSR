@@ -34,8 +34,7 @@ export function openEnemyPicker(opts: EnemyPickerOptions): { close: () => void }
     aiStatus: 'all' as 'all' | 'implemented' | 'unimplemented',
   }
 
-  let resolve!: (v: null) => void
-  const ov = openOverlay('ВЫБОР ПРОТИВНИКА', () => resolve(null))
+  const ov = openOverlay('ВЫБОР ПРОТИВНИКА', () => undefined)
   ov.root.classList.add('enemyPickerOverlay')
   ov.root.style.maxWidth = '1200px'
 
@@ -180,7 +179,6 @@ export function openEnemyPicker(opts: EnemyPickerOptions): { close: () => void }
         selectedVariant = variant
         selectedDefinition = definition
         ov.close()
-        resolve(variant)
         opts.onSelect(variant, definition)
       }
 
@@ -396,7 +394,6 @@ export function openEnemyPicker(opts: EnemyPickerOptions): { close: () => void }
       selectedVariant = variant
       selectedDefinition = definition
       ov.close()
-      resolve(variant)
       opts.onSelect(variant, definition)
     }
     previewPanel.append(selectBtn)

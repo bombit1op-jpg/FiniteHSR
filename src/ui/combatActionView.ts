@@ -11,6 +11,7 @@
  */
 import type { BattleEvent, StateSnapshot, EventType } from '../core/battlelog'
 import type { Simulator } from '../core/simulator'
+import { abilityName as abilityDisplayName } from '../core/abilityNames'
 
 export type CombatActionCategory =
   | 'attack' | 'bonusAttack' | 'extraTurn' | 'ultimate'
@@ -205,6 +206,7 @@ export interface CombatActionRecord {
 
   totalDamage: number
   shieldDamage: number
+  toughnessDamage: number
   spDelta: number
   effects: CombatEffectSummary
   events: BattleEvent[]
@@ -259,9 +261,9 @@ export function aggregateCombatActions(
     const sourceUnit = sourceId ? sim.roster.find(u => u.id === sourceId) : undefined
     const baseCategory = categorizeAction(actionEvents, sourceUnit)
     const abilityId = (abilityEvent.payload.abilityId ?? abilityEvent.payload.ability_id) as string | undefined
-    const abilityName = abilityNameOf(abilityEvent)
     const abilitySlot = (abilityEvent.payload.slot ?? abilityEvent.payload.abilitySlot ??
       (abilityEvent.type === 'TECHNIQUE_APPLIED' ? 'technique' : undefined)) as string | undefined
+    const abilityName = resolveAbilityName(abilityNameOf(abilityEvent), abilityId, abilitySlot, sourceUnit, sim)
     const ability = { abilityId, abilityName, abilitySlot }
     const rawAttacks = [...groupEventsByAttack(actionEvents)]
       .map(([attackId, attackEvents]) => buildAttackRecord(attackEvents, attackId, sim, baseCategory, ability))
@@ -286,6 +288,8 @@ export function aggregateCombatActions(
     const afterSnapshot = snapshots.find(s => s.actionId === boundary.actionId + 1 && s.turn === boundary.turn)
       ?? snapshots.find(s => s.actionId === boundary.actionId && s.turn > boundary.turn)
     const effects = buildEffectsSummary(actionEvents, sim)
+    const toughnessDamage = actionEvents.reduce((sum, e) =>
+      sum + (e.type === 'TOUGHNESS_DAMAGE' ? Math.max(0, Number(e.payload.amount ?? e.payload.damage ?? 0) || 0) : 0), 0)
     const spFromEvents = effects.spChanges.reduce((sum, change) => sum + change.delta, 0)
     const spDelta = spFromEvents !== 0 ? spFromEvents
       : beforeSnapshot && afterSnapshot ? afterSnapshot.sp - beforeSnapshot.sp : 0
@@ -310,6 +314,7 @@ export function aggregateCombatActions(
       attacks: attacksArray,
       totalDamage: attacksArray.reduce((sum, a) => sum + a.totalDamage, 0),
       shieldDamage: actionEvents.reduce((sum, e) => sum + (e.type === 'SHIELD_ABSORBED' ? Number(e.payload.amount ?? 0) : 0), 0),
+      toughnessDamage,
       spDelta,
       effects,
       events: actionEvents,
@@ -335,6 +340,42 @@ function abilityNameOf(e: BattleEvent): string {
   const p = e.payload
   if (typeof p.technique === 'string' && p.technique) return p.technique
   return String(p.abilityName ?? p.ability_name ?? p.action ?? e.attackType ?? 'Attack')
+}
+
+const GENERIC_ABILITY_SLOTS = new Set([
+  'attack', 'ability', 'basic', 'skill', 'ult', 'technique',
+  'enhance', 'enhanced', 'assist', 'mem_skill', 'mem_talent',
+])
+
+function normalizeAbilitySlot(value: unknown): string {
+  const slot = String(value ?? '').trim().toLowerCase()
+  if (slot === 'ultimate') return 'ult'
+  if (slot === 'memo' || slot === 'memosprite') return 'mem_skill'
+  return slot
+}
+
+function isGenericAbilityName(value: unknown): boolean {
+  return GENERIC_ABILITY_SLOTS.has(normalizeAbilitySlot(value))
+}
+
+function resolveAbilityName(
+  raw: string,
+  abilityId: string | undefined,
+  abilitySlot: string | undefined,
+  sourceUnit: { kitId?: string; ownerId?: string } | undefined,
+  sim: Simulator
+): string {
+  const text = String(raw ?? '').trim()
+  const ownerId = sourceUnit?.ownerId
+  const kitId = sourceUnit?.kitId ?? (ownerId ? sim.roster.find(u => u.id === ownerId)?.kitId : undefined)
+  if (!kitId || (text && !isGenericAbilityName(text))) return text
+  const candidates = [abilitySlot, text, abilityId, text === 'ability' ? 'mem_skill' : undefined]
+  for (const candidate of candidates) {
+    if (!candidate) continue
+    const found = abilityDisplayName(kitId, normalizeAbilitySlot(candidate))
+    if (found) return found
+  }
+  return text
 }
 
 function categorizeAction(events: BattleEvent[], sourceUnit?: { kind?: string; side?: string }): CombatActionCategory {
@@ -457,6 +498,7 @@ function buildAttackRecord(
   const targetIds = [...new Set(attackEvents.map(e => e.targetId).filter((id): id is string => !!id))]
   const abilityEvent = attackEvents.find(e => e.type === 'ABILITY_USED') ?? first
   const localName = abilityNameOf(abilityEvent)
+  const resolvedName = isGenericAbilityName(localName) ? actionAbility.abilityName : localName
   return {
     attackId,
     targetIds,
@@ -465,7 +507,7 @@ function buildAttackRecord(
     totalDamage: attackEvents.reduce((sum, e) => sum + (e.type === 'DAMAGE_DEALT' ? Number(e.payload.amount ?? 0) : 0), 0),
     shieldDamage: attackEvents.reduce((sum, e) => sum + (e.type === 'SHIELD_ABSORBED' ? Number(e.payload.amount ?? 0) : 0), 0),
     abilityId: ((abilityEvent.payload.abilityId ?? abilityEvent.payload.ability_id) as string | undefined) ?? actionAbility.abilityId,
-    abilityName: localName === 'Attack' ? actionAbility.abilityName : localName,
+    abilityName: resolvedName,
     abilitySlot: ((abilityEvent.payload.slot ?? abilityEvent.payload.abilitySlot) as string | undefined) ?? actionAbility.abilitySlot,
     category,
     provenance: attackEvents.find(e => e.provenance)?.provenance,
@@ -701,7 +743,7 @@ function buildEffectsSummary(
         summary.energyChanges.push({
           targetId,
           targetName,
-          delta: Math.abs(payload.amount ?? 0),
+          delta: Math.abs(Number(payload.n ?? payload.amount ?? 0) || 0),
           reason: payload.reason ?? 'energy_gain',
         })
         break

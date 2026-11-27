@@ -2556,7 +2556,7 @@ function applyMemberAura(sim: SimApi, u: Unit, ctx: KitRuntime): void {
   const v = mult(PID, slot, ml.talent)
   for (const e of sim.livingEnemiesOf(u)) {
     sim.removeBuff(e, MEMBER)
-    sim.addBuff(e, { id: MEMBER, name: 'Summer Songbirds', sourceId: u.id, mods: [{ stat: 'vulnAll', value: v }], turns: Infinity })
+    sim.addBuff(e, { id: MEMBER, name: 'Summer Songbirds', sourceId: u.id, mods: [{ stat: 'vulnAll', value: v }], turns: Infinity, debuff: true })
   }
 }
 

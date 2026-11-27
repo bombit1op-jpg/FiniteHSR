@@ -13,6 +13,8 @@ export default async () => {
   g.Event = (win as unknown as { Event: unknown }).Event
   g.location = (win as unknown as { location: unknown }).location
   g.localStorage = (win as unknown as { localStorage: unknown }).localStorage
+  g.innerWidth = 1280
+  g.innerHeight = 900
   g.requestAnimationFrame = (cb: FrameRequestCallback) => setTimeout(() => cb(0), 0) as unknown as number
   doc.body.innerHTML = '<div id="simulationRoot"></div><div id="uiSimulationRoot"></div><div id="statusBar"></div>'
 
@@ -69,11 +71,49 @@ export default async () => {
   const uiRunBtn = uiHost.querySelector<HTMLButtonElement>('.simRunBtn')!
   await uiRunBtn.onclick?.call(uiRunBtn, undefined as unknown as PointerEvent)
 
+  const deltaHost = doc.createElement('div')
+  doc.body.append(deltaHost)
+  const deltaStore = new PartyStore()
+  const deltaKits = ['robin_summeretto', 'sparkle', 'kafka', 'march7th']
+  deltaStore.active!.slots.forEach((slot, i) => deltaStore.patchSlot(slot.id, {
+    kitId: deltaKits[i], eidolon: 2, skillPriority: 2, energyStartFrac: 1,
+  }))
+  initSimulationPanel(deltaHost, deltaStore).refresh()
+  const deltaCustomRadio = deltaHost.querySelector<HTMLInputElement>('input[type="radio"][value="custom"]')!
+  deltaCustomRadio.checked = true
+  deltaCustomRadio.onchange?.call(deltaCustomRadio, new Event('change'))
+  const setDeltaInput = (text: string, value: string) => {
+    const input = [...deltaHost.querySelectorAll<HTMLLabelElement>('label')]
+      .find(l => l.textContent?.trim() === text)?.querySelector('input') as HTMLInputElement | undefined
+    if (!input) throw new Error(`missing input ${text}`)
+    input.value = value
+    input.onchange?.call(input, new Event('change'))
+  }
+  deltaHost.querySelector<HTMLButtonElement>('.encounterPickBtn')!.click()
+  const deltaPickerSearch = doc.querySelector<HTMLInputElement>('.pickerSearch')!
+  deltaPickerSearch.value = 'Ice Edge (1)'
+  deltaPickerSearch.oninput?.call(deltaPickerSearch, new Event('input'))
+  const deltaPickerCard = [...doc.querySelectorAll<HTMLButtonElement>('.enemyPickerCard')]
+    .find(b => b.dataset.variantId === 'Ice Edge (1)')!
+  deltaPickerCard.click()
+  const deltaPickedEnemy = deltaHost.querySelector<HTMLButtonElement>('.encounterPickBtn')?.textContent ?? ''
+  setDeltaInput('Кол-во', '1')
+  setDeltaInput('HP', '500000')
+  setDeltaInput('Ур', '80')
+  setDeltaInput('Жест', '30')
+  setDeltaInput('DEF', '0')
+  const deltaSeedInp = [...deltaHost.querySelectorAll<HTMLLabelElement>('label')]
+    .find(l => l.textContent === 'Seed')?.querySelector('input') as HTMLInputElement
+  deltaSeedInp.value = '0'
+  const deltaRunBtn = deltaHost.querySelector<HTMLButtonElement>('.simRunBtn')!
+  await deltaRunBtn.onclick?.call(deltaRunBtn, undefined as unknown as PointerEvent)
+  const deltaCards = [...deltaHost.querySelectorAll<HTMLElement>('.simCombatActionCard')]
+
   const cards = [...uiHost.querySelectorAll<HTMLElement>('.simCombatActionCard')]
   const tagBadges = [...uiHost.querySelectorAll<HTMLElement>('.simActionTag')]
   const multiTagCards = cards.filter(c => c.querySelectorAll('.simActionTag').length > 1)
   const enemyAttackCard = cards.find(c => c.classList.contains('enemyAttack'))
-  const spDeltaLabels = cards.map(c => c.querySelector('.simActionSpDelta')?.textContent ?? '').filter(Boolean)
+  const spDeltaLabels = deltaCards.map(c => c.querySelector('.simActionSpDelta')?.textContent ?? '').filter(Boolean)
   const fuaCard = cards.find(c => c.textContent?.includes('Kafka') && c.textContent?.includes('Gentle but Cruel') && !!c.querySelector('.simActionHitsSummary'))
   fuaCard?.click()
   enemyAttackCard?.click()
@@ -246,7 +286,7 @@ export default async () => {
         makeEffect('cipher', 'Cipher', allyA, allyB, { mods: [{ stat: 'critDmg', value: 0.1 }] }),
         makeEffect('flat_atk', 'Flat ATK', allyB, allyB, { mods: [{ stat: 'atkFlat', value: 100 }] }),
         makeEffect('cond_cd', 'Conditional CD', allyA, allyB, { mods: [{ stat: 'critDmg', value: 0.3, whenAbility: ['skill'] }] }),
-        makeEffect('shield_buff', 'March Shield Buff', allyA, allyB, { shield: 500 }),
+        makeEffect('shield_buff', 'March Shield Buff', allyA, allyB, { shield: 500.75 }),
         makeEffect('atk_up', 'ATK Up', allyB, allyB, { mods: [{ stat: 'atkPct', value: 0.2 }] }),
         makeEffect('stacked_total', 'Stacked Total', allyA, allyB, { stacks: 3, mods: [{ stat: 'atkPct', value: 0.04 }] }),
         makeEffect('stat_fallback', 'Stat Fallback', allyA, allyB, { stacks: 2, mods: [{ stat: 'defPct', value: 0.06 }] }),
@@ -277,7 +317,7 @@ export default async () => {
         name: 'March Shield',
         targetId: allyB.id,
         targetName: allyB.name,
-        amount: 500,
+        amount: 500.75,
         sourceId: allyA.id,
         sourceName: allyA.name,
       }],
@@ -353,6 +393,8 @@ export default async () => {
   const sourceOf = (row?: HTMLElement) => row?.querySelector('.simInspectorEffectSource')?.textContent ?? ''
   const targetOf = (row?: HTMLElement) => row?.querySelector('.simInspectorEffectTarget')?.textContent ?? ''
   const removalRows = () => [...effectHost.querySelectorAll<HTMLElement>('.simInspectorEffect.removal')]
+  const shieldEffectRow = [...effectHost.querySelectorAll<HTMLElement>('.simInspectorEffect.shield')]
+    .find(row => /March Shield/.test(textOf(row)))
 
   const dotWithSource = Object.values(stateSnapshot.units)
     .flatMap(u => u.dots.map(d => ({ unit: u, dot: d })))
@@ -383,6 +425,56 @@ export default async () => {
     log: { debug: 0 },
   })
   const robinBird = robinSim.units().find(u => u.name === 'Summer Songbirds')
+  const requestedSim = runBattle({
+    team: [
+      { kitId: 'seele', skillPriority: 2 },
+      { kitId: 'danhengperman', skillPriority: 2 },
+      { kitId: 'robin_summeretto', skillPriority: 2 },
+      { kitId: 'sparkle', skillPriority: 2 },
+    ],
+    enemy: { ...ENEMY_PRESETS.mob, count: 1, hp: 500_000 },
+    cycles: 4,
+    seed: 7,
+    log: { debug: 4, captureUiHistory: true, snapshotOn: ['ACTION_START', 'ACTION_END', 'DAMAGE_DEALT'] },
+  })
+  const requestedActions = aggregateCombatActions(
+    requestedSim.logger.events,
+    requestedSim,
+    collectSnapshots(requestedSim.logger)
+  )
+  const requestedRoster = new Map(requestedSim.roster.map(u => [u.id, u] as const))
+  const requestedSide = (id?: string) => id ? requestedRoster.get(id)?.side ?? '?' : '?'
+  const requestedCharActions = requestedActions.filter(a => {
+    const unit = a.sourceId ? requestedRoster.get(a.sourceId) : undefined
+    return unit?.side === 'ally' && unit?.kind === 'char'
+  })
+  const requestedRawSlotNames = requestedCharActions
+    .map(a => a.abilityName.toLowerCase())
+    .filter(name => ['attack', 'ability', 'basic', 'skill', 'ult', 'ultimate', 'technique'].includes(name))
+  const requestedEnemyBuffsFromAllies = requestedSim.logger.events.filter(e =>
+    /^BUFF_(APPLIED|STACKED|REFRESHED)$/.test(e.type)
+    && requestedSide(e.sourceId) === 'ally'
+    && requestedSide(e.targetId) === 'enemy'
+  )
+  const rsuDebuffApplied = requestedSim.logger.events.some(e =>
+    e.type === 'DEBUFF_APPLIED'
+    && String((e.payload as Record<string, unknown>).id) === 'rsu_member'
+    && requestedSide(e.sourceId) === 'ally'
+    && requestedSide(e.targetId) === 'enemy'
+  )
+  const energyDeltaLabels = deltaCards.map(c => c.querySelector('.simActionEnergyDelta')?.textContent ?? '').filter(Boolean)
+  const inlineSpDeltaCount = deltaCards.filter(c => !!c.querySelector('.simVitalBar .simActionSpDelta')).length
+  const ultimateCard = deltaCards.find(c => [...c.querySelectorAll('.simActionTag')].some(t => t.textContent === 'Ультимейт'))
+  const ultimateEnergyVital = [...(ultimateCard?.querySelectorAll<HTMLElement>('.simVitalBar') ?? [])]
+    .find(bar => bar.querySelector('.simVitalLabel')?.textContent === 'EN')
+  const ultimateEnergyText = ultimateEnergyVital?.querySelector('.simVitalValue')?.textContent ?? ''
+  const toughnessDamageLabels = [...deltaHost.querySelectorAll<HTMLElement>('.simActionToughnessDamage')]
+    .map(label => label.textContent ?? '')
+  const energyProbeAction = aggregateCombatActions([
+    { eventId: -300, time: 0, turn: 0, actionId: 300, type: 'ACTION_START', source: allyA.name, sourceId: allyA.id, target: allyA.name, targetId: allyA.id, payload: { action: 'effect' }, actionCategory: 'effect', combatActionId: 'probe_energy' },
+    { eventId: -301, time: 0, turn: 0, actionId: 300, type: 'ENERGY_GAIN', source: allyA.name, sourceId: allyA.id, target: allyA.name, targetId: allyA.id, payload: { n: 30, reason: 'Probe' }, combatActionId: 'probe_energy' },
+    { eventId: -302, time: 0, turn: 0, actionId: 300, type: 'ENERGY_LOSS', source: allyA.name, sourceId: allyA.id, target: allyA.name, targetId: allyA.id, payload: { amount: 12, reason: 'Probe' }, combatActionId: 'probe_energy' },
+  ] as any, sim, [])[0]
 
   for (const row of store.getState().team) store.dispatch({ type: 'team/remove', id: row.id })
   for (const row of originalTeam) store.dispatch({ type: 'team/add', row })
@@ -391,15 +483,22 @@ export default async () => {
     raw('simulation panel renders run button', !!runBtn, runBtn?.textContent ?? 'missing'),
     raw('run button disabled without active party', runBtn?.disabled === true, String(runBtn?.disabled)),
     raw('custom encounter builder renders', !!addWaveBtn, addWaveBtn?.textContent ?? 'missing'),
+    raw('enemy picker selection configures custom encounter', deltaPickedEnemy === 'Ice Edge (1)', deltaPickedEnemy || 'missing'),
     raw('initSimulationPanel returns handle', typeof handle?.refresh === 'function', String(typeof handle?.refresh)),
     raw('UI history captures snapshots at debug 4', snapshots.length > 0, `snapshots=${snapshots.length}`),
     raw('actions link to captured snapshots', actions.some(a => !!a.beforeSnapshot), `with before=${actions.filter(a => !!a.beforeSnapshot).length}`),
     raw('actions have sequential order', actions.every((a, i) => a.order === i + 1), `actions=${actions.length}`),
+    raw('requested team resolves character ability names', requestedCharActions.length > 0 && requestedRawSlotNames.length === 0 && ['Sheathed Blade', 'Terra Omnibus', 'Summer Strums the Soul', 'Monodrama'].every(name => requestedCharActions.some(a => a.abilityName === name)), `raw=${requestedRawSlotNames.join(',') || 'none'} names=${[...new Set(requestedCharActions.map(a => a.abilityName))].join('|')}`),
+    raw('requested team keeps enemy vulnerability as debuff', requestedEnemyBuffsFromAllies.length === 0 && rsuDebuffApplied, `buffs=${requestedEnemyBuffsFromAllies.length} debuff=${rsuDebuffApplied}`),
     raw('attacks resolve action ability names', actions.some(a => a.attacks.some(x => !!x.abilityName && x.abilityName !== 'Attack')), `attacks=${actions.reduce((n, a) => n + a.attacks.length, 0)}`),
     raw('attack actions keep real hits', actions.every(a => a.category !== 'attack' || a.attacks.length > 0), `empty=${actions.filter(a => a.category === 'attack' && a.attacks.length === 0).map(a => a.abilityName).join(',')}`),
     raw('enemy technique and summon actions typed', enemyCategory === 'enemyAttack' && techniqueCategory === 'technique' && summonCategory === 'summon', `enemy=${enemyCategory} technique=${techniqueCategory} summon=${summonCategory}`),
     raw('state tab removed', !stateTab, String(!!stateTab)),
     raw('SP delta shown with ability', spDeltaLabels.some(t => /^[+-]?\d+ ОД$/.test(t)), spDeltaLabels.join('|') || 'none'),
+    raw('SP delta rendered inline with SP value', inlineSpDeltaCount > 0 && inlineSpDeltaCount === spDeltaLabels.length, `inline=${inlineSpDeltaCount} total=${spDeltaLabels.length}`),
+    raw('energy delta rendered inline with EN bar', energyDeltaLabels.some(t => /^[+-]?[\d,]+\s+EN$/.test(t)) && deltaCards.some(c => !!c.querySelector('.simVitalBar .simActionEnergyDelta')), energyDeltaLabels.join('|') || 'none'),
+    raw('ultimate energy displays zero', !!ultimateCard && /^0\//.test(ultimateEnergyText), `${ultimateEnergyText || 'missing'} card=${!!ultimateCard}`),
+    raw('toughness damage aggregated and rendered under damage', actions.some(a => a.toughnessDamage > 0) && toughnessDamageLabels.some(t => /^Tgh:\s*[\d,]+$/.test(t)), `aggregate=${actions.reduce((n, a) => n + a.toughnessDamage, 0)} labels=${toughnessDamageLabels.join('|') || 'none'}`),
     raw('single encounter replaces preset picker', !encounterSelect && encounterIcons.length >= 3, `select=${!!encounterSelect} icons=${encounterIcons.length}`),
     raw('enemy icons resolve aliases', enemyIconUrl('Ice Edge') === enemyIconUrl('Ice Edge (1)') && enemyIconUrl('Sting') === enemyIconUrl('Gnaw Sting'), `${enemyIconUrl('Ice Edge')} | ${enemyIconUrl('Sting')}`),
     raw('numbered Ice Edge icon resolves', enemyIconUrl('Ice Edge #1') === enemyIconUrl('Ice Edge (1)'), `${enemyIconUrl('Ice Edge #1')} | ${enemyIconUrl('Ice Edge (1)')}`),
@@ -407,6 +506,7 @@ export default async () => {
     raw('summons excluded from enemy targets', targetPick.targets[0]?.id === 'char_probe', targetPick.targets.map(t => t.id).join(',')),
     raw('memosprite stays targetable while true summon excluded', memoSpritePick.targets.some(t => t.id === 'memo_probe') && !memoSpritePick.targets.some(t => t.id === 'summon_probe'), memoSpritePick.targets.map(t => t.id).join(',')),
     raw('support log shows heal and shield with source target amount', supportText.includes(`${allyA.name} → ${allyB.name}: 500 щит`) && supportText.includes(`${allyA.name} → ${allyB.name}: 350 HP`), supportText),
+    raw('shield values floor decimals in effects and support', /Значение:\s*500(?!\.)/.test(textOf(shieldEffectRow)) && !textOf(shieldEffectRow).includes('500.75') && !supportText.includes('500.75') && supportParts[1]?.amount === 500, `${textOf(shieldEffectRow)} | ${supportText} | ${JSON.stringify(supportParts)}`),
     raw('snapshot carries summon ownership flag', Object.values(stateSnapshot.units).every(u => 'sharesOwnerBuffs' in u), Object.values(stateSnapshot.units).map(u => `${u.id}:${u.sharesOwnerBuffs}`).join(',')),
     raw('vitals hide true summon HP/EN and memosprite EN', trueSummonVitalLabels.join(',') === 'ОД' && memoSpriteVitalLabels.join(',') === 'HP,ОД' && charVitalLabels.join(',') === 'HP,EN,ОД', `${trueSummonVitalLabels.join(',')} | ${memoSpriteVitalLabels.join(',')} | ${charVitalLabels.join(',')}`),
     raw('enemy vitals omit energy and SP', enemyVitalLabels.join(',') === 'HP', enemyVitalLabels.join(',') || 'none'),
@@ -468,6 +568,7 @@ export default async () => {
     raw('combat log drops system rows', !cards.some(c => c.classList.contains('system')), `systemCards=${cards.filter(c => c.classList.contains('system')).length}`),
     raw('technique events keep damage healing and SP in one action', techniqueEffects?.category === 'technique' && techniqueEffects?.totalDamage === 333 && techniqueEffects?.effects.heals.some(h => h.amount === 222) === true && techniqueEffects?.spDelta === 1, `category=${techniqueEffects?.category} dmg=${techniqueEffects?.totalDamage} heals=${techniqueEffects?.effects.heals.length} sp=${techniqueEffects?.spDelta}`),
     raw('technique target selection populates Targets', techniqueEffects?.targetIds.includes(allyA.id) === true, `targets=${techniqueEffects?.targetIds.join(',')}`),
+    raw('energy gain payload uses n field', energyProbeAction?.effects.energyChanges.some(c => c.delta === 30) === true && energyProbeAction?.effects.energyChanges.some(c => c.delta === -12) === true, JSON.stringify(energyProbeAction?.effects.energyChanges ?? [])),
     raw('summons created during an attack are not shown as targets', summonAfterHitAction?.targetIds.includes(enemy.id) === true && summonAfterHitAction?.targetIds.includes('probe_late_summon') === false, `targets=${summonAfterHitAction?.targetIds.join(',')}`),
     raw('Dan Heng Bondmate target emitted and shown', !!bondTargetId && dhTechnique?.targetIds.includes(bondTargetId) === true, `bond=${bondTargetId} targets=${dhTechnique?.targetIds.join(',')}`),
     raw('all Dan Heng shield targets shown', dhShieldTargets.size >= 4 && dhSupportRows.length >= 4, `targets=${dhShieldTargets.size} rows=${dhSupportRows.length}`),
