@@ -350,6 +350,9 @@ cfg: SimConfig
     const kit = u.kitId ? this.kits.get(u.kitId) : undefined
     return kit?.availability?.(this, u, this.rt(u)) ?? DEFAULT_AVAILABILITY
   }
+  ultConsumptionOf(u: Unit): 'energy' | 'none' | undefined {
+    return u.kitId ? this.kits.get(u.kitId)?.ultConsumption : undefined
+  }
   /** §17 schedule a countdown entity owned by `owner` (see combat/Scheduled) */
   scheduleCountdown(owner: Unit, spec: CountdownSpec): Unit {
     const t = makeCountdown(spec)

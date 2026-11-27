@@ -290,6 +290,7 @@ const DAMAGE_ELEMENT_COLORS: Record<string, string> = {
 }
 const HEAL_COLOR = '#b6ff3d'
 const SHIELD_COLOR = '#5f83ff'
+const TRUE_DAMAGE_COLOR = '#d8b4fe'
 const COUNTDOWN_STATE_KEY = /countdown|timer|cd(?:id|seq)/i
 
 export function supportSummaryParts(action: CombatActionRecord): Array<{ label: string; amount: number; color: string }> {
@@ -312,19 +313,20 @@ export function damageElementParts(action: CombatActionRecord, fallbackElement?:
   for (const hit of action.attacks.flatMap(a => a.hits)) {
     const amount = Math.max(0, Number(hit.damage) || 0)
     if (amount <= 0) continue
-    const element = hit.element || fallbackElement || ''
+    const element = hit.attackType === 'true' ? 'True DMG' : (hit.element || fallbackElement || '')
     byElement.set(element, (byElement.get(element) ?? 0) + amount)
   }
   return [...byElement.entries()]
-    .map(([element, amount]) => ({ element, amount, color: DAMAGE_ELEMENT_COLORS[element] ?? '#f2c94c' }))
+    .map(([element, amount]) => ({ element, amount, color: element === 'True DMG' ? TRUE_DAMAGE_COLOR : (DAMAGE_ELEMENT_COLORS[element] ?? '#f2c94c') }))
     .sort((a, b) => b.amount - a.amount || a.element.localeCompare(b.element))
 }
 
 export function damageDisplay(action: CombatActionRecord, fallbackElement?: string): { color: string; elation: boolean } {
-  const hit = action.attacks.flatMap(a => a.hits).find(h => h.element)
+  const hit = action.attacks.flatMap(a => a.hits).find(h => h.attackType === 'true' || h.element)
   const parts = damageElementParts(action, fallbackElement)
+  const fallbackKey = hit?.attackType === 'true' ? 'True DMG' : (hit?.element ?? fallbackElement ?? '')
   return {
-    color: parts[0]?.color ?? DAMAGE_ELEMENT_COLORS[hit?.element ?? fallbackElement ?? ''] ?? '#f2c94c',
+    color: parts[0]?.color ?? (fallbackKey === 'True DMG' ? TRUE_DAMAGE_COLOR : (DAMAGE_ELEMENT_COLORS[fallbackKey] ?? '#f2c94c')),
     elation: action.attacks.some(a => a.hits.some(h => h.attackType === 'elation')),
   }
 }

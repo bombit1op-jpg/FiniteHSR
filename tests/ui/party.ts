@@ -218,9 +218,11 @@ export default () => {
   const setGrid = setOverlay?.querySelector('.pickerGrid.sets')
   const setCards = [...(setGrid?.querySelectorAll<HTMLElement>('.pickSetCard') ?? [])]
   const musketeerCard = setCards.find(c => c.dataset.setId === 'musketeer')
+  const setPctNodes = [...(musketeerCard?.querySelectorAll<HTMLElement>('.pickSetPct') ?? [])]
   cases.push(raw('set selection opens a filterless modal', !!setOverlay && !setOverlay.querySelector('.pickerSearch') && !setOverlay.querySelector('.pickerBtnRow')))
   cases.push(raw('set modal uses a two-column grid', !!setGrid, String(!!setGrid)))
   cases.push(raw('set cards show 2pc/4pc effects', !!musketeerCard?.textContent?.includes('2pc: Increases ATK by 12%.'), musketeerCard?.textContent?.slice(0, 120) ?? 'missing'))
+  cases.push(raw('set effect percent values highlighted', setPctNodes.length > 0 && setPctNodes.every(n => /^\d+(?:\.\d+)?%$/.test(n.textContent ?? '')), setPctNodes.map(n => n.textContent).join('|')))
   const closeSetBtn = setOverlay.querySelector<HTMLButtonElement>('.pickerClose')!
   closeSetBtn.onclick?.call(closeSetBtn, new Event('click') as never)
 

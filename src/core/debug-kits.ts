@@ -7021,6 +7021,9 @@ function coneMods(sim: ReturnType<typeof runBattle>, name: string): Record<strin
   chk(s, 'tb-rem', 'Ult → Together, Mem! + Mem summoned', s.logLines.some(l => /Together, Mem!/.test(l)) && s.logLines.some(l => /summons Mem/.test(l)))
   chk(s, 'tb-rem', 'Friends! Together! CD buff on allies', !!rem && s.buffLog.some(e => e.id === 'tb_rem_friends' && e.unitName !== rem!.name && e.mods?.some(m => m.stat === 'critDmg' && m.value > 0)))
   chk(s, 'tb-rem', 'Mem turn → Baddies skill fires', s.logLines.some(l => /Baddies!/.test(l)))
+  const mem = s.roster.find(u => u.id.startsWith('mem_'))
+  chk(s, 'tb-rem', 'Mem mirrors owner CRIT live', !!rem && mem?.critOwner === rem)
+  chk(s, 'tb-rem', 'Mem skill names Baddies! Trouble!', s.logLines.some(l => /uses Baddies! Trouble!/.test(l)))
 
   // 1800707: "For every 1 instance of DMG dealt by a target that has Mem's Support, deals 1
   // additional instance of True DMG equal to #1% of the original DMG" — *instance*, not *attack*, so

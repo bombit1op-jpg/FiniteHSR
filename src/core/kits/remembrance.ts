@@ -1,6 +1,6 @@
 // Kits of the Remembrance path, merged from the former per-character modules (7 kits).
 // Bodies are verbatim; only module-local names that collided across kits are suffixed with their kit id.
-import { levelsOf, manualTarget, decideByPattern, type KitDef, type KitRuntime, type SimApi, type Action } from '../kit'
+import { levelsOf, manualTarget, decideByPattern, mirrorOwnerCrit, type KitDef, type KitRuntime, type SimApi, type Action } from '../kit'
 import type { Unit } from '../entities/Unit'
 import type { Buff } from '../effects/Buff'
 import { mult, PROG } from '../progression'
@@ -2237,6 +2237,26 @@ export const cyreneKit: KitDef = {
 // ===== trailblazer_remembrance  (was trailblazer_remembrance.ts) =====
 function memOf(sim: SimApi, u: Unit): Unit | undefined { return sim.find(`mem_${u.id}`) }
 
+function memospriteOfOwner(sim: SimApi, u: Unit): Unit | undefined {
+  return sim.units().find(x => x.side === 'ally' && x.kind === 'summon' && !x.sharesOwnerBuffs && !x.dead && sim.rt(x).ownerId === u.id)
+}
+
+function addMemCharge(sim: SimApi, u: Unit, amount: number, mem?: Unit): void {
+  const rt = sim.rt(u)
+  rt.memCharge = Math.min(100, ((rt.memCharge as number) ?? 0) + amount)
+  if ((rt.memCharge as number) >= 100 && !rt.memActionQueued) {
+    const m = mem ?? memOf(sim, u)
+    if (m && !m.dead) rt.memActionQueued = true
+  }
+}
+
+function bumpMemSupport(u: Unit | undefined, amount: number): boolean {
+  const b = u?.buffs.find(x => x.id === 'tb_rem_support')
+  if (!b || typeof b.payload !== 'number') return false
+  b.payload += amount
+  return true
+}
+
 /** Memosprite ladders top out at Lv.10; E3 grants Memosprite Talent +1, E5 Memosprite Skill +1.
  *  (mult() clamps to the ladder length). */
 function tbRemMemLevels(ctx: KitRuntime): { skill: number; talent: number } {
@@ -2273,14 +2293,15 @@ function summonMem(sim: SimApi, u: Unit, ctx: KitRuntime): Unit {
     weaknesses: [], res: {}, kitId: u.kitId,
   }
   sim.rt(mem).ownerId = u.id
+  mirrorOwnerCrit(u, mem)
   refreshMem(sim, u, mem, ctx)
   sim.registerUnit(mem)
   sim.fireMemospriteSummon(u)
   const rt = sim.rt(u)
-  rt.memCharge = Math.min(100, ((rt.memCharge as number) ?? 0) + mult('trailblazer_remembrance', 'mem_talent_en', mlv.talent) * 100)
+  addMemCharge(sim, u, mult('trailblazer_remembrance', 'mem_talent_en', mlv.talent) * 100, mem)
   if (!(rt.tbRemFirstSummon as boolean)) {
     rt.tbRemFirstSummon = true
-    rt.memCharge = Math.min(100, (rt.memCharge as number) + 40)
+    addMemCharge(sim, u, 40, mem)
   }
   sim.log(`${u.name} summons Mem (HP ${mem.maxHp}, SPD ${mem.base.spd})`)
   return mem
@@ -2289,16 +2310,16 @@ function summonMem(sim: SimApi, u: Unit, ctx: KitRuntime): Unit {
 function memBaddies(sim: SimApi, mem: Unit, u: Unit, ctx: KitRuntime) {
   const mlv = tbRemMemLevels(ctx)
   const n = mult('trailblazer_remembrance', 'mem_skill_a2', mlv.skill)
+  sim.log(`-- ${mem.name} uses Baddies! Trouble!`)
   const pool = [...sim.livingEnemiesOf(mem)]
   for (let i = 0; i < n; i++) {
     if (!pool.length) break
     const e = pool[Math.floor(sim.rng() * pool.length)]
-    if (!e.dead) sim.hit(mem, e, { type: 'skill', elem: 'Ice', mult: mult('trailblazer_remembrance', 'mem_skill', mlv.skill), toughDmg: 10, label: 'Baddies!' })
+    if (!e.dead) sim.hit(mem, e, { type: 'skill', elem: 'Ice', mult: mult('trailblazer_remembrance', 'mem_skill', mlv.skill), toughDmg: 10, memoSkill: true, label: 'Baddies!' })
   }
   for (const e of [...sim.livingEnemiesOf(mem)])
-    sim.hit(mem, e, { type: 'skill', elem: 'Ice', mult: mult('trailblazer_remembrance', 'mem_skill_a3', mlv.skill), toughDmg: 10, label: 'Baddies AoE' })
-  const rt = sim.rt(u)
-  rt.memCharge = Math.min(100, ((rt.memCharge as number) ?? 0) + 5) // Petite Parable
+    sim.hit(mem, e, { type: 'skill', elem: 'Ice', mult: mult('trailblazer_remembrance', 'mem_skill_a3', mlv.skill), toughDmg: 10, memoSkill: true, label: 'Baddies AoE' })
+  addMemCharge(sim, u, 5, mem)
 }
 
 function memLemme(sim: SimApi, mem: Unit, u: Unit, ctx: KitRuntime) {
@@ -2311,18 +2332,48 @@ function memLemme(sim: SimApi, mem: Unit, u: Unit, ctx: KitRuntime) {
   const excess = Math.max(0, target.maxEnergy - 100)
   const magnetBonus = Math.min(0.20, Math.floor(excess / 10) * 0.02)
   const payload = mult('trailblazer_remembrance', 'mem_skill_en', mlv.skill) + magnetBonus
-  sim.addBuff(target, { id: 'tb_rem_support', name: "Mem's Support", mods: [], turns: mult('trailblazer_remembrance', 'mem_skill_en_a2', mlv.skill), payload, sourceId: u.id })
-  if (eid >= 1) sim.addBuff(target, { id: 'tb_rem_e1', name: 'Narrator CR+', mods: [{ stat: 'critRate', value: 0.10 }], turns: mult('trailblazer_remembrance', 'mem_skill_en_a2', mlv.skill) })
-  sim.log(`${mem.name} Lemme: ${target.name} (true ${(payload * 100).toFixed(1)}%)`)
+  const turns = mult('trailblazer_remembrance', 'mem_skill_en_a2', mlv.skill)
+  sim.addBuff(target, { id: 'tb_rem_support', name: "Mem's Support", mods: [], turns, payload, sourceId: u.id })
+  if (eid >= 1) {
+    sim.addBuff(target, { id: 'tb_rem_e1', name: 'Narrator CR+', mods: [{ stat: 'critRate', value: 0.10 }], turns, sourceId: u.id })
+    const memo = memospriteOfOwner(sim, target)
+    if (memo) {
+      sim.addBuff(memo, { id: 'tb_rem_support', name: "Mem's Support", mods: [], turns, payload, sourceId: u.id })
+      sim.addBuff(memo, { id: 'tb_rem_e1', name: 'Narrator CR+', mods: [{ stat: 'critRate', value: 0.10 }], turns, sourceId: u.id })
+    }
+  }
+  sim.log(`-- ${mem.name} uses Lemme! Help You!: ${target.name} (true ${(payload * 100).toFixed(1)}%)`)
 }
 
 /** 1800707 "Mem's Support": one True DMG instance worth `payload` of the damage that triggered it.
  *  Shared by the hit, DoT-tick and Break paths — the proc is per instance, not per attack. */
 function memSupportTrue(sim: SimApi, attacker: Unit, target: Unit, dmg: number): void {
   if (attacker.side !== 'ally' || target.side !== 'enemy' || target.dead) return
-  const support = attacker.buffs.find(b => b.id === 'tb_rem_support')
+  const ownerId = attacker.sharesOwnerBuffs ? String(sim.rt(attacker).ownerId ?? '') : ''
+  const source = ownerId ? sim.find(ownerId) ?? attacker : attacker
+  const support = source.buffs.find(b => b.id === 'tb_rem_support')
   if (!support?.payload || dmg <= 0) return
-  sim.trueDamage(attacker, target, Math.round(dmg * (support.payload as number)))
+  sim.trueDamage(source, target, Math.round(dmg * (support.payload as number)))
+}
+
+function memTurn(sim: SimApi, mem: Unit, u: Unit, ctx: KitRuntime): void {
+  const rt = sim.rt(u)
+  rt.memActionQueued = false
+  if (((rt.memCharge as number) ?? 0) >= 100) {
+    memLemme(sim, mem, u, ctx)
+    rt.memCharge = 0
+  } else {
+    memBaddies(sim, mem, u, ctx)
+  }
+  refreshMem(sim, u, mem, ctx)
+}
+
+function flushMemExtraTurn(sim: SimApi, owner: Unit, ctx: KitRuntime): void {
+  if (!ctx.memActionQueued) return
+  const mem = memOf(sim, owner)
+  if (!mem || mem.dead) return
+  ctx.memActionQueued = false
+  sim.grantExtraTurn(mem)
 }
 
 export const trailblazerRemembranceKit: KitDef = {
@@ -2344,11 +2395,18 @@ export const trailblazerRemembranceKit: KitDef = {
   onStart(sim, u, _ctx) { sim.advance(u, 0.30) },
 
   decide(sim, u, _ctx) {
+    if (u.kind === 'summon') return { kind: 'skill' }
     if (u.energy >= u.maxEnergy) return { kind: 'ult' }
     return decideByPattern(sim, u, _ctx)
   },
 
   perform(sim, u, action, ctx) {
+    if (u.kind === 'summon') {
+      const owner = sim.find(sim.rt(u).ownerId as string) ?? u
+      sim.fireMemospriteTurnStart(owner)
+      memTurn(sim, u, owner, sim.rt(owner))
+      return
+    }
     const lv = levelsOf(ctx)
     const eid = (ctx.eidolon as number) ?? 0
     const enemies = sim.livingEnemiesOf(u)
@@ -2360,7 +2418,7 @@ export const trailblazerRemembranceKit: KitDef = {
       if (u.energy < u.maxEnergy) return
       u.energy = 0
       const mem = summonMem(sim, u, ctx)
-      rt.memCharge = Math.min(100, ((rt.memCharge as number) ?? 0) + mult('trailblazer_remembrance', 'ult_a2', lv.ult) * 100)
+      addMemCharge(sim, u, mult('trailblazer_remembrance', 'ult_a2', lv.ult) * 100, mem)
       const opts = eid >= 6 ? { forceCrit: true } : {}
       for (const e of [...sim.livingEnemiesOf(u)])
         sim.hit(mem, e, { type: 'ult', elem: 'Ice', mult: mult('trailblazer_remembrance', 'ult', lv.ult), toughDmg: 20, label: 'Together, Mem!', ...opts })
@@ -2372,7 +2430,7 @@ export const trailblazerRemembranceKit: KitDef = {
       sim.gainEnergy(u, 30)
       const mem = summonMem(sim, u, ctx)
       sim.heal(mem, Math.round(mem.maxHp * mult('trailblazer_remembrance', 'skill', lv.skill)), u)
-      rt.memCharge = Math.min(100, ((rt.memCharge as number) ?? 0) + mult('trailblazer_remembrance', 'skill_a2', lv.skill) * 100)
+      addMemCharge(sim, u, mult('trailblazer_remembrance', 'skill_a2', lv.skill) * 100, mem)
       return
     }
 
@@ -2385,7 +2443,7 @@ export const trailblazerRemembranceKit: KitDef = {
         sim.hit(u, e, { type: 'basic', elem: 'Ice', mult: mult('trailblazer_remembrance', 'basic_en', lv.basic), toughDmg: 20, label: 'Script Tomorrow (TB)' })
         sim.hit(mem, e, { type: 'basic', elem: 'Ice', mult: mult('trailblazer_remembrance', 'basic_en_a2', lv.basic), toughDmg: 10, label: 'Script Tomorrow (Mem)' })
       }
-      rt.memCharge = Math.min(100, (rt.memCharge as number) + mult('trailblazer_remembrance', 'basic_en_a3', 1) * 100)
+      addMemCharge(sim, u, mult('trailblazer_remembrance', 'basic_en_a3', 1) * 100, mem)
       return
     }
 
@@ -2395,20 +2453,32 @@ export const trailblazerRemembranceKit: KitDef = {
   },
 
   onSummonTurn(sim, summon, owner, ctx) {
-    const rt = sim.rt(owner)
-    const charge = (rt.memCharge as number) ?? 0
-    if (charge >= 100) {
-      memLemme(sim, summon, owner, ctx)
-      rt.memCharge = 0
-    } else {
-      memBaddies(sim, summon, owner, ctx)
-    }
-    refreshMem(sim, owner, summon, ctx)
+    memTurn(sim, summon, owner, ctx)
   },
 
   onTurnStart(sim, u, _ctx) {
     if (u.kitId !== 'trailblazer_remembrance') return
     sim.rt(u).tbRemE2ThisTurn = false
+  },
+
+  onTurnEnd(sim, u, ctx) {
+    flushMemExtraTurn(sim, u, ctx)
+  },
+
+  onAllyActionEnd(sim, actor, ctx) {
+    const owner = sim.allies('ally').find(a => a.kitId === 'trailblazer_remembrance' && !a.dead)
+    if (!owner) return
+    const noEnergyUlt = actor.maxEnergy === 0 || sim.ultConsumptionOf(actor) === 'none'
+    if (((ctx.eidolon as number) ?? 0) >= 4 && actor.side === 'ally' && actor.kind === 'char' && noEnergyUlt) {
+      const bonus = mult('trailblazer_remembrance', 'e4_support', 1)
+      const supportActor = bumpMemSupport(actor, bonus)
+      const supportMemo = bumpMemSupport(memospriteOfOwner(sim, actor), bonus)
+      if (supportActor || supportMemo) {
+        addMemCharge(sim, owner, mult('trailblazer_remembrance', 'e4_charge', 1))
+        sim.log(`-- ${owner.name} E4: Mem +3% Charge from ${actor.name}`)
+      }
+    }
+    flushMemExtraTurn(sim, owner, ctx)
   },
 
   // E2: a non-Mem ALLY memosprite acts → TB +8 Energy, once per TB turn. Canon reads "any other
@@ -2434,7 +2504,7 @@ export const trailblazerRemembranceKit: KitDef = {
     const crossings = Math.floor((rt.tbRemEnergyTotal as number) / 10) - prev
     if (crossings > 0) {
       rt.tbRemEnergySeen = prev + crossings
-      rt.memCharge = Math.min(100, ((rt.memCharge as number) ?? 0) + crossings)
+      addMemCharge(sim, owner, crossings)
     }
   },
 

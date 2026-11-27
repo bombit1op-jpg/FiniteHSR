@@ -3714,6 +3714,8 @@ const TRAILBLAZER_REMEMBRANCE: CharProg = {
     mem_skill_en: [0.18,0.2,0.22,0.24,0.26,0.28,0.3,0.32,0.34,0.36], // Lemme! Help You!
     mem_skill_en_a2: Array(10).fill(3), // Lemme! Help You! param#2
     mem_skill_en_a3: Array(10).fill(1), // Lemme! Help You! param#3
+    e4_charge: Array(10).fill(0.03), // Dancer of the Muse param#1
+    e4_support: Array(10).fill(0.06), // Dancer of the Muse param#2
   },
   eidolons: [
     "E1: Narrator of the Present — Increases the CRIT Rate of ally targets with Mem's Support by 10%. When an ally target has Mem's Support, the effect of Mem's Support also applies to ",

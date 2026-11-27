@@ -466,6 +466,8 @@ export default async () => {
   const supportParts = supportSummaryParts(syntheticAction as any)
   const windDamage = damageDisplay({ attacks: [{ hits: [{ element: 'Wind', attackType: 'basic' }] }] } as any)
   const elationDamage = damageDisplay({ attacks: [{ hits: [{ element: 'Wind', attackType: 'elation' }] }] } as any)
+  const trueDamage = damageDisplay({ attacks: [{ hits: [{ element: 'Ice', attackType: 'true', damage: 100 }] }] } as any)
+  const trueDamageParts = damageElementParts({ attacks: [{ hits: [{ element: 'Ice', attackType: 'true', damage: 100 }] }] } as any)
   const multiElementDamage = damageElementParts({ attacks: [{ hits: [
     { element: 'Physical', damage: 10, attackType: 'add' },
     { element: 'Quantum', damage: 100, attackType: 'add' },
@@ -679,6 +681,7 @@ export default async () => {
     raw('damage colors distinguish elements and mark elation', windDamage.color === '#5eead4' && elationDamage.elation && supportParts[0].color !== windDamage.color && supportParts[1].color !== '#67e8f9', `${windDamage.color} | ${JSON.stringify(elationDamage)} | ${JSON.stringify(supportParts)}`),
     raw('multi-element damage groups by element largest first', multiElementDamage.map(p => `${p.element}:${p.amount}`).join('|') === 'Quantum:100|Physical:10', JSON.stringify(multiElementDamage)),
     raw('multi-element damage parts keep element-specific colors', multiElementColors.length === 2 && multiElementColors[0] !== multiElementColors[1] && multiElementColors.every(color => /^#[0-9a-f]{6}$/i.test(color)), multiElementColors.join('|')),
+    raw('true damage marked as light-purple damage type', trueDamage.color === '#d8b4fe' && trueDamageParts.length === 1 && trueDamageParts[0].element === 'True DMG' && trueDamageParts[0].color === '#d8b4fe', `${trueDamage.color} | ${JSON.stringify(trueDamageParts)}`),
     raw('damage summary shows element icons after numbers', [...uiHost.querySelectorAll<HTMLElement>('.simActionDamageElement')].some(n => !!n.dataset.element && !!n.querySelector('img')), `icons=${uiHost.querySelectorAll('.simActionDamageElement').length}`),
     raw('enemy inspector shows toughness bar', toughnessBars.length > 0 && /Tgh/.test(toughnessText) && /\d+\/\d+/.test(toughnessText), toughnessText || 'none'),
     raw('shield damage recorded on hit and action', shieldHitAction?.shieldDamage === 320 && shieldHitAction?.attacks[0]?.shieldDamage === 320 && shieldHit?.shieldDamage === 320 && shieldHit?.damage === 100 && shieldHitAction?.totalDamage === 100, `action=${shieldHitAction?.shieldDamage} attack=${shieldHitAction?.attacks[0]?.shieldDamage} hit=${shieldHit?.shieldDamage} hp=${shieldHit?.damage}`),

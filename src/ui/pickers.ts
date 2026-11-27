@@ -136,6 +136,19 @@ function setEffectLines(name: string): string[] {
   return lines
 }
 
+function appendEffectText(parent: HTMLElement, text: string): void {
+  for (const part of text.split(/(\d+(?:\.\d+)?%)/g)) {
+    if (!part) continue
+    if (/^\d+(?:\.\d+)?%$/.test(part)) {
+      const pct = el('span', 'pickSetPct')
+      pct.textContent = part
+      parent.append(pct)
+    } else {
+      parent.append(document.createTextNode(part))
+    }
+  }
+}
+
 export function openSetPicker(opts: {
   kind: 'relic' | 'planar'
   current?: string
@@ -163,7 +176,7 @@ export function openSetPicker(opts: {
     btn.append(title)
     for (const line of setEffectLines(name)) {
       const effect = el('div', 'pickSetEffect')
-      effect.textContent = line
+      appendEffectText(effect, line)
       btn.append(effect)
     }
     btn.onclick = () => { ov.close(); resolve(id) }

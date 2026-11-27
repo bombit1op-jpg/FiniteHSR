@@ -73,8 +73,10 @@ export interface SimApi {
   shieldMultOf(unitId: string): number
 
   /** §19 the unit's current mode + active ability variants (see combat/Availability). Default =
-   *  `DEFAULT_AVAILABILITY` (normal basic/skill/ult) for kits without an `availability` hook. */
+   *  `DEFAULT_AVAILABILITY` (normal basic/skill/ult) for kits without the hook. */
   availableAbilities(u: Unit): AvailabilityState
+  ultConsumptionOf(u: Unit): 'energy' | 'none' | undefined
+
   /** §17 schedule a countdown entity owned by `owner` (see combat/Scheduled): builds the timer,
    *  binds ownership, registers it on the timeline. Returns the live unit; `onCcEnd` fires on it. */
   scheduleCountdown(owner: Unit, spec: CountdownSpec): Unit
