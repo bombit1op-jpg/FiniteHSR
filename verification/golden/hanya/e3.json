@@ -81,7 +81,7 @@
   "BUFF_APPLIED|-|Hanya|-|- [1,2]",
   "BUFF_APPLIED|-|Elite #1|-|- [2]",
   "ACTION_END|Hanya|-|-|-",
-  "BUFF_EXPIRED|-|Hanya|-|- [1]",
+  "BUFF_EXPIRED|Hanya|Hanya|-|- [1]",
   "BUFF_EXPIRED|-|Hanya|-|- [1]",
   "ACTION_SCHEDULED|-|Elite #1|-|- [0,222.2222,38.682]",
   "ACTION_START|Elite #1|-|-|- [2,240,300,5991210,6000000]",

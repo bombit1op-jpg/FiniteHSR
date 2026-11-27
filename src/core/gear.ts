@@ -2581,8 +2581,37 @@ export const PLANAR_SETS: PlanarSet[] = [
 
 // ---------------------------------------------------------------- helpers
 
+let currentGearOwnerId: string | undefined
+
+function withGearOwner<T>(ownerId: string, fn: () => T): T {
+  const prev = currentGearOwnerId
+  currentGearOwnerId = ownerId
+  try { return fn() } finally { currentGearOwnerId = prev }
+}
+
+export function bindGearAggregate(agg: GearAggregate, ownerId: string): GearAggregate {
+  const bind = <T extends object>(obj: T | undefined): T | undefined => {
+    if (!obj) return undefined
+    const copy = { ...obj } as Record<string, unknown>
+    for (const [key, value] of Object.entries(obj)) {
+      if (typeof value === 'function') {
+        copy[key] = (...args: unknown[]) => withGearOwner(ownerId, () => (value as (...a: unknown[]) => unknown)(...args))
+      }
+    }
+    return copy as T
+  }
+  return {
+    ...agg,
+    cone: bind(agg.cone),
+    planar: bind(agg.planar),
+    relicSets: agg.relicSets.map(set => bind(set)!),
+    relicSets4: agg.relicSets4?.map(set => bind(set)!),
+    post: new Set([...agg.post].map(fn => () => withGearOwner(ownerId, fn))),
+  }
+}
+
 function gearBuff(id: string, name: string, mods: Mod[], turns: number, maxStacks?: number): Buff {
-  return { id, name, mods, turns, maxStacks, sourceId: 'gear' }
+  return { id, name, mods, turns, maxStacks, sourceId: 'gear', appliedById: currentGearOwnerId }
 }
 
 /** buff every living char ally (born party buffs, e.g. Past Self in Mirror) */

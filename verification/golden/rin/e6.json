@@ -389,7 +389,7 @@
   "HIT_END|Rin Tohsaka|Elite|-|skill [10050,5744843]",
   "ACTION_END|Rin Tohsaka|-|-|-",
   "ACTION_SCHEDULED|-|Elite|-|- [0,13.889,272.2222]",
-  "DOT_EXPIRED|-|Elite|-|- [5]",
+  "DOT_EXPIRED|Rin Tohsaka|Elite|-|- [5]",
   "ACTION_START|Elite|-|-|- [2,300,300,5677828,6000000]",
   "ABILITY_USED|Elite|-|-|-",
   "TARGET_SELECTED|Elite|Rin Tohsaka|-|-",

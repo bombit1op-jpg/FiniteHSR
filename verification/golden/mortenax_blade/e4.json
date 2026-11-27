@@ -226,7 +226,7 @@
   "ABILITY_USED|Elite|-|-|-",
   "TARGET_SELECTED|Elite|Mortenax Blade|-|-",
   "ACTION_END|Elite|-|-|-",
-  "DEBUFF_EXPIRED|-|Elite|-|- [1]",
+  "DEBUFF_EXPIRED|Mortenax Blade|Elite|-|- [1]",
   "CYCLE_END|-|-|-|- [4,466.6667]",
   "CYCLE_START|-|-|-|- [466.6667,5]",
   "ACTION_SCHEDULED|-|Mortenax Blade|-|- [0,22.222,466.6667]",

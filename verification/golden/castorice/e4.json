@@ -216,7 +216,7 @@
   "ACTION_END|Netherwing: Pollux|-|-|-",
   "BUFF_EXPIRED|-|Netherwing: Pollux|-|- [1]",
   "ACTION_SCHEDULED|-|Elite|-|- [0,15.079,272.2222]",
-  "DOT_EXPIRED|-|Elite|-|- [5]",
+  "DOT_EXPIRED|Castorice|Elite|-|- [5]",
   "ACTION_START|Elite|-|-|- [2,300,300,4697916,6000000]",
   "ABILITY_USED|Elite|-|-|-",
   "TARGET_SELECTED|Elite|Castorice|-|-",

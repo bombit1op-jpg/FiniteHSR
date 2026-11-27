@@ -106,7 +106,7 @@ async function fetchCategoryImages(category: string): Promise<FileInfo[]> {
 }
 
 // Map Fandom category names to display names
-const CHARACTER_CATEGORIES: Record<string, string> = {
+const CHARACTER_CATEGORIES: Record<string, { category: string; displayName: string }> = {
   'Acheron': { category: 'Acheron_Eidolon_Icons', displayName: 'Acheron' },
   'Aglaea': { category: 'Aglaea_Eidolon_Icons', displayName: 'Aglaea' },
   'Anaxa': { category: 'Anaxa_Eidolon_Icons', displayName: 'Anaxa' },
@@ -238,7 +238,7 @@ async function downloadCharacterEidolons(displayName: string, data: { category: 
 
 function updateManifest(): void {
   console.log('\nUpdating _manifest.json...');
-  const manifest = JSON.parse(readFileSync(join(ROOT, 'public', 'icons', '_manifest.json'), 'utf8'));
+  const manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8'));
 
   // Clear existing eidolons and rebuild from disk
   manifest.eidolons.icons = [];
@@ -265,7 +265,7 @@ function updateManifest(): void {
   }
 
   manifest.eidolons.count = manifest.eidolons.icons.length;
-  writeFileSync(join(ROOT, 'public', 'icons', '_manifest.json'), JSON.stringify(manifest, null, 2));
+  writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2));
   console.log(`Manifest updated with ${manifest.eidolons.count} eidolon icons`);
 }
 

@@ -155,7 +155,7 @@
   "ACTION_END|Luka|-|-|-",
   "ACTION_SCHEDULED|-|Elite #1|-|- [0,33.333,333.3333]",
   "DOT_TICK|Luka|Elite #1|-|- [0,1,3622,3622,3974746]",
-  "DOT_EXPIRED|-|Elite #1|-|- [1]",
+  "DOT_EXPIRED|Luka|Elite #1|-|- [1]",
   "ACTION_START|Elite #1|-|-|- [113.3333,240,3,3974746,4000000]",
   "ABILITY_USED|Elite #1|-|-|-",
   "TARGET_SELECTED|Elite #1|Luka|-|-",

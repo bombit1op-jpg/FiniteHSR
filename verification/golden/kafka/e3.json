@@ -148,7 +148,7 @@
   "ACTION_END|Kafka|-|-|-",
   "ACTION_SCHEDULED|-|Elite|-|- [0,33.333,333.3333]",
   "DOT_TICK|Kafka|Elite|-|- [0,1,4813,4813,5974040]",
-  "DOT_EXPIRED|-|Elite|-|- [1]",
+  "DOT_EXPIRED|Kafka|Elite|-|- [1]",
   "ACTION_START|Elite|-|-|- [180,3,300,5974040,6000000]",
   "ABILITY_USED|Elite|-|-|-",
   "TARGET_SELECTED|Elite|Kafka|-|-",

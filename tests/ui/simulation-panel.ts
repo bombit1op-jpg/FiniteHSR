@@ -114,6 +114,14 @@ export default async () => {
   const multiTagCards = cards.filter(c => c.querySelectorAll('.simActionTag').length > 1)
   const enemyAttackCard = cards.find(c => c.classList.contains('enemyAttack'))
   const spDeltaLabels = deltaCards.map(c => c.querySelector('.simActionSpDelta')?.textContent ?? '').filter(Boolean)
+  const spSquareCounts = deltaCards.map(c => c.querySelectorAll('.simVitalTrack.squares .simVitalSquare').length)
+  const spDeltaColors = deltaCards.map(c => (c.querySelector('.simActionSpDelta') as HTMLElement | null)?.style.color ?? '').filter(Boolean)
+  const abilityLabels = [...deltaHost.querySelectorAll<HTMLElement>('.simActionHeader .simActionAbility')]
+  const abilityIconBeforeName = abilityLabels.some(label => label.firstElementChild?.classList.contains('simActionAbilityIconImg') && label.lastElementChild?.classList.contains('simActionAbilityName'))
+  const metaTexts = [...uiHost.querySelectorAll<HTMLElement>('.simActionMeta')].map(n => n.textContent ?? '')
+  const metaColors = [...uiHost.querySelectorAll<HTMLElement>('.simActionMeta')].map(n => n.style.color)
+  const weaknessIconCount = uiHost.querySelectorAll('.simWeaknessIcon').length
+  const duplicateHitPrefix = [...uiHost.querySelectorAll<HTMLElement>('.simActionHitsSummary')].some(n => (n.textContent ?? '').startsWith('Попадания:'))
   const fuaCard = cards.find(c => c.textContent?.includes('Kafka') && c.textContent?.includes('Gentle but Cruel') && !!c.querySelector('.simActionHitsSummary'))
   fuaCard?.click()
   enemyAttackCard?.click()
@@ -132,7 +140,7 @@ export default async () => {
   const shieldHitLabels = [...uiHost.querySelectorAll<HTMLElement>('.simInspectorHitShieldDamage')]
     .map(label => label.textContent ?? '')
 
-  const { effectIconUrl, enemyIconUrl, statIconUrlForKey, summonIconUrl } = await import('../../src/ui/icons')
+  const { effectIconUrl, enemyIconUrl, gearIconUrl, statIconUrlForKey, summonIconUrl } = await import('../../src/ui/icons')
 
   const summonNames = [
     'Demiurge', 'Evey', 'Fuyuan', 'Garmentmaker', 'Lightning-Lord',
@@ -143,6 +151,10 @@ export default async () => {
   const allies = sim.roster.filter(u => u.side === 'ally')
   const enemy = sim.roster.find(u => u.side === 'enemy')!
   const allyA = allies[0]
+  sim.gearMap.set(allyA.id, {
+    cone: { id: 'secret_vow' }, coneSi: 1, mods: [], pieces: [],
+    relicSets: [], relicSets4: [], planar: undefined, post: [],
+  } as any)
   const targetPick = resolveTargets({
     actorId: enemy.id,
     rule: 'single',
@@ -298,6 +310,8 @@ export default async () => {
         makeEffect('no_max', 'No Max', allyA, allyB, { stacks: 1 }),
         makeEffect('gear', 'Gear', allyA, allyB, { provenance: { sourceKind: 'relic' }, mods: [{ stat: 'atkPct', value: 0.15 }] }),
         makeEffect('traces', 'Traces', allyA, allyB, { provenance: { sourceKind: 'trace' }, mods: [{ stat: 'critDmg', value: 0.2 }] }),
+        makeEffect('genius_def', 'Genius DEF Ignore', enemy, allyB, { sourceId: 'gear', appliedById: allyA.id, mods: [{ stat: 'defIgnore', value: 0.2 }] }),
+        makeEffect('gear_atk', 'Gear ATK', allyA, allyB, { sourceId: 'gear', appliedById: allyA.id, mods: [{ stat: 'atkPct', value: 0.12 }] }),
       ],
       debuffs: [makeEffect('enemy_only', 'Enemy Only Debuff', enemy, enemy, { mods: [{ stat: 'defPct', value: -0.1 }] })],
       dots: [{
@@ -354,9 +368,11 @@ export default async () => {
 
   const effectHost = doc.createElement('div')
   const enemyEffectHost = doc.createElement('div')
+  const allEffectsHost = doc.createElement('div')
+  const stackHost = doc.createElement('div')
   const memoSpriteHost = doc.createElement('div')
   const supportHost = doc.createElement('div')
-  doc.body.append(effectHost, enemyEffectHost, memoSpriteHost, supportHost)
+  doc.body.append(effectHost, enemyEffectHost, allEffectsHost, stackHost, memoSpriteHost, supportHost)
   const supportEl = renderSupportLog(syntheticAction as any)
   if (supportEl) supportHost.append(supportEl)
   const supportText = supportHost.textContent ?? ''
@@ -374,6 +390,12 @@ export default async () => {
   const charVitalLabels = vitalLabelsForSnapshot({ kind: 'char' })
   renderEffectSummary(syntheticAction, sim, effectHost, allyB.id)
   renderEffectSummary(syntheticAction, sim, enemyEffectHost, enemy.id)
+  renderEffectSummary(syntheticAction, sim, allEffectsHost)
+  const stackBefore = JSON.parse(JSON.stringify(stateSnapshot)) as typeof stateSnapshot
+  const stackAfter = JSON.parse(JSON.stringify(stateSnapshot)) as typeof stateSnapshot
+  stackBefore.units[allyB.id].buffs.push({ id: 'refund_stack', name: 'Refund Stack', stacks: 1, turns: 2, mods: [] } as any)
+  stackAfter.units[allyB.id].buffs.push({ id: 'refund_stack', name: 'Refund Stack', stacks: 3, turns: 2, mods: [] } as any)
+  renderEffectSummary({ ...syntheticAction, beforeSnapshot: stackBefore, afterSnapshot: stackAfter } as any, sim, stackHost, allyB.id)
   const namedSummonHost = doc.createElement('div')
   doc.body.append(namedSummonHost)
   const memoSpriteProbe = allyA as { kind?: string; name?: string }
@@ -468,6 +490,7 @@ export default async () => {
   const ultimateEnergyVital = [...(ultimateCard?.querySelectorAll<HTMLElement>('.simVitalBar') ?? [])]
     .find(bar => bar.querySelector('.simVitalLabel')?.textContent === 'EN')
   const ultimateEnergyText = ultimateEnergyVital?.querySelector('.simVitalValue')?.textContent ?? ''
+  const ultimateEnergyDelta = ultimateCard?.querySelector('.simActionEnergyDelta')?.textContent ?? ''
   const toughnessDamageLabels = [...deltaHost.querySelectorAll<HTMLElement>('.simActionToughnessDamage')]
     .map(label => label.textContent ?? '')
   const energyProbeAction = aggregateCombatActions([
@@ -497,7 +520,12 @@ export default async () => {
     raw('SP delta shown with ability', spDeltaLabels.some(t => /^[+-]?\d+ ОД$/.test(t)), spDeltaLabels.join('|') || 'none'),
     raw('SP delta rendered inline with SP value', inlineSpDeltaCount > 0 && inlineSpDeltaCount === spDeltaLabels.length, `inline=${inlineSpDeltaCount} total=${spDeltaLabels.length}`),
     raw('energy delta rendered inline with EN bar', energyDeltaLabels.some(t => /^[+-]?[\d,]+\s+EN$/.test(t)) && deltaCards.some(c => !!c.querySelector('.simVitalBar .simActionEnergyDelta')), energyDeltaLabels.join('|') || 'none'),
-    raw('ultimate energy displays zero', !!ultimateCard && /^0\//.test(ultimateEnergyText), `${ultimateEnergyText || 'missing'} card=${!!ultimateCard}`),
+    raw('SP uses square track and SP color', spSquareCounts.some(n => n > 0) && spDeltaColors.includes('#f2c94c'), `squares=${spSquareCounts.join(',')} colors=${spDeltaColors.join(',')}`),
+    raw('ability icon sits left of ability name', abilityIconBeforeName, `labels=${abilityLabels.length}`),
+    raw('action meta uses action turn and light color', metaTexts.some(t => /\| ACT \d+$/.test(t)) && metaColors.every(c => c === '#e6ebf2'), `${metaTexts[0] ?? 'none'} | ${metaColors.join(',')}`),
+    raw('enemy weakness icons render by toughness value', weaknessIconCount > 0, `icons=${weaknessIconCount}`),
+    raw('hit summary omits duplicate Попадания label', !duplicateHitPrefix, `cards=${uiHost.querySelectorAll('.simActionHitsSummary').length}`),
+    raw('ultimate energy displays actual charge and refund', !!ultimateCard && /^\d+\//.test(ultimateEnergyText) && !/^0\//.test(ultimateEnergyText) && /^\+\d+ EN$/.test(ultimateEnergyDelta), `${ultimateEnergyText || 'missing'} delta=${ultimateEnergyDelta || 'missing'}`),
     raw('toughness damage aggregated and rendered under damage', actions.some(a => a.toughnessDamage > 0) && toughnessDamageLabels.some(t => /^Tgh:\s*[\d,]+$/.test(t)), `aggregate=${actions.reduce((n, a) => n + a.toughnessDamage, 0)} labels=${toughnessDamageLabels.join('|') || 'none'}`),
     raw('single encounter replaces preset picker', !encounterSelect && encounterIcons.length >= 3, `select=${!!encounterSelect} icons=${encounterIcons.length}`),
     raw('enemy icons resolve aliases', enemyIconUrl('Ice Edge') === enemyIconUrl('Ice Edge (1)') && enemyIconUrl('Sting') === enemyIconUrl('Gnaw Sting'), `${enemyIconUrl('Ice Edge')} | ${enemyIconUrl('Sting')}`),
@@ -532,6 +560,13 @@ export default async () => {
     raw('dot source id retained in snapshot', !!dotWithSource, dotWithSource ? `${dotWithSource.unit.id}/${dotWithSource.dot.id}/${dotWithSource.dot.sourceId}` : 'missing'),
     raw('shield not duplicated as normal buff', rowsNamed('March Shield Buff').length === 0 && [...effectHost.querySelectorAll<HTMLElement>('.simInspectorEffect.shield')].some(r => /March Shield/.test(textOf(r))), `buffRows=${rowsNamed('March Shield Buff').length}`),
     raw('gear and traces omitted from buff list', !hostText(effectHost).includes('Снаряжение и следы') && rowsNamed('Gear').length === 0 && rowsNamed('Traces').length === 0, hostText(effectHost).slice(0, 220)),
+    raw('genius def-ignore effect hidden from UI', !hostText(effectHost).includes('Genius DEF Ignore') && !hostText(allEffectsHost).includes('Genius DEF Ignore'), hostText(allEffectsHost).slice(0, 220)),
+    raw('gear effect source names wearer and shows cone and stat icons', sourceOf(rowsNamed('Gear ATK')[0]).includes(allyA.name)
+      && rowsNamed('Gear ATK')[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src') === gearIconUrl('cone', 'secret_vow')
+      && rowsNamed('Gear ATK')[0]?.querySelector('.simInspectorEffectIconImg img')?.getAttribute('src') === statIconUrlForKey('atkPct'),
+      `${sourceOf(rowsNamed('Gear ATK')[0])} | ${rowsNamed('Gear ATK')[0]?.querySelector('.simInspectorEffectSourceIcon img')?.getAttribute('src')}`),
+    raw('effects tab defaults to all effects', hostText(allEffectsHost).includes('Scope Ally Buff') && hostText(allEffectsHost).includes('Scope Enemy Debuff'), hostText(allEffectsHost).slice(0, 220)),
+    raw('stack changes shown from before and after snapshots', hostText(stackHost).includes('Изменение стаков') && hostText(stackHost).includes('Refund Stack 1→3'), hostText(stackHost).slice(0, 220)),
     raw('shield damage rendered separately', hostText(effectHost).includes('Урон по щитам') && hostText(effectHost).includes('320'), hostText(effectHost).slice(0, 260)),
     raw('debuff classified via isDebuff in snapshot', engineDebuffIds.length > 0 && engineDebuffIds.every(id => snapshotDebuffIds.has(id) && !snapshotBuffIds.has(id)), `engine=${engineDebuffIds.join(',')} buffs=${[...snapshotBuffIds].join(',')}`),
     raw('ally inspector shows own effects only', hostText(effectHost).includes('Scope Ally Buff') && !hostText(effectHost).includes('Scope Enemy Debuff') && !hostText(effectHost).includes('Enemy Only Debuff'), hostText(effectHost).slice(0, 200)),
@@ -564,6 +599,7 @@ export default async () => {
     raw('hit rows show shield damage', shieldHitLabels.some(text => /\+[\d,]+\s+щит/.test(text)), shieldHitLabels.join(',') || 'none'),
     raw('empty system actions hidden from log', hiddenSystemAction === undefined, String(hiddenSystemAction?.category)),
     raw('combat log drops category headers', uiHost.querySelectorAll('.simLogCategoryHeader').length === 0, `headers=${uiHost.querySelectorAll('.simLogCategoryHeader').length}`),
+    raw('combat log drops filter and search bar', !uiHost.querySelector('.simLogFilterBar') && !uiHost.querySelector('.simLogSearch'), `filterBar=${!!uiHost.querySelector('.simLogFilterBar')} search=${!!uiHost.querySelector('.simLogSearch')}`),
     raw('combat log drops system filter', ![...uiHost.querySelectorAll<HTMLOptionElement>('.simLogFilter option')].some(o => o.value === 'system'), 'system filter'),
     raw('combat log drops system rows', !cards.some(c => c.classList.contains('system')), `systemCards=${cards.filter(c => c.classList.contains('system')).length}`),
     raw('technique events keep damage healing and SP in one action', techniqueEffects?.category === 'technique' && techniqueEffects?.totalDamage === 333 && techniqueEffects?.effects.heals.some(h => h.amount === 222) === true && techniqueEffects?.spDelta === 1, `category=${techniqueEffects?.category} dmg=${techniqueEffects?.totalDamage} heals=${techniqueEffects?.effects.heals.length} sp=${techniqueEffects?.spDelta}`),

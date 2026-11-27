@@ -277,8 +277,8 @@
   "ACTION_END|Mob #2|-|-|-",
   "ACTION_SCHEDULED|-|Mob #1|-|- [0,20.833,270.8333]",
   "ACTION_SKIPPED|-|Mob #1|-|- [1]",
-  "DOT_EXPIRED|-|Mob #1|-|- [0]",
-  "CONTROL_EXPIRED|-|Mob #1|-|-",
+  "DOT_EXPIRED|The Herta|Mob #1|-|- [1]",
+  "CONTROL_EXPIRED|The Herta|Mob #1|-|- [1]",
   "ACTION_SCHEDULED|-|The Herta|-|- [0,25.463,296.2963]",
   "ACTION_START|The Herta|-|-|- [0,220,4066,5000,63]",
   "ABILITY_USED|The Herta|-|-|-",
@@ -500,7 +500,7 @@
   "ACTION_END|Anaxa|-|-|-",
   "ACTION_SCHEDULED|-|Mob #2|-|- [0,25.129,437.5]",
   "DOT_TICK|Anaxa|Mob #2|-|- [0,11182,11182,3,74643]",
-  "DOT_EXPIRED|-|Mob #2|-|- [3]",
+  "DOT_EXPIRED|Anaxa|Mob #2|-|- [3]",
   "ACTION_START|Mob #2|-|-|- [100,300000,5,60,74643]",
   "ABILITY_USED|Mob #2|-|-|-",
   "TARGET_SELECTED|Mob #2|Anaxa|-|-",
@@ -728,8 +728,8 @@
   "CYCLE_START|-|-|-|- [666.6667,7]",
   "ACTION_SCHEDULED|-|Mob #1|-|- [0,48.11,666.6667]",
   "ACTION_SKIPPED|-|Mob #1|-|- [1]",
-  "DOT_EXPIRED|-|Mob #1|-|- [0]",
-  "CONTROL_EXPIRED|-|Mob #1|-|-",
+  "DOT_EXPIRED|The Herta|Mob #1|-|- [1]",
+  "CONTROL_EXPIRED|The Herta|Mob #1|-|- [1]",
   "BATTLE_END|-|-|-|- [0,0,1,123,26,500992,6,666.6667]"
  ]
 }

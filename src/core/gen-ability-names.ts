@@ -21,6 +21,7 @@ interface RawChar {
   damage_type: string
   skills: Record<string, RawSkill>
   memosprite?: { skills: Record<string, RawSkill> }
+  relics?: { avatar_id: number }
 }
 
 /** PROG slot -> dataset type_name + occurrence index (0 = first of that type) */

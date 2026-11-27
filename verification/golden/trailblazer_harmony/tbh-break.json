@@ -68,7 +68,7 @@
   "HIT_END|TBH|Beetle|-|skill [390,395350]",
   "ACTION_END|TBH|-|-|-",
   "ACTION_SCHEDULED|-|Beetle|-|- [0,221.825,67.979]",
-  "DOT_EXPIRED|-|Beetle|-|- [1]",
+  "DOT_EXPIRED|TBH|Beetle|-|- [1]",
   "ACTION_START|Beetle|-|-|- [2,395350,400000,60,60]",
   "ABILITY_USED|Beetle|-|-|-",
   "TARGET_SELECTED|Beetle|TBH|-|-",

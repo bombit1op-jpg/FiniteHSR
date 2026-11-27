@@ -152,12 +152,12 @@
   "ENERGY_FULL|Silver Wolf|Silver Wolf|-|-",
   "DEBUFF_APPLIED|-|Elite|-|- [1,2]",
   "HIT_START|Silver Wolf|Elite|Allow Changes?|skill [1,20,2760,300,5960751]",
-  "DAMAGE_CALCULATED|Silver Wolf|Elite|-|skill [0,0,0,0,0.05,0.08,0.2,0.468,11,2.156,2760,4514]",
-  "DAMAGE_DEALT|Silver Wolf|Elite|Allow Changes?|skill [2.156,2760,4514,5956237,6000000]",
+  "DAMAGE_CALCULATED|Silver Wolf|Elite|-|skill [0,0,0,0,0.05,0.08,0.2,0.6,11,2.156,2760,5049]",
+  "DAMAGE_DEALT|Silver Wolf|Elite|Allow Changes?|skill [2.156,2760,5049,5955702,6000000]",
   "TOUGHNESS_DAMAGE|Silver Wolf|Elite|-|- [1,170,190,20]",
-  "HIT_END|Silver Wolf|Elite|-|skill [4514,5956237]",
+  "HIT_END|Silver Wolf|Elite|-|skill [5049,5955702]",
   "BUFF_REFRESHED|-|Elite|-|- [1,4]",
   "ACTION_END|Silver Wolf|-|-|-",
-  "BATTLE_END|-|-|-|- [0,0,1,10,23,3,350,43763]"
+  "BATTLE_END|-|-|-|- [0,0,1,10,23,3,350,44298]"
  ]
 }

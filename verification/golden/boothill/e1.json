@@ -143,7 +143,7 @@
   "ACTION_SCHEDULED|-|Elite #1|-|- [0,22.222,322.2222]",
   "DOT_TICK|Boothill|Elite #1|-|- [0,1,3860518,9965,9965]",
   "DOT_TICK|Boothill|Elite #1|-|- [0,1,3850553,9965,9965]",
-  "DOT_EXPIRED|-|Elite #1|-|- [1]",
+  "DOT_EXPIRED|Boothill|Elite #1|-|- [1]",
   "ACTION_START|Elite #1|-|-|- [2,3850553,4000000,60,60]",
   "ABILITY_USED|Elite #1|-|-|-",
   "TARGET_SELECTED|Elite #1|Boothill|-|-",

@@ -387,7 +387,7 @@
     {
       "id": "gil_e2_interest_present",
       "layer": "parameters",
-      "claim": "E2 raises Interest SPD 0.3 -> 1.3 (gil_interest_spd spdPct 1.3).",
+      "claim": "E2 raises Interest SPD from the E0 0.3 floor to at least 1.3 (gil_interest_spd spdPct).",
       "fixtures": [
         "e2",
         "e6"
@@ -396,7 +396,8 @@
         "assert": "buffStat",
         "id": "gil_interest_spd",
         "stat": "spdPct",
-        "value": 1.3
+        "atLeast": 1.3,
+        "pick": "max"
       }
     },
     {

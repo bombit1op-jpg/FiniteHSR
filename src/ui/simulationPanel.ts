@@ -10,7 +10,7 @@ import { runBattle, ENEMY_PRESETS } from '../core/battle'
 import { resolveEncounter, type EncounterSpec, validateEncounter } from '../core/encounter'
 import { toTeamSpec } from './team'
 import { techniquesForRows } from './store'
-import { charIconUrl, iconNode, metaBadge, enemyIconUrl, charPortraitUrl, gearBadge, effectIconUrl, abilityIconUrl, statIconUrlForKey, summonIconUrl, elemIconUrl } from './icons'
+import { charIconUrl, iconNode, metaBadge, enemyIconUrl, charPortraitUrl, gearBadge, gearIconUrl, effectIconUrl, abilityIconUrl, statIconUrlForKey, summonIconUrl, elemIconUrl } from './icons'
 import { el } from './dom'
 
 import { withBusy, showStatus } from './shell'
@@ -178,10 +178,34 @@ function formatEnergyDelta(delta: number): string {
   return `${value >= 0 ? '+' : ''}${value} EN`
 }
 
+function weaknessIcons(unit: Pick<SnapshotUnit, 'weaknesses'> | undefined): HTMLElement | undefined {
+  if (!unit?.weaknesses?.length) return undefined
+  const row = el('span', 'simWeaknessIcons')
+  for (const weak of unit.weaknesses) {
+    row.append(iconNode(elemIconUrl(weak), weak, {
+      cls: 'simWeaknessIcon', size: 14, fit: 'contain',
+      fallbackText: safeInitial(weak), tint: DAMAGE_ELEMENT_COLORS[weak] ?? '#e6ebf2', title: `Слабость: ${weak}`,
+    }))
+  }
+  return row
+}
+
 function isNeutralEffect(effect: any): boolean {
+  if (effect?.id === 'genius_def') return true
+  if (effect?.name === 'Gear' || effect?.name === 'Traces') return true
   const provenance = String(effect?.provenance?.sourceKind ?? '')
-  const label = `${effect?.id ?? ''} ${effect?.name ?? ''}`.toLowerCase()
-  return provenance === 'trace' || provenance === 'lightCone' || provenance === 'relic' || /\b(gear|traces)\b/.test(label)
+  return provenance === 'trace' || provenance === 'lightCone' || provenance === 'relic'
+}
+
+function gearIconFor(effect: EffectIdentity, sim: Simulator): string | undefined {
+  if (effect.sourceId !== 'gear' || !effect.appliedById) return undefined
+  const gear = sim.gearMap.get(effect.appliedById)
+  if (!gear) return undefined
+  const coneId = (gear.cone as { id?: string } | undefined)?.id
+  if (coneId) return gearIconUrl('cone', coneId)
+  const setName = gear.relicSets4?.[0]?.id ?? gear.relicSets?.[0]?.id ?? gear.planar?.id
+  if (!setName) return undefined
+  return gearIconUrl(gear.planar?.id === setName ? 'planar' : 'relic', setName)
 }
 
 let renderEffectsTabImpl: ((action: CombatActionRecord, sim: Simulator, content: HTMLElement, scopeId?: string) => void) | undefined
@@ -214,10 +238,14 @@ interface EffectIdentity {
   appliedById?: string
 }
 
-function effectIconFor(effect: { name: string; kind?: EffectKind; mods?: Array<{ stat: string; value: number }> }): string | undefined {
+function effectIconFor(effect: { name: string; kind?: EffectKind; sourceId?: string; mods?: Array<{ stat: string; value: number }> }): string | undefined {
+  const mod = effect.mods?.[0]
+  if (effect.sourceId === 'gear' && mod) {
+    const gearStatIcon = statIconUrlForKey(mod.stat)
+    if (gearStatIcon) return gearStatIcon
+  }
   const direct = effectIconUrl(effect.name)
   if (direct) return direct
-  const mod = effect.mods?.[0]
   if (mod) {
     const statIcon = statIconUrlForKey(mod.stat)
     if (statIcon) return statIcon
@@ -233,11 +261,13 @@ function entityIconUrl(unit: { name?: string; side?: string; kitId?: string; own
 }
 
 function effectSourceFor(effect: EffectIdentity, sim: Simulator): { name: string; url?: string } {
-  const sourceId = effect.sourceId ?? effect.appliedById
-  const unit = sourceId ? sim.roster.find(u => u.id === sourceId) : undefined
-  const gearName = sourceId === 'gear' && effect.name ? `Снаряжение · ${effect.name}` : ''
+  const isGear = effect.sourceId === 'gear'
+  const sourceId = isGear ? effect.appliedById : effect.sourceId ?? effect.appliedById
+  const unit = sourceId && sourceId !== 'gear' ? sim.roster.find(u => u.id === sourceId) : undefined
+  const gearName = isGear && effect.name ? `Снаряжение · ${effect.name}` : ''
   const name = unit?.name ?? effect.sourceName ?? gearName
-  return { name: name || '—', url: entityIconUrl(unit, sim) }
+  const url = isGear ? gearIconFor(effect, sim) ?? entityIconUrl(unit, sim) : entityIconUrl(unit, sim)
+  return { name: name || '—', url }
 }
 
 function effectTargetFor(effect: EffectIdentity, sim: Simulator): { name: string; url?: string } {
@@ -991,55 +1021,6 @@ traceContainer.append(traceEl)
   function renderCombatActionLog(sim: Simulator, combatActions: CombatActionRecord[], snapshots: StateSnapshot[], container: HTMLElement): void {
     container.innerHTML = ''
 
-    // Filter bar
-    const filterBar = el('div', 'simLogFilterBar')
-    const searchInput = el('input', 'simLogSearch') as HTMLInputElement
-    searchInput.type = 'search'
-    searchInput.placeholder = 'Поиск по журналу...'
-    searchInput.setAttribute('aria-label', 'Поиск по журналу')
-
-    const filterSelect = el('select', 'simLogFilter') as HTMLSelectElement
-    const filterOptions = [
-      ['all', 'Все действия'],
-      ['attack', 'Атаки'],
-      ['enemyAttack', 'Атаки врагов'],
-      ['bonusAttack', 'Бонус-атаки'],
-      ['extraTurn', 'Доп. ходы'],
-      ['ultimate', 'Ультимейты'],
-      ['technique', 'Техники'],
-      ['summon', 'Призывы'],
-      ['timer', 'Таймеры'],
-      ['effect', 'Эффекты'],
-    ]
-    for (const [val, label] of filterOptions) {
-      const opt = el('option')
-      opt.value = val
-      opt.textContent = label
-      filterSelect.append(opt)
-    }
-    filterSelect.value = 'all'
-
-    const characterFilter = el('select', 'simLogCharFilter') as HTMLSelectElement
-    characterFilter.innerHTML = '<option value="all">Все персонажи</option>'
-    for (const u of sim.roster.filter(u => u.side === 'ally')) {
-      const opt = el('option')
-      opt.value = u.id
-      opt.textContent = u.name
-      characterFilter.append(opt)
-    }
-    for (const u of sim.roster.filter(u => u.side === 'enemy')) {
-      const opt = el('option')
-      opt.value = u.id
-      opt.textContent = u.name
-      characterFilter.append(opt)
-    }
-
-    const clearFiltersBtn = el('button', 'simLogClearBtn btn-secondary')
-    clearFiltersBtn.textContent = 'Сбросить фильтры'
-
-    filterBar.append(searchInput, filterSelect, characterFilter, clearFiltersBtn)
-    container.append(filterBar)
-
     // Main content area - two columns
     const workspace = el('div', 'simLogWorkspace')
     container.append(workspace)
@@ -1057,42 +1038,9 @@ traceContainer.append(traceEl)
     inspectorPane.append(inspectorPanel)
     workspace.append(inspectorPane)
 
-    // State for filters
-    let currentFilters = {
-      search: '',
-      type: 'all' as string,
-      character: 'all' as string,
-    }
-
-    function selectedInspectorUnitId(action: CombatActionRecord): string | undefined {
-      return currentFilters.character !== 'all' ? currentFilters.character : action.sourceId
-    }
-
     function applyFilters(): void {
       timeline.innerHTML = ''
-
-      const filteredActions = combatActions.filter(action => {
-        if (currentFilters.search) {
-          const searchLower = currentFilters.search.toLowerCase()
-          const abilityName = action.abilityName?.toLowerCase() || ''
-          const sourceName = action.sourceName?.toLowerCase() || ''
-          const targetNames = action.targetNames?.join(' ').toLowerCase() || ''
-          if (!abilityName.includes(searchLower) && !sourceName.includes(searchLower) && !targetNames.includes(searchLower)) {
-            return false
-          }
-        }
-        if (currentFilters.type !== 'all' && action.category !== currentFilters.type) {
-          return false
-        }
-        if (currentFilters.character !== 'all' &&
-            action.sourceId !== currentFilters.character &&
-            !action.targetIds.includes(currentFilters.character)) {
-          return false
-        }
-        return true
-      })
-
-      for (const action of filteredActions) {
+      for (const action of combatActions) {
         const actionEl = createActionCard(action, sim, () => selectAction(action))
         timeline.append(actionEl)
       }
@@ -1120,22 +1068,32 @@ traceContainer.append(traceEl)
       return hitEl
     }
 
-    function vitalBar(label: string, value: number, max: number, color: string, shieldText?: string, deltaText?: string, deltaClass?: string): HTMLElement {
+    function vitalBar(label: string, value: number, max: number, color: string, shieldText?: string, deltaText?: string, deltaClass?: string, suffix?: HTMLElement, segments?: number): HTMLElement {
       const row = el('div', 'simVitalBar')
       const labelEl = el('span', 'simVitalLabel')
       labelEl.textContent = label
-      const track = el('div', 'simVitalTrack')
-      const fill = el('div', 'simVitalFill')
-      const pct = max > 0 ? Math.max(0, Math.min(100, value / max * 100)) : 0
-      fill.style.width = `${pct}%`
-      fill.style.background = color
-      track.append(fill)
+      const track = el('div', segments ? 'simVitalTrack squares' : 'simVitalTrack')
+      if (segments && segments > 0) {
+        for (let i = 0; i < segments; i++) {
+          const square = el('span', 'simVitalSquare')
+          square.style.background = i < value ? color : '#0d1117'
+          track.append(square)
+        }
+      } else {
+        const fill = el('div', 'simVitalFill')
+        const pct = max > 0 ? Math.max(0, Math.min(100, value / max * 100)) : 0
+        fill.style.width = `${pct}%`
+        fill.style.background = color
+        track.append(fill)
+      }
       const valueEl = el('span', 'simVitalValue')
       valueEl.textContent = `${value.toLocaleString()}/${value === 0 && max === 0 ? '0' : max.toLocaleString()}`
       row.append(labelEl, track, valueEl)
+      if (suffix) row.append(suffix)
       if (deltaText) {
         const deltaEl = el('span', `simVitalDelta${deltaClass ? ` ${deltaClass}` : ''}`)
         deltaEl.textContent = deltaText
+        deltaEl.style.color = color
         row.append(deltaEl)
       }
       if (shieldText) {
@@ -1161,18 +1119,15 @@ traceContainer.append(traceEl)
       const shield = Number(snap.shield ?? 0) ||
         (snap.buffs ?? []).reduce((sum, buff) => sum + Number(buff.shield ?? 0), 0)
       const labels = new Set(vitalLabelsForSnapshot(snap))
-      const beforeEnergy = before?.units[action.sourceId]?.energy ?? snap.energy
-      const energyDelta = action.category === 'ultimate'
-        ? -Number(beforeEnergy ?? 0)
-        : action.effects.energyChanges
-          .filter(change => change.targetId === action.sourceId)
-          .reduce((sum, change) => sum + change.delta, 0)
+      const energyDelta = action.effects.energyChanges
+        .filter(change => change.targetId === action.sourceId)
+        .reduce((sum, change) => sum + change.delta, 0)
       const vitals = el('div', 'simActionVitals')
       if (labels.has('HP')) vitals.append(vitalBar('HP', snap.hp, snap.maxHp, '#4ade80', shield > 0 ? floorDisplay(shield).toLocaleString() : undefined))
-      if (labels.has('EN')) vitals.append(vitalBar('EN', action.category === 'ultimate' ? 0 : snap.energy, snap.maxEnergy, '#60a5fa', undefined, formatEnergyDelta(energyDelta), 'simActionEnergyDelta'))
-      if (labels.has('ОД')) vitals.append(vitalBar('ОД', teamSnapshot?.sp ?? 0, teamSnapshot?.maxSp ?? 5, '#f2c94c', undefined, `${formatSpDelta(action.spDelta)} ОД`, 'simActionSpDelta'))
+      if (labels.has('EN')) vitals.append(vitalBar('EN', snap.energy, snap.maxEnergy, '#60a5fa', undefined, formatEnergyDelta(energyDelta), 'simActionEnergyDelta'))
+      if (labels.has('ОД')) vitals.append(vitalBar('ОД', teamSnapshot?.sp ?? 0, teamSnapshot?.maxSp ?? 5, '#f2c94c', undefined, `${formatSpDelta(action.spDelta)} ОД`, 'simActionSpDelta', undefined, teamSnapshot?.maxSp ?? 5))
       if (snap.side === 'enemy' && snap.maxToughness > 0) {
-        const tough = vitalBar('Tgh', snap.toughness, snap.maxToughness, '#c9a7ff')
+        const tough = vitalBar('Tgh', snap.toughness, snap.maxToughness, '#c9a7ff', undefined, undefined, undefined, weaknessIcons(snap))
         tough.classList.add('simToughnessBar')
         vitals.append(tough)
       }
@@ -1207,16 +1162,24 @@ traceContainer.append(traceEl)
       const abilityName = el('span', 'simActionAbilityName')
       abilityName.textContent = action.abilityName || 'Атака'
       abilityName.title = abilityName.textContent
+      const abilityLabel = el('span', 'simActionAbility')
+      if (abilityIcon) {
+        abilityLabel.append(iconNode(abilityIcon, action.abilityName || action.abilityId || '?', {
+          cls: 'simActionAbilityIconImg', size: 20, fit: 'contain', fallbackText: safeInitial(action.abilityName || action.abilityId || '?'), tint: '#8fd694', title: action.abilityName || action.abilityId || '?',
+        }))
+      }
+      abilityLabel.append(abilityName)
       if (entityKind) {
         const entityBadge = el('span', 'simActionEntity')
         entityBadge.style.color = accent
         entityBadge.textContent = entityKind === 'timer' ? 'Таймер' : 'Призыв'
-        header.append(tagGroup, abilityName, entityBadge)
+        header.append(tagGroup, abilityLabel, entityBadge)
       } else {
-        header.append(tagGroup, abilityName)
+        header.append(tagGroup, abilityLabel)
       }
       const meta = el('span', 'simActionMeta')
-      meta.textContent = `№${action.order} | AV ${action.av.toFixed(1)} | ACT ${action.actionId}`
+      meta.textContent = `№${action.order} | AV ${action.av.toFixed(1)} | ACT ${action.turn}`
+      meta.style.color = '#e6ebf2'
       header.append(meta)
 
       const sourceDiv = el('div', 'simActionSource')
@@ -1231,11 +1194,6 @@ traceContainer.append(traceEl)
       sourceInfo.append(sourceName)
       const vitals = createActionVitals(action, sourceUnit)
       if (vitals) sourceInfo.append(vitals)
-      if (abilityIcon) {
-        const abilityIconSpan = el('span', 'simActionAbilityIcon')
-        abilityIconSpan.append(iconNode(abilityIcon, action.abilityName || action.abilityId || '?', { cls: 'simActionAbilityIconImg', size: 20, fit: 'contain', fallbackText: safeInitial(action.abilityName || action.abilityId || '?'), tint: '#8fd694', title: action.abilityName || action.abilityId || '?' }))
-        sourceInfo.append(abilityIconSpan)
-      }
       sourceDiv.append(sourceInfo)
 
       const targetsDiv = el('div', 'simActionTargets')
@@ -1314,7 +1272,11 @@ traceContainer.append(traceEl)
       const hitsSpan = el('span', 'simActionHitsSummary')
       hitsSpan.textContent = `${allHits.length} попад.${critHits > 0 ? ` (${critHits} крит)` : ''}${hasBreak ? ' | Пробитие' : ''}`
       const effectsSpan = el('span', 'simActionEffects')
-      effectsSpan.textContent = `${action.effects.buffs.length + action.effects.debuffs.length + action.effects.dots.length + action.effects.shields.length + action.effects.shieldDamage.length + action.effects.heals.length} эфф.`
+      const visibleEffects = [
+        ...action.effects.buffs, ...action.effects.debuffs, ...action.effects.dots,
+        ...action.effects.shields, ...action.effects.shieldDamage, ...action.effects.heals,
+      ].filter(effect => !isNeutralEffect(effect))
+      effectsSpan.textContent = `${visibleEffects.length} эфф.`
       summary.append(damageGroup, hitsSpan, effectsSpan)
       if (totalShieldDamage > 0) {
         const shieldSpan = el('span', 'simActionShieldDamage')
@@ -1326,7 +1288,7 @@ traceContainer.append(traceEl)
       if (allHits.length > 0) {
         const details = el('details', 'simActionHits')
         const hitSummary = el('summary')
-        hitSummary.textContent = `Попадания: ${allHits.length}${critHits > 0 ? ` · ${critHits} крит` : ''} · ${totalDamage.toLocaleString()} урона${totalShieldDamage > 0 ? ` · ${totalShieldDamage.toLocaleString()} по щиту` : ''}`
+        hitSummary.textContent = `${totalDamage.toLocaleString()} урона${totalShieldDamage > 0 ? ` · ${totalShieldDamage.toLocaleString()} по щиту` : ''}`
         details.append(hitSummary)
         for (const attack of action.attacks) {
           if (attack.hits.length === 0) continue
@@ -1421,7 +1383,8 @@ traceContainer.append(traceEl)
       const h4 = el('h4')
       h4.textContent = 'Инспектор действия'
       const idSpan = el('span', 'simLogInspectorId')
-      idSpan.textContent = `№${action.order} | ${action.category} | AV ${action.av.toFixed(1)} | ACT ${action.actionId} | ${formatSpDelta(action.spDelta)} ОД`
+      idSpan.textContent = `№${action.order} | ${action.category} | AV ${action.av.toFixed(1)} | ACT ${action.turn} | ${formatSpDelta(action.spDelta)} ОД`
+      idSpan.style.color = '#e6ebf2'
       header.append(h4, idSpan)
       inspectorPanel.append(header)
 
@@ -1452,7 +1415,7 @@ traceContainer.append(traceEl)
 
     function relevantSnapshotUnitIds(action: CombatActionRecord, snapshot: StateSnapshot | undefined, sim: Simulator): string[] {
       void sim
-      const id = selectedInspectorUnitId(action)
+      const id = action.sourceId
       if (!id) return []
       return snapshot?.units[id] ? [id] : []
     }
@@ -1474,7 +1437,7 @@ traceContainer.append(traceEl)
       nameEl.append(label)
       unitEl.append(nameEl)
       if (options.stats && unit.side === 'enemy' && unit.maxToughness > 0) {
-        const toughBar = vitalBar('Tgh', unit.toughness, unit.maxToughness, '#c9a7ff')
+        const toughBar = vitalBar('Tgh', unit.toughness, unit.maxToughness, '#c9a7ff', undefined, undefined, undefined, weaknessIcons(unit))
         toughBar.classList.add('simToughnessBar')
         unitEl.append(toughBar)
       }
@@ -1633,21 +1596,26 @@ traceContainer.append(traceEl)
     function renderEffectsTab(action: CombatActionRecord, sim: Simulator, content: HTMLElement, scopeId?: string): void {
       const grid = el('div', 'simLogInspectorGrid')
       const effectNameFor = (effect: any): string => effect.name || ''
-      const selectedId = scopeId ?? selectedInspectorUnitId(action)
-      const selectedUnit = selectedId ? (action.afterSnapshot?.units[selectedId] ?? action.beforeSnapshot?.units[selectedId]) : undefined
-      const selectedName = selectedUnit?.name ?? sim.roster.find(u => u.id === selectedId)?.name ?? ''
+      const selectedId = scopeId
       const inScope = (effect: any): boolean => !selectedId || effect.targetId === selectedId || (!effect.targetId && effect.sourceId === selectedId)
 
       const snapshotRows = (() => {
-        if (!selectedUnit || !selectedId) return undefined
+        const snapshot = action.afterSnapshot ?? action.beforeSnapshot
+        if (!snapshot) return undefined
         const rows: { buff: any[]; debuff: any[]; shield: any[] } = { buff: [], debuff: [], shield: [] }
-        for (const buff of selectedUnit.buffs) {
-          const row = { ...buff, targetId: selectedId, targetName: selectedName }
-          if (buff.shield) rows.shield.push(row)
-          else rows.buff.push(row)
+        const ids = selectedId ? [selectedId] : Object.keys(snapshot.units)
+        for (const id of ids) {
+          const unit = snapshot.units[id]
+          if (!unit) continue
+          const name = unit.name ?? sim.roster.find(u => u.id === id)?.name ?? ''
+          for (const buff of unit.buffs) {
+            const row = { ...buff, targetId: id, targetName: name }
+            if (buff.shield) rows.shield.push(row)
+            else rows.buff.push(row)
+          }
+          for (const debuff of unit.debuffs) rows.debuff.push({ ...debuff, targetId: id, targetName: name })
+          for (const dot of unit.dots) rows.debuff.push({ ...dot, targetId: id, targetName: name })
         }
-        for (const debuff of selectedUnit.debuffs) rows.debuff.push({ ...debuff, targetId: selectedId, targetName: selectedName })
-        for (const dot of selectedUnit.dots) rows.debuff.push({ ...dot, targetId: selectedId, targetName: selectedName })
         return rows
       })()
 
@@ -1804,23 +1772,50 @@ traceContainer.append(traceEl)
         grid.append(section)
       }
 
+      if (action.beforeSnapshot && action.afterSnapshot) {
+        const stackRows: Array<{ targetId: string; targetName: string; name: string; before: number; after: number }> = []
+        for (const [id, afterUnit] of Object.entries(action.afterSnapshot.units)) {
+          const beforeUnit = action.beforeSnapshot.units[id]
+          if (!beforeUnit) continue
+          const pairs: Array<[any[], any[]]> = [
+            [beforeUnit.buffs, afterUnit.buffs],
+            [beforeUnit.debuffs, afterUnit.debuffs],
+            [beforeUnit.dots, afterUnit.dots],
+          ]
+          for (const [beforeList, afterList] of pairs) {
+            for (const after of afterList) {
+              const before = beforeList.find(item => item.id === after.id && item.sourceId === after.sourceId)
+              const beforeStacks = Number(before?.stacks ?? 1)
+              const afterStacks = Number(after.stacks ?? 1)
+              if (beforeStacks === afterStacks) continue
+              stackRows.push({ targetId: id, targetName: afterUnit.name, name: after.name, before: beforeStacks, after: afterStacks })
+            }
+          }
+        }
+        const visibleStackRows = stackRows.filter(row => inScope({ targetId: row.targetId, sourceId: row.targetId }))
+        if (visibleStackRows.length > 0) {
+          const section = el('div', 'simInspectorEffectSection')
+          const title = el('h4', 'simInspectorEffectTitle neutral')
+          title.textContent = 'Изменение стаков'
+          section.append(title)
+          const list = el('div', 'simInspectorEffectList')
+          for (const row of visibleStackRows) {
+            const item = el('div', 'simInspectorEffect simInspectorStackChange')
+            const text = el('span')
+            text.textContent = `${row.targetName}: ${row.name} ${row.before}→${row.after}`
+            item.append(text)
+            list.append(item)
+          }
+          section.append(list)
+          grid.append(section)
+        }
+      }
+
       addEffectSection('Пробития', action.effects.breaks.filter(inScope), 'debuff')
 
       content.append(grid)
     }
     renderEffectsTabImpl = renderEffectsTab
-
-    // Event listeners
-    searchInput.oninput = () => { currentFilters.search = searchInput.value; applyFilters() }
-    filterSelect.onchange = () => { currentFilters.type = filterSelect.value; applyFilters() }
-    characterFilter.onchange = () => { currentFilters.character = characterFilter.value; applyFilters() }
-    clearFiltersBtn.onclick = () => {
-      searchInput.value = ''
-      filterSelect.value = 'all'
-      characterFilter.value = 'all'
-      currentFilters = { search: '', type: 'all', character: 'all' }
-      applyFilters()
-    }
 
     // Initial render
     applyFilters()

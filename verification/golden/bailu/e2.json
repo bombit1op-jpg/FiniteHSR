@@ -76,7 +76,7 @@
   "BUFF_REFRESHED|-|Bailu|-|- [1,2]",
   "ACTION_END|Bailu|-|-|-",
   "ENERGY_GAIN|Bailu|Bailu|-|- [0,100,43,8]",
-  "BUFF_EXPIRED|-|Bailu|-|- [1]",
+  "BUFF_EXPIRED|Bailu|Bailu|-|- [1]",
   "BUFF_EXPIRED|-|Bailu|-|- [1]",
   "ACTION_SCHEDULED|-|Elite #1|-|- [0,22.222,222.2222]",
   "ACTION_START|Elite #1|-|-|- [2,300,300,6000000,6000000]",

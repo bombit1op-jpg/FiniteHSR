@@ -1,9 +1,8 @@
-import { readFileSync, writeFileSync, mkdirSync, existsSync, unlinkSync } from 'node:fs';
+import { writeFileSync, mkdirSync, existsSync, unlinkSync } from 'node:fs';
 import { join, basename } from 'node:path';
 
 const ROOT = join(import.meta.dirname, '..', '..');
 const EIDOLON_DIR = join(ROOT, 'public', 'icons', 'eidolons');
-const MANIFEST_PATH = join(ROOT, 'public', 'icons', '_manifest.json');
 
 interface FileInfo {
   title: string;
@@ -236,37 +235,6 @@ async function downloadCharacterEidolons(displayName: string, { category, fandom
   }
 }
 
-function updateManifest(): void {
-  console.log('\nUpdating _manifest.json...');
-  const manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8'));
-
-  // Clear existing eidolons and rebuild
-  manifest.eidolons.icons = [];
-
-  for (const [displayName] of Object.entries(CHARACTER_CATEGORIES)) {
-    const dir = join(EIDOLON_DIR, displayName);
-    if (!existsSync(dir)) continue;
-
-    const files = readdirSync(dir);
-    for (const file of files) {
-      if (!file.startsWith('Eidolon ') || !file.endsWith('.png')) continue;
-      
-      const eidolonName = file.replace('Eidolon ', '').replace('.png', '');
-      const relativePath = `eidolons/${displayName}/${file}`;
-      
-      manifest.eidolons.icons.push({
-        file: relativePath,
-        name: eidolonName,
-        character: displayName
-      });
-    }
-  }
-
-  manifest.eidolons.count = manifest.eidolons.icons.length;
-  writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2));
-  console.log(`Manifest updated with ${manifest.eidolons.count} eidolon icons`);
-}
-
 async function main(): Promise<void> {
   console.log('=== Downloading ALL eidolon icons from Fandom ===');
   console.log(`Total characters: ${Object.keys(CHARACTER_CATEGORIES).length}`);
@@ -282,10 +250,6 @@ async function main(): Promise<void> {
       console.error(`Failed ${displayName}: ${e instanceof Error ? e.message : e}`);
       failed++;
     }
-  }
-  if (result.status !== 0) {
-    console.error('gen-icon-manifest.ts failed');
-    process.exit(result.status ?? 1);
   }
   console.log('Done!');
 }

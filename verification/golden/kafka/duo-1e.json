@@ -276,7 +276,7 @@
   "ACTION_END|Pela|-|-|-",
   "ACTION_SCHEDULED|-|Elite|-|- [0,33.333,333.3333]",
   "DOT_TICK|Kafka|Elite|-|- [0,1,3631,3631,5955706]",
-  "DOT_EXPIRED|-|Elite|-|- [1]",
+  "DOT_EXPIRED|Kafka|Elite|-|- [1]",
   "ACTION_START|Elite|-|-|- [160,3,300,5955706,6000000]",
   "ABILITY_USED|Elite|-|-|-",
   "TARGET_SELECTED|Elite|-|-|-",

@@ -1452,7 +1452,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .simActionEntity { font-size: 10px; font-weight: 700; letter-spacing: .04em; }
 .simActionMeta {
   font-size: 11px;
-  color: #7b8595;
+  color: #e6ebf2;
   margin-left: auto;
 }
 
@@ -1475,15 +1475,20 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
 .simVitalBar { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #9aa7ba; }
 .simVitalLabel { width: 22px; flex-shrink: 0; }
 .simVitalTrack { width: 88px; height: 5px; background: #0d1117; border-radius: 3px; overflow: hidden; }
+.simVitalTrack.squares { display: flex; gap: 2px; background: transparent; overflow: visible; }
 .simVitalFill { height: 100%; border-radius: 3px; }
+.simVitalSquare { width: 14px; height: 5px; border-radius: 1px; flex-shrink: 0; }
+.simWeaknessIcons { display: inline-flex; align-items: center; gap: 2px; margin-left: 4px; }
+.simWeaknessIcon { width: 14px; height: 14px; display: inline-flex; }
+.simWeaknessIcon img { width: 14px; height: 14px; }
 .simVitalValue { min-width: 60px; text-align: right; font-variant-numeric: tabular-nums; }
 .simVitalShield { display: inline-flex; align-items: center; gap: 2px; color: #7ec8ff; font-variant-numeric: tabular-nums; }
 .simVitalShieldIcon { width: 14px; height: 14px; }
 .simActionAbility { display: flex; align-items: center; gap: 4px; }
 .simActionAbilityIcon { width: 20px; height: 20px; border-radius: 4px; }
 .simActionAbilityName { font-size: 12px; color: #f2c94c; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.simActionSpDelta { font-size: 11px; color: #9aa7ba; font-variant-numeric: tabular-nums; }
-.simActionEnergyDelta { font-size: 11px; color: #93c5fd; font-variant-numeric: tabular-nums; }
+.simActionSpDelta { font-size: 11px; color: #f2c94c; font-variant-numeric: tabular-nums; }
+.simActionEnergyDelta { font-size: 11px; color: #60a5fa; font-variant-numeric: tabular-nums; }
 .simActionToughnessDamage { font-size: 11px; color: #c9a7ff; font-variant-numeric: tabular-nums; }
 
 .simActionTargets {
@@ -1575,7 +1580,7 @@ h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: #
   border-bottom: 1px solid #2a4a35;
 }
 .simLogInspectorHeader h4 { margin: 0; font-size: 13px; font-weight: 700; color: #8bd39b; }
-.simLogInspectorId { font-size: 11px; color: #7b8595; font-family: Consolas, monospace; }
+.simLogInspectorId { font-size: 11px; color: #e6ebf2; font-family: Consolas, monospace; }
 
 .simInspectorTabs {
   display: flex;

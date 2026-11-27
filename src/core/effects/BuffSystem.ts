@@ -60,6 +60,7 @@ export class BuffSystem {
     if (ex && b.maxStacks) {
       ex.stacks = Math.min(b.maxStacks, (ex.stacks ?? 1) + 1)
       ex.turns = b.turns
+      if (b.mods.length) ex.mods = b.mods
       if (b.appliedById !== undefined) ex.appliedById = b.appliedById
       rec(ex.stacks, ex.turns, ex)
       emit('STACKED')
@@ -67,6 +68,7 @@ export class BuffSystem {
     }
     if (ex) {
       ex.turns = b.turns ?? ex.turns
+      if (b.mods.length) ex.mods = b.mods
       if (b.appliedById !== undefined) ex.appliedById = b.appliedById
       rec(ex.stacks ?? 1, ex.turns, ex)
       emit('REFRESHED')

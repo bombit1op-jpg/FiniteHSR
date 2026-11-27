@@ -1,36 +1,17 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'node:fs';
-import { join, basename } from 'node:path';
+import { join } from 'node:path';
 
 const ROOT = 'C:\\.projects\\FiniteHSR';
 const EIDOLON_DIR = join(ROOT, 'public', 'icons', 'eidolons');
 const MANIFEST_PATH = join(ROOT, 'public', 'icons', '_manifest.json');
-const NANOKA_BASE = 'https://static.nanoka.cc/hsr/4.6.54/en/character/';
 
 function sanitize(name: string): string {
   return name.replace(/[\\/:*?"<>|]/g, '_');
 }
 
-async function fetchBuffer(url: string) {
-  const res = await fetch(url, { headers: { 'User-Agent': 'FiniteHSR/1.0' } });
-  if (!res.ok) throw new Error(`HTTP ${res.status}: ${url}`);
-  return Buffer.from(await res.arrayBuffer());
-}
-
-async function fetchCharacterEidolons(charId: string) {
-  const url = `${NANOKA_BASE}${charId}.json`;
-  try {
-    const res = await fetch(url, { headers: { 'User-Agent': 'FiniteHSR/1.0' } });
-    if (!res.ok) return null;
-    return await res.json();
-  } catch (e) {
-    console.error(`  Failed to fetch character ${charId}: ${e instanceof Error ? e.message : e}`);
-    return null;
-  }
-}
-
 function getEidolonNames(charData: any) {
   if (!charData.ranks) return [];
-  const ranks = Object.values(charData.ranks);
+  const ranks = Object.values(charData.ranks) as any[];
   return ranks.map(r => ({
     name: r.name,
     icon: r.icon,
@@ -105,7 +86,7 @@ async function main() {
   let downloaded = 0;
   let failed = 0;
 
-  for (const [key, charData] of uniqueChars) {
+  for (const charData of uniqueChars.values()) {
     const charName = charData.name === '{NICKNAME}' ? `Trailblazer (${charData.base_type})` : charData.name;
     const eidolons = getEidolonNames(charData);
 
@@ -147,7 +128,7 @@ async function main() {
 
 function updateManifest() {
   console.log('\nUpdating _manifest.json...');
-  const manifest = JSON.parse(readFileSync(join(ROOT, 'public', 'icons', '_manifest.json'), 'utf8'));
+  const manifest = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8'));
 
   // Clear existing eidolons and rebuild from disk
   manifest.eidolons.icons = [];
@@ -174,7 +155,7 @@ function updateManifest() {
   }
 
   manifest.eidolons.count = manifest.eidolons.icons.length;
-  writeFileSync(join(ROOT, 'public', 'icons', '_manifest.json'), JSON.stringify(manifest, null, 2));
+  writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2));
   console.log(`Manifest updated with ${manifest.eidolons.count} eidolon icons`);
 }
 

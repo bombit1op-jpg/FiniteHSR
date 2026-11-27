@@ -333,7 +333,7 @@
   "DOT_TICK|Sushang|Elite #1|-|- [0,1,3865991,7756,7756]",
   "DOT_TICK|Fugue|Elite #1|-|- [0,1,1939,1939,3864052]",
   "DOT_TICK|Sushang|Elite #1|-|- [0,1,3856296,7756,7756]",
-  "DOT_EXPIRED|-|Elite #1|-|- [1]",
+  "DOT_EXPIRED|Sushang|Elite #1|-|- [1]",
   "ACTION_START|Elite #1|-|-|- [2,3856296,4000000,60,60]",
   "ABILITY_USED|Elite #1|-|-|-",
   "TARGET_SELECTED|Elite #1|Sushang|-|-",

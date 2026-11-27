@@ -125,7 +125,7 @@
   "ACTION_END|Dr. Ratio|-|-|-",
   "ACTION_SCHEDULED|-|Elite|-|- [0,222.2222,34.722]",
   "DOT_TICK|Hook|Elite|-|- [0,1,5983248,624,624]",
-  "DOT_EXPIRED|-|Elite|-|- [1]",
+  "DOT_EXPIRED|Hook|Elite|-|- [1]",
   "ACTION_START|Elite|-|-|- [2,235,300,5983248,6000000]",
   "ABILITY_USED|Elite|-|-|-",
   "TARGET_SELECTED|Elite|Dr. Ratio|-|-",

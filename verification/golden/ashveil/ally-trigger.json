@@ -420,7 +420,7 @@
   "ACTION_END|Ashveil|-|-|-",
   "ACTION_SCHEDULED|-|Elite|-|- [0,44.444,694.4444]",
   "DOT_TICK|Ashveil|Elite|-|- [0,1,11410,11410,5755199]",
-  "DOT_EXPIRED|-|Elite|-|- [1]",
+  "DOT_EXPIRED|Ashveil|Elite|-|- [1]",
   "ACTION_START|Elite|-|-|- [250,300,5755199,6,6000000]",
   "ABILITY_USED|Elite|-|-|-",
   "TARGET_SELECTED|Elite|-|-|-",

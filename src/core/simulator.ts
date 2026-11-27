@@ -24,7 +24,7 @@ import { applyHpChange, type HpChangeKind, type HpChangeOpts } from './combat/Hp
 import { enemyDelayImmune } from './enemy/defense'
 import { DEFAULT_AVAILABILITY, type AvailabilityState } from './combat/Availability'
 import { makeCountdown, type CountdownSpec } from './combat/Scheduled'
-import { aggregateGear, type GearAggregate } from './gear'
+import { aggregateGear, bindGearAggregate, type GearAggregate } from './gear'
 import type { BattleIO, BattleView } from './battle'
 import { BattleLogger, type EventType, type LogConfig } from './battlelog'
 import type { RulesSnapshot } from './battle/BattleRules'
@@ -497,10 +497,10 @@ applyWeakness(source: Unit, target: Unit, elem: Elem): void {
 
 /** attach equipment: aggregates stats/mods and stores hooks */
   attachGear(u: Unit, cfg: GearConfig, extraBe?: number): GearAggregate {
-    const agg = aggregateGear(cfg, u.base, extraBe)
-    for (const fn of agg.post) fn()
-    this.gearMap.set(u.id, agg)
-    return agg
+    const bound = bindGearAggregate(aggregateGear(cfg, u.base, extraBe), u.id)
+    for (const fn of bound.post) fn()
+    this.gearMap.set(u.id, bound)
+    return bound
   }
 
   gearOf(u: Unit): GearAggregate | undefined { return this.gearMap.get(u.id) }

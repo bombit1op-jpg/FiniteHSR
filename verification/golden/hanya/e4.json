@@ -112,7 +112,7 @@
   "HIT_END|Hanya|Elite #1|-|basic [2016,5989194]",
   "BUFF_REFRESHED|-|Hanya|-|- [1,2]",
   "ACTION_END|Hanya|-|-|-",
-  "BUFF_EXPIRED|-|Hanya|-|- [1]",
+  "BUFF_EXPIRED|Hanya|Hanya|-|- [1]",
   "CYCLE_END|-|-|-|- [2,271.3876]",
   "CYCLE_START|-|-|-|- [271.3876,3]",
   "ACTION_SCHEDULED|-|Hanya|-|- [0,271.3876,47.847]",
