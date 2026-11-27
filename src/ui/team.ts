@@ -420,7 +420,8 @@ export function toTeamSpec(tr: TeamRowState): TeamSpec {
     // stale saved values here overrode ATK/SPD/CRIT/CD/BE, so the preview showed numbers that did
     // not match the build (HP/DEF/EHR were never forwarded and stayed correct).
     gear: gearOfRow(tr),
-    eidolon: tr.eidolon,
+    eidolon: Math.min(tr.eidolon ?? 0, 6),
+    ex: tr.ex === true || (tr.kitId === 'jingyuan' && (tr.eidolon ?? 0) >= 7),
     levels: tr.levels,
     level: tr.level,
     traces: tr.traces,

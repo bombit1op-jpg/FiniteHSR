@@ -29,6 +29,7 @@ export interface TeamSpec {
   /** declarative build (guide Phase B #11): compiled to `gear`/`stats`/`eidolon` unless set explicitly */
   build?: BuildSpec
   eidolon?: number
+  ex?: boolean
   levels?: AbilityLevels
   /** character level (1…80). Default 80. Scales the kit's base HP/ATK/DEF. */
   level?: number
@@ -426,6 +427,7 @@ function setupSim(setup: BattleSetup): Simulator {
     const ctx = sim.rt(u)
     ctx.levels = resolveLevels(t)
     ctx.eidolon = t.eidolon ?? 0
+    ctx.ex = t.ex === true
     ctx.skillPriority = t.skillPriority ?? 0
     ctx.skillPattern = t.skillPattern ?? 'auto'
     ctx.skillRotation = t.skillRotation ?? ''

@@ -41,6 +41,7 @@ export function blankSlot(): TeamRowState {
     stats: { ...BLANK_STATS },
     coneId: '', si: 1, relic1: '', relic2: '', planar: '',
     eidolon: 0,
+    ex: false,
     levels: { ...DEFAULT_LEVELS },
     traces: true,
     level: 80,
@@ -72,7 +73,9 @@ function validate(v: unknown): PartyCollection {
   const parties: Party[] = []
   for (const p of c.parties) {
     if (!p || typeof p.id !== 'string' || !Array.isArray(p.slots)) continue
-    parties.push({ id: p.id, name: typeof p.name === 'string' ? p.name : 'Отряд', slots: p.slots.filter(isRow).slice(0, MAX_SLOTS) })
+    const slots = p.slots.filter(isRow).slice(0, MAX_SLOTS).map(s =>
+      s.kitId === 'jingyuan' && (s.eidolon ?? 0) >= 7 ? { ...s, eidolon: 6, ex: true } : s)
+    parties.push({ id: p.id, name: typeof p.name === 'string' ? p.name : 'Отряд', slots })
   }
   const activeId = typeof c.activeId === 'string' && parties.some(p => p.id === c.activeId)
     ? c.activeId : (parties[0]?.id ?? null)

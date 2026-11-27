@@ -18,6 +18,8 @@ export default () => {
   const off = toTeamSpec(row('s1', 'danheng', { traces: false, energyStartFrac: 0 }))
   const quarter = toTeamSpec(row('s2', 'pela', { energyStartFrac: 0.25 }))
   const absent = toTeamSpec(row('s3', 'bronya'))
+  const ex = toTeamSpec(row('s8', 'jingyuan', { ex: true }))
+  const legacyEx = toTeamSpec(row('s9', 'jingyuan', { eidolon: 7 }))
   // legacy rows persisted by the removed battle page carry manual ATK/SPD/CRIT/CD/BE overrides;
   // the party panel must not apply them (stats are engine-resolved from kit + level + gear + traces)
   const legacy = toTeamSpec(row('s4', 'seele', { stats: { atk: 2600, spd: 140, critRate: 0.7, critDmg: 1.8, be: 3.6 } }))
@@ -35,6 +37,8 @@ export default () => {
     raw('per-node traces reach TeamSpec (each row its own flag)', off.traces === false && quarter.traces === true, `${off.traces}/${quarter.traces}`),
     raw('per-node energyStartFrac reaches TeamSpec', off.energyStartFrac === 0 && quarter.energyStartFrac === 0.25, `${off.energyStartFrac}/${quarter.energyStartFrac}`),
     raw('absent energyStartFrac stays undefined (engine default 0.5)', absent.energyStartFrac === undefined, String(absent.energyStartFrac)),
+    raw('EX flag reaches TeamSpec independently from eidolon', ex.ex === true && ex.eidolon === 0, `${ex.eidolon}/${ex.ex}`),
+    raw('legacy eidolon 7 maps to E6+EX', legacyEx.eidolon === 6 && legacyEx.ex === true, `${legacyEx.eidolon}/${legacyEx.ex}`),
     raw('collect() carries both knobs per row into BattleSetup.team', JSON.stringify(setup.team.map(t => [t.traces, t.energyStartFrac])) === JSON.stringify([[false, 0.75], [true, 0]]), JSON.stringify(setup.team.map(t => [t.traces, t.energyStartFrac]))),
     raw('legacy per-row stat overrides do not reach TeamSpec', legacy.stats === undefined, JSON.stringify(legacy.stats)),
     raw('preview resolver ignores legacy row stats (ATK/SPD/CRIT/CD/BE)', !!cleanPreview && !!legacyPreview

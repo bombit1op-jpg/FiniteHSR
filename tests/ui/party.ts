@@ -95,6 +95,10 @@ export default () => {
   cases.push(raw('a persisted collection validates with its parties intact', back.parties.length === 1 && back.parties[0]!.name === 'Тест'))
   cases.push(raw('validate drops malformed parties instead of throwing', validateCollection({ parties: [null, { id: 'ok', slots: [] }] }).parties.length === 1))
 
+  ls.setItem(PARTIES_KEY, JSON.stringify({ schema: 1, collection: { parties: [{ id: 'pEX', name: 'EX', slots: [{ ...row('exLegacy', 'jingyuan'), eidolon: 7 }] }], activeId: 'pEX' } }))
+  const legacyEx = loadCollection().parties[0]?.slots[0]
+  cases.push(raw('legacy E7 row migrates to E6+EX', legacyEx?.eidolon === 6 && legacyEx?.ex === true))
+
   // a fresh store starts with ONE slot (§Task 9)
   ls.clear()
   const fresh = new PartyStore()
@@ -171,9 +175,10 @@ export default () => {
   const exB = cardB.querySelector('.eidolon[data-eidolon="7"]') as HTMLButtonElement
   cases.push(raw('non-Jing Yuan card hides EX', !exB || exB.style.display === 'none'))
   exA.click()
-  cases.push(raw('EX toggle stores eidolon 7', pStore.active?.slots.find(s => s.id === 'r1')?.eidolon === 7))
-  cases.push(raw('EX toggle displays EX', (cardA.querySelector('.eidolonDisplay') as HTMLElement).textContent === 'EX'))
-  pStore.patchSlot('r1', { eidolon: 0 })
+  cases.push(raw('EX toggle stays independent from E0', pStore.active?.slots.find(s => s.id === 'r1')?.eidolon === 0 && pStore.active?.slots.find(s => s.id === 'r1')?.ex === true))
+  cases.push(raw('EX toggle displays E0 EX', (cardA.querySelector('.eidolonDisplay') as HTMLElement).textContent === 'E0 EX'))
+  cases.push(raw('EX toggle leaves E1 inactive', !(cardA.querySelector('.eidolon[data-eidolon="1"]') as HTMLElement).classList.contains('active')))
+  pStore.patchSlot('r1', { ex: false })
   pHandle.render()
 
   // ---- skill levels (number input + +/- buttons)

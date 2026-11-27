@@ -8,14 +8,13 @@ import { type DoTWithSource } from '../simulator'
 import { mainDpsOf } from '../autoai'
 import { computeBreakDamage } from '../combat/DamageCalculator'
 
-const JY_EX_EIDOLON = 7
 const JY_EX_HPA_CAP = 30
 const JY_EX_DMG_BOOST = 2.4
 const JY_EX_ENHANCE_ID = 'jy_ex_enhance'
 type JyExHpaHit = { hits: number; turns: number }
 
 function jyExActive(ctx: Record<string, unknown>): boolean {
-  return ((ctx.eidolon as number) ?? 0) >= JY_EX_EIDOLON
+  return ctx.ex === true
 }
 
 function jyExBonusHits(ctx: Record<string, unknown>): number {

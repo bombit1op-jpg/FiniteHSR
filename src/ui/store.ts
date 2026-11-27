@@ -53,6 +53,7 @@ export interface TeamRowState {
   relic2: string
   planar: string
   eidolon: number
+  ex?: boolean
   levels: AbilityLevels
   /** minor traces: `true` = all, `false` = none, array = per-trace flags (raw order) */
   traces: boolean | boolean[]

@@ -281,7 +281,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       const chosen = await openCharacterPicker({ exclude: filteredExclude, current: row.kitId || undefined })
       if (chosen === null) return
       if (chosen === '') { clearSlot(row.id); render(); return }
-      patch({ kitId: chosen, eidolon: Math.min(liveRow().eidolon ?? 0, 6), coneId: '', relic1: '', relic2: '', planar: '', pieces: [], techniqueUses: 0 })
+      patch({ kitId: chosen, eidolon: Math.min(liveRow().eidolon ?? 0, 6), ex: false, coneId: '', relic1: '', relic2: '', planar: '', pieces: [], techniqueUses: 0 })
       render()
     }
     portrait.onclick = pickChar
@@ -347,9 +347,14 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       if (e === 7) b.classList.add('ex')
       b.append(iconWrap, textWrap)
       b.onclick = () => {
-        const current = Number(store.active?.slots.find(s => s.id === row.id)?.eidolon ?? 0)
-        const next = (current === e) ? 0 : e
-        patch({ eidolon: next })
+        const slot = store.active?.slots.find(s => s.id === row.id)
+        const eidolon = Math.min(Number(slot?.eidolon ?? 0), 6)
+        if (e === 7) {
+          const ex = slot?.ex === true || (slot?.kitId === 'jingyuan' && (slot?.eidolon ?? 0) >= 7)
+          patch({ ex: !ex, eidolon })
+        } else {
+          patch({ eidolon: eidolon === e ? 0 : e })
+        }
         view.refresh()
       }
       eidButtons.push(b)
@@ -742,13 +747,14 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
       const uses = live.techniqueUses ?? 0
       techniqueSel.value = String(uses)
       techniqueChk.checked = uses > 0
-      const eid = Number(live.eidolon ?? 0)
+      const eid = Math.min(Number(live.eidolon ?? 0), 6)
+      const ex = kitId === 'jingyuan' && (live.ex === true || Number(live.eidolon ?? 0) >= 7)
       eidRow.classList.toggle('ex', kitId === 'jingyuan')
       for (const b of eidButtons) {
         const n = Number(b.dataset.eidolon)
         if (n === 7 && kitId !== 'jingyuan') { b.style.display = 'none'; continue }
         b.style.display = ''
-        const active = n <= eid
+        const active = n === 7 ? ex : n <= eid
         b.classList.toggle('active', active)
         b.classList.toggle('e6', active && n === 6)
         b.classList.toggle('unselected', !active)
@@ -758,9 +764,9 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
           if (iconUrl) img.src = iconUrl
         }
       }
-      // Update eidolon level display (E0-E6, EX)
+      // Update eidolon level display (E0-E6, optional EX)
       if (eidolonDisplay) {
-        eidolonDisplay.textContent = eid === 7 ? 'EX' : `E${eid}`
+        eidolonDisplay.textContent = ex ? `E${eid} EX` : `E${eid}`
         eidolonDisplay.style.display = kitId ? 'inline-flex' : 'none'
       }
       paintSkills(view, live, kitId)
@@ -776,7 +782,7 @@ export function initPartyPanel(host: HTMLElement, existing?: PartyStore): PartyP
   function clearSlot(rowId: string): void {
     store.patchSlot(rowId, {
       kitId: '', coneId: '', si: 1, relic1: '', relic2: '', planar: '',
-      eidolon: 0, pieces: [], energyStartFrac: undefined, techniqueUses: 0,
+      eidolon: 0, ex: false, pieces: [], energyStartFrac: undefined, techniqueUses: 0,
     })
   }
 
